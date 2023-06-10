@@ -4,7 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.common.core.helper.*
 import alfheim.common.item.AlfheimItems
-import alfheim.common.world.dim.alfheim.biome.BiomeField
+import alfheim.common.world.dim.alfheim.biome.*
 import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.relauncher.*
 import net.minecraft.entity.*
@@ -112,8 +112,7 @@ class EntityAlfheimPixie(world: World): EntityFlyingCreature(world), IElementalE
 	}
 	
 	override fun setDead() {
-		dead = true
-		isDead = dead
+		super.setDead()
 		if (worldObj.isRemote)
 			for (i in 0..11)
 				Botania.proxy.sparkleFX(worldObj, posX + (Math.random() - 0.5) * 0.25, posY + 0.5 + (Math.random() - 0.5) * 0.25, posZ + (Math.random() - 0.5) * 0.25, 1f, 0.25f, 0.9f, 1f + Math.random().F * 0.25f, 5)
@@ -125,8 +124,10 @@ class EntityAlfheimPixie(world: World): EntityFlyingCreature(world), IElementalE
 		var flagBiome = false
 		
 		val chunk = (worldObj.provider as? WE_WorldProvider)?.cp
-		if (chunk != null)
-			flagBiome = WE_Biome.getBiomeAt(chunk, posX.mfloor().toLong(), posZ.mfloor().toLong()).isEqualTo(BiomeField)
+		if (chunk != null) {
+			val biomeAt = WE_Biome.getBiomeAt(chunk, posX.mfloor(), posZ.mfloor())
+			flagBiome = biomeAt.isEqualTo(BiomeField) || biomeAt.isEqualTo(BiomeIslandGiantFlowers)
+		}
 		
 		return flagTime && flagBiome && posY > 64 && super.getCanSpawnHere()
 	}

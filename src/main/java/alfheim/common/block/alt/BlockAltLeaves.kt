@@ -90,6 +90,8 @@ class BlockAltLeaves: BlockLeavesMod(), IGlowingLayerBlock {
 	
 	override fun canDecay(meta: Int) = if (meta % 8 == yggMeta) false else super.canDecay(meta)
 	
+	override fun getDecayRange(meta: Int) = if (meta % 8 == 7) 8 else 4
+	
 	override fun isLeaves(world: IBlockAccess, x: Int, y: Int, z: Int) = if (world.getBlockMetadata(x, y, z) % 8 == yggMeta) false else super.isLeaves(world, x, y, z)
 	
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?): LexiconEntry {

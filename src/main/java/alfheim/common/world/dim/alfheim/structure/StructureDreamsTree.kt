@@ -451,7 +451,6 @@ class StructureDreamsTree
 		if (canBePlaced(world, x + 10, y + 10, z + 9, leaves)) world.setBlock(x + 10, y + 10, z + 9, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 11, y + 10, z + 9, leaves)) world.setBlock(x + 11, y + 10, z + 9, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 12, y + 10, z + 9, leaves)) world.setBlock(x + 12, y + 10, z + 9, leaves, lvsmeta, 2)
-		if (canBePlaced(world, x + 13, y + 10, z + 9, leaves)) world.setBlock(x + 13, y + 10, z + 9, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 1, y + 10, z + 10, leaves)) world.setBlock(x + 1, y + 10, z + 10, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 2, y + 10, z + 10, log)) world.setBlock(x + 2, y + 10, z + 10, log, lrmeta, 2)
 		if (canBePlaced(world, x + 3, y + 10, z + 10, leaves)) world.setBlock(x + 3, y + 10, z + 10, leaves, lvsmeta, 2)
@@ -502,6 +501,17 @@ class StructureDreamsTree
 		if (canBePlaced(world, x + 5, y + 11, z + 13, leaves)) world.setBlock(x + 5, y + 11, z + 13, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 10, y + 11, z + 13, leaves)) world.setBlock(x + 10, y + 11, z + 13, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 5, y + 11, z + 14, leaves)) world.setBlock(x + 5, y + 11, z + 14, leaves, lvsmeta, 2)
+		
+		// fixes
+		if (canBePlaced(world, x + 9, y + 10, z + 13, log)) world.setBlock(x + 9, y + 10, z + 13, log, lrmeta, 2)
+		if (canBePlaced(world, x + 8, y + 10, z + 13, leaves)) world.setBlock(x + 8, y + 10, z + 13, leaves, lvsmeta, 2)
+		if (canBePlaced(world, x + 9, y + 11, z + 13, leaves)) world.setBlock(x + 9, y + 11, z + 13, leaves, lvsmeta, 2)
+		if (canBePlaced(world, x + 9, y + 10, z + 14, leaves)) world.setBlock(x + 9, y + 10, z + 14, leaves, lvsmeta, 2)
+		
+		if (canBePlaced(world, x + 1, y + 10, z + 11, log)) world.setBlock(x + 1, y + 10, z + 11, log, lrmeta, 2)
+		
+		if (canBePlaced(world, x + 3, y + 9, z + 7, log)) world.setBlock(x + 3, y + 9, z + 7, log, lrmeta, 2)
+		
 		return true
 	}
 	

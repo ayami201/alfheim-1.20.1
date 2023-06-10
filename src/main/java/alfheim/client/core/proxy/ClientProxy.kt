@@ -38,7 +38,6 @@ import net.minecraft.client.settings.KeyBinding
 import net.minecraft.world.World
 import net.minecraftforge.client.MinecraftForgeClient
 import net.minecraftforge.common.MinecraftForge
-import org.apache.commons.lang3.ArrayUtils
 import org.lwjgl.input.Keyboard
 import vazkii.botania.client.core.helper.ShaderHelper
 import vazkii.botania.client.core.proxy.ClientProxy
@@ -230,23 +229,6 @@ object ClientProxy : CommonProxy() {
 	
 	override fun doParticle() = if (!ConfigHandler.useVanillaParticleLimiter) true else Math.random() < 1f - 0.4f * mc.gameSettings.particleSetting
 	
-	val keyLolicorn = KeyBinding("key.lolicorn.desc", Keyboard.KEY_L, "key.categories.alfheim")
-	val keyESMAbility = KeyBinding("key.esmability.desc", Keyboard.KEY_M, "key.categories.alfheim")
-	val keyFlight = KeyBinding("key.flight.desc", Keyboard.KEY_F, "key.categories.alfheim")
-	val keyCast = KeyBinding("key.cast.desc", Keyboard.KEY_C, "key.categories.alfheim")
-	val keyUnCast = KeyBinding("key.uncast.desc", Keyboard.KEY_X, "key.categories.alfheim")
-	val keySelMob = KeyBinding("key.selmob.desc", Keyboard.KEY_R, "key.categories.alfheim")
-	val keySelTeam = KeyBinding("key.selteam.desc", if (mc.session.username == "AlexSocol") Keyboard.KEY_T else Keyboard.KEY_Y, "key.categories.alfheim")
-	
-	init {
-		removeKeyBinding(keyFlight)
-		removeKeyBinding(keyESMAbility)
-		removeKeyBinding(keyCast)
-		removeKeyBinding(keyUnCast)
-		removeKeyBinding(keySelMob)
-		removeKeyBinding(keySelTeam)
-	}
-	
 	fun toggelModes(b: Boolean, esm: Boolean, mmo: Boolean, esmOld: Boolean, mmoOld: Boolean) {
 		MinecraftForge.EVENT_BUS.post(AlfheimModeChangedEvent(esm, mmo, esmOld, mmoOld))
 		
@@ -353,11 +335,22 @@ object ClientProxy : CommonProxy() {
 		MinecraftForge.EVENT_BUS.register(GUIRace)
 	}
 	
-	private fun addESMKeyBinds() {
-		addKeyBinding(keyFlight)
-		addKeyBinding(keyESMAbility)
-		
+	val keyLolicorn = KeyBinding("key.lolicorn.desc", Keyboard.KEY_L, "key.categories.alfheim")
+	val keyESMAbility = KeyBinding("key.esmability.desc", Keyboard.KEY_M, "key.categories.alfheim")
+	val keyFlight = KeyBinding("key.flight.desc", Keyboard.KEY_F, "key.categories.alfheim")
+	val keyCast = KeyBinding("key.cast.desc", Keyboard.KEY_C, "key.categories.alfheim")
+	val keyUnCast = KeyBinding("key.uncast.desc", Keyboard.KEY_X, "key.categories.alfheim")
+	val keySelMob = KeyBinding("key.selmob.desc", Keyboard.KEY_R, "key.categories.alfheim")
+	val keySelTeam = KeyBinding("key.selteam.desc", if (mc.session.username == "AlexSocol") Keyboard.KEY_T else Keyboard.KEY_Y, "key.categories.alfheim")
+	
+	init {
+		KeyBinding.keybindArray.removeAll(listOf(keyESMAbility, keyFlight, keyCast, keyUnCast, keySelMob, keySelTeam))
 		KeyBinding.resetKeyBindingArrayAndHash()
+	}
+	
+	private fun addESMKeyBinds() {
+		registerKeyBinding(keyFlight)
+		registerKeyBinding(keyESMAbility)
 	}
 	
 	private fun removeESMKeyBinds() {
@@ -368,12 +361,10 @@ object ClientProxy : CommonProxy() {
 	}
 	
 	private fun addMMOKeyBinds() {
-		addKeyBinding(keyCast)
-		addKeyBinding(keyUnCast)
-		addKeyBinding(keySelMob)
-		addKeyBinding(keySelTeam)
-		
-		KeyBinding.resetKeyBindingArrayAndHash()
+		registerKeyBinding(keyCast)
+		registerKeyBinding(keyUnCast)
+		registerKeyBinding(keySelMob)
+		registerKeyBinding(keySelTeam)
 	}
 	
 	private fun removeMMOKeyBinds() {
@@ -385,19 +376,16 @@ object ClientProxy : CommonProxy() {
 		KeyBinding.resetKeyBindingArrayAndHash()
 	}
 	
-	private fun unregisterKeyBinding(key: KeyBinding) {
-		removeKeyBinding(key)
-		val id = ASJUtilities.indexOfComparableArray(mc.gameSettings.keyBindings, key)
-		if (id < 0 || id > mc.gameSettings.keyBindings.size) return
-		mc.gameSettings.keyBindings = ArrayUtils.remove(mc.gameSettings.keyBindings, id)
-	}
-	
-	private fun addKeyBinding(key: KeyBinding) {
-		key.keyCode = key.keyCodeDefault
+	private fun registerKeyBinding(key: KeyBinding) {
+		if (key inl KeyBinding.keybindArray) return
+		
+		KeyBinding.keybindArray.add(key)
+		KeyBinding.hash.addKey(key.keyCode, key)
 		ClientRegistry.registerKeyBinding(key)
 	}
 	
-	private fun removeKeyBinding(key: KeyBinding) {
-		key.keyCode = 0
+	private fun unregisterKeyBinding(key: KeyBinding) {
+		KeyBinding.keybindArray.remove(key)
+		mc.gameSettings.keyBindings = mc.gameSettings.keyBindings.filter { it !== key }.toTypedArray()
 	}
 }

@@ -1,9 +1,9 @@
 package alfheim.common.world.dim.helheim
 
 import net.minecraftforge.common.BiomeDictionary
-import ru.vamig.worldengine.*
+import ru.vamig.worldengine.WE_Biome
 
-object BiomeHelheim: WE_Biome(WE_WorldProvider.we_id) {
+object BiomeHelheim: WE_Biome() {
 
 	init {
 		createChunkGen_InXZ_List.clear()
@@ -11,8 +11,7 @@ object BiomeHelheim: WE_Biome(WE_WorldProvider.we_id) {
 		setColor(0x222222)
 		setDisableRain()
 		
-		BiomeDictionary.registerBiomeType(this, BiomeDictionary.Type.DEAD)
-		BiomeDictionary.registerBiomeType(this, BiomeDictionary.Type.WASTELAND)
+		BiomeDictionary.registerBiomeType(this, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND)
 		
 		clearSpawn()
 		

@@ -11,22 +11,9 @@ import net.minecraftforge.common.BiomeDictionary.Type
 import ru.vamig.worldengine.standardcustomgen.*
 import vazkii.botania.common.block.ModBlocks
 
-object BiomeField: BiomeAlfheim() {
+object BiomeField: BiomeAlfheim(-0.55, 0.82, 1.8, 3, 250.0, 2.0, 71, 2, "Field", Type.PLAINS, Type.DENSE, Type.LUSH) {
 	
 	init {
-		setBiomeName("Field")
-		
-		BiomeDictionary.registerBiomeType(this, Type.PLAINS, Type.DENSE)
-		
-		biomeMinValueOnMap = -0.4
-		biomeMaxValueOnMap = 0.82
-		biomePersistence = 1.8
-		biomeNumberOfOctaves = 3
-		biomeScaleX = 250.0
-		biomeScaleY = 2.0
-		biomeSurfaceHeight = 71 + offset
-		biomeInterpolateQuality = 2
-		
 		var standardBiomeLayers = WE_BiomeLayer()
 		standardBiomeLayers.add(Blocks.dirt, 0.toByte(), ModBlocks.livingrock, 0.toByte(), -256, 0, -4, -2, true)
 		standardBiomeLayers.add(if (AlfheimCore.winter && AlfheimConfigHandler.winterGrassReadyGen) AlfheimBlocks.snowGrass else Blocks.grass, 0.toByte(), Blocks.dirt, 0.toByte(), -256, 0, -256, 0, false)

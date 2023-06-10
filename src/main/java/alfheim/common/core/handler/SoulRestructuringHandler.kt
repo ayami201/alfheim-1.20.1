@@ -127,7 +127,7 @@ object SoulRestructuringHandler {
 			entitylivingbase.addToPlayerScore(gaia, gaia.scoreValue)
 		}
 		entity?.onKillEntity(gaia)
-		gaia.dead = true
+		gaia.setDead()
 		gaia.func_110142_aN().func_94549_h()
 		gaia.worldObj.setEntityState(gaia, 3.toByte())
 	}

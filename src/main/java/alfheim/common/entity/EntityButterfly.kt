@@ -1,8 +1,9 @@
 package alfheim.common.entity
 
 import alexsocol.asjlib.*
-import alfheim.common.item.material.ElvenFoodMetas
-import alfheim.common.world.dim.alfheim.biome.BiomeField
+import alexsocol.asjlib.math.Vector3
+import alfheim.common.item.material.*
+import alfheim.common.world.dim.alfheim.biome.*
 import cpw.mods.fml.relauncher.*
 import net.minecraft.entity.*
 import net.minecraft.item.ItemStack
@@ -20,6 +21,14 @@ class EntityButterfly(world: World): EntityFlyingCreature(world) {
 	
 	/** Coordinates of where the pixie spawned.  */
 	private var spawnPosition: ChunkCoordinates? = null
+	
+	var sizeSet
+		get() = getFlag(6)
+		set(value) = setFlag(6, value)
+	
+	var isGiant
+		get() = getFlag(7)
+		set(value) = setFlag(7, value)
 	
 	init {
 		setSize(0.25f, 0.25f)
@@ -39,10 +48,17 @@ class EntityButterfly(world: World): EntityFlyingCreature(world) {
 	override fun getDropItem() = null
 	
 	override fun dropFewItems(hit: Boolean, looting: Int) {
-		if (rng.nextBoolean())
-			entityDropItem(ElvenFoodMetas.Nectar.stack, 0f)
-		else
-			entityDropItem(ItemStack(ModItems.dye, 1, ASJUtilities.randInBounds(0, 15, rng)), 0f)
+		val count = max(1, looting) * if (isGiant) ASJUtilities.randInBounds(7, 15, rng) else 1
+		
+		for (i in 0 until count) {
+			if (rng.nextBoolean())
+				entityDropItem(ElvenFoodMetas.Nectar.stack, 0f)
+			else {
+				val meta = ASJUtilities.randInBounds(0, 16, rng)
+				val stack = if (meta == 16) ElvenResourcesMetas.RainbowDust.stack else ItemStack(ModItems.dye, 1, meta)
+				entityDropItem(stack, 0f)
+			}
+		}
 	}
 	
 	private val immuneTo = arrayOf(DamageSource.inWall.damageType, DamageSource.drown.damageType, DamageSource.fall.damageType)
@@ -60,13 +76,28 @@ class EntityButterfly(world: World): EntityFlyingCreature(world) {
 	
 	override fun onEntityUpdate() {
 		if (worldObj.isRemote) {
-			//for (i in 0..3) {
-			val color = Color(Color.HSBtoRGB((ClientTickHandler.ticksInGame * entityId) % 360 / 360f, 1f, 1f))
-			Botania.proxy.sparkleFX(worldObj, posX + (Math.random() - 0.5) * 0.5, posY + (Math.random() - 0.5) * 0.5, posZ + (Math.random() - 0.5) * 0.5, color.red.F, color.green.F, color.blue.F, 0.1f + Math.random().F * 0.25f, 12)
-			//}
+			for (i in 0 until if (isGiant) 10 else 1) {
+				val color = Color(Color.HSBtoRGB((ClientTickHandler.ticksInGame * entityId) % 360 / 360f, 1f, 1f))
+				Botania.proxy.sparkleFX(worldObj, posX + Math.random() * width - width / 2, posY + Math.random() * height - height / 2, posZ + Math.random() * width - width / 2, color.red.F, color.green.F, color.blue.F, 0.1f + Math.random().F * 0.25f * if (isGiant) 10 else 1, 12)
+			}
+		} else if (!sizeSet)  {
+			(worldObj.provider as? WE_WorldProvider)?.cp?.let {
+				if (WE_Biome.getBiomeAt(it, posX.mfloor(), posZ.mfloor()).isEqualTo(BiomeIslandGiantFlowers)) {
+					isGiant = true
+					getEntityAttribute(SharedMonsterAttributes.maxHealth).baseValue = 20.0
+					health = maxHealth
+				}
+			}
+			
+			sizeSet = true
 		}
 		
+		if (isGiant)
+			setSize(2.5f, 2.5f)
+		
 		motionY *= 0.6
+		val (x, y, z) = Vector3.fromEntity(this).mf()
+		if (y - worldObj.getTopSolidOrLiquidBlock(x, z) > if (isGiant) 30 else 15) motionY -= 0.1f
 		if (worldObj.rand.nextInt(600) == 0) motionY -= 5.0
 		
 		super.onEntityUpdate()
@@ -95,8 +126,7 @@ class EntityButterfly(world: World): EntityFlyingCreature(world) {
 	}
 	
 	override fun setDead() {
-		dead = true
-		isDead = dead
+		super.setDead()
 		if (worldObj.isRemote)
 			for (i in 0..11)
 				Botania.proxy.sparkleFX(worldObj, posX + (Math.random() - 0.5) * 0.25, posY + 0.5 + (Math.random() - 0.5) * 0.25, posZ + (Math.random() - 0.5) * 0.25, 1f, 0.25f, 0.9f, 1f + Math.random().F * 0.25f, 5)
@@ -108,8 +138,10 @@ class EntityButterfly(world: World): EntityFlyingCreature(world) {
 		var flagBiome = false
 		
 		val chunk = (worldObj.provider as? WE_WorldProvider)?.cp
-		if (chunk != null)
-			flagBiome = WE_Biome.getBiomeAt(chunk, posX.mfloor().toLong(), posZ.mfloor().toLong()).isEqualTo(BiomeField)
+		if (chunk != null) {
+			val biomeAt = WE_Biome.getBiomeAt(chunk, posX.mfloor(), posZ.mfloor())
+			flagBiome = biomeAt.isEqualTo(BiomeField) || biomeAt.isEqualTo(BiomeIslandGiantFlowers)
+		}
 		
 		return flagTime && flagBiome && posY > 64 && super.getCanSpawnHere()
 	}

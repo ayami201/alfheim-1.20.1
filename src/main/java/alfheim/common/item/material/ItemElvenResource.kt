@@ -158,20 +158,21 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	
 	val usable = arrayOf(ElvenWeed.I, WisdomBottle.I, YggFruit.I)
 	
-	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
+	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack? {
 		if (stack.meta in usable) {
 			if (stack.meta == WisdomBottle.I && (!RagnarokHandler.ginnungagap || player is EntityPlayerMP && KnowledgeSystem.know(player, Knowledge.ABYSS_TRUTH))) return stack
 			player.setItemInUse(stack, getMaxItemUseDuration(stack))
 		} else
 		// rift shard filling
 		if (stack.meta == RiftShardEmpty.I) {
-			if (!RagnarokHandler.ginnungagap || player !is EntityPlayerMP || !KnowledgeSystem.know(player, Knowledge.ABYSS_TRUTH)) return stack
+//			if (!RagnarokHandler.ginnungagap || player !is EntityPlayerMP || !KnowledgeSystem.know(player, Knowledge.ABYSS_TRUTH)) return stack
+			if (player !is EntityPlayerMP) return stack
 			
 			val mop = ASJUtilities.getSelectedBlock(player, player.theItemInWorldManager.blockReachDistance, true)
 			if (mop?.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return stack
 			val (x, y, z) = intArrayOf(mop.blockX, mop.blockY, mop.blockZ)
 			
-			stack.meta = when (player.dimension) {
+			val give = when (player.dimension) {
 				-1 -> {
 					if (y > 31) return stack
 					
@@ -181,23 +182,31 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 								if (world.getBlock(i, j, k) != Blocks.lava)
 									return stack
 					
-					RiftShardMuspelheim.I
+					RiftShardMuspelheim.stack
 				}
 				AlfheimConfigHandler.dimensionIDNiflheim -> {
 					if (y != 127 || ChunkProviderNiflheim.f(x) !in z.bidiRange(6)) return stack
 					
-					RiftShardNiflheim.I
+					RiftShardNiflheim.stack
 				}
 				!in emptyArray<Int>() -> { // bruh
 					if (world.getBlock(x, y, z) !== AlfheimBlocks.rift) return stack
+					val nextMeta = world.getBlockMetadata(x, y, z) + 1
+					if (nextMeta > 15) return stack
+					world.setBlockMetadataWithNotify(x, y, z, nextMeta, 0)
 					
-					RiftShardGinnungagap.I
+					RiftShardGinnungagap.stack
 				}
 				else -> return stack
 			}
+			
+			stack.stackSize--
+			
+			if (!player.inventory.addItemStackToInventory(give))
+				player.dropPlayerItemWithRandomChoice(stack, false)
 		}
 		
-		return stack
+		return if (stack.stackSize <= 0) null else stack
 	}
 	
 	override fun getMaxItemUseDuration(stack: ItemStack) = if (stack.meta in usable) 40 else 0

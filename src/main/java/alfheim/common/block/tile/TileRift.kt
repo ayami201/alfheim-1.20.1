@@ -5,11 +5,11 @@ import alexsocol.asjlib.extendables.block.ASJTile
 import alexsocol.asjlib.math.Vector3
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.core.handler.VisualEffectHandler
-import alfheim.common.core.handler.ragnarok.RagnarokHandler
-import alfheim.common.core.handler.ragnarok.RagnarokHandler.isProtected
+import alfheim.common.item.equipment.bauble.ItemSpatiotemporalRing
 import alfheim.common.item.relic.ItemTankMask
 import net.minecraft.entity.Entity
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.*
+import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.util.*
 import net.minecraft.world.World
 import kotlin.math.sqrt
@@ -27,15 +27,18 @@ class TileRift: ASJTile() {
 			return
 		}
 		
+		val range = 15 - getBlockMetadata()
+		if (range == 0) return
+		
 		val p = Vector3().rand().sub(0.5).normalize().mul(Math.random() * 4).add(this)
 		val m = Vector3.fromTileEntityCenter(this).sub(p).mul(0.05)
 		VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.GRAVITY, worldObj.provider.dimensionId, p.x, p.y, p.z, m.x, m.y, m.z)
 		
-		// suck blocks
-		if (!worldObj.isRemote && ticks++ % 10 == 0) {
-			var tx = xCoord + ASJUtilities.randInBounds(-16, 16, worldObj.rand)
-			var ty = yCoord + ASJUtilities.randInBounds(-16, 16, worldObj.rand)
-			var tz = zCoord + ASJUtilities.randInBounds(-16, 16, worldObj.rand)
+		// pull blocks
+		if (ticks++ % 10 == 0) {
+			var tx = xCoord + ASJUtilities.randInBounds(-range, range, worldObj.rand)
+			var ty = yCoord + ASJUtilities.randInBounds(-range, range, worldObj.rand)
+			var tz = zCoord + ASJUtilities.randInBounds(-range, range, worldObj.rand)
 			
 			val heightValue = worldObj.getHeightValue(tx, tz)
 			if (ty > heightValue) ty = heightValue
@@ -44,7 +47,7 @@ class TileRift: ASJTile() {
 			val end = Vec3.createVectorHelper(tx.D + 0.5, ty.D + 0.5, tz.D + 0.5)
 			val mop = rayTraceIgnoringSource(worldObj, start, end)
 			
-			if (mop != null && getDistanceFrom(mop.blockX.D, mop.blockY.D, mop.blockZ.D) < (16 * 16)) {
+			if (mop != null && getDistanceFrom(mop.blockX.D, mop.blockY.D, mop.blockZ.D) < (range * range)) {
 				tx = mop.blockX
 				ty = mop.blockY
 				tz = mop.blockZ
@@ -57,20 +60,20 @@ class TileRift: ASJTile() {
 			}
 		}
 		
-		// suck entities
-		val list = getEntitiesWithinAABB(worldObj, Entity::class.java, boundingBox(15))
+		// pull entities
+		val list = getEntitiesWithinAABB(worldObj, Entity::class.java, boundingBox(range))
 		if (list.size <= 0) return
 		
 		for (e in list) {
-			if (e is EntityPlayer && e.capabilities.disableDamage) continue
+			if (e is EntityPlayer && (e.capabilities.disableDamage || ItemSpatiotemporalRing.hasProtection(e))) continue
 			
 			if (e.isEntityAlive && !e.isEntityInvulnerable && Vector3.entityTileDistance(e, this) < 2.0)
 				if (e.attackEntityFrom(DamageSource.outOfWorld, 1.0f) && e is EntityPlayer && ASJUtilities.chance(1))
 					ItemTankMask.sendToHelheim(e)
 			
-			val dx = (xCoord + 0.5 - e.posX) / 15
-			val dy = (yCoord + 0.5 - e.posY) / 15
-			val dz = (zCoord + 0.5 - e.posZ) / 15
+			val dx = (xCoord + 0.5 - e.posX) / range
+			val dy = (yCoord + 0.5 - e.posY) / range
+			val dz = (zCoord + 0.5 - e.posZ) / range
 			val dist = sqrt(dx * dx + dy * dy + dz * dz)
 			var undist = 1.0 - dist
 			
@@ -79,6 +82,8 @@ class TileRift: ASJTile() {
 				e.motionX += dx / dist * undist * 0.15
 				e.motionY += dy / dist * undist * 0.25
 				e.motionZ += dz / dist * undist * 0.15
+				
+				if (e is EntityPlayerMP) e.playerNetServerHandler.sendPacket(S12PacketEntityVelocity(e))
 			}
 		}
 	}

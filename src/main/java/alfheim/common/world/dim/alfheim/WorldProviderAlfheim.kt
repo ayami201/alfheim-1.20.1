@@ -88,16 +88,17 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 		cp.decorateChunkGen_List.add(AlfheimLakeGen())
 		
 		WE_Biome.addBiomeToGeneration(cp, BiomeField)
+		WE_Biome.addBiomeToGeneration(cp, BiomeIslandGiantFlowers)
 		WE_Biome.addBiomeToGeneration(cp, BiomeBeach)
 		WE_Biome.addBiomeToGeneration(cp, BiomeSandbank)
 		WE_Biome.addBiomeToGeneration(cp, BiomeRiver)
-		WE_Biome.addBiomeToGeneration(cp, BiomeMount1)
-		WE_Biome.addBiomeToGeneration(cp, BiomeMount2)
-		WE_Biome.addBiomeToGeneration(cp, BiomeMount3)
-		WE_Biome.addBiomeToGeneration(cp, BiomeMount3Trees)
-		WE_Biome.addBiomeToGeneration(cp, BiomeMount3Field)
-		WE_Biome.addBiomeToGeneration(cp, BiomeForest)
-		WE_Biome.addBiomeToGeneration(cp, BiomeForest2)
+		WE_Biome.addBiomeToGeneration(cp, BiomeMountLow)
+		WE_Biome.addBiomeToGeneration(cp, BiomeMountMid)
+		WE_Biome.addBiomeToGeneration(cp, BiomeMountHigh)
+		WE_Biome.addBiomeToGeneration(cp, BiomeMountTopForest)
+		WE_Biome.addBiomeToGeneration(cp, BiomeMountTopField)
+		WE_Biome.addBiomeToGeneration(cp, BiomeIslandForest)
+		WE_Biome.addBiomeToGeneration(cp, BiomePitForest)
 	}
 	
 	override fun getBiomeGenForCoords(x: Int, z: Int): BiomeGenBase {

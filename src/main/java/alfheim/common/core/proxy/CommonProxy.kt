@@ -70,7 +70,6 @@ open class CommonProxy {
 	open fun postInit() {
 		AlfheimBlocks.regOreDict()
 		AlfheimItems.regOreDict()
-		AlfheimRecipes.postInit()
 		AlfheimLexiconData.init()
 		if (ConfigHandler.relicsEnabled) AlfheimLexiconData.initRelics()
 		//AlfheimLexiconData.postInit()

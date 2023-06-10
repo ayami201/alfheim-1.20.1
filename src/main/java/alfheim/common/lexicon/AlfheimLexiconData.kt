@@ -26,6 +26,7 @@ import vazkii.botania.api.lexicon.*
 import vazkii.botania.common.block.ModBlocks
 import vazkii.botania.common.brew.ModBrews
 import vazkii.botania.common.core.handler.ConfigHandler
+import vazkii.botania.common.crafting.ModCraftingRecipes
 import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.lexicon.LexiconData
 import vazkii.botania.common.lexicon.page.*
@@ -637,7 +638,7 @@ object AlfheimLexiconData {
 							   PageMultiblock("6", AlfheimMultiblocks.portal),
 							   PageText("7"), PageText("8")).setPriority()
 		
-		pylons.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeElvenPylon), PageCraftingRecipe("2", AlfheimRecipes.recipeGaiaPylon)).setPriority().icon = ItemStack(AlfheimBlocks.alfheimPylon, 1, 0)
+		pylons.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeElvenPylon), PageCraftingRecipe("2", ModCraftingRecipes.recipeGaiaPylon)).setPriority().icon = ItemStack(AlfheimBlocks.alfheimPylon, 1, 0)
 		
 		rainbowFlora.setLexiconPages(PageText("0"),
 									 PageCraftingRecipe("1", AlfheimRecipes.recipesRainbowPetal),
@@ -989,28 +990,6 @@ object AlfheimLexiconData {
 		// ################################################################
 		// ################################################################
 		// ################################################################
-		
-		for ((i, page) in LexiconData.gaiaRitual.pages.withIndex()) {
-			if (!page.unlocalizedName.endsWith("1")) continue
-			LexiconData.gaiaRitual.pages[i] = PageCraftingRecipe(page.unlocalizedName, AlfheimRecipes.recipeGaiaPylon)
-			break
-		}
-		
-//		LexiconData.gaiaRitual.pages.clear()
-//		LexiconData.gaiaRitual.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeGaiaPylon),
-//											   PageMultiblock("2", ModMultiblocks.gaiaRitual), PageText("3"), PageText("4"),
-//											   PageText("5"))
-		
-		for ((i, page) in LexiconData.sparks.pages.withIndex()) {
-			if (!page.unlocalizedName.endsWith("2")) continue
-			LexiconData.sparks.pages[i] = PageCraftingRecipe(page.unlocalizedName, AlfheimRecipes.recipesSpark)
-			break
-		}
-		
-//		LexiconData.sparks.pages.clear()
-//		LexiconData.sparks.setLexiconPages(PageText("0"), PageText("1"),
-//										   PageCraftingRecipe("2", AlfheimRecipes.recipesSpark),
-//										   PageText("3"))
 		
 		LexiconData.cosmeticBaubles.setLexiconPages(PageCraftingRecipe("34", AlfheimRecipes.recipeThinkingHand))
 		
