@@ -48,7 +48,6 @@ import net.minecraftforge.common.ISpecialArmor.ArmorProperties
 import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.*
 import org.objectweb.asm.Opcodes
-import ru.vamig.worldengine.WE_Biome
 import ru.vamig.worldengine.WE_WorldProvider
 import java.io.File
 import java.nio.FloatBuffer
@@ -983,19 +982,21 @@ object ASJHookHandler {
 		val subBiomes = chunk.WorldEngine_SubBiomeList ?: return
 		
 		val subBiomesList = NBTTagList()
-		for (subBiome in subBiomes) subBiomesList.appendTag(NBTTagString(subBiome))
+		for (subBiome in subBiomes) subBiomesList.appendTag(NBTTagString(subBiome ?: "<null>"))
 		
-		nbt.setTag("WorldEngine_SubBiomeList", nbt)
+		nbt.setTag("WorldEngine_SubBiomeList", subBiomesList)
 	}
 	
 	@JvmStatic
 	@Hook(injectOnExit = true)
 	fun readChunkFromNBT(acl: AnvilChunkLoader, world: World, nbt: NBTTagCompound, @ReturnValue chunk: Chunk): Chunk {
-		if (!nbt.hasKey("WorldEngine_SubBiomeList", 9) || chunk.WorldEngine_SubBiomeList?.size != 256) return chunk
+		if (!nbt.hasKey("WorldEngine_SubBiomeList", 9) || chunk.WorldEngine_SubBiomeList == null) return chunk
 		
 		val subBiomesList = nbt.getTag("WorldEngine_SubBiomeList") as NBTTagList
-		for (i in 0 until subBiomesList.tagCount())
-			chunk.WorldEngine_SubBiomeList[i] = subBiomesList.getStringTagAt(i)
+		for (i in 0 until subBiomesList.tagCount()) {
+			val subBiome = subBiomesList.getStringTagAt(i)
+			chunk.WorldEngine_SubBiomeList[i] = if (subBiome == "<null>") null else subBiome
+		}
 		
 		return chunk
 	}

@@ -26,7 +26,7 @@ import vazkii.botania.api.lexicon.*
 import vazkii.botania.common.block.ModBlocks
 import vazkii.botania.common.brew.ModBrews
 import vazkii.botania.common.core.handler.ConfigHandler
-import vazkii.botania.common.crafting.ModCraftingRecipes
+import vazkii.botania.common.crafting.*
 import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.lexicon.LexiconData
 import vazkii.botania.common.lexicon.page.*
@@ -648,7 +648,7 @@ object AlfheimLexiconData {
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.rainbowTallFlower), rainbowFlora, 0)
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.rainbowGrass, 1, 2), rainbowFlora, 0)
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.rainbowGrass, 1, 3), LexiconData.shinyFlowers, 2)
-		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.rainbowFlowerFloating, 1, 3), LexiconData.shinyFlowers, 3 )
+		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.rainbowFlowerFloating), LexiconData.shinyFlowers, 3)
 		
 		reality.setLexiconPages(PageText("0"), PageText("1"), PageCraftingRecipe("2", AlfheimRecipes.recipeSword))
 		
@@ -1013,6 +1013,7 @@ object AlfheimLexiconData {
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.rainbowMushroom), LexiconData.mushrooms, 1)
 		
 		setKnowledgeTypes()
+		replaceBotaniaRecipes()
 	}
 	
 	fun initRelics() {
@@ -1117,6 +1118,14 @@ object AlfheimLexiconData {
 		if (targets!!.pages.isEmpty())
 			targets!!.setPriority()
 				.setLexiconPages(PageText("0"), PageText("1"))
+	}
+	
+	private fun replaceBotaniaRecipes() {
+		LexiconData.superLavaPendant.pages.filterIsInstance<PageCraftingRecipe>().first().recipes = listOf(ModCraftingRecipes.recipeSuperLavaPendant)
+		LexiconData.gaiaRitual.pages.filterIsInstance<PageCraftingRecipe>().first().recipes = listOf(ModCraftingRecipes.recipeGaiaPylon)
+		LexiconData.rainbowRod.pages.filterIsInstance<PageCraftingRecipe>().first { "4" in it.unlocalizedName }.recipes = listOf(ModCraftingRecipes.recipeShimmerrock)
+		LexiconData.rainbowRod.pages.filterIsInstance<PageCraftingRecipe>().first { "5" in it.unlocalizedName }.recipes = listOf(ModCraftingRecipes.recipeShimmerwoodPlanks)
+		LexiconData.dreamwoodSpreader.pages.filterIsInstance<PageCraftingRecipe>().first { "3" in it.unlocalizedName }.recipes = listOf(ModCraftingRecipes.recipeUltraSpreader)
 	}
 	
 	private fun setKnowledgeTypes() {

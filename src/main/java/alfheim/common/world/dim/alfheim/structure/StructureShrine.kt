@@ -5,7 +5,9 @@ import alexsocol.asjlib.math.Vector3
 import alfheim.api.ModInfo
 import alfheim.common.block.tile.TilePowerStone
 import alfheim.common.world.data.CustomWorldData.Companion.customData
+import alfheim.common.world.dim.alfheim.biome.BiomeField
 import net.minecraft.world.World
+import ru.vamig.worldengine.*
 import ru.vamig.worldengine.standardcustomgen.StructureBaseClass
 import java.util.*
 
@@ -18,9 +20,14 @@ object StructureShrine: StructureBaseClass() {
 		SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/shrineTank")
 	                     )
 	
-	override fun generate(world: World, rand: Random, x: Int, y: Int, z: Int): Boolean {
+	override fun generate(world: World, rand: Random, x: Int, y: Int, z: Int, chunkProvider: WE_ChunkProvider): Boolean {
 		if (ASJUtilities.isClient) return false // just in case
 		if (x shr 4 in -32 until 32 || z shr 4 in -32 until 32) return false // no shrines in Yggdrasil pit
+		
+		arrayOf(-1 to -1, 1 to 1, -1 to 1, 1 to -1).forEach { (i, k) ->
+			if (WE_Biome.getBiomeAt(chunkProvider, x + i * 16, z + k * 16) !== BiomeField)
+				return false
+		}
 		
 		val data = world.customData
 		val locs = data.structures["any"]

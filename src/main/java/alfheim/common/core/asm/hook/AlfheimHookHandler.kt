@@ -653,7 +653,9 @@ object AlfheimHookHandler {
 		
 		val random = Random()
 		val range = max(4, mc.gameSettings.renderDistanceChunks - 2) * 16
-		val max = (1312.5 * range - 20000).I
+		val max = ((1312.5 * range - 20000) * AlfheimConfigHandler.spiritsCountMultiplier).I
+		
+		if (max <= 0) return
 		
 		for (l in 0..max) {
 			val x = i + ASJUtilities.randInBounds(-range, range, world.rand)

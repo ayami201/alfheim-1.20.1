@@ -5,6 +5,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.init.Blocks
 import net.minecraft.world.World
+import ru.vamig.worldengine.WE_ChunkProvider
 import ru.vamig.worldengine.standardcustomgen.StructureBaseClass
 import java.util.*
 
@@ -17,7 +18,7 @@ class StructureDreamsTree
  */
 (val log: Block, val leaves: Block, val upmeta: Int, val lrmeta: Int, val fbmeta: Int, val lvsmeta: Int): StructureBaseClass() {
 	
-	override fun generate(world: World, rand: Random, i: Int, y: Int, k: Int): Boolean {
+	override fun generate(world: World, rand: Random, i: Int, y: Int, k: Int, `null`: WE_ChunkProvider?): Boolean {
 		var x = i
 		var z = k
 		x -= 7

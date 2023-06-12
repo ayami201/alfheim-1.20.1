@@ -58,6 +58,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var grabMidgardPortal = false
 	var increasedSpiritsRange = true
 	var rainbowPolys = 360
+	var spiritsCountMultiplier = 0.5
 	
 	// - NIFLHEIM
 	var dimensionIDNiflheim = -106
@@ -246,8 +247,9 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		dimensionIDAlfheim = loadProp(CATEGORY_ALFHEIM, "dimensionIDAlfheim", dimensionIDAlfheim, true, "Dimension ID for Alfheim")
 		enableAlfheimRespawn = loadProp(CATEGORY_ALFHEIM, "enableAlfheimRespawn", enableAlfheimRespawn, false, "Set this to false to disable respawning in Alfheim")
 		grabMidgardPortal = loadProp(CATEGORY_ALFHEIM, "grabMidgardPortal", grabMidgardPortal, false, "Set this to true to teleport near existing active loaded portal when leaving Alfheim instead of world spawn")
-		increasedSpiritsRange = loadProp(CATEGORY_ALFHEIM, "increasedSpiritsRange", increasedSpiritsRange, false, "Set this to false to reduce nighttime spirits spawn in Alfheim (may increase FPS)")
+		increasedSpiritsRange = loadProp(CATEGORY_ALFHEIM, "increasedSpiritsRange", increasedSpiritsRange, false, "Set this to false to reduce nighttime spirits spawn range in Alfheim (may increase FPS)")
 		rainbowPolys = loadProp(CATEGORY_ALFHEIM, "rainbowPolys", rainbowPolys, false, "How smooth will rainbow and rays in Alfheim sky be (higher number - more polygons)")
+		spiritsCountMultiplier = loadProp(CATEGORY_ALFHEIM, "spiritsCountMultiplier", spiritsCountMultiplier, false, "Affects nighttime spirits spawn count in Alfheim")
 		
 		dimensionIDNiflheim = loadProp(CATEGORY_NIFLHEIM, "dimensionIDNiflheim", dimensionIDNiflheim, true, "Dimension ID for Niflheim")
 		enableNiflheimRespawn = loadProp(CATEGORY_NIFLHEIM, "enableNiflheimRespawn", enableNiflheimRespawn, false, "Set this to false to disable respawning in Niflheim")

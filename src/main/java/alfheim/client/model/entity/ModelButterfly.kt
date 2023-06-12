@@ -51,7 +51,8 @@ class ModelButterfly(val pass: Int): ModelBase() {
 			shape3.render(f5)
 		}
 		
-		glScalef(0.1f)
+		if (entity is EntityButterfly && entity.isGiant)
+			glScalef(0.1f)
 	}
 	
 	/**

@@ -136,7 +136,7 @@ class BlockAltLeaves: BlockLeavesMod(), IGlowingLayerBlock {
 				Botania.proxy.wispFX(world, x + i, y + j * 5 + 1, z + k, r, g, b, s.F * 0.25f + 0.1f, m.F * 0.1f - 0.05f, n.F * 0.01F, o.F * 0.1f - 0.05f, l.F * 20f + 5f)
 			
 			if (AlfheimConfigHandler.increasedSpiritsRange) // not so good in close range
-				Botania.proxy.wispFX(world, x + i, y + j * 5 + 1, z + k, r / 2, g / 2, b / 2, s.F * 0.25f + 3f, m.F * 0.1f - 0.05f, n.F * 0.01F, o.F * 0.1f - 0.05f, l.F * 20f + 5f)
+				Botania.proxy.wispFX(world, x + i, y + j * 5 + 1, z + k, r / 2, g / 2, b / 2, s.F * 0.25f + 1.5f, m.F * 0.1f - 0.05f, n.F * 0.01F, o.F * 0.1f - 0.05f, l.F * 20f + 5f)
 			
 			Botania.proxy.setWispFXDistanceLimit(true)
 		}

@@ -37,7 +37,7 @@ public class WE_Biome extends BiomeGenBase {
 	public int biomeNumberOfOctaves = 1,
 		biomeSurfaceHeight = 63,
 		biomeInterpolateQuality = 16;
-	public int grassColor = 0x08F500;
+	public int grassColor = 0x91BD59;
 	
 	/////
 	//=//

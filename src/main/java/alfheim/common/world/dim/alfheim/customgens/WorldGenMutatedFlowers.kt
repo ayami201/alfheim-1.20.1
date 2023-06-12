@@ -29,9 +29,9 @@ object WorldGenMutatedFlowers: StructureBaseClass() {
 		subStructures
 	}
 	
-	override fun generate(world: World, rand: Random, x: Int, y: Int, z: Int): Boolean {
+	override fun generate(world: World, rand: Random, x: Int, y: Int, z: Int, chunkProvider: WE_ChunkProvider): Boolean {
 		arrayOf(-1 to -1, 1 to 1, -1 to 1, 1 to -1).forEach { (i, k) ->
-			if (WE_Biome.getBiomeAt(world.chunkProvider as WE_ChunkProvider, x + i * 24, z + k * 24) !== BiomeIslandGiantFlowers)
+			if (WE_Biome.getBiomeAt(chunkProvider, x + i * 24, z + k * 24) !== BiomeIslandGiantFlowers)
 				return false
 		}
 		

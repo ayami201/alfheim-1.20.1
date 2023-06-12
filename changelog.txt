@@ -2,6 +2,7 @@ Innovations:
  A new rare Alfheim biome with giant flowers and butterflies
  Dreamwood leaves now has 8 blocks of range for decay check
  Rifts now can be depleted with rift shards
+ More flexible (configurable) Alfheim nighttime spirits
  Optimized cold sync
  
 Fixes:
