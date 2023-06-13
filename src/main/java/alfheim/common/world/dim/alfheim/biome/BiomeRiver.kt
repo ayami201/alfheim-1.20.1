@@ -1,27 +1,13 @@
 package alfheim.common.world.dim.alfheim.biome
 
 import net.minecraft.init.Blocks
-import net.minecraftforge.common.BiomeDictionary
 import net.minecraftforge.common.BiomeDictionary.Type
 import ru.vamig.worldengine.standardcustomgen.WE_BiomeLayer
 import vazkii.botania.common.block.ModBlocks
 
-object BiomeRiver: BiomeAlfheim() {
+object BiomeRiver: BiomeAlfheim(-0.48, -0.38, 1.33, 3, 250.0, 1.0, 58, 4, "River", Type.RIVER, Type.WET) {
 	
 	init {
-		setBiomeName("River")
-		
-		BiomeDictionary.registerBiomeType(this, Type.RIVER, Type.WET)
-		
-		biomeMinValueOnMap = -0.48
-		biomeMaxValueOnMap = -0.38
-		biomePersistence = 1.33
-		biomeNumberOfOctaves = 3
-		biomeScaleX = 250.0
-		biomeScaleY = 1.0
-		biomeSurfaceHeight = 58 + offset
-		biomeInterpolateQuality = 4
-		
 		var standardBiomeLayers = WE_BiomeLayer()
 		standardBiomeLayers.add(Blocks.clay, 0.toByte(), ModBlocks.livingrock, 0.toByte(), -256, 0, -4, -2, true)
 		standardBiomeLayers.add(Blocks.gravel, 0.toByte(), Blocks.clay, 0.toByte(), -256, 0, -256, 1, true)

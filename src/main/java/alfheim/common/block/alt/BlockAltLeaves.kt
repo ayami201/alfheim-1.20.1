@@ -90,6 +90,8 @@ class BlockAltLeaves: BlockLeavesMod(), IGlowingLayerBlock {
 	
 	override fun canDecay(meta: Int) = if (meta % 8 == yggMeta) false else super.canDecay(meta)
 	
+	override fun getDecayRange(meta: Int) = if (meta % 8 == 7) 8 else 4
+	
 	override fun isLeaves(world: IBlockAccess, x: Int, y: Int, z: Int) = if (world.getBlockMetadata(x, y, z) % 8 == yggMeta) false else super.isLeaves(world, x, y, z)
 	
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?): LexiconEntry {
@@ -106,6 +108,8 @@ class BlockAltLeaves: BlockLeavesMod(), IGlowingLayerBlock {
 	override fun getGlowIcon(side: Int, meta: Int) = if (meta % 8 == 7) glowIcon else null
 	
 	override fun randomDisplayTick(world: World, x: Int, y: Int, z: Int, rand: Random) {
+		super.randomDisplayTick(world, x, y, z, rand)
+		
 		if (!AlfheimConfigHandler.increasedSpiritsRange && world.getBlockMetadata(x, y, z) % 8 == 7)
 			spawnRandomSpirit(world, x, y, z, rand, 0f, rand.nextFloat() * 0.25f + 0.5f, 1f)
 	}
@@ -134,7 +138,7 @@ class BlockAltLeaves: BlockLeavesMod(), IGlowingLayerBlock {
 				Botania.proxy.wispFX(world, x + i, y + j * 5 + 1, z + k, r, g, b, s.F * 0.25f + 0.1f, m.F * 0.1f - 0.05f, n.F * 0.01F, o.F * 0.1f - 0.05f, l.F * 20f + 5f)
 			
 			if (AlfheimConfigHandler.increasedSpiritsRange) // not so good in close range
-				Botania.proxy.wispFX(world, x + i, y + j * 5 + 1, z + k, r / 2, g / 2, b / 2, s.F * 0.25f + 3f, m.F * 0.1f - 0.05f, n.F * 0.01F, o.F * 0.1f - 0.05f, l.F * 20f + 5f)
+				Botania.proxy.wispFX(world, x + i, y + j * 5 + 1, z + k, r / 2, g / 2, b / 2, s.F * 0.25f + 1.5f, m.F * 0.1f - 0.05f, n.F * 0.01F, o.F * 0.1f - 0.05f, l.F * 20f + 5f)
 			
 			Botania.proxy.setWispFXDistanceLimit(true)
 		}

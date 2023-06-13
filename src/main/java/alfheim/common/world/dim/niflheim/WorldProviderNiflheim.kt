@@ -76,7 +76,7 @@ class WorldProviderNiflheim: WorldProvider() {
 	}
 	override fun getSpawnPoint() = worldObj.customData.spawnpoint ?: ChunkCoordinates(0, 128, 16)
 	override fun drawClouds(partialTicks: Float) = Vector3(0.001).toVec3() // ДРАВ ХУЯВ БЛЯТЬ ЭТО ПОЛУЧЕНИЕ ЦВЕТА А НЕ ОТРИСОВКА ТУПЫЕ ПИДАРАСЫ НА ФОРГАХ
-	override fun getFogColor(sunAngle: Float, ticks: Float) = if (mc.thePlayer.capabilities.isCreativeMode) Vector3(1).toVec3() else Vector3(0.001).toVec3()
+	override fun getFogColor(sunAngle: Float, ticks: Float) = if (mc.thePlayer?.capabilities?.isCreativeMode == true) Vector3(1).toVec3() else Vector3(0.001).toVec3()
 	override fun calculateCelestialAngle(ticks: Long, partial: Float) = 0.5f
 	override fun getEntrancePortalLocation() = spawnPoint
 	override fun getRandomizedSpawnPoint() = spawnPoint
@@ -90,15 +90,15 @@ class WorldProviderNiflheim: WorldProvider() {
 	override fun getActualHeight() = super.getHeight()
 	override fun isDaytime() = false
 	override fun isBlockHighHumidity(x: Int, y: Int, z: Int) = false
-	override fun getStarBrightness(par1: Float) = 0f
-	override fun getSunBrightness(par1: Float) = 0f
-	override fun getSunBrightnessFactor(par1: Float) = 0f
+	override fun getStarBrightness(ticks: Float) = 0f
+	override fun getSunBrightness(ticks: Float) = 0f
+	override fun getSunBrightnessFactor(ticks: Float) = 0f
 	override fun getCurrentMoonPhaseFactor() = 0f // ЧТО ЭТО ЗА ГОВНО ВООБЩЕ БЛЯТЬ И КАКОГО ХУЯ ОТ НЕГО ЗАВИСИТ ЛУТ ИЛИ ЧТО А А А
 	override fun getMoonPhase(ticks: Long) = 4
 	override fun getAverageGroundLevel() = 128
 	override fun getWorldHasVoidParticles() = false
-	override fun getHorizon() = if (mc.thePlayer.posY > 111) 126.0 else 189.0
-	override fun getCloudHeight() = if (mc.thePlayer.run { posY > 111 && !capabilities.isCreativeMode }) 128f else -Float.MAX_VALUE
+	override fun getHorizon() = if (mc.thePlayer?.run { posY > 111 } == true) 126.0 else 189.0
+	override fun getCloudHeight() = if (mc.thePlayer?.run { posY > 111 && !capabilities.isCreativeMode } == true) 128f else -Float.MAX_VALUE
 	override fun getDimensionName() = "Niflheim"
 	override fun getBiomeGenForCoords(x: Int, z: Int): BiomeGenBase = super.getBiomeGenForCoords(x, z) as? BiomeNiflheim ?: BiomeGenIce // fuck server cores
 	

@@ -280,15 +280,12 @@ import vazkii.botania.common.block.ModFluffBlocks.*
 import vazkii.botania.common.block.tile.mana.TilePool
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.crafting.*
-import vazkii.botania.common.crafting.ModCraftingRecipes.*
 import vazkii.botania.common.item.ModItems.*
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower
 import vazkii.botania.common.lib.LibBlockNames
 import vazkii.botania.common.lib.LibOreDict.*
 import net.minecraft.init.Items.dye as justDye
 import net.minecraft.init.Items.skull as skullPlacer
-import vazkii.botania.common.crafting.ModCraftingRecipes.recipeGaiaPylon as recipeGaiaPylonOld
-import vazkii.botania.common.crafting.ModCraftingRecipes.recipesApothecary as recipesApothecaryVanilla
 import vazkii.botania.common.item.ModItems.quartz as manaquartz
 
 object AlfheimRecipes {
@@ -368,7 +365,6 @@ object AlfheimRecipes {
 	lateinit var recipeFenrirHelmet: IRecipe
 	lateinit var recipeFenrirLeggings: IRecipe
 	lateinit var recipeFurnace: IRecipe
-	lateinit var recipeGaiaPylon: IRecipe
 	lateinit var recipeGrenade: IRecipe
 	lateinit var recipeGoddessCharm: IRecipe
 	lateinit var recipeHyperBucket: IRecipe
@@ -459,14 +455,12 @@ object AlfheimRecipes {
 	lateinit var recipeSixTorches: IRecipe
 	lateinit var recipeSoulHorn: IRecipe
 	lateinit var recipeSoulSword: IRecipe
-	lateinit var recipesSpark: MutableList<IRecipe>
 	lateinit var recipeSparkBase: IRecipe
 	lateinit var recipeSpatiotemporal: IRecipe
 	lateinit var recipeSpire: IRecipe
 	lateinit var recipeSplashPotions: IRecipe
 	lateinit var recipesStar2: List<IRecipe>
 	lateinit var recipesStar: List<IRecipe>
-	lateinit var recipeSuperLavaPendantNew: IRecipe
 	lateinit var recipeSword: IRecipe
 	lateinit var recipeTerraHarvester: IRecipe
 	lateinit var recipeThinkingHand: IRecipe
@@ -523,8 +517,6 @@ object AlfheimRecipes {
 	}
 	
 	private fun registerCraftingRecipes() {
-		ASJUtilities.removeRecipe(ModCraftingRecipes.recipeGaiaPylon.recipeOutput)
-		
 		addOreDictRecipe(ItemStack(airyVirus, 3),
 		                 "RGR", "EVE", "AAA",
 		                 'R', REDSTONE_DUST,
@@ -579,7 +571,7 @@ object AlfheimRecipes {
 						 'S', "slabCobblestone",
 						 'P', RAINBOW_PETAL,
 						 'C', "cobblestone")
-		recipesApothecaryVanilla.add(BotaniaAPI.getLatestAddedRecipe())
+		ModCraftingRecipes.recipesApothecary?.add(BotaniaAPI.getLatestAddedRecipe())
 		
 		for (i in 0 until ALT_TYPES.size - 1)
 			addRecipe(ItemStack(altSlabs, 6, i),
@@ -825,7 +817,7 @@ object AlfheimRecipes {
 		          'F', ItemStack(rainbowGrass, 1, 3),
 		          'S', ItemStack(grassSeeds),
 		          'D', ItemStack(dirt))
-		recipesMiniIsland.add(BotaniaAPI.getLatestAddedRecipe())
+		ModCraftingRecipes.recipesMiniIsland?.add(BotaniaAPI.getLatestAddedRecipe())
 		
 		recipeRealityAnchor = ShapedOreRecipeLearnable(ABYSS_TRUTH, ItemStack(realityAnchor),
 		                                               "NBN", "CMC", "NRN",
@@ -980,8 +972,8 @@ object AlfheimRecipes {
 						 "WPW", "W W", " W ",
 						 'P', PETAL_ANY,
 						 'W', ItemStack(wool, 1, 32767))
-		CraftingManager.getInstance().recipeList.remove(recipeFlowerBag)
-		recipeFlowerBag = BotaniaAPI.getLatestAddedRecipe()
+		ModCraftingRecipes.recipeFlowerBag?.let { CraftingManager.getInstance().recipeList.remove(it) }
+		ModCraftingRecipes.recipeFlowerBag = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(fenrirBoots),
 						 "G G", "F F", "FBF",
@@ -1111,7 +1103,7 @@ object AlfheimRecipes {
 		                 'P', PRISMARINE_SHARD,
 		                 'A', RUNE[3],
 		                 'E', RUNE[2])
-		recipesLaputaShard.add(BotaniaAPI.getLatestAddedRecipe())
+		ModCraftingRecipes.recipesLaputaShard?.add(BotaniaAPI.getLatestAddedRecipe())
 		
 		addOreDictRecipe(ItemStack(lens, 1, 22),
 						 " P ", "PLP", " P ",
@@ -1252,14 +1244,14 @@ object AlfheimRecipes {
 		
 		if (AlfheimConfigHandler.enableMMO) addMMORecipes()
 		
-		ASJUtilities.removeRecipe(superLavaPendant)
 		addOreDictRecipe(ItemStack(superLavaPendant),
 						 "MMM", "MPM", "ISI",
 						 'M', blaze_rod,
 						 'P', lavaPendant,
 						 'I', nether_brick,
 						 'S', MUSPELHEIM_ESSENCE)
-		recipeSuperLavaPendantNew = BotaniaAPI.getLatestAddedRecipe()
+		ModCraftingRecipes.recipeSuperLavaPendant?.let { CraftingManager.getInstance().recipeList.remove(it) }
+		ModCraftingRecipes.recipeSuperLavaPendant = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(pendantSuperIce),
 						 "MMM", "MPM", "ISI",
@@ -1410,7 +1402,8 @@ object AlfheimRecipes {
 						 'T', TERRASTEEL_NUGGET,
 						 'E', overgrowthSeed,
 						 'P', ItemStack(alfheimPylon))
-		recipeGaiaPylon = BotaniaAPI.getLatestAddedRecipe()
+		ModCraftingRecipes.recipeGaiaPylon?.let { CraftingManager.getInstance().recipeList.remove(it) }
+		ModCraftingRecipes.recipeGaiaPylon = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(rationBelt),
 						 "GL ", "L L", "ELS",
@@ -1572,14 +1565,23 @@ object AlfheimRecipes {
 						 'D', INFUSED_DREAM_TWIG)
 		recipeSoulSword = BotaniaAPI.getLatestAddedRecipe()
 		
-		for (i in 0..15)
-			addOreDictRecipe(ItemStack(spark),
-							 " P ", "BNB", " P ",
-							 'B', PIXIE_DUST,
-							 'P', PETAL[i],
-							 'N', "nuggetGold")
-		recipesSpark = BotaniaAPI.getLatestAddedRecipes(16)
-		recipesSpark.addAll(ModCraftingRecipes.recipesSpark)
+		addOreDictRecipe(ItemStack(spark),
+						 " P ", "BNB", " P ",
+						 'B', PIXIE_DUST,
+						 'P', PETAL_ANY,
+						 'N', "nuggetGold")
+		
+		addOreDictRecipe(ItemStack(spark),
+		                 " P ", "BNB", " P ",
+		                 'B', ItemStack(blaze_powder),
+		                 'P', PETAL_ANY,
+		                 'N', "nuggetGold")
+		
+		ModCraftingRecipes.recipesSpark?.let {
+			it.forEach(CraftingManager.getInstance().recipeList::remove)
+			it.clear()
+			it.addAll(BotaniaAPI.getLatestAddedRecipes(2))
+		}
 		
 		addOreDictRecipe(ItemStack(spatiotemporalRing),
 						 "GES", "E E", "SE ",
@@ -1601,14 +1603,14 @@ object AlfheimRecipes {
 						 'W', LIVING_WOOD,
 						 'P', RAINBOW_PETAL,
 						 'G', if (Botania.gardenOfGlassLoaded) LIVING_WOOD else "ingotGold")
-		recipesSpreader.add(BotaniaAPI.getLatestAddedRecipe())
+		ModCraftingRecipes.recipesSpreader?.add(BotaniaAPI.getLatestAddedRecipe())
 		
 		addOreDictRecipe(ItemStack(spreader, 1, 2),
 						 "WWW", "EP ", "WWW",
 						 'W', DREAM_WOOD,
 						 'P', RAINBOW_PETAL,
 						 'E', ELEMENTIUM)
-		recipesDreamwoodSpreader.add(BotaniaAPI.getLatestAddedRecipe())
+		ModCraftingRecipes.recipesDreamwoodSpreader?.add(BotaniaAPI.getLatestAddedRecipe())
 		
 		for (i in 0..16) {
 			val stack = ItemStarPlacer.forColor(i)
@@ -2026,8 +2028,8 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(ItemStack(glowstone_dust), PESTLE_AND_MORTAR, DreamCherry.stack, DreamCherry.stack, DreamCherry.stack)
 		
 		addShapelessOreDictRecipe(ItemStack(fertilizer, if (Botania.gardenOfGlassLoaded) 3 else 1), ItemStack(justDye, 1, 15), FLORAL_POWDER, FLORAL_POWDER, FLORAL_POWDER, FLORAL_POWDER)
-		CraftingManager.getInstance().recipeList.remove(recipeFertilizerPowder)
-		recipeFertilizerPowder = BotaniaAPI.getLatestAddedRecipe()
+		ModCraftingRecipes.recipeFertilizerPowder?.let { CraftingManager.getInstance().recipeList.remove(it) }
+		ModCraftingRecipes.recipeFertilizerPowder = BotaniaAPI.getLatestAddedRecipe()
 		
 		for (i in 0..5) {
 			val enh: Any = if (i < 3) MAUFTRIUM_INGOT else ItemStack(alfStorage, 1, 1)
@@ -2110,11 +2112,11 @@ object AlfheimRecipes {
 		recipeGrenade = BotaniaAPI.getLatestAddedRecipe()
 		
 		addShapelessOreDictRecipe(ItemStack(rainbowGrass, 1, 3), "dustGlowstone", "dustGlowstone", ItemStack(rainbowGrass, 1, 2))
-		recipesShinyFlowers.add(BotaniaAPI.getLatestAddedRecipe())
+		ModCraftingRecipes.recipesShinyFlowers?.add(BotaniaAPI.getLatestAddedRecipe())
 		
 		addShapelessRecipe(ItemStack(rainbowMushroom), ItemStack(red_mushroom), RainbowDust.stack)
 		addShapelessRecipe(ItemStack(rainbowMushroom), ItemStack(brown_mushroom), RainbowDust.stack)
-		recipesMushrooms.addAll(BotaniaAPI.getLatestAddedRecipes(2))
+		ModCraftingRecipes.recipesMushrooms?.addAll(BotaniaAPI.getLatestAddedRecipes(2))
 		
 		addOreDictRecipe(ItemStack(rainbowPetalBlock), "PPP", "PPP", "PPP", 'P', RainbowPetal.stack)
 		recipeRainbowPetalBlock = BotaniaAPI.getLatestAddedRecipe()
@@ -2123,14 +2125,14 @@ object AlfheimRecipes {
 		recipeSealingPlanks = BotaniaAPI.getLatestAddedRecipe()
 		
 		addShapelessOreDictRecipe(ItemStack(shimmerrock), "livingrock", DYES[16])
-		CraftingManager.getInstance().recipeList.remove(recipeShimmerrock)
-		recipeShimmerrock = BotaniaAPI.getLatestAddedRecipe()
+		ModCraftingRecipes.recipeShimmerrock?.let { CraftingManager.getInstance().recipeList.remove(it) }
+		ModCraftingRecipes.recipeShimmerrock = BotaniaAPI.getLatestAddedRecipe()
 		
 		recipeShimmerQuartz = addQuartzRecipes(shimmerQuartz, shimmerQuartzStairs, shimmerQuartzSlab)
 		
 		addShapelessOreDictRecipe(ItemStack(shimmerwoodPlanks), ItemStack(dreamwood, 1, 1), DYES[16])
-		CraftingManager.getInstance().recipeList.remove(recipeShimmerwoodPlanks)
-		recipeShimmerwoodPlanks = BotaniaAPI.getLatestAddedRecipe()
+		ModCraftingRecipes.recipeShimmerwoodPlanks?.let { CraftingManager.getInstance().recipeList.remove(it) }
+		ModCraftingRecipes.recipeShimmerwoodPlanks = BotaniaAPI.getLatestAddedRecipe()
 		
 		addShapelessOreDictRecipe(ItemStack(corporeaSparkBase), fence, corporeaSpark)
 		recipeSparkBase = BotaniaAPI.getLatestAddedRecipe()
@@ -2146,9 +2148,10 @@ object AlfheimRecipes {
 		
 		addShapelessRecipe(NiflheimBlockMetas.COBBLESTONE.stack, NiflheimBlockMetas.STONE.stack)
 		
-		CraftingManager.getInstance().recipeList.remove(recipeUltraSpreader)
+		// change to shapeless, same parts
 		addShapelessOreDictRecipe(ItemStack(spreader, 1, 3), LIFE_ESSENCE, ItemStack(spreader, 1, 2), DRAGONSTONE)
-		recipeUltraSpreader = BotaniaAPI.getLatestAddedRecipe()
+		ModCraftingRecipes.recipeUltraSpreader?.let { CraftingManager.getInstance().recipeList.remove(it) }
+		ModCraftingRecipes.recipeUltraSpreader = BotaniaAPI.getLatestAddedRecipe()
 		
 		repeat(16) {
 			addShapelessRecipe(ItemStack(petal, 9, it), ItemStack(petalBlock, 1, it))
@@ -2369,11 +2372,11 @@ object AlfheimRecipes {
 		recipeNiflheimRune = BotaniaAPI.registerRuneAltarRecipe(NiflheimRune.stack, costTier3,
 																RUNE[0], RUNE[3], NiflheimEssence.stack, NiflheimEssence.stack, IFFESAL_DUST)
 		
-		BotaniaAPI.runeAltarRecipes.remove(ModRuneRecipes.recipeSummerRune)
+		ModRuneRecipes.recipeSummerRune?.let { BotaniaAPI.runeAltarRecipes.remove(it) }
 		ModRuneRecipes.recipeSummerRune = BotaniaAPI.registerRuneAltarRecipe(ItemStack(rune, 1, 5), costTier2, RUNE[2], RUNE[3], "sand", "sand", ItemStack(slime_ball), ItemStack(melon))
 		
-		ModRuneRecipes.recipesEarthRune.add(BotaniaAPI.registerRuneAltarRecipe(ItemStack(rune, 2, 2), costTier1, MANA_POWDER, MANA_STEEL, ItemStack(livingcobble), ItemStack(obsidian), ItemStack(brown_mushroom)))
-		ModRuneRecipes.recipesEarthRune.add(BotaniaAPI.registerRuneAltarRecipe(ItemStack(rune, 2, 2), costTier1, MANA_POWDER, MANA_STEEL, ItemStack(livingcobble), ItemStack(obsidian), ItemStack(red_mushroom)))
+		ModRuneRecipes.recipesEarthRune?.add(BotaniaAPI.registerRuneAltarRecipe(ItemStack(rune, 2, 2), costTier1, MANA_POWDER, MANA_STEEL, ItemStack(livingcobble), ItemStack(obsidian), ItemStack(brown_mushroom)))
+		ModRuneRecipes.recipesEarthRune?.add(BotaniaAPI.registerRuneAltarRecipe(ItemStack(rune, 2, 2), costTier1, MANA_POWDER, MANA_STEEL, ItemStack(livingcobble), ItemStack(obsidian), ItemStack(red_mushroom)))
 		
 		recipeInterdimensional = BotaniaAPI.registerElvenTradeRecipe(InterdimensionalGatewayCore.stack, ItemStack(nether_star))
 		//recipeStoryToken = BotaniaAPI.registerElvenTradeRecipe(ItemStack(storyToken, 1, 1), ItemStack(storyToken))
@@ -2387,7 +2390,7 @@ object AlfheimRecipes {
 		BotaniaAPI.pureDaisyRecipes.add(recipeIrisSapling)
 		
 		recipeInfusedDreamTwig = BotaniaAPI.registerManaInfusionRecipe(InfusedDreamwoodTwig.stack, ItemStack(manaResource, 1, 13), 10000)
-		ModManaInfusionRecipes.manaPowderRecipes.add(BotaniaAPI.registerManaInfusionRecipe(ItemStack(manaResource, 1, 23), RainbowDust.stack, 400))
+		ModManaInfusionRecipes.manaPowderRecipes?.add(BotaniaAPI.registerManaInfusionRecipe(ItemStack(manaResource, 1, 23), RainbowDust.stack, 400))
 		
 		val grasses = Array(16) { ItemStack(irisGrass, 1, it) } + Array(2) { ItemStack(rainbowGrass, 1, it) }
 		recipesPastoralSeeds = grasses.mapIndexed { id, it -> BotaniaAPI.registerManaInfusionRecipe(ItemStack(irisSeeds, 1, id), it, 2500) }
@@ -2437,11 +2440,6 @@ object AlfheimRecipes {
 		AlfheimAPI.banRetrade(ItemStack(ender_pearl))
 		AlfheimAPI.banRetrade(ItemStack(diamond))
 		AlfheimAPI.banRetrade(ItemStack(diamond_block))
-	}
-	
-	fun postInit() {
-		recipeGaiaPylonOld = recipeGaiaPylon
-		recipeSuperLavaPendant = recipeSuperLavaPendantNew
 	}
 	
 	fun addMMORecipes() {

@@ -5,27 +5,13 @@ import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.world.dim.alfheim.customgens.*
 import net.minecraft.init.Blocks
-import net.minecraftforge.common.BiomeDictionary
 import net.minecraftforge.common.BiomeDictionary.Type
 import ru.vamig.worldengine.standardcustomgen.*
 import vazkii.botania.common.block.ModBlocks
 
-object BiomeForest2: BiomeAlfheim() {
+object BiomePitForest: BiomeAlfheim(0.82, 1.0, 1.8, 3, 250.0, 1.0, 71, 4, "Forest", Type.FOREST, Type.HILLS, Type.DENSE, Type.LUSH) {
 	
 	init {
-		setBiomeName("Forest")
-		
-		BiomeDictionary.registerBiomeType(this, Type.FOREST, Type.HILLS, Type.DENSE, Type.LUSH)
-		
-		biomeMinValueOnMap = 0.82
-		biomeMaxValueOnMap = 1.0
-		biomePersistence = 1.8
-		biomeNumberOfOctaves = 3
-		biomeScaleX = 250.0
-		biomeScaleY = 1.0
-		biomeSurfaceHeight = 71 + offset
-		biomeInterpolateQuality = 4
-		
 		var standardBiomeLayers = WE_BiomeLayer()
 		standardBiomeLayers.add(Blocks.dirt, 0.toByte(), ModBlocks.livingrock, 0.toByte(), -256, 0, -4, -2, true)
 		standardBiomeLayers.add(if (AlfheimCore.winter && AlfheimConfigHandler.winterGrassReadyGen) AlfheimBlocks.snowGrass else Blocks.grass, 0.toByte(), Blocks.dirt, 0.toByte(), -256, 0, -256, 0, false)

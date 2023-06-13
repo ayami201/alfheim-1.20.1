@@ -61,7 +61,7 @@ class BlockDreamSapling: BlockBush(), IGrowable, ILexiconable, IFuelHandler {
 		if (!TerrainGen.saplingGrowTree(world, rand, x, y, z)) return
 		val l = world.getBlockMetadata(x, y, z) and 7
 		world.setBlock(x, y, z, Blocks.air, 0, 4)
-		if (!BiomeAlfheim.dreamTree.generate(world, rand, x, y, z)) world.setBlock(x, y, z, this, l, 4)
+		if (!BiomeAlfheim.dreamTree.generate(world, rand, x, y, z, null)) world.setBlock(x, y, z, this, l, 4)
 	}
 	
 	/** Can the block grow

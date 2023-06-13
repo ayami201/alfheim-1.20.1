@@ -8,17 +8,24 @@ import net.minecraft.init.Blocks
 import net.minecraft.world.biome.BiomeGenBase
 import net.minecraftforge.common.BiomeDictionary
 import net.minecraftforge.common.BiomeDictionary.Type
-import ru.vamig.worldengine.*
+import ru.vamig.worldengine.WE_Biome
 
-abstract class BiomeAlfheim: WE_Biome(WE_WorldProvider.we_id) {
+abstract class BiomeAlfheim(
+	minMapValue: Double, maxMapValue: Double,
+	persistence: Double, numOctaves: Int,
+	sx: Double, sy: Double,
+	height: Int, interpolateQuality: Int,
+	name: String, vararg types: Type
+): WE_Biome(minMapValue, maxMapValue, persistence, numOctaves, sx, sy, height + offset, interpolateQuality) {
 	
 	init {
-		setBiomeName("Alfheim")
+		setBiomeName(name)
 		
-		BiomeDictionary.registerBiomeType(this, Type.MAGICAL)
+		BiomeDictionary.registerBiomeType(this, Type.MAGICAL, *types)
 		
 		clearSpawn()
-		setColor(grassColor)
+		setColor(0x08F500)
+		grassColor = 0x08F500
 		waterColorMultiplier = if (AlfheimCore.winter) 0x1D1D4E else 0x00FFFF
 		temperature = if (AlfheimCore.winter) 0f else 0.5f
 		
@@ -38,8 +45,8 @@ abstract class BiomeAlfheim: WE_Biome(WE_WorldProvider.we_id) {
 		
 		val alfheimBiomes = ArrayList<BiomeAlfheim>()
 		
-		val dreamTree = StructureDreamsTree(AlfheimBlocks.altWood1, AlfheimBlocks.altLeaves, 3, 7, 11, 15)
-		val sadOak = StructureDreamsTree(Blocks.log, Blocks.leaves, 0, 4, 8, 4)
+		val dreamTree = StructureDreamsTree(AlfheimBlocks.altWood1, AlfheimBlocks.altLeaves, 3, 7, 11, 7)
+		val sadOak = StructureDreamsTree(Blocks.log, AlfheimBlocks.sadOakLeaves, 0, 4, 8, 0)
 		
 		fun BiomeGenBase.addEntry(clazz: Class<*>, rate: IntArray, type: EnumCreatureType = EnumCreatureType.creature) {
 			val (w, i, x) = rate

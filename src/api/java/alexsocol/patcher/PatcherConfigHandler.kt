@@ -14,8 +14,10 @@ object PatcherConfigHandler: ASJConfigHandler() {
 	
 	var biomeDuplication = false
 	var clearWater = true
+	var commands = PatcherMain.Commands.values().map { it.name }.toTypedArray()
 	var creativeDamage = false
 	var damageMobArmor = true
+	var entityGravityFix = true
 	var explosions = true
 	var floatingTrapDoors = true
 	var flyFastDig = true
@@ -26,7 +28,7 @@ object PatcherConfigHandler: ASJConfigHandler() {
 	var showOreDict = true
 	var vignette = false
 	var voidFog = true
-	var WEBiomeID = 150
+	var WEBiomeID = 152
 	
 	var blacklistWither = true
 	
@@ -41,8 +43,10 @@ object PatcherConfigHandler: ASJConfigHandler() {
 		
 		biomeDuplication = loadProp(CATEGORY_GENERAL, "biomeDuplication", biomeDuplication, true, "Set this to true to allow registering duplicated biome ids")
 		clearWater = loadProp(CATEGORY_GENERAL, "clearWater", clearWater, false, "Set this to true for clear, transparent water")
+		commands = loadProp(CATEGORY_GENERAL, "commands", commands, true, "List of commands. Remove any to unregister it. DO NOT add anything new", false)
 		creativeDamage = loadProp(CATEGORY_GENERAL, "creativeDamage", creativeDamage, false, "Set this to true to allow taking damage in creative")
 		damageMobArmor = loadProp(CATEGORY_GENERAL, "damageMobArmor", damageMobArmor, false, "Set this to false to prevent mob armor getting destroyed from attacks")
+		entityGravityFix = loadProp(CATEGORY_GENERAL, "entityGravityFix", entityGravityFix, false, "Set this to false to disable gravity fix")
 		explosions = loadProp(CATEGORY_GENERAL, "explosions", explosions, false, "Set this to false to disable explosions")
 		floatingTrapDoors = loadProp(CATEGORY_GENERAL, "floatingTrapDoors", floatingTrapDoors, true, "Set this to false to forbid trapdoors to remain free-floating (as in vanilla, may break some world structures)")
 		flyFastDig = loadProp(CATEGORY_GENERAL, "flyFastDig", flyFastDig, false, "Set this to false to make block break speed 5 times slower when flying with creative-like flight not in creative")

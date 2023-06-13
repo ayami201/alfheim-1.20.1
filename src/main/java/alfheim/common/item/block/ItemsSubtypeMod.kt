@@ -1,8 +1,9 @@
 package alfheim.common.item.block
 
-import alexsocol.asjlib.meta
+import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.common.block.base.BlockLeavesMod
+import alfheim.common.block.colored.BlockColoredLeaves
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
@@ -23,7 +24,7 @@ open class ItemSubtypedBlockMod(block: Block): ItemBlockWithMetadata(block, bloc
 	}
 	
 	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>?, par4: Boolean) {
-		if (stack == null) return
+		if (stack == null || stack.item.toBlock() !is BlockColoredLeaves) return
 		addStringToTooltip("&7" + StatCollector.translateToLocal("misc.${ModInfo.MODID}.color." + stack.meta) + "&r", list)
 	}
 }

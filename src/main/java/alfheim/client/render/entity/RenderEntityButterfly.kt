@@ -36,7 +36,7 @@ object RenderEntityButterfly: RenderLiving(ModelButterfly(0), 0.25f) {
 		ASJRenderHelper.discard()
 	}
 	
-	private fun setPixieBrightness(pixie: EntityButterfly, pass: Int): Int {
+	private fun setButterflyBrightness(pixie: EntityButterfly, pass: Int): Int {
 		if (pass != 0) return -1
 		
 		bindTexture(getEntityTexture(pixie))
@@ -50,5 +50,5 @@ object RenderEntityButterfly: RenderLiving(ModelButterfly(0), 0.25f) {
 		return 1
 	}
 	
-	override fun shouldRenderPass(entity: EntityLivingBase, pass: Int, ticks: Float) = setPixieBrightness(entity as EntityButterfly, pass)
+	override fun shouldRenderPass(entity: EntityLivingBase, pass: Int, ticks: Float) = setButterflyBrightness(entity as EntityButterfly, pass)
 }

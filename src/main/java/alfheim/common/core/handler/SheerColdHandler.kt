@@ -30,9 +30,10 @@ object SheerColdHandler {
 	var EntityLivingBase.cold: Float
 		get() = entityData.getFloat(TAG_SHEER_COLD)
 		set(value) {
+			val prev = entityData.getFloat(TAG_SHEER_COLD)
 			entityData.setFloat(TAG_SHEER_COLD, value)
 			
-			if (this is EntityPlayerMP)
+			if (prev != value && this is EntityPlayerMP)
 				NetworkService.sendTo(Message1d(M1d.COLD, value.D), this)
 		}
 	

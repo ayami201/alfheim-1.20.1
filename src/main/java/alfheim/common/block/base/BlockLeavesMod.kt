@@ -51,7 +51,7 @@ abstract class BlockLeavesMod: BlockLeaves(), IShearable, ILexiconable {
 	override fun getRenderColor(meta: Int) = 0xFFFFFF
 	
 	@SideOnly(Side.CLIENT)
-	override fun colorMultiplier(world: IBlockAccess?, x: Int, y: Int, z: Int) = 0xFFFFFF
+	override fun colorMultiplier(world: IBlockAccess, x: Int, y: Int, z: Int) = 0xFFFFFF
 	
 	@SideOnly(Side.CLIENT)
 	override fun getIcon(side: Int, meta: Int): IIcon? {
@@ -96,98 +96,82 @@ abstract class BlockLeavesMod: BlockLeaves(), IShearable, ILexiconable {
 		val meta = world.getBlockMetadata(x, y, z)
 		if (!canDecay(meta)) return
 		
-		val b0 = 4
-		val i1 = b0 + 1
-		val b1 = 32
-		val j1 = b1 * b1
-		val k1 = b1 / 2
+		val range = getDecayRange(meta)
+		val extraRange = range + 1
+		val bufferSize = extraRange * 2 + 1
+		val squareBufferSize = bufferSize * bufferSize
+		val halfBufferSize = bufferSize / 2
+		val arraySize = bufferSize * bufferSize * bufferSize
 		
-		if (decayField == null) {
-			decayField = IntArray(b1 * b1 * b1)
+		if (decayField?.run { size == arraySize } != true) {
+			decayField = IntArray(arraySize)
 		}
-		
 		val decayField = decayField!!
 		
-		var l1: Int
-		
-		if (world.checkChunksExist(x - i1, y - i1, z - i1, x + i1, y + i1, z + i1)) {
-			var i2: Int
-			var j2: Int
-			
-			l1 = -b0
-			while (l1 <= b0) {
-				i2 = -b0
-				while (i2 <= b0) {
-					j2 = -b0
-					while (j2 <= b0) {
-						val block = world.getBlock(x + l1, y + i2, z + j2)
+		if (world.checkChunksExist(x - extraRange, y - extraRange, z - extraRange, x + extraRange, y + extraRange, z + extraRange)) {
+			for (i in 0.bidiRange(range)) {
+				for (j in 0.bidiRange(range)) {
+					for (k in 0.bidiRange(range)) {
+						val block = world.getBlock(x + i, y + j, z + k)
 						
-						if (!block.canSustainLeaves(world, x + l1, y + i2, z + j2)) {
-							if (block.isLeaves(world, x + l1, y + i2, z + j2)) {
-								decayField[(l1 + k1) * j1 + (i2 + k1) * b1 + j2 + k1] = -2
+						if (!block.canSustainLeaves(world, x + i, y + j, z + k)) {
+							if (block.isLeaves(world, x + i, y + j, z + k)) {
+								decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize) * bufferSize + k + halfBufferSize] = -2
 							} else {
-								decayField[(l1 + k1) * j1 + (i2 + k1) * b1 + j2 + k1] = -1
+								decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize) * bufferSize + k + halfBufferSize] = -1
 							}
 						} else {
-							decayField[(l1 + k1) * j1 + (i2 + k1) * b1 + j2 + k1] = 0
+							decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize) * bufferSize + k + halfBufferSize] = 0
 						}
-						++j2
 					}
-					++i2
 				}
-				++l1
 			}
 			
-			l1 = 1
-			while (l1 <= 4) {
-				i2 = -b0
-				while (i2 <= b0) {
-					j2 = -b0
-					while (j2 <= b0) {
-						for (k2 in -b0..b0) {
-							if (decayField[(i2 + k1) * j1 + (j2 + k1) * b1 + k2 + k1] == l1 - 1) {
-								if (decayField[(i2 + k1 - 1) * j1 + (j2 + k1) * b1 + k2 + k1] == -2) {
-									decayField[(i2 + k1 - 1) * j1 + (j2 + k1) * b1 + k2 + k1] = l1
+			for (state in 1..range) {
+				for (i in 0.bidiRange(range)) {
+					for (j in 0.bidiRange(range)) {
+						for (k in 0.bidiRange(range)) {
+							if (decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize) * bufferSize + k + halfBufferSize] == state - 1) {
+								if (decayField[(i + halfBufferSize - 1) * squareBufferSize + (j + halfBufferSize) * bufferSize + k + halfBufferSize] == -2) {
+									decayField[(i + halfBufferSize - 1) * squareBufferSize + (j + halfBufferSize) * bufferSize + k + halfBufferSize] = state
 								}
 								
-								if (decayField[(i2 + k1 + 1) * j1 + (j2 + k1) * b1 + k2 + k1] == -2) {
-									decayField[(i2 + k1 + 1) * j1 + (j2 + k1) * b1 + k2 + k1] = l1
+								if (decayField[(i + halfBufferSize + 1) * squareBufferSize + (j + halfBufferSize) * bufferSize + k + halfBufferSize] == -2) {
+									decayField[(i + halfBufferSize + 1) * squareBufferSize + (j + halfBufferSize) * bufferSize + k + halfBufferSize] = state
 								}
 								
-								if (decayField[(i2 + k1) * j1 + (j2 + k1 - 1) * b1 + k2 + k1] == -2) {
-									decayField[(i2 + k1) * j1 + (j2 + k1 - 1) * b1 + k2 + k1] = l1
+								if (decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize - 1) * bufferSize + k + halfBufferSize] == -2) {
+									decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize - 1) * bufferSize + k + halfBufferSize] = state
 								}
 								
-								if (decayField[(i2 + k1) * j1 + (j2 + k1 + 1) * b1 + k2 + k1] == -2) {
-									decayField[(i2 + k1) * j1 + (j2 + k1 + 1) * b1 + k2 + k1] = l1
+								if (decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize + 1) * bufferSize + k + halfBufferSize] == -2) {
+									decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize + 1) * bufferSize + k + halfBufferSize] = state
 								}
 								
-								if (decayField[(i2 + k1) * j1 + (j2 + k1) * b1 + (k2 + k1 - 1)] == -2) {
-									decayField[(i2 + k1) * j1 + (j2 + k1) * b1 + (k2 + k1 - 1)] = l1
+								if (decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize) * bufferSize + (k + halfBufferSize - 1)] == -2) {
+									decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize) * bufferSize + (k + halfBufferSize - 1)] = state
 								}
 								
-								if (decayField[(i2 + k1) * j1 + (j2 + k1) * b1 + k2 + k1 + 1] == -2) {
-									decayField[(i2 + k1) * j1 + (j2 + k1) * b1 + k2 + k1 + 1] = l1
+								if (decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize) * bufferSize + k + halfBufferSize + 1] == -2) {
+									decayField[(i + halfBufferSize) * squareBufferSize + (j + halfBufferSize) * bufferSize + k + halfBufferSize + 1] = state
 								}
 							}
 						}
-						++j2
 					}
-					++i2
 				}
-				++l1
 			}
 		}
+		val state = decayField[halfBufferSize * squareBufferSize + halfBufferSize * bufferSize + halfBufferSize]
 		
-		l1 = decayField[k1 * j1 + k1 * b1 + k1]
-		
-		if (l1 < 0) removeLeaves(world, x, y, z)
+		if (state < 0) removeLeaves(world, x, y, z)
 	}
 	
-	override fun getPickBlock(target: MovingObjectPosition?, world: World, x: Int, y: Int, z: Int, player: EntityPlayer) =
+	override fun getPickBlock(target: MovingObjectPosition?, world: World, x: Int, y: Int, z: Int, player: EntityPlayer?) =
 		ItemStack(this, 1, world.getBlockMetadata(x, y, z) and decayBit().inv())
 	
 	abstract fun decayBit(): Int
+	
+	open fun getDecayRange(meta: Int) = 4
 	
 	open fun canDecay(meta: Int) = meta and decayBit() == 0
 	

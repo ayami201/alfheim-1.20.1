@@ -7,7 +7,7 @@ import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.core.helper.*
 import alfheim.common.entity.boss.EntityDedMoroz
 import alfheim.common.item.material.ElvenResourcesMetas
-import alfheim.common.world.dim.alfheim.biome.BiomeField
+import alfheim.common.world.dim.alfheim.biome.*
 import alfheim.common.world.dim.alfheim.customgens.NiflheimLocationGenerator
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.*
@@ -102,8 +102,7 @@ class EntitySnowSprite(world: World): EntityFlyingCreature(world), INiflheimEnti
 	}
 	
 	override fun setDead() {
-		dead = true
-		isDead = dead
+		super.setDead()
 		if (worldObj.isRemote)
 			for (i in 0..11)
 				Botania.proxy.sparkleFX(worldObj, posX + (Math.random() - 0.5) * 0.5, posY + (Math.random() - 0.5) * 0.5, posZ + (Math.random() - 0.5) * 0.5, (Math.random() * 0.25 + 0.25).F, 1f, 1f, 1f + Math.random().F * 0.25f, 10)
@@ -117,7 +116,8 @@ class EntitySnowSprite(world: World): EntityFlyingCreature(world), INiflheimEnti
 		
 		val flagBiome = if (WRATH_OF_THE_WINTER) {
 			val cp = (worldObj.provider as? WE_WorldProvider)?.cp ?: return false
-			WE_Biome.getBiomeAt(cp, posX.mfloor().toLong(), posZ.mfloor().toLong()) === BiomeField
+			val biomeAt = WE_Biome.getBiomeAt(cp, posX.mfloor().toLong(), posZ.mfloor().toLong())
+			biomeAt === BiomeField || biomeAt === BiomeIslandGiantFlowers
 		} else {
 			val (xOff, zOff) = NiflheimLocationGenerator.portalXZ(worldObj)
 			NiflheimLocationGenerator.yobaFunction2d(posX.mfloor() - xOff, posZ.mfloor() - zOff)

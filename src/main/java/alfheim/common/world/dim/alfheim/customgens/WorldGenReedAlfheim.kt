@@ -17,14 +17,14 @@ class WorldGenReedAlfheim(val perChunk: Int): IWorldGenerator {
 			val z = chunkZ * 16 + random.nextInt(16) + 8
 			val y = world.getTopSolidOrLiquidBlock(x, z)
 			
-			if (Blocks.reeds.canBlockStay(world, x, y, z)) {
-				val height = random.nextInt(4) + 2
-				for (h in 0 until height) {
-					if (world.isAirBlock(x, y + h, z))
-						world.setBlock(x, y + h, z, Blocks.reeds)
-					else
-						break
-				}
+			if (!Blocks.reeds.canBlockStay(world, x, y, z)) continue
+			
+			val height = random.nextInt(4) + 2
+			for (h in 0 until height) {
+				if (world.isAirBlock(x, y + h, z))
+					world.setBlock(x, y + h, z, Blocks.reeds)
+				else
+					break
 			}
 		}
 	}

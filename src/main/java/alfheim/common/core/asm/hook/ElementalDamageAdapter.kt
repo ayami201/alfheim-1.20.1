@@ -181,7 +181,7 @@ object ElementalDamageAdapter {
 	
 	@JvmStatic
 	@Hook(targetMethod = "<init>", injectOnExit = true)
-	fun `EntityDamageSourceIndirect$init`(thiz: EntityDamageSourceIndirect, name: String, entity: Entity, indirectEntity: Entity) {
+	fun `EntityDamageSourceIndirect$init`(thiz: EntityDamageSourceIndirect, name: String?, entity: Entity?, indirectEntity: Entity?) {
 		when (entity) {
 			is EntitySnowball -> thiz.setTo(ICE)
 		}

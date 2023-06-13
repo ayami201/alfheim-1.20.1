@@ -5,6 +5,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.init.Blocks
 import net.minecraft.world.World
+import ru.vamig.worldengine.WE_ChunkProvider
 import ru.vamig.worldengine.standardcustomgen.StructureBaseClass
 import java.util.*
 
@@ -17,7 +18,7 @@ class StructureDreamsTree
  */
 (val log: Block, val leaves: Block, val upmeta: Int, val lrmeta: Int, val fbmeta: Int, val lvsmeta: Int): StructureBaseClass() {
 	
-	override fun generate(world: World, rand: Random, i: Int, y: Int, k: Int): Boolean {
+	override fun generate(world: World, rand: Random, i: Int, y: Int, k: Int, `null`: WE_ChunkProvider?): Boolean {
 		var x = i
 		var z = k
 		x -= 7
@@ -451,7 +452,6 @@ class StructureDreamsTree
 		if (canBePlaced(world, x + 10, y + 10, z + 9, leaves)) world.setBlock(x + 10, y + 10, z + 9, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 11, y + 10, z + 9, leaves)) world.setBlock(x + 11, y + 10, z + 9, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 12, y + 10, z + 9, leaves)) world.setBlock(x + 12, y + 10, z + 9, leaves, lvsmeta, 2)
-		if (canBePlaced(world, x + 13, y + 10, z + 9, leaves)) world.setBlock(x + 13, y + 10, z + 9, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 1, y + 10, z + 10, leaves)) world.setBlock(x + 1, y + 10, z + 10, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 2, y + 10, z + 10, log)) world.setBlock(x + 2, y + 10, z + 10, log, lrmeta, 2)
 		if (canBePlaced(world, x + 3, y + 10, z + 10, leaves)) world.setBlock(x + 3, y + 10, z + 10, leaves, lvsmeta, 2)
@@ -502,6 +502,17 @@ class StructureDreamsTree
 		if (canBePlaced(world, x + 5, y + 11, z + 13, leaves)) world.setBlock(x + 5, y + 11, z + 13, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 10, y + 11, z + 13, leaves)) world.setBlock(x + 10, y + 11, z + 13, leaves, lvsmeta, 2)
 		if (canBePlaced(world, x + 5, y + 11, z + 14, leaves)) world.setBlock(x + 5, y + 11, z + 14, leaves, lvsmeta, 2)
+		
+		// fixes
+		if (canBePlaced(world, x + 9, y + 10, z + 13, log)) world.setBlock(x + 9, y + 10, z + 13, log, lrmeta, 2)
+		if (canBePlaced(world, x + 8, y + 10, z + 13, leaves)) world.setBlock(x + 8, y + 10, z + 13, leaves, lvsmeta, 2)
+		if (canBePlaced(world, x + 9, y + 11, z + 13, leaves)) world.setBlock(x + 9, y + 11, z + 13, leaves, lvsmeta, 2)
+		if (canBePlaced(world, x + 9, y + 10, z + 14, leaves)) world.setBlock(x + 9, y + 10, z + 14, leaves, lvsmeta, 2)
+		
+		if (canBePlaced(world, x + 1, y + 10, z + 11, log)) world.setBlock(x + 1, y + 10, z + 11, log, lrmeta, 2)
+		
+		if (canBePlaced(world, x + 3, y + 9, z + 7, log)) world.setBlock(x + 3, y + 9, z + 7, log, lrmeta, 2)
+		
 		return true
 	}
 	

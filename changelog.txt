@@ -1,34 +1,14 @@
 Innovations:
- Set of new drops to Fenrir, created and designed by ChatGPT :D
- Elementium mana and aura rings now can spawn a pixie
- Fenrir claws now got a chance (higher with full Fenrir set) to impose bleeding on hit
- Flugel music updated to remaster
- Flugel tier 3 as well as Thrym, Surtr and Fenrir now got own bossfight music
- Thrym and Surtr got sounds for their actions
- Beast Within and Bleeding potions are now not MMO-mode exclusive (configs updated)
- Little tuning for Corporea Sequencer and more informative wand HUD
- Alfheim->Midgard teleportation now can link to ranom exisiting portal (config)
- Increased nighttime spirits quantity in Alfheim (configurable)
- Visualization for mob elements when wearing monocle
- Config for mob elements (not for Alfheim ones tho)
- Rebalanced elemental reactions
- Removed Interdimensional Gateway Core infusion recipe
- Booba render for female elves
- [WIP] Entity-blocks
+ A new rare Alfheim biome with giant flowers and butterflies
+ Dreamwood leaves now has 8 blocks of range for decay check
+ Rifts now can be depleted with rift shards
+ More flexible (configurable) Alfheim nighttime spirits
+ Optimized cold sync
+ "Weeping" trees now have more decay-resistant leaves (up to 8 blocks)
  
 Fixes:
- Crash with EtFR
- Ragnarok crash with Aether Legacy
- WireAxe HRT abuse #259
- Floating bifrost flower flaws #266
- IguanaTweaksTConstruct support #271
- Bifrost petal block breaker #272
- Mushroom recipes
- Over- heat/cold weak hands effect
- Liquid mana placing
- Thrym, Surtr and Fenrir relic drops
- Purification and Smelt lenses behaviour and display
- ESM/MMO modes sync across SP worlds (#273)
- At last, livingcobble furnace texture :o
- Botania dupe
- Elemental Chestplate effect in inventory
+ Crash with Botania fork for GTNH modpack
+ Crash with Loot++
+ Crash with Zelda Sword Skills
+ Keybind duplication in ESM/MMO on world join
+ "Weeping" trees disconnected branches

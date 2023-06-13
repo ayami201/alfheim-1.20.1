@@ -32,7 +32,7 @@ repositories {
 }
 
 group = "main"
-version = "46"
+version = "47-dev"
 archivesBaseName = "Alfheim"
 
 minecraft {
@@ -60,7 +60,7 @@ compileKotlin {
 sourceCompatibility = targetCompatibility = '1.8'
 
 jar {
-	duplicatesStrategy = 'include'
+	duplicatesStrategy = 'INCLUDE'
 		
 	manifest {
 		attributes 'FMLAT': 'alfheim_at.cfg'
@@ -73,7 +73,7 @@ jar {
 }
 
 processResources {
-	duplicatesStrategy = 'include'
+	duplicatesStrategy = 'INCLUDE'
 	
 	inputs.property "version", project.version
 	inputs.property "mcversion", project.minecraft.version

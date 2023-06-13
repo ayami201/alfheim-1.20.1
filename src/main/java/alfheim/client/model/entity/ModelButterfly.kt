@@ -1,6 +1,7 @@
 package alfheim.client.model.entity
 
-import alexsocol.asjlib.F
+import alexsocol.asjlib.*
+import alfheim.common.entity.EntityButterfly
 import net.minecraft.client.model.*
 import net.minecraft.entity.Entity
 import net.minecraft.util.MathHelper
@@ -22,7 +23,7 @@ class ModelButterfly(val pass: Int): ModelBase() {
 		shape1 = ModelRenderer(this, 0, 0)
 		shape1.setRotationPoint(0.0f, 0.0f, 0.0f)
 		shape1.addBox(-1.0f, -3.0f, -1.0f, 2, 10, 2, 0.0f)
-		setRotateAngle(shape1, 1.5707963267948966f, 0.0f, 0.0f)
+		setRotateAngle(shape1, 1.5707964f, 0.0f, 0.0f)
 		shape2 = ModelRenderer(this, -8, 0)
 		shape2.setRotationPoint(0.0f, 0.0f, 0.0f)
 		shape2.addBox(1.0f, 0.0f, -4.0f, 10, 0, 16, 0.0f)
@@ -33,11 +34,14 @@ class ModelButterfly(val pass: Int): ModelBase() {
 		shape4 = ModelRenderer(this, -4, 12)
 		shape4.setRotationPoint(0.0f, 0.0f, 0.0f)
 		shape4.addBox(-2.0f, 0.0f, -7.0f, 4, 0, 4, 0.0f)
-		setRotateAngle(shape4, -0.32288591161895097f, 0.0f, 0.0f)
+		setRotateAngle(shape4, -0.3228859f, 0.0f, 0.0f)
 	}
 	
 	override fun render(entity: Entity, f: Float, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float) {
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity)
+		
+		if (entity is EntityButterfly && entity.isGiant)
+			glScalef(10f)
 		
 		if (pass == 0) {
 			shape1.render(f5)
@@ -46,6 +50,9 @@ class ModelButterfly(val pass: Int): ModelBase() {
 			shape2.render(f5)
 			shape3.render(f5)
 		}
+		
+		if (entity is EntityButterfly && entity.isGiant)
+			glScalef(0.1f)
 	}
 	
 	/**

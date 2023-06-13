@@ -1,20 +1,16 @@
 package alfheim.common.block.colored
 
 import alfheim.common.block.tile.TileFloatingFlowerRainbow
-import cpw.mods.fml.common.Optional
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.passive.EntitySheep
 import net.minecraft.item.*
 import net.minecraft.world.World
-import thaumcraft.api.crafting.IInfusionStabiliser
-import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.common.Botania
 import vazkii.botania.common.block.decor.BlockFloatingFlower
 import vazkii.botania.common.core.handler.ConfigHandler
 import java.util.*
 
-@Optional.Interface(modid = "Thaumcraft", iface = "thaumcraft.api.crafting.IInfusionStabiliser", striprefs = true)
-class BlockFloatingFlowerRainbow: BlockFloatingFlower("miniIslandRainbow"), ILexiconable, IInfusionStabiliser {
+class BlockFloatingFlowerRainbow: BlockFloatingFlower("miniIslandRainbow") {
 	
 	val TYPES = 1
 	

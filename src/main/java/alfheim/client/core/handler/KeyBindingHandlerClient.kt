@@ -75,7 +75,7 @@ object KeyBindingHandlerClient {
 			toggleRMB = false
 		}
 		
-		if (safeKeyDown(ClientProxy.keyLolicorn.keyCode)) {
+		if (safeKeyDown(ClientProxy.keyLolicorn)) {
 			if (!toggleCorn) {
 				toggleCorn = true
 				NetworkService.sendToServer(MessageKeyBindS(CORN.ordinal, false, 0))
@@ -85,7 +85,7 @@ object KeyBindingHandlerClient {
 		}
 		
 		if (AlfheimConfigHandler.enableElvenStory) {
-			if (safeKeyDown(ClientProxy.keyFlight.keyCode)) {
+			if (safeKeyDown(ClientProxy.keyFlight)) {
 				if (!toggleFlight) {
 					toggleFlight = true
 					toggleFlight(false)
@@ -94,7 +94,7 @@ object KeyBindingHandlerClient {
 				toggleFlight = false
 			}
 			
-			if (safeKeyDown(ClientProxy.keyESMAbility.keyCode) && player.race != EnumRace.HUMAN) {
+			if (safeKeyDown(ClientProxy.keyESMAbility) && player.race != EnumRace.HUMAN) {
 				if (!toggleESMAbility) {
 					toggleESMAbility = true
 					if (AlfheimConfigHandler.enableElvenStory) {
@@ -208,7 +208,7 @@ object KeyBindingHandlerClient {
 			}
 			
 			run {
-				if (safeKeyDown(ClientProxy.keyCast.keyCode)) {
+				if (safeKeyDown(ClientProxy.keyCast)) {
 					GUISpells.fadeOut = 5f
 					if (!toggleCast) {
 						toggleCast = true
@@ -233,7 +233,7 @@ object KeyBindingHandlerClient {
 				}
 			}
 			
-			if (safeKeyDown(ClientProxy.keyUnCast.keyCode)) {
+			if (safeKeyDown(ClientProxy.keyUnCast)) {
 				if (!toggleUnCast) {
 					toggleUnCast = true
 					NetworkService.sendToServer(MessageKeyBindS(UNCAST.ordinal, false, 0))
@@ -244,7 +244,7 @@ object KeyBindingHandlerClient {
 				toggleUnCast = false
 			}
 			
-			if (safeKeyDown(ClientProxy.keySelMob.keyCode)) {
+			if (safeKeyDown(ClientProxy.keySelMob)) {
 				if (!toggleSelMob) run {
 					toggleSelMob = true
 					
@@ -261,7 +261,7 @@ object KeyBindingHandlerClient {
 				toggleSelMob = false
 			}
 			
-			if (safeKeyDown(ClientProxy.keySelTeam.keyCode)) {
+			if (safeKeyDown(ClientProxy.keySelTeam)) {
 				if (!toggleSelTeam) {
 					toggleSelTeam = true
 					if (TargetingSystemClient.selectTeam()) NetworkService.sendToServer(MessageKeyBindS(SEL.ordinal, PlayerSegmentClient.isParty, PlayerSegmentClient.partyIndex))
@@ -271,7 +271,7 @@ object KeyBindingHandlerClient {
 			}
 		}
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_U)) {
+		if (safeKeyDown(Keyboard.KEY_U)) {
 			if (!toggleSecret) {
 				toggleSecret = true
 				NetworkService.sendToServer(MessageKeyBindS(SECRET.ordinal, false, 0))
@@ -285,6 +285,16 @@ object KeyBindingHandlerClient {
 		Keyboard.isKeyDown(id)
 	} catch (e: IndexOutOfBoundsException) {
 		false
+	}
+	
+	fun safeKeyDown(key: KeyBinding): Boolean {
+		return try {
+			if (key inln KeyBinding.keybindArray) return false
+			
+			Keyboard.isKeyDown(key.keyCode)
+		} catch (e: IndexOutOfBoundsException) {
+			false
+		}
 	}
 	
 	fun sendAction(left: Boolean) {
