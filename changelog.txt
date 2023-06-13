@@ -1,10 +1,9 @@
 Innovations:
  A new rare Alfheim biome with giant flowers and butterflies
- Dreamwood leaves now has 8 blocks of range for decay check
+ "Weeping" trees now have more decay-resistant leaves (up to 8 blocks)
  Rifts now can be depleted with rift shards
  More flexible (configurable) Alfheim nighttime spirits
  Optimized cold sync
- "Weeping" trees now have more decay-resistant leaves (up to 8 blocks)
  
 Fixes:
  Crash with Botania fork for GTNH modpack
