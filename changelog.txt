@@ -4,10 +4,11 @@ Innovations:
  Rifts now can be depleted with rift shards
  More flexible (configurable) Alfheim nighttime spirits
  Optimized cold sync
+ "Weeping" trees now have more decay-resistant leaves (up to 8 blocks)
  
 Fixes:
  Crash with Botania fork for GTNH modpack
  Crash with Loot++
  Crash with Zelda Sword Skills
  Keybind duplication in ESM/MMO on world join
- "Sad" trees three branches
+ "Weeping" trees disconnected branches

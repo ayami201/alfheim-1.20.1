@@ -108,6 +108,8 @@ class BlockAltLeaves: BlockLeavesMod(), IGlowingLayerBlock {
 	override fun getGlowIcon(side: Int, meta: Int) = if (meta % 8 == 7) glowIcon else null
 	
 	override fun randomDisplayTick(world: World, x: Int, y: Int, z: Int, rand: Random) {
+		super.randomDisplayTick(world, x, y, z, rand)
+		
 		if (!AlfheimConfigHandler.increasedSpiritsRange && world.getBlockMetadata(x, y, z) % 8 == 7)
 			spawnRandomSpirit(world, x, y, z, rand, 0f, rand.nextFloat() * 0.25f + 0.5f, 1f)
 	}

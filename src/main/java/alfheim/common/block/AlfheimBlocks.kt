@@ -127,6 +127,7 @@ object AlfheimBlocks {
 	val redFlame: Block
 	val rift: Block
 	val rpc: Block
+	val sadOakLeaves: Block
 	val schemaAnnihilator: Block
 	val schemaController: Block
 	val schemaFiller: Block
@@ -311,6 +312,7 @@ object AlfheimBlocks {
 		redFlame = BlockRedFlame()
 		rift = BlockRift()
 		rpc = BlockRealmPowerCollector()
+		sadOakLeaves = BlockSadOakLeaves()
 		schemaAnnihilator = BlockSchemaAnnihilator()
 		schemaController = BlockSchemaContoller()
 		schemaFiller = BlockSchemaFiller()

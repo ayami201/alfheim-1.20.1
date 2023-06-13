@@ -41,8 +41,8 @@ class BlockColoredLeaves(val colorSet: Int): BlockLeavesMod() {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	override fun colorMultiplier(world: IBlockAccess?, x: Int, y: Int, z: Int): Int {
-		val meta = world!!.getBlockMetadata(x, y, z)
+	override fun colorMultiplier(world: IBlockAccess, x: Int, y: Int, z: Int): Int {
+		val meta = world.getBlockMetadata(x, y, z)
 		return getRenderColor(meta)
 	}
 	

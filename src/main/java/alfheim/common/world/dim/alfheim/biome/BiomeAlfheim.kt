@@ -46,7 +46,7 @@ abstract class BiomeAlfheim(
 		val alfheimBiomes = ArrayList<BiomeAlfheim>()
 		
 		val dreamTree = StructureDreamsTree(AlfheimBlocks.altWood1, AlfheimBlocks.altLeaves, 3, 7, 11, 7)
-		val sadOak = StructureDreamsTree(Blocks.log, Blocks.leaves, 0, 4, 8, 4)
+		val sadOak = StructureDreamsTree(Blocks.log, AlfheimBlocks.sadOakLeaves, 0, 4, 8, 0)
 		
 		fun BiomeGenBase.addEntry(clazz: Class<*>, rate: IntArray, type: EnumCreatureType = EnumCreatureType.creature) {
 			val (w, i, x) = rate

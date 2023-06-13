@@ -51,7 +51,7 @@ abstract class BlockLeavesMod: BlockLeaves(), IShearable, ILexiconable {
 	override fun getRenderColor(meta: Int) = 0xFFFFFF
 	
 	@SideOnly(Side.CLIENT)
-	override fun colorMultiplier(world: IBlockAccess?, x: Int, y: Int, z: Int) = 0xFFFFFF
+	override fun colorMultiplier(world: IBlockAccess, x: Int, y: Int, z: Int) = 0xFFFFFF
 	
 	@SideOnly(Side.CLIENT)
 	override fun getIcon(side: Int, meta: Int): IIcon? {
@@ -166,7 +166,7 @@ abstract class BlockLeavesMod: BlockLeaves(), IShearable, ILexiconable {
 		if (state < 0) removeLeaves(world, x, y, z)
 	}
 	
-	override fun getPickBlock(target: MovingObjectPosition?, world: World, x: Int, y: Int, z: Int, player: EntityPlayer) =
+	override fun getPickBlock(target: MovingObjectPosition?, world: World, x: Int, y: Int, z: Int, player: EntityPlayer?) =
 		ItemStack(this, 1, world.getBlockMetadata(x, y, z) and decayBit().inv())
 	
 	abstract fun decayBit(): Int
