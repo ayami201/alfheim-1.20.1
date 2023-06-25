@@ -20,27 +20,6 @@ import kotlin.math.cos
 
 class WorldProviderAlfheim: WE_WorldProvider() {
 	
-	override fun calculateCelestialAngle(worldTicks: Long, partialTicks: Float): Float {
-		if (RagnarokHandler.ragnarok) return 0.5f
-		
-		val j = (worldTicks % 24000).I
-		var f1 = (j.F + partialTicks) / 24000f - 0.25f
-		
-		if (f1 < 0f) {
-			++f1
-		}
-		
-		if (f1 > 1f) {
-			--f1
-		}
-		
-		val f2 = f1
-		f1 = 1f - ((cos(f1.D * Math.PI) + 1.0) / 2.0).F
-		f1 = f2 + (f1 - f2) / 3f
-		
-		return f1
-	}
-	
 	override fun genSettings(cp: WE_ChunkProvider) {
 		cp.createChunkGen_List.clear()
 		cp.decorateChunkGen_List.clear()
@@ -99,6 +78,11 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 		WE_Biome.addBiomeToGeneration(cp, BiomeMountTopField)
 		WE_Biome.addBiomeToGeneration(cp, BiomeIslandForest)
 		WE_Biome.addBiomeToGeneration(cp, BiomePitForest)
+	}
+	
+	override fun calculateCelestialAngle(worldTicks: Long, partialTicks: Float): Float {
+		return if (RagnarokHandler.ragnarok) 0.5f
+		else super.calculateCelestialAngle(worldTicks, partialTicks)
 	}
 	
 	override fun getBiomeGenForCoords(x: Int, z: Int): BiomeGenBase {

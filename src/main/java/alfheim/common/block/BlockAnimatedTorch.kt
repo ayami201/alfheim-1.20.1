@@ -42,12 +42,6 @@ class BlockAnimatedTorch: BlockContainerMod(Material.circuits), IHourglassTrigge
 		return false
 	}
 	
-	override fun onBlockEventReceived(world: World, x: Int, y: Int, z: Int, id: Int, param: Int): Boolean {
-		super.onBlockEventReceived(world, x, y, z, id, param)
-		val tile = world.getTileEntity(x, y, z)
-		return tile != null && tile.receiveClientEvent(id, param)
-	}
-	
 	override fun onUsedByWand(player: EntityPlayer?, stack: ItemStack, world: World, x: Int, y: Int, z: Int, side: Int): Boolean {
 		val tile = world.getTileEntity(x, y, z) as? TileAnimatedTorch ?: return false
 		

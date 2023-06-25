@@ -1823,4 +1823,16 @@ object AlfheimHookHandler {
 	fun onPlayerInteractPost(item: ItemManaResource, event: PlayerInteractEvent?) {
 		hookRaytrace = false
 	}
+	
+	@JvmStatic
+	@Hook(injectOnExit = true)
+	fun getCollidingBoundingBoxes(world: World, entity: Entity?, bb: AxisAlignedBB?, @ReturnValue list: MutableList<AxisAlignedBB?>): List<AxisAlignedBB?> {
+		bb ?: return list
+		
+		world.loadedEntityList.filterIsInstance<IMulticollidableEntity>().forEach {
+			it.getAdditionalCollisions().filterTo(list, bb::intersectsWith)
+		}
+		
+		return list
+	}
 }

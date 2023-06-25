@@ -1,5 +1,9 @@
 Innovations:
- 
+ [WIP] Floating islands
 
 Fixes:
- 
+ Rain on ice mountain
+ Purification lens crash
+ ESM not allowing to join server #274
+ Sequencer isufficient slots logic #275
+ Booba skin with non-elven skin #276

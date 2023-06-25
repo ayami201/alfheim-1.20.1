@@ -121,12 +121,12 @@ object AlfheimRegistry {
 		registerEntity(EntityVoidCreeper::class.java, "VoidCreeper", nextEntityID, 0xcc11d3, 0xfb9bff)
 		
 		registerEntity(EntityBlackBolt::class.java, "BlackBolt", nextEntityID)
-		registerEntity(EntityBlock::class.java, "Block", nextEntityID)
 		registerEntity(EntityCharge::class.java, "Charge", nextEntityID)
 		registerEntity(EntityEarthquake::class.java, "Earthquake", nextEntityID)
 		registerEntity(EntityEarthquakeFracture::class.java, "EarthquakeFracture", nextEntityID)
 		registerEntity(EntityFireAura::class.java, "FireAura", nextEntityID)
 		registerEntity(EntityFireTornado::class.java, "FireTornado", nextEntityID)
+		registerEntity(EntityFloatingIsland::class.java, "FloatingIsland", nextEntityID)
 		registerEntity(EntityFracturedSpaceCollector::class.java, "FracturedSpaceCollector", nextEntityID)
 		registerEntity(EntityIcicle::class.java, "Icicle", nextEntityID)
 		registerEntity(EntityItemImmortal::class.java, "ImmortalItem", nextEntityID)

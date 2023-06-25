@@ -7,6 +7,7 @@ import alfheim.api.lib.LibResourceLocations
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.common.core.handler.AlfheimConfigHandler
 import cpw.mods.fml.relauncher.*
+import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.renderer.entity.RenderBiped
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
@@ -20,10 +21,11 @@ object RenderBooba {
 	
 	@SideOnly(Side.CLIENT)
 	fun render(player: EntityPlayer) {
+		if (player !is AbstractClientPlayer) return
 		if (!AlfheimConfigHandler.enableElvenStory) return
-		if (CardinalSystemClient.playerSkinsData[player.commandSenderName]?.first != true) return
-		
 		val booba = model ?: return
+		val skinData = CardinalSystemClient.playerSkinsData[player.commandSenderName]
+		if (skinData?.first != true) return
 		
 		glPushMatrix()
 		glScaled(0.0625)
@@ -36,7 +38,7 @@ object RenderBooba {
 			glTranslatef(0f, -1f, -0.5f)
 		}
 		
-		mc.renderEngine.bindTexture(LibResourceLocations.oldFemale[player.raceID - 1])
+		mc.renderEngine.bindTexture(if (skinData.second) LibResourceLocations.oldFemale[player.raceID - 1] else player.locationSkin)
 		booba.renderAll()
 		
 		player.inventory.armorInventory[2]?.let {

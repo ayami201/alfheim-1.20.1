@@ -3,6 +3,7 @@ package alfheim.common.item
 import alexsocol.asjlib.ASJUtilities
 import alfheim.api.ModInfo
 import alfheim.api.entity.*
+import alfheim.common.world.dim.alfheim.customgens.FloatingIslandGenerator
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -21,7 +22,7 @@ class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 		try {
 			if (!player.isSneaking) {
 				if (!world.isRemote) {
-				
+					// FloatingIslandGenerator.generateSubstrate(world, 100000, 0)
 				} else {
 				
 				}
