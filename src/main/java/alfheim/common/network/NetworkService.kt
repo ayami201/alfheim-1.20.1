@@ -52,6 +52,7 @@ object NetworkService {
 			network.registerMessage(clazz.java.newInstance(), clazz.java, id, side)
 		} catch (e: Exception) {
 			ASJUtilities.error("Can`t register packet: Class: ${clazz.qualifiedName} ID: $id Side:${side.name}")
+			throw RuntimeException(e)
 		}
 	}
 	

@@ -121,7 +121,7 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 		           ?: return changeState(NO_TARGET)
 		
 		// not enough slots in container below
-		if (down.sizeInventory < (0 until patterns.sizeInventory).indexOfLast { patterns[it] != null })
+		if (down.sizeInventory < (0 until patterns.sizeInventory).indexOfLast { patterns[it] != null } + 1)
 			return changeState(NOT_ENOUGH_SLOTS)
 		
 		// not all slots can be inserted from above

@@ -121,7 +121,7 @@ object ClientProxy : CommonProxy() {
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityAlfheimPixie::class.java, RenderEntityAlfheimPixie)
 		RenderingRegistry.registerEntityRenderingHandler(EntityBlackBolt::class.java, RenderEntityBlackBolt)
-		RenderingRegistry.registerEntityRenderingHandler(EntityBlock::class.java, RenderEntityBlock)
+		RenderingRegistry.registerEntityRenderingHandler(EntityFloatingIsland::class.java, RenderEntityFloatingIsland)
 		RenderingRegistry.registerEntityRenderingHandler(EntityButterfly::class.java, RenderEntityButterfly)
 		RenderingRegistry.registerEntityRenderingHandler(EntityDedMoroz::class.java, RenderEntityDedMoroz)
 		RenderingRegistry.registerEntityRenderingHandler(EntityElf::class.java, RenderEntityElf)
@@ -245,7 +245,7 @@ object ClientProxy : CommonProxy() {
 //		if (Botania.thaumcraftLoaded) ThaumcraftAlfheimModule.addESMRecipes()
 		enableESMGUIs()
 		addESMKeyBinds()
-		ESMHandler.checkAddAttrs()
+//		ESMHandler.checkAddAttrs()
 	}
 	
 	fun disableESM() {

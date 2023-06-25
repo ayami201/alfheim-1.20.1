@@ -2,6 +2,7 @@ package alfheim.api.entity
 
 import alfheim.common.core.helper.*
 import net.minecraft.entity.Entity
+import net.minecraft.util.AxisAlignedBB
 import java.util.*
 
 interface IMuspelheimEntity: IElementalEntity {
@@ -19,4 +20,8 @@ interface IIntersectAttackEntity {
 	 * Check if this entity is an allie for [e] so it won't set it as attack target
 	 */
 	fun isAllie(e: Entity?): Boolean
+}
+
+interface IMulticollidableEntity {
+	fun getAdditionalCollisions(): List<AxisAlignedBB>
 }

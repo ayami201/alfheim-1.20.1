@@ -81,22 +81,14 @@ class LensDaisy: Lens() {
 			if (recipe.output.stackSize != it.entityItem.stackSize) return@forEach
 			
 			if (recipe.input is ItemStack) {
-				it.setEntityItemStack(recipe.input as ItemStack)
+				it.setEntityItemStack((recipe.input as ItemStack).copy())
+				return@forEach
 			} else if (recipe.input !is String) return@forEach
 			
 			val validStack = OreDictionary.getOres(recipe.input as String).firstOrNull() ?: return@forEach
 			val vsc = validStack.copy()
 			if (vsc.getItemDamage() == Short.MAX_VALUE.I) vsc.setItemDamage(0)
-			
-			it.entityItem.stackSize = 0
-			it.setEntityItemStack(null)
-			it.setDead()
-			
-			EntityItem(it.worldObj, it.posX, it.posY, it.posZ, vsc).apply {
-				setMotion(0.0)
-				spawn()
-				age = 120
-			}
+			it.setEntityItemStack(vsc)
 		}
 		
 		return true

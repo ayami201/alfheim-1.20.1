@@ -1,10 +1,14 @@
 package alfheim.common.world.dim.alfheim.biome
 
+import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 import alfheim.common.block.AlfheimBlocks
+import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.world.dim.alfheim.customgens.NiflheimLocationGenerator
 import alfheim.common.world.dim.alfheim.structure.StructureDreamsTree
 import net.minecraft.entity.EnumCreatureType
 import net.minecraft.init.Blocks
+import net.minecraft.server.MinecraftServer
 import net.minecraft.world.biome.BiomeGenBase
 import net.minecraftforge.common.BiomeDictionary
 import net.minecraftforge.common.BiomeDictionary.Type
@@ -35,9 +39,13 @@ abstract class BiomeAlfheim(
 		alfheimBiomes.add(this)
 	}
 	
-	override fun getFloatTemperature(x: Int, y: Int, z: Int) = if (AlfheimCore.winter) 0f else 0.5f
+	override fun getFloatTemperature(x: Int, y: Int, z: Int): Float {
+		val world = if (ASJUtilities.isServer) MinecraftServer.getServer().worldServerForDimension(AlfheimConfigHandler.dimensionIDAlfheim) else mc.theWorld
+		val (xOff, zOff) = NiflheimLocationGenerator.portalXZ(world)
+		return if (AlfheimCore.winter || NiflheimLocationGenerator.yobaFunction2d(x - xOff, z - zOff)) 0f else 0.5f
+	}
 	
-	override fun getSkyColorByTemp(temp: Float) = if (AlfheimCore.winter) 0x576cd9 else 0x266eff
+	override fun getSkyColorByTemp(temp: Float) = if (AlfheimCore.winter || temp < 0.5f) 0x576cd9 else 0x266eff
 	
 	companion object {
 		

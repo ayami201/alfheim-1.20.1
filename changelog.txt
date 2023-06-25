@@ -1,13 +1,9 @@
 Innovations:
- A new rare Alfheim biome with giant flowers and butterflies
- "Weeping" trees now have more decay-resistant leaves (up to 8 blocks)
- Rifts now can be depleted with rift shards
- More flexible (configurable) Alfheim nighttime spirits
- Optimized cold sync
- 
+ [WIP] Floating islands
+
 Fixes:
- Crash with Botania fork for GTNH modpack
- Crash with Loot++
- Crash with Zelda Sword Skills
- Keybind duplication in ESM/MMO on world join
- "Weeping" trees disconnected branches
+ Rain on ice mountain
+ Purification lens crash
+ ESM not allowing to join server #274
+ Sequencer isufficient slots logic #275
+ Booba skin with non-elven skin #276
