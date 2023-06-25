@@ -1,6 +1,6 @@
 <news>
 	<version id="LATEST">
-		<val>47</val>
+		<val>48</val>
 	</version>
 	<version id="UNIVERSAL">
 		<val>$json["Official Alfheim Discord server is here! *",{"text":"click","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Join discord server","color":"gold"}},"clickEvent":{"action":"open_url","value":"https://discord.gg/dqQXZHq"}},"*"]</val>
@@ -130,5 +130,8 @@
 	</version>
 	<version id="46">
 		<val>New Alfheim biome and optimization</val>
+	</version>
+	<version id="47">
+		<val>Fixed some crashes and bugs</val>
 	</version>
 </news>
