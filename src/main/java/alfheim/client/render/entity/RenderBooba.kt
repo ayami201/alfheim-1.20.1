@@ -1,6 +1,7 @@
 package alfheim.client.render.entity
 
 import alexsocol.asjlib.*
+import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.ModInfo
 import alfheim.api.entity.raceID
 import alfheim.api.lib.LibResourceLocations
@@ -27,11 +28,22 @@ object RenderBooba {
 		val skinData = CardinalSystemClient.playerSkinsData[player.commandSenderName]
 		if (skinData?.first != true) return
 		
+		val invisible = player.isInvisible
+		val transparet = invisible && !player.isInvisibleToPlayer(mc.thePlayer)
+		if (invisible && !transparet) return
+		
 		glPushMatrix()
 		glScaled(0.0625)
 		glRotatef(180f, 0f, 1f, 0f)
 		glTranslatef(0f, 2.7f, 1.9f)
 		glRotatef(180f, 0f, 0f, 1f)
+		
+		if (transparet) {
+			glColor4f(1f, 1f, 1f, 0.15f)
+			glDepthMask(false)
+			glAlphaFunc(GL_GREATER, 0.003921569f)
+			ASJRenderHelper.setBlend()
+		}
 		
 		if (player.isSneaking) {
 			IBaubleRender.Helper.applySneakingRotation()
@@ -45,6 +57,13 @@ object RenderBooba {
 			mc.renderEngine.bindTexture(RenderBiped.getArmorResource(player, it, 1, null))
 			glScaled(1.1)
 			booba.renderAll()
+		}
+		
+		if (transparet) {
+			ASJRenderHelper.discard()
+			glAlphaFunc(GL_GREATER, 0.1f)
+			glDepthMask(true)
+			glColor4f(1f, 1f, 1f, 1f)
 		}
 		
 		glPopMatrix()
