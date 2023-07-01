@@ -86,8 +86,9 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 	
 	private var posWatcher = HashMap<String, WatchedChunk>()
 	
-	var blockdustParticles = mutableListOf<Array<Double>>()
-	var sparkleParticles = mutableListOf<Array<Double>>()
+	val blockdustParticles = mutableListOf<Array<Double>>()
+	val sparkleParticles = mutableListOf<Array<Double>>()
+	var markParticles = mutableListOf<Array<Double>>()
 	
 	// mutex bits:
 	// 1st - motion
@@ -204,6 +205,15 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 			while (blockdustParticles.isNotEmpty()) {
 				val d = blockdustParticles.removeAt(0)
 				mc.theWorld.spawnParticle("blockdust_${ d[0].I }_0", d[1], d[2], d[3], d[4], d[5], d[6])
+			}
+			
+			while (markParticles.isNotEmpty()) {
+				val (x, y, z) = markParticles.removeAt(0)
+				EntityPrimalMark(mc.theWorld, x, y, z, this).apply {
+					isSpecial = true
+					ticksExisted = 49
+					spawn()
+				}
 			}
 		}
 		

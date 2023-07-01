@@ -2,7 +2,6 @@ package alfheim.client.model.entity
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alfheim.AlfheimCore
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.entity.EntityPrimalMark
 import alfheim.common.entity.boss.primal.EntityPrimalBoss
@@ -101,7 +100,7 @@ abstract class ModelEntityPrimalBoss: ModelBiped() {
 					val (ox, oy, oz) = v
 					val (mx, my, mz) = v.mul(0.075).negate()
 					
-					AlfheimCore.proxy.sparkleFX(mc.theWorld, x + ox, y + oy + 9, z + oz, r, g, b, 2f, 5, mx, my, mz)
+					entity.sparkleParticles += arrayOf(x + ox, y + oy + 9, z + oz, r.D, g.D, b.D, mx, my, mz)
 				}
 			}
 			in 70..75 -> run {
@@ -113,16 +112,12 @@ abstract class ModelEntityPrimalBoss: ModelBiped() {
 				val (x, y, z) = Vector3.fromEntity(entity).add(Vector3(-1.5, 0, 1.75).rotateOY(-entity.renderYawOffset))
 				for (i in 0..511) {
 					VisualEffectHandlerClient.v.set(Math.random() - 0.5, 0.0, Math.random() - 0.5).normalize().mul(Math.random() * 1.5 + 0.5).set(VisualEffectHandlerClient.v.x, Math.random() * 0.25, VisualEffectHandlerClient.v.z)
-					mc.theWorld.spawnParticle("blockdust_${ getSuperSmashParticlesBlockIDs().random(entity.rng) }_0", x, y + 0.5, z, VisualEffectHandlerClient.v.x, VisualEffectHandlerClient.v.y, VisualEffectHandlerClient.v.z)
+					entity.blockdustParticles += arrayOf(getSuperSmashParticlesBlockIDs().random(entity.rng)!!.D, x, y + 0.5, z, VisualEffectHandlerClient.v.x, VisualEffectHandlerClient.v.y, VisualEffectHandlerClient.v.z)
 				}
 				
 				entity.ultAnimationTicks++
 				
-				EntityPrimalMark(mc.theWorld, x, y, z, entity).apply {
-					isSpecial = true
-					ticksExisted = 49
-					spawn()
-				}
+				entity.markParticles += arrayOf(x, y, z)
 			}
 			in 76..79 -> rightarm.rotateAngleX += Math.toRadians(50.0).F
 			in 80..85 -> {
