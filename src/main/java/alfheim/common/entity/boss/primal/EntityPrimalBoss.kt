@@ -3,6 +3,7 @@ package alfheim.common.entity.boss.primal
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.render.ICustomArmSwingEndEntity
+import alfheim.AlfheimCore
 import alfheim.api.*
 import alfheim.api.boss.IBotaniaBossWithName
 import alfheim.api.entity.IIntersectAttackEntity
@@ -84,6 +85,9 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 		set(value) = dataWatcher.updateObject(4, value)
 	
 	private var posWatcher = HashMap<String, WatchedChunk>()
+	
+	var blockdustParticles = mutableListOf<Array<Double>>()
+	var sparkleParticles = mutableListOf<Array<Double>>()
 	
 	// mutex bits:
 	// 1st - motion
@@ -191,6 +195,16 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 			tickWhirl(players)
 			doChunkAttack(players)
 			doElementalMarks(arenaBB)
+		} else {
+			while (sparkleParticles.isNotEmpty()) {
+				val d = sparkleParticles.removeAt(0)
+				AlfheimCore.proxy.sparkleFX(mc.theWorld, d[0], d[1], d[2], d[3].F, d[4].F, d[5].F, 2f, 5, d[6], d[7], d[8])
+			}
+			
+			while (blockdustParticles.isNotEmpty()) {
+				val d = blockdustParticles.removeAt(0)
+				mc.theWorld.spawnParticle("blockdust_${ d[0].I }_0", d[1], d[2], d[3], d[4], d[5], d[6])
+			}
 		}
 		
 		if (stage > 1 && getEntitiesWithinAABB(worldObj, protectorEntityClass(), arenaBB).isNotEmpty()) {
