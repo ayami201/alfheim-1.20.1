@@ -14,6 +14,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.entity.*
 import alfheim.common.entity.boss.*
 import alfheim.common.entity.boss.primal.*
+import alfheim.common.floatingisland.EntityFloatingIsland
 import alfheim.common.entity.item.*
 import alfheim.common.entity.spell.*
 import alfheim.common.item.*

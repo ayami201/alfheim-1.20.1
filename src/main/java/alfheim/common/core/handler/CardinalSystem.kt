@@ -1150,6 +1150,8 @@ object CardinalSystem {
 			esmAbility = !esmAbility
 		}
 		
+		var flightEnableCooldown = 0
+		
 		/** isFemale otherwise */
 		var gender = false
 		var customSkin = false

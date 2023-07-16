@@ -14,17 +14,17 @@ class SubTileSpeedUp: SubTileAnomalyBase() {
 		get() {
 			if (inWG()) return EMPTY_LIST
 			
-			val l = allAround(Entity::class.java, 8.0)
+			val l = allAround(Entity::class.java, radius.D)
 			l.removeAll { !it.isEntityAlive }
 			
-			val tiles = ArrayList<Any>(l)
+			val tiles = ArrayList<TileEntity>()
 			
 			for (i in -radius..radius)
 				for (j in -radius..radius)
 					for (k in -radius..radius) {
 						if (i == 0 && j == 0 && k == 0) continue
-						val t = worldObj.getTileEntity(x + i, y + j, z + k)
-						if (t != null && t.canUpdate() && !t.isInvalid && t !is TileAnomaly) tiles.add(t)
+						val t = worldObj.getTileEntity(x + i, y + j, z + k) ?: continue
+						if (t.canUpdate() && !t.isInvalid && t !is TileAnomaly) tiles.add(t)
 					}
 			
 			return tiles + l

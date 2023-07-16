@@ -20,7 +20,7 @@ object LibOreDict {
 	const val IFFESAL_DUST = "dustIffesal"
 	const val FENRIR_FUR = "furFenrir"
 	val ARUNE = arrayOf("runePrimalA", "runeMuspelheimA", "runeNiflheimA")
-	const val INFUSED_DREAM_TWIG = "twigDeamwoodInsufed"
+	const val INFUSED_DREAM_TWIG = "twigDreamwoodInfused"
 	const val DREAM_WOOD_LOG = "logDeamwood"
 	
 	// Iridescence

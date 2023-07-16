@@ -25,24 +25,16 @@ object MTHandlerAnyavil {
 			if (i != null) old = i
 		}
 		
-		override fun canUndo(): Boolean {
-			return true
-		}
+		override fun canUndo() = true
 		
 		override fun undo() {
 			AlfheimAPI.pinkness[output] = old
 		}
 		
-		override fun describe(): String {
-			return String.format("Mapping new (%d) pinkness weight for %s", pinkness, output.unlocalizedName)
-		}
+		override fun describe() = "Mapping new ($pinkness) pinkness weight for ${output.unlocalizedName}"
 		
-		override fun describeUndo(): String {
-			return String.format("Mapping previous (%d) pinkness weight for %s", old, output.unlocalizedName)
-		}
+		override fun describeUndo() = "Mapping previous ($old) pinkness weight for ${output.unlocalizedName}"
 		
-		override fun getOverrideKey(): Any? {
-			return null
-		}
+		override fun getOverrideKey() = null
 	}
 }

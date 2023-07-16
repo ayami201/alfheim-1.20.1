@@ -14,7 +14,7 @@ class MessageHotSpellC(var ids: IntArray): ASJPacket(), AlfheimPacket<MessageHot
 		for (id in ids) buf.writeInt(id)
 	}
 
-	override fun handleClient(packet: MessageHotSpellC) {
-		CardinalSystemClient.PlayerSegmentClient.hotSpells = packet.ids.clone()
+	override fun handleClient() {
+		CardinalSystemClient.PlayerSegmentClient.hotSpells = ids.clone()
 	}
 }

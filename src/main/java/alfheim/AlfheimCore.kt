@@ -38,6 +38,7 @@ object AlfheimCore {
 	var stupidMode = false
 	var TiCLoaded = false
 	var TravellersGearLoaded = false
+	var TwilightForestLoaded = false
 	
 	val jingleTheBells: Boolean
 	
@@ -64,6 +65,7 @@ object AlfheimCore {
 		NEILoaded = Loader.isModLoaded("NotEnoughItems")
 		TiCLoaded = Loader.isModLoaded("TConstruct")
 		TravellersGearLoaded = Loader.isModLoaded("TravellersGear")
+		TwilightForestLoaded = Loader.isModLoaded("TwilightForest")
 		
 		stupidMode = Loader.isModLoaded("Avaritia")
 		

@@ -10,6 +10,7 @@ import alfheim.common.core.helper.*
 import alfheim.common.core.registry.AlfheimRegistry
 import alfheim.common.crafting.recipe.AlfheimRecipes
 import alfheim.common.entity.*
+import alfheim.common.floatingisland.FloatingIslandGenerator
 import alfheim.common.integration.etfuturum.EtFuturumAlfheimConfig
 import alfheim.common.integration.multipart.MultipartAlfheimConfig
 import alfheim.common.integration.thaumcraft.TCHandlerShadowFoxAspects
@@ -91,6 +92,8 @@ open class CommonProxy {
 		EventHandlerSummer.eventForge()
 		SpriteKillHandler.eventForge()
 		SheerColdHandler.eventForge()
+		ChunkLoadingHandler
+		FloatingIslandGenerator
 		
 		FMLCommonHandler.instance().bus().register(object {
 			@SubscribeEvent(priority = EventPriority.HIGHEST)

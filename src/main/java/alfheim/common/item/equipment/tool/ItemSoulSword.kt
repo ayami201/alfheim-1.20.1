@@ -137,12 +137,6 @@ class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem {
 			eventForge()
 		}
 		
-		fun setLevelP(stack: ItemStack, lvl: Int) {
-			stack.level = lvl
-		}
-		
-		fun getLevelP(stack: ItemStack) = stack.level
-		
 		private fun getDamageFromLevel(stack: ItemStack) = stack.level / 100f
 		
 		private fun getMaxUsesFromLevel(stack: ItemStack) = max(100, stack.level / 10)
@@ -151,7 +145,7 @@ class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem {
 			stack.meta = max(0, stack.meta - amount)
 		}
 		
-		const val TAG_WONT_DROP_SOUL = "${ModInfo.MODID}:wontDropSoul"
+		const val TAG_WONT_DROP_SOUL = "${ModInfo.MODID}.wontDropSoul"
 		
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		fun onLivingHurt(e: LivingHurtEvent) {

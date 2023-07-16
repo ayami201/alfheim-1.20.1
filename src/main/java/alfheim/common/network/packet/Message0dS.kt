@@ -15,8 +15,8 @@ import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.item.equipment.bauble.ItemTravelBelt
 
 class Message0dS(ty: M0ds, var type: Int = ty.ordinal): ASJPacket(), AlfheimPacket<Message0dS> {
-	override fun handleServer(packet: Message0dS, player: EntityPlayerMP) {
-		when (M0ds.values()[packet.type]) {
+	override fun handleServer(player: EntityPlayerMP) {
+		when (M0ds.values()[type]) {
 			M0ds.DODGE     -> dodge(player)
 			M0ds.JUMP      -> jump(player)
 			M0ds.HEIMBLINK -> blink(player)

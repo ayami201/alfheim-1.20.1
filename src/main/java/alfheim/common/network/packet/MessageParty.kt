@@ -15,8 +15,8 @@ class MessageParty(var party: CardinalSystem.PartySystem.Party): ASJPacket(), Al
 		party.write(buf)
 	}
 
-	override fun handleClient(packet: MessageParty) {
-		CardinalSystemClient.PlayerSegmentClient.party = packet.party
+	override fun handleClient() {
+		CardinalSystemClient.PlayerSegmentClient.party = party
 		CardinalSystemClient.PlayerSegmentClient.partyIndex = 0
 	}
 }

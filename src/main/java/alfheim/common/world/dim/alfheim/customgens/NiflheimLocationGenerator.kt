@@ -2,17 +2,22 @@ package alfheim.common.world.dim.alfheim.customgens
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.AlfheimCore
 import alfheim.api.ModInfo
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.block.BlockNiflheimPortal
 import alfheim.common.core.handler.*
+import alfheim.common.entity.EntityElf
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent
 import net.minecraft.block.*
+import net.minecraft.entity.EntityList
 import net.minecraft.init.Blocks
 import net.minecraft.world.World
+import net.minecraftforge.event.entity.living.LivingSpawnEvent.CheckSpawn
 import net.minecraftforge.event.terraingen.PopulateChunkEvent
 import ru.vamig.worldengine.additions.*
+import vazkii.botania.common.entity.EntityFlyingCreature
 import java.util.*
 import kotlin.math.min
 
@@ -126,6 +131,22 @@ object NiflheimLocationGenerator: WE_CreateChunkGen() {
 		val (mx, my, mz) = Vector3().rand().sub(0.5).normalize().mul(Math.random() * 0.25)
 		VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.WISP, AlfheimConfigHandler.dimensionIDAlfheim,
 		                               x, y, z, 0.75, 0.95, 1.0, Math.random() * 0.1 + 0.2, mx, my, mz, Math.random() * 3 + 1)
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	fun forbidEntitySpawn(e: CheckSpawn) {
+		if (e.world.provider.dimensionId != AlfheimConfigHandler.dimensionIDAlfheim) return
+		
+		val (xOff, zOff) = portalXZ(e.world)
+		if (!yobaFunction2d(e.entity.posX.mfloor() - xOff, e.entity.posZ.mfloor() - zOff)) return
+		
+		if (e.entity is EntityElf || e.entity is EntityFlyingCreature) return
+		if (AlfheimCore.TwilightForestLoaded && EntityList.getEntityString(e.entity) == "TwilightForest.Glacier Penguin") {
+			e.result = Event.Result.ALLOW
+			return
+		}
+		
+		e.result = Event.Result.DENY
 	}
 	
 	fun portalXZ(world: World): Pair<Int, Int> {

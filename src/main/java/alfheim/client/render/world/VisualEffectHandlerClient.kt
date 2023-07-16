@@ -54,6 +54,7 @@ object VisualEffectHandlerClient {
 			ECHO_MOB           -> spawnEchoMob(d[0], d[1], d[2])
 			ECHO_PLAYER        -> spawnEchoPlayer(d[0], d[1], d[2])
 			EMBLEM_ACTIVATION  -> activateEmblem(d[0], d[1])
+			ENDER              -> spawnEnder(d[0], d[1], d[2])
 			EXPL               -> spawnExplosion(d[0], d[1], d[2])
 			FALLING            -> spawnFalling(d[0].I, d[1].I, d[2].I, d[3])
 			FEATHER            -> spawnFeather(d[0], d[1], d[2], d[3], d[4], d[5], d[6].I, d[7].F, d[8].F, d[9].F)
@@ -215,6 +216,19 @@ object VisualEffectHandlerClient {
 		Botania.proxy.setWispFXDepthTest(false)
 		Botania.proxy.wispFX(mc.theWorld, x, y + 0.2, z, 0f, 0f, 1f, 1f, 0f, 3f)
 		Botania.proxy.setWispFXDepthTest(true)
+	}
+	
+	fun spawnEnder(x: Double, y: Double, z: Double) {
+		for (l in 0 until 128) {
+			val d6: Double = l.toDouble() / (128.toDouble() - 1.0)
+			val f: Float = (mc.theWorld.rand.nextFloat() - 0.5f) * 0.2f
+			val f1: Float = (mc.theWorld.rand.nextFloat() - 0.5f) * 0.2f
+			val f2: Float = (mc.theWorld.rand.nextFloat() - 0.5f) * 0.2f
+			val d7: Double = x * d6 + (mc.theWorld.rand.nextDouble() - 0.5)  * 2.0
+			val d8: Double = y * d6 + mc.theWorld.rand.nextDouble()
+			val d9: Double = z * d6 + (mc.theWorld.rand.nextDouble() - 0.5) * 2.0
+			mc.theWorld.spawnParticle("portal", d7, d8, d9, f.toDouble(), f1.toDouble(), f2.toDouble())
+		}
 	}
 	
 	fun spawnExplosion(x: Double, y: Double, z: Double) {
@@ -476,7 +490,7 @@ object VisualEffectHandlerClient {
 	}
 	
 	enum class VisualEffects {
-		ACID, AQUABIND, AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FLAMESTAR, GAIA_SOUL, GRAVITY, GUNGNIR, HEAL, HORN, ICELENS, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SNICE_MARK, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
+		ACID, AQUABIND, AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, ENDER, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FLAMESTAR, GAIA_SOUL, GRAVITY, GUNGNIR, HEAL, HORN, ICELENS, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SNICE_MARK, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
 	}
 	
 	fun onDeath(target: EntityLivingBase) {

@@ -1,7 +1,7 @@
 package alfheim.common.block.tile.sub.flower
 
 import alexsocol.asjlib.*
-import alfheim.AlfheimCore
+import alfheim.common.core.handler.*
 import alfheim.common.lexicon.AlfheimLexiconData
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
@@ -9,56 +9,22 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
-import net.minecraft.world.*
-import net.minecraftforge.common.ForgeChunkManager.*
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.subtile.*
 import vazkii.botania.common.item.ItemTwigWand
 
 class SubTileBudOfYggdrasil: SubTileFunctional() {
 	
-	var chunkTicket: Ticket? = null
 	var creative = false
 	
 	override fun onUpdate() {
 		super.onUpdate()
 		
-		val can = (creative || mana >= COST) && redstoneSignal <= 0
+		if (!(creative || mana >= COST) || redstoneSignal > 0) return
 		
-		if (chunkTicket == null) {
-			if (can) init() else return
-		} else {
-			if (!can) return disable()
-		}
+		if (!ChunkLoadingHandler.requestChunkLoad(supertile.worldObj, supertile.xCoord shr 4, supertile.zCoord shr 4)) return
 		
 		if (!creative) mana -= COST
-	}
-	
-	fun init() {
-		if (supertile.worldObj.isRemote) return
-		
-		requestTicket(AlfheimCore, supertile.worldObj, Type.NORMAL)?.apply {
-			chunkTicket = this
-			modData.setInteger("subtileX", supertile.xCoord)
-			modData.setInteger("subtileY", supertile.yCoord)
-			modData.setInteger("subtileZ", supertile.zCoord)
-			forceChunkLoading()
-		}
-	}
-	
-	fun forceChunkLoading() = try_ {
-		forceChunk(chunkTicket, ChunkCoordIntPair(supertile.xCoord shr 4, supertile.zCoord shr 4))
-		ASJUtilities.log("Inited ticket $chunkTicket")
-	}
-	
-	fun disable() {
-		if (supertile.worldObj.isRemote) return
-		
-		releaseTicket(chunkTicket ?: return)
-		
-		ASJUtilities.log("Released ticket $chunkTicket")
-		
-		chunkTicket = null
 	}
 	
 	override fun onWanded(player: EntityPlayer?, wand: ItemStack?): Boolean {
@@ -110,17 +76,8 @@ class SubTileBudOfYggdrasil: SubTileFunctional() {
 		}
 	}
 	
-	companion object: LoadingCallback {
-		
+	companion object {
 		const val COST = 10
 		const val TAG_CREATIVE = "creative"
-		
-		init {
-			setForcedChunkLoadingCallback(AlfheimCore, this)
-		}
-		
-		override fun ticketsLoaded(tickets: MutableList<Ticket>?, world: World?) {
-			ASJUtilities.log("Loaded tickets '$tickets' for world '$world'")
-		}
 	}
 }

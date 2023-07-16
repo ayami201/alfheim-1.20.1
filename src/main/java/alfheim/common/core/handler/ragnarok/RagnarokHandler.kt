@@ -770,7 +770,7 @@ object RagnarokHandler {
 			val erebusID = if (Loader.isModLoaded("erebus")) ErebusConfig.INSTANCE.erebusDimensionID else null
 			val hoannaID = if (Loader.isModLoaded("EssentialCraftIII") || Loader.isModLoaded("essentialcraft")) EC3Config.dimensionID else null
 			val outerLandsID = if (Botania.thaumcraftLoaded) ThaumcraftConfig.dimensionOuterId else null
-			val twillightForestID = if (Loader.isModLoaded("TwilightForest")) TwilightForestMod.dimensionID else null
+			val twillightForestID = if (AlfheimCore.TwilightForestLoaded) TwilightForestMod.dimensionID else null
 			
 			fun getWorldAffectionLevel(world: World): WorldAffectionLevel {
 				val dimensionId: Int?

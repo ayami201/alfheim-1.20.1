@@ -19,8 +19,6 @@ import kotlin.math.*
 
 class WorldGenGrass(val grass: Boolean, val flowers: Boolean, val doubleFlowers: Boolean, val botanicalFlowers: Boolean, val mod: Double): IWorldGenerator {
 	
-	val grassBlocks get() = if (AlfheimCore.winter) arrayOf(AlfheimBlocks.snowGrass, Blocks.grass) else arrayOf(Blocks.grass)
-	
 	override fun generate(rand: Random, chunkX: Int, chunkZ: Int, world: World, chunkGenerator: IChunkProvider, chunkProvider: IChunkProvider) {
 		if (world.provider.dimensionId != AlfheimConfigHandler.dimensionIDAlfheim) return
 		
@@ -91,12 +89,6 @@ class WorldGenGrass(val grass: Boolean, val flowers: Boolean, val doubleFlowers:
 		var perChunk = (64 * mod).roundToInt()
 		var iteration = 256
 		
-		val types = arrayOf<Block>(Blocks.yellow_flower, Blocks.yellow_flower, // 0 1
-								   Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, // 2 3 4
-								   Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, // 5 6 7 8 9 10
-								   Blocks.double_plant, Blocks.double_plant                                                                    // 11 12
-		)
-		
 		val metas = byteArrayOf(0, 0, 0, 0, -1, 0, 2, 1, 1, 1, 1, 2, -1)
 		
 		while (perChunk > 0 && iteration > 0) {
@@ -113,16 +105,15 @@ class WorldGenGrass(val grass: Boolean, val flowers: Boolean, val doubleFlowers:
 					if (type > 12) return@loop
 					if (type > 10 && !doubleFlowers) return@select
 					if (type < 5 && !flowers) return@select
-					if (type in 5..10 && !grass)
-						return@select
-					else if (type == 4)
-						metas[4] = (rand.nextInt(8) + 1).toByte()
-					else if (type == 11)
-						world.setBlock(x, y + 1, z, types[11], metas[11] + 8, 2)
-					else if (type == 12) {
-						metas[12] = rand.nextInt(6).toByte()
-						if (metas[12].I == 2) return@loop
-						world.setBlock(x, y + 1, z, types[12], metas[12] + 8, 2)
+					if (type in 5..10 && !grass) return@select
+					when (type) {
+						4  -> metas[4] = (rand.nextInt(8) + 1).toByte()
+						11 -> world.setBlock(x, y + 1, z, types[11], metas[11] + 8, 2)
+						12 -> {
+							metas[12] = rand.nextInt(6).toByte()
+							if (metas[12].I == 2) return@loop
+							world.setBlock(x, y + 1, z, types[12], metas[12] + 8, 2)
+						}
 					}
 					
 					world.setBlock(x, y, z, types[type], metas[type].I, 2)
@@ -130,5 +121,17 @@ class WorldGenGrass(val grass: Boolean, val flowers: Boolean, val doubleFlowers:
 				--perChunk
 			}
 		}
+	}
+	
+	companion object {
+		
+		val grassBlocks get() = if (AlfheimCore.winter) arrayOf(AlfheimBlocks.snowGrass, Blocks.grass) else arrayOf(Blocks.grass)
+		
+		val types = arrayOf<Block>(Blocks.yellow_flower, Blocks.yellow_flower, // 0 1
+		                           Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, // 2 3 4
+		                           Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, // 5 6 7 8 9 10
+		                           Blocks.double_plant, Blocks.double_plant                                                                    // 11 12
+		)
+		
 	}
 }

@@ -13,7 +13,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.MapColor
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
 import net.minecraft.util.*
@@ -76,6 +76,7 @@ class BlockAnomaly: BlockContainerMod(anomaly), ILexiconable {
 		blockIcon = iconUndefined
 	}
 	
+	override fun getExplosionResistance(entity: Entity?) = Float.MAX_VALUE / 3f
 	override fun createNewTileEntity(world: World, meta: Int) = TileAnomaly()
 	override fun getCollisionBoundingBoxFromPool(p_149668_1_: World?, p_149668_2_: Int, p_149668_3_: Int, p_149668_4_: Int) = null
 	override fun isOpaqueCube() = false

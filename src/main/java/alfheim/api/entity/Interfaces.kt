@@ -23,5 +23,5 @@ interface IIntersectAttackEntity {
 }
 
 interface IMulticollidableEntity {
-	fun getAdditionalCollisions(): List<AxisAlignedBB>
+	fun getAdditionalCollisions(target: AxisAlignedBB): List<AxisAlignedBB>
 }

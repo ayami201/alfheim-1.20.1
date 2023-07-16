@@ -6,7 +6,7 @@ import alfheim.common.core.handler.CardinalSystem
 import net.minecraft.entity.player.EntityPlayerMP
 
 class MessageHotSpellS(var slot: Int, var id: Int): ASJPacket(), AlfheimPacket<MessageHotSpellS> {
-	override fun handleServer(packet: MessageHotSpellS, player: EntityPlayerMP) {
-		CardinalSystem.HotSpellsSystem.setHotSpellID(player, packet.slot, packet.id);
+	override fun handleServer(player: EntityPlayerMP) {
+		CardinalSystem.HotSpellsSystem.setHotSpellID(player, slot, id)
 	}
 }

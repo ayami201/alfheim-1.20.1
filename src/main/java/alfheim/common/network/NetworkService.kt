@@ -26,6 +26,7 @@ object NetworkService {
 		
 		registerPacket(MessageContributor::class, Side.CLIENT)
 		registerPacket(MessageEffect::class, Side.CLIENT)
+		registerPacket(MessageFIBlock::class, Side.CLIENT)
 		registerPacket(MessageGleipnirLeash::class, Side.CLIENT)
 		registerPacket(MessageHotSpellC::class, Side.CLIENT)
 		registerPacket(MessageParty::class, Side.CLIENT)

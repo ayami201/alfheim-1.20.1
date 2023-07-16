@@ -17,6 +17,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		"net.minecraft.entity.monster.EntitySkeleton" to setOf("alfheim/common/core/helper/IElementalEntity"),
 		"thaumcraft.common.entities.golems.EntityGolemBase" to setOf("alfheim/common/core/helper/IElementalEntity"),
 		"thaumcraft.common.entities.monster.EntityWisp" to setOf("alfheim/common/core/helper/IElementalEntity"),
+		"vazkii.botania.common.item.equipment.bauble.ItemAuraRing" to setOf("vazkii/botania/api/mana/IManaItem"),
 									)
 	
 	/** name for logging */

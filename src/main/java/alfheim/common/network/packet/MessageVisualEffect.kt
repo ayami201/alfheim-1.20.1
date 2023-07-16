@@ -15,7 +15,7 @@ class MessageVisualEffect(var type: Int, vararg var data: Double): ASJPacket(), 
 		for (d in data) buf.writeDouble(d)
 	}
 
-	override fun handleClient(packet: MessageVisualEffect) {
-		VisualEffectHandlerClient.select(VisualEffectHandlerClient.VisualEffects.values()[packet.type], packet.data)
+	override fun handleClient() {
+		VisualEffectHandlerClient.select(VisualEffectHandlerClient.VisualEffects.values()[type], data)
 	}
 }

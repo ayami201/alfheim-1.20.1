@@ -130,7 +130,7 @@ object RenderEntityThrym: RenderBiped(ModelEntityThrym, 2f) {
 		glColor4f(0f, 0.5f, 0.75f, 0.75f)
 		iterator.onEach { pos ->
 			if (domes[pos]!! < mc.theWorld.totalWorldTime)
-				iterator.remove()
+				remove()
 			
 			val (x, y, z) = pos
 			interpolatedTranslationReverse(mc.thePlayer)

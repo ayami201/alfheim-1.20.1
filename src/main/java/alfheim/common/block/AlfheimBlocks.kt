@@ -38,7 +38,6 @@ import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.api.subtile.SubTileEntity
 import vazkii.botania.common.block.*
-import vazkii.botania.common.lexicon.LexiconData
 import vazkii.botania.common.lib.LibBlockNames
 import vazkii.botania.common.lib.LibOreDict as BLibOreDict
 
@@ -100,6 +99,7 @@ object AlfheimBlocks {
 	val kindling: Block
 	val livingcobble: Block
 	val livingwoodFunnel: Block
+	val lootbox: Block
 	val manaAccelerator: Block
 	val manaFluidBlock: Block
 	val manaInfuser: Block
@@ -274,14 +274,8 @@ object AlfheimBlocks {
 		irisWood3 = BlockColoredWood(3)
 		helheimBlock = BlockPattern(ModInfo.MODID, Material.rock, "HelheimBlock", AlfheimTab, hardness = -1f, harvLvl = Int.MAX_VALUE, resistance = Float.MAX_VALUE)
 		kindling = BlockKindling()
-		livingcobble = object: BlockModMeta(Material.rock, 4, ModInfo.MODID, "LivingCobble", AlfheimTab, 2f, resist = 60f), ILexiconable {
-			override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = when (world.getBlockMetadata(x, y, z)) {
-					0 -> AlfheimLexiconData.worldgen
-					1, 2 -> LexiconData.decorativeBlocks
-					3 -> LexiconData.vineBall
-					else -> null
-			}
-		}
+		livingcobble = BlockLivingCobble()
+		lootbox = BlockLootbox()
 		livingwoodFunnel = BlockFunnel()
 		manaAccelerator = BlockManaAccelerator()
 		manaFluidBlock = BlockManaFluid()
@@ -403,7 +397,44 @@ object AlfheimBlocks {
 		AlfheimAPI.warmBlocks.addAll(arrayOf(redFlame))
 		
 		registerBurnables()
+		registerPaintables()
 		registerFlora()
+	}
+	
+	fun registerPaintables() {
+		BotaniaAPI.registerPaintableBlock(irisWood0)
+		BotaniaAPI.registerPaintableBlock(irisWood1)
+		BotaniaAPI.registerPaintableBlock(irisWood2)
+		BotaniaAPI.registerPaintableBlock(irisWood3)
+		BotaniaAPI.registerPaintableBlock(irisPlanks)
+		
+		irisStairs.forEach {
+			BotaniaAPI.registerPaintableBlock(it)
+		}
+		
+		irisSlabs.forEach {
+			BotaniaAPI.registerPaintableBlock(it)
+		}
+		
+		irisSlabsFull.forEach {
+			BotaniaAPI.registerPaintableBlock(it)
+		}
+		
+		BotaniaAPI.registerPaintableBlock(rainbowWood)
+		BotaniaAPI.registerPaintableBlock(rainbowPlanks)
+		BotaniaAPI.registerPaintableBlock(rainbowStairs)
+		BotaniaAPI.registerPaintableBlock(rainbowSlab)
+		BotaniaAPI.registerPaintableBlock(rainbowSlabFull)
+		
+		BotaniaAPI.registerPaintableBlock(starBlock)
+		BotaniaAPI.registerPaintableBlock(starBlock2)
+		
+		BotaniaAPI.registerPaintableBlock(Blocks.dirt)
+		BotaniaAPI.registerPaintableBlock(irisDirt)
+		BotaniaAPI.registerPaintableBlock(rainbowDirt)
+		
+		BotaniaAPI.registerPaintableBlock(ModBlocks.livingrock)
+		BotaniaAPI.registerPaintableBlock(ModBlocks.dreamwood)
 	}
 	
 	fun regOreDict() {

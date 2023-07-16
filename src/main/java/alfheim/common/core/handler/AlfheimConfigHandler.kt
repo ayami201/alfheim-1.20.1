@@ -50,11 +50,14 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var gaiaBarOffset = 1
 	var gaiaNameColor = 0x00D5FF
 	var hpHooks = true
+	var overrideCoFHCollisionCheck = true
 	
 	// DIMENSION
 	// - ALFHEIM
 	var dimensionIDAlfheim = -105
 	var enableAlfheimRespawn = true
+	var floatingIslandCountMax = 50
+	var floatingIslandCountPerPlayer = 5
 	var grabMidgardPortal = false
 	var increasedSpiritsRange = true
 	var rainbowPolys = 360
@@ -100,6 +103,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var minChunks = 1
 	var maxChunks = 6
 	var playerGroupDistance = maxChunks
+	var tfMobs = true
 	
 	// OHTER
 	var alfheimSleepExtraCheck = true
@@ -110,6 +114,8 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var eventBanner = true
 	var fancies = true
 	var faultLinePersistence = 3000
+	var floatingIslandPathfinder = true
+	var floatingIslandSyncedDataInitLimit = 31
 	var flugelSwapBlackList = emptyArray<String>()
 	var gourmaryllisDifficulty = 2
 	var hotHell = true
@@ -133,6 +139,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var overcoldBlacklist = arrayOf("alfheim.DedMoroz", "alfheim.SnowSprite", "Skeleton", "SnowMan")
 	var overheatBlacklist = arrayOf("alfheim.Muspelson", "alfheim.FireSpirit", "Blaze", "Ghast", "LavaSlime", "PigZombie", "Skeleton", "WitherBoss")
 	var realLightning = false
+	var renderBooba = true
 	var repairBlackList = emptyArray<String>()
 	var rocketRide = 2
 	var searchTabAlfheim = true
@@ -243,8 +250,12 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		gaiaBarOffset = loadProp(CATEGORY_PRELOAD, "gaiaBarOffset", gaiaBarOffset, true, "Gaia hp and bg boss bar variant (from default texture pairs)")
 		gaiaNameColor = loadProp(CATEGORY_PRELOAD, "gaiaNameColor", gaiaNameColor, false, "Gaia name color on boss bar")
 		hpHooks = loadProp(CATEGORY_PRELOAD, "hpHooks", hpHooks, true, "Toggles hooks to vanilla health system. Set this to false if you have any issues with other systems")
+		overrideCoFHCollisionCheck = loadProp(CATEGORY_PRELOAD, "overrideCoFHCollisionCheck", overrideCoFHCollisionCheck, false, "Set this to false to disable override of CoFHCore hook to entity collisions. This will make small entities to fall through floating islands")
 		
 		dimensionIDAlfheim = loadProp(CATEGORY_ALFHEIM, "dimensionIDAlfheim", dimensionIDAlfheim, true, "Dimension ID for Alfheim")
+		enableAlfheimRespawn = loadProp(CATEGORY_ALFHEIM, "enableAlfheimRespawn", enableAlfheimRespawn, false, "Set this to false to disable respawning in Alfheim")
+		floatingIslandCountMax = loadProp(CATEGORY_ALFHEIM, "floatingIslandCountMax", floatingIslandCountMax, false, "Max count of floating islands in world", 1)
+		floatingIslandCountPerPlayer = loadProp(CATEGORY_ALFHEIM, "floatingIslandCountPerPlayer", floatingIslandCountPerPlayer, false, "Max count of floating islands per player in world", 1)
 		enableAlfheimRespawn = loadProp(CATEGORY_ALFHEIM, "enableAlfheimRespawn", enableAlfheimRespawn, false, "Set this to false to disable respawning in Alfheim")
 		grabMidgardPortal = loadProp(CATEGORY_ALFHEIM, "grabMidgardPortal", grabMidgardPortal, false, "Set this to true to teleport near existing active loaded portal when leaving Alfheim instead of world spawn")
 		increasedSpiritsRange = loadProp(CATEGORY_ALFHEIM, "increasedSpiritsRange", increasedSpiritsRange, false, "Set this to false to reduce nighttime spirits spawn range in Alfheim (may increase FPS)")
@@ -274,6 +285,8 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		minChunks = loadProp(CATEGORY_ENTITIES_A, "minChunks", minChunks, false, "Min distance in chunks from player at which mobs can spawn")
 		maxChunks = loadProp(CATEGORY_ENTITIES_A, "maxChunks", maxChunks, false, "Max distance in chunks from player at which mobs can spawn")
 		playerGroupDistance = loadProp(CATEGORY_ENTITIES_A, "playerGroupDistance", playerGroupDistance, false, "Distance in chunks for players to be considered as player group (for mob spawning balance)")
+		tfMobs = loadProp(CATEGORY_ENTITIES_A, "tfMobs", tfMobs, true, "Set this to false to remove Twilight Forest mobs from Alfheim spawn")
+		
 		butterflySpawn = loadProp(CATEGORY_ENTITIES_A, "butterflySpawn", butterflySpawn, false, "Butterfly max count per player, min and max group count")
 		cowSpawn = loadProp(CATEGORY_ENTITIES_A, "cowSpawn", cowSpawn, false, "Cows max count per player, min and max group count")
 		chickSpawn = loadProp(CATEGORY_ENTITIES_A, "chickSpawn", chickSpawn, false, "Chicken max count per player, min and max group count")
@@ -292,6 +305,8 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		eventBanner = loadProp(CATEGORY_GENERAL, "eventBanner", eventBanner, false, "Set this to false to disable event banner popup")
 		fancies = loadProp(CATEGORY_GENERAL, "fancies", fancies, false, "Set this to false to locally disable fancies rendering on you (for contributors only)")
 		faultLinePersistence = loadProp(CATEGORY_GENERAL, "faultLinePersistence", faultLinePersistence, false, "Persistence for Fault Lines (lower value - smaller faults)")
+		floatingIslandPathfinder = loadProp(CATEGORY_GENERAL, "floatingIslandPathfinder", floatingIslandPathfinder, false, "Set this to false to disable entity's pathfinding on floating islands. This will make them stand still on islands, but will also lower the server load")
+		floatingIslandSyncedDataInitLimit = loadProp(CATEGORY_GENERAL, "floatingIslandSyncedDataInitLimit", floatingIslandSyncedDataInitLimit, false, "Increase that limit ONLY if you have mods that extend DataWatcher IDs and want really large floating island")
 		flugelSwapBlackList = loadProp(CATEGORY_GENERAL, "flugelSwapBlackList", flugelSwapBlackList, false, "Blacklist for items that flugel can't swap [modid:name]", false)
 		gourmaryllisDifficulty = loadProp(CATEGORY_GENERAL, "gourmaryllisDifficulty", gourmaryllisDifficulty, false, "Difficulty of Gourmaryllis functionality: 0 - default, 1 - as in 1.12.2, 2 - hardcore", 0, 2)
 		hotHell = loadProp(CATEGORY_GENERAL, "hotHell", hotHell, false, "Set this to false to remove overheating in Muspleheim (Hell/Nether)")
@@ -315,6 +330,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		overcoldBlacklist = loadProp(CATEGORY_GENERAL, "overcoldBlacklist", overcoldBlacklist, false, "List of entity names with no cold gauge filling ", false)
 		overheatBlacklist = loadProp(CATEGORY_GENERAL, "overheatBlacklist", overheatBlacklist, false, "List of entity names with no heat gauge filling ", false)
 		realLightning = loadProp(CATEGORY_GENERAL, "realLightning", realLightning, false, "Set this to true to make lightning rod summon real (weather) lightning")
+		renderBooba = loadProp(CATEGORY_GENERAL, "renderBooba", renderBooba, false, "Set this to false to disable ESM booba render")
 		repairBlackList = loadProp(CATEGORY_GENERAL, "repairBlackList", repairBlackList, false, "Blacklist of repairable items (ex: for anyavil) [modid:name]", false)
 		rocketRide = loadProp(CATEGORY_GENERAL, "rocketRide", rocketRide, false, "Rocket ride [-1 - not players, 0 - none, 1 - players, 2 - anyone]")
 		searchTabAlfheim = loadProp(CATEGORY_GENERAL, "searchTabAlfheim", searchTabAlfheim, false, "Set this to false to disable searchbar in Alfheim Tab")

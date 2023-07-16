@@ -52,7 +52,7 @@ object CorporeaAdvancedHelper {
 		for (i in 0 until inv.sizeInventory) {
 			if (stack.stackSize <= 0) return null
 			
-			if (!isValidSlot(inv, i)) continue
+			if (!isValidSlot(inv, stack, i)) continue
 			
 			val stackAt = inv[i] ?: continue
 			
@@ -77,8 +77,8 @@ object CorporeaAdvancedHelper {
 		return stack
 	}
 	
-	fun isValidSlot(inv: IInventory, slot: Int): Boolean {
-		return inv !is ISidedInventory || slot in inv.getAccessibleSlotsFromSide(ForgeDirection.UP.ordinal) && inv.canInsertItem(slot, inv[slot], ForgeDirection.UP.ordinal)
+	fun isValidSlot(inv: IInventory, stack: ItemStack, slot: Int): Boolean {
+		return inv !is ISidedInventory || slot in inv.getAccessibleSlotsFromSide(ForgeDirection.UP.ordinal) && inv.canInsertItem(slot, stack, ForgeDirection.UP.ordinal)
 	}
 	
 	fun putOrDrop(tile: TileEntity, spark: ICorporeaSpark?, stack: ItemStack?, yOff: Int = 2) {

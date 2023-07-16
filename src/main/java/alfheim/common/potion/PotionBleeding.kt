@@ -1,6 +1,7 @@
 package alfheim.common.potion
 
 import alexsocol.asjlib.F
+import alexsocol.asjlib.math.Vector3
 import alfheim.AlfheimCore
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.DamageSourceSpell
@@ -13,6 +14,7 @@ object PotionBleeding: PotionAlfheim(AlfheimConfigHandler.potionIDBleeding, "ble
 	
 	override fun performEffect(living: EntityLivingBase, ampl: Int) {
 		living.attackEntityFrom(DamageSourceSpell.bleeding, (ampl + 1).F)
-		AlfheimCore.proxy.bloodFX(living.worldObj, living.posX, living.posY + living.height, living.posZ, 200, (Math.random() * 2 + 1).F / 10, 0.5F)
+		val (x, y, z) = Vector3.fromEntity(living)
+		AlfheimCore.proxy.bloodFX(living.worldObj, x, y + living.height, z, 200, (Math.random() * 2 + 1).F / 10, 0.5F)
 	}
 }

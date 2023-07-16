@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.*
+import net.minecraftforge.common.util.Constants
 
 // change to TileItemContainer ???
 class TileItemDisplay: ASJTile(), ISidedInventory {
@@ -71,7 +72,7 @@ class TileItemDisplay: ASJTile(), ISidedInventory {
 	override fun hasCustomInventoryName() = false
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
-		val list = nbt.getTagList("Items", 10)
+		val list = nbt.getTagList("Items", Constants.NBT.TAG_COMPOUND)
 		inventory = arrayOfNulls(this.sizeInventory)
 		
 		for (i in 0 until list.tagCount()) {

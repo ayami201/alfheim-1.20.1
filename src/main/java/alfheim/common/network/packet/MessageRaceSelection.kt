@@ -9,24 +9,24 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 
 class MessageRaceSelection(var doMeta: Boolean, var custom: Boolean, var female: Boolean, var give: Boolean, var meta: Int, var rot: Int, var arot: Int, var timer: Int, var x: Int, var y: Int, var z: Int, var dim: Int): ASJPacket(), AlfheimPacket<MessageRaceSelection> {
-	override fun handleServer(packet: MessageRaceSelection, player: EntityPlayerMP) {
-		if (Vector3.vecEntityDistance(Vector3(packet.x, packet.y, packet.z), player) > 5) return
+	override fun handleServer(player: EntityPlayerMP) {
+		if (Vector3.vecEntityDistance(Vector3(x, y, z), player) > 5) return
 
-		val world = MinecraftServer.getServer().worldServerForDimension(packet.dim) ?: return
-		val tile = world.getTileEntity(packet.x, packet.y, packet.z) as? TileRaceSelector ?: return
+		val world = MinecraftServer.getServer().worldServerForDimension(dim) ?: return
+		val tile = world.getTileEntity(x, y, z) as? TileRaceSelector ?: return
 
-		if (packet.doMeta) {
-			world.setBlockMetadataWithNotify(packet.x, packet.y, packet.z, packet.meta, 3)
+		if (doMeta) {
+			world.setBlockMetadataWithNotify(x, y, z, meta, 3)
 
-			tile.custom = packet.custom
-			tile.female = packet.female
+			tile.custom = custom
+			tile.female = female
 		}
 
-		tile.activeRotation = packet.arot
-		tile.rotation = packet.rot
-		tile.timer = packet.timer
+		tile.activeRotation = arot
+		tile.rotation = rot
+		tile.timer = timer
 
-		if (packet.give) tile.giveRaceAndReset(player)
+		if (give) tile.giveRaceAndReset(player)
 
 		ASJUtilities.dispatchTEToNearbyPlayers(tile)
 	}

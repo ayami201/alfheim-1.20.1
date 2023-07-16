@@ -11,8 +11,8 @@ import java.io.File
 
 class MessageContributor(var key: String = "", var value: String = key, var isRequest: Boolean = false): ASJPacket(), AlfheimPacket<MessageContributor> {
 	
-	override fun handleClient(packet: MessageContributor) {
-		if (packet.isRequest) {
+	override fun handleClient() {
+		if (isRequest) {
 			with(File("contributor.info")) {
 				if (exists()) {
 					val lines = FileUtils.readLines(this)
@@ -20,21 +20,21 @@ class MessageContributor(var key: String = "", var value: String = key, var isRe
 				}
 			}
 		} else {
-			ContributorsPrivacyHelper.contributors[packet.key] = packet.value
+			ContributorsPrivacyHelper.contributors[key] = value
 		}
 	}
 
-	override fun handleServer(packet: MessageContributor, player: EntityPlayerMP) {
+	override fun handleServer(player: EntityPlayerMP) {
 		// we are on server
 		val username = player.commandSenderName
-		val passMatch = ContributorsPrivacyHelper.getPassHash(packet.key)?.let { if (it.isBlank()) true else it == HashHelper.hash(packet.value) } ?: false
+		val passMatch = ContributorsPrivacyHelper.getPassHash(key)?.let { if (it.isBlank()) true else it == HashHelper.hash(value) } ?: false
 
 		// are you the person you are saying you are ?
 		if (ContributorsPrivacyHelper.isRegistered(username)) {
 			// auth packet received - no hacking (probably)
 			ContributorsPrivacyHelper.authTimeout.remove(player)
 
-			if (packet.key != username) {
+			if (key != username) {
 				player.playerNetServerHandler.kickPlayerFromServer("Invalid login provided, it must be equal to your username")
 				return
 			}
@@ -51,7 +51,7 @@ class MessageContributor(var key: String = "", var value: String = key, var isRe
 			// so you are noname...
 
 			// do you want to stay nobody ?
-			if (packet.key == "login" || packet.value == HashHelper.hash("password"))
+			if (key == "login" || value == HashHelper.hash("password"))
 				return
 
 			// ok, your new identity will be set
@@ -67,12 +67,12 @@ class MessageContributor(var key: String = "", var value: String = key, var isRe
 		// --> proceeding here:
 
 		// set contributor name alias to current username
-		ContributorsPrivacyHelper.contributors[packet.key] = username
+		ContributorsPrivacyHelper.contributors[key] = username
 
 		// tell everyone about new alias
 		MinecraftServer.getServer()?.configurationManager?.playerEntityList?.forEach {
 			if (it is EntityPlayerMP)
-				NetworkService.sendTo(MessageContributor(packet.key, username), it)
+				NetworkService.sendTo(MessageContributor(key, username), it)
 		}
 
 		// send all aliases to new player

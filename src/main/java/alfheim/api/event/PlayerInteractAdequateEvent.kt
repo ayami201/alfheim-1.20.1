@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer
 
 /**
  * Adequate interaction event
- * Do not use ase class
+ * Do not use base class
  */
 open class PlayerInteractAdequateEvent(val player: EntityPlayer, val x: Int, val y: Int, val z: Int, val side: Int, val entity: Entity?): Event() {
 	

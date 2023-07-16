@@ -22,24 +22,16 @@ object MTHandlerPetronia {
 			AlfheimAPI.registerFuel(name, burnTime, manaPerTick)
 		}
 		
-		override fun canUndo(): Boolean {
-			return prev != null
-		}
+		override fun canUndo() = prev != null
 		
 		override fun undo() {
 			AlfheimAPI.fuelMap[name] = prev!!
 		}
 		
-		override fun describe(): String {
-			return "Setting fuel values for $name"
-		}
+		override fun describe() = "Setting fuel values for $name"
 		
-		override fun describeUndo(): String {
-			return "Reverting fuel values for $name"
-		}
+		override fun describeUndo() = "Reverting fuel values for $name"
 		
-		override fun getOverrideKey(): Any? {
-			return null
-		}
+		override fun getOverrideKey() = null
 	}
 }

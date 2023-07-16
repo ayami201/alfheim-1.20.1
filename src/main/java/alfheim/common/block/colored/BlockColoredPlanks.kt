@@ -33,7 +33,6 @@ class BlockColoredPlanks: BlockMod(Material.wood), ILexiconable, IWandable {
 		stepSound = soundTypeWood
 		
 		setBlockName(name)
-		BotaniaAPI.registerPaintableBlock(this)
 	}
 	
 	@SideOnly(Side.CLIENT)

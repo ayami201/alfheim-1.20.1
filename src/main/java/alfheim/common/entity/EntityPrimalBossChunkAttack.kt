@@ -3,7 +3,7 @@ package alfheim.common.entity
 import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.api.entity.*
-import alfheim.common.core.handler.SheerColdHandler
+import alfheim.common.core.handler.*
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.armor.ItemSnowArmor
@@ -131,6 +131,8 @@ class EntityPrimalBossChunkAttack(world: World, val summoner: EntityLivingBase?,
 		
 		@SubscribeEvent(priority = EventPriority.HIGH)
 		fun affectPlayersInside(e: SheerColdHandler.SheerColdTickEvent) {
+			if (e.entity.worldObj.provider.dimensionId != AlfheimConfigHandler.dimensionIDDomains) return
+			
 			val target = e.entityLiving
 			val epbca = target.worldObj.loadedEntityList.firstOrNull { it is EntityPrimalBossChunkAttack && target in it } as? EntityPrimalBossChunkAttack ?: return
 			
@@ -139,6 +141,8 @@ class EntityPrimalBossChunkAttack(world: World, val summoner: EntityLivingBase?,
 		
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		fun attackUnprotectedPlayers(e: SheerColdHandler.SheerColdTickEvent) {
+			if (e.entity.worldObj.provider.dimensionId != AlfheimConfigHandler.dimensionIDDomains) return
+			
 			val target = e.entityLiving
 			val epbca = target.worldObj.loadedEntityList.firstOrNull { it is EntityPrimalBossChunkAttack && target in it } as? EntityPrimalBossChunkAttack ?: return
 			
