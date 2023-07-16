@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.patcher.event.ServerStoppedEvent
 import alfheim.AlfheimCore
 import alfheim.api.ModInfo
+import com.google.common.collect.ImmutableSetMultimap
 import cpw.mods.fml.common.FMLLog
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.TickEvent
@@ -25,9 +26,17 @@ object ChunkLoadingHandler: ForgeChunkManager.LoadingCallback {
 	fun requestChunkLoad(world: World, chunkX: Int, chunkZ: Int): Boolean {
 		if (ASJUtilities.isClient) return false
 		
-		var ticket = ticketsStore.computeIfAbsent(world.provider.dimensionId) { LinkedHashSet() }.firstOrNull {
-			it.ticket.chunkList.size < it.ticket.chunkListDepth
+		val chunk = ChunkCoordIntPair(chunkX, chunkZ)
+		
+		val ticketsForDim = ticketsStore.computeIfAbsent(world.provider.dimensionId) { LinkedHashSet() }
+		
+		var ticket = ticketsForDim.firstOrNull {
+			chunk in it.ticket.chunkList
+		} ?: ticketsForDim.firstOrNull {
+			it.ticket.chunkListDepth <= 0 || it.ticket.chunkList.size < it.ticket.chunkListDepth
 		}
+		
+		var newTicket = false
 		
 		if (ticket == null) {
 			val fTicket = ForgeChunkManager.requestTicket(AlfheimCore, world, Type.NORMAL) ?: run {
@@ -36,13 +45,16 @@ object ChunkLoadingHandler: ForgeChunkManager.LoadingCallback {
 			}
 			
 			ticket = AlfheimTicket(fTicket, linkedMapOf())
+			newTicket = true
 		}
 		
-		val chunk = ChunkCoordIntPair(chunkX, chunkZ)
-		ForgeChunkManager.forceChunk(ticket.ticket, chunk)
+		if (!ForgeChunkManager.getPersistentChunksFor(world).containsKey(chunk))
+			ForgeChunkManager.forceChunk(ticket.ticket, chunk)
+		
 		ticket.requestedChunkTimers[chunk] = 100
 		
-		ticketsStore[world.provider.dimensionId]!! += ticket
+		if (newTicket)
+			ticketsForDim += ticket
 		
 		return true
 	}

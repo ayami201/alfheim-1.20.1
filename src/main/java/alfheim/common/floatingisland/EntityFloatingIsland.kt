@@ -9,10 +9,12 @@ import alfheim.common.core.handler.*
 import com.google.gson.JsonParseException
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.*
-import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.*
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.*
+import net.minecraft.network.play.server.S12PacketEntityVelocity
+import net.minecraft.network.play.server.S14PacketEntity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.*
 import net.minecraft.world.World
@@ -47,7 +49,7 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 		get() {
 			var acc = ""
 			
-			for (it in 3..AlfheimConfigHandler.floatingIslandSyncedDataInitLimit) {
+			for (it in BLOCK_START..AlfheimConfigHandler.floatingIslandSyncedDataInitLimit) {
 				val string = dataWatcher.getWatchedObject(it)?.`object` ?: break
 				acc = "$acc$string"
 			}
@@ -62,10 +64,10 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 				if (id > max)
 					throw IllegalArgumentException("Cannot save such a big island to synced entity data (max ${32767 * max} bytes, provided ${value.length}).\nPlease, update configs and install mod that extends DataWatcher IDs such as https://curseforge.com/minecraft/mc-mods/confighelper")
 				
-				dataWatcher.updateObject(id + 3, it)
+				dataWatcher.updateObject(id + BLOCK_START, it)
 			}
 			
-			for (i in (chunked.size + 3)..max) {
+			for (i in (chunked.size + BLOCK_START)..max) {
 				dataWatcher.updateObject(i, "")
 			}
 			
@@ -86,8 +88,13 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 	
 	var deathTimer = 0
 	
-	var velocityX = 0.0
-	var velocityZ = 0.0
+	var velocityX: Float
+		get() = dataWatcher.getWatchableObjectFloat(3)
+		set(value) = dataWatcher.updateObject(3, value)
+	
+	var velocityZ: Float
+		get() = dataWatcher.getWatchableObjectFloat(4)
+		set(value) = dataWatcher.updateObject(4, value)
 	
 	init {
 		setSize(1f, 1f)
@@ -96,11 +103,13 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 	
 	override fun entityInit() {
 		dataWatcher.addObject(2, 3)
-		dataWatcher.addObject(3, "[{\"block\":\"minecraft:stone\",\"location\":[{}]}]")
-		(4..AlfheimConfigHandler.floatingIslandSyncedDataInitLimit).forEach { dataWatcher.addObject(it, "") }
+		dataWatcher.addObject(3, 0f)
+		dataWatcher.addObject(4, 0f)
+		dataWatcher.addObject(BLOCK_START, "[{\"block\":\"minecraft:stone\",\"location\":[{}]}]")
+		(BLOCK_START + 1..AlfheimConfigHandler.floatingIslandSyncedDataInitLimit).forEach { dataWatcher.addObject(it, "") }
 	}
 	
-	fun setVelocity(vx: Double, vz: Double) {
+	fun setVelocity(vx: Float, vz: Float) {
 		velocityX = vx
 		velocityZ = vz
 	}
@@ -113,9 +122,10 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 		prevPosZ = posZ
 		
 		setMotion(0.0, 0.0, 0.0)
+		rotationYaw = 0f
+		rotationPitch = 0f
 		
 		if (shouldUpdate) run {
-			
 			val schemaText = blocksString
 			if (schemaText.isBlank()) return setDead()
 			
@@ -135,35 +145,40 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 			shouldUpdate = false
 		}
 		
-		val collidedWith = getEntitiesWithinAABB(worldObj, Entity::class.java, boundingBox(collisionBorderSize))
+		val thisBB = boundingBox(collisionBorderSize)
+		
+		val collidedWith = if (velocityX == 0f && velocityZ == 0f)
+			emptyList()
+		else if (ASJUtilities.isServer)
+			getEntitiesWithinAABB(worldObj, Entity::class.java, thisBB)
+		else
+			if (mc.thePlayer.boundingBox.intersectsWith(thisBB)) listOf(mc.thePlayer, this) else listOf(this)
+		
 		collidedWith.forEach {
-			if (velocityX == 0.0 && velocityZ == 0.0) return@forEach
-			
 			it.boundingBox.offset(velocityX, 0.0, velocityZ)
 			it.posX = (it.boundingBox.minX + it.boundingBox.maxX) / 2.0
 			it.posZ = (it.boundingBox.minZ + it.boundingBox.maxZ) / 2.0
 		}
 		
-		collidedWith.filterIsInstance<EntityFloatingIsland>().toMutableList().apply {
-			if (size < 2) return@apply
-			
-			forEach {
-				it.duying = true
+		if (ASJUtilities.isServer) {
+			collidedWith.filterIsInstance<EntityFloatingIsland>().toMutableList().apply {
+				if (size < 2) return@apply
+				
+				forEach {
+					it.duying = true
+				}
 			}
-		}
-		
-		if (worldObj.func_147461_a(boundingBox(collisionBorderSize)).isNotEmpty())
-			duying = true
-		
-		rotationYaw = 0f
-		rotationPitch = 0f
-		
-		loadChunk()
-		
-		if (worldObj.playerEntities.isEmpty()) {
-			if (despawnTimer++ >= Short.MAX_VALUE - 1)
+			
+			if (worldObj.totalWorldTime % 100 == 0L && worldObj.func_147461_a(thisBB).isNotEmpty())
 				duying = true
-		} else despawnTimer = 0
+			
+			loadChunk()
+			
+			if (worldObj.playerEntities.isEmpty()) {
+				if (despawnTimer++ >= Short.MAX_VALUE - 1)
+					duying = true
+			} else despawnTimer = 0
+		}
 		
 		if (duying) onDeathUpdate()
 	}
@@ -211,11 +226,11 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 	}
 	
 	fun loadChunk() {
-		ChunkLoadingHandler.requestChunkLoad(worldObj, posX.mfloor() shr 4, posZ.mfloor() shr 4)
-		ChunkLoadingHandler.requestChunkLoad(worldObj, posX.mfloor() shr 4 + 1, posZ.mfloor() shr 4)
-		ChunkLoadingHandler.requestChunkLoad(worldObj, posX.mfloor() shr 4 - 1, posZ.mfloor() shr 4)
-		ChunkLoadingHandler.requestChunkLoad(worldObj, posX.mfloor() shr 4, posZ.mfloor() shr 4 + 1)
-		ChunkLoadingHandler.requestChunkLoad(worldObj, posX.mfloor() shr 4, posZ.mfloor() shr 4 - 1)
+		ChunkLoadingHandler.requestChunkLoad(worldObj, (posX.mfloor() shr 4),     (posZ.mfloor() shr 4))
+		ChunkLoadingHandler.requestChunkLoad(worldObj, (posX.mfloor() shr 4) + 1, (posZ.mfloor() shr 4))
+		ChunkLoadingHandler.requestChunkLoad(worldObj, (posX.mfloor() shr 4) - 1, (posZ.mfloor() shr 4))
+		ChunkLoadingHandler.requestChunkLoad(worldObj, (posX.mfloor() shr 4),     (posZ.mfloor() shr 4) + 1)
+		ChunkLoadingHandler.requestChunkLoad(worldObj, (posX.mfloor() shr 4),     (posZ.mfloor() shr 4) - 1)
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -231,16 +246,16 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 	}
 	
 	public override fun writeEntityToNBT(nbt: NBTTagCompound) {
-		nbt.setDouble(TAG_VELOCITY_X, velocityX)
-		nbt.setDouble(TAG_VELOCITY_Z, velocityZ)
+		nbt.setFloat(TAG_VELOCITY_X, velocityX)
+		nbt.setFloat(TAG_VELOCITY_Z, velocityZ)
 		
 		val chunked = blockAccess.toSchema().chunked(Short.MAX_VALUE.I * 2 - 1)
 		nbt.setTag(TAG_BLOCK_LIST, NBTTagList().apply { chunked.forEach { appendTag(NBTTagString(it)) } })
 	}
 	
 	public override fun readEntityFromNBT(nbt: NBTTagCompound) {
-		velocityX = nbt.getDouble(TAG_VELOCITY_X)
-		velocityZ = nbt.getDouble(TAG_VELOCITY_Z)
+		velocityX = nbt.getFloat(TAG_VELOCITY_X)
+		velocityZ = nbt.getFloat(TAG_VELOCITY_Z)
 		
 		val list = nbt.getTagList(TAG_BLOCK_LIST, Constants.NBT.TAG_STRING)
 		if (list.tagCount() == 0) return
@@ -352,6 +367,8 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 	}
 	
 	companion object {
+		
+		const val BLOCK_START = 5
 		
 		const val TAG_BLOCK_LIST = "blockList"
 		const val TAG_VELOCITY_X = "vecolityX"

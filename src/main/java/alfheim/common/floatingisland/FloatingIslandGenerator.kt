@@ -60,7 +60,7 @@ object FloatingIslandGenerator {
 		
 		EntityFloatingIsland(world).apply {
 			setPosition(x.D, y.D, z.D)
-			val (mx, _, mz) = Vector3.fromEntity(target).sub(this).mul(1, 0, 1).normalize().mul(j / 10000.0)
+			val (mx, _, mz) = Vector3.fromEntity(target).sub(this).mul(1, 0, 1).normalize().mul(j / 10000.0).F
 			setVelocity(mx, mz)
 			generate(this)
 			spawn()
