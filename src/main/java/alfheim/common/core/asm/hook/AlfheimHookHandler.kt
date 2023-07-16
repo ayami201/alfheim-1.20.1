@@ -13,6 +13,7 @@ import alfheim.api.item.equipment.bauble.IManaDiscountBauble
 import alfheim.api.lib.LibResourceLocations
 import alfheim.api.spell.SpellBase
 import alfheim.client.core.handler.CardinalSystemClient
+import alfheim.client.render.entity.RenderEntityFloatingIsland
 import alfheim.common.block.*
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.block.colored.BlockAuroraDirt
@@ -34,6 +35,8 @@ import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.entity.*
 import alfheim.common.entity.ai.EntityAICreeperAvoidPooka
 import alfheim.common.entity.boss.EntityFlugel
+import alfheim.common.entity.item.EntityItemImmortal
+import alfheim.common.floatingisland.*
 import alfheim.common.item.*
 import alfheim.common.item.equipment.armor.ItemSnowArmor
 import alfheim.common.item.equipment.bauble.ItemPendant
@@ -45,6 +48,7 @@ import alfheim.common.spell.earth.SpellGoldRush
 import alfheim.common.world.data.CustomWorldData.Companion.customData
 import alfheim.common.world.mobspawn.MobSpawnHandler
 import baubles.common.lib.PlayerHandler
+import cofh.asmhooks.HooksCore
 import cpw.mods.fml.relauncher.*
 import cpw.mods.fml.relauncher.Side.CLIENT
 import gloomyfolken.hooklib.asm.*
@@ -54,6 +58,7 @@ import net.minecraft.block.*
 import net.minecraft.block.material.Material
 import net.minecraft.client.gui.*
 import net.minecraft.client.multiplayer.WorldClient
+import net.minecraft.client.particle.EntityFX
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.texture.*
 import net.minecraft.command.*
@@ -70,6 +75,7 @@ import net.minecraft.init.*
 import net.minecraft.inventory.*
 import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.pathfinding.*
 import net.minecraft.potion.*
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.management.ServerConfigurationManager
@@ -1825,14 +1831,82 @@ object AlfheimHookHandler {
 	}
 	
 	@JvmStatic
-	@Hook(injectOnExit = true)
-	fun getCollidingBoundingBoxes(world: World, entity: Entity?, bb: AxisAlignedBB?, @ReturnValue list: MutableList<AxisAlignedBB?>): List<AxisAlignedBB?> {
-		bb ?: return list
+	@Hook(injectOnExit = true, priority = HookPriority.HIGH)
+	fun getCollidingBoundingBoxes(world: World, entity: Entity?, bb: AxisAlignedBB?, @ReturnValue result: MutableList<AxisAlignedBB?>): List<AxisAlignedBB?> {
+		bb ?: return result
+		if (ASJUtilities.isClient && entity is EntityFX) return result
 		
-		world.loadedEntityList.filterIsInstance<IMulticollidableEntity>().forEach {
-			it.getAdditionalCollisions().filterTo(list, bb::intersectsWith)
+		val prevMR = World.MAX_ENTITY_RADIUS
+		World.MAX_ENTITY_RADIUS = EntityFloatingIsland.MAX_ISLAND_RADIUS.D
+		
+		getEntitiesWithinAABB(world, IMulticollidableEntity::class.java, bb).forEach {
+			result += it.getAdditionalCollisions(bb)
 		}
 		
-		return list
+		World.MAX_ENTITY_RADIUS = prevMR
+		
+		return result
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_NOT_NULL)
+	fun getEntityCollisionBoxes(static: HooksCore?, world: World, entity: Entity?, bb: AxisAlignedBB?): List<Any?>? {
+		return if (AlfheimConfigHandler.overrideCoFHCollisionCheck) world.getCollidingBoundingBoxes(entity, bb) else null
+	}
+	
+	@JvmStatic
+	@Hook(injectOnExit = true, returnCondition = ALWAYS)
+	fun getPathEntityToEntity(world: World, host: Entity, target: Entity, pathSearchRange: Float, canPassOpenWoodenDoors: Boolean, canPassClosedWoodenDoors: Boolean, avoidsWater: Boolean, canSwim: Boolean, @ReturnValue result: PathEntity?): PathEntity? {
+		if (result != null) return result
+		if (!AlfheimConfigHandler.floatingIslandPathfinder) return null
+		
+		host.stepHeight = host.entityData.getFloat("${ModInfo.MODID}.prevStepHeight")
+		
+		world.theProfiler.startSection("pathfind_alfheim_floatingisland")
+		
+		val island = world.loadedEntityList
+			.filterIsInstance<EntityFloatingIsland>()
+			.firstOrNull { it.boundingBox(it.collisionBorderSize).intersectsWith(host.boundingBox(host.collisionBorderSize)) }
+		    ?: return null
+		
+		val pathentity = FloatingIslandPathfinder(island, canPassOpenWoodenDoors, canPassClosedWoodenDoors, avoidsWater).createEntityPathTo(host, target, pathSearchRange)
+		world.theProfiler.endSection()
+		
+		host.entityData.setFloat("${ModInfo.MODID}.prevStepHeight", host.stepHeight)
+		host.stepHeight = 1f
+		
+		return pathentity
+	}
+	
+	@JvmStatic
+	@Hook(injectOnExit = true, returnCondition = ALWAYS)
+	fun getEntityPathToXYZ(world: World, host: Entity, x: Int, y: Int, z: Int, pathSearchRange: Float, canPassOpenWoodenDoors: Boolean, canPassClosedWoodenDoors: Boolean, avoidsWater: Boolean, canSwim: Boolean, @ReturnValue result: PathEntity?): PathEntity? {
+		if (result != null) return result
+		if (!AlfheimConfigHandler.floatingIslandPathfinder) return null
+		
+		host.stepHeight = host.entityData.getFloat("${ModInfo.MODID}.prevStepHeight")
+		
+		world.theProfiler.startSection("pathfind_alfheim_floatingisland")
+		
+		val island = world.loadedEntityList
+		    .filterIsInstance<EntityFloatingIsland>()
+		    .firstOrNull { it.boundingBox(it.collisionBorderSize).intersectsWith(host.boundingBox(host.collisionBorderSize)) }
+			?: return null
+		
+		val pathentity = FloatingIslandPathfinder(island, canPassOpenWoodenDoors, canPassClosedWoodenDoors, avoidsWater).createEntityPathTo(host, x, y, z, pathSearchRange)
+		world.theProfiler.endSection()
+		
+		host.entityData.setFloat("${ModInfo.MODID}.prevStepHeight", host.stepHeight)
+		host.stepHeight = 1f
+		
+		return pathentity
+	}
+	
+	@SideOnly(CLIENT)
+	@JvmStatic
+	@Hook
+	fun loadRenderers(r: RenderGlobal) {
+		RenderEntityFloatingIsland.callLists.keys.forEach(GLAllocation::deleteDisplayLists)
+		RenderEntityFloatingIsland.callLists.clear()
 	}
 }

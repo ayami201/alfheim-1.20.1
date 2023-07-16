@@ -45,25 +45,17 @@ object MTHandlerSuffuser {
 			AlfheimAPI.addTreeRecipe(recipe)
 		}
 		
-		override fun canUndo(): Boolean {
-			return true
-		}
+		override fun canUndo() = true
 		
 		override fun undo() {
 			AlfheimAPI.removeTreeRecipe(recipe.output)
 		}
 		
-		override fun describe(): String {
-			return String.format("Adding Tree Suffusion recipe %s", recipe)
-		}
+		override fun describe() = "Adding Tree Suffusion recipe $recipe"
 		
-		override fun describeUndo(): String {
-			return String.format("Removing Tree Suffusion recipe %s", recipe)
-		}
+		override fun describeUndo() = "Removing Tree Suffusion recipe $recipe"
 		
-		override fun getOverrideKey(): Any? {
-			return null
-		}
+		override fun getOverrideKey() = null
 	}
 	
 	private class Remove(private val output: ItemStack): IUndoableAction {
@@ -78,24 +70,16 @@ object MTHandlerSuffuser {
 			}
 		}
 		
-		override fun canUndo(): Boolean {
-			return true
-		}
+		override fun canUndo() = true
 		
 		override fun undo() {
 			for (rec in removed) AlfheimAPI.addTreeRecipe(rec)
 		}
 		
-		override fun describe(): String {
-			return String.format("Removing all Tree Suffusion recipes for %s", output.unlocalizedName)
-		}
+		override fun describe() = "Removing all Tree Suffusion recipes for ${output.unlocalizedName}"
 		
-		override fun describeUndo(): String {
-			return String.format("Re-adding previously removed Tree Suffusion recipes for %s", output.unlocalizedName)
-		}
+		override fun describeUndo() = "Re-adding previously removed Tree Suffusion recipes for ${output.unlocalizedName}"
 		
-		override fun getOverrideKey(): Any? {
-			return null
-		}
+		override fun getOverrideKey() = null
 	}
 }

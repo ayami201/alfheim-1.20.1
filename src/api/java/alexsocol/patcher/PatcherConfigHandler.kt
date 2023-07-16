@@ -28,7 +28,7 @@ object PatcherConfigHandler: ASJConfigHandler() {
 	var showOreDict = true
 	var vignette = false
 	var voidFog = true
-	var WEBiomeID = 152
+	var WEBiomeID = 150
 	
 	var blacklistWither = true
 	

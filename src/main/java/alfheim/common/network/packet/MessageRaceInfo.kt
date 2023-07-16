@@ -5,7 +5,7 @@ import alfheim.api.network.AlfheimPacket
 import alfheim.client.core.handler.CardinalSystemClient
 
 class MessageRaceInfo(var name: String, var raceID: Int): ASJPacket(), AlfheimPacket<MessageRaceInfo> {
-	override fun handleClient(packet: MessageRaceInfo) {
-		CardinalSystemClient.playerRaceIDs[packet.name] = packet.raceID
+	override fun handleClient() {
+		CardinalSystemClient.playerRaceIDs[name] = raceID
 	}
 }

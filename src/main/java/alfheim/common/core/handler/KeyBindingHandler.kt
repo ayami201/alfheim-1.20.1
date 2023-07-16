@@ -15,17 +15,17 @@ import net.minecraft.item.ItemStack
 
 object KeyBindingHandler {
 	
-	var flightEnableCooldown = 0
-	
 	fun enableFlight(player: EntityPlayerMP, boost: Boolean) {
 		if (AlfheimConfigHandler.wingsBlackList.contains(player.worldObj.provider.dimensionId)) {
 			ASJUtilities.say(player, "mes.flight.unavailable")
 		} else {
 			if (!AlfheimConfigHandler.enableElvenStory || (player.race == EnumRace.HUMAN && !player.capabilities.isCreativeMode) || (player.capabilities.isCreativeMode && boost)) return
-			if (!CardinalSystem.forPlayer(player).esmAbility) return
+			
+			val segment = CardinalSystem.forPlayer(player)
+			if (!segment.esmAbility) return
 			
 			val isntFlying = !player.capabilities.isFlying
-			if (flightEnableCooldown > 0 && isntFlying) return
+			if (segment.flightEnableCooldown > 0 && isntFlying) return
 			
 			player.capabilities.allowFlying = true
 			player.capabilities.isFlying = isntFlying

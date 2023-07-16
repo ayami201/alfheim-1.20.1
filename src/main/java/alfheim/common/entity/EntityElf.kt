@@ -34,6 +34,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.util.*
 import net.minecraft.world.World
 import net.minecraftforge.common.ISpecialArmor.ArmorProperties
+import net.minecraftforge.common.util.Constants
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import java.util.*
 import kotlin.math.abs
@@ -280,7 +281,7 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 					if (abs(amount) >= baseValue) amount = -baseValue + 1
 					applyModifier(AttributeModifier(entityUniqueID, "OdinPriestTookYourHeart", amount, 0))
 					
-					val back = entityData.getTagList(TAG_BRING_HEART_BACK, 8)
+					val back = entityData.getTagList(TAG_BRING_HEART_BACK, Constants.NBT.TAG_STRING)
 					back.appendTag(NBTTagString(target.commandSenderName))
 					entityData.setTag(TAG_BRING_HEART_BACK, back)
 				}
@@ -294,7 +295,7 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 	fun bringHeartsBack() {
 		if (worldObj.isRemote) return
 		
-		entityData.getTagList(TAG_BRING_HEART_BACK, 8).tagList.forEach {
+		entityData.getTagList(TAG_BRING_HEART_BACK, Constants.NBT.TAG_STRING).tagList.forEach {
 			if (it !is NBTTagString) return@forEach
 			val player = MinecraftServer.getServer().configurationManager.func_152612_a(it.func_150285_a_()) ?: return@forEach
 			player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth).apply {

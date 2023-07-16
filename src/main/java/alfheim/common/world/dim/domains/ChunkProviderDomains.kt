@@ -37,7 +37,7 @@ class ChunkProviderDomains(val world: World): IChunkProvider {
 	override fun canSave() = true
 	override fun makeString() = "Domains"
 	override fun getPossibleCreatures(type: EnumCreatureType?, x: Int, y: Int, z: Int) = emptyList<Any?>()
-	override fun func_147416_a(world: World?, name: String?, x: Int, y: Int, z: Int) = ChunkPosition(0, 64, 0)
+	override fun func_147416_a(world: World?, name: String?, x: Int, y: Int, z: Int) = null
 	override fun getLoadedChunkCount() = 0
 	override fun recreateStructures(x: Int, z: Int) = Unit
 	override fun saveExtraData() = Unit

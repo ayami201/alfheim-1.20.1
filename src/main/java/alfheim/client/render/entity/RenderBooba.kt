@@ -3,7 +3,7 @@ package alfheim.client.render.entity
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.ModInfo
-import alfheim.api.entity.raceID
+import alfheim.api.entity.*
 import alfheim.api.lib.LibResourceLocations
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -11,10 +11,12 @@ import cpw.mods.fml.relauncher.*
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.renderer.entity.RenderBiped
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.ResourceLocation
+import net.minecraft.util.*
 import net.minecraftforge.client.model.AdvancedModelLoader
 import org.lwjgl.opengl.GL11.*
 import vazkii.botania.api.item.IBaubleRender
+import java.util.Random
+import kotlin.math.*
 
 object RenderBooba {
 	
@@ -22,6 +24,7 @@ object RenderBooba {
 	
 	@SideOnly(Side.CLIENT)
 	fun render(player: EntityPlayer) {
+		if (!AlfheimConfigHandler.renderBooba) return
 		if (player !is AbstractClientPlayer) return
 		if (!AlfheimConfigHandler.enableElvenStory) return
 		val booba = model ?: return
@@ -29,20 +32,24 @@ object RenderBooba {
 		if (skinData?.first != true) return
 		
 		val invisible = player.isInvisible
-		val transparet = invisible && !player.isInvisibleToPlayer(mc.thePlayer)
-		if (invisible && !transparet) return
+		val transparent = invisible && !player.isInvisibleToPlayer(player)
+		if (invisible && !transparent) return
 		
 		glPushMatrix()
 		glScaled(0.0625)
 		glRotatef(180f, 0f, 1f, 0f)
-		glTranslatef(0f, 2.7f, 1.9f)
+		val offset = (Random(player.commandSenderName.hashCode().toLong()).nextFloat() - 0.5f) * 2f
+		glTranslatef(0f, 2.7f, 1.9f + offset)
 		glRotatef(180f, 0f, 0f, 1f)
+		glRotatef(-Math.toDegrees(sin(sqrt(player.getSwingProgress(mc.timer.renderPartialTicks)) * Math.PI * 2) * 0.2).F, 0f, 1f, 0f)
 		
-		if (transparet) {
+		if (transparent) {
 			glColor4f(1f, 1f, 1f, 0.15f)
 			glDepthMask(false)
 			glAlphaFunc(GL_GREATER, 0.003921569f)
 			ASJRenderHelper.setBlend()
+		} else {
+			glColor4f(1f, 1f, 1f, 1f)
 		}
 		
 		if (player.isSneaking) {
@@ -50,7 +57,8 @@ object RenderBooba {
 			glTranslatef(0f, -1f, -0.5f)
 		}
 		
-		mc.renderEngine.bindTexture(if (skinData.second) LibResourceLocations.oldFemale[player.raceID - 1] else player.locationSkin)
+		val id = player.raceID - 1
+		mc.renderEngine.bindTexture(if (skinData.second && id in LibResourceLocations.oldFemale.indices) LibResourceLocations.oldFemale[id] else player.locationSkin)
 		booba.renderAll()
 		
 		player.inventory.armorInventory[2]?.let {
@@ -59,7 +67,7 @@ object RenderBooba {
 			booba.renderAll()
 		}
 		
-		if (transparet) {
+		if (transparent) {
 			ASJRenderHelper.discard()
 			glAlphaFunc(GL_GREATER, 0.1f)
 			glDepthMask(true)

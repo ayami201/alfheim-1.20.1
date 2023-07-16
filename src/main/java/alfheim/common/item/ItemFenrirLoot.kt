@@ -89,7 +89,7 @@ class ItemFenrirLoot: ItemMod("FenrirLoot"), ILensEffect, IManaUsingItem {
 						if (!at.isAir(world, x, y, z)) continue
 						if (world.getBlockLightValue(x, y, z) > 8) continue
 						if (!at.isReplaceable(world, x, y, z)) continue
-						if (!World.doesBlockHaveSolidTopSurface(world, x, y, z)) continue
+						if (!World.doesBlockHaveSolidTopSurface(world, x, y - 1, z)) continue
 						
 						did = true
 						

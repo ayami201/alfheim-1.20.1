@@ -947,7 +947,7 @@ object ASJHookHandler {
 	
 	// NPE fix
 	@JvmStatic
-	@Hook(injectOnExit = true)
+	@Hook(injectOnExit = true, returnCondition = ALWAYS)
 	fun getCollidingBoundingBoxes(world: World, entity: Entity?, aabb: AxisAlignedBB?, @ReturnValue result: List<AxisAlignedBB?>) = ArrayList(result).filterNotNull()
 	
 	// Entity gravity fix
@@ -957,7 +957,7 @@ object ASJHookHandler {
 	fun moveEntityWithHeading(thiz: EntityLivingBase, moveStrafe: Float, moveForward: Float): Boolean {
 		if (!PatcherConfigHandler.entityGravityFix) return false
 		
-		if (FMLCommonHandler.instance().side != Side.CLIENT || Minecraft.getMinecraft().isSingleplayer || thiz is EntityPlayer) return false
+		if (ASJUtilities.isServer || thiz is EntityPlayer) return false
 		
 		thiz.prevLimbSwingAmount = thiz.limbSwingAmount
 		val x = thiz.posX - thiz.prevPosX

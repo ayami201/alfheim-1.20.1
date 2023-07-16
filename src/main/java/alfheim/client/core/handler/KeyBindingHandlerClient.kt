@@ -75,6 +75,9 @@ object KeyBindingHandlerClient {
 			toggleRMB = false
 		}
 		
+		if (Keyboard.isKeyDown(Keyboard.KEY_F4))
+			mc.entityRenderer.camRoll = 0f
+		
 		if (safeKeyDown(ClientProxy.keyLolicorn)) {
 			if (!toggleCorn) {
 				toggleCorn = true
@@ -146,9 +149,9 @@ object KeyBindingHandlerClient {
 								
 								val spell = AlfheimAPI.getSpellByIDs(raceID, spellID)
 								if (spell == null)
-									Message2d(M2d.COOLDOWN, 0.0, (-DESYNC.ordinal).D).apply { handleClient(this) }
+									Message2d(M2d.COOLDOWN, 0.0, (-DESYNC.ordinal).D).apply { handleClient() }
 								else if (!player.capabilities.isCreativeMode && !SpellBase.consumeMana(player, spell.getManaCost(), false) && !player.isPotionActive(AlfheimConfigHandler.potionIDLeftFlame)) {
-									Message2d(M2d.COOLDOWN, 0.0, (-NOMANA.ordinal).D).apply { handleClient(this) }
+									Message2d(M2d.COOLDOWN, 0.0, (-NOMANA.ordinal).D).apply { handleClient() }
 									return@run
 								}
 
@@ -216,9 +219,9 @@ object KeyBindingHandlerClient {
 							
 							val spell = AlfheimAPI.getSpellByIDs(raceID, spellID)
 							if (spell == null)
-								Message2d(M2d.COOLDOWN, 0.0, (-DESYNC.ordinal).D).apply { handleClient(this) }
+								Message2d(M2d.COOLDOWN, 0.0, (-DESYNC.ordinal).D).apply { handleClient() }
 							else if (!player.capabilities.isCreativeMode && !SpellBase.consumeMana(player, spell.getManaCost(), false) && !player.isPotionActive(AlfheimConfigHandler.potionIDLeftFlame)) {
-								Message2d(M2d.COOLDOWN, 0.0, (-NOMANA.ordinal).D).apply { handleClient(this) }
+								Message2d(M2d.COOLDOWN, 0.0, (-NOMANA.ordinal).D).apply { handleClient() }
 								return@run
 							}
 							

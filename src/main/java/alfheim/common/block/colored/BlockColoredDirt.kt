@@ -31,7 +31,6 @@ class BlockColoredDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
 		setLightLevel(0f)
 		setBlockName(name)
 		stepSound = soundTypeGravel
-		BotaniaAPI.registerPaintableBlock(this)
 	}
 	
 	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, remote: Boolean) = world.isAirBlock(x, y + 1, z)

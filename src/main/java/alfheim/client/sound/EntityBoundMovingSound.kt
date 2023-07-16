@@ -27,6 +27,10 @@ open class EntityBoundMovingSound<E : Entity>(val host: E, sound: String, val up
 		}
 	}
 	
+	fun setRepeat(rep: Boolean) {
+		repeat = rep
+	}
+	
 	fun setVolume(new: Float) {
 		volume = new
 	}

@@ -23,7 +23,9 @@ import net.minecraft.util.*
 import net.minecraft.world.*
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.common.DimensionManager
+import net.minecraftforge.common.util.Constants
 import org.lwjgl.opengl.GL11.*
+import scala.reflect.internal.Constants.Constant
 import vazkii.botania.common.item.equipment.bauble.ItemMonocle
 import java.awt.Color
 import kotlin.math.max
@@ -198,7 +200,7 @@ open class RedstoneSignalHandler(datakey: String = ID): WorldSavedData(datakey) 
 	
 	private fun updatePosition(world: World, x: Int, y: Int, z: Int) {
 		val block = world.getBlock(x, y, z)
-		block.onNeighborBlockChange(world, x, y, z, Blocks.redstone_block) // TODO DANGEROUS
+		block.onNeighborBlockChange(world, x, y, z, Blocks.redstone_block)
 		world.notifyBlocksOfNeighborChange(x, y, z, Blocks.redstone_block)
 	}
 	
@@ -238,7 +240,7 @@ open class RedstoneSignalHandler(datakey: String = ID): WorldSavedData(datakey) 
 	
 	@Synchronized
 	override fun readFromNBT(nbt: NBTTagCompound) {
-		val list = nbt.getTagList("redstoneSignals", 10)
+		val list = nbt.getTagList("redstoneSignals", Constants.NBT.TAG_COMPOUND)
 		
 		repeat(list.tagCount()) {
 			redstoneSignals.add(RedstoneSignal.readFromNBT(list.getCompoundTagAt(it)))

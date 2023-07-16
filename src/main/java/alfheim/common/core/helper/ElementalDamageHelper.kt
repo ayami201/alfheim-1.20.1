@@ -9,6 +9,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.SheerColdHandler.cold
 import alfheim.common.core.helper.ElementalDamage.*
 import alfheim.common.core.helper.ElementalDamageBridge.*
+import com.google.common.collect.ImmutableMap
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.*
@@ -73,7 +74,7 @@ object ElementalDamageHandler {
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	fun onHurt(e: LivingHurtEvent) {
-		val targetEl = e.entityLiving.elements
+		val targetEl = EnumSet.copyOf(e.entityLiving.elements)
 		val attackEl = e.source.elements()
 		
 		if (targetEl.any { attackEl.any(it::isResistant) } ) e.ammount *= 0.5f

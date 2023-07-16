@@ -23,12 +23,12 @@ class MessageNI(ty: Mni, vararg var intArray: Int, var type: Int = ty.ordinal) :
 		for (value in intArray) write(buf, value)
 	}
 
-	override fun handleServer(packet: MessageNI, player: EntityPlayerMP) = when (Mni.values()[packet.type]) {
-		Mni.INTERACTION -> with(packet) {
+	override fun handleServer(player: EntityPlayerMP) = when (Mni.values()[type]) {
+		Mni.INTERACTION -> with(this) {
 			operator fun IntArray.component6() = this[5]
 			operator fun IntArray.component7() = this[6]
 
-			val (left, type, x, y, z, side, id) = packet.intArray
+			val (left, type, x, y, z, side, id) = intArray
 			val entity = player.worldObj.getEntityByID(id)
 
 			if (AlfheimConfigHandler.interactEventChecks) {
@@ -49,21 +49,21 @@ class MessageNI(ty: Mni, vararg var intArray: Int, var type: Int = ty.ordinal) :
 		Mni.WINGS_BL    -> Unit // client
 	}
 
-	override fun handleClient(packet: MessageNI) {
-		when (Mni.values()[packet.type]) {
+	override fun handleClient() {
+		when (Mni.values()[type]) {
 			Mni.BLIZZARD -> RagnarokHandler.blizzards.apply {
-				val (id) = packet.intArray
+				val (id) = intArray
 
 				if (id < 0) removeAll { it.id == id }
-				else if (packet.intArray.size == 5) {
-					val (_, x1, z1, x2, z2) = packet.intArray
+				else if (intArray.size == 5) {
+					val (_, x1, z1, x2, z2) = intArray
 					add(RagnarokHandler.BlizzardData(x1, z1, x2, z2).apply { setId(id) })
 				}
 			}
 
-			Mni.HEARTLOSS -> CardinalSystem.CommonSystem.updateLostHearts(mc.thePlayer, packet.intArray[0])
+			Mni.HEARTLOSS -> CardinalSystem.CommonSystem.updateLostHearts(mc.thePlayer, intArray[0])
 			Mni.INTERACTION -> Unit // server
-			Mni.WINGS_BL -> AlfheimConfigHandler.wingsBlackList = packet.intArray
+			Mni.WINGS_BL -> AlfheimConfigHandler.wingsBlackList = intArray
 		}
 	}
 }

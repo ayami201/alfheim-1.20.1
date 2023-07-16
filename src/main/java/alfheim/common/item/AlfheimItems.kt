@@ -84,6 +84,7 @@ object AlfheimItems {
 	val fenrirLeggings: Item
 	val fenrirLoot: Item
 	val fireGrenade: Item
+	val floatingIslandGenerator: Item
 	val flugelHead: Item
 	val flugelHead2: Item
 	val flugelSoul: Item
@@ -222,6 +223,7 @@ object AlfheimItems {
 		fenrirBoots = ItemFenrirArmor(3, "FenrirBoots")
 		fenrirClaws = ItemFenrirClaws()
 		fenrirLoot = ItemFenrirLoot()
+		floatingIslandGenerator = ItemFloatingIslandGenerator()
 		flugelHead = ItemHeadFlugel()
 		flugelHead2 = ItemHeadMiku()
 		flugelSoul = ItemFlugelSoul()

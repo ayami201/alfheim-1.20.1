@@ -26,6 +26,7 @@ import alfheim.common.entity.EntitySubspace
 import alfheim.common.entity.EntitySubspaceSpear
 import alfheim.common.entity.boss.*
 import alfheim.common.entity.boss.primal.*
+import alfheim.common.floatingisland.EntityFloatingIsland
 import alfheim.common.entity.item.EntityItemImmortal
 import alfheim.common.entity.spell.*
 import alfheim.common.integration.travellersgear.TGHandlerBotaniaRenderer

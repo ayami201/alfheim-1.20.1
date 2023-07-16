@@ -1,4 +1,10 @@
 {
+	"ea": {
+		"category": "master",
+		"sounds": [
+			"ea"
+		]
+	},
 	"fenrir.attack": {
 		"category": "hostile",
 		"sounds": [

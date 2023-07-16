@@ -12,42 +12,42 @@ import net.minecraft.potion.*
 class MessageEffect @JvmOverloads constructor(var entity: Int, var id: Int, var dur: Int, var amp: Int, var readd: Boolean = false, var state: Byte = 1): ASJPacket(), AlfheimPacket<MessageEffect> {
 	constructor(e: Entity, p: PotionEffect): this(e.entityId, p.potionID, p.duration, p.amplifier)
 
-	override fun handleClient(packet: MessageEffect) {
-		val e = mc.theWorld.getEntityByID(packet.entity)
+	override fun handleClient() {
+		val e = mc.theWorld.getEntityByID(entity)
 
 		if (e !is EntityLivingBase) return
 
-		val pe = e.getActivePotionEffect(packet.id)
+		val pe = e.getActivePotionEffect(id)
 
-		when (packet.state.toInt()) {
+		when (state.toInt()) {
 			1 -> {
 				if (pe == null) {
-					e.addPotionEffect(PotionEffect(packet.id, packet.dur, packet.amp))
-					Potion.potionTypes[packet.id].applyAttributesModifiersToEntity(e, e.getAttributeMap(), packet.amp)
+					e.addPotionEffect(PotionEffect(id, dur, amp))
+					Potion.potionTypes[id].applyAttributesModifiersToEntity(e, e.getAttributeMap(), amp)
 				} else {
-					if (packet.readd) Potion.potionTypes[packet.id].removeAttributesModifiersFromEntity(e, e.getAttributeMap(), packet.amp)
-					pe.amplifier = packet.amp
-					pe.duration = packet.dur
-					if (packet.readd) Potion.potionTypes[packet.id].applyAttributesModifiersToEntity(e, e.getAttributeMap(), packet.amp)
+					if (readd) Potion.potionTypes[id].removeAttributesModifiersFromEntity(e, e.getAttributeMap(), amp)
+					pe.amplifier = amp
+					pe.duration = dur
+					if (readd) Potion.potionTypes[id].applyAttributesModifiersToEntity(e, e.getAttributeMap(), amp)
 				}
 			}
 
 			0 -> {
 				if (pe == null) {
-					e.addPotionEffect(PotionEffect(packet.id, packet.dur, packet.amp))
-					Potion.potionTypes[packet.id].applyAttributesModifiersToEntity(e, e.getAttributeMap(), packet.amp)
+					e.addPotionEffect(PotionEffect(id, dur, amp))
+					Potion.potionTypes[id].applyAttributesModifiersToEntity(e, e.getAttributeMap(), amp)
 				} else {
-					if (packet.readd) Potion.potionTypes[packet.id].removeAttributesModifiersFromEntity(e, e.getAttributeMap(), packet.amp)
-					pe.amplifier = packet.amp
-					pe.duration = packet.dur
-					if (packet.readd) Potion.potionTypes[packet.id].applyAttributesModifiersToEntity(e, e.getAttributeMap(), packet.amp)
+					if (readd) Potion.potionTypes[id].removeAttributesModifiersFromEntity(e, e.getAttributeMap(), amp)
+					pe.amplifier = amp
+					pe.duration = dur
+					if (readd) Potion.potionTypes[id].applyAttributesModifiersToEntity(e, e.getAttributeMap(), amp)
 				}
 			}
 
 			-1 -> {
 				if (pe != null) {
-					e.removePotionEffect(packet.id)
-					Potion.potionTypes[packet.id].removeAttributesModifiersFromEntity(e, e.getAttributeMap(), packet.amp)
+					e.removePotionEffect(id)
+					Potion.potionTypes[id].removeAttributesModifiersFromEntity(e, e.getAttributeMap(), amp)
 				}
 			}
 		}

@@ -22,24 +22,14 @@ object MTHandlerTradePortal {
 			AlfheimAPI.banRetrade(output)
 		}
 		
-		override fun canUndo(): Boolean {
-			return false
-		}
+		override fun canUndo() = false
 		
-		override fun undo() {
-			throw IllegalArgumentException("Don't cheat!")
-		}
+		override fun undo() = Unit
 		
-		override fun describe(): String {
-			return String.format("Removing %s from Alfheim trade portal", output.unlocalizedName)
-		}
+		override fun describe() = "Removing ${output.unlocalizedName} from Alfheim trade portal"
 		
-		override fun describeUndo(): String {
-			throw IllegalArgumentException("Don't cheat!")
-		}
+		override fun describeUndo() = "NO-OP"
 		
-		override fun getOverrideKey(): Any? {
-			return null
-		}
+		override fun getOverrideKey() = null
 	}
 }

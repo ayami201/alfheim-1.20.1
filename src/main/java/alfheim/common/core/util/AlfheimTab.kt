@@ -205,6 +205,7 @@ import alfheim.common.item.AlfheimItems.fenrirHelmet
 import alfheim.common.item.AlfheimItems.fenrirLeggings
 import alfheim.common.item.AlfheimItems.fenrirLoot
 import alfheim.common.item.AlfheimItems.fireGrenade
+import alfheim.common.item.AlfheimItems.floatingIslandGenerator
 import alfheim.common.item.AlfheimItems.flugelHead
 import alfheim.common.item.AlfheimItems.flugelSoul
 import alfheim.common.item.AlfheimItems.gaiaSlayer
@@ -668,6 +669,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		}
 		
 		addItem(gaiaSlayer)
+		addItem(floatingIslandGenerator)
 		
 		additionalDisplays.forEach { it.invoke() }
 	}

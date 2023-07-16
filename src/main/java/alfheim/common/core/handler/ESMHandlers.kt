@@ -351,7 +351,8 @@ object ElvenFlightHandler {
 		if (e.phase == TickPhase.START) return
 		val player = e.player
 		
-		--KeyBindingHandler.flightEnableCooldown
+		if (player is EntityPlayerMP)
+			CardinalSystem.forPlayer(player).flightEnableCooldown--
 		
 		if (!AlfheimConfigHandler.enableElvenStory || player.race == HUMAN || ESMHandler.isAbilityDisabled(player)) return
 		if ((ModItems.flightTiara as ItemFlightTiara).shouldPlayerHaveFlight(player))
@@ -368,7 +369,9 @@ object ElvenFlightHandler {
 		
 		if (player.flight <= 0) {
 			player.capabilities.isFlying = false
-			KeyBindingHandler.flightEnableCooldown = (ElvenFlightHelper.max / 10).I + 1
+			
+			if (player is EntityPlayerMP)
+				CardinalSystem.forPlayer(player).flightEnableCooldown = (ElvenFlightHelper.max / 10).I + 1
 		}
 	}
 	

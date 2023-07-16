@@ -15,6 +15,7 @@ import net.minecraft.nbt.*
 import net.minecraft.tileentity.IHopper
 import net.minecraft.util.Facing
 import net.minecraft.world.World
+import net.minecraftforge.common.util.Constants
 import org.lwjgl.opengl.GL11
 import vazkii.botania.common.core.helper.InventoryHelper
 import vazkii.botania.common.lib.LibMisc
@@ -391,7 +392,7 @@ class TileLivingwoodFunnel: ASJTile(), IHopper {
 	override fun hasCustomInventoryName() = false
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
-		val list = nbt.getTagList("Items", 10)
+		val list = nbt.getTagList("Items", Constants.NBT.TAG_COMPOUND)
 		inventory = arrayOfNulls(sizeInventory)
 		
 		for (i in 0 until list.tagCount()) {

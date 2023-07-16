@@ -8,14 +8,14 @@ import alfheim.common.entity.EntityLolicorn
 import net.minecraft.entity.player.EntityPlayerMP
 
 class MessageKeyBindS(var action: Int, var state: Boolean, var data: Int): ASJPacket(), AlfheimPacket<MessageKeyBindS> {
-	override fun handleServer(packet: MessageKeyBindS, player: EntityPlayerMP) {
-		when (KeyBindingHandlerClient.KeyBindingIDs.values()[packet.action]) {
+	override fun handleServer(player: EntityPlayerMP) {
+		when (KeyBindingHandlerClient.KeyBindingIDs.values()[action]) {
 			KeyBindingHandlerClient.KeyBindingIDs.CORN    -> EntityLolicorn.call(player)
-			KeyBindingHandlerClient.KeyBindingIDs.FLIGHT  -> KeyBindingHandler.enableFlight(player, packet.state)
+			KeyBindingHandlerClient.KeyBindingIDs.FLIGHT  -> KeyBindingHandler.enableFlight(player, state)
 			KeyBindingHandlerClient.KeyBindingIDs.ESMABIL -> KeyBindingHandler.toggleESMAbility(player)
-			KeyBindingHandlerClient.KeyBindingIDs.CAST    -> KeyBindingHandler.cast(player, packet.state, packet.data)
+			KeyBindingHandlerClient.KeyBindingIDs.CAST    -> KeyBindingHandler.cast(player, state, data)
 			KeyBindingHandlerClient.KeyBindingIDs.UNCAST  -> KeyBindingHandler.unCast(player)
-			KeyBindingHandlerClient.KeyBindingIDs.SEL     -> KeyBindingHandler.select(player, packet.state, packet.data)
+			KeyBindingHandlerClient.KeyBindingIDs.SEL     -> KeyBindingHandler.select(player, state, data)
 			KeyBindingHandlerClient.KeyBindingIDs.SECRET  -> KeyBindingHandler.secret(player)
 		}
 	}

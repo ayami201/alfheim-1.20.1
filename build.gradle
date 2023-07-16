@@ -1,5 +1,5 @@
 buildscript {
-	ext.kotlinVersion = '1.8.21'
+	ext.kotlinVersion = '1.9.0'
 	
 	repositories {
 		mavenCentral()
@@ -32,7 +32,7 @@ repositories {
 }
 
 group = "main"
-version = "48-dev"
+version = "49-dev"
 archivesBaseName = "Alfheim"
 
 minecraft {

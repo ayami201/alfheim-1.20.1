@@ -7,9 +7,9 @@ import alfheim.api.network.AlfheimPacket
 import net.minecraft.item.ItemStack
 
 class MessageTileItem(var x: Int, var y: Int, var z: Int, var s: ItemStack): ASJPacket(), AlfheimPacket<MessageTileItem> {
-	override fun handleClient(packet: MessageTileItem) {
+	override fun handleClient() {
 		val world = mc.theWorld
-		val te = world.getTileEntity(packet.x, packet.y, packet.z)
-		if (te is TileItemContainer) te.item = packet.s
+		val te = world.getTileEntity(x, y, z)
+		if (te is TileItemContainer) te.item = s
 	}
 }

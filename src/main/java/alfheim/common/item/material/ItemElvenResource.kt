@@ -248,7 +248,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	override fun getItemStackLimit(stack: ItemStack) = if (stack.meta == WisdomBottle.I || stack.meta == DomainKey.I) 1 else 64
 	
 	override fun onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, par8: Float, par9: Float, par10: Float): Boolean {
-		var block = world.getBlock(x, y, z)
+		val block = world.getBlock(x, y, z)
 		// Fabulous manapool
 		if (block === ModBlocks.pool && world.getBlockMetadata(x, y, z) == 0 && stack.meta == RainbowDust.I) {
 			world.setBlockMetadataWithNotify(x, y, z, 3, 2)

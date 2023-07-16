@@ -16,8 +16,8 @@ class MessageTimeStop(var party: CardinalSystem.PartySystem.Party?, var x: Doubl
 		if (party != null) party!!.write(buf)
 	}
 
-	override fun handleClient(packet: MessageTimeStop) {
-		if (packet.party == null) packet.party = CardinalSystem.PartySystem.Party()
-		CardinalSystemClient.TimeStopSystemClient.stop(packet.x, packet.y, packet.z, packet.party!!, packet.id)
+	override fun handleClient() {
+		if (party == null) party = CardinalSystem.PartySystem.Party()
+		CardinalSystemClient.TimeStopSystemClient.stop(x, y, z, party!!, id)
 	}
 }

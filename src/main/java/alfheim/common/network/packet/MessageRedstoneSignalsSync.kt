@@ -24,7 +24,7 @@ class MessageRedstoneSignalsSync(var signals: HashSet<RedstoneSignal>): ASJPacke
 		signals.forEach { ByteBufUtils.writeUTF8String(buf, it.writeToNBT(NBTTagCompound()).toString()) }
 	}
 
-	override fun handleClient(packet: MessageRedstoneSignalsSync) {
-		RedstoneSignalHandlerClient.redstoneSignals = packet.signals
+	override fun handleClient() {
+		RedstoneSignalHandlerClient.redstoneSignals = signals
 	}
 }

@@ -9,6 +9,7 @@ import alfheim.common.item.*
 import alfheim.common.item.block.ItemRainbowGrassMod
 import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.lexicon.AlfheimLexiconData
+import cpw.mods.fml.common.Optional
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.*
@@ -22,6 +23,7 @@ import net.minecraft.util.IIcon
 import net.minecraft.world.*
 import net.minecraftforge.client.event.TextureStitchEvent
 import net.minecraftforge.common.MinecraftForge
+import thaumcraft.api.crafting.IInfusionStabiliser
 import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.common.Botania
 import vazkii.botania.common.achievement.*
@@ -31,7 +33,8 @@ import vazkii.botania.common.lexicon.LexiconData
 import java.awt.Color
 import java.util.*
 
-class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement {
+@Optional.Interface(modid = "Thaumcraft", iface = "thaumcraft.api.crafting.IInfusionStabiliser", striprefs = true)
+class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement, IInfusionStabiliser {
 	
 	var flowerIcon: IIcon? = null
 	var glowingIcon: IIcon? = null
@@ -51,6 +54,10 @@ class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement {
 		setStepSound(Block.soundTypeGrass)
 		if (ASJUtilities.isClient)
 			MinecraftForge.EVENT_BUS.register(this)
+	}
+	
+	override fun canStabaliseInfusion(world: World, x: Int, y: Int, z: Int): Boolean {
+		return if (world.getBlockMetadata(x, y, z) == GLIMMER) ConfigHandler.enableThaumcraftStablizers else false
 	}
 	
 	override fun setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int) {

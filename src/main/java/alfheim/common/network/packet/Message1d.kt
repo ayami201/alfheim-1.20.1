@@ -15,18 +15,18 @@ import net.minecraft.event.ClickEvent
 import net.minecraft.util.*
 
 class Message1d(ty: M1d, var data1: Double, var type: Int = ty.ordinal) : ASJPacket(), AlfheimPacket<Message1d> {
-	override fun handleClient(packet: Message1d) {
-		when (M1d.values()[packet.type]) {
-			M1d.COLD             -> mc.thePlayer.cold = packet.data1.F
-			M1d.DEATH_TIMER      -> AlfheimConfigHandler.deathScreenAddTime = packet.data1.I
-			M1d.ESMABIL          -> CardinalSystemClient.PlayerSegmentClient.esmAbility = packet.data1 != 0.0
+	override fun handleClient() {
+		when (M1d.values()[type]) {
+			M1d.COLD             -> mc.thePlayer.cold = data1.F
+			M1d.DEATH_TIMER      -> AlfheimConfigHandler.deathScreenAddTime = data1.I
+			M1d.ESMABIL          -> CardinalSystemClient.PlayerSegmentClient.esmAbility = data1 != 0.0
 			M1d.ELVEN_FLIGHT_MAX -> {
-				AlfheimConfigHandler.flightTime = packet.data1.I
-				ElvenFlightHelper.max = packet.data1
+				AlfheimConfigHandler.flightTime = data1.I
+				ElvenFlightHelper.max = data1
 			}
-			M1d.KNOWLEDGE        -> CardinalSystemClient.PlayerSegmentClient.knowledge.add("${CardinalSystem.KnowledgeSystem.Knowledge.values()[packet.data1.I]}")
-			M1d.LIMBO            -> CardinalSystemClient.PlayerSegmentClient.limbo = packet.data1.I
-			M1d.TIME_STOP_REMOVE -> CardinalSystemClient.TimeStopSystemClient.remove(packet.data1.I)
+			M1d.KNOWLEDGE        -> CardinalSystemClient.PlayerSegmentClient.knowledge.add("${CardinalSystem.KnowledgeSystem.Knowledge.values()[data1.I]}")
+			M1d.LIMBO            -> CardinalSystemClient.PlayerSegmentClient.limbo = data1.I
+			M1d.TIME_STOP_REMOVE -> CardinalSystemClient.TimeStopSystemClient.remove(data1.I)
 			M1d.RLCM    -> {
 				// sorry anyone whom RUN_COMMAND chat actions may have been deleted by this :sweat_smile: but I don't really care
 				for (it in mc.ingameGUI.chatGUI.chatLines) {
@@ -51,23 +51,23 @@ class Message1d(ty: M1d, var data1: Double, var type: Int = ty.ordinal) : ASJPac
 					}
 				}
 
-				while (packet.data1-- > 0)
+				while (data1-- > 0)
 					mc.ingameGUI.chatGUI.sentMessages.removeLastOrNull() // for safety
 			}
-			M1d.NOSUNMOON        -> RagnarokHandler.noSunAndMoon = packet.data1 == 1.0
-			M1d.GINNUNGAGAP      -> RagnarokHandler.ginnungagap = packet.data1 == 1.0
+			M1d.NOSUNMOON        -> RagnarokHandler.noSunAndMoon = data1 == 1.0
+			M1d.GINNUNGAGAP      -> RagnarokHandler.ginnungagap = data1 == 1.0
 			M1d.RAGNAROK         -> {
-				if (packet.data1 == -1.0) {
+				if (data1 == -1.0) {
 					RagnarokHandler.ragnarok = false
 					RagnarokHandler.finished = true
 					RagnarokHandler.fogFade = 1f
 					return
 				}
 
-				RagnarokHandler.ragnarok = packet.data1 < 1
-				RagnarokHandler.fogFade = packet.data1.F
+				RagnarokHandler.ragnarok = data1 < 1
+				RagnarokHandler.fogFade = data1.F
 
-				if (0 < packet.data1 && packet.data1 < 1)
+				if (0 < data1 && data1 < 1)
 					mc.theWorld.playSound(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, "${ModInfo.MODID}:fenrir.howl", 50f, 0.5f, false)
 			}
 		}

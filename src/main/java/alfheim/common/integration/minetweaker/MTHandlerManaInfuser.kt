@@ -43,25 +43,17 @@ object MTHandlerManaInfuser {
 			AlfheimAPI.addInfuserRecipe(recipe)
 		}
 		
-		override fun canUndo(): Boolean {
-			return true
-		}
+		override fun canUndo() = true
 		
 		override fun undo() {
 			AlfheimAPI.removeInfusionRecipe(recipe)
 		}
 		
-		override fun describe(): String {
-			return "Adding Mana Infuser recipe $recipe"
-		}
+		override fun describe() = "Adding Mana Infuser recipe $recipe"
 		
-		override fun describeUndo(): String {
-			return "Removing Mana Infuser recipe $recipe"
-		}
+		override fun describeUndo() = "Removing Mana Infuser recipe $recipe"
 		
-		override fun getOverrideKey(): Any? {
-			return null
-		}
+		override fun getOverrideKey() = null
 	}
 	
 	private class Remove(private val output: ItemStack): IUndoableAction {
@@ -76,24 +68,16 @@ object MTHandlerManaInfuser {
 			}
 		}
 		
-		override fun canUndo(): Boolean {
-			return true
-		}
+		override fun canUndo() = true
 		
 		override fun undo() {
 			for (rec in removed) AlfheimAPI.addInfuserRecipe(rec)
 		}
 		
-		override fun describe(): String {
-			return "Removing all Mana Infuser recipes for ${output.unlocalizedName}"
-		}
+		override fun describe() = "Removing all Mana Infuser recipes for ${output.unlocalizedName}"
 		
-		override fun describeUndo(): String {
-			return "Re-adding previously removed Mana Infuser recipes for ${output.unlocalizedName}"
-		}
+		override fun describeUndo() = "Re-adding previously removed Mana Infuser recipes for ${output.unlocalizedName}"
 		
-		override fun getOverrideKey(): Any? {
-			return null
-		}
+		override fun getOverrideKey() = null
 	}
 }

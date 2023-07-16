@@ -1,11 +1,28 @@
 Innovations:
- [WIP] Floating islands
+ Floating islands with ancient ruins and useful resources
+ Item to manually spawn floating island
+ Config to disable booba render
+ Optimized chunkloading tickets allocation and usage
+ Bands of aura can output mana to pools
+ Paintslinger lens can paint iridescent blocks
+
+Integration:
+ [CoFHCore] added entity collision override to fix non-living entity collision on floating islands (disable in configs)
+ [Mine-/CraftTweaker] any other mob spawn can be added to a world
+ [Thaumcraft] Glimmering bifrost flowers can stabilize matrix
+ [Twiligh Forest] animals now spawn in Alfheim dimension (disable in configs)
 
 Fixes:
- Rain on ice mountain
- Purification lens crash
- ESM not allowing to join server #274
- Sequencer isufficient slots logic #275
- Booba skin with non-elven skin #276
  FastCraft crash #280
  Booba render with invisibility #282
+ Applied elements were forever added to configured mobs
+ Elven flight enable cooldown was shared on server for every player
+ Anomalies explosiveness
+ OreDict "twigDeamwoodInsufed" -> "twigDreamwoodInfused" (lol)
+ Accelerator anomaly entities acceleration\
+ NPE in Corporea Sequencer
+ Temperature event CPU load decreased
+ Hati Eye light source placement
+ Bleeding potion particles position
+ Mobspawn on ice mountain
+ Removed extra blocks from sad trees

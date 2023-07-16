@@ -2,7 +2,9 @@ package alfheim.common.world.mobspawn
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.AlfheimCore
 import alfheim.api.ModInfo.MODID
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.AlfheimConfigHandler.butterflySpawn
 import alfheim.common.core.handler.AlfheimConfigHandler.chickSpawn
 import alfheim.common.core.handler.AlfheimConfigHandler.cowSpawn
@@ -16,6 +18,9 @@ import alfheim.common.core.handler.AlfheimConfigHandler.pigSpawn
 import alfheim.common.core.handler.AlfheimConfigHandler.pixieSpawn
 import alfheim.common.core.handler.AlfheimConfigHandler.playerGroupDistance
 import alfheim.common.core.handler.AlfheimConfigHandler.sheepSpawn
+import alfheim.common.world.dim.alfheim.WorldProviderAlfheim
+import alfheim.common.world.dim.alfheim.biome.*
+import alfheim.common.world.dim.alfheim.customgens.NiflheimLocationGenerator
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.gameevent.TickEvent
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent
@@ -24,19 +29,20 @@ import net.minecraft.entity.player.*
 import net.minecraft.util.WeightedRandom
 import net.minecraft.world.*
 import net.minecraftforge.event.ForgeEventFactory
+import ru.vamig.worldengine.WE_Biome
 import java.util.*
 import kotlin.collections.sumOf
 import kotlin.math.*
 
 object MobSpawnHandler {
 	
-	val despawnRadiusHard = maxChunks * 16 + despawnChunks * 16
-	val despawnRadiusSoft = maxChunks * 8 + despawnChunks * 16
-	val registeredMobs = HashMap<Int, ArrayList<MobData>>()
+	private val despawnRadiusHard = maxChunks * 16 + despawnChunks * 16
+	private val despawnRadiusSoft = maxChunks * 8 + despawnChunks * 16
+	val registeredMobs = HashMap<Int, HashSet<MobData>>()
 	val mobNames = HashMap<Int, HashSet<String>>()
 	
 	init {
-		eventFML()
+		eventFML().eventForge()
 		
 		registerMob("$MODID.Butterfly", butterflySpawn)
 		registerMob("Chicken", chickSpawn)
@@ -47,23 +53,55 @@ object MobSpawnHandler {
 		registerMob("$MODID.Pixie", pixieSpawn)
 		registerMob("Sheep", sheepSpawn)
 		registerMob("$MODID.SnowSprite", pixieSpawn.map { it * 2 }.toIntArray())
+		
+		if (AlfheimCore.TwilightForestLoaded && AlfheimConfigHandler.tfMobs)
+			tfIntegration()
+	}
+	
+	fun tfIntegration() {
+		val d = dimensionIDAlfheim
+		registerMob("TwilightForest.Forest Bunny", 10, 1, 3, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
+		registerMob("TwilightForest.Wild Deer", 8, 2, 4, d) { it.biomeCheck(BiomeIslandForest, BiomeMountTopForest, BiomePitForest) }
+		registerMob("TwilightForest.Forest Raven", 4, 1, 1, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
+		registerMob("TwilightForest.Forest Squirrel", 10, 1, 3, d) { it.biomeCheck(BiomeIslandForest, BiomeMountTopForest, BiomePitForest) }
+		registerMob("TwilightForest.Tiny Bird", 10, 1, 3, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomeIslandGiantFlowers, BiomeMountLow, BiomeMountMid, BiomeMountHigh, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
+		registerMob("TwilightForest.Bighorn Sheep", 10, 2, 4, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomeIslandGiantFlowers, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
+		registerMob("TwilightForest.Wild Boar", 10, 2, 4, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
+		registerMob("TwilightForest.Glacier Penguin", 8, 1, 4, d) {
+			val (xOff, zOff) = NiflheimLocationGenerator.portalXZ(it.worldObj)
+			NiflheimLocationGenerator.yobaFunction2d(it.posX.mfloor() - xOff, it.posZ.mfloor() - zOff)
+		}
+	}
+	
+	private fun Entity.biomeCheck(vararg biomes: BiomeAlfheim): Boolean {
+		val (x, _, z) = Vector3.fromEntity(this).mf()
+		val at = WE_Biome.getBiomeAt((worldObj.provider as WorldProviderAlfheim).chunkProvider, x, z)
+		return biomes.any { it === at }
 	}
 	
 	fun registerMob(name: String, data: IntArray, dim: Int = dimensionIDAlfheim) {
 		val (m, n, b) = data
-		registerMob(name, dim, m, n, b)
+		registerMob(name, m, n, b, dim)
 	}
 	
-	fun registerMob(name: String, dim: Int, maxCountPerPlayer: Int, minBatchSize: Int, maxBatchSize: Int) {
-		registeredMobs.computeIfAbsent(dim) { ArrayList() } += MobData(name, maxCountPerPlayer, minBatchSize, maxBatchSize)
+	fun registerMob(name: String, maxCountPerPlayer: Int, minBatchSize: Int, maxBatchSize: Int, dim: Int, spawnCheck: (Entity) -> Boolean = { true }) {
+		registeredMobs.computeIfAbsent(dim) { HashSet() } += MobData(name, maxCountPerPlayer, minBatchSize, maxBatchSize, spawnCheck)
 		mobNames.computeIfAbsent(dim) { HashSet() } += name
+	}
+	
+	fun unregisterMob(name: String, dim: Int, maxCountPerPlayer: Int, minBatchSize: Int, maxBatchSize: Int) {
+		val set = registeredMobs.computeIfAbsent(dim) { HashSet() }
+		set -= MobData(name, maxCountPerPlayer, minBatchSize, maxBatchSize)
+		
+		if (set.none { it.name == name })
+			mobNames.computeIfAbsent(dim) { HashSet() } -= name
 	}
 	
 	@SubscribeEvent
 	fun worldTickEvent(e: WorldTickEvent) {
 		val world = e.world
 		
-		if (registeredMobs.computeIfAbsent(world.provider.dimensionId) { ArrayList() }.isEmpty()) return
+		if (registeredMobs.computeIfAbsent(world.provider.dimensionId) { HashSet() }.isEmpty()) return
 		
 		if (e.phase == TickEvent.Phase.START)
 			doDespawn(world)
@@ -96,7 +134,7 @@ object MobSpawnHandler {
 		
 		val suitablePos = Vector3()
 		var canSpawn = 0
-		val (name, _, min, max) = registeredMobs[world.provider.dimensionId]!!.run {
+		val (name, _, min, max, spawnCheck) = registeredMobs[world.provider.dimensionId]!!.toMutableList().run {
 			shuffle()
 			firstOrNull { data ->
 				val mob = EntityList.createEntityByName(data.name, world) as? EntityLiving ?: return@firstOrNull false
@@ -104,10 +142,10 @@ object MobSpawnHandler {
 				val y = world.getTopSolidOrLiquidBlock(x.mfloor(), z.mfloor()).D
 				
 				mob.setPosition(x, y, z)
-				if (!mob.canSpawnHere) return@firstOrNull false
+				if (!checkSpawn(mob, data.spawnCheck)) return@firstOrNull false
 				suitablePos.set(x, y, z)
 				
-				val mobsInWorld = world.loadedEntityList.count { EntityList.getEntityString(it as Entity) == data.name }
+				val mobsInWorld = world.loadedEntityList.count { mob::class.java.isInstance(it) }
 				val mobsInWorldMax = data.maxCountPerPlayer * world.playerEntities.size
 				canSpawn = mobsInWorldMax - mobsInWorld
 				canSpawn > 0
@@ -128,11 +166,11 @@ object MobSpawnHandler {
 				val y = world.getTopSolidOrLiquidBlock(x.mfloor(), z.mfloor()).D
 				
 				mob.setPosition(x, y, z)
-			} while (!checkSpawn(mob) && retries-- > 0)
+			} while (!checkSpawn(mob, spawnCheck) && retries-- > 0)
 			
 			val (x, y, z) = suitablePos
-			if (!checkSpawn(mob)) mob.setPosition(x, y, z)
-			if (!checkSpawn(mob, force = true)) continue
+			if (!checkSpawn(mob, spawnCheck)) mob.setPosition(x, y, z)
+			if (!checkSpawn(mob, spawnCheck, force = true)) continue
 			
 			mob.spawn(world)
 			
@@ -141,11 +179,17 @@ object MobSpawnHandler {
 		}
 	}
 	
-	fun checkSpawn(entity: EntityLiving, force: Boolean = false): Boolean {
+	fun checkSpawn(entity: EntityLiving, spawnCheck: ((Entity) -> Boolean)?, force: Boolean = false): Boolean {
 		return when (ForgeEventFactory.canEntitySpawn(entity, entity.worldObj, entity.posX.F, entity.posY.F, entity.posZ.F)) {
 			Event.Result.DENY    -> false
 			Event.Result.ALLOW   -> true
-			else                 -> force || entity.canSpawnHere
+			else                 -> {
+				if (force) true
+				else {
+					val test = spawnCheck?.invoke(entity)
+					if (test == false) false else entity.canSpawnHere
+				}
+			}
 		}
 	}
 	
@@ -224,5 +268,5 @@ object MobSpawnHandler {
 		}
 	}
 	
-	data class MobData(val name: String, val maxCountPerPlayer: Int, val minBatchSize: Int, val maxBatchSize: Int)
+	data class MobData(val name: String, val maxCountPerPlayer: Int, val minBatchSize: Int, val maxBatchSize: Int, val spawnCheck: ((Entity) -> Boolean)? = null)
 }

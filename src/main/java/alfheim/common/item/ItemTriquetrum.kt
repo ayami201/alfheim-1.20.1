@@ -28,8 +28,8 @@ class ItemTriquetrum: ItemMod("Triquetrum"), IDoubleBoundItem, IRotationDisplay 
 		val first = getFirstPosition(stack) ?: return
 		val second = getSecondPosition(stack) ?: return
 		
-		val v = Vector3(second.posX, second.posY, second.posZ).sub(first.posX, first.posY, first.posZ)
-		list.add(StatCollector.translateToLocalFormatted("item.Triquetrum.blocks", abs(v.x.plus(1) * v.y.plus(1) * v.z.plus(1)).I))
+		val (x, y, z) = Vector3(second.posX, second.posY, second.posZ).sub(first.posX, first.posY, first.posZ).add(1)
+		list.add(StatCollector.translateToLocalFormatted("item.Triquetrum.blocks", abs(x * y * z).I))
 		list.add(StatCollector.translateToLocalFormatted("item.Triquetrum.rotation", getRotation(stack) * 90))
 	}
 	

@@ -45,7 +45,7 @@ class BlockManaAccelerator: BlockContainerMod(Material.rock), ILexiconable {
 			if (!world.isRemote) EntityItem(world, x + 0.5, y + 0.5, z + 0.5, te.item!!).spawn()
 			te.item = null
 		}
-		if (stack != null && stack.stackSize == 1 && stack.item.isDamageable) {
+		if (stack != null && stack.stackSize == 1 && stack.item is IManaItem) {
 			te.item = stack.copy()
 			te.item!!.stackSize = stack.stackSize
 			stack.stackSize = 0

@@ -1,6 +1,6 @@
 package alfheim.common.network
 
-enum class M0dc { MTSPELL }
+enum class M0dc { MTSPELL, ROLL, SEEME, SSS }
 
 enum class M0ds { DODGE, JUMP, HEIMBLINK }
 
