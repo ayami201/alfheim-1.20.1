@@ -47,10 +47,10 @@ object FaithHandlerHeimdall: IFaithHandler {
 		val b = player.isPotionActive(Potion.blindness)
 		val nv = player.getActivePotionEffect(Potion.nightVision)
 		
-		if (!b && nv != null && nv.duration > 50) return
+		if (!b && nv != null && nv.duration > 250) return
 
 		if (!player.worldObj.isRemote && ManaItemHandler.requestManaExact(stack, player, 1, true)) {
-			player.addPotionEffect(PotionEffect(Potion.nightVision.id, 100, 0))
+			player.addPotionEffect(PotionEffect(Potion.nightVision.id, 250, 0))
 			if (b) player.removePotionEffect(Potion.blindness.id)
 		}
 	}

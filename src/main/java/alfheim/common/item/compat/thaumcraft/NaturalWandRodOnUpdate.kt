@@ -17,12 +17,12 @@ class NaturalWandRodOnUpdate: IWandRodOnUpdate {
 		val forTool = wand.getCap(stack).tag.startsWith(ModInfo.MODID)
 		
 		for (primal in primals)
-			if (wand.getVis(stack, primal) < wand.getMaxVis(stack) && (if (forTool) ManaItemHandler.requestManaExactForTool(stack, player, 100, true) else ManaItemHandler.requestManaExact(stack, player, 100, true)))
+			if (wand.getVis(stack, primal) < wand.getMaxVis(stack) && (if (forTool) ManaItemHandler.requestManaExactForTool(stack, player, COST, true) else ManaItemHandler.requestManaExact(stack, player, COST, true)))
 				wand.addVis(stack, primal, 1, true)
 	}
 	
 	companion object {
-		
+		const val COST = 100
 		val primals = Aspect.getPrimalAspects()
 	}
 }

@@ -22,14 +22,15 @@ object AlfheimAPI {
 	
 	val elvoriumArmor = EnumHelper.addArmorMaterial("ALFHEIM_ELVORIUM", 50, intArrayOf(5, 8, 7, 4), 30)!!
 	val elementalArmor = EnumHelper.addArmorMaterial("ALFHEIM_ELEMENTAL", 20, intArrayOf(2, 9, 5, 2), 20)!!
+	val fenrirArmor = EnumHelper.addArmorMaterial("ALFHEIM_FENRIR", 32, intArrayOf(3, 7, 6, 2), 15)!!
 	
 	val elvoriumToolMaterial = EnumHelper.addToolMaterial("ALFHEIM_ELVORIUM", 4, 2400, 9.5f, 3f, 30)!!
-	val mauftriumToolmaterial = EnumHelper.addToolMaterial("ALFHEIM_MAUFTRIUM", 10, 9000, 3f, 8f, 40)!!
+	val mauftriumToolmaterial = EnumHelper.addToolMaterial("ALFHEIM_MAUFTRIUM", 10, 3000, 3f, 8f, 40)!!
 	
 	// relic
 	val EXCALIBER = EnumHelper.addToolMaterial("ALFHEIM_EXCALIBER", 3, -1, 6.2f, 6f, 40)!!
 	val FENRIR = EnumHelper.addToolMaterial("ALFHEIM_FENRIR", 0, 2000, 0f, 3.0f, 14)!!
-	var RUNEAXE = EnumHelper.addToolMaterial("ALFHEIM_RUNEAXE", 4, 1561, 10f, 2f, 50)!!
+	var RUNEAXE = EnumHelper.addToolMaterial("ALFHEIM_RUNEAXE", 7, 1561, 16f, 2f, 50)!!
 	val SOUL = EnumHelper.addToolMaterial("ALFHEIM_SOUL", -1, -1, -1f, -1f, -1)!! // ragnarok sword
 	val SURTR = EnumHelper.addToolMaterial("ALFHEIM_SURTR", 0, 1, 0f, 4f, 0)!!
 	val THRYM = EnumHelper.addToolMaterial("ALFHEIM_THRYM", 0, 1, 0f, 4f, 0)!!
@@ -63,6 +64,9 @@ object AlfheimAPI {
 	
 	/** Ores for Orechid Endium */
 	val oreWeightsEnd = HashMap<String, Int>()
+	
+	/** Ores for Orechid Alfarem */
+	val oreWeightsAlfheim = HashMap<String, Int>()
 	
 	/** Map of domains */
 	val domains = LinkedHashMap<String, Domain>()
@@ -157,7 +161,7 @@ object AlfheimAPI {
 	}
 	
 	fun getSpellID(spell: SpellBase): Int {
-		for (race in EnumRace.values()) {
+		for (race in EnumRace.entries) {
 			var i = -1
 			for (sb in getSpellsFor(race)) {
 				++i
@@ -192,6 +196,18 @@ object AlfheimAPI {
 	 */
 	fun addOreWeightEnd(ore: String, weight: Int) {
 		oreWeightsEnd[ore] = weight
+	}
+	
+	/**
+	 * Maps an ore (ore dictionary key) to it's weight on the Alfheim world generation.
+	 * This is used for the Orechid Alfarem flower.
+	 * Alternatively get the values with the OreDetector mod:
+	 * https://gist.github.com/Vazkii/9493322
+	 *
+	 * Higher weight means higher chance
+	 */
+	fun addOreWeightAlfheim(ore: String, weight: Int) {
+		oreWeightsAlfheim[ore] = weight
 	}
 	
 	/**

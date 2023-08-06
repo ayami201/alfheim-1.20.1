@@ -60,12 +60,4 @@ class ItemGjallarhorn: ItemRelic("Gjallarhorn") {
 		
 		return stack
 	}
-	
-	companion object {
-		private const val TAG_COOLDOWN = "cooldown"
-		
-		private var ItemStack.cooldown
-			get() = ItemNBTHelper.getInt(this, TAG_COOLDOWN, 0)
-			set(value) = ItemNBTHelper.setInt(this, TAG_COOLDOWN, value)
-	}
 }

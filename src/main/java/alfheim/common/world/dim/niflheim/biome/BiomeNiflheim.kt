@@ -34,5 +34,4 @@ open class BiomeNiflheim(id: Int, top: Block, filler: Block = top): BiomeGenBase
 	override fun getSkyColorByTemp(temp: Float) = 0x0
 	override fun getBiomeGrassColor(x: Int, y: Int, z: Int) = 0x4FA390
 	override fun getBiomeFoliageColor(x: Int, y: Int, z: Int) = 0x4FA390
-	
 }

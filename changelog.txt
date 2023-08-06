@@ -1,28 +1,20 @@
 Innovations:
- Floating islands with ancient ruins and useful resources
- Item to manually spawn floating island
- Config to disable booba render
- Optimized chunkloading tickets allocation and usage
- Bands of aura can output mana to pools
- Paintslinger lens can paint iridescent blocks
-
-Integration:
- [CoFHCore] added entity collision override to fix non-living entity collision on floating islands (disable in configs)
- [Mine-/CraftTweaker] any other mob spawn can be added to a world
- [Thaumcraft] Glimmering bifrost flowers can stabilize matrix
- [Twiligh Forest] animals now spawn in Alfheim dimension (disable in configs)
+ Fruits that grow on crafted trees (#188)
+ Barrier tree that pushes enemies away (#188)
+ A banner to dance on the corpses of your foes (#188)
+ Bauble that makes music and heals everyone around (#188)
+ Super rod of shifting crusts (#255)
+ Orechid Alfarem to generate ores from Alfheim (#285)
+ New baubles - Fenrir Cloak and Fenrir Glove (#286)
+ Chalk to draw anything in the world (#287)
+ Mushroom that can warp you
+ Bottomless crate
+ Save Ivy to protect your items in inventory
+ Lens to refill mana in a burst on the fly
+ Reworked Fenrir set
+ New Sequencer mode - one at a time
 
 Fixes:
- FastCraft crash #280
- Booba render with invisibility #282
- Applied elements were forever added to configured mobs
- Elven flight enable cooldown was shared on server for every player
- Anomalies explosiveness
- OreDict "twigDeamwoodInsufed" -> "twigDreamwoodInfused" (lol)
- Accelerator anomaly entities acceleration\
- NPE in Corporea Sequencer
- Temperature event CPU load decreased
- Hati Eye light source placement
- Bleeding potion particles position
- Mobspawn on ice mountain
- Removed extra blocks from sad trees
+ New gourmaryllises "/ by zero" exception
+ Floating islands collision
+ [Thaumcraft] Fixed greatwood and silverwood worldgen

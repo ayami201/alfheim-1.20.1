@@ -16,10 +16,6 @@ import kotlin.math.min
 
 object PotionLightningShield: PotionAlfheim(AlfheimConfigHandler.potionIDLightningShield, "lightningShield", false, 0x0079C4) {
 	
-	init {
-		eventForge()
-	}
-	
 	override fun isReady(time: Int, mod: Int): Boolean {
 		return true
 	}
@@ -38,13 +34,13 @@ object PotionLightningShield: PotionAlfheim(AlfheimConfigHandler.potionIDLightni
 	
 	@SubscribeEvent
 	fun onPlayerAttacked(e: LivingAttackEvent) {
-		if (e.source.damageType == "lightning") return // Stack overflow fix
+		if (e.source.damageType == "lightningShieldEffect") return // Stack overflow fix
 		
 		val attacker = e.source.entity as? EntityLivingBase ?: return
 		val player = e.entityLiving as? EntityPlayer ?: return
 		if (!player.isPotionActive(this.id)) return
 		if (ItemPriestCloak.getCloak(0, player) == null) return
 		
-		attacker.attackEntityFrom(DamageSourceSpell.lightning(player), min(e.ammount, 2f))
+		attacker.attackEntityFrom(DamageSourceSpell.lightningShield(player), min(e.ammount, 2f))
 	}
 }

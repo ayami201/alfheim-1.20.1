@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound
 import vazkii.botania.api.subtile.RadiusDescriptor.Square
 import vazkii.botania.api.subtile.SubTileGenerating
 import vazkii.botania.common.lexicon.LexiconData
-import kotlin.math.min
+import kotlin.math.*
 
 class SubTileGourmaryllisUltra: SubTileGenerating() {
 	
@@ -34,7 +34,7 @@ class SubTileGourmaryllisUltra: SubTileGenerating() {
 		if (storedMana != 0) {
 			val lastFood = lastFood[lastFoodIndex].stack
 			val lastFoodCount = lastFood.stackSize
-			val munchInterval = 2 + 2 * lastFoodCount
+			val munchInterval = max(2 + 2 * lastFoodCount, 4)
 			
 			if (cooldown == 0) {
 				mana = min(maxMana, mana + storedMana)

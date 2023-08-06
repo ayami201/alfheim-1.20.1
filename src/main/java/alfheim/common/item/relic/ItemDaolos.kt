@@ -40,6 +40,7 @@ class ItemDaolos: ItemAxe(AlfheimAPI.RUNEAXE), IRelic {
 	
 	init {
 		creativeTab = AlfheimTab
+		efficiencyOnProperMaterial = 50f
 		maxStackSize = 1
 		maxDamage = 0
 		unlocalizedName = "Daolos"

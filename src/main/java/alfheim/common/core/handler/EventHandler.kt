@@ -314,21 +314,21 @@ object EventHandler {
 	
 	@SubscribeEvent
 	fun onLivingUpdate(e: LivingUpdateEvent) {
-		if (AlfheimConfigHandler.enableMMO) {
-			if (e.entityLiving.isPotionActive(AlfheimConfigHandler.potionIDLeftFlame)) {
-				val pe = e.entityLiving.getActivePotionEffect(AlfheimConfigHandler.potionIDLeftFlame)!!
-				pe.duration--
-				if (ASJUtilities.isClient) VisualEffectHandlerClient.onDeathTick(e.entityLiving)
-				if (pe.duration <= 0)
-					e.entityLiving.removePotionEffect(pe.potionID)
-				else
-					e.isCanceled = true
-			}
-			
-			if (e.entityLiving.isDead) {
-				val pt = CardinalSystem.PartySystem.getMobParty(e.entityLiving)
-				pt?.setDead(e.entityLiving, true)
-			}
+		if (!AlfheimConfigHandler.enableMMO) return
+		
+		if (e.entityLiving.isPotionActive(AlfheimConfigHandler.potionIDLeftFlame)) {
+			val pe = e.entityLiving.getActivePotionEffect(AlfheimConfigHandler.potionIDLeftFlame)!!
+			pe.duration--
+			if (ASJUtilities.isClient) VisualEffectHandlerClient.onDeathTick(e.entityLiving)
+			if (pe.duration <= 0)
+				e.entityLiving.removePotionEffect(pe.potionID)
+			else
+				e.isCanceled = true
+		}
+		
+		if (e.entityLiving.isDead) {
+			val pt = CardinalSystem.PartySystem.getMobParty(e.entityLiving)
+			pt?.setDead(e.entityLiving, true)
 		}
 	}
 	

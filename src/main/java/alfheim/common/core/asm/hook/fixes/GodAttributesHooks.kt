@@ -152,12 +152,9 @@ object GodAttributesHooks {
 	}
 	
 	@JvmStatic
-	@Hook(injectOnExit = true)
-	fun onUnequipped(ring: ItemAesirRing, stack: ItemStack, player: EntityLivingBase) {
-		if (RagnarokHandler.blockedPowers[2]) return
-		
-		player.stepHeight = 0.5f
-	}
+	@Hook(createMethod = true, returnCondition = ReturnCondition.ALWAYS)
+	fun shouldHaveStepup(ring: ItemAesirRing, wearer: EntityLivingBase, stack: ItemStack) =
+		if (RagnarokHandler.blockedPowers[2]) false else wearer.isInWater
 	
 	// block Thor ring powers
 	

@@ -6,6 +6,7 @@ import alexsocol.asjlib.math.Vector3
 import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.asm.hook.extender.SparkExtender.attachTile
+import alfheim.common.core.handler.ChunkLoadingHandler
 import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.BlockFluidBase
@@ -21,6 +22,7 @@ class TileRealityAnchor: ASJTile(), ISparkAttachable {
 	
 	override fun updateEntity() {
 		recieveMana(-50)
+		ChunkLoadingHandler.requestChunkLoad(worldObj, xCoord shr 4, zCoord shr 4)
 		
 		val spark = attachedSpark ?: return
 		val (x, y, z) = Vector3.fromTileEntityCenter(this)

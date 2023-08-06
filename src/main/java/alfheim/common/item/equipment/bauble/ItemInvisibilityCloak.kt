@@ -3,7 +3,6 @@ package alfheim.common.item.equipment.bauble
 import alexsocol.asjlib.PotionEffectU
 import alfheim.api.lib.LibResourceLocations
 import alfheim.common.core.util.AlfheimTab
-import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -11,16 +10,11 @@ import net.minecraft.potion.Potion
 import net.minecraftforge.client.event.RenderPlayerEvent
 import vazkii.botania.api.item.IBaubleRender
 import vazkii.botania.api.mana.*
-import vazkii.botania.client.core.helper.IconHelper
 
 class ItemInvisibilityCloak: ItemBaubleCloak("InvisibilityCloak"), IManaUsingItem {
 	
 	init {
 		creativeTab = AlfheimTab
-	}
-	
-	override fun registerIcons(reg: IIconRegister?) {
-		itemIcon = IconHelper.forName(reg, "cloak_invisibility")
 	}
 	
 	override fun onWornTick(stack: ItemStack, player: EntityLivingBase) {

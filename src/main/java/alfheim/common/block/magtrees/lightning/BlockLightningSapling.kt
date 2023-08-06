@@ -25,7 +25,7 @@ class BlockLightningSapling: BlockColoredSapling(name = "lightningSapling") {
 			if (canGrowHere(plantedOn)) {
 				val l = world.getBlockMetadata(x, y, z)
 				
-				val obj: WorldGenerator = HeartWoodTreeGen(5, AlfheimBlocks.lightningWood, 0, AlfheimBlocks.lightningWood, 1, AlfheimBlocks.lightningLeaves, 0)
+				val obj: WorldGenerator = HeartWoodTreeGen(5, AlfheimBlocks.lightningWood, 0, AlfheimBlocks.lightningWood, 1, AlfheimBlocks.lightningLeaves, 0, AlfheimBlocks.lightningBerry)
 				
 				world.setBlock(x, y, z, Blocks.air, 0, 4)
 				

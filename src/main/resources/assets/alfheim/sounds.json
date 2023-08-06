@@ -1,4 +1,10 @@
 {
+	"calm": {
+		"category": "player",
+		"sounds": [
+			"calm"
+		]
+	},
 	"ea": {
 		"category": "master",
 		"sounds": [
@@ -104,17 +110,20 @@
 			}
 		]
 	},
+	"warbanner": {
+		"category": "player",
+		"sounds": [
+			{
+				"name": "warbanner",
+				"stream": false
+			}
+		]
+	},
 	"wind": {
 		"category": "player",
 		"sounds": [
 			"wind1",
 			"wind2"
-		]
-	},
-	"calm": {
-		"category": "player",
-		"sounds": [
-			"calm"
 		]
 	},
 	"surtr.fireball.form": {

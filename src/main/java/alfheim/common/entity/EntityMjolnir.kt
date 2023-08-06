@@ -4,7 +4,6 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.common.core.helper.*
 import alfheim.common.item.AlfheimItems
-import alfheim.common.item.relic.ItemMjolnir
 import net.minecraft.block.*
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
@@ -13,7 +12,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.*
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import java.awt.Color
 
 class EntityMjolnir: EntityThrowable {
@@ -72,7 +70,7 @@ class EntityMjolnir: EntityThrowable {
 						val slot = ASJUtilities.getSlotWithItem(AlfheimItems.mjolnir, thrower.inventory)
 						
 						if (slot != -1)
-							thrower.inventory[slot]?.let { if (it.item === AlfheimItems.mjolnir) ItemNBTHelper.setInt(it, ItemMjolnir.TAG_COOLDOWN, 0) }
+							thrower.inventory[slot]?.let { if (it.item === AlfheimItems.mjolnir) it.cooldown = 0 }
 					}
 					
 					setDead()

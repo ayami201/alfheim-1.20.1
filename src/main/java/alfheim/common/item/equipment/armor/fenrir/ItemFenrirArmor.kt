@@ -2,7 +2,8 @@ package alfheim.common.item.equipment.armor.fenrir
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ASJRenderHelper
-import alfheim.api.ModInfo
+import alfheim.api.*
+import alfheim.api.item.ISpeedUpItem
 import alfheim.client.core.helper.IconHelper
 import alfheim.client.model.armor.ModelFenrirArmor
 import alfheim.common.core.handler.*
@@ -12,9 +13,11 @@ import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.tool.ItemFenrirClaws
 import alfheim.common.item.material.ElvenResourcesMetas
+import baubles.common.lib.PlayerHandler
 import com.google.common.collect.*
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.relauncher.*
+import net.minecraft.block.material.Material
 import net.minecraft.client.model.ModelBiped
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.*
@@ -22,20 +25,29 @@ import net.minecraft.entity.ai.attributes.AttributeModifier
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.*
-import net.minecraftforge.event.entity.living.LivingAttackEvent
-import vazkii.botania.api.mana.IManaDiscountArmor
+import net.minecraft.world.World
+import net.minecraftforge.event.entity.living.*
+import net.minecraftforge.event.entity.living.LivingEvent.*
+import vazkii.botania.api.mana.*
 import vazkii.botania.client.lib.LibResources
 import vazkii.botania.common.item.equipment.armor.manasteel.ItemManasteelArmor
+import vazkii.botania.common.item.equipment.bauble.ItemTravelBelt
 import java.util.*
 import kotlin.math.min
 
-open class ItemFenrirArmor(slot: Int, name: String): ItemManasteelArmor(slot, name), IManaDiscountArmor {
+open class ItemFenrirArmor(slot: Int, name: String): ItemManasteelArmor(slot, name, AlfheimAPI.fenrirArmor), IManaDiscountArmor, ISpeedUpItem {
 	
 	lateinit var overlay: IIcon
 	lateinit var modelsGedeon: Array<ModelBiped>
 	
 	init {
 		creativeTab = AlfheimTab
+	}
+	
+	override fun onArmorTick(world: World, player: EntityPlayer?, stack: ItemStack) = Unit // no-op
+	
+	override fun damageArmor(entity: EntityLivingBase?, stack: ItemStack, source: DamageSource?, damage: Int, slot: Int) {
+		stack.damageItem(damage, entity)
 	}
 	
 	override fun getArmorModelForSlot(entity: EntityLivingBase?, stack: ItemStack?, slot: Int): ModelBiped? {
@@ -145,11 +157,15 @@ open class ItemFenrirArmor(slot: Int, name: String): ItemManasteelArmor(slot, na
 	override fun addArmorSetDescription(stack: ItemStack?, list: List<String>) {
 		addStringToTooltip(StatCollector.translateToLocal("alfheim.armorset.fenrir.desc0"), list)
 		addStringToTooltip(StatCollector.translateToLocal("alfheim.armorset.fenrir.desc1"), list)
+		addStringToTooltip(StatCollector.translateToLocal("alfheim.armorset.fenrir.desc2"), list)
 	}
 	
 	override fun getDiscount(stack: ItemStack, slot: Int, player: EntityPlayer): Float {
 		return if (hasArmorSet(player)) 0.2f / 4f else 0f
 	}
+	
+	override fun getSpeedUp(wearer: EntityLivingBase, stack: ItemStack) =
+		if (wearer is EntityPlayer && hasSet(wearer)) 0.1f / 4 else 0f
 	
 	companion object {
 		
@@ -161,25 +177,48 @@ open class ItemFenrirArmor(slot: Int, name: String): ItemManasteelArmor(slot, na
 		
 		fun hasSet(player: EntityPlayer?) = (AlfheimItems.fenrirChestplate as ItemFenrirArmor).hasArmorSet(player)
 		
-		@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+		@SubscribeEvent(priority = EventPriority.LOWEST)
 		fun onLivingAttack(e: LivingAttackEvent) {
+			if (e.source.damageType != "player") return
+			
 			val target = e.entityLiving
 			val attacker = e.source.entity as? EntityPlayer ?: return
+			
 			val flagSet = hasSet(attacker)
-			val flagClaws = attacker.heldItem?.item is ItemFenrirClaws
-			if (e.source.damageType == "player" && ((flagSet && attacker.heldItem == null) || flagClaws)) {
+			
+			val stack = attacker.heldItem
+			if ((stack == null && flagSet) || stack?.item is ItemFenrirClaws)
 				e.source.setDamageBypassesArmor()
-				e.isCanceled = false
+			
+			if (stack?.item !is ItemFenrirClaws) return
+			
+			if (ASJUtilities.isServer && ASJUtilities.chance(if (flagSet) 20 else 5)) {
+				val amount = if (flagSet) 2 else 1
+				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDBleeding, 100, amount))
 				
-				if (ASJUtilities.chance(if (flagSet) 20 else 5))
-					target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDBleeding, 100, if (flagSet) 3 else 1))
+				if (flagSet) attacker.heal(5f)
 			}
+		}
+		
+		@SubscribeEvent
+		fun jumpBoost(e: LivingJumpEvent) {
+			val player = e.entityLiving as? EntityPlayer ?: return
+			if (hasSet(player))
+				player.motionY *= 1.5
+		}
+		
+		@SubscribeEvent
+		fun noFallDamage(e: LivingFallEvent) {
+			val player = e.entityLiving as? EntityPlayer ?: return
+			if (hasSet(player))
+				e.isCanceled = true
 		}
 		
 		@SubscribeEvent(priority = EventPriority.LOW)
 		fun keepPlayerWarm(e: SheerColdHandler.SheerColdTickEvent) {
 			if (!RagnarokHandler.checkSet(e.entityLiving, (AlfheimItems.fenrirChestplate as ItemFenrirArmor).armorSetStacks)) return
-			e.delta = min(e.delta ?: 0f, 0f) // minimal so that if other source heats more - it won't override
+			if (e.delta == null) return
+			e.delta = min(e.delta!!, 0f) // minimal so that if other source heats - it won't override
 		}
 	}
 }

@@ -4,7 +4,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.world.World
 import java.util.*
 
-class BlockStalagmite: BlockHang(Material.rock, "Stalagmite", 8) {
+class BlockStalagmite: BlockHang(Material.rock, "Stalagmite", 8, false) {
 	
 	init {
 		setBlockBounds(0.25f, 0.0f, 0.25f, 0.75f, 0.9f, 0.75f)

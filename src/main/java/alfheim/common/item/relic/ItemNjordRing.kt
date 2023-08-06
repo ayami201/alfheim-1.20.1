@@ -1,23 +1,24 @@
 package alfheim.common.item.relic
 
 import alexsocol.asjlib.*
+import alfheim.api.item.IStepupItem
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.item.AlfheimItems
 import baubles.api.BaubleType
 import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.block.material.Material
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.potion.Potion
 import net.minecraftforge.event.entity.living.LivingEvent
 import vazkii.botania.api.mana.ManaItemHandler
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.item.relic.ItemRelicBauble
 import kotlin.math.*
 
-class ItemNjordRing: ItemRelicBauble("NjordRing") {
+class ItemNjordRing: ItemRelicBauble("NjordRing"), IStepupItem {
 	
 	init {
 		eventForge()
@@ -31,16 +32,13 @@ class ItemNjordRing: ItemRelicBauble("NjordRing") {
 		val ring = getNjordRing(player) ?: return
 		
 		if (player.isInWater) {
-			player.stepHeight = 1f
-			
 			heal(player, ring)
 			waterSpeed(player, ring)
-		} else if (ItemNBTHelper.getBoolean(ring, TAG_WAS_IN_WATER, false)) {
-			player.stepHeight = 0.5f
 		}
-		
-		ItemNBTHelper.setBoolean(ring, TAG_WAS_IN_WATER, player.isInWater)
 	}
+	
+	override fun shouldHaveStepup(wearer: EntityLivingBase, stack: ItemStack) =
+		if (RagnarokHandler.blockedPowers[2]) false else wearer.isInWater
 	
 	override fun getBaubleType(stack: ItemStack?) = BaubleType.RING
 	
@@ -80,8 +78,6 @@ class ItemNjordRing: ItemRelicBauble("NjordRing") {
 	}
 	
 	companion object {
-		
-		const val TAG_WAS_IN_WATER = "wasInWater"
 		
 		fun getNjordRing(player: EntityPlayer): ItemStack? {
 			val baubles = PlayerHandler.getPlayerBaubles(player)

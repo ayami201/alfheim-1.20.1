@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.EntityRenderer
 
 class Message0dC(ty: M0dc, var type: Int = ty.ordinal) : ASJPacket(), AlfheimPacket<Message0dC> {
 	override fun handleClient() {
-		when (M0dc.values()[type]) {
+		when (M0dc.entries[type]) {
 			M0dc.MTSPELL -> {
 				val spell = AlfheimAPI.getSpellByIDs(KeyBindingHandlerClient.raceID, KeyBindingHandlerClient.spellID) ?: return
 				ASJUtilities.say(mc.thePlayer, "spell.$spell.mtinfo", *spell.usableParams)

@@ -66,7 +66,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	// - NIFLHEIM
 	var dimensionIDNiflheim = -106
 	var enableNiflheimRespawn = true
-	var niflheimBiomeIDs: IntArray = intArrayOf(152, 153, 154)
+	var niflheimBiomeIDs = intArrayOf(152, 153, 154)
 	
 	// - OTHER
 	var dimensionIDDomains = -104
@@ -108,6 +108,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	// OHTER
 	var alfheimSleepExtraCheck = true
 	var authTimeout = 200
+	var berrierTreeAllowAnyPlayer = false
 	var blackLotusDropRate = 0.05
 	var cataclysmCooldown = 600
 	var enderOreWeights = arrayOf("oreEndCoal:9000", "oreEndDiamond:500", "oreEndEmerald:500", "oreEndGold:3635", "oreEndIron:5790", "oreEndLapis:3250", "oreEndRedstone:5600", "oreDraconium:200")
@@ -201,6 +202,11 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var potionIDThrow = potionID___COUNTER++
 	var potionIDWellOLife = potionID___COUNTER++
 	var potionIDWisdom = potionID___COUNTER++
+	var potionIDWtfBerry0 = potionID___COUNTER++
+	var potionIDWtfBerry2 = potionID___COUNTER++
+	var potionIDWtfBerry3 = potionID___COUNTER++
+	var potionIDWtfBerry4 = potionID___COUNTER++
+	var potionIDWtfBerry5 = potionID___COUNTER++
 	
 	// Elven Story
 	var bonusChest = false
@@ -299,6 +305,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		
 		alfheimSleepExtraCheck = loadProp(CATEGORY_GENERAL, "alfheimSleepExtraCheck", alfheimSleepExtraCheck, false, "Set this to false if you are skipping whole day while sleeping")
 		authTimeout = loadProp(CATEGORY_GENERAL, "authTimeout", authTimeout, false, "Time limit for client to send authentication credentials", 100, 600)
+		berrierTreeAllowAnyPlayer = loadProp(CATEGORY_GENERAL, "berrierTreeAllowAnyPlayer", berrierTreeAllowAnyPlayer, false, "Set this to true to allow any player to bypass barrier trees")
 		blackLotusDropRate = loadProp(CATEGORY_GENERAL, "blackLotusDropRate", blackLotusDropRate, false, "Rate of black loti dropping from Manaseal Creepers")
 		cataclysmCooldown = loadProp(CATEGORY_GENERAL, "cataclysmCooldown", cataclysmCooldown, false, "Average ticks between cataclysms", 100, 6000)
 		enderOreWeights = loadProp(CATEGORY_GENERAL, "enderOreWeights", enderOreWeights, false, "Map of OreDict name to ore weight (more weight - more chace to spawn) for Orechid Endium")
@@ -390,6 +397,11 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDThrow = loadProp(CATEGORY_MMOP, "potionIDThrow", potionIDThrow, true, "Potion id for Throw")
 		potionIDWellOLife = loadProp(CATEGORY_MMOP, "potionIDWellOLife", potionIDWellOLife, true, "Potion id for Well'o'Life")
 		potionIDWisdom = loadProp(CATEGORY_POTIONS, "potionIDWisdom", potionIDWisdom, true, "Potion id for Wisdom")
+		potionIDWtfBerry0 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry0", potionIDWtfBerry0, true, "Potion id for Barrier Berry")
+		potionIDWtfBerry2 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry2", potionIDWtfBerry2, true, "Potion id for Redstone Berry")
+		potionIDWtfBerry3 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry3", potionIDWtfBerry3, true, "Potion id for Lightning Berry")
+		potionIDWtfBerry4 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry4", potionIDWtfBerry4, true, "Potion id for Nether Berry")
+		potionIDWtfBerry5 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry5", potionIDWtfBerry5, true, "Potion id for Sealing Berry")
 		
 		bonusChest = loadProp(CATEGORY_WORLDGEN_A, "bonusChest", bonusChest, false, "Set this to true to generate bonus chest in ESM sky box")
 		bothSpawnStructures = loadProp(CATEGORY_ESMODE, "bothSpawnStructures", bothSpawnStructures, false, "Set this to true to generate both race room inside and portal on top of Yggdrasil on zero coords of Alfheim")

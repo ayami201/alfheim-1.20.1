@@ -1,6 +1,7 @@
 package alfheim.common.core.registry
 
 import alexsocol.asjlib.ASJUtilities.registerEntity
+import alexsocol.asjlib.eventForge
 import alfheim.api.*
 import alfheim.api.AlfheimAPI.addPink
 import alfheim.api.AlfheimAPI.registerAnomaly
@@ -20,6 +21,7 @@ import alfheim.common.entity.spell.*
 import alfheim.common.item.*
 import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.potion.*
+import alfheim.common.potion.berries.*
 import alfheim.common.spell.darkness.*
 import alfheim.common.spell.earth.*
 import alfheim.common.spell.fire.*
@@ -62,12 +64,9 @@ object AlfheimRegistry {
 		
 		val (w, n, x) = AlfheimConfigHandler.voidCreeper
 		
-		for (i in BiomeGenBase.getBiomeGenArray()) {
-			if (i != null && !AlfheimConfigHandler.voidCreepBiomeBlackList.contains(i.biomeID))
-				EntityRegistry.addSpawn(EntityVoidCreeper::class.java, w, n, x, EnumCreatureType.monster, i)
-		}
+		EntityRegistry.addSpawn(EntityVoidCreeper::class.java, w, n, x, EnumCreatureType.monster, *BiomeGenBase.getBiomeGenArray().filter { it != null && it.biomeID !in AlfheimConfigHandler.voidCreepBiomeBlackList }.toTypedArray())
 		
-		registerEnderOres()
+		registerFlowerOres()
 	}
 	
 	private fun registerPotions() {
@@ -81,7 +80,7 @@ object AlfheimRegistry {
 		PotionGoldRush
 		PotionAlfheim(AlfheimConfigHandler.potionIDIceLens, "icelens", false, 0xDDFFFF)
 		PotionLeftFlame
-		PotionLightningShield
+		PotionLightningShield.eventForge()
 		PotionManaVoid
 		PotionAlfheim(AlfheimConfigHandler.potionIDNineLifes, "nineLifes", false, 0xDD2222)
 		PotionNinja
@@ -97,6 +96,11 @@ object AlfheimRegistry {
 		PotionThrow
 		PotionWellOLife
 		PotionAlfheim(AlfheimConfigHandler.potionIDWisdom, "wisdom", false, 0xFFC880)
+		PotionWTFBerry0 // barrier
+		PotionWTFBerry2 // redstone
+		PotionWTFBerry3.eventForge() // lightning
+		PotionWTFBerry4.eventForge() // nether
+		PotionWTFBerry5.eventForge() // sealing
 	}
 	
 	var nextEntityID = 0
@@ -125,6 +129,7 @@ object AlfheimRegistry {
 		registerEntity(EntityCharge::class.java, "Charge", nextEntityID)
 		registerEntity(EntityEarthquake::class.java, "Earthquake", nextEntityID)
 		registerEntity(EntityEarthquakeFracture::class.java, "EarthquakeFracture", nextEntityID)
+		registerEntity(EntityFallingHang::class.java, "FallingHang", nextEntityID)
 		registerEntity(EntityFireAura::class.java, "FireAura", nextEntityID)
 		registerEntity(EntityFireTornado::class.java, "FireTornado", nextEntityID)
 		registerEntity(EntityFloatingIsland::class.java, "FloatingIsland", nextEntityID)
@@ -142,6 +147,7 @@ object AlfheimRegistry {
 		registerEntity(EntityThrowableItem::class.java, "ThrownItem", nextEntityID)
 		registerEntity(EntityThrownPotion::class.java, "ThrownPotion", nextEntityID)
 		registerEntity(EntityThunderChakram::class.java, "ThunderChakram", nextEntityID)
+		registerEntity(EntityWarBanner::class.java, "WarBanner", nextEntityID)
 		
 		registerEntity(EntityGleipnir::class.java, "Gleipnir", nextEntityID)
 		registerEntity(EntityMjolnir::class.java, "Mjolnir", nextEntityID)
@@ -189,6 +195,7 @@ object AlfheimRegistry {
 		registerTile(TileAnomalyHarvester::class.java, "AnomalyHarvester")
 		registerTile(TileAnyavil::class.java, "Anyavil")
 		registerTile(TileBarrel::class.java, "Barrel")
+		registerTile(TileBottomlessChest::class.java, "BottomlessChest")
 		registerTile(TileCorporeaAutocrafter::class.java, "CorporeaAutocrafter")
 		registerTile(TileCorporeaInjector::class.java, "CorporeaInjector")
 		registerTile(TileCorporeaRat::class.java, "CorporeaRat")
@@ -198,6 +205,7 @@ object AlfheimRegistry {
 		registerTile(TileFloatingFlowerRainbow::class.java, "miniIslandRainbow")
 		registerTile(TileHeadFlugel::class.java, "HeadFlugel")
 		registerTile(TileHeadMiku::class.java, "HeadMiku")
+		registerTile(TileIcyGeyser::class.java, "IcyGeyser")
 		registerTile(TileManaAccelerator::class.java, "ItemHolder")
 		registerTile(TileManaInfuser::class.java, "ManaInfuser")
 		registerTile(TilePowerStone::class.java, "PowerStone")
@@ -206,6 +214,7 @@ object AlfheimRegistry {
 		registerTile(TileRift::class.java, "Rift")
 		registerTile(TileSpire::class.java, "Spire")
 		registerTile(TileTradePortal::class.java, "TradePortal")
+		registerTile(TileTreeBerry::class.java, "TreeBerry")
 		registerTile(TileVafthrudnirSoul::class.java, "VafthrudnirSoul")
 		registerTile(TileYggFlower::class.java, "YggFlower")
 		
@@ -221,6 +230,7 @@ object AlfheimRegistry {
 		registerTile(TileSchemaAnnihilator::class.java, "SchemaAnnihilator")
 		registerTile(TileTreeCook::class.java, "TreeCook")
 		registerTile(TileTreeCrafter::class.java, "TreeCrafter")
+		registerTile(TileTreeWind::class.java, "TreeWind")
 	}
 	
 	private fun registerTile(tileEntityClass: Class<out TileEntity>, id: String) {
@@ -441,11 +451,18 @@ object AlfheimRegistry {
 		addPink(ItemStack(AlfheimItems.wireAxe), 81)
 	}
 	
-	private fun registerEnderOres() {
+	private fun registerFlowerOres() {
 		AlfheimConfigHandler.enderOreWeights.forEach {
 			val (name, weight) = it.split(':')
 			AlfheimAPI.addOreWeightEnd(name, weight.toInt())
 		}
+		
+		AlfheimAPI.addOreWeightAlfheim("oreDragonstone", 2167)
+		AlfheimAPI.addOreWeightAlfheim("oreElementium", 6686)
+		AlfheimAPI.addOreWeightAlfheim("oreQuartzElven", 2218)
+		AlfheimAPI.addOreWeightAlfheim("oreGoldAlfheim", 3658)
+		AlfheimAPI.addOreWeightAlfheim("oreIffesal", 181)
+		AlfheimAPI.addOreWeightAlfheim("oreLapisAlfheim", 1153)
 		
 //		// Vanilla
 //		AlfheimAPI.addOreWeightEnd("oreEndCoal", 9000)

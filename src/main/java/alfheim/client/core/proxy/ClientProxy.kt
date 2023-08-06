@@ -82,11 +82,6 @@ object ClientProxy : CommonProxy() {
 		MinecraftForgeClient.registerItemRenderer(AlfheimItems.thrymAxe, RenderItemThrymAxe)
 		MinecraftForgeClient.registerItemRenderer(AlfheimBlocks.yggFlower.toItem(), RenderItemYggFlower)
 		
-		if (!AlfheimConfigHandler.minimalGraphics) {
-			MinecraftForgeClient.registerItemRenderer(AlfheimItems.mjolnir, RenderItemMjolnir)
-			MinecraftForgeClient.registerItemRenderer(AlfheimItems.snowSword, RenderItemSnowSword)
-		}
-		
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idAnyavil, RenderBlockAnyavil)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idBarrel, RenderBlockBarrel)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idDomainDoor, RenderBlockDomainLobby)
@@ -111,6 +106,7 @@ object ClientProxy : CommonProxy() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileFloatingFlowerRainbow::class.java, TileEntityRendererDispatcher.instance.mapSpecialRenderers[TileFloatingFlower::class.java] as RenderTileFloatingFlower)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileHeadFlugel::class.java, RenderTileHeadFlugel)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileHeadMiku::class.java, RenderTileHeadMiku)
+		ClientRegistry.bindTileEntitySpecialRenderer(TileIcyGeyser::class.java, RenderTileIcyGeyser)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileItemDisplay::class.java, RenderTileItemDisplay)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileManaAccelerator::class.java, RenderTileManaAccelerator)
 		ClientRegistry.bindTileEntitySpecialRenderer(TilePowerStone::class.java, RenderTilePowerStone)
@@ -122,6 +118,7 @@ object ClientProxy : CommonProxy() {
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityAlfheimPixie::class.java, RenderEntityAlfheimPixie)
 		RenderingRegistry.registerEntityRenderingHandler(EntityBlackBolt::class.java, RenderEntityBlackBolt)
+		RenderingRegistry.registerEntityRenderingHandler(EntityFallingHang::class.java, RenderEntityFallingHang)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFloatingIsland::class.java, RenderEntityFloatingIsland)
 		RenderingRegistry.registerEntityRenderingHandler(EntityButterfly::class.java, RenderEntityButterfly)
 		RenderingRegistry.registerEntityRenderingHandler(EntityDedMoroz::class.java, RenderEntityDedMoroz)
@@ -158,11 +155,18 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrym::class.java, RenderEntityThrym)
 		RenderingRegistry.registerEntityRenderingHandler(EntityThunderChakram::class.java, RenderEntityThunderChakram)
 		RenderingRegistry.registerEntityRenderingHandler(EntityVoidCreeper::class.java, RenderEntityGrieferCreeper)
+		RenderingRegistry.registerEntityRenderingHandler(EntityWarBanner::class.java, RenderEntityWarBanner)
 		RenderingRegistry.registerEntityRenderingHandler(FakeLightning::class.java, RenderFakeLightning)
 		
 		RenderingRegistry.registerBlockHandler(RenderBlockColoredDoubleGrass)
 		RenderingRegistry.registerBlockHandler(MultipassRenderer)
 		RenderingRegistry.registerBlockHandler(RenderBlockHopper)
+		
+		if (!AlfheimConfigHandler.minimalGraphics) {
+			MinecraftForgeClient.registerItemRenderer(AlfheimItems.mjolnir, RenderItemMjolnir)
+			MinecraftForgeClient.registerItemRenderer(AlfheimItems.snowSword, RenderItemSnowSword)
+			ClientRegistry.bindTileEntitySpecialRenderer(TileTreeBerry::class.java, RenderTileTreeBerry)
+		}
 	}
 	
 	override fun registerKeyBinds() {
@@ -226,6 +230,13 @@ object ClientProxy : CommonProxy() {
 //		if (ClientProxy.noclipEnabled) sparkle.noClip = true
 //		if (ClientProxy.corruptSparkle) sparkle.corrupt = true
 		mc.effectRenderer.addEffect(sparkle)
+	}
+	
+	override fun voxelFX(world: World, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float) {
+		if (!doParticle()) return
+		val voxel = EntityVoxelFX(world, x, y, z, r, g, b)
+		
+		mc.effectRenderer.addEffect(voxel)
 	}
 	
 	override fun doParticle() = if (!ConfigHandler.useVanillaParticleLimiter) true else Math.random() < 1f - 0.4f * mc.gameSettings.particleSetting

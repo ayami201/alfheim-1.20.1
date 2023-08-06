@@ -104,7 +104,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 		set(regens) = dataWatcher.updateObject(28, regens)
 	
 	var aiTask: AITask
-		get() = AITask.values()[dataWatcher.getWatchableObjectInt(27)]
+		get() = AITask.entries[dataWatcher.getWatchableObjectInt(27)]
 		set(ai) {
 //			if (ModInfo.DEV) for (player in playersAround) ASJUtilities.say(player, "Set AI command to $ai")
 			dataWatcher.updateObject(27, ai.ordinal)
@@ -606,7 +606,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 	
 	fun nextTask(): AITask {
 		if (stage < STAGE_AGGRO) return AITask.NONE
-		val next = AITask.values()[rand.nextInt(AITask.values().size)]
+		val next = AITask.entries[rand.nextInt(AITask.entries.size)]
 		if (/*next.instant && getAITask().instant &&*/ aiTask == next) return nextTask()
 		if (Math.random() < next.chance) return nextTask()
 		return if (stage < next.stage) nextTask() else next
@@ -657,7 +657,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 		else
 			1
 		
-		aiTask = AITask.values()[nbt.getInteger(TAG_AI_TASK)]
+		aiTask = AITask.entries.toTypedArray()[nbt.getInteger(TAG_AI_TASK)]
 		
 		//if (ModInfo.DEV) ASJUtilities.log("Scrolling AIs for " + nbt.getString(TAG_AI));
 		for (e in tasks.taskEntries) {

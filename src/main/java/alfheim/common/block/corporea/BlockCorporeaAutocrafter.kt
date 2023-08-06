@@ -42,8 +42,20 @@ class BlockCorporeaAutocrafter: BlockContainerMod(Material.iron), ILexiconable, 
 	override fun onBlockClicked(world: World, x: Int, y: Int, z: Int, player: EntityPlayer) {
 		(world.getTileEntity(x, y, z) as? TileCorporeaAutocrafter)?.let {
 			it.craftResult = max(1, it.craftResult + if (player.isSneaking) -1 else 1)
-			if (!world.isRemote) ASJUtilities.say(player, "alfheimmisc.craftresult", it.craftResult)
+			if (!world.isRemote) ASJUtilities.say(player, "alfheimmisc.craftResult", it.craftResult)
 		}
+	}
+	
+	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+		if (player.heldItem != null) return false
+		
+		(world.getTileEntity(x, y, z) as? TileCorporeaAutocrafter)?.let {
+			it.oneAtATime = !it.oneAtATime
+			if (!world.isRemote) ASJUtilities.say(player, "alfheimmisc.craftStrategy.${it.oneAtATime}")
+			return true
+		}
+		
+		return false
 	}
 	
 	override fun onUsedByWand(player: EntityPlayer?, stack: ItemStack?, world: World, x: Int, y: Int, z: Int, side: Int): Boolean {

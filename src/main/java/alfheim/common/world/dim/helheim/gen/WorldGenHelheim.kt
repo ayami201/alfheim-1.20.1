@@ -56,7 +56,7 @@ object WorldGenHelheim: IWorldGenerator {
 		return true
 	}
 	
-	val soulColors = EnumRace.values().map { it.rgbColor }
+	val soulColors = EnumRace.entries.map { it.rgbColor }
 	
 	fun genStairs(world: World) {
 		val stairs = SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/helstairs")

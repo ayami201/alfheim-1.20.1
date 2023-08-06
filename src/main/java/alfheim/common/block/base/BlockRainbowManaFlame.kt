@@ -37,7 +37,7 @@ class BlockRainbowManaFlame: BlockMod(Material.cloth), ILexiconable {
 				val name: String
 				val eColor: EnumChatFormatting
 				if (this !is TileVafthrudnirSoul) {
-					val race = EnumRace.values().firstOrNull { it.rgbColor == color } ?: return@apply
+					val race = EnumRace.entries.firstOrNull { it.rgbColor == color } ?: return@apply
 					name = StatCollector.translateToLocal("tile.lostsoul.$race.name")
 					eColor = race.enumColor
 				} else {

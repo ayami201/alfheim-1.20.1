@@ -12,10 +12,6 @@ import vazkii.botania.client.core.helper.IconHelper
 
 class ItemAesirCloak: ItemBaubleCloak("AesirCloak"), IManaUsingItem {
 	
-	override fun registerIcons(reg: IIconRegister?) {
-		itemIcon = IconHelper.forName(reg, "cloak_aesir")
-	}
-	
 	override fun getUnlocalizedNameInefficiently(par1ItemStack: ItemStack) =
 		super.getUnlocalizedNameInefficiently(par1ItemStack).replace("item\\.botania:".toRegex(), "item.${ModInfo.MODID}:")
 	

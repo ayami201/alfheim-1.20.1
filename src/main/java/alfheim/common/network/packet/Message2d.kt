@@ -15,7 +15,7 @@ import net.minecraft.entity.EntityLivingBase
 
 class Message2d(ty: M2d, var data1: Double, var data2: Double, var type: Int = ty.ordinal) : ASJPacket(), AlfheimPacket<Message2d> {
 	override fun handleClient() {
-		when (M2d.values()[type]) {
+		when (M2d.entries[type]) {
 			M2d.ATTRIBUTE -> {
 				when (data1.I) {
 					0 -> mc.thePlayer.raceID = data2.I
@@ -24,7 +24,7 @@ class Message2d(ty: M2d, var data1: Double, var data2: Double, var type: Int = t
 			}
 
 			M2d.COOLDOWN -> {
-				when (if (data2 > 0) SpellBase.SpellCastResult.OK else SpellBase.SpellCastResult.values()[(-data2).I]) {
+				when (if (data2 > 0) SpellBase.SpellCastResult.OK else SpellBase.SpellCastResult.entries[(-data2).I]) {
 					SpellBase.SpellCastResult.DESYNC -> throw IllegalArgumentException("Client-server spells desynchronization. Not found spell for ${EnumRace[data1.I shr 28 and 0xF]} with id ${data1.I and 0xFFFFFFF}")
 					SpellBase.SpellCastResult.NOMANA -> ASJUtilities.say(mc.thePlayer, "alfheimmisc.cast.nomana")
 					SpellBase.SpellCastResult.NOTALLOW -> ASJUtilities.say(mc.thePlayer, "alfheimmisc.cast.notallow")

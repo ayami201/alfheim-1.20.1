@@ -123,7 +123,7 @@ class EntityAlfheimPixie(world: World): EntityFlyingCreature(world), IElementalE
 		val flagTime = (worldObj.worldTime % 24000L).I in ((0..13333) + (22666..23999))
 		var flagBiome = false
 		
-		val chunk = (worldObj.provider as? WE_WorldProvider)?.cp
+		val chunk = (worldObj.provider as? WE_WorldProvider)?.chunkProvider
 		if (chunk != null) {
 			val biomeAt = WE_Biome.getBiomeAt(chunk, posX.mfloor(), posZ.mfloor())
 			flagBiome = biomeAt.isEqualTo(BiomeField) || biomeAt.isEqualTo(BiomeIslandGiantFlowers)

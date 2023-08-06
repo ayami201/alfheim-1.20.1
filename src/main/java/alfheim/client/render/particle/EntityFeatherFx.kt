@@ -19,11 +19,6 @@ class EntityFeatherFx(world: World, x: Double, y: Double, z: Double, colour: Int
 	
 	var rotationSpeed: Float
 	var f0 = 0f
-	var f1 = 0f
-	var f2 = 0f
-	var f3 = 0f
-	var f4 = 0f
-	var f5 = 0f
 	
 	init {
 		posX = x
@@ -67,11 +62,6 @@ class EntityFeatherFx(world: World, x: Double, y: Double, z: Double, colour: Int
 	
 	override fun renderParticle(tessellator: Tessellator, f0: Float, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float) {
 		this.f0 = f0
-		this.f1 = f1
-		this.f2 = f2
-		this.f3 = f3
-		this.f4 = f4
-		this.f5 = f5
 		renderQueue.add(this)
 	}
 	

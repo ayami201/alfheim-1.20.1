@@ -25,6 +25,7 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 	var request: Any? = null
 	var leftToCraft = 0
 	var requestMissing = 0
+	var prevCount = -1
 	var requestX = 0
 	var requestY = -1
 	var requestZ = 0
@@ -33,6 +34,9 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 	
 	/** how many items will be produced from this autocrafter */
 	var craftResult = 1
+	
+	/** param for automation something that cannot produce everything on one go */
+	var oneAtATime = false
 	
 	var prevRedstone = false
 	
@@ -66,6 +70,7 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 		
 		request = req
 		requestMissing = missing
+		prevCount = -1
 		leftToCraft = MathHelper.ceiling_float_int(missing / craftResult.F)
 		
 		requestX = x
@@ -86,10 +91,11 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 		
 		if (!pendingRequest) return
 		
-		if (leftToCraft > 0)
-			return doAutocraft().also {
-				ASJUtilities.dispatchTEToNearbyPlayers(this)
-			}
+		if (!oneAtATime && leftToCraft > 0) {
+			doAutocraft()
+			ASJUtilities.dispatchTEToNearbyPlayers(this)
+			return
+		}
 		
 		val spark = spark
 		if (spark == null || spark.master == null) return
@@ -100,15 +106,22 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 		if (count >= requestMissing) {
 			fulfillRequest()
 			ASJUtilities.dispatchTEToNearbyPlayers(this)
+			return
+		} else if (!oneAtATime) return
+		
+		if (waitingForIngredient) return
+		
+		if (prevCount != count) {
+			prevCount = count
+			doAutocraft()
+			ASJUtilities.dispatchTEToNearbyPlayers(this)
 		}
 	}
 	
 	var buffer = arrayOfNulls<ItemStack?>(27)
 	var waitingForIngredient
 		get() = state == WAITING
-		set(value) {
-			state = if (value) WAITING else OK
-		}
+		set(value) = changeState(if (value) WAITING else OK)
 	
 	/** Used for HUD only */
 	var awaitedIngredient: ItemStack? = null
@@ -193,12 +206,14 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 	
 	fun changeState(state: EnumState) {
 		this.state = state
+		if (state != OK) prevCount = -1
 	}
 	
 	fun onWanded(): Boolean {
 		pendingRequest = false
 		request = null
 		requestMissing = 0
+		prevCount = -1
 		leftToCraft = 0
 		requestX = 0
 		requestY = -1
@@ -258,6 +273,7 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 		super.writeCustomNBT(nbt)
 		
 		nbt.setInteger(TAG_CRAFT_RESULT, craftResult)
+		nbt.setBoolean(TAG_ONE_AT_A_TIME, oneAtATime)
 		
 		nbt.setBoolean(TAG_PENDING_REQUEST, pendingRequest)
 		
@@ -276,6 +292,7 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 		}
 		
 		nbt.setInteger(TAG_REQUEST_COUNT, requestMissing)
+		nbt.setInteger(TAG_COUNT_PREV, prevCount)
 		nbt.setInteger(TAG_LEFT_TO_CRAFT, leftToCraft)
 		
 		nbt.setInteger(TAG_REQUEST_X, requestX)
@@ -301,6 +318,7 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 		super.readCustomNBT(nbt)
 		
 		craftResult = nbt.getInteger(TAG_CRAFT_RESULT)
+		oneAtATime = nbt.getBoolean(TAG_ONE_AT_A_TIME)
 		
 		pendingRequest = nbt.getBoolean(TAG_PENDING_REQUEST)
 		
@@ -311,6 +329,7 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 		}
 		
 		requestMissing = nbt.getInteger(TAG_REQUEST_COUNT)
+		prevCount = nbt.getInteger(TAG_COUNT_PREV)
 		leftToCraft = nbt.getInteger(TAG_LEFT_TO_CRAFT)
 		
 		requestX = nbt.getInteger(TAG_REQUEST_X)
@@ -335,11 +354,13 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 	companion object {
 		
 		const val TAG_CRAFT_RESULT = "craftResult"
+		const val TAG_ONE_AT_A_TIME = "oneAtATime"
 		
 		const val TAG_PENDING_REQUEST = "pendingRequest"
 		const val TAG_REQUEST_TYPE = "requestType"
 		const val TAG_REQUEST_CONTENTS = "requestContents"
 		const val TAG_REQUEST_COUNT = "requestCount"
+		const val TAG_COUNT_PREV = "prevRequestCount"
 		const val TAG_LEFT_TO_CRAFT = "leftToCraft"
 		const val TAG_REQUEST_X = "requestX"
 		const val TAG_REQUEST_Y = "requestY"

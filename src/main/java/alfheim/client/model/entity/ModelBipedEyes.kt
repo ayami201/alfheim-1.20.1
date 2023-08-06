@@ -1,6 +1,7 @@
 package alfheim.client.model.entity
 
 import alexsocol.asjlib.mc
+import alexsocol.asjlib.render.ASJRenderHelper
 import net.minecraft.client.model.*
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.entity.Entity
@@ -19,12 +20,7 @@ class ModelBipedEyes(val textureEyes: ResourceLocation): ModelBiped() {
 		
 		mc.renderEngine.bindTexture(textureEyes)
 		
-		glDisable(GL_LIGHTING)
-		
-		val lastX = OpenGlHelper.lastBrightnessX
-		val lastY = OpenGlHelper.lastBrightnessY
-		
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f)
+		ASJRenderHelper.setGlow()
 		
 		if (isChild) {
 			glPushMatrix()
@@ -36,8 +32,7 @@ class ModelBipedEyes(val textureEyes: ResourceLocation): ModelBiped() {
 			bipedEyes.render(f5)
 		}
 		
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastX, lastY)
-		glEnable(GL_LIGHTING)
+		ASJRenderHelper.discard()
 	}
 	
 	override fun setRotationAngles(f: Float, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float, entity: Entity?) {

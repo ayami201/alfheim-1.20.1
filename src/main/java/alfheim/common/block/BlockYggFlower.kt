@@ -1,15 +1,15 @@
 package alfheim.common.block
 
-import alexsocol.asjlib.extendables.block.BlockModContainer
 import alfheim.api.ModInfo
 import alfheim.common.block.alt.BlockAltLeaves
+import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileYggFlower
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.world.*
 
-class BlockYggFlower: BlockModContainer(Material.plants) {
+class BlockYggFlower: BlockContainerMod(Material.plants) {
 	
 	init {
 		setBlockBounds(0f, 0f, 0f, 1f, 0.25f, 1f)

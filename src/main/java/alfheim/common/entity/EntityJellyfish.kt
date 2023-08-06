@@ -146,7 +146,7 @@ class EntityJellyfish(world: World): EntityWaterMob(world), IElementalEntity {
 	override fun getCanSpawnHere(): Boolean {
 		var flagBiome = false
 		
-		val chunk = (worldObj.provider as? WE_WorldProvider)?.cp
+		val chunk = (worldObj.provider as? WE_WorldProvider)?.chunkProvider
 		if (chunk != null)
 			flagBiome = WE_Biome.getBiomeAt(chunk, posX.mfloor().toLong(), posZ.mfloor().toLong()).isEqualTo(BiomeRiver)
 		

@@ -39,7 +39,7 @@ import kotlin.math.sin
 
 class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IFuelHandler {
 	
-	val texture = arrayOfNulls<IIcon>(values().size)
+	val texture = arrayOfNulls<IIcon>(entries.size)
 	
 	init {
 		setHasSubtypes(true)
@@ -97,7 +97,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	val riftIcons = arrayOf(RiftShardGinnungagap.I, RiftShardMuspelheim.I, RiftShardNiflheim.I)
 	
 	override fun registerIcons(reg: IIconRegister) {
-		for (type in values())
+		for (type in entries)
 			if (!isInterpolated(type.I) && type.I !in riftIcons)
 				texture[type.I] = IconHelper.forName(reg, type.toString(), "materials")
 		
@@ -120,7 +120,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	@SideOnly(Side.CLIENT)
 	fun loadTextures(event: TextureStitchEvent.Pre) {
 		if (event.map.textureType == 1)
-			for (type in values())
+			for (type in entries)
 				if (isInterpolated(type.I))
 					texture[type.I] = InterpolatedIconHelper.forName(event.map, type.toString(), "materials")
 	}
@@ -142,7 +142,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 			"item.${of(stack.meta).toString()}"
 	
 	override fun getSubItems(item: Item, tab: CreativeTabs?, list: MutableList<Any?>) {
-		for (type in values())
+		for (type in entries)
 			if (type !in ElvenResourcesMetas.displayBlackList)
 				list.add(type.stack)
 	}
@@ -356,6 +356,7 @@ enum class ElvenResourcesMetas {
 	RiftShardMuspelheim,
 	RiftShardNiflheim,
 	DomainKey,
+	SaveIvy,
 	;
 	
 	val I get() = ordinal
@@ -368,6 +369,6 @@ enum class ElvenResourcesMetas {
 		
 		val displayBlackList = arrayOf(ElvenWeed, WisdomBottle)
 		
-		fun of(meta: Int) = values().getOrNull(meta)
+		fun of(meta: Int) = entries.getOrNull(meta)
 	}
 }

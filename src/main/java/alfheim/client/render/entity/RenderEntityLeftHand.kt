@@ -50,7 +50,7 @@ object RenderEntityLeftHand {
 		glColor4f(1f, 1f, 1f, 1f)
 		
 		glPushMatrix()
-		render.invoke(e)
+		render(e)
 		glPopMatrix()
 		
 		glPopMatrix()

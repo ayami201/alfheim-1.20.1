@@ -81,7 +81,7 @@ class EntityButterfly(world: World): EntityFlyingCreature(world) {
 				Botania.proxy.sparkleFX(worldObj, posX + Math.random() * width - width / 2, posY + Math.random() * height - height / 2, posZ + Math.random() * width - width / 2, color.red.F, color.green.F, color.blue.F, 0.1f + Math.random().F * 0.25f * if (isGiant) 10 else 1, 12)
 			}
 		} else if (!sizeSet)  {
-			(worldObj.provider as? WE_WorldProvider)?.cp?.let {
+			(worldObj.provider as? WE_WorldProvider)?.chunkProvider?.let {
 				if (WE_Biome.getBiomeAt(it, posX.mfloor(), posZ.mfloor()).isEqualTo(BiomeIslandGiantFlowers)) {
 					isGiant = true
 					getEntityAttribute(SharedMonsterAttributes.maxHealth).baseValue = 20.0
@@ -137,7 +137,7 @@ class EntityButterfly(world: World): EntityFlyingCreature(world) {
 		val flagTime = (worldObj.worldTime % 24000L).I in ((0..13333) + (22666..23999))
 		var flagBiome = false
 		
-		val chunk = (worldObj.provider as? WE_WorldProvider)?.cp
+		val chunk = (worldObj.provider as? WE_WorldProvider)?.chunkProvider
 		if (chunk != null) {
 			val biomeAt = WE_Biome.getBiomeAt(chunk, posX.mfloor(), posZ.mfloor())
 			flagBiome = biomeAt.isEqualTo(BiomeField) || biomeAt.isEqualTo(BiomeIslandGiantFlowers)

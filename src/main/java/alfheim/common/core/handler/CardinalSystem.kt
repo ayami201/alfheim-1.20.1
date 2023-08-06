@@ -230,7 +230,7 @@ object CardinalSystem {
 		fun know(player: EntityPlayerMP, kn: Knowledge) = forPlayer(player).knowledge.contains("$kn")
 		
 		fun transfer(player: EntityPlayerMP) {
-			for (kn in Knowledge.values()) if (know(player, kn)) NetworkService.sendTo(Message1d(M1d.KNOWLEDGE, kn.ordinal.D), player)
+			for (kn in Knowledge.entries) if (know(player, kn)) NetworkService.sendTo(Message1d(M1d.KNOWLEDGE, kn.ordinal.D), player)
 		}
 		
 		enum class Knowledge {
@@ -248,7 +248,7 @@ object CardinalSystem {
 	object SpellCastingSystem {
 		
 		fun transfer(player: EntityPlayerMP) {
-			for (affinity in EnumRace.values())
+			for (affinity in EnumRace.entries)
 				for (spell in AlfheimAPI.getSpellsFor(affinity))
 					NetworkService.sendTo(Message2d(M2d.COOLDOWN, (affinity.ordinal and 0xF shl 28 or (AlfheimAPI.getSpellID(spell) and 0xFFFFFFF)).D, getCoolDown(player, spell).D), player)
 		}
@@ -855,7 +855,7 @@ object CardinalSystem {
 					companion object {
 						
 						fun typeOf(e: EntityLivingBase) = when (e) {
-							is EntityPlayer     -> values()[e.raceID]
+							is EntityPlayer     -> entries[e.raceID]
 							is IBossDisplayData -> BOSS
 							is INpc             -> NPC
 							else                -> MOB
@@ -1156,7 +1156,7 @@ object CardinalSystem {
 		var gender = false
 		var customSkin = false
 		
-		var reputation = Array(EnumRace.values().size) { 150 }
+		var reputation = Array(EnumRace.entries.size) { 150 }
 		
 		@Transient
 		var quadStage = 0

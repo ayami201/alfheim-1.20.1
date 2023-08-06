@@ -14,6 +14,6 @@ class BlockIcicle: BlockHang(Material.ice, "Icicle", 4) {
 	
 	override fun canBlockStay(world: World, x: Int, y: Int, z: Int): Boolean {
 		val mat = world.getBlock(x, y + 1, z).material
-		return mat === Material.snow || mat === Material.craftedSnow || mat === Material.ice || mat === Material.packedIce
+		return mat === Material.ice || mat === Material.packedIce
 	}
 }

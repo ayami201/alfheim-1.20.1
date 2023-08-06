@@ -27,7 +27,7 @@ import kotlin.math.*
 object ElementalDamageHandler {
 	
 	init {
-		for (ed in ElementalDamage.values()) require(ElementalDamageBridge.valueOf("${ed}_").real == ed)
+		for (ed in ElementalDamage.entries) require(ElementalDamageBridge.valueOf("${ed}_").real == ed)
 		
 		DamageSource.inWall.setTo(EARTH)
 		DamageSource.drown.setTo(WATER)
@@ -143,7 +143,7 @@ object ElementalDamageHandler {
 
 private enum class ElementalDamageBridge {
 	COMMON_, FIRE_, WATER_, AIR_, EARTH_, ICE_, ELECTRIC_, NATURE_, LIGHTNESS_, DARKNESS_, PSYCHIC_, ALIEN_;
-	val real get() = ElementalDamage.values()[ordinal]
+	val real get() = ElementalDamage.entries[ordinal]
 }
 
 enum class ElementalDamage(private val x2: Array<ElementalDamageBridge>, private val x05: Array<ElementalDamageBridge>) {
@@ -161,11 +161,11 @@ enum class ElementalDamage(private val x2: Array<ElementalDamageBridge>, private
 	ALIEN(arrayOf(PSYCHIC_), arrayOf(DARKNESS_));
 	
 	fun isVulnerable(type: ElementalDamage): Boolean {
-		return ElementalDamageBridge.values()[type.ordinal] in x2
+		return ElementalDamageBridge.entries.toTypedArray()[type.ordinal] in x2
 	}
 	
 	fun isResistant(type: ElementalDamage): Boolean {
-		return ElementalDamageBridge.values()[type.ordinal] in x05
+		return ElementalDamageBridge.entries.toTypedArray()[type.ordinal] in x05
 	}
 	
 	fun isImmune(type: ElementalDamage): Boolean {
@@ -194,6 +194,6 @@ fun DamageSource.elements(): EnumSet<ElementalDamage> {
 		"basalz" -> EnumSet.of(EARTH)
 		"blitz"  -> EnumSet.of(ELECTRIC)
 		"blizz"  -> EnumSet.of(ICE)
-		else     -> EnumSet.copyOf(ElementalDamage.values().filter { isOf(it) })
+		else     -> EnumSet.copyOf(ElementalDamage.entries.filter { isOf(it) })
 	}
 }

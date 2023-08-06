@@ -63,6 +63,8 @@ class WorldProviderHelheim: WE_WorldProvider() {
 		cp.decorateChunkGen_List.add(WorldGenHelheim)
 	}
 	
+	override fun getDefaultBiome() = BiomeHelheim
+	
 	override fun generateLightBrightnessTable() {
 		val modifier = 0.0f
 		for (steps in 0..15) {

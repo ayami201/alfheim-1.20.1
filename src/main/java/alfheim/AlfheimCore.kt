@@ -13,13 +13,11 @@ import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
 import alfheim.common.integration.travellersgear.TravellersGearAlfheimConfig
 import alfheim.common.integration.waila.WAILAAlfheimConfig
 import alfheim.common.network.*
-import alfheim.common.network.packet.*
 import cpw.mods.fml.common.*
 import cpw.mods.fml.common.Mod.*
 import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event.*
 import vazkii.botania.common.Botania
-import java.util.*
 
 @Suppress("UNUSED_PARAMETER")
 @Mod(modid = MODID, dependencies = "required-after:Botania", useMetadata = true, guiFactory = "$MODID.client.gui.GUIFactory", modLanguageAdapter = KotlinAdapter.className)

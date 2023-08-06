@@ -78,7 +78,7 @@ enum class EnumRace {
 			org.lwjgl.opengl.GL11.glColor4ub((color shr 16 and 0xFF).toByte(), (color shr 8 and 0xFF).toByte(), (color and 0xFF).toByte(), (color shr 24 and 0xFF).toByte())
 		}
 		
-		private fun getByID(id: Int) = if (0 > id || id > values().size) HUMAN else values()[id]
+		private fun getByID(id: Int) = if (0 > id || id > entries.size) HUMAN else entries[id]
 		
 		operator fun get(id: Int) = getByID(id)
 		

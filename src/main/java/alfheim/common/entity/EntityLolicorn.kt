@@ -49,7 +49,7 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 		set(uuid) = dataWatcher.updateObject(16, "$uuid")
 	
 	var type: EnumMountType
-		get() = EnumMountType.values()[dataWatcher.getWatchableObjectInt(17)]
+		get() = EnumMountType.entries[dataWatcher.getWatchableObjectInt(17)]
 		set(value) = dataWatcher.updateObject(17, value.ordinal)
 	
 	init {

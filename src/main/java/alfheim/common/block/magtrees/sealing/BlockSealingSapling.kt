@@ -29,7 +29,7 @@ class BlockSealingSapling: BlockColoredSapling(name = "sealingSapling"), ISoundS
 			if (canGrowHere(plantedOn)) {
 				val l = world.getBlockMetadata(x, y, z)
 				
-				val obj: WorldGenerator = HeartWoodTreeGen(5, AlfheimBlocks.sealingWood, 0, AlfheimBlocks.sealingWood, 0, AlfheimBlocks.sealingLeaves, 0)
+				val obj: WorldGenerator = HeartWoodTreeGen(5, AlfheimBlocks.sealingWood, 0, AlfheimBlocks.sealingWood, 0, AlfheimBlocks.sealingLeaves, 0, AlfheimBlocks.sealingBerry)
 				
 				world.setBlock(x, y, z, Blocks.air, 0, 4)
 				

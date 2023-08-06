@@ -187,6 +187,7 @@ object EventHandlerClient {
 			if (SpellCastingSystemClient.getCoolDown(spell) > 0) return@run
 			
 			glPushMatrix()
+			glColor4f(1f, 1f, 1f, 1f)
 			ASJRenderHelper.interpolatedTranslationReverse(mc.thePlayer)
 			spell.render(mc.thePlayer)
 			glPopMatrix()
@@ -291,6 +292,8 @@ object EventHandlerClient {
 		EntityFeatherFx.renderQueue()
 		mc.mcProfiler.endStartSection("bloodParticles")
 		EntityBloodFx.renderQueue()
+		mc.mcProfiler.endStartSection("voxelParticles")
+		EntityVoxelFX.renderQueue()
 		mc.mcProfiler.endSection()
 		glDisable(GL_BLEND)
 		glDepthMask(true)

@@ -3,12 +3,11 @@ package alfheim.common.item.relic
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.AlfheimAPI
+import alfheim.api.item.ISpeedUpItem
 import alfheim.common.core.helper.*
 import alfheim.common.core.util.AlfheimTab
-import com.google.common.collect.*
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.*
-import net.minecraft.entity.ai.attributes.AttributeModifier
 import net.minecraft.entity.monster.IMob
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.EntityThrowable
@@ -32,7 +31,7 @@ import java.util.*
  * This code is completely copied from 208th Botania version and fully made by Vazkii or whoever... :D<br></br>
  * Hope all required stuff is already done by Botania using iterfaces and stuff...
  */
-class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRelic, ILensEffect {
+class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRelic, ILensEffect, ISpeedUpItem {
 	
 	internal lateinit var achievement: Achievement
 	
@@ -73,13 +72,6 @@ class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRel
 	
 	override fun getEntityLifespan(itemStack: ItemStack?, world: World?) = Integer.MAX_VALUE
 	
-	override fun getAttributeModifiers(stack: ItemStack): Multimap<String, AttributeModifier> {
-		val multimap = HashMultimap.create<String, AttributeModifier>()
-		multimap.put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(field_111210_e, "Weapon modifier", 10.0, 0))
-		multimap.put(SharedMonsterAttributes.movementSpeed.attributeUnlocalizedName, AttributeModifier(uuid, "Weapon modifier", 0.3, 1))
-		return multimap
-	}
-	
 	fun getBurst(player: EntityPlayer, stack: ItemStack): EntityManaBurst {
 		val burst = EntityManaBurst(player)
 		
@@ -95,6 +87,8 @@ class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRel
 		
 		val lens = stack.copy()
 		ItemNBTHelper.setString(lens, TAG_ATTACKER_USERNAME, player.commandSenderName)
+		val damage = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.attackDamage).attributeValue
+		ItemNBTHelper.setDouble(lens, TAG_DAMAGE, damage)
 		burst.sourceLens = lens
 		return burst
 	}
@@ -135,12 +129,11 @@ class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRel
 		entities.forEach {
 			if (it is EntityPlayer && !(it.commandSenderName != attacker && (MinecraftServer.getServer() == null || MinecraftServer.getServer().isPVPEnabled))) return@forEach
 			if (it.hurtTime != 0) return@forEach
-			var damage = 4f + AlfheimAPI.EXCALIBER.damageVsEntity
+			
 			val player = it.worldObj.getPlayerEntityByName(attacker)
-			val mod = player?.getAttributeMap()?.getAttributeInstance(SharedMonsterAttributes.attackDamage)?.attributeValue?.F
-			damage = mod ?: damage
-			if (player != null) damage += EnchantmentHelper.getEnchantmentModifierLiving(player, it)
-			it.attackEntityFrom(if (player == null) DamageSource.magic else DamageSource.causePlayerDamage(player).setDamageBypassesArmor().setMagicDamage().setTo(ElementalDamage.LIGHTNESS), damage)
+			var damage = ItemNBTHelper.getDouble(stack, TAG_DAMAGE, 4.0 + AlfheimAPI.EXCALIBER.damageVsEntity)
+			if (player != null) damage += EnchantmentHelper.func_152377_a(stack, it.creatureAttribute)
+			it.attackEntityFrom(if (player == null) DamageSource.magic else DamageSource.causePlayerDamage(player).setDamageBypassesArmor().setMagicDamage().setTo(ElementalDamage.LIGHTNESS), damage.F)
 			burst.setDead()
 			return
 		}
@@ -150,11 +143,14 @@ class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRel
 	
 	override fun getRarity(sta: ItemStack) = BotaniaAPI.rarityRelic!!
 	
+	override fun getSpeedUp(wearer: EntityLivingBase, stack: ItemStack) = 0.05f
+	
 	companion object {
 		
 		val uuid = UUID.fromString("7d5ddaf0-15d2-435c-8310-bdfc5fd1522d")!!
 		
 		private const val TAG_ATTACKER_USERNAME = "attackerUsername"
+		private const val TAG_DAMAGE = "damage"
 		private const val TAG_HOME_ID = "homeID"
 	}
 }
