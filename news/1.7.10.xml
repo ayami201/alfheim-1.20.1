@@ -1,6 +1,6 @@
 <news>
 	<version id="LATEST">
-		<val>49</val>
+		<val>50</val>
 	</version>
 	<version id="UNIVERSAL">
 		<val>$json["Official Alfheim Discord server is here! *",{"text":"click","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Join discord server","color":"gold"}},"clickEvent":{"action":"open_url","value":"https://discord.gg/dqQXZHq"}},"*"]</val>
@@ -136,5 +136,8 @@
 	</version>
 	<version id="48">
 		<val>Added floating islands, yay!</val>
+	</version>
+	<version id="49">
+		<val>Lots of new items and some bugfixes as usual</val>
 	</version>
 </news>
