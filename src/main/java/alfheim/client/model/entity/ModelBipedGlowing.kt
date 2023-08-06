@@ -1,6 +1,7 @@
 package alfheim.client.model.entity
 
 import alexsocol.asjlib.glScaled
+import alexsocol.asjlib.render.ASJRenderHelper
 import net.minecraft.client.model.ModelBiped
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.entity.Entity
@@ -9,12 +10,7 @@ import org.lwjgl.opengl.GL11.*
 class ModelBipedGlowing: ModelBiped() {
 	
 	override fun render(entity: Entity?, f: Float, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float) {
-		glDisable(GL_LIGHTING)
-		
-		val lastX = OpenGlHelper.lastBrightnessX
-		val lastY = OpenGlHelper.lastBrightnessY
-		
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f)
+		ASJRenderHelper.setGlow()
 		
 		if (isChild) {
 			glPushMatrix()
@@ -26,7 +22,6 @@ class ModelBipedGlowing: ModelBiped() {
 		
 		if (isChild) glPopMatrix()
 		
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastX, lastY)
-		glEnable(GL_LIGHTING)
+		ASJRenderHelper.discard()
 	}
 }

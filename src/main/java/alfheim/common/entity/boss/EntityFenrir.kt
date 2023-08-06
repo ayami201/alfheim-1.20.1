@@ -503,7 +503,7 @@ class EntityFenrir(world: World): EntityCreature(world), IBotaniaBossWithName {
 		const val TAG_STAGE = "stage"
 		
 		val relics = arrayOf(AlfheimAchievements.gungnir to AlfheimItems.gungnir, AlfheimAchievements.gleipnir to AlfheimItems.gleipnir)
-		val lightRelics = arrayOf(ItemStack(AlfheimItems.fenrirClaws), *ItemFenrirLoot.FenrirLootMetas.values().map(ItemFenrirLoot.FenrirLootMetas::stack).toTypedArray())
+		val lightRelics = arrayOf(ItemStack(AlfheimItems.fenrirClaws), *ItemFenrirLoot.FenrirLootMetas.entries.map(ItemFenrirLoot.FenrirLootMetas::stack).toTypedArray())
 		
 		var barRect: Rectangle? = null
 		var hpBarRect: Rectangle? = null

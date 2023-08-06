@@ -24,6 +24,8 @@ import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.entity.EntityManaBurst
 import java.awt.Color
 
+private const val TAG_ATTACKER_USERNAME = "attackerUsername"
+
 // All functional (feature-related) code was created by ChatGPT, I just adapted it
 class ItemFenrirLoot: ItemMod("FenrirLoot"), ILensEffect, IManaUsingItem {
 	
@@ -229,8 +231,8 @@ class ItemFenrirLoot: ItemMod("FenrirLoot"), ILensEffect, IManaUsingItem {
 	}
 	
 	override fun registerIcons(reg: IIconRegister) {
-		icons = FenrirLootMetas.values().map { IconHelper.forName(reg, it.name) }
-		iconsCD = FenrirLootMetas.values().map { IconHelper.forName(reg, "${it}CD") }
+		icons = FenrirLootMetas.entries.map { IconHelper.forName(reg, it.name) }
+		iconsCD = FenrirLootMetas.entries.map { IconHelper.forName(reg, "${it}CD") }
 	}
 	
 	override fun getIcon(stack: ItemStack, pass: Int) = getIconIndex(stack)
@@ -240,23 +242,13 @@ class ItemFenrirLoot: ItemMod("FenrirLoot"), ILensEffect, IManaUsingItem {
 	override fun getUnlocalizedName(stack: ItemStack) = "item.${FenrirLootMetas.of(stack.meta).toString()}"
 	
 	override fun getSubItems(item: Item, tab: CreativeTabs?, list: MutableList<Any?>) {
-		for (type in FenrirLootMetas.values())
+		for (type in FenrirLootMetas.entries)
 			list.add(type.stack)
 	}
 	
 	override fun shouldRotateAroundWhenRendering() = mc.gameSettings.thirdPersonView != 0
 	
 	override fun usesMana(stack: ItemStack?) = true
-	
-	companion object {
-		
-		private const val TAG_COOLDOWN = "cooldown"
-		private const val TAG_ATTACKER_USERNAME = "attackerUsername"
-		
-		private var ItemStack.cooldown
-			get() = ItemNBTHelper.getInt(this, TAG_COOLDOWN, 0)
-			set(value) = ItemNBTHelper.setInt(this, TAG_COOLDOWN, value)
-	}
 	
 	enum class FenrirLootMetas {
 		HatiEye,
@@ -270,7 +262,7 @@ class ItemFenrirLoot: ItemMod("FenrirLoot"), ILensEffect, IManaUsingItem {
 		val stack get() = ItemStack(AlfheimItems.fenrirLoot, 1, I)
 		
 		companion object {
-			fun of(meta: Int) = values().getOrNull(meta)
+			fun of(meta: Int) = entries.getOrNull(meta)
 		}
 	}
 }

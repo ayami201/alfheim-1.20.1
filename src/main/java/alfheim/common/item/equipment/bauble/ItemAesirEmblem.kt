@@ -118,7 +118,7 @@ class ItemAesirEmblem: ItemBauble("aesirEmblem"), IBaubleRender, IManaUsingItem,
 		}
 	}
 	
-	override fun getDiscount(stack: ItemStack, slot: Int, player: EntityPlayer) = 0.1f
+	override fun getDiscount(stack: ItemStack, slot: Int, player: EntityPlayer) = 0.3f
 	
 	companion object {
 		const val COST = 2 * ItemPriestEmblem.TYPES

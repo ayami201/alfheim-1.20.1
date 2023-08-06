@@ -8,7 +8,6 @@ import alfheim.client.core.helper.IconHelper
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.bauble.faith.IFaithHandler
-import baubles.api.BaubleType
 import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.common.Optional
 import net.minecraft.client.renderer.texture.IIconRegister
@@ -65,9 +64,6 @@ class ItemPriestCloak: ItemBaubleCloak("priestCloak"), IManaUsingItem {
 	
 	override fun usesMana(stack: ItemStack) = true
 	
-	override fun getBaubleType(stack: ItemStack) =
-		if (AlfheimCore.TravellersGearLoaded) null else BaubleType.BELT
-	
 	override fun onEquippedOrLoadedIntoWorld(stack: ItemStack, player: EntityLivingBase) {
 		if (player is EntityPlayer)
 			IFaithHandler.getFaithHandler(stack).onEquipped(stack, player, IFaithHandler.FaithBauble.CLOAK)
@@ -84,24 +80,8 @@ class ItemPriestCloak: ItemBaubleCloak("priestCloak"), IManaUsingItem {
 			IFaithHandler.getFaithHandler(stack).onUnequipped(stack, player, IFaithHandler.FaithBauble.CLOAK)
 	}
 	
-	override fun getSlot(stack: ItemStack) = 0
-	
-	override fun onTravelGearEquip(player: EntityPlayer, stack: ItemStack) {
-		super.onTravelGearEquip(player, stack)
-		onEquipped(stack, player)
-	}
-	
-	override fun onTravelGearTickSynced(player: EntityPlayer, stack: ItemStack) {
-		onWornTick(stack, player)
-	}
-	
-	override fun onTravelGearUnequip(player: EntityPlayer, stack: ItemStack) {
-		super.onTravelGearUnequip(player, stack)
-		onUnequipped(stack, player)
-	}
-	
 	override fun addHiddenTooltip(stack: ItemStack, player: EntityPlayer, tooltip: MutableList<Any?>, adv: Boolean) {
-		try {
+		try_ {
 			if (AlfheimCore.TravellersGearLoaded) {
 				addStringToTooltip(StatCollector.translateToLocal("TG.desc.gearSlot.tg.0"), tooltip)
 				val key = RenderHelper.getKeyDisplayString("TG.keybind.openInv")
@@ -114,7 +94,6 @@ class ItemPriestCloak: ItemBaubleCloak("priestCloak"), IManaUsingItem {
 				if (key != null)
 					addStringToTooltip(StatCollector.translateToLocal("botania.baubletooltip").replace("%key%".toRegex(), key), tooltip)
 			}
-		} catch (ignore: Throwable) {
 		}
 		
 		val cosmetic = getCosmeticItem(stack)

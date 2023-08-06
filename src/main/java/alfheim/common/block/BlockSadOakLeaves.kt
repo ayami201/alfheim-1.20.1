@@ -1,11 +1,11 @@
 package alfheim.common.block
 
 import alexsocol.asjlib.toItem
-import alfheim.api.lib.LibOreDict
 import alfheim.common.block.base.BlockLeavesMod
 import alfheim.common.item.block.ItemUniqueSubtypedBlockMod
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.*
+import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.*
 import net.minecraft.item.*
@@ -53,6 +53,8 @@ class BlockSadOakLeaves: BlockLeavesMod() {
 	override fun func_150124_c(world: World, x: Int, y: Int, z: Int, meta: Int, chance: Int) {
 		if (meta and 7 == 0 && world.rand.nextInt(chance) == 0) dropBlockAsItem(world, x, y, z, ItemStack(Items.apple, 1, 0))
 	}
+	
+	override fun registerBlockIcons(reg: IIconRegister) = Unit
 	
 	@SideOnly(Side.CLIENT)
 	override fun getIcon(side: Int, meta: Int) = if (meta and 7 == 0) Blocks.leaves.getIcon(side, 0) else null

@@ -24,10 +24,6 @@ object FloatingIslandGenerator {
 	
 	var genTimer = 0
 	
-	init {
-		eventFML().eventForge()
-	}
-	
 	@SubscribeEvent
 	fun onServerStop(e: ServerStoppedEvent) {
 		genTimer = 0

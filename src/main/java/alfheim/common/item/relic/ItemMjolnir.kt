@@ -37,6 +37,10 @@ class ItemMjolnir: ItemRelic("Mjolnir") {
 		setFull3D()
 	}
 	
+	override fun isItemTool(stack: ItemStack?) = true
+	
+	override fun getItemEnchantability(stack: ItemStack?) = 30
+	
 	// ################ Checker ################
 	
 	fun isWorthy(player: EntityLivingBase): Boolean {
@@ -213,16 +217,10 @@ class ItemMjolnir: ItemRelic("Mjolnir") {
 	
 	override fun getRenderPasses(meta: Int) = 2
 	
-	private var ItemStack.cooldown
-		get() = getInt(this, TAG_COOLDOWN, 0)
-		set(value) = setInt(this, TAG_COOLDOWN, value)
-	
 	companion object {
 		
 		const val CHARGE_PER_TICK = 1000
 		const val MAX_CHARGE = 10000
-		
-		const val TAG_COOLDOWN = "cooldown"
 		
 		const val TAG_CHARGE = "charge"
 		const val TAG_LIGHTNING_SEED = "lightningSeed"

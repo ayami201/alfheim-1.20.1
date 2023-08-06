@@ -12,15 +12,16 @@ import vazkii.botania.api.mana.IManaSpreader
 import vazkii.botania.client.core.helper.IconHelper
 import vazkii.botania.common.item.lens.ItemLens
 
+@Suppress("unused", "UNUSED_PARAMETER")
 object ItemLensExtender {
 	
-	const val PROP_NONE = 0
-	const val PROP_POWER = 1
-	const val PROP_ORIENTATION = 2
-	const val PROP_TOUCH = 4
-	const val PROP_INTERACTION = 8
-	const val PROP_DAMAGE = 16
-	const val PROP_CONTROL = 32
+	private const val PROP_NONE = 0
+	private const val PROP_POWER = 1
+	private const val PROP_ORIENTATION = 2
+	private const val PROP_TOUCH = 4
+	private const val PROP_INTERACTION = 8
+	private const val PROP_DAMAGE = 16
+	private const val PROP_CONTROL = 32
 	
 	const val MESSANGER = 22
 	const val TRIPWIRE = 23
@@ -31,6 +32,7 @@ object ItemLensExtender {
 	const val TRACK = 27
 	
 	const val DAISY = 28
+	const val LINKBACK = 29
 	
 	/**
 	 * Change [alfheim.common.core.asm.AlfheimClassTransformer.moreLenses] when adding new lens.
@@ -50,6 +52,7 @@ object ItemLensExtender {
 		ItemLens.setProps(TRACK, PROP_CONTROL)
 		// new
 		ItemLens.setProps(DAISY, PROP_INTERACTION or PROP_TOUCH)
+		ItemLens.setProps(LINKBACK, PROP_NONE)
 		
 		// Botania
 		ItemLens.setLens(MESSANGER, LensMessanger())
@@ -62,6 +65,7 @@ object ItemLensExtender {
 		ItemLens.setLens(TRACK, LensTrack())
 		// new
 		ItemLens.setLens(DAISY, LensDaisy())
+		ItemLens.setLens(LINKBACK, LensLinkback())
 	}
 	
 	@JvmStatic
@@ -70,7 +74,7 @@ object ItemLensExtender {
 		list.add(ItemStack(item, 1, ItemLens.STORM))
 	}
 	
-	var lensStormIcon: IIcon? = null
+	private var lensStormIcon: IIcon? = null
 	
 	@SideOnly(Side.CLIENT)
 	@JvmStatic

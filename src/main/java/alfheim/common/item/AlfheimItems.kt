@@ -43,6 +43,7 @@ object AlfheimItems {
 	val auraRingGod: Item
 	val auraRingPink: Item
 	val balanceCloak: Item
+	val chalk: Item
 	val cloudPendant: Item
 	val cloudPendantSuper: Item
 	val coatOfArms: Item
@@ -79,6 +80,8 @@ object AlfheimItems {
 	val fenrirBoots: Item
 	val fenrirChestplate: Item
 	val fenrirClaws: Item
+	val fenrirCloak: Item
+	val fenrirGlove: Item
 	val fenrirHelmet: Item
 	val fenrirHelmetRevealing: Item?
 	val fenrirLeggings: Item
@@ -93,6 +96,7 @@ object AlfheimItems {
 	val gjallarhorn: Item
 	val gleipnir: Item
 	val gungnir: Item
+	val holyGlass: Item
 	val hyperBucket: Item
 	val invisibilityCloak: Item
 	val invisibleFlameLens: Item
@@ -137,6 +141,8 @@ object AlfheimItems {
 	val rodPortal: Item
 	val rodPrismatic: Item
 	val rodRedstone: Item
+	val rodSuperExchange: Item
+	val serenade: Item
 	val snowSword: Item
 	val snowHelmet: Item
 	val snowHelmetRevealing: Item?
@@ -166,6 +172,7 @@ object AlfheimItems {
 	val volcanoChest: Item
 	val volcanoLeggings: Item
 	val volcanoBoots: Item
+	val warBanner: Item
 	val wiltedLotus: Item
 	val wireAxe: Item
 	
@@ -182,6 +189,7 @@ object AlfheimItems {
 		auraRingGod = ItemAuraRingAlfheim("AuraRingGod", 2)
 		auraRingPink = ItemAuraRingAlfheim("AuraRingPink", 50, 0.075f)
 		balanceCloak = ItemBalanceCloak()
+		chalk = ItemChalk()
 		cloudPendant = ItemCloudPendant()
 		cloudPendantSuper = ItemCloudPendant("SuperCloudPendant", 3)
 		coatOfArms = ItemCoatOfArms()
@@ -220,8 +228,10 @@ object AlfheimItems {
 		fenrirHelmetRevealing = if (Botania.thaumcraftLoaded) ItemFenrirHelmetRevealing() else null
 		fenrirChestplate = ItemFenrirArmor(1, "FenrirChestplate")
 		fenrirLeggings = ItemFenrirArmor(2, "FenrirLeggings")
-		fenrirBoots = ItemFenrirArmor(3, "FenrirBoots")
+		fenrirBoots = ItemFenrirBoots()
 		fenrirClaws = ItemFenrirClaws()
+		fenrirCloak = ItemFenrirCloak()
+		fenrirGlove = ItemFenrirGlove()
 		fenrirLoot = ItemFenrirLoot()
 		floatingIslandGenerator = ItemFloatingIslandGenerator()
 		flugelHead = ItemHeadFlugel()
@@ -232,6 +242,7 @@ object AlfheimItems {
 		gjallarhorn = ItemGjallarhorn()
 		gleipnir = ItemGleipnir()
 		gungnir = ItemGungnir()
+		holyGlass = ItemHolyGlass()
 		hyperBucket = ItemHyperBucket()
 		invisibilityCloak = ItemInvisibilityCloak()
 		invisibleFlameLens = ItemLensFlashInvisible()
@@ -276,6 +287,8 @@ object AlfheimItems {
 		rodPortal = ItemRodPortal()
 		rodPrismatic = ItemRodPrismatic()
 		rodRedstone = ItemRedstoneRod()
+		rodSuperExchange = ItemRodSuperExchange()
+		serenade = ItemSerenade()
 		snowSword = ItemSnowSword()
 		snowHelmet = ItemSnowArmor(0, "SnowHelmet")
 		snowHelmetRevealing = if (Botania.thaumcraftLoaded) ItemSnowHelmetRevealing() else null
@@ -305,6 +318,7 @@ object AlfheimItems {
 		volcanoChest = ItemVolcanoArmor(1, "VolcanoChest")
 		volcanoLeggings = ItemVolcanoArmor(2, "VolcanoLeggings")
 		volcanoBoots = ItemVolcanoArmor(3, "VolcanoBoots")
+		warBanner = ItemWarBanner()
 		wireAxe = ItemWireAxe()
 		wiltedLotus = ItemWiltedLotus()
 		

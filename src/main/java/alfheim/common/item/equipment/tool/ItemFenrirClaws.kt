@@ -5,10 +5,7 @@ import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.*
 import alfheim.client.core.helper.IconHelper
 import alfheim.common.core.util.AlfheimTab
-import alfheim.common.item.AlfheimItems
-import alfheim.common.item.creator.*
 import alfheim.common.item.equipment.armor.fenrir.ItemFenrirArmor
-import alfheim.common.item.material.ElvenResourcesMetas
 import com.google.common.collect.*
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.relauncher.*
@@ -17,7 +14,6 @@ import net.minecraft.entity.*
 import net.minecraft.entity.ai.attributes.AttributeModifier
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.potion.*
 import net.minecraft.util.*
 import net.minecraft.world.World
 import net.minecraftforge.event.entity.living.LivingHurtEvent
@@ -28,13 +24,13 @@ import vazkii.botania.common.lib.LibMisc
 
 class ItemFenrirClaws: ItemManasteelSword(AlfheimAPI.FENRIR, "FenrirClaws") {
 	
-	val MANA_PER_DAMAGE = 40
 	val attackDamage = 3.0
 	
 	lateinit var overlay: IIcon
 	
 	init {
 		creativeTab = AlfheimTab
+		setMaxDamage(0)
 	}
 	
 	override fun isFull3D() = false
@@ -45,20 +41,14 @@ class ItemFenrirClaws: ItemManasteelSword(AlfheimAPI.FENRIR, "FenrirClaws") {
 		ItemNBTHelper.setBoolean(stack, "SET", ItemFenrirArmor.hasSet(player))
 	}
 	
-	override fun getIsRepairable(stack: ItemStack?, material: ItemStack?): Boolean {
-		return material?.item === AlfheimItems.elvenResource && material.meta == ElvenResourcesMetas.MauftriumNugget.I
-	}
-	
 	override fun getAttributeModifiers(stack: ItemStack): Multimap<String, AttributeModifier> {
 		val set = ItemNBTHelper.getBoolean(stack, "SET", false)
 		val multimap = HashMultimap.create<String, AttributeModifier>()
-		multimap.put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(field_111210_e, "Weapon modifier", attackDamage + if (set) (13.75 / 1.5 - 9 + attackDamage) else 0.0, 0))
+		multimap.put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(field_111210_e, "Weapon modifier", attackDamage * if (set) 2 else 1, 0))
 		return multimap
 	}
 	
 	override fun getItemEnchantability() = 14
-	
-	override fun getManaPerDamage() = MANA_PER_DAMAGE
 	
 	override fun getItemStackDisplayName(stack: ItemStack) =
 		super.getItemStackDisplayName(stack).replace("&", "\u00a7")
@@ -76,7 +66,7 @@ class ItemFenrirClaws: ItemManasteelSword(AlfheimAPI.FENRIR, "FenrirClaws") {
 	
 	override fun getRenderPasses(metadata: Int) = 3
 	
-	override fun getIcon(stack: ItemStack?, pass: Int): IIcon? {
+	override fun getIcon(stack: ItemStack?, pass: Int): IIcon {
 		return when (pass) {
 			0    -> getIconIndex(stack)
 			
@@ -94,6 +84,10 @@ class ItemFenrirClaws: ItemManasteelSword(AlfheimAPI.FENRIR, "FenrirClaws") {
 				getIconIndex(stack)
 			}
 		}
+	}
+	
+	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>, anv: Boolean) {
+		addStringToTooltip(list, StatCollector.translateToLocal("alfheim.armorset.fenrir.claws0" + if (ItemFenrirArmor.hasSet(mc.thePlayer)) ".buf" else ""))
 	}
 	
 	override fun getIconIndex(stack: ItemStack?) = itemIcon!! // no elucidator

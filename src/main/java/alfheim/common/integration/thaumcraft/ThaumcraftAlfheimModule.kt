@@ -2,7 +2,7 @@ package alfheim.common.integration.thaumcraft
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.ASJUtilities.register
-import alfheim.api.ModInfo
+import alfheim.api.*
 import alfheim.api.event.AlfheimModeChangedEvent
 import alfheim.api.lib.LibOreDict.ELEMENTIUM_ORE
 import alfheim.api.lib.LibOreDict.ELVORIUM_NUGGET
@@ -452,13 +452,27 @@ object ThaumcraftAlfheimModule {
 	}
 	
 	fun registerOreDict() {
-		registerOre("oreCinnabar", ItemStack(alfheimThaumOre, 1, 0))
-		registerOre("oreInfusedAir", ItemStack(alfheimThaumOre, 1, 1))
-		registerOre("oreInfusedFire", ItemStack(alfheimThaumOre, 1, 2))
-		registerOre("oreInfusedWater", ItemStack(alfheimThaumOre, 1, 3))
-		registerOre("oreInfusedEarth", ItemStack(alfheimThaumOre, 1, 4))
-		registerOre("oreInfusedOrder", ItemStack(alfheimThaumOre, 1, 5))
-		registerOre("oreInfusedEntropy", ItemStack(alfheimThaumOre, 1, 6))
-		registerOre("oreAmber", ItemStack(alfheimThaumOre, 1, 7))
+		registerOreDict("")
+		registerOreDict("Alfheim")
+		
+		AlfheimAPI.addOreWeightAlfheim("oreCinnabarAlfheim", 4275)
+		AlfheimAPI.addOreWeightAlfheim("oreInfusedAirAlfheim", 1548)
+		AlfheimAPI.addOreWeightAlfheim("oreInfusedFireAlfheim", 1327)
+		AlfheimAPI.addOreWeightAlfheim("oreInfusedWaterAlfheim", 1432)
+		AlfheimAPI.addOreWeightAlfheim("oreInfusedEarthAlfheim", 1460)
+		AlfheimAPI.addOreWeightAlfheim("oreInfusedOrderAlfheim", 1377)
+		AlfheimAPI.addOreWeightAlfheim("oreInfusedEntropyAlfheim", 1455)
+		AlfheimAPI.addOreWeightAlfheim("oreAmberAlfheim", 4261)
+	}
+	
+	fun registerOreDict(postfix: String) {
+		registerOre("oreCinnabar$postfix", ItemStack(alfheimThaumOre, 1, 0))
+		registerOre("oreInfusedAir$postfix", ItemStack(alfheimThaumOre, 1, 1))
+		registerOre("oreInfusedFire$postfix", ItemStack(alfheimThaumOre, 1, 2))
+		registerOre("oreInfusedWater$postfix", ItemStack(alfheimThaumOre, 1, 3))
+		registerOre("oreInfusedEarth$postfix", ItemStack(alfheimThaumOre, 1, 4))
+		registerOre("oreInfusedOrder$postfix", ItemStack(alfheimThaumOre, 1, 5))
+		registerOre("oreInfusedEntropy$postfix", ItemStack(alfheimThaumOre, 1, 6))
+		registerOre("oreAmber$postfix", ItemStack(alfheimThaumOre, 1, 7))
 	}
 }

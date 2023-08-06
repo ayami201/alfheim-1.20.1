@@ -49,7 +49,7 @@ object CommandAlfheim: CommandBase() {
 					ArrayList()
 				"randgen", "help" -> return ArrayList()
 				"knowledge" -> return if (args.size == 2)
-					getListOfStringsMatchingLastWord(args, "ALL", *CardinalSystem.KnowledgeSystem.Knowledge.values().map { it.toString() }.toTypedArray())
+					getListOfStringsMatchingLastWord(args, "ALL", *CardinalSystem.KnowledgeSystem.Knowledge.entries.map { it.toString() }.toTypedArray())
 				else
 					getListOfStringsMatchingLastWord(args, *MinecraftServer.getServer().configurationManager.allUsernames)
 			}
@@ -162,7 +162,7 @@ object CommandAlfheim: CommandBase() {
 			val knowledge = CardinalSystem.KnowledgeSystem.Knowledge.valueOf(args[1])
 			CardinalSystem.KnowledgeSystem.learn(target, knowledge)
 		} else {
-			CardinalSystem.KnowledgeSystem.Knowledge.values().forEach {
+			CardinalSystem.KnowledgeSystem.Knowledge.entries.forEach {
 				CardinalSystem.KnowledgeSystem.learn(target, it)
 			}
 		}

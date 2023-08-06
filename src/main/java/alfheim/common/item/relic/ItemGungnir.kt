@@ -13,7 +13,6 @@ import net.minecraft.item.*
 import net.minecraft.util.*
 import net.minecraft.world.World
 import vazkii.botania.api.mana.ManaItemHandler
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.item.relic.ItemRelic
 
 class ItemGungnir: ItemRelic("Gungnir") {
@@ -57,10 +56,10 @@ class ItemGungnir: ItemRelic("Gungnir") {
 		if (player.isSneaking)
 			shoot(stack, world, player)
 		else
-			onePunchMan(stack, world, player)
+			onePunchMan(stack, player)
 	}
 	
-	fun onePunchMan(stack: ItemStack, world: World, player: EntityPlayer) {
+	fun onePunchMan(stack: ItemStack, player: EntityPlayer) {
 		var target: EntityLivingBase? = null
 		
 		if (AlfheimConfigHandler.enableMMO) {
@@ -99,14 +98,5 @@ class ItemGungnir: ItemRelic("Gungnir") {
 		}.spawn()
 		
 		if (!player.capabilities.isCreativeMode) stack.cooldown = 500
-	}
-	
-	private var ItemStack.cooldown
-		get() = ItemNBTHelper.getInt(this, TAG_COOLDOWN, 0)
-		set(value) = ItemNBTHelper.setInt(this, TAG_COOLDOWN, value)
-	
-	companion object {
-		
-		const val TAG_COOLDOWN = "cooldown"
 	}
 }

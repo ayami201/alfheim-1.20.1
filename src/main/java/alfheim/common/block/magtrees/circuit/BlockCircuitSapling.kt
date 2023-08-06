@@ -25,7 +25,7 @@ class BlockCircuitSapling: BlockColoredSapling(name = "circuitSapling"), ICircui
 			if (canGrowHere(plantedOn)) {
 				val l = world.getBlockMetadata(x, y, z)
 				
-				val obj: WorldGenerator = HeartWoodTreeGen(5, AlfheimBlocks.circuitWood, 0, AlfheimBlocks.circuitWood, 0, AlfheimBlocks.circuitLeaves, 0)
+				val obj: WorldGenerator = HeartWoodTreeGen(5, AlfheimBlocks.circuitWood, 0, AlfheimBlocks.circuitWood, 0, AlfheimBlocks.circuitLeaves, 0, AlfheimBlocks.circuitBerry)
 				
 				world.setBlock(x, y, z, Blocks.air, 0, 4)
 				

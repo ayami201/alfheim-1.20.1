@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.MathHelper
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import vazkii.botania.api.mana.*
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import kotlin.math.max
 
 class ItemCrescentMoonAmulet: ItemPendant("CrescentMoonAmulet"), IManaUsingItem {
@@ -21,8 +20,7 @@ class ItemCrescentMoonAmulet: ItemPendant("CrescentMoonAmulet"), IManaUsingItem 
 	
 	override fun onWornTick(stack: ItemStack, player: EntityLivingBase) {
 		super.onWornTick(stack, player)
-		val cd = ItemNBTHelper.getInt(stack, TAG_COOLDOWN, 0)
-		if (cd > 0) ItemNBTHelper.setInt(stack, TAG_COOLDOWN, cd - 1)
+		if (stack.cooldown > 0) stack.cooldown--
 	}
 	
 	override fun usesMana(stack: ItemStack) = true
@@ -30,7 +28,6 @@ class ItemCrescentMoonAmulet: ItemPendant("CrescentMoonAmulet"), IManaUsingItem 
 	companion object {
 		
 		const val MANA_PER_DAMAGE = 100
-		private const val TAG_COOLDOWN = "cooldown"
 		
 		init {
 			eventForge()
@@ -41,17 +38,17 @@ class ItemCrescentMoonAmulet: ItemPendant("CrescentMoonAmulet"), IManaUsingItem 
 			if (e.source.isDamageAbsolute) return
 			
 			val player = e.entityLiving as? EntityPlayer ?: return
-			val bbls = PlayerHandler.getPlayerBaubles(player)
+			val amulet = PlayerHandler.getPlayerBaubles(player)[0]
 			
-			if (bbls[0]?.item !is ItemCrescentMoonAmulet) return
+			if (amulet?.item !is ItemCrescentMoonAmulet) return
 			
 			if (e.source.isMagical) {
-				if (ItemNBTHelper.getInt(bbls[0], TAG_COOLDOWN, 0) <= 0) {
-					ItemNBTHelper.setInt(bbls[0], TAG_COOLDOWN, 100)
+				if (amulet.cooldown <= 0) {
+					amulet.cooldown = 100
 					e.ammount = max(0f, e.ammount - 10)
 				}
 			} else
-				e.ammount -= ManaItemHandler.requestMana(bbls[0], player, MathHelper.ceiling_float_int(e.ammount * MANA_PER_DAMAGE), true) / (MANA_PER_DAMAGE * 10f)
+				e.ammount -= ManaItemHandler.requestMana(amulet, player, MathHelper.ceiling_float_int(e.ammount * MANA_PER_DAMAGE), true) / (MANA_PER_DAMAGE * 10f)
 		}
 	}
 }

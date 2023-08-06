@@ -12,6 +12,7 @@ import alfheim.common.block.colored.*
 import alfheim.common.block.colored.rainbow.*
 import alfheim.common.block.corporea.*
 import alfheim.common.block.fluid.BlockManaFluid
+import alfheim.common.block.magtrees.barrier.*
 import alfheim.common.block.magtrees.calico.*
 import alfheim.common.block.magtrees.circuit.*
 import alfheim.common.block.magtrees.lightning.*
@@ -62,6 +63,7 @@ object AlfheimBlocks {
 	val auroraWood: Block
 	val barrel: Block
 	val barrier: Block
+	val bottomlessChest: Block
 	val corporeaAutocrafter: Block
 	val corporeaInjector: Block
 	val corporeaRatBase: Block
@@ -78,6 +80,7 @@ object AlfheimBlocks {
 	val grapesRedPlanted: Block
 	val grapesWhite: Block
 	val icicle: Block
+	val icyGeyser: Block
 	val itemDisplay: Block
 	val irisDirt: Block
 	val irisGrass: Block
@@ -144,6 +147,7 @@ object AlfheimBlocks {
 	val starBlock2: Block
 	val stalactite: Block
 	val stalagmite: Block
+	val subspacian: Block
 	val tradePortal: Block
 	val treeCrafterBlock: Block
 	val treeCrafterBlockRB: Block
@@ -160,7 +164,17 @@ object AlfheimBlocks {
 	val altWood0: Block
 	val altWood1: Block
 	
+	val barrierLeaves: Block
+	val barrierBerry: Block
+	val barrierPlanks: Block
+	val barrierSapling: Block
+	val barrierSlabs: Block
+	val barrierSlabsFull: Block
+	val barrierStairs: Block
+	val barrierWood: Block
+	
 	val calicoLeaves: Block
+	val calicoBerry: Block
 	val calicoPlanks: Block
 	val calicoSapling: Block
 	val calicoSlabs: Block
@@ -169,6 +183,7 @@ object AlfheimBlocks {
 	val calicoWood: Block
 	
 	val circuitLeaves: Block
+	val circuitBerry: Block
 	val circuitPlanks: Block
 	val circuitSapling: Block
 	val circuitSlabs: Block
@@ -177,6 +192,7 @@ object AlfheimBlocks {
 	val circuitWood: Block
 	
 	val lightningLeaves: Block
+	val lightningBerry: Block
 	val lightningPlanks: Block
 	val lightningSapling: Block
 	val lightningSlabs: Block
@@ -185,6 +201,7 @@ object AlfheimBlocks {
 	val lightningWood: Block
 	
 	val netherLeaves: Block
+	val netherBerry: Block
 	val netherPlanks: Block
 	val netherSapling: Block
 	val netherSlabs: Block
@@ -193,6 +210,7 @@ object AlfheimBlocks {
 	val netherWood: Block
 	
 	val sealingLeaves: Block
+	val sealingBerry: Block
 	val sealingPlanks: Block
 	val sealingSapling: Block
 	val sealingSlabs: Block
@@ -231,6 +249,7 @@ object AlfheimBlocks {
 		auroraWood = BlockAuroraWood()
 		barrel = BlockBarrel()
 		barrier = BlockBarrier()
+		bottomlessChest = BlockBottomlessChest()
 		corporeaAutocrafter = BlockCorporeaAutocrafter()
 		corporeaInjector = BlockCorporeaInjector()
 		corporeaRatBase = BlockCorporeaRat()
@@ -253,6 +272,7 @@ object AlfheimBlocks {
 		grapesRedPlanted = BlockGrapeRedPlanted()
 		grapesWhite = BlockGrapeWhite()
 		icicle = BlockIcicle()
+		icyGeyser = BlockIcyGeyser()
 		itemDisplay = BlockItemDisplay()
 		irisDirt = BlockColoredDirt()
 		irisLamp = BlockColoredLamp()
@@ -325,6 +345,7 @@ object AlfheimBlocks {
 		starBlock2 = BlockCracklingStar()
 		stalactite = BlockStalactite()
 		stalagmite = BlockStalagmite()
+		subspacian = BlockSubspacian()
 		tradePortal = BlockTradePortal()
 		treeCrafterBlock = BlockTreeCrafter("treeCrafter", irisPlanks)
 		treeCrafterBlockRB = BlockTreeCrafter("treeCrafterRB", rainbowPlanks)
@@ -343,7 +364,19 @@ object AlfheimBlocks {
 		altWood0 = BlockAltWood(0)
 		altWood1 = BlockAltWood(1)
 		
+		barrierLeaves = BlockBarrierLeaves()
+		barrierBerry = BlockTreeBerry(barrierLeaves, 0)
+		barrierPlanks = BlockBarrierPlanks()
+		barrierSapling = BlockBarrierSapling()
+		barrierSlabs = BlockBarrierWoodSlab(false)
+		barrierSlabsFull = BlockBarrierWoodSlab(true)
+		barrierSlabs.register()
+		barrierSlabsFull.register()
+		barrierStairs = BlockBarrierWoodStairs()
+		barrierWood = BlockBarrierWood()
+		
 		calicoLeaves = BlockCalicoLeaves()
+		calicoBerry = BlockTreeBerry(calicoLeaves, 1)
 		calicoPlanks = BlockCalicoPlanks()
 		calicoSapling = BlockCalicoSapling()
 		calicoSlabs = BlockCalicoWoodSlab(false)
@@ -354,6 +387,7 @@ object AlfheimBlocks {
 		calicoWood = BlockCalicoWood()
 		
 		circuitLeaves = BlockCircuitLeaves()
+		circuitBerry = BlockTreeBerry(circuitLeaves, 2)
 		circuitPlanks = BlockCircuitPlanks()
 		circuitSapling = BlockCircuitSapling()
 		circuitSlabs = BlockCircuitWoodSlab(false)
@@ -364,6 +398,7 @@ object AlfheimBlocks {
 		circuitWood = BlockCircuitWood()
 		
 		lightningLeaves = BlockLightningLeaves()
+		lightningBerry = BlockTreeBerry(lightningLeaves, 3)
 		lightningPlanks = BlockLightningPlanks()
 		lightningSapling = BlockLightningSapling()
 		lightningSlabs = BlockLightningWoodSlab(false)
@@ -374,6 +409,7 @@ object AlfheimBlocks {
 		lightningWood = BlockLightningWood()
 		
 		netherLeaves = BlockNetherLeaves()
+		netherBerry = BlockTreeBerry(netherLeaves, 4)
 		netherPlanks = BlockNetherPlanks()
 		netherSapling = BlockNetherSapling()
 		netherSlabs = BlockNetherWoodSlab(false)
@@ -384,6 +420,7 @@ object AlfheimBlocks {
 		netherWood = BlockNetherWood()
 		
 		sealingLeaves = BlockSealingLeaves()
+		sealingBerry = BlockTreeBerry(sealingLeaves, 5)
 		sealingPlanks = BlockSealingPlanks()
 		sealingSapling = BlockSealingSapling()
 		sealingSlabs = BlockSealingWoodSlab(false)
@@ -394,7 +431,7 @@ object AlfheimBlocks {
 		sealingWood = BlockSealingWood()
 		
 		AlfheimAPI.coldBlocks.addAll(arrayOf(snowLayer, poisonIce))
-		AlfheimAPI.warmBlocks.addAll(arrayOf(redFlame))
+		AlfheimAPI.warmBlocks.addAll(arrayOf(redFlame, ModBlocks.blazeBlock, netherLeaves, netherBerry, netherSapling, netherPlanks, netherSlabs, netherSlabsFull, netherStairs, netherWood))
 		
 		registerBurnables()
 		registerPaintables()
@@ -449,8 +486,10 @@ object AlfheimBlocks {
 		registerOre(LibOreDict.ELEMENTIUM_ORE, ItemStack(elvenOre, 1, 1))
 		registerOre(LibOreDict.ELVEN_QUARTZ_ORE, ItemStack(elvenOre, 1, 2))
 		registerOre(LibOreDict.GOLD_ORE, ItemStack(elvenOre, 1, 3))
+		registerOre(LibOreDict.GOLD_ORE + "Alfheim", ItemStack(elvenOre, 1, 3))
 		registerOre(LibOreDict.IFFESAL_ORE, ItemStack(elvenOre, 1, 4))
 		registerOre(LibOreDict.LAPIS_ORE, ItemStack(elvenOre, 1, 5))
+		registerOre(LibOreDict.LAPIS_ORE + "Alfheim", ItemStack(elvenOre, 1, 5))
 		
 		registerOre(LibOreDict.NIFLEUR_ORE, BlockNiflheim.NiflheimBlockMetas.ORE.stack)
 		
@@ -744,6 +783,7 @@ object AlfheimBlocks {
 		addSubFlower(SubTileBudOfYggdrasil::class.java, "budOfYggdrasil")
 		addSubFlower(SubTileCrysanthermum::class.java, "crysanthermum")
 		addSubFlower(SubTileOrechidEndium::class.java, "orechidEndium")
+		addSubFlower(SubTileOrechidAlfarem::class.java, "orechidAlfarem")
 		addSubFlower(SubTilePetronia::class.java, "petronia")
 		addSubFlower(SubTileRainFlower::class.java, "rainFlower")
 		addSubFlower(SubTileSnowFlower::class.java, "snowFlower")

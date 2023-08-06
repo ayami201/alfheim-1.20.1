@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP
 
 class MessageKeyBindS(var action: Int, var state: Boolean, var data: Int): ASJPacket(), AlfheimPacket<MessageKeyBindS> {
 	override fun handleServer(player: EntityPlayerMP) {
-		when (KeyBindingHandlerClient.KeyBindingIDs.values()[action]) {
+		when (KeyBindingHandlerClient.KeyBindingIDs.entries[action]) {
 			KeyBindingHandlerClient.KeyBindingIDs.CORN    -> EntityLolicorn.call(player)
 			KeyBindingHandlerClient.KeyBindingIDs.FLIGHT  -> KeyBindingHandler.enableFlight(player, state)
 			KeyBindingHandlerClient.KeyBindingIDs.ESMABIL -> KeyBindingHandler.toggleESMAbility(player)

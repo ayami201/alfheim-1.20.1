@@ -21,9 +21,9 @@ import java.util.stream.*
 
 object EntityElfDialogLogic {
 	
-	val commonDialogs = Array(EnumRace.values().size - 1) { ArrayList<DialogPattern>() }
-	val merchantDialogs = Array(EnumRace.values().size - 2) { ArrayList<DialogPattern>() }
-	val guardDialogs = Array(EnumRace.values().size - 2) { ArrayList<DialogPattern>() }
+	val commonDialogs = Array(EnumRace.entries.size - 1) { ArrayList<DialogPattern>() }
+	val merchantDialogs = Array(EnumRace.entries.size - 2) { ArrayList<DialogPattern>() }
+	val guardDialogs = Array(EnumRace.entries.size - 2) { ArrayList<DialogPattern>() }
 	
 	fun launchDialog(elf: EntityElf, speaker: EntityPlayer): Dialog? {
 		val lvl = CardinalSystem.ElvenReputationSystem.getReputationLevel(speaker, elf.race)

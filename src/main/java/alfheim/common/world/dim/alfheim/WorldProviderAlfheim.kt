@@ -16,7 +16,6 @@ import ru.vamig.worldengine.*
 import ru.vamig.worldengine.standardcustomgen.*
 import vazkii.botania.common.Botania
 import vazkii.botania.common.block.ModBlocks
-import kotlin.math.cos
 
 class WorldProviderAlfheim: WE_WorldProvider() {
 	
@@ -62,7 +61,7 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 		cp.decorateChunkGen_List.add(WorldGenAlfheim)
 		cp.decorateChunkGen_List.add(ores)
 		if (Botania.thaumcraftLoaded)
-			cp.decorateChunkGen_List.add(WorldGenAlfheimThaumOre)
+			cp.decorateChunkGen_List.add(WorldGenAlfheimThaumcraft)
 		
 		cp.decorateChunkGen_List.add(AlfheimLakeGen())
 		
@@ -79,6 +78,8 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 		WE_Biome.addBiomeToGeneration(cp, BiomeIslandForest)
 		WE_Biome.addBiomeToGeneration(cp, BiomePitForest)
 	}
+	
+	override fun getDefaultBiome() = BiomeField
 	
 	override fun calculateCelestialAngle(worldTicks: Long, partialTicks: Float): Float {
 		return if (RagnarokHandler.ragnarok) 0.5f

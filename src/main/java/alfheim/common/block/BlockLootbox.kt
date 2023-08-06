@@ -14,19 +14,18 @@ import alfheim.common.network.*
 import alfheim.common.network.packet.Message0dC
 import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.block.material.Material
-import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.item.*
 import net.minecraft.entity.player.*
 import net.minecraft.init.*
-import net.minecraft.item.EnumRarity
 import net.minecraft.item.ItemStack
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.potion.Potion
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.*
 import net.minecraft.world.*
+import net.minecraftforge.common.util.FakePlayer
 import thaumcraft.common.config.Config
 import vazkii.botania.common.Botania
 import vazkii.botania.common.block.ModBlocks
@@ -48,7 +47,7 @@ class BlockLootbox: BlockMod(Material.rock) {
 	}
 	
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		if (world.isRemote) return true
+		if (world.isRemote || player is FakePlayer) return true
 		
 		val scam = isScambox(world, x, y, z)
 		if (scam) {
@@ -57,6 +56,8 @@ class BlockLootbox: BlockMod(Material.rock) {
 			getRewarded(player, getRarity(world, x, y, z))
 		
 		hooray(world, x + 0.5, y + 0.5, z + 0.5, scam)
+		
+		world.setBlockToAir(x, y, z)
 		
 		return true
 	}

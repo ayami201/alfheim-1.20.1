@@ -9,7 +9,6 @@ open class EntityBoundMovingSound<E : Entity>(val host: E, sound: String, val up
 	init {
 		repeat = true
 		field_147665_h = 1
-//		volume = 0.01f
 	}
 	
 	/**

@@ -6,6 +6,8 @@ import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
 import alfheim.common.core.handler.VisualEffectHandler
 import alfheim.common.core.helper.*
 import alfheim.common.core.util.AlfheimTab
+import alfheim.common.item.AlfheimItems
+import alfheim.common.item.material.ElvenResourcesMetas
 import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.enchantment.EnchantmentHelper
@@ -26,7 +28,6 @@ class ItemRealitySword: ItemSword(AlfheimAPI.mauftriumToolmaterial), IManaUsingI
 	
 	init {
 		creativeTab = AlfheimTab
-		setNoRepair()
 		unlocalizedName = "RealitySword"
 	}
 	
@@ -198,6 +199,9 @@ class ItemRealitySword: ItemSword(AlfheimAPI.mauftriumToolmaterial), IManaUsingI
 		
 		player.addStat(StatList.damageDealtStat, (damage * 10f).roundToInt())
 	}
+	
+	override fun getIsRepairable(stack: ItemStack?, material: ItemStack) =
+		material.item === AlfheimItems.elvenResource && material.meta == ElvenResourcesMetas.MauftriumIngot.I
 	
 	override fun addInformation(stack: ItemStack, player: EntityPlayer?, list: MutableList<Any?>, b: Boolean) {
 		val elem = stack.element

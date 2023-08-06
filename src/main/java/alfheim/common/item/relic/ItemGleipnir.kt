@@ -2,10 +2,8 @@ package alfheim.common.item.relic
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.ItemNBTHelper.getBoolean
-import alexsocol.asjlib.ItemNBTHelper.getInt
 import alexsocol.asjlib.ItemNBTHelper.getLong
 import alexsocol.asjlib.ItemNBTHelper.setBoolean
-import alexsocol.asjlib.ItemNBTHelper.setInt
 import alexsocol.asjlib.ItemNBTHelper.setLong
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.render.ASJRenderHelper
@@ -145,7 +143,6 @@ class ItemGleipnir: ItemRelic("Gleipnir") {
 	
 	companion object {
 		
-		const val TAG_COOLDOWN = "cooldown"
 		const val TAG_ENTANGLED = "entangled"
 		const val TAG_RAND_SEED = "randomSeed"
 		
@@ -245,10 +242,6 @@ class ItemGleipnir: ItemRelic("Gleipnir") {
 			discard()
 			glPopMatrix()
 		}
-		
-		private var ItemStack.cooldown
-			get() = getInt(this, TAG_COOLDOWN, 0)
-			set(value) = setInt(this, TAG_COOLDOWN, value)
 	}
 }
 
@@ -385,7 +378,7 @@ object LeashingHandler {
 	@SideOnly(Side.CLIENT)
 	fun interpolate(prev: Double, current: Double, ticks: Double) = prev + (current - prev) * ticks
 	
-	// used in transformers
+	@Suppress("unused") // used in transformers
 	@SideOnly(Side.CLIENT)
 	fun isBoundInRender(flag: Boolean, entity: Entity, camera: ICamera): Boolean {
 		if (flag || entity !is EntityLivingBase) return flag

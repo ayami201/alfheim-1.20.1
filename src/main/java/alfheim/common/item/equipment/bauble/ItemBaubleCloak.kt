@@ -63,7 +63,7 @@ abstract class ItemBaubleCloak(name: String): ItemBauble(name), ITravellersGearS
 			IBaubleRender.Helper.rotateIfSneaking(event.entityPlayer)
 			val armor = event.entityPlayer.getCurrentArmor(2) != null
 			GL11.glTranslatef(0.0f, if (armor) -0.07f else -0.01f, 0.0f)
-			val s = 0.1f
+			val s = 0.101f
 			GL11.glScalef(s, s, s)
 			if (model == null)
 				model = ModelBiped()

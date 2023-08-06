@@ -22,6 +22,7 @@ import net.minecraftforge.common.MinecraftForge
 import vazkii.botania.api.item.IManaProficiencyArmor
 import vazkii.botania.api.mana.*
 import java.awt.Color
+import kotlin.math.*
 
 /**
  * @author WireSegal
@@ -68,27 +69,32 @@ class ItemRodFlameStar(name: String = "rodFlameStar"): ItemMod(name), IManaUsing
 		val cost = getCost(prowess, priest)
 		if (!ManaItemHandler.requestManaExactForTool(stack, player, cost, false)) return
 		
-		val power = getDamage(prowess, priest)
+		var maxDistance = 8.0
+		if (priest) maxDistance += 6.0
+		if (prowess) maxDistance += 2.0
 		
-		val mop = ASJUtilities.getMouseOver(player, power.D, true)
+		val distance = max(min(maxDistance, (getMaxItemUseDuration(stack) - count) * 0.2), 0.5)
+		
+		val mop = ASJUtilities.getMouseOver(player, distance.D, true)
 		
 		val hit = if (mop?.hitVec == null)
-			Vector3(player.lookVec).normalize().mul(power.D).add(player.posX, player.posY + player.eyeHeight, player.posZ)
+			Vector3(player.lookVec).normalize().mul(distance.D).add(player.posX, player.posY + player.eyeHeight, player.posZ)
 		else
 			Vector3(mop.hitVec)
 		
 		val (x, y, z) = hit
 		
 		val color = Color(ColorOverrideHelper.getColor(player, 0xF94407))
-		val r = color.red / 255f
-		val g = color.green / 255f
-		val b = color.blue / 255f
+		val (r, g, b) = color.getRGBColorComponents(null)
 		
 		VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.FLAMESTAR, world.provider.dimensionId, x, y, z, r.D, g.D, b.D, 1.0)
 		
-		if (count % 20 != 0) return
+		val power = getDamage(prowess, priest)
+//		if (count % 20 != 0) return
 		getEntitiesWithinAABB(world, EntityLivingBase::class.java, getBoundingBox(x, y, z).expand(0.5)).forEach { entity ->
-			if (entity == player || entity.health <= 0) return@forEach
+			if (entity == player) return@forEach
+			entity.knockback(player, 0.5f)
+			if (entity.health <= 0) return@forEach
 			if (!entity.attackEntityFrom(DamageSource.causePlayerDamage(player).setFireDamage(), power.F)) return@forEach
 			ManaItemHandler.requestManaExactForTool(stack, player, cost, true)
 			entity.setFire(power * 20)
@@ -101,7 +107,7 @@ class ItemRodFlameStar(name: String = "rodFlameStar"): ItemMod(name), IManaUsing
 	
 	val DAMAGE = 2
 	val PROWESS_DAMAGE = 1
-	val PRIEST_DAMAGE = 7
+	val PRIEST_DAMAGE = 5
 	
 	fun getCost(prowess: Boolean, priest: Boolean): Int {
 		var d = COST

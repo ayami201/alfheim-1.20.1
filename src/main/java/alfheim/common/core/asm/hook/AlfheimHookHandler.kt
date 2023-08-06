@@ -32,16 +32,18 @@ import alfheim.common.core.handler.ragnarok.RagnarokHandler.ragnarok
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.summer
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.summerTicks
 import alfheim.common.core.util.DamageSourceSpell
+import alfheim.common.crafting.recipe.*
 import alfheim.common.entity.*
 import alfheim.common.entity.ai.EntityAICreeperAvoidPooka
 import alfheim.common.entity.boss.EntityFlugel
-import alfheim.common.entity.item.EntityItemImmortal
 import alfheim.common.floatingisland.*
 import alfheim.common.item.*
 import alfheim.common.item.equipment.armor.ItemSnowArmor
 import alfheim.common.item.equipment.bauble.ItemPendant
 import alfheim.common.item.equipment.bauble.ItemPendant.Companion.EnumPrimalWorldType.MUSPELHEIM
 import alfheim.common.item.equipment.bauble.faith.ItemRagnarokEmblem
+import alfheim.common.item.material.ElvenResourcesMetas
+import alfheim.common.item.relic.ItemMjolnir
 import alfheim.common.item.rod.ItemRodClicker
 import alfheim.common.potion.PotionSoulburn
 import alfheim.common.spell.earth.SpellGoldRush
@@ -90,6 +92,9 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fluids.IFluidBlock
 import org.lwjgl.opengl.GL11.*
 import ru.vamig.worldengine.*
+import thaumcraft.api.aspects.AspectList
+import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager
+import thaumcraft.common.tiles.TileAlchemyFurnace
 import travellersgear.api.TravellersGearAPI
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.boss.IBotaniaBoss
@@ -518,7 +523,7 @@ object AlfheimHookHandler {
 	fun noDupePre(gaia: EntityDoppleganger, src: DamageSource, dmg: Float): Boolean {
 		val player = src.entity as? EntityPlayer ?: return false
 		hadPlayer = gaia.playersWhoAttacked.contains(player.commandSenderName)
-		return false
+		return true
 	}
 	
 	@JvmStatic
@@ -1566,8 +1571,8 @@ object AlfheimHookHandler {
 		input.sneak = shift
 		
 		if (input.sneak) {
-			input.moveStrafe = input.moveStrafe * 0.3f
-			input.moveForward = input.moveForward * 0.3f
+			input.moveStrafe *= 0.3f
+			input.moveForward *= 0.3f
 		}
 		
 		return true
@@ -1909,4 +1914,41 @@ object AlfheimHookHandler {
 		RenderEntityFloatingIsland.callLists.keys.forEach(GLAllocation::deleteDisplayLists)
 		RenderEntityFloatingIsland.callLists.clear()
 	}
+	
+	@JvmStatic
+	@Hook(injectOnExit = true)
+	fun saveLastRecipe(tile: TileRuneAltar) {
+		val recipe = BotaniaAPI.runeAltarRecipes.firstOrNull { it.matches(tile) }
+		
+		if (recipe is RecipeRuneAltarFull) {
+			for (i in 0 until tile.sizeInventory)
+				tile[i] = null
+			
+			return
+		}
+		
+		if (tile.worldObj.isRemote) return
+		
+		for (i in 0 until tile.sizeInventory)  {
+			val stack = tile[i] ?: continue
+			
+			if (stack.item !== AlfheimItems.elvenResource) continue
+			when (stack.meta) { ElvenResourcesMetas.MuspelheimRune.I, ElvenResourcesMetas.NiflheimRune.I, ElvenResourcesMetas.PrimalRune.I -> continue }
+			
+			EntityItem(tile.worldObj, tile.xCoord + 0.5, tile.yCoord + 1.5, tile.zCoord + 0.5, stack.copy()).spawn()
+			tile[i] = null
+		}
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE, returnNull = true)
+	fun getObjectTags(static: ThaumcraftCraftingManager?, stack: ItemStack?) = RecipeSaveIvy.checkStack(stack)
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE, returnNull = true)
+	fun getBonusTags(static: ThaumcraftCraftingManager?, stack: ItemStack?, sourcetags: AspectList?) = RecipeSaveIvy.checkStack(stack)
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE)
+	fun canEnchantItem(ench: EnumEnchantmentType, item: Item?) = item is ItemMjolnir && ench === EnumEnchantmentType.weapon
 }

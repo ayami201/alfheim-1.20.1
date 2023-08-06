@@ -13,8 +13,10 @@ import alfheim.common.item.ItemMod
 import com.mojang.authlib.GameProfile
 import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.Event
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.Entity
+import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.*
@@ -26,6 +28,7 @@ import net.minecraft.util.*
 import net.minecraft.world.World
 import net.minecraftforge.common.util.*
 import net.minecraftforge.event.ForgeEventFactory
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import vazkii.botania.api.item.*
 import vazkii.botania.api.mana.ManaItemHandler
@@ -97,7 +100,7 @@ class ItemRodClicker: ItemMod("RodClicker"), IAvatarWieldable {
 			yl -= 1
 			s = 1
 		} else {
-			s = ForgeDirection.values()[s].opposite.ordinal
+			s = ForgeDirection.entries[s].opposite.ordinal
 		}
 		
 		val player = getFake(world.provider.dimensionId)
@@ -301,5 +304,16 @@ class ItemRodClicker: ItemMod("RodClicker"), IAvatarWieldable {
 		}
 		
 		fun isFakeNotAvatar(player: EntityPlayer) = player.commandSenderName.startsWith("Avatar-Clicker_") || EntityFlugel.isTruePlayer(player)
+		
+		@SubscribeEvent
+		fun unagre(e: LivingSetAttackTargetEvent) {
+			if (e.target !is FakePlayer) return
+			
+			val living = e.entityLiving
+			living.entityLivingToAttack = null
+			
+			if (living is EntityLiving)
+				living.attackTarget = null
+		}
 	}
 }

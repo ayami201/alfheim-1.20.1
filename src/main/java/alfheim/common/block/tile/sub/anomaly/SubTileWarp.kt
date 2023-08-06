@@ -3,6 +3,7 @@ package alfheim.common.block.tile.sub.anomaly
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.block.tile.SubTileAnomalyBase
+import alfheim.common.block.AlfheimBlocks
 import alfheim.common.item.equipment.bauble.ItemSpatiotemporalRing
 import net.minecraft.block.Block
 import net.minecraft.entity.EntityLivingBase
@@ -41,7 +42,7 @@ class SubTileWarp: SubTileAnomalyBase() {
 				var tries = 50
 				
 				while (tries-- > 0) {
-					v[x, y, z, radius] = worldObj.rand
+					v.set(x, y, z, radius, worldObj.rand)
 					
 					b1 = worldObj.getBlock(v.x1, v.y1, v.z1)
 					b2 = worldObj.getBlock(v.x2, v.y2, v.z2)
@@ -64,11 +65,29 @@ class SubTileWarp: SubTileAnomalyBase() {
 		}
 	
 	public override fun update() {
+		if (ASJUtilities.isServer && worldObj.rand.nextInt(if (inWG()) 1000 else 24000) == 0) {
+			var tries = 100
+			
+			while (tries-- > 0) {
+				val (x, _, z) = Vector3().rand().sub(0.5).normalize().mul(radius - worldObj.rand.nextInt(10) + 5).add(x, y, z).mf()
+				val y = worldObj.getTopSolidOrLiquidBlock(x, z)
+				val block = AlfheimBlocks.subspacian
+				if (!worldObj.isAirBlock(x, y, z) || !block.canBlockStay(worldObj, x, y, z)) continue
+				
+				worldObj.setBlock(x, y, z, block)
+				break
+			}
+		}
+		
 		if (inWG()) return
 		
-		if (ASJUtilities.isServer && ticks % 600 == 0) {
-			radius = worldObj.rand.nextInt(8) + 16
-			ASJUtilities.dispatchTEToNearbyPlayers(superTile!!)
+		if (ASJUtilities.isServer) {
+			if (ticks % 600 == 0) {
+				radius = worldObj.rand.nextInt(8) + 16
+				ASJUtilities.dispatchTEToNearbyPlayers(superTile!!)
+			}
+			
+			return
 		}
 		
 		rand.setSeed((x xor y xor z).toLong())
@@ -175,7 +194,7 @@ class SubTileWarp: SubTileAnomalyBase() {
 		var z2: Int = 0
 		var m2: Int = 0
 		
-		operator fun set(x: Int, y: Int, z: Int, radius: Int, rand: Random) {
+		fun set(x: Int, y: Int, z: Int, radius: Int, rand: Random) {
 			x1 = rand.nextInt(radius * 2) - radius
 			y1 = rand.nextInt(radius * 2) - radius
 			z1 = rand.nextInt(radius * 2) - radius

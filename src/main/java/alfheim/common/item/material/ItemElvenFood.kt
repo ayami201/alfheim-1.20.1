@@ -3,6 +3,7 @@ package alfheim.common.item.material
 import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.client.core.helper.IconHelper
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenFoodMetas.*
@@ -14,13 +15,15 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.item.*
 import net.minecraft.nbt.*
+import net.minecraft.potion.Potion
 import net.minecraft.potion.PotionEffect
 import net.minecraft.util.IIcon
 import net.minecraft.world.World
+import net.minecraftforge.common.util.Constants
 
 class ItemElvenFood: ItemFood(0, 0f, false) {
 	
-	val subItems = values().size
+	val subItems = entries.size
 	
 	lateinit var icons: Array<IIcon>
 	
@@ -54,7 +57,7 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 	
 	// foodLevel
 	override fun func_150905_g(stack: ItemStack): Int {
-		return when (values().getOrNull(stack.meta)) {
+		return when (entries.getOrNull(stack.meta)) {
 			Lembas                 -> 20
 			RedGrapes, WhiteGrapes -> 2
 			Nectar                 -> 1
@@ -62,14 +65,21 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 			JellyBottle            -> 3
 			JellyBread             -> 6
 			JellyCod               -> 9
-			DreamCherry            -> 2
+			DreamCherry,
+			TreeBerryBarrier,
+			TreeBerryCalico,
+			TreeBerryCircuit,
+			TreeBerryLightning,
+			TreeBerryNether,
+			TreeBerrySealing       -> 2
+			
 			else                   -> 0
 		}
 	}
 	
 	// foodSaturationLevel
 	override fun func_150906_h(stack: ItemStack): Float {
-		return when (values().getOrNull(stack.meta)) {
+		return when (entries.getOrNull(stack.meta)) {
 			Lembas                 -> 5f
 			RedGrapes, WhiteGrapes -> 0.3f
 			Nectar                 -> 0.15f
@@ -77,7 +87,14 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 			JellyBottle            -> 0.5f
 			JellyBread             -> 0.8f
 			JellyCod               -> 1.2f
-			DreamCherry            -> 0.3f
+			DreamCherry,
+			TreeBerryBarrier,
+			TreeBerryCalico,
+			TreeBerryCircuit,
+			TreeBerryLightning,
+			TreeBerryNether,
+			TreeBerrySealing       -> 0.3f
+			
 			else                   -> 0f
 		}
 	}
@@ -91,12 +108,26 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 	}
 	
 	override fun onEaten(stack: ItemStack, world: World?, player: EntityPlayer): ItemStack {
-		getPotions(stack).forEach {
-			it ?: return@forEach
+		if (!world!!.isRemote) {
+			getPotions(stack).forEach {
+				it ?: return@forEach
+				
+				if (!player.isPotionActive(it.potionID))
+					player.addPotionEffect(it)
+				val eff = player.getActivePotionEffect(it.potionID) ?: return@forEach
+				eff.duration = it.duration
+				eff.amplifier = it.amplifier
+			}
 			
-			val eff = player.getActivePotionEffect(it.potionID) ?: it
-			eff.duration = it.duration
-			eff.amplifier = it.amplifier
+			ElvenFoodMetas.entries[stack.meta].potion?.let {
+				var amp = 0
+				val id = if (it == -1) {
+					amp = 2
+					Potion.potionTypes.shuffled().filterNotNull().random(player.rng)!!.id
+				} else it
+				
+				player.addPotionEffect(PotionEffectU(id, 7200, amp))
+			}
 		}
 		
 		val ret = super.onEaten(stack, world, player)
@@ -109,7 +140,7 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 	override fun hasContainerItem(stack: ItemStack) = true
 	
 	override fun getContainerItem(stack: ItemStack): ItemStack? {
-		return when (ElvenFoodMetas.values().getOrNull(stack.meta)) {
+		return when (entries.getOrNull(stack.meta)) {
 			RedWine, WhiteWine -> ElvenResourcesMetas.Jug.stack
 			JellyBottle        -> ItemStack(Items.glass_bottle)
 			else               -> null
@@ -129,18 +160,18 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 		const val TAG_POTIONS = "potions"
 		
 		fun addPotion(stack: ItemStack, effect: PotionEffect) {
-			ItemNBTHelper.getList(stack, TAG_POTIONS, NBTBase.NBTTypes.indexOf("COMPOUND")).appendTag(NBTTagCompound().apply { effect.writeCustomPotionEffectToNBT(this) })
+			ItemNBTHelper.getList(stack, TAG_POTIONS, Constants.NBT.TAG_COMPOUND).appendTag(NBTTagCompound().apply { effect.writeCustomPotionEffectToNBT(this) })
 		}
 		
 		fun getPotions(stack: ItemStack): List<PotionEffect?> {
-			return ItemNBTHelper.getList(stack, TAG_POTIONS, NBTBase.NBTTypes.indexOf("COMPOUND")).tagList.map {
+			return ItemNBTHelper.getList(stack, TAG_POTIONS, Constants.NBT.TAG_COMPOUND).tagList.map {
 				PotionEffect.readCustomPotionEffectFromNBT(it as NBTTagCompound)
 			}
 		}
 	}
 }
 
-enum class ElvenFoodMetas {
+enum class ElvenFoodMetas(val potion: Int? = null) {
 	
 	Lembas,
 	RedGrapes,
@@ -151,7 +182,14 @@ enum class ElvenFoodMetas {
 	JellyBottle,
 	JellyBread,
 	JellyCod,
-	DreamCherry;
+	DreamCherry,
+	TreeBerryBarrier(AlfheimConfigHandler.potionIDWtfBerry0),
+	TreeBerryCalico(-1),
+	TreeBerryCircuit(AlfheimConfigHandler.potionIDWtfBerry2),
+	TreeBerryLightning(AlfheimConfigHandler.potionIDWtfBerry3),
+	TreeBerryNether(AlfheimConfigHandler.potionIDWtfBerry4),
+	TreeBerrySealing(AlfheimConfigHandler.potionIDWtfBerry5),
+	;
 	
 	val I get() = ordinal
 	

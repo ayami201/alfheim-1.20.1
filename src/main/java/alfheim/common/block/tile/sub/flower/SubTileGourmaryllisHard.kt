@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound
 import vazkii.botania.api.subtile.RadiusDescriptor.Square
 import vazkii.botania.api.subtile.SubTileGenerating
 import vazkii.botania.common.lexicon.LexiconData
-import kotlin.math.min
+import kotlin.math.*
 
 class SubTileGourmaryllisHard: SubTileGenerating() {
 	
@@ -31,7 +31,7 @@ class SubTileGourmaryllisHard: SubTileGenerating() {
 		val (x, y, z) = Vector3.fromTileEntityCenter(supertile)
 		
 		if (storedMana != 0) {
-			val munchInterval = 2 + 2 * lastFoodCount
+			val munchInterval = max(2 + 2 * lastFoodCount, 4)
 			
 			if (cooldown == 0) {
 				mana = min(maxMana, mana + storedMana)

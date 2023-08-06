@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack
 
 object EntityElfJunkmanLogic {
 
-	val trades = Array(EnumRace.values().size) { HashSet<TradeEntry>() }
+	val trades = Array(EnumRace.entries.size) { HashSet<TradeEntry>() }
 	
 	/**
 	 * @param lvl Player reputation level. May be in range -1..3,

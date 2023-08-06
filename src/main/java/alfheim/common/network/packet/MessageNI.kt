@@ -23,7 +23,7 @@ class MessageNI(ty: Mni, vararg var intArray: Int, var type: Int = ty.ordinal) :
 		for (value in intArray) write(buf, value)
 	}
 
-	override fun handleServer(player: EntityPlayerMP) = when (Mni.values()[type]) {
+	override fun handleServer(player: EntityPlayerMP) = when (Mni.entries[type]) {
 		Mni.INTERACTION -> with(this) {
 			operator fun IntArray.component6() = this[5]
 			operator fun IntArray.component7() = this[6]
@@ -40,9 +40,9 @@ class MessageNI(ty: Mni, vararg var intArray: Int, var type: Int = ty.ordinal) :
 
 			MinecraftForge.EVENT_BUS.post(
 				if (left == 1)
-					PlayerInteractAdequateEvent.LeftClick(player, PlayerInteractAdequateEvent.LeftClick.Action.values()[type], x, y, z, side, entity)
+					PlayerInteractAdequateEvent.LeftClick(player, PlayerInteractAdequateEvent.LeftClick.Action.entries[type], x, y, z, side, entity)
 				else
-					PlayerInteractAdequateEvent.RightClick(player, PlayerInteractAdequateEvent.RightClick.Action.values()[type], x, y, z, side, entity))
+					PlayerInteractAdequateEvent.RightClick(player, PlayerInteractAdequateEvent.RightClick.Action.entries[type], x, y, z, side, entity))
 		}
 		Mni.BLIZZARD,
 		Mni.HEARTLOSS,
@@ -50,7 +50,7 @@ class MessageNI(ty: Mni, vararg var intArray: Int, var type: Int = ty.ordinal) :
 	}
 
 	override fun handleClient() {
-		when (Mni.values()[type]) {
+		when (Mni.entries[type]) {
 			Mni.BLIZZARD -> RagnarokHandler.blizzards.apply {
 				val (id) = intArray
 

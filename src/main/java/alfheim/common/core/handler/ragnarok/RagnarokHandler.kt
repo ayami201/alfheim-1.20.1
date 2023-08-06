@@ -104,8 +104,7 @@ object RagnarokHandler {
 	var blockedPowers = BooleanArray(6)
 	
 	init {
-		eventForge()
-		eventFML()
+		eventForge().eventFML()
 		
 		RagnarokEmblemCraftHandler.eventForge()
 		
@@ -799,7 +798,7 @@ object RagnarokHandler {
 					outerLandsID -> NONE
 					twillightForestID -> ALL
 					// configured
-					in AlfheimConfigHandler.worldDestroyConfig.keys -> values()[AlfheimConfigHandler.worldDestroyConfig[dimensionId]!!]
+					in AlfheimConfigHandler.worldDestroyConfig.keys -> entries[AlfheimConfigHandler.worldDestroyConfig[dimensionId]!!]
 					// all other
 					else -> NONE
 				}

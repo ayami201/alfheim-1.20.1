@@ -84,14 +84,19 @@ object MobSpawnHandler {
 		registerMob(name, m, n, b, dim)
 	}
 	
-	fun registerMob(name: String, maxCountPerPlayer: Int, minBatchSize: Int, maxBatchSize: Int, dim: Int, spawnCheck: (Entity) -> Boolean = { true }) {
+	fun registerMob(name: String, maxCountPerPlayer: Int, minBatchSize: Int, maxBatchSize: Int, dim: Int, spawnCheck: ((Entity) -> Boolean)? = null) {
 		registeredMobs.computeIfAbsent(dim) { HashSet() } += MobData(name, maxCountPerPlayer, minBatchSize, maxBatchSize, spawnCheck)
 		mobNames.computeIfAbsent(dim) { HashSet() } += name
 	}
 	
-	fun unregisterMob(name: String, dim: Int, maxCountPerPlayer: Int, minBatchSize: Int, maxBatchSize: Int) {
+	fun unregisterMob(name: String, maxCountPerPlayer: Int, minBatchSize: Int, maxBatchSize: Int, dim: Int) {
 		val set = registeredMobs.computeIfAbsent(dim) { HashSet() }
-		set -= MobData(name, maxCountPerPlayer, minBatchSize, maxBatchSize)
+		set.removeAll {
+			it.name == name &&
+			it.maxCountPerPlayer == maxCountPerPlayer &&
+			it.minBatchSize == minBatchSize &&
+			it.maxBatchSize == maxBatchSize
+		}
 		
 		if (set.none { it.name == name })
 			mobNames.computeIfAbsent(dim) { HashSet() } -= name

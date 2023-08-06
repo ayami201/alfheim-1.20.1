@@ -50,10 +50,11 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 		return stack
 	}
 	
-	override fun onUpdate(stack: ItemStack?, world: World?, entity: Entity?, slotID: Int, inHand: Boolean) {
+	override fun onUpdate(stack: ItemStack, world: World, entity: Entity?, slotID: Int, inHand: Boolean) {
 		super.onUpdate(stack, world, entity, slotID, inHand)
-		setInt(stack!!, TAG_POSSESSION, 0)
-		if (entity is EntityPlayer && getInt(stack, TAG_COOLDOWN, 0) > 0) setInt(stack, TAG_COOLDOWN, getInt(stack, TAG_COOLDOWN, 0) - ManaItemHandler.requestMana(stack, entity as EntityPlayer?, 1, world!!.isRemote))
+		setInt(stack, TAG_POSSESSION, 0)
+		if (entity is EntityPlayer && stack.cooldown > 0 && ManaItemHandler.requestManaExact(stack, entity, 1, world.isRemote))
+			stack.cooldown--
 	}
 	
 	override fun onWornTick(stack: ItemStack, player: EntityLivingBase) {
@@ -77,7 +78,7 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 			val copy = inSlot.copy()
 			baubles[0] = null
 			
-			setInt(copy, TAG_COOLDOWN, MAX_COOLDOWN * 3)
+			copy.cooldown = MAX_COOLDOWN * 3
 			player.triggerAchievement(AlfheimAchievements.outstander)
 			
 			player.removePotionEffect(Potion.damageBoost.id)
@@ -91,7 +92,7 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 	override fun onEquipped(stack: ItemStack, entity: EntityLivingBase) {
 		if (entity.worldObj.isRemote) return
 		setInt(stack, TAG_POSSESSION, 0)
-		setInt(stack, TAG_COOLDOWN, MAX_COOLDOWN)
+		stack.cooldown = MAX_COOLDOWN
 		entity.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDPossession, 2))
 	}
 	
@@ -115,7 +116,7 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 	
 	override fun addHiddenTooltip(stack: ItemStack, player: EntityPlayer?, list: MutableList<Any?>, advTT: Boolean) {
 		super.addHiddenTooltip(stack, player, list, advTT)
-		val e = if (getInt(stack, TAG_COOLDOWN, 0) > 0) EnumChatFormatting.DARK_GRAY else if (getBoolean(stack, TAG_ACTIVATED, false)) EnumChatFormatting.GREEN else EnumChatFormatting.DARK_RED
+		val e = if (stack.cooldown > 0) EnumChatFormatting.DARK_GRAY else if (getBoolean(stack, TAG_ACTIVATED, false)) EnumChatFormatting.GREEN else EnumChatFormatting.DARK_RED
 		list.add("")
 		list.add("$e${StatCollector.translateToLocal("$unlocalizedName.${if (getBoolean(stack, TAG_ACTIVATED, false)) "" else "in"}active")}")
 	}
@@ -139,7 +140,7 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 		glPopMatrix()
 	}
 	
-	override fun usesMana(stack: ItemStack) = getInt(stack, TAG_COOLDOWN, 0) > 0
+	override fun usesMana(stack: ItemStack) = stack.cooldown > 0
 	
 	override fun registerIcons(reg: IIconRegister) {
 		itemIcon = IconHelper.forItem(reg, this)
@@ -157,7 +158,6 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 		
 		const val TAG_POSSESSION = "possession"
 		const val TAG_ACTIVATED = "activated"
-		const val TAG_COOLDOWN = "cooldown"
 		const val MAX_COOLDOWN = 12000
 		
 		val dimdoors = Loader.isModLoaded("dimdoors")
@@ -256,13 +256,14 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 			
 			val slot = ASJUtilities.getSlotWithItem(AlfheimItems.mask, player.inventory)
 			if (slot == -1) return false
+			val mask = player.inventory[slot] ?: return false
 			
-			if (!getBoolean(player.inventory[slot], TAG_ACTIVATED, false) || getInt(player.inventory[slot], TAG_COOLDOWN, 0) > 0) return false
+			if (!getBoolean(mask, TAG_ACTIVATED, false) || mask.cooldown > 0) return false
 			
-			val mask = PlayerHandler.getPlayerBaubles(player)[0]
-			if (mask?.item === AlfheimItems.mask) return false
+			val amulet = PlayerHandler.getPlayerBaubles(player)[0]
+			if (amulet?.item === AlfheimItems.mask) return false
 			
-			if ((mask?.item as? IBauble)?.canUnequip(mask, player) == false) return false
+			if ((amulet?.item as? IBauble)?.canUnequip(amulet, player) == false) return false
 			
 			return true
 		}

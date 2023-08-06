@@ -75,9 +75,14 @@ alfheim.page.shrines0=Traveling around the Alfheim, one can notice different sma
 alfheim.page.shrines1=&4Berserk&0 - gain attack damage, lose health points.<br>&4Overmage&0 - gain magic attack damage, lose mana.<br>&4Ninja&0 - gain speed, lose attack damage.<br>&4Tank&0 - gain protection, lose speed
 
 alfheim.entry.flowerEnderchid=Orechid Endium
-alfheim.tagline.flowerEnderchid=Creates End ores from End Stone
+alfheim.tagline.flowerEnderchid=Creates end ores from end stone
 alfheim.page.flowerEnderchid0=The &1Orechid&0 is a great flower. The ability to create raw ores with &4Mana&0 can be a great boon to any sedentary botanist's life. It, however, can't create ores from the &4End&0. Getting that sorted out is easy, by switching the petals a bit, it'll create &4End&0 ores in &1End Stone&0 instead. The flower must be in &4The End&0 to function.
 alfheim.page.flowerEnderchid1=&oRevelationary Ore&r.
+
+alfheim.entry.flowerAlfchid=Orechid Alfarem
+alfheim.tagline.flowerAlfchid=Creates Alfheim ores from livingrock
+alfheim.page.flowerAlfchid0=The other variant of &1Orechid&0 flower was created by travelers from Midgard specifically for use in the Elven world. &1Orechid Alfarem&0, housed in &1Alfheim&0, will turn all nearby &1livingrock&0 blocks into ores native to that world. Of course, this process requires a certain amount of &4mana&0.
+alfheim.page.flowerAlfchid1=&oIf you lie on grass you can feel heartbeat of world&0.
 
 alfheim.entry.flowerPetronia=Petronia
 alfheim.tagline.flowerPetronia=Mana from Liquid Fuel
@@ -411,6 +416,48 @@ alfheim.tagline.thunderChakram=An electrified Thorn Chakram
 alfheim.page.thunderChakram0=This is another variant of common &1Thorn Chakram&0. By adding some of &1Thunderous Splinters&0 and a &1Pixie Dust&0 to the said weapon one can infuse it with the power of lightning, transforming it into &1Thunder Chakram&0, that deals less damage, but in a bigger range, and even can pierce through armor.
 alfheim.page.thunderChakram1=Mjölnir for kids
 
+alfheim.entry.bud=Bud of Yggdrasil
+alfheim.tagline.bud=Where we aren't
+alfheim.page.bud0=There is one rumor that in those places where there are no elves or humans, time completely stops, and the world freezes in anticipation. Let's leave all these incomprehensible phrases like "quantum entanglement" and "observer effect" to mad scientists, fruitlessly delving into their theories. We are interested in the practical aspect!
+alfheim.page.bud1=&1Yggdrasil&0 doesn't just connect worlds into one whole. It literally defines the laws of being that oppose chaos. Laws that can be reinforced in a certain territory, so that time can flow. The &1Bud of Yggdrasil&0 absorbs the energy of the World Tree to keep the surrounding territory active. Alas, the power of the flower extends to a single chunk, so your farms will have to squeeze!
+alfheim.page.bud2=No Chickens here!
+
+alfheim.entry.serenade=Serenade of Tranquility
+alfheim.tagline.serenade=Feel the harmony with a pleasant melody
+alfheim.page.serenade0=The ethereal &1Serenade of Tranquility&0 is a magical zither that bestows upon the wearer with a mesmerizing symphony of serenity. Enchanting notes swirl in the air, bestowing a soothing aura upon all in its presence, restoring their spirits with cheering magic.
+alfheim.page.serenade1=Exit Tranquility Lane
+
+alfheim.entry.subshroom=Subspacian
+alfheim.tagline.subshroom=What is this mushroom, grandpa?
+alfheim.page.subshroom0=Amidst enchanted woodlands lie the &1Subspacian&0 mushrooms, aglow with celestial brilliance. Upon contact or consumption, these enigmatic fungi hold the key to traverse space itself, teleporting entities to uncharted realms.
+alfheim.page.subshroom1=Such close encounters carry the risk of being forever lost between worlds, so one must possess a pure and fearless heart. They are found near spatial anomalies, and are rumored to be gifts from benevolent beings, awe-inspiring and forever altering reality for any wanderer.
+
+alfheim.entry.warBanner=War Banner
+alfheim.tagline.warBanner=Show your fighting spirit
+alfheim.page.warBanner0=&1War Banners&0 are cosmetic baubles that may not only serve as a sign of your battle determination, but will also help you to celebrate your glorious victories, standing atop of your foes' corpses.
+alfheim.page.warBanner1=Heavy losses were expected
+
+alfheim.entry.openChest=Bottomless Crate
+alfheim.tagline.openChest=It has no bottom. Literally.
+alfheim.page.openChest0=The &1Bottomless Crate&0 is the upgraded version of &1Open Crate&0, with one single difference - it has no internal buffer or capacity limit, so it will drop all your stuff at once (even 100 stacks), and that's it.
+alfheim.page.openChest1=Wait, that was a lie?
+
+alfheim.entry.rodSuperExchange=Rod of the Tectonic Movement
+alfheim.tagline.rodSuperExchange=More WorldEdit stuff to mortals
+alfheim.page.rodSuperExchange0=The &1Rod of the Tectonic Movement&0 is the enhanced version of the &1Rod of the Shifting Crust&0, allowing one to select multiple blocks to be placed in random order with semi-equal chance.<br>To clear block list one should simply sneak-rightclick the rod in the air.
+alfheim.page.rodSuperExchange1=That is not a buzzsaw
+
+alfheim.entry.ivySave=Indissoluble Ivy
+alfheim.tagline.ivySave=Ivy that can be attached to items to make them nearly indestructible
+alfheim.page.ivySave0=If you had ever thrown your pickaxe into lava, destroyed your sword on a cactus or otherwise lost your precious items, this thing is for you. The &1Indissoluble Ivy&0 binds the item to you so you cannot accidentally drop it from your inventory. And even if said item somehow appeared in the world it would become resistant to most threats, but will still naturally despawn after 5 minutes.
+alfheim.page.ivySave1=Not made of bedrock
+
+alfheim.entry.chalk=Runic Chalk
+alfheim.tagline.chalk=Tool to draw on blocks and air
+alfheim.page.chalk0=The &1Runic Chalk&0 is a mystical artifact bestowed upon the artists of nine worlds by the ancient spirits of creativity. With this otherworldly tool in hand, one can weave their imagination into reality, painting intricate masterpieces upon blocks and in the very air itself, giving life to vibrant dreams and transcending the boundaries of the realm.
+alfheim.page.chalk1=Unleash your artistic prowess and sculpt a world that reflects the colors of your soul!<br>Colors can be controlled by equipping the &1Clerical Colorizer&0. Everything you draw will be visible to anyone who has been in the same dimension with you at the time of drawing, and will disappear in five minutes after.
+alfheim.page.chalk2=Creating &1Runic Chalk&0
+
 ################################################################ DIVINITY ################################################################
 
 alfheim.entry.divinity_intro=Divine Faith
@@ -557,17 +604,6 @@ alfheim.page.soulSword1=The fusion of terrasteel - a metal symbolizing the origi
 alfheim.page.soulSword2=Creating &1Soul Sword&0
 alfheim.page.soulSword3=To repair it you can simply Sneak-rightclick it in the air with some &1Gaia Spirit&0 in your inventory.
 
-alfheim.entry.goddessCharm=Benevolent Goddess' Charm
-alfheim.tagline.goddessCharm=Prevents explosions from damaging the world
-alfheim.page.goddessCharm0=The Benevolent Goddess' Charm is a defensive Bauble that's worn in the Amulet slot. When worn, it uses Mana to prevent explosions in its wearer's vicinity from damaging any blocks in the world.
-alfheim.page.goddessCharm1=Keep TNT away from children!
-
-alfheim.entry.bud=Bud of Yggdrasil
-alfheim.tagline.bud=Where we aren't
-alfheim.page.bud0=There is one rumor that in those places where there are no elves or humans, time completely stops, and the world freezes in anticipation. Let's leave all these incomprehensible phrases like "quantum entanglement" and "observer effect" to mad scientists, fruitlessly delving into their theories. We are interested in the practical aspect!
-alfheim.page.bud1=&1Yggdrasil&0 doesn't just connect worlds into one whole. It literally defines the laws of being that oppose chaos. Laws that can be reinforced in a certain territory, so that time can flow. The &1Bud of Yggdrasil&0 absorbs the energy of the World Tree to keep the surrounding territory active. Alas, the power of the flower extends to a single chunk, so your farms will have to squeeze!
-alfheim.page.bud2=No Chickens here!
-
 alfheim.entry.gjallarhorn=Gjallarhorn
 alfheim.tagline.gjallarhorn=Heralds victory (or end?)
 alfheim.page.gjallarhorn0=This horn belongs to Heimdall, the guardian of the gods who guards the Bifrost from enemies. As the legends say, on the day of Ragnarök, he will blow the Gjallarhorn, and its sound will sweep through all the Nine Worlds, marking the beginning of the end of the world and calling all the warriors to protect the aesir.
@@ -636,6 +672,9 @@ botania.page.elvenLenses14=Superconductor Lens
 
 botania.page.elvenLenses15=&1Purification Lens&0 grants mana burst the ability to purify blocks into their natural counterparts, similar to a pure daisy, but instantly. It is also capable to dissolve mana infused into items.
 botania.page.elvenLenses16=Purification Lens
+
+botania.page.elvenLenses17=&1Linkback Lens&0 allows burst to refill its mana on the fly while it is in the range of its source, either a &1Mana Spreader&0 or a &1Mana Blaster&0. Its most power is revealed when paired with other functional lens.
+botania.page.elvenLenses18=Linkback Lens
 
 botania.page.luminizerTransport7=Adding a &4Lever&0 to a &1Luminizer&0 turns it into a &1Toggle Luminizer&0, which accepts a &4redstone signal&0. When powered with Redstone signal, a Toggle Luminizer will drop anything passing through. It works normally when unpowered.
 botania.page.luminizerTransport8=Signal in
@@ -721,6 +760,11 @@ alfheim.entry.aconite=Wither Aconite
 alfheim.tagline.aconite=Mana from the stars
 alfheim.page.aconite0=The &1Wither Aconite&0 uses up nether stars dropped on it to create mana from them. If the wither aconite can't use up the nether star after 5 minutes, it will despawn like any other item.
 alfheim.page.aconite1=No blocks tho
+
+alfheim.entry.goddessCharm=Benevolent Goddess' Charm
+alfheim.tagline.goddessCharm=Prevents explosions from damaging the world
+alfheim.page.goddessCharm0=The Benevolent Goddess' Charm is a defensive Bauble that's worn in the Amulet slot. When worn, it uses Mana to prevent explosions in its wearer's vicinity from damaging any blocks in the world.
+alfheim.page.goddessCharm1=Keep TNT away from children!
 
 ################################################################ EBT ################################################################
 
@@ -885,6 +929,10 @@ alfheim.entry.circuitSapling=Circuitree
 alfheim.tagline.circuitSapling=A redstone emitter
 alfheim.entry.calicoSapling=Calico Tree
 alfheim.tagline.calicoSapling=An explosion absorber
+alfheim.entry.barrierSapling=Barrier Tree
+alfheim.tagline.barrierSapling=An enemy repulser
+alfheim.entry.treeBerry=Magic berries
+alfheim.tagline.treeBerry=Special tree fruit
 alfheim.entry.livingwoodFunnel=Livingwood Funnel
 alfheim.tagline.livingwoodFunnel=A filterable hopper that only carries one item
 alfheim.entry.toolbelt=Botanist's Toolbelt
@@ -993,6 +1041,20 @@ alfheim.page.calicoSapling2=The planks work too
 alfheim.page.calicoSapling3=And Stairs
 alfheim.page.calicoSapling4=And even Slabs
 
+alfheim.page.barrierSapling0=The &1Barrier tree&0 prevents any living entity from approaching the tree in certain range. The tree does not work on individuals who were near it at the moment of growth.
+alfheim.page.barrierSapling1=Oh, you're approaching me?
+alfheim.page.barrierSapling2=The planks work too
+alfheim.page.barrierSapling3=And Stairs
+alfheim.page.barrierSapling4=And even Slabs
+
+alfheim.page.treeBerry0=Any artificial tree, created on &1Dendric suffuser&0 has a chance to grow some &1Magic fruits&0 on its leaves. While having poor nutrition quality, those fruits are possessing extraordinary powers and can grant interesting effects upon consumption.
+alfheim.page.treeBerry1=The &1Thunderous Fruit&0, a formidable creation, grants the ability to reflect a portion of incoming damage back upon the enemies, striking fear into the hearts of adversaries.
+alfheim.page.treeBerry2=The &1Infernal Fruit&0 stands out as a guardian against the scorching dangers of lava and fire. With its unique ability to absorb such harm, it becomes an invaluable companion to brave adventurers navigating treacherous landscapes.
+alfheim.page.treeBerry3=The &1Circuitree Fruit&0 grants anyone who partakes of its magical essence the power to emit a mysterious &4redstone signal&0, tapping into the very essence of the land's underlying energies.
+alfheim.page.treeBerry4=The &1Calico Fruit&0, an alluringly colorful wonder, boasts the most unpredictable nature. Its consumption brings forth an assortment of random effects, leaving its consumer in a state of delightful uncertainty.
+alfheim.page.treeBerry5=The &1Sealing Fruit&0, a rare and sought-after treasure. Those who savor its delectable taste find themselves immune to the aggression of menacing mobs, as if being invisible to their hostile intent.
+alfheim.page.treeBerry6=The &1Barrier Fruit&0, a rare gem among the harvest, grants unparalleled protection. Its potent aura repels all entities, rendering the one who consumes it an impregnable fortress, safe from the grasp of harm.
+
 alfheim.page.toolbelt0=The &1Botanist's Toolbelt&0 is an easy-access extra inventory. By sneaking, you gain access to 12 extra stacks of storage, which can be used by interacting with the air around where they appear. Any items or blocks in it will provide for the &1Rod of the Shifting Crust&0.
 alfheim.page.toolbelt1=Not quite hammerspace
 
@@ -1042,14 +1104,17 @@ alfheim.page.throwablePotions3=I love the smell of napalm in the morning!
 alfheim.entry.fenrir=Fenrir
 alfheim.tagline.fenrir=Break thy bonds
 alfheim.page.fenrir0=The legends says that this violent son of Loki was bound by Gods and caged deep underground, in the hidden cave near the roots of Yggdrasil. No foolish mortal dares to challenge this terrifying beast. Until now..?
-alfheim.page.fenrir1=The gear created with the fur of &4Fenrir Wolf&0 encourages you to fight where others falter, surpassing your own limitations to cut &1Gleipnir&0. The &4Direwolf&0, the special ability of the armor set, strengthens you and strikes past armor when bare-handed. The claws of &4Fenrir&0, &1Nightscourge the Ravager&0, will also strike through armor, and can block attacks like a shield.
-alfheim.page.fenrir2=Odinsbane
-alfheim.page.fenrir3=The &1Helm of Fenrir&0
-alfheim.page.fenrir4=The &1Chestplate of Fenrir&0
-alfheim.page.fenrir5=The &1Platelegs of Fenrir&0
-alfheim.page.fenrir6=The &1Greaves of Fenrir&0
+alfheim.page.fenrir1=The gear created with the fur of &4Fenrir Wolf&0 encourages you to fight where others falter, surpassing your own limitations to cut &1Gleipnir&0. The &4Direwolf&0, the special ability of the armor set, strengthens you with wolf powers. The claws of &4Fenrir&0, &1Nightscourge the Ravager&0, will strike through armor, and can block attacks like a shield.
+alfheim.page.fenrir2=The &1Helm of Fenrir&0
+alfheim.page.fenrir3=The &1Chestplate of Fenrir&0
+alfheim.page.fenrir4=The &1Platelegs of Fenrir&0
+alfheim.page.fenrir5=The &1Greaves of Fenrir&0
 
-# Generated by ChatGPT, with minor fixes
+alfheim.entry.fenrirCloak=Cloak of Fenrir
+alfheim.tagline.fenrirCloak=Will help you in blizzards
+alfheim.page.fenrirCloak0=The mystical &1Cloak of Fenrir&0 is a useful bauble that defies the chill of frosty realms, offering both resolute warmth and a swiftness akin to the winds themselves during raging blizzards. When draped upon your form, it bestows the nimbleness of a wild wolf, enabling you to gracefully evade some oncoming assaults, as if guided by the instincts of the majestic creature.
+alfheim.page.fenrirCloak1=The &1Cloak of Fenrir&0
+
 alfheim.entry.fenrirDrop=Fenrir's Gifts
 alfheim.tagline.fenrirDrop=Victorious's Rewards
 alfheim.page.fenrirDrop0=The Great Wolf will endow the hero with his gifts and there will be no one stronger... Each of these relics is evidence of the strength and antiquity of Fenrir, the great wolf, personifying invincibility and power. Whoever wields them gains the ability to become the embodiment of nature's harshest fury and unsurpassed skill in battle.
@@ -1058,3 +1123,8 @@ alfheim.page.fenrirDrop2=&1Skoll's Bane&0 is a relic that shines with the power 
 alfheim.page.fenrirDrop3=&1Howling Charm&0 is a relic whose wearer gains the power of pack leader. When activated, the sound of a howling wolf pierces the air, causing enemies to stop and listen intently. At this moment, the magic of the Howling Charm fills their hearts with fear of merciless power and determination, striking their bodies from the inside.
 alfheim.page.fenrirDrop4=&1Wolf's Blood Potion&0 is a potion once made by the most powerful shamans. The user of this potion becomes a deadly hunter, gaining the speed and grace of a wolf. His blows become powerful and accurate, enhanced by the fury of a wild beast, and his jumps are as light and incredible as those of the most cunning and agile wolf.
 alfheim.page.fenrirDrop5=&1Fenrisulfr's Heart&0 is a relic that possesses the divine power of the greatest wolf itself. Its rhythmic pulsations fill the owner with strength and restorative energy. It will give him not only accelerated regeneration and physical protection, but also increase his outgoing damage to unprecedented heights. The owner of this heart becomes a living stronghold of unstoppable force.
+
+alfheim.entry.fenrirGlove=Vambrace of Fenrir
+alfheim.tagline.fenrirGlove=Improves your combat skills
+alfheim.page.fenrirGlove0=The legendary &1Vambrace of Fenrir&0 is a combat bauble that surges with otherworldly might. Whether you unleash your bare fists or wield &1Nightscourge the Ravager&0, this vambrace shall amplify the force behind your strikes. Even when wielding any other weapon, your melee attacks shall possess the uncanny ability to pierce through the most impenetrable armor.
+alfheim.page.fenrirGlove1=Odinsbane

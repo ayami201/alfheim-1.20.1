@@ -2,11 +2,14 @@ package alfheim.client.render.item
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ASJRenderHelper.discard
+import alexsocol.asjlib.render.ASJRenderHelper.drawGuideArrows
 import alexsocol.asjlib.render.ASJRenderHelper.setBlend
 import alexsocol.asjlib.render.ASJRenderHelper.setGlow
 import alexsocol.asjlib.render.ASJRenderHelper.setTwoside
 import alfheim.api.lib.LibResourceLocations
+import alfheim.common.item.AlfheimItems
 import net.minecraft.client.renderer.Tessellator
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraftforge.client.IItemRenderer
@@ -40,7 +43,9 @@ object RenderItemFenrirClaws: IItemRenderer {
 				glRotatef(15f, 0f, 1f, 0f)
 				glTranslatef(-4 / 16f, 5 / 16f, -5.5f / 16f)
 				glRotatef(-30f, 0f, 0f, 1f)
-				glTranslatef(-1 / 16f, 2 / 16f, 0f)
+				glTranslatef(-1 / 16f + (data.firstOrNull { it is EntityLivingBase }?.let { it as EntityLivingBase
+					if (it.getEquipmentInSlot(3)?.item === AlfheimItems.fenrirChestplate) 0f else 0.15f
+				} ?: 0.15f), 2 / 16f, 0f)
 			}
 			
 			INVENTORY             -> {

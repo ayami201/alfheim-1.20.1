@@ -29,7 +29,6 @@ import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.item.relic.ItemRelic
 import java.util.*
 import kotlin.math.*
-
 /**
  * @author ExtraMeteorP, CKATEPTb, AlexSocol
  */
@@ -98,7 +97,7 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 	override fun onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityPlayer, itemInUse: Int) {
 		if (!isRightPlayer(player, stack)) return
 		val m = maxDmg / 10
-		val i = ((getMaxItemUseDuration(stack) - itemInUse) * chargeVelocityMultiplier).I
+		val i = ((getMaxItemUseDuration(stack) - itemInUse) * chargeVelocityMultiplier(stack)).I
 		if (i < m) return
 		val rank = (i - m) / 5
 		var dmg = min(maxDmg, m + rank * 2).F
@@ -137,8 +136,9 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 		}
 	}
 	
-	val chargeVelocityMultiplier: Float
-		get() = AlfheimConfigHandler.moonbowVelocity
+	fun chargeVelocityMultiplier(stack: ItemStack): Float {
+		return AlfheimConfigHandler.moonbowVelocity + EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack) * 0.1f
+	}
 	
 	val maxDmg: Int
 		get() = AlfheimConfigHandler.moonbowMaxDmg
@@ -168,7 +168,7 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 	
 	override fun getIcon(stack: ItemStack, renderPass: Int, player: EntityPlayer?, usingItem: ItemStack?, useRemaining: Int): IIcon {
 		val m = maxDmg / 10
-		val j = (((stack.maxItemUseDuration - useRemaining) * chargeVelocityMultiplier - m) / 5) * 2 + m
+		val j = (((stack.maxItemUseDuration - useRemaining) * chargeVelocityMultiplier(stack) - m) / 5) * 2 + m
 		
 		var iconD = itemIcon
 		var iconA = icons
@@ -257,6 +257,7 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 	
 	override fun getRarity(stack: ItemStack?) = BotaniaAPI.rarityRelic!!
 }
+
 
 /**
  * Code from iChunUtil ichun.common.core.EntityHelperBase

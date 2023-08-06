@@ -55,7 +55,7 @@ class TileAnimatedTorch: ASJTile() {
 	}
 	
 	fun onWanded() {
-		val modes = TorchMode.values()
+		val modes = TorchMode.entries.toTypedArray()
 		torchMode = modes[(torchMode.ordinal + 1) % modes.size]
 		ASJUtilities.dispatchTEToNearbyPlayers(this)
 	}
@@ -144,7 +144,7 @@ class TileAnimatedTorch: ASJTile() {
 		nextRandomRotation = nbt.getInteger(TAG_NEXT_RANDOM_ROTATION)
 		
 		val modeOrdinal = nbt.getInteger(TAG_TORCH_MODE)
-		val modes = TorchMode.values()
+		val modes = TorchMode.entries.toTypedArray()
 		torchMode = modes[modeOrdinal % modes.size]
 	}
 	

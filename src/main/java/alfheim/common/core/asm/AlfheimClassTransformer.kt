@@ -1,6 +1,7 @@
 package alfheim.common.core.asm
 
 import alfheim.api.ModInfo.OBF
+import alfheim.common.core.asm.hook.extender.ItemLensExtender
 import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.launchwrapper.IClassTransformer
 import org.lwjgl.opengl.GL11
@@ -18,6 +19,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		"thaumcraft.common.entities.golems.EntityGolemBase" to setOf("alfheim/common/core/helper/IElementalEntity"),
 		"thaumcraft.common.entities.monster.EntityWisp" to setOf("alfheim/common/core/helper/IElementalEntity"),
 		"vazkii.botania.common.item.equipment.bauble.ItemAuraRing" to setOf("vazkii/botania/api/mana/IManaItem"),
+		"vazkii.botania.common.item.relic.ItemAesirRing" to setOf("alfheim/api/item/IStepupItem"),
 									)
 	
 	/** name for logging */
@@ -87,7 +89,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	inline fun core(frames: Int = ClassReader.EXPAND_FRAMES, lambda: (ClassVisitor) -> ClassVisitor): ByteArray {
+	private inline fun core(frames: Int = ClassReader.EXPAND_FRAMES, lambda: (ClassVisitor) -> ClassVisitor): ByteArray {
 		println("Transforming $transformedName")
 		val cr = ClassReader(basicClass)
 		val cw = ClassWriter(ClassWriter.COMPUTE_MAXS)
@@ -96,7 +98,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		return cw.toByteArray()
 	}
 	
-	inline fun tree(lambda: (ClassNode) -> Unit): ByteArray {
+	private inline fun tree(lambda: (ClassNode) -> Unit): ByteArray {
 		println("Transforming $transformedName")
 		val cr = ClassReader(basicClass)
 		val it = ClassWriter(ClassWriter.COMPUTE_MAXS)
@@ -854,32 +856,36 @@ class AlfheimClassTransformer: IClassTransformer {
 					if (add) {
 						add = false
 						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, 22)
+						mv.visitIntInsn(BIPUSH, ItemLensExtender.MESSANGER)
 						mv.visitLdcInsn("lensMessenger")
 						mv.visitInsn(AASTORE)
 						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, 23)
+						mv.visitIntInsn(BIPUSH, ItemLensExtender.TRIPWIRE)
 						mv.visitLdcInsn("lensTripwire")
 						mv.visitInsn(AASTORE)
 						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, 24)
+						mv.visitIntInsn(BIPUSH, ItemLensExtender.PUSH)
 						mv.visitLdcInsn("lensPush")
 						mv.visitInsn(AASTORE)
 						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, 25)
+						mv.visitIntInsn(BIPUSH, ItemLensExtender.SMELT)
 						mv.visitLdcInsn("lensSmelt")
 						mv.visitInsn(AASTORE)
 						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, 26)
+						mv.visitIntInsn(BIPUSH, ItemLensExtender.SUPERCONDUCTOR)
 						mv.visitLdcInsn("lensSuperconductor")
 						mv.visitInsn(AASTORE)
 						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, 27)
+						mv.visitIntInsn(BIPUSH, ItemLensExtender.TRACK)
 						mv.visitLdcInsn("lensTrack")
 						mv.visitInsn(AASTORE)
 						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, 28)
+						mv.visitIntInsn(BIPUSH, ItemLensExtender.DAISY)
 						mv.visitLdcInsn("lensDaisy")
+						mv.visitInsn(AASTORE)
+						mv.visitInsn(DUP)
+						mv.visitIntInsn(BIPUSH, ItemLensExtender.LINKBACK)
+						mv.visitLdcInsn("lensLinkback")
 						mv.visitInsn(AASTORE)
 					}
 				}
@@ -943,6 +949,6 @@ class AlfheimClassTransformer: IClassTransformer {
 	
 	companion object {
 		
-		val moreLenses = 7
+		val moreLenses = 8
 	}
 }

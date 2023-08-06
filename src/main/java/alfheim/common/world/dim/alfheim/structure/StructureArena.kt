@@ -29,7 +29,7 @@ object StructureArena: StructureBaseClass() {
 		
 		if (locs.any { Vector3.pointDistancePlane(x, z, it.first, it.second) < 128 }) return false
 		
-		(world.provider as? WE_WorldProvider)?.cp?.also { cp ->
+		(world.provider as? WE_WorldProvider)?.chunkProvider?.also { cp ->
 			val biomes = Array(xs.size) { WE_Biome.getBiomeAt(cp, x + xs[it], z + zs[it]) }
 			if (biomes.any { it !is BiomeField }) return false
 		}

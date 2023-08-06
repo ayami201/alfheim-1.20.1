@@ -16,6 +16,6 @@ class MessageVisualEffect(var type: Int, vararg var data: Double): ASJPacket(), 
 	}
 
 	override fun handleClient() {
-		VisualEffectHandlerClient.select(VisualEffectHandlerClient.VisualEffects.values()[type], data)
+		VisualEffectHandlerClient.select(VisualEffectHandlerClient.VisualEffects.entries[type], data)
 	}
 }

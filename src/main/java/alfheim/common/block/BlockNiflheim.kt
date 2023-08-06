@@ -53,7 +53,7 @@ class BlockNiflheim: BlockMod(Material.rock) {
 	}
 	
 	override fun registerBlockIcons(reg: IIconRegister) {
-		icons = Array(NiflheimBlockMetas.values().size - 6) { IconHelper.forBlock(reg, this, NiflheimBlockMetas.values()[it].modname) }
+		icons = Array(NiflheimBlockMetas.entries.size - 6) { IconHelper.forBlock(reg, this, NiflheimBlockMetas.entries[it].modname) }
 		arrayOf("Side", "Top").apply {
 			iconsPillar = map { IconHelper.forBlock(reg, this@BlockNiflheim, "Pillar$it") }.toTypedArray()
 			iconsRunic = map { IconHelper.forBlock(reg, this@BlockNiflheim, "Runic$it") }.toTypedArray()
@@ -63,7 +63,7 @@ class BlockNiflheim: BlockMod(Material.rock) {
 	override fun getSubBlocks(item: Item, tab: CreativeTabs?, list: MutableList<Any?>) {
 		var prev: String? = null
 		
-		NiflheimBlockMetas.values().forEachIndexed { id, it ->
+		NiflheimBlockMetas.entries.forEachIndexed { id, it ->
 			val s = it.modname
 			if (s != prev)
 				list.add(ItemStack(item, 1, id))
@@ -109,5 +109,5 @@ class BlockNiflheim: BlockMod(Material.rock) {
 		fun stack(size: Int) = ItemStack(AlfheimBlocks.niflheimBlock, size, ordinal)
 	}
 	
-	class ItemBlockNiflheim(block: Block): ItemMultiTexture(block, block, NiflheimBlockMetas.values().map { it.modname }.toTypedArray())
+	class ItemBlockNiflheim(block: Block): ItemMultiTexture(block, block, NiflheimBlockMetas.entries.map { it.modname }.toTypedArray())
 }

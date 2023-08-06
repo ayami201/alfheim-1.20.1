@@ -10,11 +10,11 @@ import alfheim.common.network.M3d
 
 class Message3d(ty: M3d, var data1: Double, var data2: Double, var data3: Double, var type: Int = ty.ordinal) : ASJPacket(), AlfheimPacket<Message3d> {
 	override fun handleClient() {
-		when (M3d.values()[type]) {
+		when (M3d.entries[type]) {
 			M3d.KEY_BIND     -> Unit
 
 			M3d.PARTY_STATUS -> {
-				when (PartyStatus.values()[data1.I]) {
+				when (PartyStatus.entries[data1.I]) {
 					PartyStatus.DEAD      -> CardinalSystemClient.PlayerSegmentClient.party?.setDead(data2.I, data3.I == -10)
 					PartyStatus.MANA      -> CardinalSystemClient.PlayerSegmentClient.party?.setMana(data2.I, data3.I)
 					PartyStatus.HEALTH    -> CardinalSystemClient.PlayerSegmentClient.party?.setHealth(data2.I, data3.F)

@@ -2,6 +2,7 @@ package alfheim.common.core.proxy
 
 import alexsocol.asjlib.*
 import alfheim.api.*
+import alfheim.api.item.*
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.*
@@ -93,7 +94,9 @@ open class CommonProxy {
 		SpriteKillHandler.eventForge()
 		SheerColdHandler.eventForge()
 		ChunkLoadingHandler
-		FloatingIslandGenerator
+		FloatingIslandGenerator.eventFML().eventForge()
+		ISpeedUpItem.eventForge()
+		IStepupItem.eventForge()
 		
 		FMLCommonHandler.instance().bus().register(object {
 			@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -118,6 +121,8 @@ open class CommonProxy {
 	open fun featherFX(world: World, x: Double, y: Double, z: Double, color: Int, size: Float = 1f, lifetime: Float = 1f, distance: Float = 16f, must: Boolean = false, motionX: Double = 0.0, motionY: Double = 0.0, motionZ: Double = 0.0) = Unit
 	
 	open fun sparkleFX(world: World, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float, size: Float, ageMultiplier: Int = 2, motionX: Double = 0.0, motionY: Double = 0.0, motionZ: Double = 0.0, fake: Boolean = false, noclip: Boolean = false) = Unit
+	
+	open fun voxelFX(world: World, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float) = Unit
 	
 	open fun doParticle() = false
 }

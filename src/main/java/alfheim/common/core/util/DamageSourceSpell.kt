@@ -75,6 +75,9 @@ open class DamageSourceSpell(type: String): DamageSource(type) {
 		fun lightningIndirect(st: Entity, caster: EntityLivingBase?) =
 			EntityDamageSourceIndirectSpell("indirectLightning", caster, st).setDamageBypassesArmor().setTo(ELECTRIC)
 		
+		fun lightningShield(attacker: EntityLivingBase?) =
+			EntityDamageSource("lightningShieldEffect", attacker).setDamageBypassesArmor().setTo(ELECTRIC)
+		
 		fun magic(attacker: EntityLivingBase?) =
 			EntityDamageSource("indirectMagic", attacker).setDamageBypassesArmor().setMagicDamage()!!
 		

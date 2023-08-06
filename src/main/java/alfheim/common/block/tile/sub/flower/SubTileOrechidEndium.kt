@@ -12,7 +12,7 @@ import vazkii.botania.common.block.subtile.functional.SubTileOrechid
 
 class SubTileOrechidEndium: SubTileOrechid() {
 	
-	private val COST = 20000
+	private val COST = 22500
 	
 	override fun canOperate(): Boolean {
 		if (!searched) {

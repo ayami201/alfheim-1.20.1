@@ -115,7 +115,7 @@ class EntitySnowSprite(world: World): EntityFlyingCreature(world), INiflheimEnti
 		val flagTime = (worldObj.worldTime % 24000L).I in 13333..22666 && worldObj.isRaining
 		
 		val flagBiome = if (WRATH_OF_THE_WINTER) {
-			val cp = (worldObj.provider as? WE_WorldProvider)?.cp ?: return false
+			val cp = (worldObj.provider as? WE_WorldProvider)?.chunkProvider ?: return false
 			val biomeAt = WE_Biome.getBiomeAt(cp, posX.mfloor().toLong(), posZ.mfloor().toLong())
 			biomeAt === BiomeField || biomeAt === BiomeIslandGiantFlowers
 		} else {

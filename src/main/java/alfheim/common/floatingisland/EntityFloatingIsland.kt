@@ -149,10 +149,16 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 		
 		val collidedWith = if (velocityX == 0f && velocityZ == 0f)
 			emptyList()
-		else if (ASJUtilities.isServer)
-			getEntitiesWithinAABB(worldObj, Entity::class.java, thisBB)
+		else if (ASJUtilities.isServer) {
+			val prevRadius = World.MAX_ENTITY_RADIUS
+			World.MAX_ENTITY_RADIUS = MAX_ISLAND_RADIUS.D
+			val list = getEntitiesWithinAABB(worldObj, Entity::class.java, thisBB)
+			World.MAX_ENTITY_RADIUS = prevRadius
+			list
+		} else if (mc.thePlayer.boundingBox.intersectsWith(thisBB))
+			listOf(mc.thePlayer, this)
 		else
-			if (mc.thePlayer.boundingBox.intersectsWith(thisBB)) listOf(mc.thePlayer, this) else listOf(this)
+			listOf(this)
 		
 		collidedWith.forEach {
 			it.boundingBox.offset(velocityX, 0.0, velocityZ)
@@ -207,10 +213,7 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 		if (deathTimer in 170..240) return
 		
 		if (deathTimer == 1)
-			mc.soundHandler.playSound(EntityBoundMovingSound(mc.thePlayer, "${ModInfo.MODID}:ea") {
-				isDonePlaying = this@EntityFloatingIsland.isDead
-				if (isDonePlaying) volume = 0f
-			}.apply {
+			mc.soundHandler.playSound(EntityBoundMovingSound(mc.thePlayer, "${ModInfo.MODID}:ea").apply {
 				setRepeat(false)
 				volume = 0.6f
 			})

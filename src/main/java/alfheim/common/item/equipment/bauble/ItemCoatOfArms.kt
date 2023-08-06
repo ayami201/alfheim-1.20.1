@@ -75,31 +75,31 @@ class ItemCoatOfArms: ItemBauble("coatOfArms"), ICosmeticBauble, IPriestColorOve
 	override fun getBaubleType(arg0: ItemStack) = BaubleType.AMULET
 	
 	override fun onPlayerBaubleRender(stack: ItemStack, event: RenderPlayerEvent, type: IBaubleRender.RenderType) {
-		if (type == IBaubleRender.RenderType.BODY) {
-			mc.renderEngine.bindTexture(TextureMap.locationItemsTexture)
-			IBaubleRender.Helper.rotateIfSneaking(event.entityPlayer)
-			chestTranslate()
-			glScaled(0.8)
-			glTranslatef(0.2F, -0.2F, -0.35F)
-			glRotatef(10F, 0F, 0F, 1F)
-			if (stack.meta == 16) {
-				glEnable(GL_BLEND)
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-				glAlphaFunc(GL_GREATER, 0.9F)
-				ShaderHelper.useShader(ShaderHelper.halo)
-			}
-			renderIcon(stack.meta)
-			if (stack.meta == 16) {
-				ShaderHelper.releaseShader()
-				glAlphaFunc(GL_GREATER, 0.1F)
-				glDisable(GL_BLEND)
-			}
+		if (type != IBaubleRender.RenderType.BODY) return
+		
+		mc.renderEngine.bindTexture(TextureMap.locationItemsTexture)
+		IBaubleRender.Helper.rotateIfSneaking(event.entityPlayer)
+		chestTranslate()
+		glScaled(0.8)
+		glTranslated(0.2, -0.2, -0.35)
+		glRotatef(10f, 0f, 0f, 1f)
+		if (stack.meta == 16) {
+			glEnable(GL_BLEND)
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+			glAlphaFunc(GL_GREATER, 0.9f)
+			ShaderHelper.useShader(ShaderHelper.halo)
+		}
+		renderIcon(stack.meta)
+		if (stack.meta == 16) {
+			ShaderHelper.releaseShader()
+			glAlphaFunc(GL_GREATER, 0.1f)
+			glDisable(GL_BLEND)
 		}
 	}
 	
 	fun chestTranslate() {
-		glRotatef(180F, 1F, 0F, 0F)
-		glTranslatef(-0.5F, -0.7F, 0.15F)
+		glRotatef(180f, 1f, 0f, 0f)
+		glTranslated(-0.5, -0.7, 0.15)
 	}
 	
 	fun renderIcon(i: Int) {

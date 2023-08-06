@@ -77,51 +77,51 @@ class ItemSpearSubspace: ItemRelic("SpearSubspace"), IManaUsingItem, ILensEffect
 	override fun getItemUseAction(stack: ItemStack?) = EnumAction.bow
 	
 	override fun onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityPlayer, itemInUse: Int) {
-		if (isRightPlayer(player, stack) && isCooledDown(stack)) {
-			if (!ManaItemHandler.requestManaExactForTool(stack, player, 1000, true)) return
-			
+		if (!isRightPlayer(player, stack) || !isCooledDown(stack)) return
+		if (!ManaItemHandler.requestManaExactForTool(stack, player, 1000, true)) return
+		
+		if (!player.capabilities.isFlying) {
 			player.isSprinting = true
 			player.setJumping(true)
 			player.motionY += 0.75
-			if (!world.isRemote)
-				for (i in 0 until 20) {
-					val look = Vector3(player.lookVec)
-					look.y = 0.0
-					look.normalize().negate().multiply(2.0)
-					val div = i / 5
-					val mod = i % 5
-					val pl = look.copy().add(Vector3.fromEntityCenter(player)).add(0.0, 1.6, div.D * 0.1)
-					val axis = look.copy().normalize().crossProduct(Vector3(-1.0, 0.0, -1.0)).normalize()
-					val axis1 = axis.copy()
-					val rot = mod.D * 3.141592653589793 / 4.0 - 1.5707963267948966
-					axis1.multiply(div.D * 3.5 + 5.0).rotate(rot, look)
-					if (axis1.y < 0.0) {
-						axis1.y = -axis1.y
-					}
-					
-					val end = pl.copy().add(axis1)
-					val sub = EntitySubspace(world, player)
-					sub.liveTicks = 120
-					sub.delay = 15 + world.rand.nextInt(12)
-					sub.posX = end.x
-					sub.posY = end.y - 0.5f + world.rand.nextFloat()
-					sub.posZ = end.z
-					sub.rotationYaw = player.rotationYaw
-					sub.rotation = MathHelper.wrapAngleTo180_float(-player.rotationYaw + 180f)
-					sub.interval = 10 + world.rand.nextInt(10)
-					sub.size = 1f + world.rand.nextFloat()
-					sub.type = 0
-					
-					sub.spawn()
-					
-					if (i == 1) sub.playSoundAtEntity("${ModInfo.MODID}:spearsubspace", 1f, 1f + player.worldObj.rand.nextFloat() * 3f)
-				}
 			player.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDEternity, 120))
-			
-			setCooldown(stack, 200)
 		}
 		
-		super.onPlayerStoppedUsing(stack, world, player, itemInUse)
+		if (!world.isRemote)
+			for (i in 0 until 20) {
+				val look = Vector3(player.lookVec)
+				look.y = 0.0
+				look.normalize().negate().multiply(2.0)
+				val div = i / 5
+				val mod = i % 5
+				val pl = look.copy().add(Vector3.fromEntityCenter(player)).add(0.0, 1.6, div.D * 0.1)
+				val axis = look.copy().normalize().crossProduct(Vector3(-1.0, 0.0, -1.0)).normalize()
+				val axis1 = axis.copy()
+				val rot = mod.D * 3.141592653589793 / 4.0 - 1.5707963267948966
+				axis1.multiply(div.D * 3.5 + 5.0).rotate(rot, look)
+				if (axis1.y < 0.0) {
+					axis1.y = -axis1.y
+				}
+				
+				val end = pl.copy().add(axis1)
+				val sub = EntitySubspace(world, player)
+				sub.liveTicks = 120
+				sub.delay = 15 + world.rand.nextInt(12)
+				sub.posX = end.x
+				sub.posY = end.y - 0.5f + world.rand.nextFloat()
+				sub.posZ = end.z
+				sub.rotationYaw = player.rotationYaw
+				sub.rotation = MathHelper.wrapAngleTo180_float(-player.rotationYaw + 180f)
+				sub.interval = 10 + world.rand.nextInt(10)
+				sub.size = 1f + world.rand.nextFloat()
+				sub.type = 0
+				
+				sub.spawn()
+				
+				if (i == 1) sub.playSoundAtEntity("${ModInfo.MODID}:spearsubspace", 1f, 1f + player.worldObj.rand.nextFloat() * 3f)
+			}
+		
+		setCooldown(stack, 200)
 	}
 	
 	fun getCooldown(stack: ItemStack) = getInt(stack, TAG_COOLDOWN, 0)
