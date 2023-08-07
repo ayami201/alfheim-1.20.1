@@ -536,14 +536,22 @@ class ChunkProviderNiflheim(world: World, val seed: Long, structures: Boolean): 
 			z = k + random.nextInt(16) + 8
 			WorldGenRuins.generate(world, random, x, y, z)
 		}
-        m = 0
-        while (m < 8) {
-            x = i + random.nextInt(16) + 8
-            y = random.nextInt(128)
-            z = k + random.nextInt(16) + 8
-            WorldGenNifleur.generate(world, random, x, y, z)
-            ++m
-        }
+		m = 0
+		while (m < 8) {
+			x = i + random.nextInt(16) + 8
+			y = random.nextInt(128)
+			z = k + random.nextInt(16) + 8
+			WorldGenNifleur.generate(world, x, y, z)
+			++m
+		}
+		if (random.nextInt(10) == 0) {
+			x = i + random.nextInt(16) + 8
+			z = k + random.nextInt(16) + 8
+			biomegenbase2 = world.worldChunkManager.getBiomeGenAt(x, z)
+			if (biomegenbase2 is BiomeGenIce) {
+				WorldGenIcyGeyser.generate(world, x, z)
+			}
+		}
 		m = 0
 		while (m < 128) {
 			x = i + random.nextInt(16) + 8

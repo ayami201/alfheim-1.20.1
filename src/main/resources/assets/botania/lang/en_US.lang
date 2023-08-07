@@ -979,11 +979,12 @@ alfheim.page.rodPrismatic0=One particularly frustrating property of the &1Mana L
 alfheim.page.rodPrismatic1=All the colors of the wind
 
 alfheim.page.irisSapling0=Blessed by the goddess of rainbows, these saplings are made from their earthly counterparts by the purifying magic of a &1Pure Daisy&0. These saplings will only grow on &1Iridescent Dirt&0 and take on the hue of the dirt they lay their roots in.<br><br>They're just &oreally&0 big carnations
-alfheim.page.irisSapling1=Planks
-alfheim.page.irisSapling2=Stairs
-alfheim.page.irisSapling3=Slabs
-alfheim.page.irisSapling4=And back again
-alfheim.page.irisSapling5=Grinding them down
+alfheim.page.irisSapling1=Sapling
+alfheim.page.irisSapling2=Planks
+alfheim.page.irisSapling3=Stairs
+alfheim.page.irisSapling4=Slabs
+alfheim.page.irisSapling5=And back again
+alfheim.page.irisSapling6=Grinding them down
 
 alfheim.page.treeCrafting0=Affecting life is much harder than making or destroying it. The &1Iridescent Tree&0 has a natural lack of regular life, which lends itself to making beautiful spectrums of wood. It seems possible to re-add this life, by drawing mana into a &4Dendric Suffuser&0. This structure, of &1Obsidian&0 and materials of &4Iridesence&0, will suffuse the purified tree with life, creating interesting new varieties of life.
 alfheim.page.treeCrafting1=When a &1Wand of the Forest&0 is used on the apex plank of the structure, it will complete it. For a tree to be made, you must plant a lifeless &1Iridescent Sapling&0 on the dirt below, and pump &4Mana&0 into the apex block. The components must be placed on the &1Item Platforms&0, and the crafting will begin on its own.

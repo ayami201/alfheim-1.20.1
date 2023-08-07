@@ -149,6 +149,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var schemaMaxSize = 64
 	var soulSwordMaxLvl = Int.MAX_VALUE
 	var storyLines = 4
+	var timelessProtection = true
 	var tradePortalRate = 1200
 	var triquetrumBlackList = emptyArray<String>()
 	var triquetrumManaUsage = intArrayOf(100, 60)
@@ -346,6 +347,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		schemaMaxSize = loadProp(CATEGORY_GENERAL, "schemaMaxSize", schemaMaxSize, false, "Max schema cuboid side length")
 		soulSwordMaxLvl = loadProp(CATEGORY_GENERAL, "soulSwordMaxLvl", soulSwordMaxLvl, false, "Sword of Ragnarok max level")
 		storyLines = loadProp(CATEGORY_GENERAL, "storyLines", storyLines, false, "Number of lines for story token")
+		timelessProtection = loadProp(CATEGORY_GENERAL, "timelessProtection", timelessProtection, false, "If true, Timeless Ivy won't allow item to break if you have enough mana (instead of post-regen it)")
 		tradePortalRate = loadProp(CATEGORY_GENERAL, "tradePortalRate", tradePortalRate, false, "Portal updates every [N] ticks")
 		triquetrumBlackList = loadProp(CATEGORY_GENERAL, "triquetrumBlackList", triquetrumBlackList, false, "Blacklist for blocks that triquetrum can't swap [modid:name]", false)
 		triquetrumManaUsage = loadProp(CATEGORY_GENERAL, "triquetrumManaUsage", triquetrumManaUsage, false, "Mana usage for triquetrum, 1st is for tiles, 2nd for regular blocks")

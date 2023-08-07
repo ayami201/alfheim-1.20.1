@@ -1,6 +1,6 @@
 package alfheim.common.item
 
-import alexsocol.asjlib.ASJUtilities
+import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.api.entity.*
 import net.minecraft.entity.player.EntityPlayer
@@ -21,7 +21,7 @@ class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 		try {
 			if (!player.isSneaking) {
 				if (!world.isRemote) {
-				
+					ASJUtilities.chatLog("${world.getBiomeGenForCoords(player.posX.I, player.posZ.I)}")
 				} else {
 				
 				}
@@ -30,8 +30,7 @@ class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 				ASJUtilities.chatLog("${player.race.ordinal} - ${player.race}", player)
 			}
 		} catch (e: Throwable) {
-			ASJUtilities.log("Oops!")
-			e.printStackTrace()
+			ASJUtilities.error("Oops!", e)
 		}
 		
 		return stack

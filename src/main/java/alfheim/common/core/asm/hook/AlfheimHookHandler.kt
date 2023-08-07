@@ -94,7 +94,6 @@ import org.lwjgl.opengl.GL11.*
 import ru.vamig.worldengine.*
 import thaumcraft.api.aspects.AspectList
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager
-import thaumcraft.common.tiles.TileAlchemyFurnace
 import travellersgear.api.TravellersGearAPI
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.boss.IBotaniaBoss
@@ -123,7 +122,6 @@ import vazkii.botania.common.block.subtile.generating.*
 import vazkii.botania.common.block.tile.*
 import vazkii.botania.common.block.tile.mana.*
 import vazkii.botania.common.core.BotaniaCreativeTab
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.core.proxy.CommonProxy
 import vazkii.botania.common.crafting.recipe.*
 import vazkii.botania.common.entity.*
@@ -1137,7 +1135,7 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ALWAYS)
 	fun getRecipes(rh: RecipeHandlerPetalApothecary): List<RecipePetals> {
-		return BotaniaAPI.petalRecipes.filter { alexsocol.asjlib.ItemNBTHelper.getString(it.output, "SkullOwner", "") !in specialHeads }
+		return BotaniaAPI.petalRecipes.filter { ItemNBTHelper.getString(it.output, "SkullOwner", "") !in specialHeads }
 	}
 	
 	@JvmStatic
@@ -1951,4 +1949,9 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
 	fun canEnchantItem(ench: EnumEnchantmentType, item: Item?) = item is ItemMjolnir && ench === EnumEnchantmentType.weapon
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE)
+	fun damageItem(stack: ItemStack, amount: Int, holder: EntityLivingBase?) =
+		AlfheimConfigHandler.timelessProtection && stack.isItemStackDamageable && ItemNBTHelper.getBoolean(stack, ItemRegenIvy.TAG_REGEN, false) && holder is EntityPlayer && ManaItemHandler.requestManaExactForTool(stack, holder, amount * 100, true)
 }

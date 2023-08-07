@@ -43,10 +43,10 @@ object RenderTileIcyGeyser: TileEntitySpecialRenderer() {
 				})
 				
 				tes.startDrawingQuads()
-				tes.addVertexWithUV(i + 0.0, 1.0001, k + 0.0, 0.0, 0.0)
-				tes.addVertexWithUV(i + 0.0, 1.0001, k + 1.0, 0.0, 1.0)
-				tes.addVertexWithUV(i + 1.0, 1.0001, k + 1.0, 1.0, 1.0)
-				tes.addVertexWithUV(i + 1.0, 1.0001, k + 0.0, 1.0, 0.0)
+				tes.addVertexWithUV(i + 0.0, 1.001, k + 0.0, 0.0, 0.0)
+				tes.addVertexWithUV(i + 0.0, 1.001, k + 1.0, 0.0, 1.0)
+				tes.addVertexWithUV(i + 1.0, 1.001, k + 1.0, 1.0, 1.0)
+				tes.addVertexWithUV(i + 1.0, 1.001, k + 0.0, 1.0, 0.0)
 				tes.draw()
 			}
 		

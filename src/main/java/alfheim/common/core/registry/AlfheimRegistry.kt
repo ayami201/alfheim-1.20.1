@@ -238,14 +238,14 @@ object AlfheimRegistry {
 	}
 	
 	private fun registerAnomalies() {
-		registerAnomaly("Antigrav", SubTileAntigrav::class.java, COMMON, 7)
-		registerAnomaly("Gravity", SubTileGravity::class.java, COMMON, 0)
-		registerAnomaly("Killer", SubTileKiller::class.java, EPIC, 5)
-		registerAnomaly("Lightning", SubTileLightning::class.java, COMMON, 1)
-		registerAnomaly("ManaTornado", SubTileManaTornado::class.java, RARE, 2)
-		registerAnomaly("ManaVoid", SubTileManaVoid::class.java, COMMON, 3)
-		registerAnomaly("SpeedUp", SubTileSpeedUp::class.java, EPIC, 4)
-		registerAnomaly("Warp", SubTileWarp::class.java, RARE, 6)
+		registerAnomaly("Antigrav", SubTileAntigrav::class.java, COMMON, 7, 0x7FE6FF)
+		registerAnomaly("Gravity", SubTileGravity::class.java, COMMON, 0, 0xEDEDED)
+		registerAnomaly("Killer", SubTileKiller::class.java, EPIC, 5, 0xFF6D6D)
+		registerAnomaly("Lightning", SubTileLightning::class.java, COMMON, 1, 0xFF0000)
+		registerAnomaly("ManaTornado", SubTileManaTornado::class.java, RARE, 2, -1)
+		registerAnomaly("ManaVoid", SubTileManaVoid::class.java, COMMON, 3, 0x03C0FF)
+		registerAnomaly("SpeedUp", SubTileSpeedUp::class.java, EPIC, 4, 0x20E020)
+		registerAnomaly("Warp", SubTileWarp::class.java, RARE, 6, 0x6020E0)
 	}
 	
 	private fun registerSpells() {

@@ -34,8 +34,15 @@ class ItemChalk: ItemMod("Chalk") {
 		
 		val hit = if (mop?.hitVec == null)
 			Vector3(player.lookVec).normalize().mul(distance.D).add(player.posX, player.posY + player.eyeHeight, player.posZ)
-		else
-			Vector3(mop.hitVec)
+		else {
+			val v = Vector3(mop.hitVec)
+			when (mop.sideHit) {
+				0 -> v.sub(0, 0.00390625, 0)
+				2 -> v.sub(0, 0, 0.00390625)
+				4 -> v.sub(0.00390625, 0, 0)
+			}
+			v
+		}
 		
 		val (x, y, z) = hit
 		val (r, g, b) = Color(ColorOverrideHelper.getColor(player, 0xFFD400)).getRGBColorComponents(null)

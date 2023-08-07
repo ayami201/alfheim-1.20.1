@@ -5,5 +5,5 @@ object ModInfo {
 	const val MODID = "alfheim"
 	
 	var OBF = true
-	const val DEV = false
+	const val DEV = true
 }

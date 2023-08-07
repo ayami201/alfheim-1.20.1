@@ -1,20 +1,9 @@
 Innovations:
- Fruits that grow on crafted trees (#188)
- Barrier tree that pushes enemies away (#188)
- A banner to dance on the corpses of your foes (#188)
- Bauble that makes music and heals everyone around (#188)
- Super rod of shifting crusts (#255)
- Orechid Alfarem to generate ores from Alfheim (#285)
- New baubles - Fenrir Cloak and Fenrir Glove (#286)
- Chalk to draw anything in the world (#287)
- Mushroom that can warp you
- Bottomless crate
- Save Ivy to protect your items in inventory
- Lens to refill mana in a burst on the fly
- Reworked Fenrir set
- New Sequencer mode - one at a time
+ Icy Geysers Niflheim worldgen
+ Timeless Ivy now won't allow your items to break while you have enough mana instead of post-regen it (configurable)
 
 Fixes:
- New gourmaryllises "/ by zero" exception
- Floating islands collision
- [Thaumcraft] Fixed greatwood and silverwood worldgen
+ Indissoluble Ivy tooltip
+ Knowledge types for lexicon
+ Runic Chalk drawing dark on blocks
+ Anomalies visuals

@@ -765,7 +765,7 @@ object AlfheimLexiconData {
 									 else PageCraftingRecipe(if (AlfheimCore.stupidMode) "2s" else "2", AlfheimRecipes.recipeUberSpreader)).icon = ItemStack(ModBlocks.spreader, 1, 4)
 		LexiconRecipeMappings.map(ItemStack(ModBlocks.spreader, 1, 4), uberSpreader, 2)
 		
-		warBanner.setLexiconPages(PageText("0"), PageCraftingRecipe("1", listOf(AlfheimRecipes.recipeWarBanner0, AlfheimRecipes.recipeWarBanner1)))
+		warBanner.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeWarBanner0))
 		
 		winery.setLexiconPages(*Array(12) { PageText("$it") },
 							   PageCraftingRecipe("12", AlfheimRecipes.recipeBarrel),
@@ -1196,28 +1196,43 @@ object AlfheimLexiconData {
 	
 	private fun setKnowledgeTypes() {
 		advancedMana.knowledgeType = BotaniaAPI.elvenKnowledge
+		alfheim.knowledgeType = BotaniaAPI.elvenKnowledge
 		amplifier.knowledgeType = BotaniaAPI.elvenKnowledge
 		amuletIceberg.knowledgeType = BotaniaAPI.elvenKnowledge
 		amuletNimbus.knowledgeType = BotaniaAPI.elvenKnowledge
 		amulterCrescent.knowledgeType = BotaniaAPI.elvenKnowledge
 		anomaly.knowledgeType = BotaniaAPI.elvenKnowledge
 		anyavil.knowledgeType = BotaniaAPI.elvenKnowledge
+		armilla.knowledgeType = BotaniaAPI.elvenKnowledge
 		astrolabe.knowledgeType = BotaniaAPI.elvenKnowledge
 		beltRation.knowledgeType = BotaniaAPI.elvenKnowledge
+		chalk.knowledgeType = BotaniaAPI.elvenKnowledge
 		corpInj.knowledgeType = BotaniaAPI.elvenKnowledge
+		corpQuandex.knowledgeType = BotaniaAPI.elvenKnowledge
 		corpSeq.knowledgeType = BotaniaAPI.elvenKnowledge
 		colorOverride.knowledgeType = BotaniaAPI.elvenKnowledge
+		dasGold.knowledgeType = BotaniaAPI.elvenKnowledge
+		deathSeed.knowledgeType = BotaniaAPI.elvenKnowledge
 		elementalSet.knowledgeType = BotaniaAPI.elvenKnowledge
 		elvenSet.knowledgeType = BotaniaAPI.elvenKnowledge
 		elves.knowledgeType = BotaniaAPI.elvenKnowledge
 		elvorium.knowledgeType = BotaniaAPI.elvenKnowledge
 		essences.knowledgeType = BotaniaAPI.elvenKnowledge
+		fenrir.knowledgeType = BotaniaAPI.elvenKnowledge
+		fenrirCloak.knowledgeType = BotaniaAPI.elvenKnowledge
+		fenrirDrop.knowledgeType = BotaniaAPI.elvenKnowledge
+		fenrirGlove.knowledgeType = BotaniaAPI.elvenKnowledge
+		flowerAlfchid.knowledgeType = BotaniaAPI.elvenKnowledge
+		flowerBud.knowledgeType = BotaniaAPI.elvenKnowledge
 		flowerEnderchid.knowledgeType = BotaniaAPI.elvenKnowledge
 		flowerPetronia.knowledgeType = BotaniaAPI.elvenKnowledge
 		flugel.knowledgeType = BotaniaAPI.elvenKnowledge
+		fracturedSpace.knowledgeType = BotaniaAPI.elvenKnowledge
 		hyperBucket.knowledgeType = BotaniaAPI.elvenKnowledge
 		infuser.knowledgeType = BotaniaAPI.elvenKnowledge
+		ivySave.knowledgeType = BotaniaAPI.elvenKnowledge
 		lamp.knowledgeType = BotaniaAPI.elvenKnowledge
+		legends.knowledgeType = BotaniaAPI.elvenKnowledge
 		lembas.knowledgeType = BotaniaAPI.elvenKnowledge
 		lootInt.knowledgeType = BotaniaAPI.elvenKnowledge
 		manaImba.knowledgeType = BotaniaAPI.elvenKnowledge
@@ -1225,6 +1240,7 @@ object AlfheimLexiconData {
 		mobs.knowledgeType = BotaniaAPI.elvenKnowledge
 		multbauble.knowledgeType = BotaniaAPI.elvenKnowledge
 		ores.knowledgeType = BotaniaAPI.elvenKnowledge
+		openChest.knowledgeType = BotaniaAPI.elvenKnowledge
 		pixie.knowledgeType = BotaniaAPI.elvenKnowledge
 		portal.knowledgeType = BotaniaAPI.elvenKnowledge
 		pylons.knowledgeType = BotaniaAPI.elvenKnowledge
@@ -1234,15 +1250,44 @@ object AlfheimLexiconData {
 		ringsAura.knowledgeType = BotaniaAPI.elvenKnowledge
 		rodClick.knowledgeType = BotaniaAPI.elvenKnowledge
 		rodPrismatic.knowledgeType = BotaniaAPI.elvenKnowledge
+		rodRedstone.knowledgeType = BotaniaAPI.elvenKnowledge
+		rodSuperExchange.knowledgeType = BotaniaAPI.elvenKnowledge
 		ruling.knowledgeType = BotaniaAPI.elvenKnowledge
 		runes.knowledgeType = BotaniaAPI.elvenKnowledge
+		serenade.knowledgeType = BotaniaAPI.elvenKnowledge
 		shimmer.knowledgeType = BotaniaAPI.elvenKnowledge
 		shrines.knowledgeType = BotaniaAPI.elvenKnowledge
 		silencer.knowledgeType = BotaniaAPI.elvenKnowledge
+		soulSword.knowledgeType = BotaniaAPI.elvenKnowledge
+		subshroom.knowledgeType = BotaniaAPI.elvenKnowledge
+		thunderChakram.knowledgeType = BotaniaAPI.elvenKnowledge
 		trade.knowledgeType = BotaniaAPI.elvenKnowledge
 		uberSpreader.knowledgeType = BotaniaAPI.elvenKnowledge
 		winery.knowledgeType = BotaniaAPI.elvenKnowledge
 		worldgen.knowledgeType = BotaniaAPI.elvenKnowledge
+		
+		abyss.knowledgeType = BotaniaAPI.elvenKnowledge
+		vafthrudnir.knowledgeType = BotaniaAPI.elvenKnowledge
+		
+		emblemThor.knowledgeType = BotaniaAPI.elvenKnowledge
+		emblemSif.knowledgeType = BotaniaAPI.elvenKnowledge
+		emblemNjord.knowledgeType = BotaniaAPI.elvenKnowledge
+		emblemLoki.knowledgeType = BotaniaAPI.elvenKnowledge
+		emblemHeimdall.knowledgeType = BotaniaAPI.elvenKnowledge
+		emblemOdin.knowledgeType = BotaniaAPI.elvenKnowledge
+		
+		cloakThor.knowledgeType = BotaniaAPI.elvenKnowledge
+		cloakSif.knowledgeType = BotaniaAPI.elvenKnowledge
+		cloakNjord.knowledgeType = BotaniaAPI.elvenKnowledge
+		cloakLoki.knowledgeType = BotaniaAPI.elvenKnowledge
+		cloakHeimdall.knowledgeType = BotaniaAPI.elvenKnowledge
+		cloakOdin.knowledgeType = BotaniaAPI.elvenKnowledge
+		
+		rodThor.knowledgeType = BotaniaAPI.elvenKnowledge
+		rodSif.knowledgeType = BotaniaAPI.elvenKnowledge
+		rodNjord.knowledgeType = BotaniaAPI.elvenKnowledge
+		rodLoki.knowledgeType = BotaniaAPI.elvenKnowledge
+		rodOdin.knowledgeType = BotaniaAPI.elvenKnowledge
 		
 		if (ThaumcraftSuffusionRecipes.recipesLoaded) {
 			tctrees.knowledgeType = BotaniaAPI.elvenKnowledge

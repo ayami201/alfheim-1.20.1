@@ -3,6 +3,7 @@ package alfheim.client.render.particle
 import alexsocol.asjlib.*
 import net.minecraft.client.particle.EntityFX
 import net.minecraft.client.renderer.Tessellator
+import net.minecraft.util.MathHelper
 import net.minecraft.world.World
 import org.lwjgl.opengl.GL11.*
 import java.util.*
@@ -39,8 +40,18 @@ class EntityVoxelFX(world: World, x: Double, y: Double, z: Double, r: Float, g: 
 		val rand = Random(uniqueID.mostSignificantBits)
 		val randOffset = 8
 		
+		val i = MathHelper.floor_double(posX)
+		val j = MathHelper.floor_double(posZ)
+		
+		val b = if (worldObj.blockExists(i, 0, j)) {
+			val k = MathHelper.floor_double(posY)
+			worldObj.getLightBrightnessForSkyBlocks(i, k, j, 0)
+		} else {
+			0
+		}
+		
 		val tes = Tessellator.instance
-		tes.setBrightness(getBrightnessForRender(0f))
+		tes.setBrightness(b)
 		tes.setColorOpaque_F(
 			min(1f, max(0f, particleRed + ASJUtilities.randInBounds(-randOffset, randOffset, rand) / 255f)),
 			min(1f, max(0f, particleGreen + ASJUtilities.randInBounds(-randOffset, randOffset, rand) / 255f)),
