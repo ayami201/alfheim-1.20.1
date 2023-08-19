@@ -2,7 +2,6 @@ package alfheim.common.entity.boss
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alfheim.api.block.tile.SubTileAnomalyBase
 import alfheim.api.boss.IBotaniaBossWithName
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.AlfheimBlocks
@@ -226,12 +225,11 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 		
 		val (x, y, z) = Vector3.fromEntity(this).mf()
 		
-		while (worldObj.setBlock(x, y, z, AlfheimBlocks.anomaly)) {
-			(worldObj.getTileEntity(x, y, z) as? TileAnomaly ?: break).addSubTile(SubTileAnomalyBase.forName("Lightning") ?: break, "Lightning").lock(x, y, z, worldObj.provider.dimensionId)
-			return
+		worldObj.setBlock(x, y, z, AlfheimBlocks.anomaly)
+		(worldObj.getTileEntity(x, y, z) as? TileAnomaly)?.apply {
+			subTileName = "Lightning"
+			lock(x, y, z, worldObj.provider.dimensionId)
 		}
-		
-		worldObj.setBlockToAir(x, y, z)
 	}
 	
 	override fun dropFewItems(byPlayer: Boolean, looting: Int) {

@@ -1,49 +1,54 @@
 package alfheim.common.block.tile
 
 import alexsocol.asjlib.*
+import alexsocol.asjlib.math.Vector3
 import alfheim.common.entity.FakeLightning
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.gameevent.TickEvent
+import cpw.mods.fml.common.gameevent.TickEvent.*
 import net.minecraft.entity.effect.EntityLightningBolt
-import net.minecraft.init.Blocks
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.World
 
 class TileLightningRod: TileEntity() {
 	
-	// somehow dupes lightnings (not confirmed)
-	override fun updateEntity() {
-		if (worldObj != null) {
-			for (e in getBoltsWithinAABB(worldObj, boundingBox(48))) {
-				worldObj.removeEntity(e)
-				val fakeLightning = FakeLightning(worldObj)
-				fakeLightning.setPosition(xCoord.D, (yCoord + 1).D, zCoord.D)
-				worldObj.addWeatherEffect(fakeLightning)
+	companion object {
+		
+		init {
+			eventFML()
+		}
+		
+		@SubscribeEvent
+		fun onClientTick(e: ClientTickEvent) {
+			removeLightnings(e, mc.theWorld ?: return)
+		}
+		
+		@SubscribeEvent
+		fun onWorldTick(e: WorldTickEvent) {
+			removeLightnings(e, e.world ?: return)
+		}
+		
+		fun removeLightnings(e: TickEvent, world: World) {
+			if (e.phase != Phase.START || world.weatherEffects.isEmpty()) return
+			
+			val rods = world.loadedTileEntityList.filterIsInstance<TileLightningRod>()
+			if (rods.isEmpty()) return
+			
+			val newLightnings = ArrayList<FakeLightning>()
+			
+			world.weatherEffects.iterator().onEach { l ->
+				if (l !is EntityLightningBolt) return@onEach
+				val rod = rods.firstOrNull { Vector3.entityTileDistance(l, it) < 64 } ?: return@onEach
+				
+				remove()
+				l.lightningState = -1
+				l.boltLivingTime = -1
+				l.setDead()
+				
+				newLightnings += FakeLightning(world, rod.xCoord + 0.5, rod.yCoord + 1.5, rod.zCoord + 0.5)
 			}
 			
-			for (x in (xCoord - 2)..(xCoord + 2))
-				for (y in (yCoord - 2)..(yCoord + 2))
-					for (z in (zCoord - 2)..(zCoord + 2)) {
-						if (worldObj.getBlock(x, y, z) === Blocks.fire) {
-							worldObj.setBlockToAir(x, y, z)
-						}
-					}
+			newLightnings.forEach(world::addWeatherEffect)
 		}
-	}
-	
-	fun getBoltsWithinAABB(world: World, box: AxisAlignedBB): ArrayList<EntityLightningBolt> {
-		val bolts = ArrayList<EntityLightningBolt>()
-		
-		for (effect in world.weatherEffects) {
-			if (effect is EntityLightningBolt && effect !is FakeLightning) {
-				if (effect.posX in box.minX..box.maxX &&
-					effect.posY in box.minY..box.maxY &&
-					effect.posZ in box.minZ..box.maxZ) {
-					
-					bolts.add(effect)
-				}
-			}
-		}
-		
-		return bolts
 	}
 }

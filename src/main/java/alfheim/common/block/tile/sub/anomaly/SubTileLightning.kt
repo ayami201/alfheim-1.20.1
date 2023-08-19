@@ -29,7 +29,7 @@ class SubTileLightning: SubTileAnomalyBase() {
 	
 	override val targets: List<Any>
 		get() {
-			if (inWG()) return EMPTY_LIST
+			if (inWG()) return emptyList()
 			
 			run {
 				if (ticks % 50 == 0) {
@@ -42,7 +42,7 @@ class SubTileLightning: SubTileAnomalyBase() {
 					return l
 				}
 			}
-			return EMPTY_LIST
+			return emptyList()
 		}
 	
 	var transfer = 0
@@ -156,8 +156,6 @@ class SubTileLightning: SubTileAnomalyBase() {
 		
 		Botania.proxy.lightningFX(worldObj, vt, ve, 1f, worldObj.rand.nextLong(), 0, 0xFF0000)
 	}
-	
-	override fun typeBits() = HEALTH
 	
 	override fun writeCustomNBT(cmp: NBTTagCompound) {
 		super.writeCustomNBT(cmp)

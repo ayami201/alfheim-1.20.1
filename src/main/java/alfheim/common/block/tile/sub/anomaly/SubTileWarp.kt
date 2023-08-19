@@ -19,7 +19,7 @@ class SubTileWarp: SubTileAnomalyBase() {
 	
 	override val targets: List<Any>
 		get() {
-			if (ASJUtilities.isClient) return EMPTY_LIST
+			if (ASJUtilities.isClient) return emptyList()
 			
 			val l: MutableList<Any> = ArrayList()
 			
@@ -180,8 +180,6 @@ class SubTileWarp: SubTileAnomalyBase() {
 			worldObj.setBlock(target.x2, target.y2, target.z2, block, target.m1, 3)
 		}
 	}
-	
-	override fun typeBits() = SPACE
 	
 	private class Vector8i {
 		

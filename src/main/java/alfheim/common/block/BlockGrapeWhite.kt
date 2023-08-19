@@ -52,13 +52,19 @@ class BlockGrapeWhite: BlockBush(), IGrowable, ILexiconable {
 	override fun addCollisionBoxesToList(world: World?, x: Int, y: Int, z: Int, aabb: AxisAlignedBB?, list: List<Any?>?, entity: Entity?) = if (entity !is EntityBoat) super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity) else Unit
 	override fun getCollisionBoundingBoxFromPool(world: World?, x: Int, y: Int, z: Int) = getBoundingBox(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ)
 	override fun canPlaceBlockOn(block: Block) = block === Blocks.water
-	override fun canBlockStay(world: World, x: Int, y: Int, z: Int) = if (y in 0..255) world.getBlock(x, y - 1, z) === Blocks.water && world.getBlockMetadata(x, y - 1, z) == 0 else false
+	
+	override fun canBlockStay(world: World, x: Int, y: Int, z: Int) =
+		world.getBlock(x, y - 1, z).let { it === Blocks.water || it === AlfheimBlocks.manaFluidBlock } && world.getBlockMetadata(x, y - 1, z) == 0
 	
 	override fun updateTick(world: World, x: Int, y: Int, z: Int, random: Random) {
 		super.updateTick(world, x, y, z, random)
 		
 		val meta = world.getBlockMetadata(x, y, z)
-		if (meta < 2 && random.nextInt(if (meta == 0) 50 else 10) == 0) {
+		var chance = if (meta == 0) 50 else 10
+		if (world.getBlock(x, y - 1, z) === AlfheimBlocks.manaFluidBlock && world.getBlockMetadata(x, y - 1, z) == 0)
+			chance /= 2
+		
+		if (meta < 2 && random.nextInt(chance) == 0) {
 			world.setBlockMetadataWithNotify(x, y, z, meta + 1, 3)
 			return
 		}

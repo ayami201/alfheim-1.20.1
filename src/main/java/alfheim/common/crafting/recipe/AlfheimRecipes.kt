@@ -1,6 +1,6 @@
 package alfheim.common.crafting.recipe
 
-import alexsocol.asjlib.ASJUtilities
+import alexsocol.asjlib.*
 import alexsocol.asjlib.ASJUtilities.addOreDictRecipe
 import alexsocol.asjlib.ASJUtilities.addShapelessOreDictRecipe
 import alfheim.AlfheimCore
@@ -41,6 +41,7 @@ import alfheim.api.lib.LibOreDict.SPLINTERS_THUNDERWOOD
 import alfheim.api.lib.LibOreDict.TWIG_NETHERWOOD
 import alfheim.api.lib.LibOreDict.TWIG_THUNDERWOOD
 import alfheim.api.lib.LibOreDict.WOOD
+import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.AlfheimBlocks.airyVirus
 import alfheim.common.block.AlfheimBlocks.alfStorage
 import alfheim.common.block.AlfheimBlocks.alfheimPortal
@@ -52,6 +53,7 @@ import alfheim.common.block.AlfheimBlocks.altWood0
 import alfheim.common.block.AlfheimBlocks.altWood1
 import alfheim.common.block.AlfheimBlocks.amplifier
 import alfheim.common.block.AlfheimBlocks.animatedTorch
+import alfheim.common.block.AlfheimBlocks.anomalyHarvester
 import alfheim.common.block.AlfheimBlocks.anyavil
 import alfheim.common.block.AlfheimBlocks.auroraDirt
 import alfheim.common.block.AlfheimBlocks.auroraPlanks
@@ -105,6 +107,7 @@ import alfheim.common.block.AlfheimBlocks.livingcobble
 import alfheim.common.block.AlfheimBlocks.livingwoodFunnel
 import alfheim.common.block.AlfheimBlocks.manaAccelerator
 import alfheim.common.block.AlfheimBlocks.manaInfuser
+import alfheim.common.block.AlfheimBlocks.manaTuner
 import alfheim.common.block.AlfheimBlocks.netherPlanks
 import alfheim.common.block.AlfheimBlocks.netherSapling
 import alfheim.common.block.AlfheimBlocks.netherSlabs
@@ -121,6 +124,7 @@ import alfheim.common.block.AlfheimBlocks.rainbowSlab
 import alfheim.common.block.AlfheimBlocks.rainbowStairs
 import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimBlocks.realityAnchor
+import alfheim.common.block.AlfheimBlocks.redstoneRelay
 import alfheim.common.block.AlfheimBlocks.rpc
 import alfheim.common.block.AlfheimBlocks.sealingPlanks
 import alfheim.common.block.AlfheimBlocks.sealingSapling
@@ -174,7 +178,7 @@ import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteSlab
 import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.block.BlockNiflheim.NiflheimBlockMetas
-import alfheim.common.core.asm.hook.extender.*
+import alfheim.common.block.tile.TileAnomaly
 import alfheim.common.core.asm.hook.extender.ItemLensExtender.DAISY
 import alfheim.common.core.asm.hook.extender.ItemLensExtender.LINKBACK
 import alfheim.common.core.asm.hook.extender.ItemLensExtender.MESSANGER
@@ -183,9 +187,11 @@ import alfheim.common.core.asm.hook.extender.ItemLensExtender.SMELT
 import alfheim.common.core.asm.hook.extender.ItemLensExtender.SUPERCONDUCTOR
 import alfheim.common.core.asm.hook.extender.ItemLensExtender.TRACK
 import alfheim.common.core.asm.hook.extender.ItemLensExtender.TRIPWIRE
+import alfheim.common.core.asm.hook.extender.ItemTwigWandExtender
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge.ABYSS_TRUTH
 import alfheim.common.core.handler.HilarityHandler.AttributionNameChecker.getCurrentNickname
+import alfheim.common.core.helper.*
 import alfheim.common.integration.thaumcraft.ThaumcraftSuffusionRecipes
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
 import alfheim.common.item.AlfheimItems.armilla
@@ -282,18 +288,27 @@ import alfheim.common.item.AlfheimItems.warBanner
 import alfheim.common.item.AlfheimItems.wiltedLotus
 import alfheim.common.item.block.*
 import alfheim.common.item.material.ElvenFoodMetas.*
-import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.item.material.ElvenResourcesMetas.*
 import cpw.mods.fml.common.registry.GameRegistry.*
 import net.minecraft.block.Block
+import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.item.EntityItem
+import net.minecraft.entity.monster.*
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks.*
 import net.minecraft.init.Items
 import net.minecraft.init.Items.*
 import net.minecraft.item.*
 import net.minecraft.item.crafting.*
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.oredict.*
 import net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE
+import tconstruct.world.TinkerWorld
+import tconstruct.world.entity.BlueSlime
+import thaumcraft.common.config.ConfigItems
+import thaumcraft.common.entities.monster.EntityThaumicSlime
 import vazkii.botania.api.BotaniaAPI
+import vazkii.botania.api.item.IBurstViewerBauble
 import vazkii.botania.api.recipe.*
 import vazkii.botania.common.Botania
 import vazkii.botania.common.block.ModBlocks.*
@@ -326,6 +341,7 @@ object AlfheimRecipes {
 	lateinit var recipesAltStairs: List<IRecipe>
 	lateinit var recipeAmplifier: IRecipe
 	lateinit var recipeAnimatedTorch: IRecipe
+	lateinit var recipeAnomalyHarvester: IRecipe
 	lateinit var recipeAnyavil: IRecipe
 	lateinit var recipesApothecary: List<IRecipe>
 	lateinit var recipeAstrolabe: IRecipe
@@ -433,6 +449,7 @@ object AlfheimRecipes {
 	lateinit var recipeManaRingElven: IRecipe
 	lateinit var recipeManaRingGod: IRecipe
 	lateinit var recipeManaRingPink: IRecipe
+	lateinit var recipeManaTuner: IRecipe
 	lateinit var recipeManaweaveGlove: IRecipe
 	lateinit var recipeMultibauble: IRecipe
 	lateinit var recipeMuspelheimPendant: IRecipe
@@ -509,6 +526,7 @@ object AlfheimRecipes {
 	
 	lateinit var recipeInfusedDreamTwig: RecipeManaInfusion
 	lateinit var recipesPastoralSeeds: List<RecipeManaInfusion>
+	lateinit var recipeRedstoneRelay: RecipeManaInfusion
 	lateinit var recipeRiftShard: RecipeManaInfusion
 	
 	lateinit var recipesAttributionHeads: MutableList<RecipePetals>
@@ -542,6 +560,14 @@ object AlfheimRecipes {
 	lateinit var recipeCircuitTree: RecipeTreeCrafting
 	lateinit var recipeBarrierTree: RecipeTreeCrafting
 	
+	lateinit var tuningElementalSeer: TunerIncantation<EntityItem>
+	lateinit var tuningAnomalyStabilization: TunerIncantation<TileAnomaly>
+	lateinit var tuningAnomalyPackaging: TunerIncantation<TileAnomaly>
+	lateinit var tuningMagmaSize: TunerIncantation<EntityLivingBase>
+	lateinit var tuningSlimeSize: TunerIncantation<EntityLivingBase>
+	var tuningTaintSize: TunerIncantation<EntityLivingBase>? = null
+	var tuningGelatSize: TunerIncantation<EntityLivingBase>? = null
+	
 	init {
 		registerCraftingRecipes()
 		registerShapelessRecipes()
@@ -549,6 +575,7 @@ object AlfheimRecipes {
 		registerManaInfusionRecipes()
 		registerDendrology()
 		registerRecipies()
+		registerTuning()
 		banRetrades()
 	}
 	
@@ -632,6 +659,14 @@ object AlfheimRecipes {
 						 'T', redstone_torch,
 						 'P', MANA_POWDER)
 		recipeAnimatedTorch = BotaniaAPI.getLatestAddedRecipe()
+		
+		addOreDictRecipe(ItemStack(anomalyHarvester),
+		                 "TCT", "CPC", "TET",
+		                 'T', TERRASTEEL_NUGGET,
+		                 'C', ManaInfusionCore.stack,
+						 'P', ItemStack(pylon),
+						 'E', ItemStack(alfStorage))
+		recipeAnomalyHarvester = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(anyavil),
 						 "BGB", " P ", "EDE",
@@ -1287,6 +1322,15 @@ object AlfheimRecipes {
 		                 'D', DRAGONSTONE,
 		                 'I', IFFESAL_DUST)
 		recipeManaRingPink = BotaniaAPI.getLatestAddedRecipe()
+		
+		addOreDictRecipe(ItemStack(manaTuner),
+		                 "ISI", " P ", "MRM",
+		                 'I', IFFESAL_DUST,
+						 'S', livingrockSlab,
+						 'P', ItemStack(alfheimPylon),
+						 'M', MAUFTRIUM_INGOT,
+						 'R', runeAltar)
+		recipeManaTuner = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(manaGlove),
 						 "MM ", "MPM", " M ",
@@ -2544,6 +2588,8 @@ object AlfheimRecipes {
 		val grasses = Array(16) { ItemStack(irisGrass, 1, it) } + Array(2) { ItemStack(rainbowGrass, 1, it) }
 		recipesPastoralSeeds = grasses.mapIndexed { id, it -> BotaniaAPI.registerManaInfusionRecipe(ItemStack(irisSeeds, 1, id), it, 2500) }
 		
+		recipeRedstoneRelay = BotaniaAPI.registerManaInfusionRecipe(ItemStack(redstoneRelay), ItemStack(redstone_block), 15000)
+		
 		recipeRiftShard = BotaniaAPI.registerManaAlchemyRecipe(RiftShardEmpty.stack, ItemStack(bifrostPerm), 12000)
 		
 		if (Botania.thaumcraftLoaded) {
@@ -2582,6 +2628,76 @@ object AlfheimRecipes {
 		RecipeSorter.register("${ModInfo.MODID}:floatingSpecialFlower", RecipeSpecialFloatingFlower::class.java, RecipeSorter.Category.SHAPELESS, "")
 		addRecipe(RecipeSaveIvy)
 		RecipeSorter.register("${ModInfo.MODID}:saveIvy", RecipeSaveIvy::class.java, RecipeSorter.Category.SHAPELESS, "")
+	}
+	
+	private fun registerTuning() {
+		IncantationEquipmentElementalTuning(ElementalDamage.FIRE.name,      "o ken e ni: kon seli li kama jo e tomo lon insa ijo", COAL_NETHERWOOD)
+		IncantationEquipmentElementalTuning(ElementalDamage.WATER.name,     "telo tawa o tawa insa pi ijo ni",                     ItemStack(potionitem))
+		IncantationEquipmentElementalTuning(ElementalDamage.AIR.name,       "kon pi musi sike o sike o awen e ijo ni",             ItemStack(glass_bottle))
+		IncantationEquipmentElementalTuning(ElementalDamage.EARTH.name,     "o wan e ijo ni e wawa pi kiwen ale",                  ItemStack(clay))
+		IncantationEquipmentElementalTuning(ElementalDamage.ICE.name,       "o lete e ijo ni kepeken kon sina lete",               Nifleur.stack)
+		IncantationEquipmentElementalTuning(ElementalDamage.ELECTRIC.name,  "o wawa e ijo ni kepeken wawa pi jan sewi tola",       SPLINTERS_THUNDERWOOD)
+		IncantationEquipmentElementalTuning(ElementalDamage.NATURE.name,    "o namako e ijo ni kepeken sona pi linja laso kasi",   LIVINGWOOD_TWIG)
+		IncantationEquipmentElementalTuning(ElementalDamage.LIGHTNESS.name, "suno o walo e insa pi ijo ni",                        ItemStack(glowstone))
+		IncantationEquipmentElementalTuning(ElementalDamage.DARKNESS.name,  "pimeja o moku ali suno tawa ijo ni",                  ItemStack(wiltedLotus, 1, 1))
+		IncantationEquipmentElementalTuning(ElementalDamage.PSYCHIC.name,   "o pakala e sijelo ala. ijo ni li wile ala e sijelo",  ItemStack(ghast_tear))
+		
+		tuningElementalSeer = AlfheimAPI.registerIncantation<EntityItem>(
+			"o ken e ni: mi o kama sona e ijo ale",
+		    *AlfheimAPI.tunerIncantations.values().filterIsInstance<IncantationEquipmentElementalTuning>().map {
+				it.elementResource
+		    }.take(16).toTypedArray()
+		) {
+			if (!it.isEntityAlive) return@registerIncantation false
+			
+			val stack = it.entityItem ?: return@registerIncantation false
+			if (stack.stackSize <= 0) return@registerIncantation false
+			if (stack.item !is IBurstViewerBauble) return@registerIncantation false
+			if (ItemNBTHelper.getBoolean(stack, ElementalDamageHandler.TAG_ELEMENTAL_SEER, false)) return@registerIncantation false
+			
+			ItemNBTHelper.setBoolean(stack, ElementalDamageHandler.TAG_ELEMENTAL_SEER, true)
+			
+			true
+		}
+		
+		tuningAnomalyStabilization = AlfheimAPI.registerIncantation<TileAnomaly>("o pona e wawa. o wan e walo e pimeja. o wan e suno e mun") {
+			if (it.stable) return@registerIncantation false
+			it.stable = true
+			ASJUtilities.dispatchTEToNearbyPlayers(it)
+			true
+		}
+		
+		tuningAnomalyPackaging = AlfheimAPI.registerIncantation<TileAnomaly>("o pana e ale lon poki", *Array(4) { RiftShardGinnungagap.stack }) {
+			if (!it.stable || it.subTileName.isEmpty()) return@registerIncantation false
+			it.worldObj.setBlockToAir(it.xCoord, it.yCoord, it.zCoord)
+			val stack = RiftDrive.stack
+			ItemNBTHelper.setString(stack, TileAnomaly.TAG_SUBTILE_NAME, it.subTileName)
+			EntityItem(it.worldObj, it.xCoord + 0.5, it.yCoord + 0.5, it.zCoord + 0.5, stack).apply { setMotion(0.0) }.spawn()
+			true
+		}
+		
+		tuningSlimeSize = registerSlimeGrowthTune<EntitySlime>(ItemStack(slime_ball))
+		tuningMagmaSize = registerSlimeGrowthTune<EntityMagmaCube>(ItemStack(magma_cream))
+		if (Botania.thaumcraftLoaded) tuningTaintSize = registerSlimeGrowthTune<EntityThaumicSlime>(ItemStack(ConfigItems.itemResource, 1, 11))
+		if (AlfheimCore.TiCLoaded) tuningGelatSize = registerSlimeGrowthTune<BlueSlime>(ItemStack(TinkerWorld.strangeFood))
+	}
+	
+	private inline fun <reified T: EntityLivingBase> registerSlimeGrowthTune(item: Any): TunerIncantation<EntityLivingBase> {
+		return AlfheimAPI.registerIncantation<T>("jaki o kama suli", *Array(4) { item }) {
+			if (it::class.java != T::class.java) return@registerIncantation false // no other types for this
+			val nbt = NBTTagCompound()
+			it.writeEntityToNBT(nbt)
+			val newSize = nbt.getInteger("Size") + 1
+			if (newSize > Byte.MAX_VALUE) return@registerIncantation false // no overflow
+			nbt.setInteger("Size", newSize)
+			it.readEntityFromNBT(nbt)
+			
+			if (newSize == Byte.MAX_VALUE.I) getEntitiesWithinAABB(it.worldObj, EntityPlayer::class.java, it.boundingBox(8)).forEach { p ->
+				p.triggerAchievement(AlfheimAchievements.slime)
+			}
+			
+			true
+		}
 	}
 	
 	private fun banRetrades() {

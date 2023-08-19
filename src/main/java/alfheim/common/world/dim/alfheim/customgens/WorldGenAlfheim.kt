@@ -2,7 +2,6 @@ package alfheim.common.world.dim.alfheim.customgens
 
 import alexsocol.asjlib.*
 import alfheim.api.*
-import alfheim.api.block.tile.SubTileAnomalyBase
 import alfheim.api.block.tile.SubTileAnomalyBase.EnumAnomalyRarity
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.tile.*
@@ -83,14 +82,12 @@ object WorldGenAlfheim: IWorldGenerator {
 		val te = world.getTileEntity(x, y, z) as? TileAnomaly ?: return
 		
 		te.lock(x, y, z, world.provider.dimensionId)
+		te.subTileName = type
 		
-		val sub = SubTileAnomalyBase.forName(type) ?: return
-		sub.worldGen = true
-		
-		te.addSubTile(sub, type)
-		
-		for (i in 0 until AlfheimConfigHandler.anomaliesUpdate) te.updateEntity()
-		
-		sub.worldGen = false
+		if (te.subTile != null) {
+			te.subTile?.worldGen = true
+			for (i in 0 until AlfheimConfigHandler.anomaliesUpdate) te.updateEntity()
+			te.subTile?.worldGen = false
+		}
 	}
 }

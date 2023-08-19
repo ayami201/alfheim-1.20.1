@@ -97,10 +97,10 @@ object TinkersConstructAlfheimConfig {
 		
 		TConstructRegistry.addToolMaterial(id, name, tooltip, harvest, durability, efficiency, damage, handle, reinforced, stoneBound, style, color)
 		
-		if ((bowSpeed == null) xor (projSpeed == null)) throw IllegalArgumentException("Both bowSpeed ($bowSpeed) and projSpeed ($projSpeed) must be present")
+		require(!((bowSpeed == null) xor (projSpeed == null))) { "Both bowSpeed ($bowSpeed) and projSpeed ($projSpeed) must be present" }
 		if (bowSpeed != null && projSpeed != null) TConstructRegistry.addBowMaterial(id, bowSpeed, projSpeed)
 		
-		if ((projMass == null) xor (projFrag == null)) throw IllegalArgumentException("Both projMass ($projMass) and projFrag ($projFrag) must be present")
+		require(!((projMass == null) xor (projFrag == null))) { "Both projMass ($projMass) and projFrag ($projFrag) must be present" }
 		if (projMass != null && projFrag != null) TConstructRegistry.addArrowMaterial(id, projMass, projFrag)
 	}
 	

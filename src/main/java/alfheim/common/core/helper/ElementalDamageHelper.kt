@@ -3,26 +3,30 @@
 package alfheim.common.core.helper
 
 import alexsocol.asjlib.*
-import alfheim.api.entity.*
+import alfheim.api.ModInfo
+import alfheim.api.item.equipment.IElementalItem
 import alfheim.api.lib.LibResourceLocations
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.SheerColdHandler.cold
 import alfheim.common.core.helper.ElementalDamage.*
 import alfheim.common.core.helper.ElementalDamageBridge.*
-import com.google.common.collect.ImmutableMap
+import alfheim.common.crafting.recipe.IncantationEquipmentElementalTuning
+import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.entity.*
 import net.minecraft.entity.passive.EntityWaterMob
-import net.minecraft.util.*
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
+import net.minecraft.util.DamageSource
 import net.minecraftforge.client.event.RenderLivingEvent
 import net.minecraftforge.event.entity.living.*
 import org.lwjgl.opengl.GL11.*
-import vazkii.botania.common.item.equipment.bauble.ItemMonocle
+import vazkii.botania.api.item.*
 import java.util.*
-import kotlin.math.*
+import kotlin.math.max
 
 object ElementalDamageHandler {
 	
@@ -64,23 +68,125 @@ object ElementalDamageHandler {
 			return set
 		}
 	
+	fun calculateElements(source: DamageSource, target: EntityLivingBase, amount: Float): Float {
+		val attackEl = source.elements()
+		
+		val attunementLevel: Int
+		
+		val attacker = source.entity as? EntityLivingBase
+		if (attacker != null) run {
+			val stack = attacker.heldItem
+			
+			if (stack == null) {
+				attunementLevel = 0
+				return@run
+			}
+			
+			val item = stack.item
+			
+			val element: ElementalDamage
+			
+			if (item is IElementalItem) {
+				element = item.getElement(stack)
+				attunementLevel = item.getElementLevel(stack)
+			} else {
+				val name = ItemNBTHelper.getString(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT, COMMON.name)
+				element = ElementalDamage.valueOf(name)
+				val level = ItemNBTHelper.getInt(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT_LEVEL, 0)
+				attunementLevel = if (level == 4) 5 else level
+			}
+			
+			attackEl += element
+		} else {
+			attunementLevel = 0
+		}
+		
+		if (attackEl.size == 1 && attackEl.first() == COMMON) return amount
+		
+		val targetEl = EnumSet.copyOf(target.elements)
+		val resistanceModifiers = EnumMap<ElementalDamage, Float>(ElementalDamage::class.java)
+		ElementalDamage.entries.forEach { resistanceModifiers[it] = 0f }
+		
+		if (targetEl.size != 1 || targetEl.first() != COMMON) {
+			targetEl.forEach { te ->
+				resistanceModifiers[te] = resistanceModifiers[te]!! - (1f / targetEl.size)
+				
+				te.x05.forEach { x05 ->
+					resistanceModifiers[x05.real] = resistanceModifiers[x05.real]!! - 0.5f
+				}
+			}
+		}
+		
+		if (targetEl.size != 1 || targetEl.first() != COMMON) {
+			targetEl.addAll(target.appliedElements)
+			targetEl.forEach { te ->
+				
+				te.x2.forEach { x2 ->
+					resistanceModifiers[x2.real] = resistanceModifiers[x2.real]!! + 1f
+				}
+			}
+		}
+		
+		if (!source.isUnblockable)
+			for (i in 1..4) {
+				val armor = target.getEquipmentInSlot(i) ?: continue
+				val item = armor.item
+				
+				val element: ElementalDamage
+				val level: Int
+				
+				if (item is IElementalItem) {
+					element = item.getElement(armor)
+					level = item.getElementLevel(armor)
+				} else {
+					val name = ItemNBTHelper.getString(armor, IncantationEquipmentElementalTuning.TAG_ELEMENT, COMMON.name)
+					element = ElementalDamage.valueOf(name)
+					level = ItemNBTHelper.getInt(armor, IncantationEquipmentElementalTuning.TAG_ELEMENT_LEVEL, 0)
+				}
+				
+				resistanceModifiers[element] = resistanceModifiers[element]!! - (0.25f * level)
+				
+				element.x05.forEach { x05 ->
+					resistanceModifiers[x05.real] = resistanceModifiers[x05.real]!! - (0.125f * level)
+				}
+				
+				element.x2.forEach { x2 ->
+					resistanceModifiers[x2.real] = resistanceModifiers[x2.real]!! + (0.25f * level)
+				}
+			}
+		
+		var elementalDamage = amount
+		var commonDamage = 0f
+		
+		// for mixed damage types
+		if (COMMON in attackEl) {
+			commonDamage = max(0f, amount * (1f - 0.25f * attunementLevel))
+			elementalDamage = amount * (0.25f * attunementLevel) * (attackEl.size - 1)
+		}
+		
+		// no effect for common
+		attackEl.remove(COMMON)
+		
+		val elementalDamages = EnumMap<ElementalDamage, Float>(ElementalDamage::class.java)
+		attackEl.forEach { elementalDamages[it] = elementalDamage / attackEl.size }
+		
+		elementalDamages.keys.forEach {
+			elementalDamages[it] = elementalDamages[it]!! * (resistanceModifiers[it]!! + 1f)
+		}
+		
+		return commonDamage + elementalDamages.values.sum()
+	}
+	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	fun onAttacked(e: LivingAttackEvent) {
-		val targetEl = e.entityLiving.elements
-		val attackEl = e.source.elements()
-		
-		e.isCanceled = attackEl.any { targetEl.any(it::isImmune) }
+		val newAmount = calculateElements(e.source, e.entityLiving, e.ammount)
+		if (newAmount <= 0f) e.isCanceled = true
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	fun onHurt(e: LivingHurtEvent) {
-		val targetEl = EnumSet.copyOf(e.entityLiving.elements)
-		val attackEl = e.source.elements()
-		
-		if (targetEl.any { attackEl.any(it::isResistant) } ) e.ammount *= 0.5f
-		
-		targetEl.addAll(e.entityLiving.appliedElements)
-		if (targetEl.any { attackEl.any(it::isVulnerable) } ) e.ammount *= 2f
+		e.ammount = calculateElements(e.source, e.entityLiving, e.ammount)
+		if (e.ammount <= 0f) e.isCanceled = true
 	}
 	
 	@SubscribeEvent
@@ -88,7 +194,8 @@ object ElementalDamageHandler {
 	fun drawStatusIcons(e: RenderLivingEvent.Specials.Post) {
 		if (mc.theWorld == null || mc.thePlayer == null) return // in-menu render
 		
-		if (!ItemMonocle.hasMonocle(mc.thePlayer)) return
+		val monocle = getMonocle(mc.thePlayer) ?: return
+		if (!ItemNBTHelper.getBoolean(monocle, TAG_ELEMENTAL_SEER, false)) return
 		
 		val applied = e.entity.appliedElements
 		val elements = e.entity.elements.plus(applied).filter { it != COMMON }
@@ -113,7 +220,7 @@ object ElementalDamageHandler {
 		mc.renderEngine.bindTexture(LibResourceLocations.elements)
 		
 		val debufSignPoses = mutableListOf<Double>()
-		val uOff = 1.0/11
+		val uOff = 1.0 / (ElementalDamage.entries.size - 1)
 		
 		val tes = Tessellator.instance
 		tes.startDrawingQuads()
@@ -139,14 +246,33 @@ object ElementalDamageHandler {
 		glColor4f(1f, 1f, 1f, 1f)
 		glPopMatrix()
 	}
+	
+	fun getMonocle(player: EntityPlayer?): ItemStack? {
+		val baubles = PlayerHandler.getPlayerBaubles(player)
+		
+		for (i in 0..3) {
+			val stack = baubles[i] ?: continue
+			
+			val item = stack.item
+			if (item is IBurstViewerBauble) return stack
+			if (item !is ICosmeticAttachable) continue
+			
+			val cosmetic = item.getCosmeticItem(stack) ?: continue
+			if (cosmetic.item is IBurstViewerBauble) return cosmetic
+		}
+		
+		return null
+	}
+	
+	const val TAG_ELEMENTAL_SEER = "${ModInfo.MODID}_elementalSeer"
 }
 
-private enum class ElementalDamageBridge {
-	COMMON_, FIRE_, WATER_, AIR_, EARTH_, ICE_, ELECTRIC_, NATURE_, LIGHTNESS_, DARKNESS_, PSYCHIC_, ALIEN_;
+enum class ElementalDamageBridge {
+	COMMON_, FIRE_, WATER_, AIR_, EARTH_, ICE_, ELECTRIC_, NATURE_, LIGHTNESS_, DARKNESS_, PSYCHIC_;
 	val real get() = ElementalDamage.entries[ordinal]
 }
 
-enum class ElementalDamage(private val x2: Array<ElementalDamageBridge>, private val x05: Array<ElementalDamageBridge>) {
+enum class ElementalDamage(val x2: Array<ElementalDamageBridge>, val x05: Array<ElementalDamageBridge>) {
 	COMMON(arrayOf(), arrayOf()),
 	FIRE(arrayOf(WATER_, EARTH_), arrayOf(AIR_, NATURE_)),
 	WATER(arrayOf(ICE_, ELECTRIC_), arrayOf(FIRE_, NATURE_)),
@@ -155,10 +281,9 @@ enum class ElementalDamage(private val x2: Array<ElementalDamageBridge>, private
 	ICE(arrayOf(FIRE_, ELECTRIC_), arrayOf(WATER_, NATURE_)),
 	ELECTRIC(arrayOf(FIRE_, ICE_), arrayOf(WATER_, AIR_)),
 	NATURE(arrayOf(FIRE_, ICE_), arrayOf(WATER_, ELECTRIC_)),
-	LIGHTNESS(arrayOf(DARKNESS_), arrayOf(PSYCHIC_)),
-	DARKNESS(arrayOf(LIGHTNESS_), arrayOf(ALIEN_)),
-	PSYCHIC(arrayOf(ALIEN_), arrayOf(LIGHTNESS_)),
-	ALIEN(arrayOf(PSYCHIC_), arrayOf(DARKNESS_));
+	LIGHTNESS(arrayOf(DARKNESS_), arrayOf()),
+	DARKNESS(arrayOf(LIGHTNESS_), arrayOf()),
+	PSYCHIC(arrayOf(DARKNESS_), arrayOf(LIGHTNESS_));
 	
 	fun isVulnerable(type: ElementalDamage): Boolean {
 		return ElementalDamageBridge.entries.toTypedArray()[type.ordinal] in x2
@@ -178,12 +303,12 @@ interface IElementalEntity {
 }
 
 fun DamageSource.setTo(type: ElementalDamage): DamageSource {
-	alfheim_synthetic_elementalFlag = if (type == COMMON) 0 else ASJBitwiseHelper.setBit(alfheim_synthetic_elementalFlag, type.ordinal, true)
+	alfheim_synthetic_elementalFlag = ASJBitwiseHelper.setBit(alfheim_synthetic_elementalFlag, type.ordinal, true)
 	return this
 }
 
 fun DamageSource.isOf(type: ElementalDamage): Boolean {
-	return if (type == COMMON) alfheim_synthetic_elementalFlag == 0 else {
+	return if (type == COMMON && alfheim_synthetic_elementalFlag == 0) true else {
 		val stored = ASJBitwiseHelper.getBit(alfheim_synthetic_elementalFlag, type.ordinal)
 		if (type == FIRE) isFireDamage || stored else stored
 	}

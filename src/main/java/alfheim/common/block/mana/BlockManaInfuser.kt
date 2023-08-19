@@ -2,7 +2,6 @@ package alfheim.common.block.mana
 
 import alexsocol.asjlib.safeGet
 import alfheim.client.core.helper.IconHelper
-import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileManaInfuser
 import alfheim.common.lexicon.AlfheimLexiconData
@@ -10,14 +9,12 @@ import net.minecraft.block.material.Material
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
 import net.minecraft.world.World
 import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.api.wand.*
-import vazkii.botania.common.block.*
 
 class BlockManaInfuser: BlockContainerMod(Material.rock), ILexiconable, IWandHUD, IWandable {
 	
@@ -51,22 +48,6 @@ class BlockManaInfuser: BlockContainerMod(Material.rock), ILexiconable, IWandHUD
 	}
 	
 	override fun getIcon(side: Int, meta: Int) = textures.safeGet(meta).safeGet(side)
-	
-	override fun onBlockPlacedBy(world: World, x: Int, y: Int, z: Int, placer: EntityLivingBase?, stack: ItemStack?) {
-		super.onBlockPlacedBy(world, x, y, z, placer, stack)
-		if (placer is EntityPlayer) {
-			if (world.getBlock(x + 1, y, z) === ModFluffBlocks.elfQuartz &&
-				world.getBlock(x - 1, y, z) === ModFluffBlocks.elfQuartz &&
-				world.getBlock(x, y, z + 1) === ModFluffBlocks.elfQuartz &&
-				world.getBlock(x, y, z - 1) === ModFluffBlocks.elfQuartz &&
-				world.getBlock(x + 1, y, z + 1) === ModBlocks.storage && world.getBlockMetadata(x + 1, y, z + 1) == 2 &&
-				world.getBlock(x + 1, y, z - 1) === ModBlocks.storage && world.getBlockMetadata(x + 1, y, z - 1) == 2 &&
-				world.getBlock(x - 1, y, z + 1) === ModBlocks.storage && world.getBlockMetadata(x - 1, y, z + 1) == 2 &&
-				world.getBlock(x - 1, y, z - 1) === ModBlocks.storage && world.getBlockMetadata(x - 1, y, z - 1) == 2)
-				
-				placer.triggerAchievement(AlfheimAchievements.infuser)
-		}
-	}
 	
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, lexicon: ItemStack) = AlfheimLexiconData.infuser
 	

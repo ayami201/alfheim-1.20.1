@@ -60,8 +60,8 @@ class ItemMjolnir: ItemRelic("Mjolnir") {
 		return super.onEntitySwing(entity, stack)
 	}
 	
-	override fun hitEntity(stack: ItemStack?, entity: EntityLivingBase, attacker: EntityLivingBase): Boolean {
-		if (isWorthy(attacker)) return false
+	override fun hitEntity(stack: ItemStack, entity: EntityLivingBase, attacker: EntityLivingBase): Boolean {
+		if (!isWorthy(attacker)) return false
 		
 		val range = 10
 		var dmg = 8f
@@ -72,6 +72,10 @@ class ItemMjolnir: ItemRelic("Mjolnir") {
 		val lightningSeed = getLong(stack, TAG_LIGHTNING_SEED, 0)
 		val rand = Random(lightningSeed)
 		
+		val pink = stack.displayName.trim().lowercase().let { it == "gloryhammer" || it == "glory hammer" }
+		var color = if (pink) EntityMjolnir.colorP else EntityMjolnir.color
+		if (attacker is EntityPlayer) color = ColorOverrideHelper.getColor(attacker, color)
+		
 		for (i in 0..5) {
 			val entities = selectEntitiesWithinAABB(entity.worldObj, EntityLivingBase::class.java, lightningSource.boundingBox(range)) {
 				it is IMob && it !is EntityPlayer && !alreadyTargetedEntities.contains(it)
@@ -80,10 +84,7 @@ class ItemMjolnir: ItemRelic("Mjolnir") {
 			
 			val target = entities[rand.nextInt(entities.size)]
 			
-			target.attackEntityFrom(if (attacker is EntityPlayer) DamageSource.causePlayerDamage(attacker) else DamageSource.causeMobDamage(attacker).setTo(ElementalDamage.ELECTRIC), dmg)
-			
-			var color = 0x0079C4
-			if (attacker is EntityPlayer) color = ColorOverrideHelper.getColor(attacker, color)
+			target.attackEntityFrom((if (attacker is EntityPlayer) DamageSource.causePlayerDamage(attacker) else DamageSource.causeMobDamage(attacker)).setTo(ElementalDamage.ELECTRIC), dmg)
 			
 			Botania.proxy.lightningFX(entity.worldObj, Bector3.fromEntityCenter(lightningSource), Bector3.fromEntityCenter(target), 1f, color, Color(color).brighter().brighter().rgb)
 			alreadyTargetedEntities.add(target)
@@ -152,7 +153,8 @@ class ItemMjolnir: ItemRelic("Mjolnir") {
 		val end = Bector3()
 		val oY = Bector3(0.0, 1.0, 0.0)
 		
-		val color = ColorOverrideHelper.getColor(player, 0x0079C4)
+		val pink = stack.displayName.trim().lowercase().let { it == "gloryhammer" || it == "glory hammer" }
+		val color = ColorOverrideHelper.getColor(player, if (pink) EntityMjolnir.colorP else EntityMjolnir.color)
 		
 		for (i in 0 until 360 step 5) {
 			end.set(5.0, 1.0, 0.0).rotate(i.D, oY).add(start)
@@ -179,13 +181,14 @@ class ItemMjolnir: ItemRelic("Mjolnir") {
 				if (e === entity) return@forEach
 				
 				if (Vector3.vecEntityDistance(center, e) in (radius - 1)..(radius + 1)) {
-					val src = (if (entity is EntityPlayer) DamageSource.causePlayerDamage(entity) else DamageSource.causeMobDamage(entity)).setTo(ElementalDamage.ELECTRIC)
 					if (e.onGround) {
+						val src = (if (entity is EntityPlayer) DamageSource.causePlayerDamage(entity) else DamageSource.causeMobDamage(entity))
 						e.attackEntityFrom(src, 10f)
 						e.hurtResistantTime = 0
 						e.hurtTime = 0
 					}
 					
+					val src = (if (entity is EntityPlayer) DamageSource.causePlayerDamage(entity) else DamageSource.causeMobDamage(entity)).setTo(ElementalDamage.ELECTRIC)
 					e.attackEntityFrom(src, 5f)
 				}
 			}

@@ -363,11 +363,9 @@ class TileTreeCrafter: ASJTile(), ISparkAttachable {
 			for (rItem: Any? in recipeItems) {
 				if (rItem != null)
 					if (it[0]?.itemEquals(rItem) == true) {
-						it.apply {
-							setInventorySlotContents(0, null)
-							invalidate()
-						}
+						it[0] = null
 						recipeItems.remove(rItem)
+						ASJUtilities.dispatchTEToNearbyPlayers(it)
 						break
 					}
 			}

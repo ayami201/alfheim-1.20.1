@@ -17,7 +17,7 @@ class SubTileGravity: SubTileAnomalyBase() {
 	
 	override val targets: List<Any>
 		get() {
-			if (inWG()) return EMPTY_LIST
+			if (inWG()) return emptyList()
 			val radius = power * 10
 			return allAround(Entity::class.java, radius)
 		}
@@ -66,8 +66,6 @@ class SubTileGravity: SubTileAnomalyBase() {
 		target.motionY += vt.y * 1.25
 		target.motionZ += vt.z
 	}
-	
-	override fun typeBits() = MOTION
 	
 	companion object {
 		

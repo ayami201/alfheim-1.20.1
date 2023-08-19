@@ -145,9 +145,7 @@ class ItemWireAxe(val name: String = "axeRevelation", val toolMaterial: ToolMate
 		val damage = ModifiableAttributeInstance(ServersideAttributeMap(), godSlayingDamage).apply { stack.attributeModifiers[godSlayingDamage.attributeUnlocalizedName].forEach { applyModifier(it as AttributeModifier) } }.attributeValue
 		if (damage <= 0 || !entity.canAttackWithItem() || entity.hitByEntity(player)) return false
 		
-		val reset = entity.hurtResistantTime == 0
 		attackEntity(player, entity, damage, DamageSourceSpell.godslayer(player, AlfheimConfigHandler.wireoverpowered))
-		if (reset) entity.hurtResistantTime = 0
 		
 		return false
 	}

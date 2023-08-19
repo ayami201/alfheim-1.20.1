@@ -12,13 +12,17 @@ import java.util.*
 
 open class BlockHang(mat: Material, name: String, sub: Int, val fallable: Boolean = true): BlockModMeta(mat, sub, ModInfo.MODID, name, AlfheimTab, 0.3f) {
 	
+	init {
+		tickRandomly = fallable
+	}
+	
 	override fun onNeighborBlockChange(world: World, x: Int, y: Int, z: Int, block: Block) = checkChange(world, x, y, z)
 	
 	override fun updateTick(world: World, x: Int, y: Int, z: Int, random: Random) {
 		if (fallable) {
 			val nextMeta = world.getBlockMetadata(x, y, z) + 1
 			
-			if (random.nextInt(16 * nextMeta) == 0) {
+			if (random.nextInt(4 * nextMeta) == 0) {
 				if (nextMeta >= subtypes) {
 					fall(world, x, y - 1, z)
 					world.setBlock(x, y, z, this, 0, 3)

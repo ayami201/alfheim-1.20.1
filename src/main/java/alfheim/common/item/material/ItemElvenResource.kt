@@ -2,10 +2,11 @@ package alfheim.common.item.material
 
 import alexsocol.asjlib.*
 import alfheim.AlfheimCore
-import alfheim.api.ModInfo
+import alfheim.api.*
 import alfheim.client.core.helper.*
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.colored.rainbow.BlockRainbowGrass
+import alfheim.common.block.tile.TileAnomaly
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
@@ -51,8 +52,8 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	
 	override fun getRenderPasses(meta: Int) =
 		when (meta) {
-			ElvenWeed.I -> 2
-			else        -> 1
+			ElvenWeed.I, RiftDrive.I -> 2
+			else                     -> 1
 		}
 	
 	override fun requiresMultipleRenderPasses() = true
@@ -83,16 +84,16 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	override fun getColorFromItemStack(stack: ItemStack, pass: Int) =
 		if ((stack.meta == ElvenWeed.I && pass == 1) || stack.meta == RiftShardEmpty.I)
 			Color.HSBtoRGB(Botania.proxy.worldElapsedTicks * 2 % 360 / 360f, 0.25f, 1f)
-		else if (stack.meta == RiftShardGinnungagap.I)
-			Color.HSBtoRGB(0f, 0f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 20 + 0.05F)
-		else if (stack.meta == RiftShardMuspelheim.I)
-			Color.HSBtoRGB(0.05f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 8 + 0.75f, 1f)
-		else if (stack.meta == RiftShardNiflheim.I)
-			Color.HSBtoRGB(2/3f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 8 + 0.75f, 1f)
-		else if (stack.meta == RainbowPetal.I || stack.meta == RainbowDust.I)
-			ItemIridescent.rainbowColor()
-		else
-			super.getColorFromItemStack(stack, pass)
+		else if ((stack.meta == RiftDrive.I && pass == 1)) {
+			val color = AlfheimAPI.getAnomaly(ItemNBTHelper.getString(stack, TileAnomaly.TAG_SUBTILE_NAME, "")).color
+			if (color == -1) Color.HSBtoRGB(Botania.proxy.worldElapsedTicks * 2 % 360 / 360f, 1f, 1f) else color
+		} else when (stack.meta) {
+			RiftShardGinnungagap.I        -> Color.HSBtoRGB(0f, 0f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 20 + 0.05F)
+			RiftShardMuspelheim.I         -> Color.HSBtoRGB(0.05f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 8 + 0.75f, 1f)
+			RiftShardNiflheim.I           -> Color.HSBtoRGB(2 / 3f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 8 + 0.75f, 1f)
+			RainbowPetal.I, RainbowDust.I -> ItemIridescent.rainbowColor()
+			else                          -> super.getColorFromItemStack(stack, pass)
+		}
 	
 	val riftIcons = arrayOf(RiftShardGinnungagap.I, RiftShardMuspelheim.I, RiftShardNiflheim.I)
 	
@@ -113,6 +114,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		wind = reg.registerIcon(ModInfo.MODID + ":misc/wind")
 		wing = reg.registerIcon(ModInfo.MODID + ":misc/wing")
 		
+		drive1 = IconHelper.forName(reg, "materials/${RiftDrive}1")
 		weed1 = IconHelper.forName(reg, "materials/${ElvenWeed}1")
 	}
 	
@@ -126,7 +128,9 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	}
 	
 	override fun getIcon(stack: ItemStack, pass: Int) =
-		if (stack.meta == ElvenWeed.I && pass == 1)
+		if (stack.meta == RiftDrive.I && pass == 1)
+			drive1
+		else if (stack.meta == ElvenWeed.I && pass == 1)
 			weed1
 		else if (stack.meta in riftIcons)
 			texture[RiftShardEmpty.I]
@@ -242,7 +246,14 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	override fun hasEffect(stack: ItemStack, pass: Int) = stack.meta == WisdomBottle.I || stack.meta == YggFruit.I
 	
 	override fun addInformation(stack: ItemStack, player: EntityPlayer?, tooltip: MutableList<Any?>, advanced: Boolean) {
-		if (stack.meta == DomainKey.I) addStringToTooltip(tooltip, "alfheimmisc.creative")
+		when (stack.meta) {
+			DomainKey.I -> addStringToTooltip(tooltip, "alfheimmisc.creative")
+			RiftDrive.I -> {
+				val sub = ItemNBTHelper.getString(stack, TileAnomaly.TAG_SUBTILE_NAME, "")
+				if (sub.isNotEmpty())
+					addStringToTooltip(tooltip, "tile.Anomaly.$sub.name")
+			}
+		}
 	}
 	
 	override fun getItemStackLimit(stack: ItemStack) = if (stack.meta == WisdomBottle.I || stack.meta == DomainKey.I) 1 else 64
@@ -312,6 +323,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		lateinit var wind: IIcon
 		lateinit var wing: IIcon
 		
+		lateinit var drive1: IIcon
 		lateinit var weed1: IIcon
 		
 		const val TAG_USAGES = "usages"
@@ -355,6 +367,7 @@ enum class ElvenResourcesMetas {
 	RiftShardGinnungagap,
 	RiftShardMuspelheim,
 	RiftShardNiflheim,
+	RiftDrive,
 	DomainKey,
 	SaveIvy,
 	;

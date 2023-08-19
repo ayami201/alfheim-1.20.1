@@ -1932,8 +1932,6 @@ object AlfheimHookHandler {
 			
 			if (stack.item !== AlfheimItems.elvenResource) continue
 			when (stack.meta) { ElvenResourcesMetas.MuspelheimRune.I, ElvenResourcesMetas.NiflheimRune.I, ElvenResourcesMetas.PrimalRune.I -> continue }
-			
-			EntityItem(tile.worldObj, tile.xCoord + 0.5, tile.yCoord + 1.5, tile.zCoord + 0.5, stack.copy()).spawn()
 			tile[i] = null
 		}
 	}

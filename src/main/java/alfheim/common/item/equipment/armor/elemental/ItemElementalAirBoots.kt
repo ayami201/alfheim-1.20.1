@@ -1,6 +1,8 @@
 package alfheim.common.item.equipment.armor.elemental
 
 import alexsocol.asjlib.*
+import alfheim.api.item.equipment.IElementalItem
+import alfheim.common.core.helper.ElementalDamage
 import alfheim.common.item.AlfheimItems
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.*
@@ -10,11 +12,15 @@ import net.minecraft.util.StatCollector
 import net.minecraftforge.event.entity.living.*
 import vazkii.botania.api.mana.ManaItemHandler
 
-class ItemElementalAirBoots: ElementalArmor(3, "ElementalAirBoots") {
+class ItemElementalAirBoots: ElementalArmor(3, "ElementalAirBoots"), IElementalItem {
 	
 	override fun getPixieChance(stack: ItemStack): Float {
 		return 0.09f
 	}
+	
+	override fun getElement(stack: ItemStack) = ElementalDamage.AIR
+	
+	override fun getElementLevel(stack: ItemStack) = 4
 	
 	@SideOnly(Side.CLIENT)
 	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>, b: Boolean) {

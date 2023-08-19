@@ -2,6 +2,7 @@ package alfheim.common.item.equipment.tool
 
 import alexsocol.asjlib.*
 import alfheim.api.*
+import alfheim.api.item.equipment.IElementalItem
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
 import alfheim.common.core.handler.VisualEffectHandler
 import alfheim.common.core.helper.*
@@ -24,7 +25,9 @@ import vazkii.botania.api.mana.*
 import vazkii.botania.common.core.helper.ItemNBTHelper.*
 import kotlin.math.*
 
-class ItemRealitySword: ItemSword(AlfheimAPI.mauftriumToolmaterial), IManaUsingItem {
+class ItemRealitySword: ItemSword(AlfheimAPI.mauftriumToolmaterial), IManaUsingItem, IElementalItem {
+	
+	lateinit var textures: Array<IIcon>
 	
 	init {
 		creativeTab = AlfheimTab
@@ -128,15 +131,13 @@ class ItemRealitySword: ItemSword(AlfheimAPI.mauftriumToolmaterial), IManaUsingI
 		if (crit) damage *= 1.5f
 		damage += addDamage
 		
-		val src = DamageSource.causePlayerDamage(player)
+		val src = DamageSource.causePlayerDamage(player).setTo(ElementalDamage.COMMON)
 		
-		if (elem == 1 || elem == 5) src.setDamageBypassesArmor().setTo(ElementalDamage.AIR)
-		if (elem == 2 || elem == 5) src.setMagicDamage().setTo(ElementalDamage.EARTH)
-		if (elem == 3 || elem == 5) {
-			if (!entity.isImmuneToFire && (entity !is EntityLivingBase || !entity.isPotionActive(Potion.fireResistance))) src.setFireDamage()
-			src.setTo(ElementalDamage.FIRE)
-		}
-		if (elem == 4 || elem == 5) src.setDamageIsAbsolute().setTo(ElementalDamage.WATER)
+		if (elem == 1 || elem == 5) src.setDamageBypassesArmor()
+		if (elem == 2 || elem == 5) src.setMagicDamage()
+		if (elem == 3 || elem == 5) if (!entity.isImmuneToFire && (entity !is EntityLivingBase || !entity.isPotionActive(Potion.fireResistance))) src.setFireDamage()
+		if (elem == 4 || elem == 5) src.setDamageIsAbsolute()
+		if (elem == 5) src.setTo(ElementalDamage.AIR).setTo(ElementalDamage.EARTH).setTo(ElementalDamage.FIRE).setTo(ElementalDamage.WATER)
 		
 		val succ = entity.attackEntityFrom(src, damage)
 		
@@ -220,9 +221,17 @@ class ItemRealitySword: ItemSword(AlfheimAPI.mauftriumToolmaterial), IManaUsingI
 	
 	override fun usesMana(stack: ItemStack) = stack.element in 1..4
 	
+	override fun getElement(stack: ItemStack) = when (stack.element) {
+		1 -> ElementalDamage.AIR
+		2 -> ElementalDamage.EARTH
+		3 -> ElementalDamage.FIRE
+		4 -> ElementalDamage.WATER
+		else -> ElementalDamage.COMMON
+	}
+	
+	override fun getElementLevel(stack: ItemStack) = if (stack.element > 0) 4 else 0
+	
 	companion object {
-		
 		const val TAG_ELEMENT = "element"
-		lateinit var textures: Array<IIcon>
 	}
 }

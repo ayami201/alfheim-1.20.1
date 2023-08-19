@@ -1,6 +1,6 @@
 package alfheim.common.item
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.ASJUtilities
 import alfheim.api.ModInfo
 import alfheim.api.entity.*
 import net.minecraft.entity.player.EntityPlayer
@@ -21,7 +21,7 @@ class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 		try {
 			if (!player.isSneaking) {
 				if (!world.isRemote) {
-					ASJUtilities.chatLog("${world.getBiomeGenForCoords(player.posX.I, player.posZ.I)}")
+				
 				} else {
 				
 				}

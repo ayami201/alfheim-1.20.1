@@ -78,7 +78,7 @@ class EntityEarthquake(world: World): Entity(world) {
 						if (block === Blocks.air) continue
 						
 						if (rand.nextDouble() < 0.3) {
-							if (!worldObj.isRemote && !worldObj.isProtected(x + xx, y, z + zz, false, false))
+							if (!worldObj.isRemote && !worldObj.isProtected(x + xx, y, z + zz, false))
 								worldObj.setBlock(x + xx, y, z + zz, if (y >= 12) Blocks.air else Blocks.flowing_lava)
 							else if (worldObj.rand.nextDouble() < 0.05 && AlfheimCore.proxy.doParticle()) {
 								val e = EntityFXSmoke(worldObj, xx + x + rand.nextDouble(), y.D, zz + z + rand.nextDouble(), 0.0, 0.2, 0.0, 2.0f + worldObj.rand.nextFloat() * 3f, 12f)

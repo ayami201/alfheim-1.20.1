@@ -9,6 +9,7 @@ import alfheim.api.lib.LibResourceLocations
 import alfheim.api.spell.SpellBase
 import alfheim.api.trees.*
 import alfheim.api.world.domain.Domain
+import com.google.common.collect.*
 import net.minecraft.block.Block
 import net.minecraft.init.*
 import net.minecraft.item.ItemStack
@@ -53,11 +54,13 @@ object AlfheimAPI {
 	/** Map of elven spells associated with their race (affinity), sorted by name  */
 	val spellMapping = HashMap<EnumRace, HashSet<SpellBase>>()
 	
+	val tunerIncantations = LinkedHashMultimap.create<String, TunerIncantation<Any>>()!!
+	
 	/** Map of anomaly data  */
 	val anomalies = HashMap<String, AnomalyData>()
 	
 	/** Map of anomaly behaviors for use in [Anomaly Harvester][alfheim.common.block.tile.TileAnomalyHarvester] */
-	val anomalyBehaviors = HashMap<String, ((TileEntity) -> Unit)>()
+	val anomalyBehaviors = HashMap<String, AnomalyBehavior>()
 	
 	/** Petronia fuels map */
 	val fuelMap = HashMap<String, Pair<Int, Int>>()
@@ -172,12 +175,19 @@ object AlfheimAPI {
 		throw IllegalArgumentException("Client-server spells desynchronization. Not found ID for " + spell.name)
 	}
 	
-	/** Register anomaly [subtile] with unique [name] */
-	fun registerAnomaly(name: String, subtile: Class<out SubTileAnomalyBase>, rarity: SubTileAnomalyBase.EnumAnomalyRarity, strip: Int, color: Int = 0xFFFFFF) {
-		if (anomalies.containsKey(name))
-			throw IllegalArgumentException("Anomaly \"$name\" is already registered")
+	inline fun <reified T: Any> registerIncantation(incantation: String, vararg inputs: Any, noinline application: (T) -> Boolean): TunerIncantation<T> {
+		val ti = TunerIncantation(T::class.java, incantation, inputs, application)
+		tunerIncantations[incantation] = ti
+		return ti
+	}
+	
+	operator fun <K, V> Multimap<K, V>.set(key: K, value: V) = put(key, value)
+	
+	/** Register anomaly with properties and unique [name] */
+	inline fun <reified T: SubTileAnomalyBase> registerAnomaly(name: String, rarity: SubTileAnomalyBase.EnumAnomalyRarity, strip: Int, color: Int) {
+		require(!anomalies.containsKey(name)) { "Anomaly \"$name\" is already registered" }
 		
-		anomalies[name] = AnomalyData(subtile, rarity, strip, color)
+		anomalies[name] = AnomalyData(T::class.java, rarity, strip, color)
 	}
 	
 	fun getAnomaly(name: String) = anomalies[name] ?: fallbackAnomalyData
@@ -342,13 +352,14 @@ object AlfheimAPI {
 	fun getTreeVariant(soil: Block, meta: Int) =
 		treeVariants.firstOrNull { it.matchesSoil(soil, meta) }
 	
-	private object FallbackAnomaly: SubTileAnomalyBase() {
+	object FallbackAnomaly: SubTileAnomalyBase() {
 		override val targets: List<Any> = emptyList()
 		override fun performEffect(target: Any) = Unit
-		override fun typeBits() = 0
 	}
 	
-	private val fallbackAnomalyData = AnomalyData(FallbackAnomaly::class.java, SubTileAnomalyBase.EnumAnomalyRarity.COMMON, 0, 0)
+	val fallbackAnomalyData = AnomalyData(FallbackAnomaly::class.java, SubTileAnomalyBase.EnumAnomalyRarity.COMMON, 31, 0)
+	
+	data class AnomalyBehavior(val costPerBlock: Int, val costPerApplication: Int, val effect: ((TileEntity) -> Int))
 	
 	data class AnomalyData(val subtileClass: Class<out SubTileAnomalyBase>, val rarity: SubTileAnomalyBase.EnumAnomalyRarity, val strip: Int, val color: Int)
 }

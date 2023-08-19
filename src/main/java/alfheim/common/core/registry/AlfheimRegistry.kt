@@ -15,9 +15,9 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.entity.*
 import alfheim.common.entity.boss.*
 import alfheim.common.entity.boss.primal.*
-import alfheim.common.floatingisland.EntityFloatingIsland
 import alfheim.common.entity.item.*
 import alfheim.common.entity.spell.*
+import alfheim.common.floatingisland.EntityFloatingIsland
 import alfheim.common.item.*
 import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.potion.*
@@ -208,9 +208,11 @@ object AlfheimRegistry {
 		registerTile(TileIcyGeyser::class.java, "IcyGeyser")
 		registerTile(TileManaAccelerator::class.java, "ItemHolder")
 		registerTile(TileManaInfuser::class.java, "ManaInfuser")
+		registerTile(TileManaTuner::class.java, "ManaTuner")
 		registerTile(TilePowerStone::class.java, "PowerStone")
 		registerTile(TileRaceSelector::class.java, "RaceSelector")
 		registerTile(TileRealityAnchor::class.java, "RealityAnchor")
+		registerTile(TileRedstoneRelay::class.java, "RedstoneRelay")
 		registerTile(TileRift::class.java, "Rift")
 		registerTile(TileSpire::class.java, "Spire")
 		registerTile(TileTradePortal::class.java, "TradePortal")
@@ -238,14 +240,14 @@ object AlfheimRegistry {
 	}
 	
 	private fun registerAnomalies() {
-		registerAnomaly("Antigrav", SubTileAntigrav::class.java, COMMON, 7, 0x7FE6FF)
-		registerAnomaly("Gravity", SubTileGravity::class.java, COMMON, 0, 0xEDEDED)
-		registerAnomaly("Killer", SubTileKiller::class.java, EPIC, 5, 0xFF6D6D)
-		registerAnomaly("Lightning", SubTileLightning::class.java, COMMON, 1, 0xFF0000)
-		registerAnomaly("ManaTornado", SubTileManaTornado::class.java, RARE, 2, -1)
-		registerAnomaly("ManaVoid", SubTileManaVoid::class.java, COMMON, 3, 0x03C0FF)
-		registerAnomaly("SpeedUp", SubTileSpeedUp::class.java, EPIC, 4, 0x20E020)
-		registerAnomaly("Warp", SubTileWarp::class.java, RARE, 6, 0x6020E0)
+		registerAnomaly<SubTileAntigrav>("Antigrav", COMMON, 7, 0x7FE6FF)
+		registerAnomaly<SubTileGravity>("Gravity", COMMON, 0, 0xEDEDED)
+		registerAnomaly<SubTileKiller>("Killer", EPIC, 5, 0xFF6D6D)
+		registerAnomaly<SubTileLightning>("Lightning", COMMON, 1, 0xFF0000)
+		registerAnomaly<SubTileManaTornado>("ManaTornado", RARE, 2, -1)
+		registerAnomaly<SubTileManaVoid>("ManaVoid", COMMON, 3, 0x03C0FF)
+		registerAnomaly<SubTileSpeedUp>("SpeedUp", EPIC, 4, 0x20E020)
+		registerAnomaly<SubTileWarp>("Warp", RARE, 6, 0x6020E0)
 	}
 	
 	private fun registerSpells() {

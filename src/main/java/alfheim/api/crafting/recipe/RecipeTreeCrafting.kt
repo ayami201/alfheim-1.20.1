@@ -16,8 +16,8 @@ class RecipeTreeCrafting(val manaUsage: Int, output: ItemStack, val outTileId: S
 	}
 	
 	init {
-		if (inputs.size > 8) throw IllegalArgumentException("Maximal suffusion inputs size is 8")
-		if (output.block == null) throw IllegalArgumentException("Can't fetch block from output stack '$output'")
+		require(inputs.size <= 8) { "Tree suffusion recipe has ${inputs.size} inputs, max is 8" }
+		requireNotNull(output.block) { "Can't fetch block from output stack '$output'" }
 	}
 	
 	fun matches(items: List<ItemStack>, mid: ItemStack): Boolean {

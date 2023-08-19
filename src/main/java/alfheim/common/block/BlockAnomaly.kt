@@ -87,7 +87,7 @@ class BlockAnomaly: BlockContainerMod(anomaly), ILexiconable {
 	override fun addHitEffects(world: World, mop: MovingObjectPosition, er: EffectRenderer?): Boolean {
 		val tile = world.getTileEntity(mop.blockX, mop.blockY, mop.blockZ) as? TileAnomaly ?: return true
 		
-		var color = AlfheimAPI.getAnomaly(tile.mainSubTile ?: "").color
+		var color = AlfheimAPI.getAnomaly(tile.subTileName).color
 		if (color == -1) color = Color.HSBtoRGB(Math.random().F, 1F, 1F)
 		val (r, g, b) = Color(color).getRGBColorComponents(null)
 		

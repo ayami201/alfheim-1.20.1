@@ -5,19 +5,26 @@ import alfheim.api.AlfheimAPI
 import alfheim.api.lib.LibRenderIDs
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.*
+import alfheim.common.item.AlfheimItems
+import alfheim.common.item.material.ElvenResourcesMetas
+import alfheim.common.lexicon.AlfheimLexiconData
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.texture.IIconRegister
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
-import vazkii.botania.api.wand.IWandable
+import vazkii.botania.api.lexicon.ILexiconable
+import vazkii.botania.api.wand.*
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.item.ModItems
 import kotlin.math.max
 
-class BlockAnomalyHarvester: BlockContainerMod(Material.iron), IWandable {
+class BlockAnomalyHarvester: BlockContainerMod(Material.iron), IWandable, ILexiconable, IWandHUD {
 	
 	init {
 		setBlockName("AnomalyHarvester")
@@ -28,6 +35,7 @@ class BlockAnomalyHarvester: BlockContainerMod(Material.iron), IWandable {
 	}
 	
 	override fun registerBlockIcons(reg: IIconRegister) = Unit
+	override fun getIcon(side: Int, meta: Int) = AlfheimBlocks.alfStorage.getIcon(side, 0)!!
 	override fun renderAsNormalBlock() = false
 	override fun isOpaqueCube() = false
 	override fun getRenderType() = LibRenderIDs.idHarvester
@@ -45,21 +53,27 @@ class BlockAnomalyHarvester: BlockContainerMod(Material.iron), IWandable {
 	}
 	
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		if (player.currentEquippedItem?.item === ModItems.twigWand) return player.currentEquippedItem.item.onItemUse(player.currentEquippedItem, player, world, x, y, z, side, hitX, hitY, hitZ)
+		val stack = player.heldItem
 		
-		// somehow insert anomaly...
+		if (stack?.item === ModItems.twigWand)
+			return stack.item.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ)
+		
 		val tile = world.getTileEntity(x, y, z) as? TileAnomalyHarvester ?: return false
 		
-		if (player.currentEquippedItem?.item === AlfheimBlocks.anomaly.toItem()) {
-			val main = ItemNBTHelper.getString(player.currentEquippedItem, TileAnomaly.TAG_SUBTILE_MAIN, "")
-			if (!AlfheimAPI.anomalyBehaviors.containsKey(main)) return false
-			tile.addSubTile(main)
+		if (stack?.item === AlfheimItems.elvenResource && stack.meta == ElvenResourcesMetas.RiftDrive.I) {
+			val sub = ItemNBTHelper.getString(stack, TileAnomaly.TAG_SUBTILE_NAME, "")
+			if (!AlfheimAPI.anomalyBehaviors.containsKey(sub)) return false
+			if (!tile.addSubTile(sub)) return false
+			
+			if (--stack.stackSize <= 0)
+				player.setCurrentItemOrArmor(0, null)
+			
 			return true
 		}
 		
-		if (player.currentEquippedItem != null) return false
+		if (stack != null) return false
 		
-		tile.power = max(0.0, tile.power + if (player.isSneaking) -1 else 1)
+		tile.power = max(0, tile.power + if (player.isSneaking) -1 else 1)
 		
 		if (!world.isRemote)
 			ASJUtilities.say(player, "alfheimmisc.power", tile.power)
@@ -67,6 +81,19 @@ class BlockAnomalyHarvester: BlockContainerMod(Material.iron), IWandable {
 		ASJUtilities.dispatchTEToNearbyPlayers(tile)
 		
 		return true
+	}
+	
+	override fun breakBlock(world: World, x: Int, y: Int, z: Int, block: Block?, meta: Int) {
+		run {
+			val te = world.getTileEntity(x, y, z) as? TileAnomalyHarvester ?: return@run
+			te.subTiles.forEach {
+				val stack = ElvenResourcesMetas.RiftDrive.stack
+				ItemNBTHelper.setString(stack, TileAnomaly.TAG_SUBTILE_NAME, it)
+				EntityItem(world, x + 0.5, y + 0.5, z + 0.5, stack).spawn()
+			}
+		}
+		
+		super.breakBlock(world, x, y, z, block, meta)
 	}
 	
 	override fun onUsedByWand(player: EntityPlayer?, stack: ItemStack, world: World, x: Int, y: Int, z: Int, side: Int): Boolean {
@@ -86,7 +113,14 @@ class BlockAnomalyHarvester: BlockContainerMod(Material.iron), IWandable {
 			}
 		
 		ASJUtilities.dispatchTEToNearbyPlayers(tile)
+		player.playSoundAtEntity("botania:ding", 0.1f, 1f)
 		
 		return true
+	}
+	
+	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, lexicon: ItemStack) = AlfheimLexiconData.anomalyHarvester
+	
+	override fun renderHUD(mc: Minecraft, res: ScaledResolution, world: World, x: Int, y: Int, z: Int) {
+		(world.getTileEntity(x, y, z) as TileAnomalyHarvester).renderHUD(res)
 	}
 }

@@ -10,11 +10,8 @@ import com.google.gson.JsonParseException
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.*
 import net.minecraft.entity.*
-import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.*
-import net.minecraft.network.play.server.S12PacketEntityVelocity
-import net.minecraft.network.play.server.S14PacketEntity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.*
 import net.minecraft.world.World
@@ -61,8 +58,7 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 			val max = AlfheimConfigHandler.floatingIslandSyncedDataInitLimit
 			
 			chunked.forEachIndexed { id, it ->
-				if (id > max)
-					throw IllegalArgumentException("Cannot save such a big island to synced entity data (max ${32767 * max} bytes, provided ${value.length}).\nPlease, update configs and install mod that extends DataWatcher IDs such as https://curseforge.com/minecraft/mc-mods/confighelper")
+				require(id <= max) { "Cannot save such a big island to synced entity data (max ${32767 * max} bytes, provided ${value.length}).\nPlease, update configs and install mod that extends DataWatcher IDs such as https://curseforge.com/minecraft/mc-mods/confighelper" }
 				
 				dataWatcher.updateObject(id + BLOCK_START, it)
 			}

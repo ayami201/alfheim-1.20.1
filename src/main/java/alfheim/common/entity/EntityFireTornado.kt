@@ -44,7 +44,7 @@ class EntityFireTornado(world: World): Entity(world) {
 						Vector3.pointDistancePlane(x, z, posX, posZ) < (17 + (y - posY) / 3) &&
 						worldObj.getBlock(x, y, z).isReplaceable(worldObj, x, y, z) &&
 						Blocks.fire.canPlaceBlockAt(worldObj, x, y, z) &&
-						!worldObj.isProtected(x, y, z, false, false))
+						!worldObj.isProtected(x, y, z, false))
 							worldObj.setBlock(x, y, z, Blocks.fire)
 		
 		val list = getEntitiesWithinAABB(worldObj, Entity::class.java, getBoundingBox())

@@ -139,7 +139,7 @@ class TileTradePortal: ASJTile() {
 			val stack = when (`in`) {
 				is String    -> OreDictionary.getOres(`in`)[0]
 				is ItemStack -> `in`.copy()
-				else         -> throw IllegalArgumentException("Invalid input")
+				else         -> throw IllegalArgumentException("Invalid input in midgard trade")
 			}
 			spawnItem(ItemStack(stack.item, 1, stack.meta))
 		}

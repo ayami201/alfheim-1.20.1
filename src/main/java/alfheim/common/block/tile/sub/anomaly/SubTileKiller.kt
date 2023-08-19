@@ -12,8 +12,6 @@ class SubTileKiller: SubTileAnomalyBase() {
 		return getEntitiesWithinAABB(worldObj, Entity::class.java, superTile?.boundingBox(0.25) ?: return emptyList())
 	}
 	
-	override fun typeBits() = HEALTH
-	
 	override fun performEffect(target: Any) {
 		if (target is Entity)
 			target.attackEntityFrom(DamageSource.outOfWorld, Float.MAX_VALUE)

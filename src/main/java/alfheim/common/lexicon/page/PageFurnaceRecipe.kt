@@ -13,7 +13,6 @@ import vazkii.botania.api.internal.IGuiLexiconEntry
 import vazkii.botania.api.lexicon.*
 import vazkii.botania.client.lib.LibResources
 import vazkii.botania.common.lexicon.page.PageRecipe
-import java.util.*
 import kotlin.math.*
 
 class PageFurnaceRecipe: PageRecipe {
@@ -33,14 +32,14 @@ class PageFurnaceRecipe: PageRecipe {
 		recipes = ArrayList()
 		for (inp in inputs) {
 			val output = FurnaceRecipes.smelting().getSmeltingResult(inp)
-						 ?: throw IllegalArgumentException("Invalid input")
+			requireNotNull(output) { "Invalid input" }
 			recipes.add(StackPair(inp, output))
 		}
 	}
 	
 	constructor(unlocalizedName: String, input: ItemStack): super(unlocalizedName) {
 		val output = FurnaceRecipes.smelting().getSmeltingResult(input)
-					 ?: throw IllegalArgumentException("Invalid input")
+		requireNotNull(output) { "Invalid input" }
 		recipes = arrayListOf(StackPair(input, output))
 	}
 	

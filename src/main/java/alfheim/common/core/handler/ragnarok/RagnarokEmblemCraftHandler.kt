@@ -27,7 +27,7 @@ object RagnarokEmblemCraftHandler {
 		val player = e.entityPlayer
 		if (player.heldItem?.item !== AlfheimItems.wiltedLotus || player.heldItem.meta != 1) return
 		val tile = e.world.getTileEntity(e.x, e.y, e.z) as? TileAnomaly ?: return
-		if (tile.mainSubTile != "Lightning") return
+		if (tile.subTileName != "Lightning") return
 		e.world.addWeatherEffect(EntityLightningBolt(e.world, e.x.D, e.y.D, e.z.D))
 		--player.heldItem.stackSize
 	}
@@ -48,7 +48,7 @@ object RagnarokEmblemCraftHandler {
 		val world = entityItem.worldObj
 		if (world.isRemote) return
 		val anomaly = world.getTileEntity(entityItem) as? TileAnomaly ?: return
-		if (anomaly.mainSubTile != "Lightning") return
+		if (anomaly.subTileName != "Lightning") return
 		
 		val (x, y, z) = Vector3.fromEntity(entityItem).mf()
 		

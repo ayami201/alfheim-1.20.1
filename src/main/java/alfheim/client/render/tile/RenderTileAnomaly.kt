@@ -16,9 +16,9 @@ object RenderTileAnomaly: TileEntitySpecialRenderer() {
 	override fun renderTileEntityAt(tile: TileEntity, x: Double, y: Double, z: Double, partialTicks: Float) {
 		if (tile !is TileAnomaly) return
 		
-		val mainSTE = tile.subTiles[tile.mainSubTile] ?: return
+		val sub = tile.subTile ?: return
 		
-		mainSTE.bindTexture()
+		sub.bindTexture()
 		
 		glPushMatrix()
 		glAlphaFunc(GL_GREATER, 1 / 255f)
@@ -27,9 +27,9 @@ object RenderTileAnomaly: TileEntitySpecialRenderer() {
 		glDisable(GL_LIGHTING)
 		glDepthMask(false)
 		
-		glTranslated(mainSTE.x + 0.5, mainSTE.y + 0.5, mainSTE.z + 0.5)
+		glTranslated(sub.x + 0.5, sub.y + 0.5, sub.z + 0.5)
 		
-		val strip = AlfheimAPI.getAnomaly(tile.mainSubTile ?: "").strip
+		val strip = AlfheimAPI.getAnomaly(tile.subTileName).strip
 		val frame = System.nanoTime().div(40000000L).plus(tile.seed).rem(32).I
 		
 		renderFacingStrip(strip, frame)

@@ -15,8 +15,7 @@ abstract class Domain(val modid: String, val name: String, val minPlayers: Int, 
 	val schema = SchemaUtils.loadStructure("${modid}/schemas/${name}")
 	
 	init {
-		val prev = AlfheimAPI.domains.put(name, this)
-		if (prev != null) throw IllegalArgumentException("Domain with name $name already exists")
+		require(AlfheimAPI.domains.put(name, this) == null) { "Domain with name $name already exists" }
 	}
 	
 	abstract val skyRenderer: IRenderHandler

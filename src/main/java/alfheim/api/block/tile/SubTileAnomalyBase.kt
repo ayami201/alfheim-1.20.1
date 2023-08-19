@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.AlfheimAPI
 import alfheim.api.lib.LibResourceLocations
+import cpw.mods.fml.relauncher.*
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -29,24 +30,18 @@ abstract class SubTileAnomalyBase {
 	/** optional update method for particles or other stuff  */
 	protected open fun update() {}
 	
-	fun updateEntity(l: MutableList<Any?>?) {
+	fun updateEntity(l: MutableList<Any>?) {
 		update()
 		
 		try {
-			if (l == null || l.isEmpty()) return
-			while (l.contains(null)) l.remove(null)
-			if (l.isEmpty()) return
-			
-			for (target in l) performEffect(target!!)
+			if (l.isNullOrEmpty()) return
+			for (target in l) performEffect(target)
 		} finally {
 			ticks++
 		}
 	}
 	
 	abstract fun performEffect(target: Any)
-	
-	/** Checks if two SubTiles can be mixed in single anomaly  */
-	abstract fun typeBits(): Int
 	
 	open fun onActivated(stack: ItemStack?, player: EntityPlayer, world: World, x: Int, y: Int, z: Int) = false
 	
@@ -116,6 +111,7 @@ abstract class SubTileAnomalyBase {
 	
 	// ################################ RENDER ################################
 	
+	@SideOnly(Side.CLIENT)
 	fun bindTexture() {
 		mc.renderEngine.bindTexture(LibResourceLocations.anomalies)
 	}
@@ -123,35 +119,12 @@ abstract class SubTileAnomalyBase {
 	companion object {
 		
 		const val TAG_TICKS = "ticks"
-		val EMPTY_LIST = ArrayList<Any>(0)
-		
-		/** fully compatible, do not use this unless you know what you are doing */
-		const val NONE = 0b00000
-		
-		/** motion manipulation		- gravity */
-		const val MOTION = 0b00001
-		
-		/** health manipulation		- damaging */
-		const val HEALTH = 0b00010
-		
-		/** mana manipulation		- drain mana */
-		const val MANA = 0b00100
-		
-		/** ticks manipulation		- time speedup */
-		const val TIME = 0b01000
-		
-		/**	space manipulation		- teleportation		- also incompatible with motion */
-		const val SPACE = 0b10000 or MOTION
-		
-		/** fully incompatible */
-		const val ALL = -0x1
 		
 		fun forName(name: String): SubTileAnomalyBase? {
 			return try {
 				AlfheimAPI.getAnomaly(name).subtileClass.newInstance()
 			} catch (e: Exception) {
-				ASJUtilities.error("Error while getting '$name' anomaly subtile: ${e.message}")
-				e.printStackTrace()
+				ASJUtilities.error("Error while getting '$name' anomaly subtile", e)
 				null
 			}
 		}

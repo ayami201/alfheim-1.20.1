@@ -13,6 +13,7 @@ object LibRenderIDs {
 	val idGrapeWhite = RenderingRegistry.getNextAvailableRenderId()
 	val idHarvester = RenderingRegistry.getNextAvailableRenderId()
 	val idManaAccelerator = RenderingRegistry.getNextAvailableRenderId()
+	val idManaTuner = RenderingRegistry.getNextAvailableRenderId()
 	val idNiflheim = RenderingRegistry.getNextAvailableRenderId()
 	val idPowerStone = RenderingRegistry.getNextAvailableRenderId()
 	val idPylon = RenderingRegistry.getNextAvailableRenderId()

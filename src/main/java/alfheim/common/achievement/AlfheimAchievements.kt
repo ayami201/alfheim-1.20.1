@@ -19,6 +19,7 @@ object AlfheimAchievements {
 	val achievements: MutableList<Achievement> = ArrayList()
 	
 	val alfheim: Achievement // go to alfheim
+	val grass: Achievement // grass
 	val infuser: Achievement // build up infuser
 	val wingedHussar: Achievement // become winged hussar
 	
@@ -48,9 +49,11 @@ object AlfheimAchievements {
 	val outstander: Achievement
 	
 	val firework: Achievement
+	val slime: Achievement
 	
 	init {
 		alfheim = AlfheimAchievement("alfheim", 0, 0, ItemStack(AlfheimBlocks.alfheimPortal, 1, 1), null)
+		grass = AlfheimAchievement("grass", -2, -1, ItemStack(Blocks.grass), alfheim).setSpecial()
 		infuser = AlfheimAchievement("infuser", 1, -2, AlfheimBlocks.manaInfuser, alfheim)
 		
 		wingedHussar = AlfheimAchievement("wingedHussaurs", -1, -3, AlfheimItems.elvoriumHelmet, infuser).setSpecial()
@@ -81,6 +84,7 @@ object AlfheimAchievements {
 		rosaBomb = AlfheimAchievement("rosaBomb", 10, 1, Blocks.red_flower, subspace).setSpecial()
 		
 		firework = AlfheimAchievement("firework", -3, 3, Items.fireworks, null).setSpecial()
+		slime = AlfheimAchievement("slime", -1, 3, Items.slime_ball, null).setSpecial()
 		
 		AchievementPage.registerAchievementPage(AchievementPage(ModInfo.MODID.capitalized(), *achievements.toTypedArray()))
 		

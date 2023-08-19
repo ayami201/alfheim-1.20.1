@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.ASJTile
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.AlfheimAPI
+import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.asm.hook.extender.SparkExtender.attachTile
 import net.minecraft.block.Block
@@ -15,6 +16,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity
 import net.minecraftforge.oredict.OreDictionary
+import org.lwjgl.opengl.GL11
 import vazkii.botania.api.lexicon.multiblock.*
 import vazkii.botania.api.mana.IManaPool
 import vazkii.botania.api.mana.spark.*
@@ -42,6 +44,8 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 	var deGaiaingTime = 0
 	var soulParticlesTime = 0
 	
+	var wasValid = false
+	
 	override fun updateEntity() {
 		if (isReadyToKillGaia) {
 			if (--soulParticlesTime > 0) soulParticles()
@@ -53,10 +57,16 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 		if (mana <= 0 && blockMetadata != 0) worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3)
 		
 		if (hasValidPlatform()) {
+			if (!wasValid && !worldObj.isRemote) {
+				wasValid = true
+				
+				getEntitiesWithinAABB(worldObj, EntityPlayerMP::class.java, boundingBox(2).expand(1, 0, 1)).forEach {
+					it.triggerAchievement(AlfheimAchievements.infuser)
+				}
+			}
+			
 			val items = items
 			if (areItemsValid(items)) {
-				if (DEBUG) println("Mana: " + mana + "\tMana requested: " + manaRequest + "\tResult: " + result!!.toString())
-				
 				removeMana = false
 				val spark = attachedSpark
 				if (spark != null) {
@@ -181,27 +191,20 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 		//boolean DBG = !worldObj.isRemote;
 		if (entities.isEmpty()) return false
 		for (recipe in AlfheimAPI.manaInfuserRecipes) {
-			if (DEBUG) println("$recipe")
 			if (entities.size != recipe.inputs.size) {
-				if (DEBUG) println("Incorrect items amount (" + entities.size + "). Skipping this recipe.")
 				continue // Odd items will mess up the infusion, less means not enough materials
 			}
 			
 			val equalitylist = BooleanArray(recipe.inputs.size) // this array contains whether required ingredient is inside of AABB of infuser
-			
-			if (DEBUG) println("Scanning entities...")
 			
 			for (entity in entities) { // For every item in AABB
 				val stack = entity.entityItem
 				
 				if (stack.tagCompound?.hasNoTags() == true) stack.tagCompound = null
 				
-				if (DEBUG) println("Entity stack: $stack")
-				if (DEBUG) println("Scanning recipe for stack...")
 				for (i in 0 until recipe.inputs.size) {
 					if (equalitylist[i]) continue
 					val ing = recipe.inputs[i]
-					if (DEBUG) println("Ingredient: $ing")
 					var flag = false
 					if (ing is ItemStack) {
 						val cing = ing.copy()
@@ -228,35 +231,27 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 					}
 					
 					if (flag) {
-						if (DEBUG) println("Entity stack matches ingredient stack ($stack == $ing) Continuing scanning.")
 						equalitylist[i] = true // Marking true for further processing
 						continue
 					}
-					if (DEBUG) println("Entity stack DON'T match ingredient stack ($stack != $ing) Continuing scanning.")
 				}
 			}
-			
-			if (DEBUG) println("Scanning complete. Checking matching")
-			
 			var flagAllEqual = true // I'm sure everything matches
 			for (deflag in equalitylist) { // But let's check
 				flagAllEqual = deflag
 				if (!flagAllEqual) {
-					if (DEBUG) println("Matching error. Breaking cycle!")
 					break // Oh no! Something went wrong!
 				}
 				// Leaving to maybe do something else
 			}
 			
 			if (flagAllEqual) { // I told you everything is fine
-				if (DEBUG) println("Everything matches. Sending item and mana cost to tile, returning true.")
 				manaRequest = recipe.manaUsage
 				result = recipe.output
 				return true
 			}
 		}
 		
-		if (DEBUG) println("Scanned all recipes, no matching found. Returning false.")
 		return false
 	}
 	
@@ -273,10 +268,9 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 	override fun writeCustomNBT(nbt: NBTTagCompound) {
 		super.writeCustomNBT(nbt)
 		nbt.setInteger(TAG_MANA, mana)
-		nbt.setInteger(TAG_MANA_REQUIRED, manaRequest)
 		nbt.setInteger(TAG_DEGAIAING, deGaiaingTime)
 		nbt.setInteger(TAG_SOUL_EFFECT, soulParticlesTime)
-		// nbt.setInteger(TAG_KNOWN_MANA, knownMana)
+		nbt.setBoolean(TAG_WAS_VALID, wasValid)
 	}
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
@@ -284,9 +278,7 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 		mana = nbt.getInteger(TAG_MANA)
 		deGaiaingTime = nbt.getInteger(TAG_DEGAIAING)
 		soulParticlesTime = nbt.getInteger(TAG_SOUL_EFFECT)
-		
-		if (nbt.hasKey(TAG_KNOWN_MANA))
-			knownMana = nbt.getInteger(TAG_KNOWN_MANA)
+		wasValid = nbt.getBoolean(TAG_WAS_VALID)
 	}
 	
 	override fun getCurrentMana() = mana
@@ -302,11 +294,9 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 	
 	override fun canAttachSpark(stack: ItemStack) = true
 	
-	override fun attachSpark(entity: ISparkEntity?) {
-		entity.attachTile(this)
-	}
+	override fun attachSpark(entity: ISparkEntity?) = entity.attachTile(this)
 	
-	override fun getAttachedSpark() = getEntitiesWithinAABB(worldObj, ISparkEntity::class.java, boundingBox().offset(0.0, 1.0, 0.0)).safeZeroGet(0)
+	override fun getAttachedSpark() = getEntitiesWithinAABB(worldObj, ISparkEntity::class.java, boundingBox().offset(0, 1, 0)).safeZeroGet(0)
 	
 	override fun areIncomingTranfersDone() = !hasValidPlatform() || !areItemsValid(items)
 	
@@ -333,12 +323,10 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 		val name = ItemStack(AlfheimBlocks.manaInfuser).displayName
 		val color = 0xCC00FF
 		HUDHandler.drawSimpleManaHUD(color, knownMana, MAX_MANA, name, res)
-		org.lwjgl.opengl.GL11.glColor4d(1.0, 1.0, 1.0, 1.0)
+		GL11.glColor4f(1f, 1f, 1f, 1f)
 	}
 	
 	companion object {
-		
-		val DEBUG = false
 		
 		const val MAX_MANA = TilePool.MAX_MANA * 8
 		
@@ -348,10 +336,10 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 		val ELEMENTIUM_BLOCKS = arrayOf(intArrayOf(1, 0, 1), intArrayOf(1, 0, -1), intArrayOf(-1, 0, 1), intArrayOf(-1, 0, -1))
 		
 		const val TAG_MANA = "mana"
-		const val TAG_MANA_REQUIRED = "manaRequired"
 		const val TAG_KNOWN_MANA = "knownMana"
 		const val TAG_DEGAIAING = "degaiatimer"
 		const val TAG_SOUL_EFFECT = "soulEffect"
+		const val TAG_WAS_VALID = "wasValid"
 		
 		fun makeMultiblockSetSoul(): MultiblockSet {
 			val mb = Multiblock()

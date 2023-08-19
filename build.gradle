@@ -50,13 +50,6 @@ compileJava {
 	sourceCompatibility = targetCompatibility = '1.8'
 }
 
-compileKotlin {
-	kotlinOptions {
-		jvmTarget = "1.8"
-		freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
-	}
-}
-
 sourceCompatibility = targetCompatibility = '1.8'
 
 jar {
@@ -94,6 +87,12 @@ idea {
 	module {
 		inheritOutputDirs = false
 		outputDir = file('build/classes/main/')
+	}
+}
+
+sourceSets {
+	main {
+		output.setResourcesDir("build/classes/kotlin/main/")
 	}
 }
 

@@ -809,17 +809,17 @@ object RagnarokHandler {
 	const val MANA_FOR_BLOCK = 10
 	const val MANA_FOR_WHOLE_THING = 50_000
 	
-	fun World.isProtected(x: Int, y: Int, z: Int, wholeThing: Boolean, checkAnchor: Boolean = true): Boolean {
+	fun World.isProtected(x: Int, y: Int, z: Int, wholeThing: Boolean, checkBud: Boolean = true): Boolean {
 		if (provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim && abs(x) <= 512 && abs(z) < 512) return true
 		val cost = if (wholeThing) MANA_FOR_WHOLE_THING else MANA_FOR_BLOCK
 		
-		if (checkAnchor) loadedTileEntityList.forEach {
+		loadedTileEntityList.forEach {
 			if (it !is TileRealityAnchor || Vector3.vecTileDistance(Vector3(x, y, z), it) > 343 || !it.checkStructure() || it.currentMana < cost) return@forEach
 			it.recieveMana(-cost)
 			return true
 		}
 		
-		loadedTileEntityList.forEach {
+		if (checkBud) loadedTileEntityList.forEach {
 			if (it !is TileSpecialFlower) return@forEach
 			
 			val subTile = it.subTile

@@ -2,8 +2,10 @@ package alfheim.common.item.equipment.tool
 
 import alexsocol.asjlib.*
 import alfheim.api.*
+import alfheim.api.item.equipment.IElementalItem
 import alfheim.client.core.helper.IconHelper
 import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.helper.ElementalDamage
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.entity.boss.EntityFlugel
 import alfheim.common.item.AlfheimItems
@@ -30,7 +32,7 @@ import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.lib.LibOreDict
 import kotlin.math.*
 
-class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem {
+class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem, IElementalItem {
 	
 	class DamageSourceSoulSword(dealer: Entity): EntityDamageSource("player", dealer)
 	
@@ -124,6 +126,10 @@ class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem {
 	override fun registerIcons(reg: IIconRegister) {
 		itemIcon = IconHelper.forItem(reg, this)
 	}
+	
+	override fun getElement(stack: ItemStack) = ElementalDamage.COMMON
+	
+	override fun getElementLevel(stack: ItemStack) = 0
 	
 	companion object {
 		
