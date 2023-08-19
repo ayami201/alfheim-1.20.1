@@ -36,7 +36,7 @@ alfheim.page.anomalyHarvester3=Taz-powered
 alfheim.page.anomalyHarvester4=Anomaly stabilization
 alfheim.page.anomalyHarvester5=Anomaly displacement
 alfheim.page.anomalyHarvester6=The behavior of contained anomalies will remain pretty much the same, but there are some exceptions. &1Manavortex&0 will increase internal mana buffer. &1Warp&0 will teleport every entity to the block next to the harvester. &1Clot of Dark Energy&0 will hurt only mobs. &1Eye of Death&0 won't oneshot and will target every living entity except players and babies.
-alfheim.page.anomalyHarvester7=One single harvester can combine anomalies. Combination of Antigravity and Gravity Vortex will form new effect that will move every entity within work zone in the direction where small pyramid is facing. Work zones of two different harvesters can safely overlap.
+alfheim.page.anomalyHarvester7=One single harvester can combine anomalies. Combination of &1Antigravity&0 and &1Gravity Vortex&0 will form new effect that will move every entity within work zone in the direction where small pyramid is facing. Work zones of two different harvesters can safely overlap.
 
 alfheim.entry.elves=Elves
 alfheim.tagline.elves=Native inhabitants
@@ -182,6 +182,14 @@ alfheim.tagline.manaLamp=Will illuminate your dark adventures
 alfheim.page.manaLamp0=The &1Mana Lamp&0 is a great alternative to hundreds of torches in your pockets. For a small amount of &4mana&0, the lamp is able to independently illuminate the dark areas around the owner, leaving bright memories of adventures in the dungeons.
 alfheim.page.manaLamp1=No dynamic lights!
 
+alfheim.entry.manaTuner=Mana Tuner
+alfheim.tagline.manaTuner=Attuning objects with mana bursts
+alfheim.page.manaTuner0=Mana bursts have a huge potential, which is perfectly revealed by &1Mana Lenses&0. And these lenses can affect many characteristics of the beam, whether it be its velocity, capacity, or even color. However, it is the color of the burst that has no practical effect, only aesthetic... Or not?
+alfheim.page.manaTuner1=Mastray, being one of the wisest elves, also asked himself this question. After a series of studies, he found out that depending on the color, the frequency of oscillations of the mana particles in the burst also changes, similar to the particles of light. Thanks to his finding, he made his great discovery.
+alfheim.page.manaTuner2=&1Mana Tuner&0 uses different-frequency oscillations in mana bursts of different colors to change the characteristics of mana flows around objects, endowing them with certain properties, or even changing their internal structure. Sometimes additional resources are needed for success, which are destroyed, passing their properties to objects.
+alfheim.page.manaTuner3=Not a rhythm game
+alfheim.page.manaTuner4=For ease of use, Mastray developed a system of encoding different colors in the form of symbols, where each symbol corresponds to a different color of the mana burst that it received when passing through the lens. Colors not from lenses Mastray used to reset the sequence.
+
 alfheim.entry.lembas=Elven Lembas
 alfheim.tagline.lembas=Elven ration
 alfheim.page.lembas0=It would seem, what else is needed when there is such a wonderful drink as wine? A decent snack, of course.
@@ -279,6 +287,23 @@ alfheim.page.elemSet2=&2Earth&0
 alfheim.page.elemSet3=&4Fire&0
 alfheim.page.elemSet4=&eAir&0
 
+alfheim.entry.elementalTuning=Elemental Tuning
+alfheim.tagline.elementalTuning=Enchanting equipment with elements
+alfheim.page.elementalTuning0=Shortly after its invention, one of the first and most widespread uses of the Mana Tuner was Elemental Tuning. With the use of a certain amount of &1Manaweave Cloth&0 and an item incarnation of the element, an alternative way of enchanting equipment for one of the primal and some additional elements appeared.
+alfheim.page.elementalTuning1=To fully attune an item for a specific element, it is necessary to carry out four stages, each of which requires one Manaweave Cloth and one incarnation of the element more than the previous one. Elements cannot be combined with each other, and those things that already have the energy of one or another element cannot be reattuned.
+alfheim.page.elementalTuning2=Armed with elemental equipment, the elves became much better at fighting against elemental creatures, much more effective and better at protecting their homes and exploring new territories. They were also aided in identifying the enemy's element by the &1Manaseer Monocles&0, which were tuned to elemental sensitivity.
+alfheim.page.elementalTuning3=Monocle tuning
+alfheim.page.elementalTuning4=Fire tuning
+alfheim.page.elementalTuning5=Water tuning
+alfheim.page.elementalTuning6=Air tuning
+alfheim.page.elementalTuning7=Earth tuning
+alfheim.page.elementalTuning8=Ice tuning
+alfheim.page.elementalTuning9=Electric tuning
+alfheim.page.elementalTuning10=Nature tuning
+alfheim.page.elementalTuning11=Lightness tuning
+alfheim.page.elementalTuning12=Darkness tuning
+alfheim.page.elementalTuning13=Psychic tuning
+
 alfheim.entry.advMana=Mana-stones
 alfheim.tagline.advMana=New word in storing mana
 alfheim.page.advMana0=As we know, the core of a simple mana store included either mana-diamond or mana-pearl. But elves had none of them. But they had their own ways of pocket mana storage.
@@ -297,7 +322,7 @@ alfheim.page.auraAlf1=Creating &1Pixie Band of Aura&0
 alfheim.page.auraAlf2=Upgrading to &1Elven Band of Aura&0
 alfheim.page.auraAlf3=Upgrading to &1God's Band of Aura&0
 
-alfheim.entry.redstoneRelay=Restone Relay
+alfheim.entry.redstoneRelay=Redstone Relay
 alfheim.tagline.redstoneRelay=Wireless redstone. Again.
 alfheim.page.redstoneRelay0=As seen with &1Force Relay&0, infusing redstone-powered objects with &4Mana&0 results in unexpected outcomes. Your next line will be: "What if we infuse redstone block itself?". The answer is: a &1Redstone Relay&0 - useful tool in the hands of skilled engineers.
 alfheim.page.redstoneRelay1=As long as this block receives a redstone signal, it will send it to the block it's bound to, on any distance, and saving the input signal level.<br>To bind it to a block, right click it with a &1Wand of the Forest&0, and right click on the block you want to bind it to.
@@ -1046,7 +1071,7 @@ alfheim.page.lightningSapling4=Slabs
 alfheim.page.lightningSapling5=Twigs
 alfheim.page.lightningSapling6=And splinters
 
-alfheim.page.infernalSapling0=The &1Infernal Oak&0 is a tree so saturated with fire energy, it repulses external flames. Its leaves, logs, and planks are all completely immune to conventional flames.
+alfheim.page.infernalSapling0=The &1Infernal Oak&0 is a tree so saturated with fire energy, it repulses external flames. Its leaves, logs, and planks are all completely immune to conventional flames. It can also cook food under its shade.
 alfheim.page.infernalSapling1=Just pour more fire on it, it'll work eventually
 alfheim.page.infernalSapling2=Planks
 alfheim.page.infernalSapling3=Stairs
