@@ -1,19 +1,18 @@
 package alfheim.common.block
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.safeGet
 import alfheim.client.core.helper.IconHelper
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileTreeBerry
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.AlfheimItems
-import alfheim.common.item.material.*
+import alfheim.common.item.material.ElvenFoodMetas
 import alfheim.common.lexicon.AlfheimLexiconData
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.potion.Potion
 import net.minecraft.util.*
 import net.minecraft.world.*
 import net.minecraftforge.common.*
@@ -104,13 +103,7 @@ class BlockTreeBerry(val leaves: Block, val type: Int): BlockContainerMod(Materi
 	override fun getPlantMetadata(world: IBlockAccess, x: Int, y: Int, z: Int) = world.getBlockMetadata(x, y, z)
 	
 	override fun getDrops(world: World, x: Int, y: Int, z: Int, metadata: Int, fortune: Int): ArrayList<ItemStack> {
-		val stack = ItemStack(getItemDropped(metadata, world.rand, fortune) ?: return arrayListOf(), quantityDropped(metadata, fortune, world.rand), damageDropped(metadata))
-		var id = ElvenFoodMetas.entries[stack.meta].potion
-		if (id != null) {
-			if (id == -1) id = Potion.potionTypes.mapNotNull { it?.id }.random(world.rand) ?: 1
-			ItemElvenFood.addPotion(stack, PotionEffectU(id, 100))
-		}
-		return arrayListOf(stack)
+		return arrayListOf(ItemStack(getItemDropped(metadata, world.rand, fortune) ?: return arrayListOf(), quantityDropped(metadata, fortune, world.rand), damageDropped(metadata)))
 	}
 	
 	companion object {

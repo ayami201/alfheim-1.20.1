@@ -1,7 +1,7 @@
 Innovations:
  Finished Anomaly Harvester
  Mana Tuner to tune some things
- Elemental tuning mechanic and elemental combat adjustements
+ Elemental tuning mechanic and elemental combat adjustments
  Removed Alien element (check your configs!)
  Redstone relay (wireless redstone)
  Icy Geysers Niflheim worldgen
@@ -9,7 +9,7 @@ Innovations:
  Pair of new achievements
  Reworked anomalies data save (may break existing ones!)
  Reduced Bottomless crate slots to 1024
- 
+ Improved the Rod of the Red Control
 
 Fixes:
  Indissoluble Ivy tooltip

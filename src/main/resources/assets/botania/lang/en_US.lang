@@ -325,7 +325,7 @@ alfheim.page.auraAlf3=Upgrading to &1God's Band of Aura&0
 alfheim.entry.redstoneRelay=Redstone Relay
 alfheim.tagline.redstoneRelay=Wireless redstone. Again.
 alfheim.page.redstoneRelay0=As seen with &1Force Relay&0, infusing redstone-powered objects with &4Mana&0 results in unexpected outcomes. Your next line will be: "What if we infuse redstone block itself?". The answer is: a &1Redstone Relay&0 - useful tool in the hands of skilled engineers.
-alfheim.page.redstoneRelay1=As long as this block receives a redstone signal, it will send it to the block it's bound to, on any distance, and saving the input signal level.<br>To bind it to a block, right click it with a &1Wand of the Forest&0, and right click on the block you want to bind it to.
+alfheim.page.redstoneRelay1=As long as this block receives a redstone signal, it will send it to the block it's bound to, on any distance, and saving the input signal level, almost as if target block was activated with the &1Rod of the Red Control&0.<br>To bind it to a block, sneak-rightclick it with a &1Wand of the Forest&0, and sneak-rightclick on the block you want to bind it to.
 alfheim.page.redstoneRelay2=But where is a receiver?
 
 alfheim.entry.ruling=Power of other worlds

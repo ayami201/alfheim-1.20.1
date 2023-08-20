@@ -15,12 +15,13 @@ import net.minecraft.nbt.*
 import net.minecraftforge.common.util.Constants
 import org.lwjgl.opengl.GL11.glTranslated
 import vazkii.botania.api.internal.IManaBurst
+import vazkii.botania.api.mana.IManaReceiver
 import vazkii.botania.common.block.tile.TileSimpleInventory
 import vazkii.botania.common.item.lens.ItemLens
 import kotlin.math.*
 import net.minecraft.client.renderer.RenderHelper as VanillaRenderHelper
 
-class TileManaTuner: TileSimpleInventory() {
+class TileManaTuner: TileSimpleInventory(), IManaReceiver {
 	
 	var block = Blocks.air!!
 	var entities = HashSet<String>()
@@ -170,13 +171,19 @@ class TileManaTuner: TileSimpleInventory() {
 		VanillaRenderHelper.disableStandardItemLighting()
 	}
 	
+	// for display in the spreader
+	override fun getCurrentMana() = 0
+	override fun isFull() = true
+	override fun recieveMana(mana: Int) = Unit
+	override fun canRecieveManaFromBursts() = false
+	
 	companion object {
 		
 		const val TAG_BLOCK = "block"
 		const val TAG_ENTITIES = "entities"
 		const val TAG_SPELL = "spell"
 		const val TAG_TIMER = "timer"
-	
+		
 		val map = arrayOf('.', 'a', 'e', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 's', 't', 'u', 'w', ':', ' ')
 	}
 }

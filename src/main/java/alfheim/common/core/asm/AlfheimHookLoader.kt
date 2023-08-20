@@ -46,7 +46,7 @@ class AlfheimHookLoader: HookLoader() {
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.RecipeAncientWillsFix")
 		registerHookContainer("alfheim.common.integration.travellersgear.TGHandlerBotaniaAdapterHooks")
 		registerHookContainer("alfheim.common.integration.tinkersconstruct.TraitFairySpawner")
-		registerHookContainer("alfheim.common.item.rod.RedstoneRodHookHandled")
+		registerHookContainer("alfheim.common.item.rod.RedstoneRodHookHandler")
 		
 		if (ModInfo.OBF) ASJASM.registerFieldHookContainer("alfheim.common.core.asm.hook.AlfheimFieldHookHandler")
 	}

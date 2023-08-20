@@ -2,6 +2,7 @@ package alfheim.common.block.tile
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.ASJTile
+import alfheim.common.item.rod.RedstoneSignal.EnumRedstoneType
 import alfheim.common.item.rod.RedstoneSignalHandler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -17,11 +18,15 @@ class TileRedstoneRelay: ASJTile(), IWandBindable {
 		val (x, y, z) = boundTo
 		
 		if (worldObj.isRemote || y == -1) return
+		if (worldObj.isAirBlock(x, y, z)) return
 		
-		val power = listOf(worldObj.getBlockPowerInput(xCoord, yCoord, zCoord), worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord)).max()
-		if (power <= 0) return
+		val powerStrong = worldObj.getBlockPowerInput(xCoord, yCoord, zCoord)
+		val powerWeak = worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord)
 		
-		RedstoneSignalHandler.get().addSignal(worldObj, x, y, z, 1, power)
+		if (powerStrong == 0 && powerWeak == 0) return
+		
+		val strong = powerStrong >= powerWeak
+		RedstoneSignalHandler.get().addSignal(worldObj, x, y, z, 1, if (strong) powerStrong else powerWeak, if (strong) EnumRedstoneType.STRONG else EnumRedstoneType.WEAK)
 	}
 	
 	override fun getBinding() = if (boundTo.posY == -1) null else boundTo
