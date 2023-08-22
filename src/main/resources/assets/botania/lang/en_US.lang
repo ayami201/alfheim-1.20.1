@@ -35,7 +35,7 @@ alfheim.page.anomalyHarvester2=Lastly, by (sneak)-rightclicking with bare hand, 
 alfheim.page.anomalyHarvester3=Taz-powered
 alfheim.page.anomalyHarvester4=Anomaly stabilization
 alfheim.page.anomalyHarvester5=Anomaly displacement
-alfheim.page.anomalyHarvester6=The behavior of contained anomalies will remain pretty much the same, but there are some exceptions. &1Manavortex&0 will increase internal mana buffer. &1Warp&0 will teleport every entity to the block next to the harvester. &1Clot of Dark Energy&0 will hurt only mobs. &1Eye of Death&0 won't oneshot and will target every living entity except players and babies.
+alfheim.page.anomalyHarvester6=The behavior of contained anomalies will remain pretty much the same, but there are some exceptions. &1Manavortex&0 will increase internal mana buffer. &1Warp&0 will teleport every entity to the block next to the harvester. &1Clot of Dark Energy&0 will hurt only monsters. &1Eye of Death&0 won't oneshot and will target every living entity except players and babies.
 alfheim.page.anomalyHarvester7=One single harvester can combine anomalies. Combination of &1Antigravity&0 and &1Gravity Vortex&0 will form new effect that will move every entity within work zone in the direction where small pyramid is facing. Work zones of two different harvesters can safely overlap.
 
 alfheim.entry.elves=Elves
@@ -325,7 +325,7 @@ alfheim.page.auraAlf3=Upgrading to &1God's Band of Aura&0
 alfheim.entry.redstoneRelay=Redstone Relay
 alfheim.tagline.redstoneRelay=Wireless redstone. Again.
 alfheim.page.redstoneRelay0=As seen with &1Force Relay&0, infusing redstone-powered objects with &4Mana&0 results in unexpected outcomes. Your next line will be: "What if we infuse redstone block itself?". The answer is: a &1Redstone Relay&0 - useful tool in the hands of skilled engineers.
-alfheim.page.redstoneRelay1=As long as this block receives a redstone signal, it will send it to the block it's bound to, on any distance, and saving the input signal level, almost as if target block was activated with the &1Rod of the Red Control&0.<br>To bind it to a block, sneak-rightclick it with a &1Wand of the Forest&0, and sneak-rightclick on the block you want to bind it to.
+alfheim.page.redstoneRelay1=As long as this block receives a redstone signal, it will send it to the block it's bound to, on any distance, and saving the input signal level and type.<br>To bind it to a block, sneak-rightclick it with a &1Wand of the Forest&0, and sneak-rightclick on the block you want to bind it to.
 alfheim.page.redstoneRelay2=But where is a receiver?
 
 alfheim.entry.ruling=Power of other worlds
@@ -457,7 +457,7 @@ alfheim.page.legends5=&oAnd, though for some the giantess Hel who rules there ma
 
 alfheim.entry.rodRedstone=Rod of the Red Control
 alfheim.tagline.rodRedstone=Redstone debug online
-alfheim.page.rodRedstone0=The &1Rod of the Red Control&0 is a handy tool to every redstone engineer. Using it on any block will cause it to become a source of &4strong redstone signal&0 for a brief moment, powering itself and any blocks around it.
+alfheim.page.rodRedstone0=The &1Rod of the Red Control&0 is a handy tool to every redstone engineer. Using it on any block will cause it to become a source of &4strong redstone signal&0 for a brief moment, powering itself and any blocks around it. Sneaking while using allows one to apply &4weak redstone signal&0.
 alfheim.page.rodRedstone1=If the wielder of the rod is equipped with the &1Manaseer Monocle&0, all powered blocks nearby will become visible through walls while the wearer is sneaking. Bright frames will indicate &4strong&0 powering and darker frames - &4weak&0. The &4power level&0 of the signal will also be displayed on the block you are currently looking on.
 alfheim.page.rodRedstone2=Show yourself!
 

@@ -68,44 +68,46 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 			}
 		}
 		
-		if ("ManaTornado" in subTiles) recieveMana(if (worldObj.rand.nextInt(5) == 0) 2 else 1)
-		if (mana <= 0) return
-		
-		val aoe = getAoE()
-		val area = ceil((aoe.maxX - aoe.minX) * (aoe.maxY - aoe.minY) * (aoe.maxZ - aoe.minZ)).I
 		var did = false
 		
-		val tunnel = subTiles.containsAll(tunnels)
-		if (tunnel) {
-			val effect = AlfheimAPI.anomalyBehaviors["Tunnel"]!!
-			var cost = 0
-			
-			cost += effect.effect(this) * effect.costPerApplication
-			cost += effect.costPerBlock * area
-			
-			mana -= cost
-			
+		if ("ManaTornado" in subTiles) {
+			recieveMana(if (worldObj.rand.nextInt(5) == 0) 2 else 1)
 			did = true
 		}
 		
-		for (st in subTiles) {
-			if (mana <= 0) return
+		if (mana > 0) {
+			val aoe = getAoE()
+			val area = ceil((aoe.maxX - aoe.minX) * (aoe.maxY - aoe.minY) * (aoe.maxZ - aoe.minZ)).I
+			val tunnel = subTiles.containsAll(tunnels)
+			if (tunnel) {
+				val effect = AlfheimAPI.anomalyBehaviors["Tunnel"]!!
+				var cost = 0
+				
+				cost += effect.effect(this) * effect.costPerApplication
+				cost += effect.costPerBlock * area
+				
+				mana -= cost
+				
+				did = true
+			}
 			
-			if (tunnel && st in tunnels) continue
-			val effect = AlfheimAPI.anomalyBehaviors[st] ?: continue
-			var cost = 0
-			
-			cost += effect.effect(this) * effect.costPerApplication
-			cost += effect.costPerBlock * area
-			
-			mana -= cost
-			
-			did = true
+			for (st in subTiles) {
+				if (mana <= 0) return
+				
+				if (tunnel && st in tunnels) continue
+				val effect = AlfheimAPI.anomalyBehaviors[st] ?: continue
+				var cost = 0
+				
+				cost += effect.effect(this) * effect.costPerApplication
+				cost += effect.costPerBlock * area
+				
+				mana -= cost
+				
+				did = true
+			}
 		}
 		
-		if (did) {
-			animationTicks += power
-		}
+		if ("ManaVoid" in subTiles || did) animationTicks += power
 		
 		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) return
 		
@@ -291,30 +293,32 @@ object AnomalyHarvesterBehaviors {
 		
 		AlfheimHookHandler.wispNoclip = true
 		
-		return applications
+		return applications * tile.power
 	}
 	
 	fun doGravity(tile: TileAnomalyHarvester): Int {
 		var applications = 0
 		
-		val x = tile.xCoord + tile.offset.x + 0.5
-		val y = tile.yCoord + tile.offset.y + 0.5
-		val z = tile.zCoord + tile.offset.z + 0.5
+		val (x, y, z) = Vector3.fromTileEntityCenter(tile).add(tile.offset)
 		
-		getEntitiesWithinAABB(tile.worldObj, Entity::class.java, tile.getAoE()).filter { it !is EntityPlayer }.forEach {
-			val v = Vector3(x, y, z).add(0.5).sub(Vector3.fromEntity(it)).normalize().mul(0.5 + tile.power * 0.1)
+		getEntitiesWithinAABB(tile.worldObj, Entity::class.java, tile.getAoE()).forEach {
+			if (it is EntityPlayer && it.capabilities.disableDamage) return@forEach
+			if (it.isSneaking) return@forEach
 			
-			it.motionX += v.x
-			it.motionY += v.y * 1.25
-			it.motionZ += v.z
+			val (mx, my, mz) = Vector3(x, y, z).sub(Vector3.fromEntity(it)).normalize().mul(0.1 * tile.power)
+			
+			it.motionX += mx
+			it.motionY += my
+			it.motionZ += mz
+			it.fallDistance = 0f
 			
 			applications++
 		}
 		
 		if (tile.worldObj.isRemote)
-			Botania.proxy.sparkleFX(tile.worldObj, x, y, z, 0.5f, 0.75f, 1f, 1f, 10, true)
+			Botania.proxy.wispFX(tile.worldObj, x, y, z, 1f, 1f, 1f, 0.5f, 0f, 0.5f)
 		
-		return applications
+		return applications * tile.power
 	}
 	
 	fun doTunnel(tile: TileAnomalyHarvester): Int {
@@ -344,7 +348,7 @@ object AnomalyHarvesterBehaviors {
 //			}
 		}
 		
-		if (!tile.worldObj.isRemote) return applications
+		if (!tile.worldObj.isRemote) return applications * tile.power
 		
 		AlfheimHookHandler.wispNoclip = false
 		
@@ -358,7 +362,7 @@ object AnomalyHarvesterBehaviors {
 		
 		AlfheimHookHandler.wispNoclip = true
 		
-		return applications
+		return applications * tile.power
 	}
 	
 	fun doLightning(tile: TileAnomalyHarvester): Int {
@@ -374,12 +378,12 @@ object AnomalyHarvesterBehaviors {
 		getEntitiesWithinAABB(tile.worldObj, IMob::class.java, tile.getAoE()).random(tile.worldObj.rand)?.let { it as Entity
 			if (it is EntityCreeper && !it.powered) {
 				it.dataWatcher.updateObject(17, 1.toByte())
-				return 1
+				return tile.power
 			}
 			
 			if (!it.attackEntityFrom(DamageSourceSpell.anomaly, Math.random().F * tile.power / 2f + tile.power / 2f)) return@let
 			Botania.proxy.lightningFX(tile.worldObj, VVec3(x, y, z), VVec3.fromEntityCenter(it), 1f, tile.worldObj.rand.nextLong(), 0, 0xFF0000)
-			return 1
+			return tile.power
 		}
 		
 		return 0
@@ -399,7 +403,7 @@ object AnomalyHarvesterBehaviors {
 			if (it is EntityPlayer || (it is EntityAgeable && it.isChild)) return@let
 			
 			if (it.attackEntityFrom(DamageSourceSpell.anomaly, (Math.random() * tile.power / 2 + tile.power / 2).F))
-				return 1
+				return tile.power
 		}
 		
 		return 0
@@ -434,7 +438,7 @@ object AnomalyHarvesterBehaviors {
 					block.updateTick(tile.worldObj, x, y, z, tile.worldObj.rand)
 				}
 		
-		if (!tile.worldObj.isRemote) return applications
+		if (!tile.worldObj.isRemote) return applications * tile.power
 		
 		val x = (Math.random() - 0.5) * tile.radius.x + tile.offset.x + tile.xCoord + 0.5
 		val y = (Math.random() - 0.5) * tile.radius.y + tile.offset.y + tile.yCoord + 0.5
@@ -442,7 +446,7 @@ object AnomalyHarvesterBehaviors {
 		
 		Botania.proxy.sparkleFX(tile.worldObj, x, y, z, 0.5f, 1f, 0.5f, 1f, 1, true)
 		
-		return applications
+		return applications * tile.power
 	}
 	
 	fun doWarp(tile: TileAnomalyHarvester): Int {
@@ -458,7 +462,7 @@ object AnomalyHarvesterBehaviors {
 		if (applicable.isEmpty()) return 0
 		
 		val targets = ArrayList<Entity>()
-		for (i in 0 until tile.power.I)
+		for (i in 0 until tile.power)
 			targets += applicable.removeRandom() ?: break
 		
 		val d = ForgeDirection.entries[tile.getBlockMetadata()]
@@ -477,6 +481,6 @@ object AnomalyHarvesterBehaviors {
 			applications++
 		}
 		
-		return applications
+		return applications * tile.power
 	}
 }

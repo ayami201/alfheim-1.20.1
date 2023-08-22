@@ -42,7 +42,7 @@ class ItemRedstoneRod: ItemMod("RodRedstone") {
 		player.swingItem()
 		
 		if (!world.isRemote) {
-			RedstoneSignalHandler.get().addSignal(world, x, y, z, 100, 15)
+			RedstoneSignalHandler.get().addSignal(world, x, y, z, 10, 15, if (player.isSneaking) EnumRedstoneType.STRONG else EnumRedstoneType.WEAK)
 			return true
 		}
 		
@@ -60,8 +60,7 @@ class ItemRedstoneRod: ItemMod("RodRedstone") {
 		fun onWorldRenderLast(event: RenderWorldLastEvent) {
 			val world = mc.theWorld ?: return
 			val player = mc.thePlayer ?: return
-			if (player.heldItem?.item !== AlfheimItems.rodRedstone || !player.isSneaking) return
-			if (!ItemMonocle.hasMonocle(player)) return
+			if (player.heldItem?.item !== AlfheimItems.rodRedstone || !player.isSneaking || !ItemMonocle.hasMonocle(player)) return
 			
 			glPushMatrix()
 			glPushAttrib(GL_LIGHTING)
