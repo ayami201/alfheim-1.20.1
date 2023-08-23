@@ -1213,15 +1213,6 @@ object AlfheimRecipes {
 						 'E', RUNE[2])
 		ModCraftingRecipes.recipesLaputaShard?.add(BotaniaAPI.getLatestAddedRecipe())
 		
-		addOreDictRecipe(ItemStack(lens, 1, LINKBACK),
-						 " M ", "GLR", " S ",
-						 'M', RUNE[8],
-						 'G', RUNE[10],
-						 'R', RUNE[11],
-						 'S', RED_STRING,
-						 'L', ItemStack(lens))
-		recipeLensLinkback = BotaniaAPI.getLatestAddedRecipe()
-		
 		addOreDictRecipe(ItemStack(lens, 1, MESSANGER),
 						 " P ", "PLP", " P ",
 						 'P', paper,
@@ -2220,6 +2211,9 @@ object AlfheimRecipes {
 			addShapelessOreDictRecipe(ItemStack(irisPlanks, 4, i), WOOD[i])
 		addShapelessOreDictRecipe(ItemStack(rainbowPlanks, 4), rainbowWood)
 		recipesColoredPlanks = BotaniaAPI.getLatestAddedRecipes(17)
+		
+		addShapelessOreDictRecipe(ItemStack(lens, 1, LINKBACK), ItemStack(lens), RUNE[8], MANA_POWDER, RED_STRING)
+		recipeLensLinkback = BotaniaAPI.getLatestAddedRecipe()
 		
 		addShapelessOreDictRecipe(ItemStack(lens, 1, TRIPWIRE), ItemStack(lens), tripwire_hook, ELEMENTIUM)
 		recipeLensTripwire = BotaniaAPI.getLatestAddedRecipe()
