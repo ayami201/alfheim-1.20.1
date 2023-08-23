@@ -26,7 +26,6 @@ class BlockNiflheim: BlockMod(Material.rock) {
 		setBlockName("NiflheimBlock")
 		setHardness(3f)
 		setHarvestLevel("pickaxe", 1)
-		setResistance(30f)
 		setStepSound(soundTypeStone)
 	}
 	

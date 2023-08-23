@@ -179,14 +179,7 @@ import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.block.BlockNiflheim.NiflheimBlockMetas
 import alfheim.common.block.tile.TileAnomaly
-import alfheim.common.core.asm.hook.extender.ItemLensExtender.DAISY
-import alfheim.common.core.asm.hook.extender.ItemLensExtender.LINKBACK
-import alfheim.common.core.asm.hook.extender.ItemLensExtender.MESSANGER
-import alfheim.common.core.asm.hook.extender.ItemLensExtender.PUSH
-import alfheim.common.core.asm.hook.extender.ItemLensExtender.SMELT
-import alfheim.common.core.asm.hook.extender.ItemLensExtender.SUPERCONDUCTOR
-import alfheim.common.core.asm.hook.extender.ItemLensExtender.TRACK
-import alfheim.common.core.asm.hook.extender.ItemLensExtender.TRIPWIRE
+import alfheim.common.core.asm.hook.extender.ItemLensExtender.EnumAlfheimLens.*
 import alfheim.common.core.asm.hook.extender.ItemTwigWandExtender
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge.ABYSS_TRUTH
@@ -1213,22 +1206,13 @@ object AlfheimRecipes {
 						 'E', RUNE[2])
 		ModCraftingRecipes.recipesLaputaShard?.add(BotaniaAPI.getLatestAddedRecipe())
 		
-		addOreDictRecipe(ItemStack(lens, 1, LINKBACK),
-						 " M ", "GLR", " S ",
-						 'M', RUNE[8],
-						 'G', RUNE[10],
-						 'R', RUNE[11],
-						 'S', RED_STRING,
-						 'L', ItemStack(lens))
-		recipeLensLinkback = BotaniaAPI.getLatestAddedRecipe()
-		
-		addOreDictRecipe(ItemStack(lens, 1, MESSANGER),
+		addOreDictRecipe(ItemStack(lens, 1, MESSANGER.meta),
 						 " P ", "PLP", " P ",
 						 'P', paper,
 						 'L', ItemStack(lens))
 		recipeLensMessenger = BotaniaAPI.getLatestAddedRecipe()
 		
-		addOreDictRecipe(ItemStack(lens, 1, SUPERCONDUCTOR),
+		addOreDictRecipe(ItemStack(lens, 1, SUPERCONDUCTOR.meta),
 						 "IWI", "RLR", "IWI",
 						 'L', ItemStack(lens),
 						 'W', RUNE[0], // water
@@ -1236,7 +1220,7 @@ object AlfheimRecipes {
 						 'I', IFFESAL_DUST)
 		recipeLensSuperconductor = BotaniaAPI.getLatestAddedRecipe()
 		
-		addOreDictRecipe(ItemStack(lens, 1, DAISY),
+		addOreDictRecipe(ItemStack(lens, 1, DAISY.meta),
 						 " P ", "RLR", " I ",
 						 'P', ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_PUREDAISY),
 						 'L', ItemStack(lens),
@@ -2221,17 +2205,20 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(ItemStack(rainbowPlanks, 4), rainbowWood)
 		recipesColoredPlanks = BotaniaAPI.getLatestAddedRecipes(17)
 		
-		addShapelessOreDictRecipe(ItemStack(lens, 1, TRIPWIRE), ItemStack(lens), tripwire_hook, ELEMENTIUM)
-		recipeLensTripwire = BotaniaAPI.getLatestAddedRecipe()
+		addShapelessOreDictRecipe(ItemStack(lens, 1, LINKBACK.meta), ItemStack(lens), RUNE[8], MANA_POWDER, RED_STRING)
+		recipeLensLinkback = BotaniaAPI.getLatestAddedRecipe()
 		
-		addShapelessOreDictRecipe(ItemStack(lens, 1, PUSH), ItemStack(lens), RUNE[2], MANA_POWDER)
+		addShapelessOreDictRecipe(ItemStack(lens, 1, PUSH.meta), ItemStack(lens), RUNE[2], MANA_POWDER)
 		recipeLensPush = BotaniaAPI.getLatestAddedRecipe()
 		
-		addShapelessOreDictRecipe(ItemStack(lens, 1, SMELT), ItemStack(lens), RUNE[1], MANA_POWDER)
+		addShapelessOreDictRecipe(ItemStack(lens, 1, SMELT.meta), ItemStack(lens), RUNE[1], MANA_POWDER)
 		recipeLensSmelt = BotaniaAPI.getLatestAddedRecipe()
 		
-		addShapelessOreDictRecipe(ItemStack(lens, 1, TRACK), ItemStack(lens), RUNE[11], MANA_POWDER)
+		addShapelessOreDictRecipe(ItemStack(lens, 1, TRACK.meta), ItemStack(lens), RUNE[11], MANA_POWDER)
 		recipeLensTrack = BotaniaAPI.getLatestAddedRecipe()
+		
+		addShapelessOreDictRecipe(ItemStack(lens, 1, TRIPWIRE.meta), ItemStack(lens), tripwire_hook, ELEMENTIUM)
+		recipeLensTripwire = BotaniaAPI.getLatestAddedRecipe()
 		
 		addShapelessOreDictRecipe(SaveIvy.stack, vine, DRAGONSTONE, MAUFTRIUM_NUGGET)
 		recipeSaveIvy = BotaniaAPI.getLatestAddedRecipe()

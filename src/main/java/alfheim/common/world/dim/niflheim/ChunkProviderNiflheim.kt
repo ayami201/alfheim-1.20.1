@@ -606,6 +606,27 @@ class ChunkProviderNiflheim(world: World, val seed: Long, structures: Boolean): 
 			var12 = world.worldChunkManager.getBiomeGenAt(x, z)
 			WorldGenLakes.generate(world, random, x, y, z, AlfheimBlocks.niflheimPortal, var12)
 		}
+		if (random.nextInt(64) == 0) {
+			x = i + random.nextInt(16) + 8
+			z = k + random.nextInt(16) + 8
+			WorldGenTentacles.generate(world, random, x, z)
+		}
+		if (random.nextInt(16) == 0) {
+			x = i + random.nextInt(16) + 8
+			z = k + random.nextInt(16) + 8
+			WorldGenRibs.generate(world, random, x, z)
+		}
+		if (random.nextInt(16) == 0) {
+			x = i + random.nextInt(16) + 8
+			z = k + random.nextInt(16) + 8
+			WorldGenGigaHangs.generate(world, random, x, z)
+		}
+//		if (random.nextInt(16) == 0) {
+		run {
+			x = i + random.nextInt(16) + 8
+			z = k + random.nextInt(16) + 8
+			WorldGenGigaRoot.generate(world, x, z)
+		}
 		
 		MinecraftForge.EVENT_BUS.post(PopulateChunkEvent.Post(provider, world, random, cX, cZ, false))
 		

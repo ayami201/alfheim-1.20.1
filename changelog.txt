@@ -1,21 +1,5 @@
 Innovations:
- Finished Anomaly Harvester
- Mana Tuner to tune some things
- Elemental tuning mechanic and elemental combat adjustments
- Removed Alien element (check your configs!)
- Redstone relay (wireless redstone)
- Icy Geysers Niflheim worldgen
- Timeless Ivy now won't allow your items to break while you have enough mana instead of post-regen it (configurable)
- Pair of new achievements
- Reworked anomalies data save (may break existing ones!)
- Reduced Bottomless crate slots to 1024
- Improved the Rod of the Red Control
+ New Niflheim worldgen features
+ Lens to unlink bursts from spreader
 
 Fixes:
- Indissoluble Ivy tooltip
- Knowledge types for lexicon
- Runic Chalk drawing dark on blocks
- Anomalies visuals
- Alfheim rune recipe dupes
- Lightning tree (#289)
- Mana Infuser achievement
