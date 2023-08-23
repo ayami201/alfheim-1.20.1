@@ -8,7 +8,6 @@ class BlockStalagmite: BlockHang(Material.rock, "Stalagmite", 8, false) {
 	
 	init {
 		setBlockBounds(0.25f, 0.0f, 0.25f, 0.75f, 0.9f, 0.75f)
-		setLightLevel(0.3f)
 	}
 	
 	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = null

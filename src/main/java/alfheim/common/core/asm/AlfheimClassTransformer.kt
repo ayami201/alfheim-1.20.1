@@ -855,38 +855,13 @@ class AlfheimClassTransformer: IClassTransformer {
 				if (opcode == AASTORE) {
 					if (add) {
 						add = false
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.MESSANGER)
-						mv.visitLdcInsn("lensMessenger")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.TRIPWIRE)
-						mv.visitLdcInsn("lensTripwire")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.PUSH)
-						mv.visitLdcInsn("lensPush")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.SMELT)
-						mv.visitLdcInsn("lensSmelt")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.SUPERCONDUCTOR)
-						mv.visitLdcInsn("lensSuperconductor")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.TRACK)
-						mv.visitLdcInsn("lensTrack")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.DAISY)
-						mv.visitLdcInsn("lensDaisy")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.LINKBACK)
-						mv.visitLdcInsn("lensLinkback")
-						mv.visitInsn(AASTORE)
+						
+						ItemLensExtender.EnumAlfheimLens.entries.forEach {
+							mv.visitInsn(DUP)
+							mv.visitIntInsn(BIPUSH, it.meta)
+							mv.visitLdcInsn(it.unlocalizedName)
+							mv.visitInsn(AASTORE)
+						}
 					}
 				}
 			}
@@ -949,6 +924,6 @@ class AlfheimClassTransformer: IClassTransformer {
 	
 	companion object {
 		
-		val moreLenses = 8
+		val moreLenses get() = ItemLensExtender.EnumAlfheimLens.entries.size
 	}
 }

@@ -10,7 +10,7 @@ import net.minecraft.item.*
 import net.minecraft.util.IIcon
 import vazkii.botania.api.mana.IManaSpreader
 import vazkii.botania.client.core.helper.IconHelper
-import vazkii.botania.common.item.lens.ItemLens
+import vazkii.botania.common.item.lens.*
 
 @Suppress("unused", "UNUSED_PARAMETER")
 object ItemLensExtender {
@@ -23,16 +23,20 @@ object ItemLensExtender {
 	private const val PROP_DAMAGE = 16
 	private const val PROP_CONTROL = 32
 	
-	const val MESSANGER = 22
-	const val TRIPWIRE = 23
-	
-	const val PUSH = 24
-	const val SMELT = 25
-	const val SUPERCONDUCTOR = 26
-	const val TRACK = 27
-	
-	const val DAISY = 28
-	const val LINKBACK = 29
+	enum class EnumAlfheimLens(val meta: Int, val unlocalizedName: String, val prop: Int, val instance: Lens) {
+		// Botania
+		MESSANGER(22, "lensMessenger", PROP_POWER, LensMessanger()),
+		TRIPWIRE(23, "lensTripwire", PROP_CONTROL, LensTripwire()),
+		// ExtraBotany
+		PUSH(24, "lensPush", PROP_NONE, LensPush()),
+		SMELT(25, "lensSmelt", PROP_NONE, LensSmelt()),
+		SUPERCONDUCTOR(26, "lensSuperconductor", PROP_DAMAGE, LensSuperconductor()),
+		TRACK(27, "lensTrack", PROP_CONTROL, LensTrack()),
+		// new
+		DAISY(28, "lensDaisy", PROP_INTERACTION or PROP_TOUCH, LensDaisy()),
+		LINKBACK(29, "lensLinkback", PROP_NONE, LensLinkback()),
+		UNLINK(30, "lensUnlink", PROP_NONE, LensUnlink()),
+	}
 	
 	/**
 	 * Change [alfheim.common.core.asm.AlfheimClassTransformer.moreLenses] when adding new lens.
@@ -42,30 +46,10 @@ object ItemLensExtender {
 	@JvmStatic
 	@Hook(injectOnExit = true, isMandatory = true, targetMethod = "<clinit>")
 	fun `ItemLens$clinit`(lens: ItemLens?) {
-		// Botania
-		ItemLens.setProps(MESSANGER, PROP_POWER)
-		ItemLens.setProps(TRIPWIRE, PROP_CONTROL)
-		// ExtraBotany
-		ItemLens.setProps(PUSH, PROP_NONE)
-		ItemLens.setProps(SMELT, PROP_NONE)
-		ItemLens.setProps(SUPERCONDUCTOR, PROP_DAMAGE)
-		ItemLens.setProps(TRACK, PROP_CONTROL)
-		// new
-		ItemLens.setProps(DAISY, PROP_INTERACTION or PROP_TOUCH)
-		ItemLens.setProps(LINKBACK, PROP_NONE)
-		
-		// Botania
-		ItemLens.setLens(MESSANGER, LensMessanger())
-		ItemLens.setLens(TRIPWIRE, LensTripwire())
-		ItemLens.setLens(TRIPWIRE, LensTripwire())
-		// ExtraBotany
-		ItemLens.setLens(PUSH, LensPush())
-		ItemLens.setLens(SMELT, LensSmelt())
-		ItemLens.setLens(SUPERCONDUCTOR, LensSuperconductor())
-		ItemLens.setLens(TRACK, LensTrack())
-		// new
-		ItemLens.setLens(DAISY, LensDaisy())
-		ItemLens.setLens(LINKBACK, LensLinkback())
+		EnumAlfheimLens.entries.forEach {
+			ItemLens.setProps(it.meta, it.prop)
+			ItemLens.setLens(it.meta, it.instance)
+		}
 	}
 	
 	@JvmStatic
