@@ -30,8 +30,7 @@ class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 				ASJUtilities.chatLog("${player.race.ordinal} - ${player.race}", player)
 			}
 		} catch (e: Throwable) {
-			ASJUtilities.log("Oops!")
-			e.printStackTrace()
+			ASJUtilities.error("Oops!", e)
 		}
 		
 		return stack

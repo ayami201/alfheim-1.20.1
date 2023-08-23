@@ -1,9 +1,10 @@
 package alfheim.common.block.tile
 
-import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.TileImmobile
 import alexsocol.asjlib.math.Vector3
+import alexsocol.asjlib.spawn
 import alfheim.api.block.tile.SubTileAnomalyBase
+import alfheim.common.core.handler.ragnarok.RagnarokHandler.isProtected
 import alfheim.common.item.equipment.bauble.ItemSpatiotemporalRing
 import alfheim.common.world.dim.alfheim.biome.*
 import net.minecraft.entity.EntityList
@@ -16,28 +17,38 @@ import vazkii.botania.common.Botania
 class TileAnomaly: TileImmobile() {
 	
 	var seed = 0L
-	val subTiles = HashMap<String, SubTileAnomalyBase>()
-	var mainSubTile: String? = null
-	var compatibilityBit = 0 // not serializing because will be recalculated on load
+	var stable = false
+	var subTile: SubTileAnomalyBase? = null
+	var subTileName = ""
+		set(value) {
+			field = value
+			subTile = SubTileAnomalyBase.forName(field)
+			subTile?.superTile = this
+		}
 	
 	override fun updateEntity() {
 		super.updateEntity()
 		
+		if (stable) return
+		if (worldObj.isProtected(xCoord, yCoord, zCoord, false)) return
+		
 		if (seed == 0L)
 			seed = worldObj.rand.nextLong()
 		
-		val main = subTiles[mainSubTile] ?: return
-		val l = main.targets as MutableList<Any?>
+		val sub = subTile ?: return
 		
-		l.removeIf { it is EntityPlayer && ItemSpatiotemporalRing.hasProtection(it) }
-		for (subTile in subTiles.values) subTile.updateEntity(l)
+		val targets = sub.targets.filter {
+			it !is EntityPlayer || !ItemSpatiotemporalRing.hasProtection(it)
+		}.toMutableList()
+		
+		sub.updateEntity(targets)
 		
 		if (Botania.thaumcraftLoaded && worldObj.rand.nextInt(6000) == 0) spawnWisps()
 	}
 	
 	fun spawnWisps() {
 		if (worldObj.isRemote || !worldObj.getBiomeGenForCoords(xCoord, zCoord).let { it is BiomeField || it is BiomeIslandGiantFlowers || it is BiomeIslandForest || it is BiomePitForest }) return
-		if (mainSubTile != "Warp" && mainSubTile != "Lightning") return
+		if (subTileName != "Warp" && subTileName != "Lightning") return
 		
 		for (i in 0..worldObj.rand.nextInt(3))
 			EntityList.createEntityByName("Thaumcraft.Wisp", worldObj)?.apply {
@@ -48,91 +59,39 @@ class TileAnomaly: TileImmobile() {
 	}
 	
 	fun onActivated(stack: ItemStack?, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Boolean {
-		var flag = false
-		for (subTile in subTiles.values) flag = flag or subTile.onActivated(stack, player, world, x, y, z)
-		return flag
-	}
-	
-	fun addSubTile(name: String): TileAnomaly {
-		return addSubTile(SubTileAnomalyBase.forName(name), name)
-	}
-	
-	fun addSubTile(sub: SubTileAnomalyBase?, name: String): TileAnomaly {
-		if (sub == null || !canAdd(sub)) return this
-		
-		compatibilityBit = compatibilityBit or sub.typeBits()
-		
-		if (mainSubTile == null || mainSubTile!!.isEmpty()) mainSubTile = name
-		
-		subTiles[name] = sub
-		sub.superTile = this
-		return sub.superTile as TileAnomaly
-	}
-	
-	fun canAdd(sub: SubTileAnomalyBase): Boolean {
-		return compatibilityBit and sub.typeBits() == 0
+		return subTile?.onActivated(stack, player, world, x, y, z) ?: false
 	}
 	
 	override fun writeCustomNBT(nbt: NBTTagCompound) {
 		super.writeCustomNBT(nbt)
 		nbt.setLong(TAG_SEED, seed)
+		nbt.setBoolean(TAG_STABLE, stable)
 		
-		if (mainSubTile == null) return
+		if (subTile == null) return
 		
-		try {
-			nbt.setString(TAG_SUBTILE_MAIN, mainSubTile!!)
-			
-			var c = subTiles.keys.size
-			nbt.setInteger(TAG_SUBTILE_COUNT, c)
-			
-			var subCmp: NBTTagCompound
-			
-			for (name in subTiles.keys) {
-				nbt.setString(TAG_SUBTILE_NAME + c, name)
-				
-				subCmp = NBTTagCompound()
-				nbt.setTag(TAG_SUBTILE_CMP + c--, subCmp)
-				
-				subTiles[name]!!.writeToNBT(subCmp)
-			}
-		} catch (e: Throwable) {
-			ASJUtilities.error("Got exception writing anomaly data. It will be discarded.")
-			e.printStackTrace()
-		}
+		nbt.setString(TAG_SUBTILE_NAME, subTileName)
 		
+		val subTag = NBTTagCompound()
+		subTile!!.writeToNBT(subTag)
+		nbt.setTag(TAG_SUBTILE_DATA, subTag)
 	}
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
 		super.readCustomNBT(nbt)
 		
 		seed = nbt.getLong(TAG_SEED)
-		mainSubTile = nbt.getString(TAG_SUBTILE_MAIN)
+		stable = nbt.getBoolean(TAG_STABLE)
 		
-		var c = nbt.getInteger(TAG_SUBTILE_COUNT)
+		if (!nbt.hasKey(TAG_SUBTILE_NAME)) return
 		
-		var subTileName: String
-		var subCmp: NBTTagCompound
-		var subTile: SubTileAnomalyBase?
-		
-		while (c > 0) {
-			subTileName = nbt.getString(TAG_SUBTILE_NAME + c)
-			subTile = SubTileAnomalyBase.forName(subTileName)
-			
-			subCmp = nbt.getCompoundTag(TAG_SUBTILE_CMP + c)
-			if (subTile != null && !subCmp.hasNoTags())
-				subTile.readFromNBT(subCmp)
-			
-			addSubTile(subTile, subTileName)
-			c--
-		}
+		subTileName = nbt.getString(TAG_SUBTILE_NAME)
+		subTile?.readFromNBT(nbt.getCompoundTag(TAG_SUBTILE_DATA))
 	}
 	
 	companion object {
-		
-		const val TAG_SUBTILE_MAIN = "subTileMain"
-		const val TAG_SUBTILE_NAME = "subTileName"
-		const val TAG_SUBTILE_CMP = "subTileCmp"
-		const val TAG_SUBTILE_COUNT = "subTileCount"
 		const val TAG_SEED = "seed"
+		const val TAG_STABLE = "stable"
+		const val TAG_SUBTILE_DATA = "subTileData"
+		const val TAG_SUBTILE_NAME = "subTileName"
 	}
 }

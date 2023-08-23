@@ -140,7 +140,6 @@ class BlockItemDisplay: BlockMod(Material.wood), ILexiconable, ITileEntityProvid
 	}
 	
 	override fun breakBlock(world: World, x: Int, y: Int, z: Int, block: Block, meta: Int) {
-		Random()
 		val tileEntity = world.getTileEntity(x, y, z)
 		if (tileEntity is IInventory) {
 			for (i in 0 until tileEntity.sizeInventory) {

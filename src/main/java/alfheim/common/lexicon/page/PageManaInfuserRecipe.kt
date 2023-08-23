@@ -24,7 +24,13 @@ class PageManaInfuserRecipe(unlocalizedName: String, private val recipe: RecipeM
 	override fun onPageAdded(entry: LexiconEntry?, index: Int) = LexiconRecipeMappings.map(recipe.output, entry!!, index)
 	
 	override fun renderScreen(gui: IGuiLexiconEntry, mx: Int, my: Int) {
-		val render = mc.renderEngine
+		mc.renderEngine.bindTexture(LibResourceLocations.petalOverlay)
+		
+		glEnable(GL_BLEND)
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+		glColor4f(1f, 1f, 1f, 1f)
+		(gui as GuiScreen).drawTexturedModalRect(gui.left, gui.top, 0, 0, gui.getWidth(), gui.getHeight())
+		glDisable(GL_BLEND)
 		
 		renderItemAtGridPos(gui, 3, 0, recipe.output, false)
 		renderItemAtGridPos(gui, 2, 1, ItemStack(AlfheimBlocks.manaInfuser), false)
@@ -44,14 +50,6 @@ class PageManaInfuserRecipe(unlocalizedName: String, private val recipe: RecipeM
 		}
 		
 		renderManaBar(gui, recipe, mx, my)
-		
-		render.bindTexture(LibResourceLocations.petalOverlay)
-		
-		glEnable(GL_BLEND)
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-		glColor4f(1f, 1f, 1f, 1f)
-		(gui as GuiScreen).drawTexturedModalRect(gui.left, gui.top, 0, 0, gui.getWidth(), gui.getHeight())
-		glDisable(GL_BLEND)
 		
 		super.renderScreen(gui, mx, my)
 	}

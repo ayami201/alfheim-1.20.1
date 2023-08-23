@@ -79,8 +79,15 @@ class ItemRodFlameStar(name: String = "rodFlameStar"): ItemMod(name), IManaUsing
 		
 		val hit = if (mop?.hitVec == null)
 			Vector3(player.lookVec).normalize().mul(distance.D).add(player.posX, player.posY + player.eyeHeight, player.posZ)
-		else
-			Vector3(mop.hitVec)
+		else {
+			val v = Vector3(mop.hitVec)
+			when (mop.sideHit) {
+				1 -> v.add(0, 0.125, 0)
+				2 -> v.sub(0, 0, 0.00390625)
+				4 -> v.sub(0.00390625, 0, 0)
+			}
+			v
+		}
 		
 		val (x, y, z) = hit
 		

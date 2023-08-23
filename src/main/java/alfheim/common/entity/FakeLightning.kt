@@ -19,6 +19,10 @@ class FakeLightning(world: World): EntityWeatherEffect(world) {
 		boltLivingTime = rand.nextInt(3) + 1
 	}
 	
+	constructor(world: World, x: Double, y: Double, z: Double): this(world) {
+		setLocationAndAngles(x, y, z, 0f, 0f)
+	}
+	
 	override fun onUpdate() {
 		super.onUpdate()
 		

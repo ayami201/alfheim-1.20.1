@@ -22,7 +22,6 @@ class NEIAlfheimConfig: IConfigureNEI {
 		
 		API.hideItem(ItemStack(ModBlocks.manaFlame))
 		API.hideItem(ItemStack(ModBlocks.gaiaHead))
-		API.hideItem(ItemStack(AlfheimBlocks.anomaly))
 		API.hideItem(ItemStack(AlfheimBlocks.flugelHeadBlock))
 		API.hideItem(ItemStack(AlfheimBlocks.flugelHead2Block))
 		API.hideItem(ItemStack(AlfheimBlocks.grapesRed[1]))
@@ -37,9 +36,6 @@ class NEIAlfheimConfig: IConfigureNEI {
 		
 		if (!ContributorsPrivacyHelper.isCorrect(mc.session.username, "AlexSocol"))
 			API.hideItem(ItemStack(AlfheimItems.royalStaff))
-		
-		API.hideItem(ItemStack(AlfheimBlocks.anomalyHarvester)) // BACK
-		API.hideItem(ItemStack(AlfheimBlocks.anomalyTransmitter)) // BACK
 	}
 	
 	override fun getName() = AlfheimCore.meta.name!!

@@ -52,7 +52,6 @@ object AlfheimBlocks {
 	val animatedTorch: Block
 	val anomaly: Block
 	val anomalyHarvester: Block
-	val anomalyTransmitter: Block
 	val anyavil: Block
 	val auroraDirt: Block
 	val auroraLeaves: Block
@@ -128,6 +127,7 @@ object AlfheimBlocks {
 	val rainbowWood: Block
 	val realityAnchor: Block
 	val redFlame: Block
+	val redstoneRelay: Block
 	val rift: Block
 	val rpc: Block
 	val sadOakLeaves: Block
@@ -235,8 +235,7 @@ object AlfheimBlocks {
 		amplifier = BlockAmplifier()
 		animatedTorch = BlockAnimatedTorch()
 		anomaly = BlockAnomaly()
-		anomalyHarvester = BlockAnomalyHarvester().WIP()
-		anomalyTransmitter = BlockAnomalyTransmitter().WIP()
+		anomalyHarvester = BlockAnomalyHarvester()
 		anyavil = BlockAnyavil()
 		auroraDirt = BlockAuroraDirt()
 		auroraLeaves = BlockAuroraLeaves()
@@ -324,6 +323,7 @@ object AlfheimBlocks {
 		rainbowWood = BlockRainbowWood()
 		realityAnchor = BlockRealityAnchor()
 		redFlame = BlockRedFlame()
+		redstoneRelay = BlockRedstoneRelay()
 		rift = BlockRift()
 		rpc = BlockRealmPowerCollector()
 		sadOakLeaves = BlockSadOakLeaves()

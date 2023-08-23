@@ -13,6 +13,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import vazkii.botania.common.Botania
 import vazkii.botania.common.core.handler.ConfigHandler
 import vazkii.botania.common.item.equipment.tool.ToolCommons
+import kotlin.math.max
 
 object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 1, 1, 1) {
 	
@@ -115,7 +116,7 @@ object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 1, 1, 1) {
 	
 	override fun getManaCost(): Int {
 		try {
-			return tmana * mana
+			return max(1, tmana * mana)
 		} finally {
 			tmana = 0
 		}

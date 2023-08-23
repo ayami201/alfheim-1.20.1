@@ -36,13 +36,13 @@ class TileBottomlessChest: ASJTile(), IInventory {
 	}
 	
 	override fun isItemValidForSlot(slot: Int, stack: ItemStack?) = canEject
-	override fun getSizeInventory() = if (canEject) Int.MAX_VALUE else 0
+	override fun getSizeInventory() = if (canEject) 1024 else 0
 	override fun getStackInSlot(slot: Int) = null
 	override fun decrStackSize(slot: Int, amount: Int) = null
 	override fun getStackInSlotOnClosing(slot: Int) = null
 	override fun getInventoryName() = "BottomlessChest"
 	override fun hasCustomInventoryName() = false
-	override fun getInventoryStackLimit() = if (canEject) Int.MAX_VALUE else 0
+	override fun getInventoryStackLimit() = if (canEject) 1024 else 0
 	override fun isUseableByPlayer(player: EntityPlayer?) = false
 	override fun openInventory() = Unit
 	override fun closeInventory() = Unit

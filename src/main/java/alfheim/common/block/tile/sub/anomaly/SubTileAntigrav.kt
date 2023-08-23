@@ -12,7 +12,7 @@ class SubTileAntigrav: SubTileAnomalyBase() {
 	internal val v = Vector3()
 	
 	override val targets: List<Any>
-		get() = if (inWG()) EMPTY_LIST else getEntitiesWithinAABB(worldObj, Entity::class.java, getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(radius, radius * 2, radius))
+		get() = if (inWG()) emptyList() else getEntitiesWithinAABB(worldObj, Entity::class.java, getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(radius, radius * 2, radius))
 	
 	public override fun update() {
 		if (inWG()) return
@@ -31,8 +31,6 @@ class SubTileAntigrav: SubTileAnomalyBase() {
 		
 		target.motionY += power * 0.125
 	}
-	
-	override fun typeBits() = MOTION
 	
 	companion object {
 		

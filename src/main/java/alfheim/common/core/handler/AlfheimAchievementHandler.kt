@@ -4,21 +4,27 @@ import alexsocol.asjlib.*
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.item.AlfheimItems
 import baubles.common.lib.PlayerHandler
-import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.item.EntityFireworkRocket
 import net.minecraft.entity.passive.EntityHorse
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.*
-import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
+import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import vazkii.botania.common.item.ModItems
 
 object AlfheimAchievementHandler {
 	
 	init {
-		FMLCommonHandler.instance().bus().register(this)
-		MinecraftForge.EVENT_BUS.register(this)
+		eventForge()
+	}
+	
+	@SubscribeEvent
+	fun grass(e: PlayerInteractEvent) {
+		if (e.entityPlayer.dimension != AlfheimConfigHandler.dimensionIDAlfheim || e.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return
+		val block = e.world.getBlock(e.x, e.y, e.z)
+		if (block !== Blocks.grass && block !== Blocks.tallgrass) return
+		e.entityPlayer.triggerAchievement(AlfheimAchievements.grass)
 	}
 	
 	@SubscribeEvent

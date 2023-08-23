@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.ModInfo
 import alfheim.common.item.*
+import alfheim.common.item.rod.RedstoneSignal.EnumRedstoneType
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageRedstoneSignalsSync
 import cpw.mods.fml.common.FMLCommonHandler
@@ -11,7 +12,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.TickEvent
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent
 import gloomyfolken.hooklib.asm.*
-import gloomyfolken.hooklib.asm.Hook.ReturnValue
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.entity.RenderManager
@@ -23,14 +23,13 @@ import net.minecraft.util.*
 import net.minecraft.world.*
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.common.DimensionManager
-import net.minecraftforge.common.util.Constants
+import net.minecraftforge.common.util.*
 import org.lwjgl.opengl.GL11.*
-import scala.reflect.internal.Constants.Constant
 import vazkii.botania.common.item.equipment.bauble.ItemMonocle
 import java.awt.Color
 import kotlin.math.max
 
-// copy of redstone activator from RandomThings mod
+// improved version of redstone activator from RandomThings mod
 // a lot of shit is going here don't ask me
 class ItemRedstoneRod: ItemMod("RodRedstone") {
 	
@@ -43,7 +42,7 @@ class ItemRedstoneRod: ItemMod("RodRedstone") {
 		player.swingItem()
 		
 		if (!world.isRemote) {
-			RedstoneSignalHandler.get().addSignal(world, x, y, z, 10, 15)
+			RedstoneSignalHandler.get().addSignal(world, x, y, z, 10, 15, if (player.isSneaking) EnumRedstoneType.STRONG else EnumRedstoneType.WEAK)
 			return true
 		}
 		
@@ -61,8 +60,7 @@ class ItemRedstoneRod: ItemMod("RodRedstone") {
 		fun onWorldRenderLast(event: RenderWorldLastEvent) {
 			val world = mc.theWorld ?: return
 			val player = mc.thePlayer ?: return
-			if (player.heldItem?.item !== AlfheimItems.rodRedstone || !player.isSneaking) return
-			if (!ItemMonocle.hasMonocle(player)) return
+			if (player.heldItem?.item !== AlfheimItems.rodRedstone || !player.isSneaking || !ItemMonocle.hasMonocle(player)) return
 			
 			glPushMatrix()
 			glPushAttrib(GL_LIGHTING)
@@ -93,32 +91,39 @@ class ItemRedstoneRod: ItemMod("RodRedstone") {
 				val y = mop.blockY
 				val z = mop.blockZ
 				
-				var color = 0xFF0000
-				var power = world.getBlockPowerInput(x, y, z)
-				if (power == 0) {
-					color = 0x800000
-					power = world.getStrongestIndirectPower(x, y, z)
-				}
+				val colorStrong = 0xFF0000
+				val colorWeak = 0x800000
+				val powerStrong = world.getBlockPowerInput(x, y, z)
+				val powerWeak = world.getStrongestIndirectPower(x, y, z)
 				
-				if (power == 0) return@run
+				if (powerStrong == 0 && powerWeak == 0) return@run
 				
 				val font = mc.fontRenderer
+				
+				val textStrong = "${if (powerStrong < 10) " " else ""}$powerStrong    "
+				val textWeak = "    $powerWeak${if (powerWeak < 10) " " else ""}"
+				val offsetStrong = font.getStringWidth(textStrong) / -2f
+				val offsetWeak = font.getStringWidth(textWeak) / -2f
 				
 				glPushMatrix()
 				ASJRenderHelper.interpolatedTranslationReverse(player)
 				glTranslated(x + 0.5, y + 0.5, z + 0.5)
-				glScalef(-1/16f)
+				glScalef(-1/32f)
 				
 				glPushMatrix()
-				glTranslatef(-font.getStringWidth(power.toString()) / 2f, -font.FONT_HEIGHT / 2f, 0f)
-				font.drawString(power.toString(), 0, 0, color)
+				glTranslatef(offsetStrong, -font.FONT_HEIGHT / 2f, 0f)
+				font.drawString(textStrong, 0, 0, colorStrong)
+				glTranslatef(-offsetStrong + offsetWeak, 0f, 0f)
+				font.drawString(textWeak, 0, 0, colorWeak)
 				glPopMatrix()
 				
 				glRotatef(180f, 0f, 1f, 0f)
 				
 				glPushMatrix()
-				glTranslatef(-font.getStringWidth(power.toString()) / 2f, -font.FONT_HEIGHT / 2f, 0f)
-				font.drawString(power.toString(), 0, 0, color)
+				glTranslatef(offsetStrong, -font.FONT_HEIGHT / 2f, 0f)
+				font.drawString(textStrong, 0, 0, colorStrong)
+				glTranslatef(-offsetStrong + offsetWeak, 0f, 0f)
+				font.drawString(textWeak, 0, 0, colorWeak)
 				glPopMatrix()
 				
 				glPopMatrix()
@@ -205,9 +210,9 @@ open class RedstoneSignalHandler(datakey: String = ID): WorldSavedData(datakey) 
 	}
 	
 	@Synchronized
-	open fun addSignal(worldObj: World, x: Int, y: Int, z: Int, duration: Int, strength: Int): Boolean {
+	open fun addSignal(worldObj: World, x: Int, y: Int, z: Int, duration: Int, strength: Int, type: EnumRedstoneType = EnumRedstoneType.STRONG): Boolean {
 		return if (worldObj.blockExists(x, y, z)) {
-			val signal = RedstoneSignal(worldObj.provider.dimensionId, x, y, z, duration, strength)
+			val signal = RedstoneSignal(worldObj.provider.dimensionId, x, y, z, duration, strength, type)
 			if (signal in redstoneSignals) redstoneSignals.remove(signal)
 			redstoneSignals.add(signal)
 			updatePosition(worldObj, x, y, z)
@@ -235,8 +240,10 @@ open class RedstoneSignalHandler(datakey: String = ID): WorldSavedData(datakey) 
 	}
 	
 	@Synchronized
-	open fun getPower(world: World, x: Int, y: Int, z: Int) =
-		redstoneSignals.firstOrNull { (dim, sx, sy, sz) -> dim == world.provider.dimensionId && x == sx && sy == y && sz == z }?.strength ?: 0
+	open fun getPower(world: World, x: Int, y: Int, z: Int): Pair<Int, EnumRedstoneType> {
+		val signal = redstoneSignals.firstOrNull { (dim, sx, sy, sz) -> dim == world.provider.dimensionId && x == sx && sy == y && sz == z } ?: return 0 to EnumRedstoneType.NONE
+		return signal.strength to signal.type
+	}
 	
 	@Synchronized
 	override fun readFromNBT(nbt: NBTTagCompound) {
@@ -291,15 +298,15 @@ open class RedstoneSignalHandler(datakey: String = ID): WorldSavedData(datakey) 
 object RedstoneSignalHandlerClient: RedstoneSignalHandler("$ID-Client")
 
 object RedstoneSignalHandlerDummy: RedstoneSignalHandler("$ID-Dummy") {
-	override fun addSignal(worldObj: World, x: Int, y: Int, z: Int, duration: Int, strength: Int) = false
+	override fun addSignal(worldObj: World, x: Int, y: Int, z: Int, duration: Int, strength: Int, type: EnumRedstoneType) = false
 	override fun tick() = Unit
-	override fun getPower(world: World, x: Int, y: Int, z: Int) = 0
+	override fun getPower(world: World, x: Int, y: Int, z: Int) = 0 to EnumRedstoneType.NONE
 	override fun isDirty() = false
 	override fun readFromNBT(nbt: NBTTagCompound) = Unit
 	override fun writeToNBT(nbt: NBTTagCompound) = Unit
 }
 
-data class RedstoneSignal(var dimension: Int, var x: Int, var y: Int, var z: Int, var duration: Int, var strength: Int, var age: Int = 0) {
+data class RedstoneSignal(var dimension: Int, var x: Int, var y: Int, var z: Int, var duration: Int, var strength: Int, var type: EnumRedstoneType, var age: Int = 0) {
 	
 	fun tick() = age++ >= duration
 	
@@ -310,6 +317,7 @@ data class RedstoneSignal(var dimension: Int, var x: Int, var y: Int, var z: Int
 		nbt.setInteger("z", z)
 		nbt.setInteger("strength", strength)
 		nbt.setInteger("duration", duration)
+		nbt.setInteger("type", type.ordinal)
 		nbt.setInteger("age", age)
 		
 		return nbt
@@ -337,6 +345,10 @@ data class RedstoneSignal(var dimension: Int, var x: Int, var y: Int, var z: Int
 		return result
 	}
 	
+	enum class EnumRedstoneType {
+		NONE, WEAK, STRONG
+	}
+	
 	companion object {
 		
 		fun readFromNBT(nbt: NBTTagCompound): RedstoneSignal {
@@ -346,43 +358,29 @@ data class RedstoneSignal(var dimension: Int, var x: Int, var y: Int, var z: Int
 			val z = nbt.getInteger("z")
 			val strength = nbt.getInteger("strength")
 			val duration = nbt.getInteger("duration")
+			val type = EnumRedstoneType.entries[nbt.getInteger("type")]
 			val age = nbt.getInteger("age")
 			
-			return RedstoneSignal(dimension, x, y, z, duration, strength, age)
+			return RedstoneSignal(dimension, x, y, z, duration, strength, type, age)
 		}
 	}
 }
 
-@Suppress("unused")
-object RedstoneRodHookHandled {
+object RedstoneRodHookHandler {
 	
 	@JvmStatic
 	@Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-	fun isBlockProvidingPowerTo(world: World, x: Int, y: Int, z: Int, direction: Int, @ReturnValue result: Int): Int {
-		return max(RedstoneSignalHandler.get().getPower(world, x, y, z), result)
+	fun isBlockProvidingPowerTo(world: World, x: Int, y: Int, z: Int, direction: Int, @Hook.ReturnValue result: Int): Int {
+		val d = ForgeDirection.entries[direction].opposite
+		val power = RedstoneSignalHandler.get().getPower(world, x + d.offsetX, y + d.offsetY, z + d.offsetZ)
+		return if (power.second == EnumRedstoneType.STRONG) max(power.first, result) else result
 	}
 	
 	@JvmStatic
 	@Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-	fun getBlockPowerInput(world: World, x: Int, y: Int, z: Int, @ReturnValue result: Int): Int {
-		return max(RedstoneSignalHandler.get().getPower(world, x, y, z), result)
-	}
-	
-	@JvmStatic
-	@Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-	fun getIndirectPowerLevelTo(world: World, x: Int, y: Int, z: Int, direction: Int, @ReturnValue result: Int): Int {
-		return max(RedstoneSignalHandler.get().getPower(world, x, y, z), result)
-	}
-	
-	@JvmStatic
-	@Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-	fun isBlockIndirectlyGettingPowered(world: World, x: Int, y: Int, z: Int, @ReturnValue result: Boolean): Boolean {
-		return result || RedstoneSignalHandler.get().getPower(world, x, y, z) > 0
-	}
-	
-	@JvmStatic
-	@Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-	fun getStrongestIndirectPower(world: World, x: Int, y: Int, z: Int, @ReturnValue result: Int): Int {
-		return max(RedstoneSignalHandler.get().getPower(world, x, y, z), result)
+	fun getIndirectPowerLevelTo(world: World, x: Int, y: Int, z: Int, direction: Int, @Hook.ReturnValue result: Int): Int {
+		val d = ForgeDirection.entries[direction].opposite
+		val power = RedstoneSignalHandler.get().getPower(world, x + d.offsetX, y + d.offsetY, z + d.offsetZ).first
+		return max(power, result)
 	}
 }

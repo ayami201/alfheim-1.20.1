@@ -56,7 +56,7 @@ abstract class SpellBase @JvmOverloads constructor(val name: String, val race: E
 	fun checkCast(caster: EntityLivingBase): SpellCastResult {
 		if (MinecraftForge.EVENT_BUS.post(SpellCastEvent.Pre(this, caster))) return SpellCastResult.NOTALLOW
 		val cost = MathHelper.ceiling_double_int((getManaCost() * if ((caster as? EntityPlayer)?.race === race || hard) 1.toByte() else AlfheimConfigHandler.raceManaMult).D)
-		if (cost < 0) throw IllegalArgumentException("Manacost for $name was $cost. Check your minetweaker scripts")
+		require(cost >= 0) { "Manacost for $name spell was $cost. This is not allowed." }
 		val mana = caster !is EntityPlayer || caster.capabilities.isCreativeMode || consumeMana(caster, cost, true)
 		return if (mana) SpellCastResult.OK else SpellCastResult.NOMANA
 	}
@@ -64,7 +64,7 @@ abstract class SpellBase @JvmOverloads constructor(val name: String, val race: E
 	fun checkCastOver(caster: EntityLivingBase): SpellCastResult {
 		if (MinecraftForge.EVENT_BUS.post(SpellCastEvent.Pre(this, caster))) return SpellCastResult.NOTALLOW
 		val cost = MathHelper.ceiling_float_int(over(caster, (getManaCost() * if ((caster as? EntityPlayer)?.race === race || hard) 1.toByte() else AlfheimConfigHandler.raceManaMult).D))
-		if (cost < 0) throw IllegalArgumentException("Manacost for $name was $cost (with overmage). Check your minetweaker scripts")
+		require(cost >= 0) { "Manacost for $name spell was $cost (with overmage). This is not allowed." }
 		val mana = caster !is EntityPlayer || caster.capabilities.isCreativeMode || consumeMana(caster, cost, true)
 		return if (mana) SpellCastResult.OK else SpellCastResult.NOMANA
 	}

@@ -8,7 +8,7 @@ import alfheim.common.entity.boss.EntityDedMoroz
 import gloomyfolken.hooklib.asm.*
 import gloomyfolken.hooklib.asm.Hook.ReturnValue
 import net.minecraft.entity.*
-import net.minecraft.entity.boss.*
+import net.minecraft.entity.boss.EntityWither
 import net.minecraft.entity.effect.EntityLightningBolt
 import net.minecraft.entity.monster.*
 import net.minecraft.entity.player.EntityPlayer
@@ -36,7 +36,6 @@ import java.util.*
 object ElementalDamageAdapter {
 	
 	var setAir = false
-	var setAlien = false
 	var setDarkness = false
 	var setEarth = false
 	var setElectric = false
@@ -78,16 +77,15 @@ object ElementalDamageAdapter {
 	}
 	
 	private fun DamageSource.set(): DamageSource {
-		if (setAir) setTo(AIR)
-		if (setAlien) setTo(ALIEN)
-		if (setDarkness) setTo(DARKNESS)
-		if (setEarth) setTo(EARTH)
-		if (setElectric) setTo(ELECTRIC)
-		if (setFire) setTo(FIRE)
-		if (setLightness) setTo(LIGHTNESS)
-		if (setIce) setTo(ICE)
-		if (setNature) setTo(NATURE)
-		if (setPsychic) setTo(PSYCHIC)
+		if (setAir) setTo(AIR) else
+		if (setDarkness) setTo(DARKNESS) else
+		if (setEarth) setTo(EARTH) else
+		if (setElectric) setTo(ELECTRIC) else
+		if (setFire) setTo(FIRE) else
+		if (setLightness) setTo(LIGHTNESS) else
+		if (setIce) setTo(ICE) else
+		if (setNature) setTo(NATURE) else
+		if (setPsychic) setTo(PSYCHIC) else
 		if (setWater) setTo(WATER)
 		
 		return this
@@ -125,15 +123,13 @@ object ElementalDamageAdapter {
 	@JvmStatic
 	@Hook(targetMethod = "onImpact")
 	fun onImpactPre(entity: EntityThornChakram, mop: MovingObjectPosition?) {
-		setNature = true
-		setFire = entity.isFire
+		setNature = !entity.isFire
 	}
 	
 	@JvmStatic
 	@Hook(targetMethod = "onImpact", injectOnExit = true)
 	fun onImpactPost(entity: EntityThornChakram, mop: MovingObjectPosition?) {
 		setNature = false
-		setFire = false
 	}
 	
 	
@@ -169,12 +165,11 @@ object ElementalDamageAdapter {
 		when (entity) {
 			is EntityWither -> thiz.setTo(DARKNESS)
 			is EntitySlime  -> thiz.setTo(NATURE)
-			is EntityDragon -> thiz.setTo(ALIEN)
 		}
 		
 		if (Botania.thaumcraftLoaded) when (entity) {
-			is EntityEldritchGuardian -> thiz.setTo(ALIEN).setTo(DARKNESS)
-			is EntityEldritchWarden   -> thiz.setTo(ALIEN).setTo(DARKNESS)
+			is EntityEldritchGuardian -> thiz.setTo(DARKNESS)
+			is EntityEldritchWarden   -> thiz.setTo(DARKNESS)
 		}
 	}
 	
@@ -248,14 +243,12 @@ object ElementalDamageAdapter {
 	@JvmStatic
 	@Hook(targetMethod = "onImpact")
 	fun onImpactPre(entity: EntityEldritchOrb, mop: MovingObjectPosition?) {
-		setAlien = true
 		setDarkness = true
 	}
 	
 	@JvmStatic
 	@Hook(targetMethod = "onImpact", injectOnExit = true)
 	fun onImpactPost(entity: EntityEldritchOrb, mop: MovingObjectPosition?) {
-		setAlien = false
 		setDarkness = false
 	}
 	
@@ -325,7 +318,6 @@ object ElementalDamageAdapter {
 			Aspect.DARKNESS.tag,
 			Aspect.UNDEAD.tag    -> setDarkness = true
 			Aspect.WATER.tag     -> setWater = true
-			Aspect.ELDRITCH.tag  -> setAlien = true
 			Aspect.POISON.tag    -> setNature = true
 		}
 	}
@@ -343,7 +335,6 @@ object ElementalDamageAdapter {
 			Aspect.DARKNESS.tag,
 			Aspect.UNDEAD.tag    -> setDarkness = false
 			Aspect.WATER.tag     -> setWater = false
-			Aspect.ELDRITCH.tag  -> setAlien = false
 			Aspect.POISON.tag    -> setNature = false
 		}
 	}
@@ -370,7 +361,6 @@ object ElementalDamageAdapter {
 	    Aspect.DARKNESS.tag,
 	    Aspect.UNDEAD.tag   -> DARKNESS
 	    Aspect.WATER.tag    -> WATER
-	    Aspect.ELDRITCH.tag -> ALIEN
 	    Aspect.POISON.tag   -> NATURE
 	    else                -> AIR
 	})!!
@@ -391,7 +381,7 @@ object ElementalDamageAdapter {
 	@JvmStatic
 	@Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
 	fun damageSource(static: ItemRelic?, @ReturnValue src: DamageSource): DamageSource {
-		return src.setTo(PSYCHIC).setTo(LIGHTNESS)
+		return src.setTo(PSYCHIC)
 	}
 	
 	@JvmStatic

@@ -1,6 +1,8 @@
 package alfheim.common.item.equipment.armor.elemental
 
 import alexsocol.asjlib.*
+import alfheim.api.item.equipment.IElementalItem
+import alfheim.common.core.helper.ElementalDamage
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
@@ -10,7 +12,7 @@ import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import vazkii.botania.api.mana.*
 
-open class ItemElementalWaterHelm: ElementalArmor, IManaDiscountArmor {
+open class ItemElementalWaterHelm: ElementalArmor, IManaDiscountArmor, IElementalItem {
 	
 	constructor(): super(0, "ElementalWaterHelm")
 	constructor(name: String): super(0, name)
@@ -31,6 +33,10 @@ open class ItemElementalWaterHelm: ElementalArmor, IManaDiscountArmor {
 			player.addPotionEffect(PotionEffectU(Potion.nightVision.id, 5, -1))
 		}
 	}
+	
+	override fun getElement(stack: ItemStack) = ElementalDamage.WATER
+	
+	override fun getElementLevel(stack: ItemStack) = 4
 	
 	@SideOnly(Side.CLIENT)
 	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>, b: Boolean) {

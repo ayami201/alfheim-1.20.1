@@ -62,9 +62,11 @@ class EntityThunderChakram: EntityThrowable {
 			getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox(2)).forEach {
 				if (it === thrower) return@forEach
 				
-				val damage = if (thrower != null) DamageSourceSpell.lightningIndirect(this, thrower) else DamageSourceSpell.lightning
-				it.attackEntityFrom(damage, 8f)
-				it.addPotionEffect(PotionEffect(Potion.moveSlowdown.id, 60))
+				if (!worldObj.isRemote) {
+					val damage = if (thrower != null) DamageSourceSpell.lightningIndirect(this, thrower) else DamageSourceSpell.lightning
+					it.attackEntityFrom(damage, 8f)
+					it.addPotionEffect(PotionEffect(Potion.moveSlowdown.id, 60))
+				}
 				
 				if (worldObj.isRemote)
 					Botania.proxy.lightningFX(worldObj, Bector3.fromEntity(this), Bector3.fromEntity(it), 0.5f, 0xFFDDFF, 0xAA44AA)

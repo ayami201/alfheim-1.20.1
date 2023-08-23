@@ -46,7 +46,6 @@ import net.minecraftforge.event.entity.player.*
 import net.minecraftforge.event.world.BlockEvent
 import ru.vamig.worldengine.WE_Biome
 import vazkii.botania.api.item.IRelic
-import vazkii.botania.api.mana.ManaItemHandler
 import vazkii.botania.api.recipe.ElvenPortalUpdateEvent
 import vazkii.botania.common.block.tile.TileAlfPortal
 import vazkii.botania.common.block.tile.string.TileRedStringFertilizer
@@ -189,11 +188,6 @@ object EventHandler {
 		}
 		
 		if (AlfheimConfigHandler.enableElvenStory && e.source.damageType == DamageSource.fall.damageType && target is EntityPlayer && target.race != EnumRace.HUMAN) {
-			e.isCanceled = true
-			return
-		}
-		
-		if (e.source.isFireDamage && !e.source.isUnblockable && (target as? EntityPlayer)?.getCurrentArmor(1)?.item === AlfheimItems.elementalLeggings && ManaItemHandler.requestManaExact(target.getCurrentArmor(1), target, MathHelper.ceiling_float_int(10 * amount), !target.worldObj.isRemote)) {
 			e.isCanceled = true
 			return
 		}

@@ -17,7 +17,7 @@ class SubTileManaVoid: SubTileAnomalyBase() {
 	internal val v = Vector3()
 	
 	override val targets: List<Any>
-		get() = if (inWG()) EMPTY_LIST else allAround(EntityPlayer::class.java, radius.D)
+		get() = if (inWG()) emptyList() else allAround(EntityPlayer::class.java, radius.D)
 	
 	public override fun update() {
 		if (mana >= 120000) {
@@ -45,8 +45,6 @@ class SubTileManaVoid: SubTileAnomalyBase() {
 			if (!target.worldObj.isRemote) VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.MANAVOID, worldObj.provider.dimensionId, x.D, y.D, z.D, target.posX, target.posY + 1.0, target.posZ)
 		}
 	}
-	
-	override fun typeBits() = MANA
 	
 	override fun writeCustomNBT(cmp: NBTTagCompound) {
 		super.writeCustomNBT(cmp)

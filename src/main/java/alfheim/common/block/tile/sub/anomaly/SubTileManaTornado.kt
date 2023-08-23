@@ -18,9 +18,9 @@ class SubTileManaTornado: SubTileAnomalyBase() {
 	override val targets: List<Any>
 		get() {
 			if (worldObj.rand.nextInt(100) == 0)
-				return spawnBurst()?.let { mutableListOf(it) } ?: EMPTY_LIST
+				return spawnBurst()?.let { mutableListOf(it) } ?: emptyList()
 			
-			return EMPTY_LIST
+			return emptyList()
 		}
 	
 	public override fun update() {
@@ -62,6 +62,4 @@ class SubTileManaTornado: SubTileAnomalyBase() {
 	override fun performEffect(target: Any) {
 		if (target is EntityManaBurst) target.spawn(worldObj)
 	}
-	
-	override fun typeBits() = ALL
 }

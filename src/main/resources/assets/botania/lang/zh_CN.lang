@@ -547,11 +547,12 @@ alfheim.page.rodPrismatic0=&1魔力透镜:闪光&0一个非常不好 的一点,�
 alfheim.page.rodPrismatic1=风中的彩虹
 
 alfheim.page.irisSapling0=受到彩虹女神的祝福,这些可 以像彩虹一样变换颜色的神 奇树苗,通过白雏菊净化树苗 即可获得. 这些树苗只会在虹彩泥土上 生长,并且会呈现出它们扎根 的土壤的颜色.<br><br>他们只是&o真实存在&0的巨大康 乃馨
-alfheim.page.irisSapling1=模板
-alfheim.page.irisSapling2=楼梯
-alfheim.page.irisSapling3=半砖
-alfheim.page.irisSapling4=重新变为木板
-alfheim.page.irisSapling5=将树叶碾碎成粉
+alfheim.page.irisSapling1=
+alfheim.page.irisSapling2=模板
+alfheim.page.irisSapling3=楼梯
+alfheim.page.irisSapling4=半砖
+alfheim.page.irisSapling5=重新变为木板
+alfheim.page.irisSapling6=将树叶碾碎成粉
 
 alfheim.page.treeCrafting0=通过影响一个生命来让其具 备某种特性远比制造一个拥 有该特性的新生命要简单得 多.&虹彩树苗&0缺少常规的生命 力,因此将很容易制造出精美 的木材. 但&1命状定序装置&0可以使用&4魔 &4力&0来更改树苗的生命形式,通 过使用&1黑曜石&0和&1虹彩&0材料制 作的装置可以制造出有趣的 新生命.
 alfheim.page.treeCrafting1=在完成了结构搭建之后,用&1森 &1林法杖&0点击结构顶端的模板, 装置将会进入预备状态. 要制作一个新的生命,使用者 必须将一个虹彩树苗放在结 构中心的虹彩土壤,然后将魔 力注入顶端的定序方块. 剩下所需的材料必须放在&1物 &1品托盘&0上. 如果一切正确,定序装置会自 行开始工作

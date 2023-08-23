@@ -125,7 +125,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var lightningsSpeed = 20
 	var longSeasons = true
 	var looniumOverseed = false
-	var mobElements = arrayOf("Blaze:FIRE", "EnderDragon:ALIEN", "Enderman:ALIEN", "Ghast:AIR,PSYCHIC", "LavaSlime:FIRE", "MushroomCow:NATURE", "SnowMan:ICE", "Slime:NATURE,WATER", "VillagerGolem:EARTH", "WitherBoss:DARKNESS", "Thaumcraft.EldritchCrab:ALIEN,DARKNESS", "Thaumcraft.EldritchGolem:EARTH", "Thaumcraft.EldritchGuardian:ALIEN,DARKNESS,PSYCHIC", "Thaumcraft.EldritchWarden:ALIEN,DARKNESS,PSYCHIC", "Thaumcraft.Firebat:FIRE", "Thaumcraft.Golem:EARTH", "Thaumcraft.MindSpider:PSYCHIC", "Thaumcraft.ThaumSlime:WATER,DARKNESS", "Thaumcraft.Wisp:AIR", "ThermalFoundation.Blizz:ICE", "ThermalFoundation.Blitz:ELECTRIC", "ThermalFoundation.Basalz:ICE")
+	var mobElements = arrayOf("Blaze:FIRE", "Creeper:NATURE", "EnderDragon:DARKNESS", "Enderman:DARKNESS", "Ghast:AIR,PSYCHIC", "LavaSlime:FIRE,EARTH", "MushroomCow:NATURE", "SnowMan:ICE", "Slime:NATURE,WATER", "VillagerGolem:EARTH", "WitherBoss:DARKNESS", "Thaumcraft.EldritchCrab:DARKNESS", "Thaumcraft.EldritchGolem:EARTH", "Thaumcraft.EldritchGuardian:DARKNESS,PSYCHIC", "Thaumcraft.EldritchWarden:DARKNESS,PSYCHIC", "Thaumcraft.Firebat:FIRE", "Thaumcraft.Golem:EARTH", "Thaumcraft.MindSpider:PSYCHIC", "Thaumcraft.ThaumSlime:WATER,DARKNESS", "Thaumcraft.Wisp:AIR", "ThermalFoundation.Blizz:ICE", "ThermalFoundation.Blitz:ELECTRIC", "ThermalFoundation.Basalz:EARTH")
 	var minimalGraphics = false
 	var mobPriests = true
 	var moonbowMaxDmg = 20
@@ -149,6 +149,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var schemaMaxSize = 64
 	var soulSwordMaxLvl = Int.MAX_VALUE
 	var storyLines = 4
+	var timelessProtection = true
 	var tradePortalRate = 1200
 	var triquetrumBlackList = emptyArray<String>()
 	var triquetrumManaUsage = intArrayOf(100, 60)
@@ -336,7 +337,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		numericalMana = loadProp(CATEGORY_GENERAL, "numericalMana", numericalMana, false, "Set this to false to disable numerical mana representation")
 		overcoldBlacklist = loadProp(CATEGORY_GENERAL, "overcoldBlacklist", overcoldBlacklist, false, "List of entity names with no cold gauge filling ", false)
 		overheatBlacklist = loadProp(CATEGORY_GENERAL, "overheatBlacklist", overheatBlacklist, false, "List of entity names with no heat gauge filling ", false)
-		realLightning = loadProp(CATEGORY_GENERAL, "realLightning", realLightning, false, "Set this to true to make lightning rod summon real (weather) lightning")
+		realLightning = loadProp(CATEGORY_GENERAL, "realLightning", realLightning, false, "Set this to true to make Rod of the Thundering Peaks summon real (weather) lightning")
 		renderBooba = loadProp(CATEGORY_GENERAL, "renderBooba", renderBooba, false, "Set this to false to disable ESM booba render")
 		repairBlackList = loadProp(CATEGORY_GENERAL, "repairBlackList", repairBlackList, false, "Blacklist of repairable items (ex: for anyavil) [modid:name]", false)
 		rocketRide = loadProp(CATEGORY_GENERAL, "rocketRide", rocketRide, false, "Rocket ride [-1 - not players, 0 - none, 1 - players, 2 - anyone]")
@@ -346,6 +347,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		schemaMaxSize = loadProp(CATEGORY_GENERAL, "schemaMaxSize", schemaMaxSize, false, "Max schema cuboid side length")
 		soulSwordMaxLvl = loadProp(CATEGORY_GENERAL, "soulSwordMaxLvl", soulSwordMaxLvl, false, "Sword of Ragnarok max level")
 		storyLines = loadProp(CATEGORY_GENERAL, "storyLines", storyLines, false, "Number of lines for story token")
+		timelessProtection = loadProp(CATEGORY_GENERAL, "timelessProtection", timelessProtection, false, "If true, Timeless Ivy won't allow item to break if you have enough mana (instead of post-regen it)")
 		tradePortalRate = loadProp(CATEGORY_GENERAL, "tradePortalRate", tradePortalRate, false, "Portal updates every [N] ticks")
 		triquetrumBlackList = loadProp(CATEGORY_GENERAL, "triquetrumBlackList", triquetrumBlackList, false, "Blacklist for blocks that triquetrum can't swap [modid:name]", false)
 		triquetrumManaUsage = loadProp(CATEGORY_GENERAL, "triquetrumManaUsage", triquetrumManaUsage, false, "Mana usage for triquetrum, 1st is for tiles, 2nd for regular blocks")

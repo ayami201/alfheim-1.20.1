@@ -4,8 +4,6 @@ import alexsocol.asjlib.ASJUtilities
 import alfheim.api.ModInfo
 import alfheim.common.block.*
 import alfheim.common.block.tile.TileAnomaly
-import alfheim.common.block.tile.TileAnomaly.Companion.TAG_SUBTILE_COUNT
-import alfheim.common.block.tile.TileAnomaly.Companion.TAG_SUBTILE_MAIN
 import alfheim.common.block.tile.TileAnomaly.Companion.TAG_SUBTILE_NAME
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
@@ -27,7 +25,7 @@ class ItemBlockAnomaly(block: Block): ItemBlock(block), IRecipeKeyProvider {
 	}
 	
 	override fun getUnlocalizedName(stack: ItemStack?): String {
-		return "tile.Anomaly." + getString(stack, TAG_SUBTILE_MAIN, TYPE_UNDEFINED)
+		return "tile.Anomaly." + getString(stack, TAG_SUBTILE_NAME, TYPE_UNDEFINED)
 	}
 	
 	override fun getMetadata(meta: Int): Int {
@@ -59,7 +57,7 @@ class ItemBlockAnomaly(block: Block): ItemBlock(block), IRecipeKeyProvider {
 		const val TYPE_UNDEFINED = "undefined"
 		
 		fun getType(stack: ItemStack): String {
-			return if (detectNBT(stack)) getString(stack, TAG_SUBTILE_MAIN, TYPE_UNDEFINED) else TYPE_UNDEFINED
+			return if (detectNBT(stack)) getString(stack, TAG_SUBTILE_NAME, TYPE_UNDEFINED) else TYPE_UNDEFINED
 		}
 		
 		fun ofType(type: String): ItemStack {
@@ -69,9 +67,7 @@ class ItemBlockAnomaly(block: Block): ItemBlock(block), IRecipeKeyProvider {
 		fun ofType(stack: ItemStack, type: String?): ItemStack {
 			var t = type
 			if (type.isNullOrEmpty()) t = TYPE_UNDEFINED
-			setString(stack, TAG_SUBTILE_MAIN, t)
-			setInt(stack, TAG_SUBTILE_COUNT, 1)
-			setString(stack, TAG_SUBTILE_NAME + "1", t)
+			setString(stack, TAG_SUBTILE_NAME, t)
 			
 			return stack
 		}

@@ -18,6 +18,7 @@ import alfheim.client.render.particle.*
 import alfheim.client.render.world.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
+import alfheim.common.crafting.recipe.RecipeSaveIvy
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageKeyBindS
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type
@@ -32,13 +33,14 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.boss.IBossDisplayData
 import net.minecraft.init.Blocks
 import net.minecraft.potion.Potion
+import net.minecraft.util.StatCollector
 import net.minecraftforge.client.event.*
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
 import net.minecraftforge.event.entity.player.*
 import org.lwjgl.opengl.GL11.*
 import vazkii.botania.common.Botania
-import vazkii.botania.common.item.ModItems
+import vazkii.botania.common.item.*
 import vazkii.botania.common.item.equipment.bauble.ItemMonocle
 
 object EventHandlerClient {
@@ -304,8 +306,11 @@ object EventHandlerClient {
 	@SubscribeEvent
 	fun drawTooltip(e: ItemTooltipEvent) {
 		val stack = e.itemStack ?: return
-		if (stack.item !== ModItems.laputaShard) return
-		if (!ItemMonocle.hasMonocle(mc.thePlayer)) return
-		addStringToTooltip(e.toolTip as MutableList<Any?>, "misc.alfheim.customSize", (14 + stack.meta).toString())
+		
+		if (stack.item === ModItems.laputaShard && ItemMonocle.hasMonocle(mc.thePlayer))
+			addStringToTooltip(e.toolTip as MutableList<Any?>, "misc.alfheim.customSize", (14 + stack.meta).toString())
+		
+		if (ItemNBTHelper.getBoolean(stack, RecipeSaveIvy.TAG_SAVE, false))
+			addStringToTooltip(e.toolTip as MutableList<Any?>, "alfheimmisc.saveIvy", (14 + stack.meta).toString())
 	}
 }

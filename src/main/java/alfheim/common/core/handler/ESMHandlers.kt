@@ -251,8 +251,7 @@ object ESMHandler {
 	}
 	
 	fun doGnome(player: EntityPlayer) {
-		if (ASJUtilities.isServer || !player.isSneaking) return
-		if (isAbilityDisabled(player)) return
+		if (ASJUtilities.isServer || !player.isSneaking || isAbilityDisabled(player) || player !== mc.thePlayer) return
 		
 		val x = player.posX.mfloor() - 8
 		val y = player.posY.mfloor() - 8

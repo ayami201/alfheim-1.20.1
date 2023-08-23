@@ -14,6 +14,7 @@ import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.potion.Potion
+import kotlin.math.pow
 
 class TileIcyGeyser: ASJTile() {
 	
@@ -96,6 +97,10 @@ class TileIcyGeyser: ASJTile() {
 		nbt.setInteger(TAG_COOLDOWN, cooldown)
 		nbt.setInteger(TAG_TIMER, timer)
 	}
+	
+	override fun getRenderBoundingBox() = boundingBox(1)
+	
+	override fun getMaxRenderDistanceSquared() = (mc.gameSettings.renderDistanceChunks * 16.0).pow(2)
 	
 	companion object {
 		const val TAG_COOLDOWN_MAX = "cooldownMax"

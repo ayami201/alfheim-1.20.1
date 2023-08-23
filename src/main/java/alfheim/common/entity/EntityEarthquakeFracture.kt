@@ -62,7 +62,7 @@ class EntityEarthquakeFracture(world: World): Entity(world) {
 				for (j in maxY + 10 downTo 12) {
 					if (worldObj.isAirBlock(i + x, j, k + z)) continue
 
-					if (rand.nextDouble() < 0.3 && !worldObj.isRemote && !worldObj.isProtected(i + x, j, k + z, false, false))
+					if (rand.nextDouble() < 0.3 && !worldObj.isRemote && !worldObj.isProtected(i + x, j, k + z, false))
 						worldObj.setBlockToAir(i + x, j, k + z)
 
 					val block = worldObj.getBlock(i + x, j, k + z)

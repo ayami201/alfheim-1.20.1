@@ -27,6 +27,17 @@ alfheim.page.anomalyKiller.d=This anomaly will kill you in instant on contact, s
 alfheim.page.anomalyGravity.t=&1Gravity Vortex&0
 alfheim.page.anomalyGravity.d=The field of alternating gravity, dragging all the objects to it. If you got into the zone of its action, then your only way to get out is to run in the opposite direction, otherwise you can stay there forever. Does not act on the blocks.
 
+alfheim.entry.anomalyHarvester=Anomaly Harvester
+alfheim.tagline.anomalyHarvester=Get use of the dangers
+alfheim.page.anomalyHarvester0=&1Anomaly Harvester&0 allows one to safely manipulate &1Anomalies&0 contained within it at the cost of fair amount of &4Mana&0. The anomaly must first be stabilized to make it safe to use. After that, the torn fabric of reality around it must be stitched to enclose it's energy within portable pocket dimension. And finally, it can be placed in the harvester.
+alfheim.page.anomalyHarvester1=When setup is ready, the area configuration can be performed to define the boundaries of harvester work zone (highlighted with red border). It is done by rightclicking or sneak-rightclicking one of the harvesters sides with &1Wand of the Forest&0. Leftclicking will allow you to change work zone orientation.
+alfheim.page.anomalyHarvester2=Lastly, by (sneak)-rightclicking with bare hand, one can change harvester power to intensify the effect or stop the harvester. But remember, the more power and the wider the zone you set, the higher the mana cost will be. Harvester can also be turned off with direct (strong) redstone signal. Indirect (weak) signal will hide the work zone border.
+alfheim.page.anomalyHarvester3=Taz-powered
+alfheim.page.anomalyHarvester4=Anomaly stabilization
+alfheim.page.anomalyHarvester5=Anomaly displacement
+alfheim.page.anomalyHarvester6=The behavior of contained anomalies will remain pretty much the same, but there are some exceptions. &1Manavortex&0 will increase internal mana buffer. &1Warp&0 will teleport every entity to the block next to the harvester. &1Clot of Dark Energy&0 will hurt only monsters. &1Eye of Death&0 won't oneshot and will target every living entity except players and babies.
+alfheim.page.anomalyHarvester7=One single harvester can combine anomalies. Combination of &1Antigravity&0 and &1Gravity Vortex&0 will form new effect that will move every entity within work zone in the direction where small pyramid is facing. Work zones of two different harvesters can safely overlap.
+
 alfheim.entry.elves=Elves
 alfheim.tagline.elves=Native inhabitants
 alfheim.page.elves0=As it was said before, elves are beautiful creatures, spellfully wielding magic, which the first &4aesir&0 settled in &4Alfheim&0. A great sorcerer and Alfheim-born &6Mastray&0 was the only one who knew the temporary anomalies of his own world as his five fingers.
@@ -73,6 +84,14 @@ alfheim.entry.shrines=Shrines of Power
 alfheim.tagline.shrines=Praise the Sun!
 alfheim.page.shrines0=Traveling around the Alfheim, one can notice different small-scaled ruins, looking like specific temples. Those are called Shrines of Power. In every shrine there is a place to pray to ancient gods - &1Stones of Power&0. Using such stones, one can gain some temporal paired-effect buffs at a cost of some &4Mana&0, to increase one skill by decreasing another. Those are not combinable.
 alfheim.page.shrines1=&4Berserk&0 - gain attack damage, lose health points.<br>&4Overmage&0 - gain magic attack damage, lose mana.<br>&4Ninja&0 - gain speed, lose attack damage.<br>&4Tank&0 - gain protection, lose speed
+
+alfheim.entry.slimes=Growing slimes
+alfheim.tagline.slimes=They were small, now they big
+alfheim.page.slimes0=If you managed to capture a small slime, and want to show it your love and care, try radiating it with some gentle &4Mana bursts&0 on your &1Mana Tuner&0 along with some of it's...flesh. As long as your new pet stays right on top of the tuner, it will grow in the blink of an eye as the tuning finishes. I promise, it won't hurt at all.
+alfheim.page.slimes1=Growing Slime
+alfheim.page.slimes2=Growing Magma Cube
+alfheim.page.slimes3=Growing Thaumic Slime
+alfheim.page.slimes4=Growing Blue Slime
 
 alfheim.entry.flowerEnderchid=Orechid Endium
 alfheim.tagline.flowerEnderchid=Creates end ores from end stone
@@ -162,6 +181,14 @@ alfheim.entry.manaLamp=Mana Lamp
 alfheim.tagline.manaLamp=Will illuminate your dark adventures
 alfheim.page.manaLamp0=The &1Mana Lamp&0 is a great alternative to hundreds of torches in your pockets. For a small amount of &4mana&0, the lamp is able to independently illuminate the dark areas around the owner, leaving bright memories of adventures in the dungeons.
 alfheim.page.manaLamp1=No dynamic lights!
+
+alfheim.entry.manaTuner=Mana Tuner
+alfheim.tagline.manaTuner=Attuning objects with mana bursts
+alfheim.page.manaTuner0=Mana bursts have a huge potential, which is perfectly revealed by &1Mana Lenses&0. And these lenses can affect many characteristics of the beam, whether it be its velocity, capacity, or even color. However, it is the color of the burst that has no practical effect, only aesthetic... Or not?
+alfheim.page.manaTuner1=Mastray, being one of the wisest elves, also asked himself this question. After a series of studies, he found out that depending on the color, the frequency of oscillations of the mana particles in the burst also changes, similar to the particles of light. Thanks to his finding, he made his great discovery.
+alfheim.page.manaTuner2=&1Mana Tuner&0 uses different-frequency oscillations in mana bursts of different colors to change the characteristics of mana flows around objects, endowing them with certain properties, or even changing their internal structure. Sometimes additional resources are needed for success, which are destroyed, passing their properties to objects.
+alfheim.page.manaTuner3=Not a rhythm game
+alfheim.page.manaTuner4=For ease of use, Mastray developed a system of encoding different colors in the form of symbols, where each symbol corresponds to a different color of the mana burst that it received when passing through the lens. Colors not from lenses Mastray used to reset the sequence.
 
 alfheim.entry.lembas=Elven Lembas
 alfheim.tagline.lembas=Elven ration
@@ -260,6 +287,23 @@ alfheim.page.elemSet2=&2Earth&0
 alfheim.page.elemSet3=&4Fire&0
 alfheim.page.elemSet4=&eAir&0
 
+alfheim.entry.elementalTuning=Elemental Tuning
+alfheim.tagline.elementalTuning=Enchanting equipment with elements
+alfheim.page.elementalTuning0=Shortly after its invention, one of the first and most widespread uses of the Mana Tuner was Elemental Tuning. With the use of a certain amount of &1Manaweave Cloth&0 and an item incarnation of the element, an alternative way of enchanting equipment for one of the primal and some additional elements appeared.
+alfheim.page.elementalTuning1=To fully attune an item for a specific element, it is necessary to carry out four stages, each of which requires one Manaweave Cloth and one incarnation of the element more than the previous one. Elements cannot be combined with each other, and those things that already have the energy of one or another element cannot be reattuned.
+alfheim.page.elementalTuning2=Armed with elemental equipment, the elves became much better at fighting against elemental creatures, much more effective and better at protecting their homes and exploring new territories. They were also aided in identifying the enemy's element by the &1Manaseer Monocles&0, which were tuned to elemental sensitivity.
+alfheim.page.elementalTuning3=Monocle tuning
+alfheim.page.elementalTuning4=Fire tuning
+alfheim.page.elementalTuning5=Water tuning
+alfheim.page.elementalTuning6=Air tuning
+alfheim.page.elementalTuning7=Earth tuning
+alfheim.page.elementalTuning8=Ice tuning
+alfheim.page.elementalTuning9=Electric tuning
+alfheim.page.elementalTuning10=Nature tuning
+alfheim.page.elementalTuning11=Lightness tuning
+alfheim.page.elementalTuning12=Darkness tuning
+alfheim.page.elementalTuning13=Psychic tuning
+
 alfheim.entry.advMana=Mana-stones
 alfheim.tagline.advMana=New word in storing mana
 alfheim.page.advMana0=As we know, the core of a simple mana store included either mana-diamond or mana-pearl. But elves had none of them. But they had their own ways of pocket mana storage.
@@ -277,6 +321,12 @@ alfheim.page.auraAlf0=Of course, the usual and terra-reinforced &1Bands of Aura&
 alfheim.page.auraAlf1=Creating &1Pixie Band of Aura&0
 alfheim.page.auraAlf2=Upgrading to &1Elven Band of Aura&0
 alfheim.page.auraAlf3=Upgrading to &1God's Band of Aura&0
+
+alfheim.entry.redstoneRelay=Redstone Relay
+alfheim.tagline.redstoneRelay=Wireless redstone. Again.
+alfheim.page.redstoneRelay0=As seen with &1Force Relay&0, infusing redstone-powered objects with &4Mana&0 results in unexpected outcomes. Your next line will be: "What if we infuse redstone block itself?". The answer is: a &1Redstone Relay&0 - useful tool in the hands of skilled engineers.
+alfheim.page.redstoneRelay1=As long as this block receives a redstone signal, it will send it to the block it's bound to, on any distance, and saving the input signal level and type.<br>To bind it to a block, sneak-rightclick it with a &1Wand of the Forest&0, and sneak-rightclick on the block you want to bind it to.
+alfheim.page.redstoneRelay2=But where is a receiver?
 
 alfheim.entry.ruling=Power of other worlds
 alfheim.tagline.ruling=I'm Bruce Almighty
@@ -407,7 +457,7 @@ alfheim.page.legends5=&oAnd, though for some the giantess Hel who rules there ma
 
 alfheim.entry.rodRedstone=Rod of the Red Control
 alfheim.tagline.rodRedstone=Redstone debug online
-alfheim.page.rodRedstone0=The &1Rod of the Red Control&0 is a handy tool to every redstone engineer. Using it on any block will cause it to become a source of &4strong redstone signal&0 for a brief moment, powering itself and any blocks around it.
+alfheim.page.rodRedstone0=The &1Rod of the Red Control&0 is a handy tool to every redstone engineer. Using it on any block will cause it to become a source of &4strong redstone signal&0 for a brief moment, powering itself and any blocks around it. Sneaking while using allows one to apply &4weak redstone signal&0.
 alfheim.page.rodRedstone1=If the wielder of the rod is equipped with the &1Manaseer Monocle&0, all powered blocks nearby will become visible through walls while the wearer is sneaking. Bright frames will indicate &4strong&0 powering and darker frames - &4weak&0. The &4power level&0 of the signal will also be displayed on the block you are currently looking on.
 alfheim.page.rodRedstone2=Show yourself!
 
@@ -979,11 +1029,12 @@ alfheim.page.rodPrismatic0=One particularly frustrating property of the &1Mana L
 alfheim.page.rodPrismatic1=All the colors of the wind
 
 alfheim.page.irisSapling0=Blessed by the goddess of rainbows, these saplings are made from their earthly counterparts by the purifying magic of a &1Pure Daisy&0. These saplings will only grow on &1Iridescent Dirt&0 and take on the hue of the dirt they lay their roots in.<br><br>They're just &oreally&0 big carnations
-alfheim.page.irisSapling1=Planks
-alfheim.page.irisSapling2=Stairs
-alfheim.page.irisSapling3=Slabs
-alfheim.page.irisSapling4=And back again
-alfheim.page.irisSapling5=Grinding them down
+alfheim.page.irisSapling1=Sapling
+alfheim.page.irisSapling2=Planks
+alfheim.page.irisSapling3=Stairs
+alfheim.page.irisSapling4=Slabs
+alfheim.page.irisSapling5=And back again
+alfheim.page.irisSapling6=Grinding them down
 
 alfheim.page.treeCrafting0=Affecting life is much harder than making or destroying it. The &1Iridescent Tree&0 has a natural lack of regular life, which lends itself to making beautiful spectrums of wood. It seems possible to re-add this life, by drawing mana into a &4Dendric Suffuser&0. This structure, of &1Obsidian&0 and materials of &4Iridesence&0, will suffuse the purified tree with life, creating interesting new varieties of life.
 alfheim.page.treeCrafting1=When a &1Wand of the Forest&0 is used on the apex plank of the structure, it will complete it. For a tree to be made, you must plant a lifeless &1Iridescent Sapling&0 on the dirt below, and pump &4Mana&0 into the apex block. The components must be placed on the &1Item Platforms&0, and the crafting will begin on its own.
@@ -1020,7 +1071,7 @@ alfheim.page.lightningSapling4=Slabs
 alfheim.page.lightningSapling5=Twigs
 alfheim.page.lightningSapling6=And splinters
 
-alfheim.page.infernalSapling0=The &1Infernal Oak&0 is a tree so saturated with fire energy, it repulses external flames. Its leaves, logs, and planks are all completely immune to conventional flames.
+alfheim.page.infernalSapling0=The &1Infernal Oak&0 is a tree so saturated with fire energy, it repulses external flames. Its leaves, logs, and planks are all completely immune to conventional flames. It can also cook food under its shade.
 alfheim.page.infernalSapling1=Just pour more fire on it, it'll work eventually
 alfheim.page.infernalSapling2=Planks
 alfheim.page.infernalSapling3=Stairs

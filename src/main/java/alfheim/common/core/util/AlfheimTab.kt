@@ -14,6 +14,7 @@ import alfheim.common.block.AlfheimBlocks.altWood0
 import alfheim.common.block.AlfheimBlocks.altWood1
 import alfheim.common.block.AlfheimBlocks.amplifier
 import alfheim.common.block.AlfheimBlocks.animatedTorch
+import alfheim.common.block.AlfheimBlocks.anomalyHarvester
 import alfheim.common.block.AlfheimBlocks.anyavil
 import alfheim.common.block.AlfheimBlocks.auroraDirt
 import alfheim.common.block.AlfheimBlocks.auroraLeaves
@@ -79,6 +80,7 @@ import alfheim.common.block.AlfheimBlocks.livingcobble
 import alfheim.common.block.AlfheimBlocks.livingwoodFunnel
 import alfheim.common.block.AlfheimBlocks.manaAccelerator
 import alfheim.common.block.AlfheimBlocks.manaInfuser
+import alfheim.common.block.AlfheimBlocks.manaTuner
 import alfheim.common.block.AlfheimBlocks.netherLeaves
 import alfheim.common.block.AlfheimBlocks.netherPlanks
 import alfheim.common.block.AlfheimBlocks.netherSapling
@@ -100,6 +102,7 @@ import alfheim.common.block.AlfheimBlocks.rainbowTallFlower
 import alfheim.common.block.AlfheimBlocks.rainbowTallGrass
 import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimBlocks.realityAnchor
+import alfheim.common.block.AlfheimBlocks.redstoneRelay
 import alfheim.common.block.AlfheimBlocks.rpc
 import alfheim.common.block.AlfheimBlocks.schemaAnnihilator
 import alfheim.common.block.AlfheimBlocks.schemaController
@@ -327,10 +330,13 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		`DEV-NULL`?.let { addItem(it) }
 		
 		addBlock(manaInfuser)
+		addBlock(manaTuner)
+		addBlock(anomalyHarvester)
 		addBlock(corporeaAutocrafter)
 		addBlock(corporeaInjector)
 		addBlock(corporeaRatBase)
 		addBlock(corporeaSparkBase)
+		addBlock(redstoneRelay)
 		addBlock(enderActuator)
 		addBlock(bottomlessChest)
 		addBlock(alfheimPortal)
@@ -339,7 +345,6 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(rpc)
 		addBlock(Blocks.furnace, 8)
 		addBlock(ModBlocks.spreader, 4)
-		// addBlock(anomalyHarvester) // BACK
 		addBlock(anyavil)
 		addBlock(spire)
 		addBlock(alfheimPylon)

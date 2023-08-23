@@ -12,7 +12,7 @@ class SubTileSpeedUp: SubTileAnomalyBase() {
 	
 	override val targets: List<Any>
 		get() {
-			if (inWG()) return EMPTY_LIST
+			if (inWG()) return emptyList()
 			
 			val l = allAround(Entity::class.java, radius.D)
 			l.removeAll { !it.isEntityAlive }
@@ -54,8 +54,6 @@ class SubTileSpeedUp: SubTileAnomalyBase() {
 		if (target is Entity) target.onUpdate()
 		if (target is TileEntity) target.updateEntity()
 	}
-	
-	override fun typeBits() = TIME
 	
 	companion object {
 		

@@ -11,6 +11,7 @@ import net.minecraft.block.BlockBush
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.*
+import net.minecraft.entity.monster.EntityEnderman
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.server.MinecraftServer
@@ -30,7 +31,9 @@ class BlockSubspacian: BlockBush(Material.plants), ILexiconable {
 	}
 	
 	override fun onEntityCollidedWithBlock(world: World, x: Int, y: Int, z: Int, entity: Entity?) {
-		doBadThings(entity as? EntityLivingBase ?: return)
+		if (entity is EntityEnderman) return
+		
+		doBadThings(entity as? EntityLivingBase ?: return, true)
 	}
 	
 	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.subshroom

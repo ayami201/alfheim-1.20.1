@@ -78,7 +78,7 @@ class EntityDedMoroz(world: World): EntityMob(world), IBotaniaBossWithName, INif
 			setRevengeTarget(attackTarget)
 		}
 		
-		super.damageEntity(src, amount * if (src.isMagical) 0.1f else if (src.isFireDamage) 1.5f else 0.75f)
+		super.damageEntity(src, amount * if (src.isMagical) 0.1f else if (src.isOf(ElementalDamage.FIRE)) 1.5f else 0.75f)
 	}
 	
 	override fun getExperiencePoints(player: EntityPlayer?): Int {

@@ -7,7 +7,6 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import cpw.mods.fml.relauncher.FMLRelaunchLog
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion
 import gloomyfolken.hooklib.minecraft.HookLoader
-import org.apache.commons.io.FileUtils
 import java.io.File
 
 // -Dfml.coreMods.load=alfheim.common.core.asm.AlfheimHookLoader
@@ -17,12 +16,6 @@ class AlfheimHookLoader: HookLoader() {
 	
 	init {
 		ModInfo.OBF = ASJHookLoader.OBF
-		
-		if (!ModInfo.OBF) { // FUCK YOU GRADLE, FUCK YOU INTELLIJ, FUCK YOU ALL
-			FMLRelaunchLog.info("[${ModInfo.MODID.uppercase()}] MoViNg FuCkInG rEsOuRcEs BeCaUsE iDeA iS FUCKED UP!!!")
-			FileUtils.copyDirectory(File("../src/main/resources/"), File("../build/classes/kotlin/main/"))
-		}
-		
 		AlfheimConfigHandler.loadConfig(File("config/Alfheim/Alfheim.cfg"))
 	}
 	
@@ -53,7 +46,7 @@ class AlfheimHookLoader: HookLoader() {
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.RecipeAncientWillsFix")
 		registerHookContainer("alfheim.common.integration.travellersgear.TGHandlerBotaniaAdapterHooks")
 		registerHookContainer("alfheim.common.integration.tinkersconstruct.TraitFairySpawner")
-		registerHookContainer("alfheim.common.item.rod.RedstoneRodHookHandled")
+		registerHookContainer("alfheim.common.item.rod.RedstoneRodHookHandler")
 		
 		if (ModInfo.OBF) ASJASM.registerFieldHookContainer("alfheim.common.core.asm.hook.AlfheimFieldHookHandler")
 	}

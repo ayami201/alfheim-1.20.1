@@ -14,12 +14,9 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.item.*
-import net.minecraft.nbt.*
 import net.minecraft.potion.Potion
-import net.minecraft.potion.PotionEffect
 import net.minecraft.util.IIcon
 import net.minecraft.world.World
-import net.minecraftforge.common.util.Constants
 
 class ItemElvenFood: ItemFood(0, 0f, false) {
 	
@@ -101,24 +98,23 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 	
 	val drinkables = arrayOf(RedWine.I, WhiteWine.I, JellyBottle.I)
 	
+	fun isAlwaysEdible(stack: ItemStack) = stack.meta in TreeBerryBarrier.I..TreeBerrySealing.I
+	
 	override fun getItemUseAction(stack: ItemStack) = if (stack.meta in drinkables) EnumAction.drink else EnumAction.eat
 	
 	override fun getMaxItemUseDuration(stack: ItemStack): Int {
 		return super.getMaxItemUseDuration(stack)
 	}
 	
+	override fun onItemRightClick(stack: ItemStack, world: World?, player: EntityPlayer): ItemStack {
+		if (isAlwaysEdible(stack) || player.canEat(false))
+			player.setItemInUse(stack, getMaxItemUseDuration(stack))
+		
+		return stack
+	}
+	
 	override fun onEaten(stack: ItemStack, world: World?, player: EntityPlayer): ItemStack {
 		if (!world!!.isRemote) {
-			getPotions(stack).forEach {
-				it ?: return@forEach
-				
-				if (!player.isPotionActive(it.potionID))
-					player.addPotionEffect(it)
-				val eff = player.getActivePotionEffect(it.potionID) ?: return@forEach
-				eff.duration = it.duration
-				eff.amplifier = it.amplifier
-			}
-			
 			ElvenFoodMetas.entries[stack.meta].potion?.let {
 				var amp = 0
 				val id = if (it == -1) {
@@ -153,21 +149,6 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 	
 	override fun getItemStackLimit(stack: ItemStack): Int {
 		return if (stack.meta in drinkables) 1 else super.getItemStackLimit(stack)
-	}
-	
-	companion object {
-		
-		const val TAG_POTIONS = "potions"
-		
-		fun addPotion(stack: ItemStack, effect: PotionEffect) {
-			ItemNBTHelper.getList(stack, TAG_POTIONS, Constants.NBT.TAG_COMPOUND).appendTag(NBTTagCompound().apply { effect.writeCustomPotionEffectToNBT(this) })
-		}
-		
-		fun getPotions(stack: ItemStack): List<PotionEffect?> {
-			return ItemNBTHelper.getList(stack, TAG_POTIONS, Constants.NBT.TAG_COMPOUND).tagList.map {
-				PotionEffect.readCustomPotionEffectFromNBT(it as NBTTagCompound)
-			}
-		}
 	}
 }
 

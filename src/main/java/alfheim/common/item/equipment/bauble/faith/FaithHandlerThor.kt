@@ -6,10 +6,12 @@ import alfheim.api.item.ColorOverrideHelper
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
+import alfheim.common.entity.EntityMjolnir
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.bauble.*
 import alfheim.common.item.equipment.bauble.faith.IFaithHandler.FaithBauble
 import alfheim.common.item.equipment.bauble.faith.IFaithHandler.FaithBauble.*
+import alfheim.common.item.relic.ItemMjolnir
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.attributes.AttributeModifier
@@ -90,7 +92,14 @@ object FaithHandlerThor: IFaithHandler {
 		
 		val (x, y, z) = Vector3.fromEntityCenter(from)
 		val (x2, y2, z2) = Vector3.fromEntityCenter(to)
-		val color = if (from is EntityPlayer) ColorOverrideHelper.getColor(from, 0x0079C4) else 0x0079C4
+		
+		var color = EntityMjolnir.color
+		if (from is EntityPlayer) {
+			if (from.heldItem?.item is ItemMjolnir && from.heldItem.displayName.trim().lowercase().let { it == "gloryhammer" || it == "glory hammer" })
+				color = EntityMjolnir.colorP
+			
+			color = ColorOverrideHelper.getColor(from, color)
+		}
 		val innerColor = Color(color).brighter().brighter().rgb
 		
 		VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.LIGHTNING, from.dimension, x, y, z, x2, y2, z2, 1.0, color.D, innerColor.D)

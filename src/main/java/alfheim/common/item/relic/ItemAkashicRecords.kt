@@ -141,9 +141,9 @@ class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 			
 			val contains = getInt(stack, TAG_RECORD_COUNT, 0)
 			if (contains == MAX_RECORDS) return false
-			if (contains > MAX_RECORDS) throw IllegalArgumentException("Records count in Akashik Records cannot be greater than $MAX_RECORDS. Holder: ${player.commandSenderName}")
+			require(contains <= MAX_RECORDS) { "Records count in Akashic Records cannot be greater than $MAX_RECORDS. Holder: ${player.commandSenderName}" }
 			
-			var record = records.values.random()!! // stupid IntelliJ -_-
+			var record = records.values.random()!!
 			var tries = 32
 			
 			while (tries-- > 0) {
