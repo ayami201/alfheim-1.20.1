@@ -10,7 +10,7 @@ import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.*
 import vazkii.botania.api.subtile.SubTileEntity
 
-@Suppress("NAME_SHADOWING", "ClassName", "unused", "LocalVariableName", "PrivatePropertyName", "MayBeConstant")
+@Suppress("NAME_SHADOWING", "ClassName", "unused", "LocalVariableName", "PrivatePropertyName")
 class AlfheimClassTransformer: IClassTransformer {
 	
 	val additionalInterfaces = mapOf(
@@ -48,7 +48,7 @@ class AlfheimClassTransformer: IClassTransformer {
 			cn.interfaces.addAll(iface)
 			
 			cn.accept(cw)
-			return cw.toByteArray()
+			this.basicClass = cw.toByteArray()
 		}
 		
 		return when (transformedName) {
@@ -85,7 +85,7 @@ class AlfheimClassTransformer: IClassTransformer {
 			// fixes for stupid coders:
 			"cofh.thermalfoundation.fluid.TFFluids"                            -> core { `TFFluids$ClassVisitor`(it) }
 			"com.emoniph.witchery.client.ClientEvents\$GUIOverlay"             -> core { `ClientEvents$GUIOverlay$ClassVisitor`(it) }
-			else                                                               -> basicClass
+			else                                                               -> this.basicClass
 		}
 	}
 	

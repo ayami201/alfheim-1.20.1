@@ -14,6 +14,7 @@ import alfheim.api.lib.LibResourceLocations
 import alfheim.api.spell.SpellBase
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.client.render.entity.RenderEntityFloatingIsland
+import alfheim.common.achievement.*
 import alfheim.common.block.*
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.block.colored.BlockAuroraDirt
@@ -43,7 +44,7 @@ import alfheim.common.item.equipment.bauble.ItemPendant
 import alfheim.common.item.equipment.bauble.ItemPendant.Companion.EnumPrimalWorldType.MUSPELHEIM
 import alfheim.common.item.equipment.bauble.faith.ItemRagnarokEmblem
 import alfheim.common.item.material.ElvenResourcesMetas
-import alfheim.common.item.relic.ItemMjolnir
+import alfheim.common.item.relic.*
 import alfheim.common.item.rod.ItemRodClicker
 import alfheim.common.potion.PotionSoulburn
 import alfheim.common.spell.earth.SpellGoldRush
@@ -1140,9 +1141,11 @@ object AlfheimHookHandler {
 	
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
-	fun onItemUse(eye: ItemFlugelEye, stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float) =
-		// Stupid Et Futurum
-		if (player.isSneaking) EntityFlugel.spawn(player, stack, world, x, y, z, false, false) else false
+	fun onItemUse(eye: ItemFlugelEye, stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+		if (player.hasAchievement(AlfheimAchievements.flugelSoul)) return false
+		if (player.isSneaking) return EntityFlugel.spawn(player, stack, world, x, y, z, false, false)
+		return false
+	}
 	
 	@JvmStatic
 	@Hook(returnCondition = ALWAYS, createMethod = true)
@@ -1173,34 +1176,6 @@ object AlfheimHookHandler {
 			player.dropPlayerItemWithRandomChoice(bottle, false)
 		
 		return true
-	}
-	
-	@JvmStatic
-	@Hook(returnCondition = ALWAYS)
-	fun addBindInfo(static: ItemRelic?, list: List<String>, stack: ItemStack, player: EntityPlayer?) {
-		if (GuiScreen.isShiftKeyDown()) {
-			val bind = ItemRelic.getSoulbindUsernameS(stack)
-			
-			if (bind.isEmpty())
-				ItemRelic.addStringToTooltip(StatCollector.translateToLocal("botaniamisc.relicUnbound"), list)
-			else {
-				ItemRelic.addStringToTooltip(String.format(StatCollector.translateToLocal("botaniamisc.relicSoulbound"), bind), list)
-				
-				if (!ItemRelic.isRightPlayer(player, stack))
-					ItemRelic.addStringToTooltip(String.format(StatCollector.translateToLocal("botaniamisc.notYourSagittarius"), bind), list)
-			}
-			
-			if (stack.item === ModItems.aesirRing)
-				ItemRelic.addStringToTooltip(StatCollector.translateToLocal("botaniamisc.dropIkea"), list)
-			
-			val name = stack.unlocalizedName + ".poem"
-			if (StatCollector.canTranslate("${name}0")) {
-				ItemRelic.addStringToTooltip("", list)
-				
-				for (i in 0..3)
-					ItemRelic.addStringToTooltip(EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal(name + i), list)
-			}
-		} else ItemRelic.addStringToTooltip(StatCollector.translateToLocal("botaniamisc.shiftinfo"), list)
 	}
 	
 	@JvmStatic

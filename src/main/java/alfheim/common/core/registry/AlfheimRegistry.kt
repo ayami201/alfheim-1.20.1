@@ -113,6 +113,7 @@ object AlfheimRegistry {
 		registerEntity(EntityFireSpirit::class.java, "FireSpirit", nextEntityID)
 		registerEntity(EntityFenrir::class.java, "Fenrir", nextEntityID)
 		registerEntity(EntityFlugel::class.java, "Flugel", nextEntityID)
+		registerEntity(EntityFrozenViking::class.java, "FrozenViking", nextEntityID, 0x26DBFF, 0x2D86B3)
 		registerEntity(EntityGrieferCreeper::class.java, "GrieferCreeper", nextEntityID, 0xFFFFFF, 0)
 		registerEntity(EntityJellyfish::class.java, "Jellyfish", nextEntityID, 0xFFFFFF, -1)
 		registerEntity(EntityLolicorn::class.java, "Lolicorn", nextEntityID)

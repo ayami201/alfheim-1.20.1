@@ -5,6 +5,7 @@ import alfheim.api.*
 import alfheim.api.item.*
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.AlfheimBlocks
+import alfheim.common.core.asm.hook.extender.RelicNBTSyncHandler
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.core.helper.*
@@ -97,6 +98,7 @@ open class CommonProxy {
 		FloatingIslandGenerator.eventFML().eventForge()
 		ISpeedUpItem.eventForge()
 		IStepupItem.eventForge()
+		RelicNBTSyncHandler.eventForge()
 		
 		FMLCommonHandler.instance().bus().register(object {
 			@SubscribeEvent(priority = EventPriority.HIGHEST)

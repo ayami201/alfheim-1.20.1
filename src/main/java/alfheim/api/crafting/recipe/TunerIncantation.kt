@@ -17,8 +17,9 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 		type = when {
 			Block::class.java.isAssignableFrom(clazz)      -> EnumTargetType.BLOCK
 			Entity::class.java.isAssignableFrom(clazz)     -> EnumTargetType.ENTITY
+			ItemStack::class.java.isAssignableFrom(clazz)  -> EnumTargetType.ITEM
 			TileEntity::class.java.isAssignableFrom(clazz) -> EnumTargetType.TILE
-			else                                           -> throw IllegalArgumentException("Mana Tuner target class must be either a Block or an Entity")
+			else                                           -> throw IllegalArgumentException("Mana Tuner target class must be one of those types: ${EnumTargetType.entries}")
 		}
 		
 		require(inputs.size <= 16) { "Mana Tuner recipe has ${inputs.size} additional inputs, max is 16" }
@@ -69,6 +70,6 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 	open fun getInputs(target: @UnsafeVariance T): List<Any> = ArrayList(inputs)
 	
 	enum class EnumTargetType {
-		BLOCK, TILE, ENTITY
+		BLOCK, ENTITY, ITEM, TILE
 	}
 }

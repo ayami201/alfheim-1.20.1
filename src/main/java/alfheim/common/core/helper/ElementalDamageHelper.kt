@@ -180,13 +180,13 @@ object ElementalDamageHandler {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	fun onAttacked(e: LivingAttackEvent) {
 		val newAmount = calculateElements(e.source, e.entityLiving, e.ammount)
-		if (newAmount <= 0f) e.isCanceled = true
+		if (e.ammount > 0 && newAmount <= 0) e.isCanceled = true
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	fun onHurt(e: LivingHurtEvent) {
 		e.ammount = calculateElements(e.source, e.entityLiving, e.ammount)
-		if (e.ammount <= 0f) e.isCanceled = true
+		if (e.ammount > 0 && e.ammount <= 0f) e.isCanceled = true
 	}
 	
 	@SubscribeEvent
@@ -198,8 +198,9 @@ object ElementalDamageHandler {
 		if (!ItemNBTHelper.getBoolean(monocle, TAG_ELEMENTAL_SEER, false)) return
 		
 		val applied = e.entity.appliedElements
-		val elements = e.entity.elements.plus(applied).filter { it != COMMON }
-		if (elements.isEmpty()) return
+		val elements = e.entity.elements
+		val all = elements.plus(applied).filter { it != COMMON }
+		if (all.isEmpty()) return
 		
 		val size = max(e.entity.width.D * 8, 8.0)
 		
@@ -215,7 +216,7 @@ object ElementalDamageHandler {
 		glEnable(GL_BLEND)
 		OpenGlHelper.glBlendFunc(770, 771, 1, 0)
 		
-		glTranslatef(elements.size * size.F / -2, 0f, 0f)
+		glTranslatef(all.size * size.F / -2, 0f, 0f)
 		
 		mc.renderEngine.bindTexture(LibResourceLocations.elements)
 		
@@ -224,7 +225,7 @@ object ElementalDamageHandler {
 		
 		val tes = Tessellator.instance
 		tes.startDrawingQuads()
-		for ((id, element) in elements.withIndex()) {
+		for ((id, element) in all.withIndex()) {
 			val x = id * size
 			val u = (element.ordinal - 1) * uOff
 			
@@ -233,7 +234,7 @@ object ElementalDamageHandler {
 			tes.addVertexWithUV(x + size, size, 0.0, u + uOff, 1.0)
 			tes.addVertexWithUV(x + size,  0.0, 0.0, u + uOff, 0.0)
 			
-			if (element in applied) debufSignPoses.add(x)
+			if (element !in elements) debufSignPoses.add(x)
 		}
 		tes.draw()
 		

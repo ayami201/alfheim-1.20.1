@@ -1,5 +1,8 @@
 Innovations:
  New Niflheim worldgen features
+ Frozen Viking mobs for Niflheim
  Lens to unlink bursts from spreader
 
 Fixes:
+ Aesir ring was dropping 3 rings
+ Applied entity elements clash with existing elements

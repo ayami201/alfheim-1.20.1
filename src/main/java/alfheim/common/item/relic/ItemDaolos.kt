@@ -6,6 +6,7 @@ import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.*
 import alfheim.api.event.PlayerInteractAdequateEvent
 import alfheim.client.core.helper.IconHelper
+import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.core.handler.*
 import alfheim.common.core.helper.*
 import alfheim.common.core.util.AlfheimTab
@@ -15,24 +16,21 @@ import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.BlockLiquid
 import net.minecraft.block.material.Material
-import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.*
 import net.minecraft.entity.boss.EntityDragonPart
-import net.minecraft.entity.monster.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.item.*
-import net.minecraft.potion.*
+import net.minecraft.potion.Potion
 import net.minecraft.stats.*
-import net.minecraft.util.*
+import net.minecraft.util.DamageSource
 import net.minecraft.world.World
 import net.minecraftforge.event.entity.player.PlayerEvent
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.item.IRelic
 import vazkii.botania.api.mana.ManaItemHandler
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.item.relic.ItemRelic
 import kotlin.math.*
 
@@ -163,78 +161,21 @@ class ItemDaolos: ItemAxe(AlfheimAPI.RUNEAXE), IRelic {
 	
 	// ItemRelic
 	
-	var achievement: Achievement? = null
-	
 	override fun onUpdate(stack: ItemStack?, world: World?, entity: Entity?, slot: Int, inHand: Boolean) {
-		if (entity is EntityPlayer) updateRelic(stack, entity)
+		if (entity is EntityPlayer) ItemRelic.updateRelic(stack, entity)
 	}
 	
-	override fun addInformation(stack: ItemStack, player: EntityPlayer, list: MutableList<Any?>, adv: Boolean) {
-		if (GuiScreen.isShiftKeyDown()) {
-			val bind = getSoulbindUsernameS(stack)
-			if (bind.isEmpty()) addStringToTooltip(list, "botaniamisc.relicUnbound") else {
-				addStringToTooltip(list, "botaniamisc.relicSoulbound", bind)
-				if (!isRightPlayer(player, stack))
-					addStringToTooltip(list, "botaniamisc.notYourSagittarius", bind)
-			}
-			
-			val name = stack.unlocalizedName + ".poem"
-			if (StatCollector.canTranslate("${name}0")) {
-				addStringToTooltip(list, "")
-				
-				for (i in 0..3)
-					addStringToTooltip(list, EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal(name + i))
-			}
-		} else addStringToTooltip(list, "botaniamisc.shiftinfo")
-	}
+	override fun getEntityLifespan(itemStack: ItemStack?, world: World?) = Int.MAX_VALUE
 	
-	fun getSoulbindUsernameS(stack: ItemStack?): String {
-		return ItemNBTHelper.getString(stack, TAG_SOULBIND, "")
-	}
+	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, infoList: List<Any?>, advTooltip: Boolean) = ItemRelic.addBindInfo(infoList, stack, player)
 	
-	fun updateRelic(stack: ItemStack?, player: EntityPlayer) {
-		if (stack == null || stack.item !is IRelic) return
-		
-		if (getSoulbindUsernameS(stack).isEmpty()) {
-			player.addStat((stack.item as IRelic).bindAchievement, 1)
-			bindToPlayer(player, stack)
-		}
-		
-		if (!isRightPlayer(player, stack) && player.ticksExisted % 10 == 0)
-			player.attackEntityFrom(ItemRelic.damageSource(), 2f)
-	}
+	override fun bindToUsername(playerName: String?, stack: ItemStack?) = ItemRelic.bindToUsernameS(playerName, stack)
 	
-	fun bindToPlayer(player: EntityPlayer, stack: ItemStack?) {
-		bindToUsernameS(player.commandSenderName, stack)
-	}
+	override fun getSoulbindUsername(stack: ItemStack?) = ItemRelic.getSoulbindUsernameS(stack)
 	
-	fun bindToUsernameS(username: String?, stack: ItemStack?) {
-		ItemNBTHelper.setString(stack, TAG_SOULBIND, username)
-	}
+	override fun getBindAchievement() = AlfheimAchievements.daolos
 	
-	fun isRightPlayer(player: EntityPlayer, stack: ItemStack?): Boolean {
-		return isRightPlayer(player.commandSenderName, stack)
-	}
-	
-	fun isRightPlayer(player: String, stack: ItemStack?): Boolean {
-		return getSoulbindUsernameS(stack) == player
-	}
-	
-	override fun bindToUsername(playerName: String?, stack: ItemStack?) {
-		bindToUsernameS(playerName, stack)
-	}
-	
-	override fun getSoulbindUsername(stack: ItemStack?): String {
-		return getSoulbindUsernameS(stack)
-	}
-	
-	override fun getBindAchievement(): Achievement? {
-		return achievement
-	}
-	
-	override fun setBindAchievement(achievement: Achievement?) {
-		this.achievement = achievement
-	}
+	override fun setBindAchievement(achievement: Achievement?) = Unit
 	
 	override fun getRarity(stack: ItemStack?): EnumRarity? {
 		return BotaniaAPI.rarityRelic
@@ -257,8 +198,6 @@ class ItemDaolos: ItemAxe(AlfheimAPI.RUNEAXE), IRelic {
 	}
 	
 	companion object {
-		
-		const val TAG_SOULBIND = "soulbind"
 		
 		init {
 			eventForge()

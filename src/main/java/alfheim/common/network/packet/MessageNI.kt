@@ -15,7 +15,7 @@ import kotlin.math.max
 
 class MessageNI(ty: Mni, vararg var intArray: Int, var type: Int = ty.ordinal) : ASJPacket(), AlfheimPacket<MessageNI> {
 	override fun fromCustomBytes(buf: ByteBuf) {
-		intArray = IntArray(buf.readInt()) { buf.readInt() }
+		intArray = IntArray(readI(buf)) { readI(buf) }
 	}
 
 	override fun toCustomBytes(buf: ByteBuf) {

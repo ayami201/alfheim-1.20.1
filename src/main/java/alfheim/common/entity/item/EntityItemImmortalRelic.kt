@@ -30,9 +30,10 @@ class EntityItemImmortalRelic: EntityItemImmortal {
 		}
 	}
 	
-	override fun canBePickedByPlayer(player: EntityPlayer): Boolean {
-		return player.capabilities.isCreativeMode || getOwner().isNullOrEmpty() || getOwner() == player.commandSenderName
-	}
+	override fun canBePickedByPlayer(player: EntityPlayer) =
+		player.capabilities.isCreativeMode || getOwner().let { it.isNullOrEmpty() || it == player.commandSenderName } && getAchievement().let { it == null || player.hasAchievement(it) }
 	
 	fun getOwner() = (stack?.item as? IRelic)?.getSoulbindUsername(stack)
+	
+	fun getAchievement() = (stack?.item as? IRelic)?.bindAchievement
 }

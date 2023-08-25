@@ -56,6 +56,7 @@ object LibResourceLocations {
 	val fenrirClaw = ResourceLocationIL(ModInfo.MODID, "textures/items/FenrirClaws0.png")
 	val fenrirClawOverlay = ResourceLocationIL(ModInfo.MODID, "textures/items/FenrirClaws1.png")
 	var flowerBagExtended = ResourceLocationIL(ModInfo.MODID, "textures/gui/flowerBagExtended.png")
+	val frozenViking = Array(5) { ResourceLocationIL(ModInfo.MODID, "textures/model/entity/frozenViking/$it.png") }
 	val futhark = ResourceLocationIL(ModInfo.MODID, "textures/misc/FutharkMono.png")
 	val gaiaPylon = ResourceLocationIL(ModInfo.MODID, "textures/model/block/GaiaPylon.png")
 	val gaiaPylonOld = ResourceLocationIL(ModInfo.MODID, "textures/model/block/GaiaPylonOld.png")

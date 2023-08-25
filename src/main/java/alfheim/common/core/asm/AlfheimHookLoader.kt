@@ -39,6 +39,7 @@ class AlfheimHookLoader: HookLoader() {
 		registerHookContainer("alfheim.common.core.asm.hook.extender.ManaSpreaderExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.PureDaisyExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.QuartzExtender")
+		registerHookContainer("alfheim.common.core.asm.hook.extender.RelicHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.SparkExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.BotaniaGlowingRenderFixes")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.FlightTiaraFix")

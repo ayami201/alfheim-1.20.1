@@ -553,7 +553,7 @@ object AlfheimRecipes {
 	lateinit var recipeCircuitTree: RecipeTreeCrafting
 	lateinit var recipeBarrierTree: RecipeTreeCrafting
 	
-	lateinit var tuningElementalSeer: TunerIncantation<EntityItem>
+	lateinit var tuningElementalSeer: TunerIncantation<ItemStack>
 	lateinit var tuningAnomalyStabilization: TunerIncantation<TileAnomaly>
 	lateinit var tuningAnomalyPackaging: TunerIncantation<TileAnomaly>
 	lateinit var tuningMagmaSize: TunerIncantation<EntityLivingBase>
@@ -2629,20 +2629,16 @@ object AlfheimRecipes {
 		IncantationEquipmentElementalTuning(ElementalDamage.DARKNESS.name,  "pimeja o moku ali suno tawa ijo ni",                  ItemStack(wiltedLotus, 1, 1))
 		IncantationEquipmentElementalTuning(ElementalDamage.PSYCHIC.name,   "o pakala e sijelo ala. ijo ni li wile ala e sijelo",  ItemStack(ghast_tear))
 		
-		tuningElementalSeer = AlfheimAPI.registerIncantation<EntityItem>(
+		tuningElementalSeer = AlfheimAPI.registerIncantation<ItemStack>(
 			"o ken e ni: mi o kama sona e ijo ale",
 		    *AlfheimAPI.tunerIncantations.values().filterIsInstance<IncantationEquipmentElementalTuning>().map {
 				it.elementResource
 		    }.take(16).toTypedArray()
 		) {
-			if (!it.isEntityAlive) return@registerIncantation false
+			if (it.item !is IBurstViewerBauble) return@registerIncantation false
+			if (ItemNBTHelper.getBoolean(it, ElementalDamageHandler.TAG_ELEMENTAL_SEER, false)) return@registerIncantation false
 			
-			val stack = it.entityItem ?: return@registerIncantation false
-			if (stack.stackSize <= 0) return@registerIncantation false
-			if (stack.item !is IBurstViewerBauble) return@registerIncantation false
-			if (ItemNBTHelper.getBoolean(stack, ElementalDamageHandler.TAG_ELEMENTAL_SEER, false)) return@registerIncantation false
-			
-			ItemNBTHelper.setBoolean(stack, ElementalDamageHandler.TAG_ELEMENTAL_SEER, true)
+			ItemNBTHelper.setBoolean(it, ElementalDamageHandler.TAG_ELEMENTAL_SEER, true)
 			
 			true
 		}

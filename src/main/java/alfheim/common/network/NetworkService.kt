@@ -12,11 +12,15 @@ import kotlin.reflect.KClass
 
 object NetworkService {
 	
-	val network: SimpleNetworkWrapper = SimpleNetworkWrapper(ModInfo.MODID)
+	private val network: SimpleNetworkWrapper = SimpleNetworkWrapper(ModInfo.MODID)
 	
-	var nextPacketID = 0
+	private var nextPacketID = 0
 	
-	fun register() {
+	init {
+		register()
+	}
+	
+	private fun register() {
 		registerPacket(Message0dC::class, Side.CLIENT)
 		registerPacket(Message1d::class, Side.CLIENT)
 		registerPacket(Message1l::class, Side.CLIENT)
@@ -32,6 +36,7 @@ object NetworkService {
 		registerPacket(MessageParty::class, Side.CLIENT)
 		registerPacket(MessageRaceInfo::class, Side.CLIENT)
 		registerPacket(MessageRedstoneSignalsSync::class, Side.CLIENT)
+		registerPacket(MessageRelicNBTSync::class, Side.CLIENT)
 		registerPacket(MessageSkinInfo::class, Side.CLIENT)
 		registerPacket(MessageSpellParams::class, Side.CLIENT)
 		registerPacket(MessageTileItem::class, Side.CLIENT)

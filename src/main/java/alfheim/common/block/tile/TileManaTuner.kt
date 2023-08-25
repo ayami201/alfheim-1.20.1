@@ -3,12 +3,14 @@ package alfheim.common.block.tile
 import alexsocol.asjlib.*
 import alfheim.api.AlfheimAPI
 import alfheim.api.crafting.recipe.TunerIncantation
+import alfheim.common.entity.item.EntityItemImmortal
 import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.entity.RenderItem
 import net.minecraft.entity.Entity
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.*
@@ -35,15 +37,21 @@ class TileManaTuner: TileSimpleInventory(), IManaReceiver {
 			resetTimer = 0
 			
 			@Suppress("UNCHECKED_CAST")
-			val target: Any = when (it.type) {
+			var target: Any = when (it.type) {
 				TunerIncantation.EnumTargetType.BLOCK -> worldObj.getBlock(xCoord, yCoord + 1, zCoord)
 				TunerIncantation.EnumTargetType.ENTITY -> getEntitiesWithinAABB(worldObj, it.clazz as Class<out Entity>, boundingBox().offset(0, 1, 0)).firstOrNull(Entity::isEntityAlive) ?: continue
+				TunerIncantation.EnumTargetType.ITEM -> getEntitiesWithinAABB(worldObj, Entity::class.java, boundingBox().offset(0, 1, 0)).firstOrNull {
+					it.isEntityAlive && (it is EntityItem && it.entityItem?.let { i -> i.stackSize > 0 && i.item != null } == true || it is EntityItemImmortal && it.stack?.let { i -> i.stackSize > 0 && i.item != null } == true)
+				} ?: continue
 				TunerIncantation.EnumTargetType.TILE -> {
 					val tile = worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) ?: continue
 					if (!tile::class.java.isAssignableFrom(it.clazz)) continue
 					tile
 				}
 			}
+			
+			if (target is EntityItem) target = target.entityItem else
+			if (target is EntityItemImmortal) target = target.stack!!
 			
 			if (!it.matches(this, target)) continue
 			if (!it.application(target)) continue

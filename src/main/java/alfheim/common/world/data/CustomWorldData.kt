@@ -20,6 +20,7 @@ class CustomWorldData(datakey: String): WorldSavedData(datakey) {
 	val structures: Multimap<String, Pair<Int, Int>> = HashMultimap.create()
 	
 	val data = HashMap<String, String>()
+	var nbtData = NBTTagCompound()
 	
 	override fun writeToNBT(nbt: NBTTagCompound) {
 		spawnpoint?.let {
@@ -42,6 +43,8 @@ class CustomWorldData(datakey: String): WorldSavedData(datakey) {
 			adata.setString(k, v)
 		}
 		nbt.setTag(TAG_DATA, adata)
+		
+		nbt.setTag(TAG_NBT_DATA, nbtData)
 	}
 	
 	override fun readFromNBT(nbt: NBTTagCompound) {
@@ -68,11 +71,14 @@ class CustomWorldData(datakey: String): WorldSavedData(datakey) {
 		val adata = nbt.getCompoundTag(TAG_DATA)
 		for (k in adata.tagMap.keys)
 			data[k.toString()] = adata.getString(k.toString())
+		
+		nbtData = nbt.getCompoundTag(TAG_NBT_DATA)
 	}
 	
 	companion object {
 		
 		const val TAG_DATA = "data"
+		const val TAG_NBT_DATA = "nbtData"
 		const val TAG_SPAWNPOINT = "spawnpoint"
 		const val TAG_STRUCTURES = "structures"
 		

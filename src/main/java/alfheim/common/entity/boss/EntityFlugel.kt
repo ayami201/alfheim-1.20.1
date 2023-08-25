@@ -246,7 +246,6 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 			var droppedRecord = false
 			
 			if (ConfigHandler.relicsEnabled && name == summoner) {
-				var bind = true
 				val relic = when {
 					ultra                                                                                                        -> {
 						val map = mutableMapOf(AlfheimAchievements.excaliber to AlfheimItems.excaliber,
@@ -262,7 +261,6 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 						}
 						
 						if (map.isEmpty()) {
-							bind = false
 							ElvenResourcesMetas.IffesalDust.stack(ASJUtilities.randInBounds(4, 6, rand))
 						} else {
 							val ach = map.keys.random()
@@ -277,13 +275,9 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 					}
 					
 					else                                                                                                         -> {
-						bind = false
 						ElvenResourcesMetas.IffesalDust.stack(ASJUtilities.randInBounds(2, 3, rand))
 					}
 				}
-				
-				if (bind)
-					ItemRelic.bindToUsernameS(name, relic)
 				
 				entityDropItem(relic, 1f)
 				lot = false
@@ -328,7 +322,6 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 		if (ConfigHandler.relicsEnabled && !hard) {
 			val relic = ItemStack(AlfheimItems.flugelSoul)
 			if (worldObj.getPlayerEntityByName(summoner) != null) worldObj.getPlayerEntityByName(summoner)?.addStat(AlfheimAchievements.flugelSoul, 1)
-			ItemRelic.bindToUsernameS(summoner, relic)
 			entityDropItem(relic, 1f)
 		}
 	}

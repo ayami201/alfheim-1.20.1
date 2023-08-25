@@ -403,7 +403,6 @@ class EntityFenrir(world: World): EntityCreature(world), IBotaniaBossWithName {
 			val stack = ItemStack(data.second)
 			
 			player.triggerAchievement(data.first)
-			ItemRelic.bindToPlayer(player, stack)
 			entityDropItem(stack, 0f)
 			return
 		}

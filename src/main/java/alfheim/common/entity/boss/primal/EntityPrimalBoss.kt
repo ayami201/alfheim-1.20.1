@@ -500,7 +500,6 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 				val stack = ItemStack(data.second)
 				
 				player.triggerAchievement(data.first)
-				ItemRelic.bindToPlayer(player, stack)
 				entityDropItem(stack, 0f)
 				return@run
 			}

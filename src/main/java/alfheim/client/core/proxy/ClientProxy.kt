@@ -127,6 +127,7 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityElf::class.java, RenderEntityElf)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFenrir::class.java, RenderEntityFenrir)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlugel::class.java, RenderEntityFlugel)
+		RenderingRegistry.registerEntityRenderingHandler(EntityFrozenViking::class.java, RenderEntityFrozenViking)
 		RenderingRegistry.registerEntityRenderingHandler(EntityGleipnir::class.java, RenderEntityGleipnir)
 		RenderingRegistry.registerEntityRenderingHandler(EntityGrieferCreeper::class.java, RenderEntityGrieferCreeper)
 		RenderingRegistry.registerEntityRenderingHandler(EntityPrimalMark::class.java, RenderEntityPrimalMark)

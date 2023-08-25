@@ -40,31 +40,28 @@ class ItemSpearSubspace: ItemRelic("SpearSubspace"), IManaUsingItem, ILensEffect
 	}
 	
 	override fun onUpdate(stack: ItemStack, world: World, entity: Entity?, slot: Int, selected: Boolean) {
-		if (!world.isRemote && entity is EntityPlayer) {
-			updateRelic(stack, entity)
-			if (!isRightPlayer(entity, stack)) return
-			
-			if (isCooledDown(stack)) {
-				if (entity.swingProgressInt == 1) {
-					if (entity.heldItem?.item === this && ManaItemHandler.requestManaExact(stack, entity, 500, true)) {
-						val sub = EntitySubspace(world, entity)
-						sub.liveTicks = 24
-						sub.delay = 6
-						sub.posX = entity.posX
-						sub.posY = entity.posY - entity.yOffset + 2.5 + (world.rand.nextFloat() * 0.2f).D
-						sub.posZ = entity.posZ
-						sub.rotationYaw = entity.rotationYaw
-						sub.rotation = MathHelper.wrapAngleTo180_float(-entity.rotationYaw + 180)
-						sub.type = 1
-						sub.size = 0.40f + world.rand.nextFloat() * 0.15f
-						if (!world.isRemote && ManaItemHandler.requestManaExactForTool(stack, entity, 400, true))
-							sub.spawn()
-					}
-					
-					setCooldown(stack, 25)
-				}
-			} else setCooldown(stack, getCooldown(stack) - 1)
-		}
+		if (world.isRemote || entity !is EntityPlayer) return
+		
+		if (!isCooledDown(stack))
+			return setCooldown(stack, getCooldown(stack) - 1)
+		
+		if (entity.swingProgressInt != 1 || entity.heldItem?.item !== this || !ManaItemHandler.requestManaExact(stack, entity, 500, true)) return
+		
+		val sub = EntitySubspace(world, entity)
+		sub.liveTicks = 24
+		sub.delay = 6
+		sub.posX = entity.posX
+		sub.posY = entity.posY - entity.yOffset + 2.5 + (world.rand.nextFloat() * 0.2f).D
+		sub.posZ = entity.posZ
+		sub.rotationYaw = entity.rotationYaw
+		sub.rotation = MathHelper.wrapAngleTo180_float(-entity.rotationYaw + 180)
+		sub.type = 1
+		sub.size = 0.40f + world.rand.nextFloat() * 0.15f
+		
+		if (!world.isRemote)
+			sub.spawn()
+		
+		setCooldown(stack, 25)
 	}
 	
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
@@ -77,7 +74,7 @@ class ItemSpearSubspace: ItemRelic("SpearSubspace"), IManaUsingItem, ILensEffect
 	override fun getItemUseAction(stack: ItemStack?) = EnumAction.bow
 	
 	override fun onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityPlayer, itemInUse: Int) {
-		if (!isRightPlayer(player, stack) || !isCooledDown(stack)) return
+		if (!isCooledDown(stack)) return
 		if (!ManaItemHandler.requestManaExactForTool(stack, player, 1000, true)) return
 		
 		if (!player.capabilities.isFlying) {
