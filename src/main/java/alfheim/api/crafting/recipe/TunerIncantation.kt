@@ -39,7 +39,7 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 				val input = inputsMissing[j]
 				
 				if (input is String) {
-					val validStacks: List<ItemStack> = OreDictionary.getOres(input as String?)
+					val validStacks: List<ItemStack> = OreDictionary.getOres(input)
 					var found = false
 					for (ostack in validStacks) {
 						val cstack = ostack.copy()

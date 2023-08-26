@@ -11,10 +11,6 @@ import net.minecraft.world.World
 
 class EntityFrozenViking(world: World): EntityMob(world), INiflheimEntity {
 	
-	var textureId
-		get() = dataWatcher.getWatchableObjectInt(2)
-		set(value) = dataWatcher.updateObject(2, value)
-	
 	init {
 		tasks.addTask(0, EntityAISwimming(this))
 		tasks.addTask(1, EntityAIAttackOnCollide(this, EntityPlayer::class.java, 1.0, false))
@@ -33,16 +29,6 @@ class EntityFrozenViking(world: World): EntityMob(world), INiflheimEntity {
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).baseValue = 24.0
 		getEntityAttribute(SharedMonsterAttributes.followRange).baseValue = 32.0
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).baseValue = 0.3
-	}
-	
-	override fun entityInit() {
-		super.entityInit()
-		dataWatcher.addObject(2, 0)
-	}
-	
-	override fun interact(player: EntityPlayer): Boolean {
-		if (!worldObj.isRemote) textureId = (textureId + 1) % 5
-		return true
 	}
 	
 	override fun isAIEnabled() = true

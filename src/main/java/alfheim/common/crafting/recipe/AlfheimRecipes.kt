@@ -135,6 +135,7 @@ import alfheim.common.block.AlfheimBlocks.shimmerQuartz
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzSlab
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
 import alfheim.common.block.AlfheimBlocks.spire
+import alfheim.common.block.AlfheimBlocks.subspacian
 import alfheim.common.block.AlfheimBlocks.tradePortal
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFenceGate
@@ -187,6 +188,7 @@ import alfheim.common.core.handler.HilarityHandler.AttributionNameChecker.getCur
 import alfheim.common.core.helper.*
 import alfheim.common.integration.thaumcraft.ThaumcraftSuffusionRecipes
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
+import alfheim.common.item.AlfheimItems.akashicRecords
 import alfheim.common.item.AlfheimItems.armilla
 import alfheim.common.item.AlfheimItems.astrolabe
 import alfheim.common.item.AlfheimItems.attributionBauble
@@ -201,6 +203,7 @@ import alfheim.common.item.AlfheimItems.coatOfArms
 import alfheim.common.item.AlfheimItems.colorOverride
 import alfheim.common.item.AlfheimItems.corporeaRat
 import alfheim.common.item.AlfheimItems.crescentMoonAmulet
+import alfheim.common.item.AlfheimItems.daolos
 import alfheim.common.item.AlfheimItems.deathSeed
 import alfheim.common.item.AlfheimItems.dodgeRing
 import alfheim.common.item.AlfheimItems.elementalBoots
@@ -217,6 +220,7 @@ import alfheim.common.item.AlfheimItems.elvoriumHelmet
 import alfheim.common.item.AlfheimItems.elvoriumHelmetRevealing
 import alfheim.common.item.AlfheimItems.elvoriumLeggings
 import alfheim.common.item.AlfheimItems.enlighter
+import alfheim.common.item.AlfheimItems.excaliber
 import alfheim.common.item.AlfheimItems.fenrirBoots
 import alfheim.common.item.AlfheimItems.fenrirChestplate
 import alfheim.common.item.AlfheimItems.fenrirCloak
@@ -225,7 +229,11 @@ import alfheim.common.item.AlfheimItems.fenrirHelmet
 import alfheim.common.item.AlfheimItems.fenrirHelmetRevealing
 import alfheim.common.item.AlfheimItems.fenrirLeggings
 import alfheim.common.item.AlfheimItems.fireGrenade
+import alfheim.common.item.AlfheimItems.flugelSoul
+import alfheim.common.item.AlfheimItems.gjallarhorn
+import alfheim.common.item.AlfheimItems.gleipnir
 import alfheim.common.item.AlfheimItems.goddesCharm
+import alfheim.common.item.AlfheimItems.gungnir
 import alfheim.common.item.AlfheimItems.hyperBucket
 import alfheim.common.item.AlfheimItems.invisibilityCloak
 import alfheim.common.item.AlfheimItems.invisibleFlameLens
@@ -239,6 +247,9 @@ import alfheim.common.item.AlfheimItems.manaRingGod
 import alfheim.common.item.AlfheimItems.manaRingPink
 import alfheim.common.item.AlfheimItems.manaStone
 import alfheim.common.item.AlfheimItems.manaStoneGreater
+import alfheim.common.item.AlfheimItems.mask
+import alfheim.common.item.AlfheimItems.mjolnir
+import alfheim.common.item.AlfheimItems.moonlightBow
 import alfheim.common.item.AlfheimItems.multibauble
 import alfheim.common.item.AlfheimItems.paperBreak
 import alfheim.common.item.AlfheimItems.peacePipe
@@ -246,6 +257,9 @@ import alfheim.common.item.AlfheimItems.pendantSuperIce
 import alfheim.common.item.AlfheimItems.pixieAttractor
 import alfheim.common.item.AlfheimItems.priestCloak
 import alfheim.common.item.AlfheimItems.priestEmblem
+import alfheim.common.item.AlfheimItems.priestRingHeimdall
+import alfheim.common.item.AlfheimItems.priestRingNjord
+import alfheim.common.item.AlfheimItems.priestRingSif
 import alfheim.common.item.AlfheimItems.rationBelt
 import alfheim.common.item.AlfheimItems.realitySword
 import alfheim.common.item.AlfheimItems.ringFeedFlower
@@ -271,6 +285,7 @@ import alfheim.common.item.AlfheimItems.soulSword
 import alfheim.common.item.AlfheimItems.spatiotemporalRing
 import alfheim.common.item.AlfheimItems.splashPotion
 import alfheim.common.item.AlfheimItems.starPlacer2
+import alfheim.common.item.AlfheimItems.subspaceSpear
 import alfheim.common.item.AlfheimItems.terraHoe
 import alfheim.common.item.AlfheimItems.thinkingHand
 import alfheim.common.item.AlfheimItems.thunderChakram
@@ -560,6 +575,27 @@ object AlfheimRecipes {
 	lateinit var tuningSlimeSize: TunerIncantation<EntityLivingBase>
 	var tuningTaintSize: TunerIncantation<EntityLivingBase>? = null
 	var tuningGelatSize: TunerIncantation<EntityLivingBase>? = null
+	
+	lateinit var tuningAkashicRecords: TunerIncantationIO
+	lateinit var tuningDaolos: TunerIncantationIO
+	lateinit var tuningExcaliber: TunerIncantationIO
+	lateinit var tuningFlugelEye: TunerIncantationIO
+	lateinit var tuningFlugelSoul: TunerIncantationIO
+	lateinit var tuningGjallarhorn: TunerIncantationIO
+	lateinit var tuningGleipnir: TunerIncantationIO
+	lateinit var tuningGungnir: TunerIncantationIO
+	lateinit var tuningHeimdallRing: TunerIncantationIO
+	lateinit var tuningInfiniteFruit: TunerIncantationIO
+	lateinit var tuningKingKey: TunerIncantationIO
+	lateinit var tuningLokiRing: TunerIncantationIO
+	lateinit var tuningMjolnir: TunerIncantationIO
+	lateinit var tuningMoonlightBow: TunerIncantationIO
+	lateinit var tuningNjordRing: TunerIncantationIO
+	lateinit var tuningOdinRing: TunerIncantationIO
+	lateinit var tuningSifRing: TunerIncantationIO
+	lateinit var tuningSpearSubspace: TunerIncantationIO
+	lateinit var tuningTankMask: TunerIncantationIO
+	lateinit var tuningThorRing: TunerIncantationIO
 	
 	init {
 		registerCraftingRecipes()
@@ -2663,6 +2699,27 @@ object AlfheimRecipes {
 		tuningMagmaSize = registerSlimeGrowthTune<EntityMagmaCube>(ItemStack(magma_cream))
 		if (Botania.thaumcraftLoaded) tuningTaintSize = registerSlimeGrowthTune<EntityThaumicSlime>(ItemStack(ConfigItems.itemResource, 1, 11))
 		if (AlfheimCore.TiCLoaded) tuningGelatSize = registerSlimeGrowthTune<BlueSlime>(ItemStack(TinkerWorld.strangeFood))
+		
+		tuningAkashicRecords = registerItemCraftTuning("lipu pi ijo sona ale", akashicRecords, shimmerrock, book, bookshelf, monocle, lexicon, RUNE[11])
+		tuningDaolos = registerItemCraftTuning("ilo utala alasa telo", daolos, manasteelAxe, MUSPELHEIM_ESSENCE, water_bucket, JellyBottle.stack, fish, RUNE[0], RUNE[3])
+		tuningExcaliber = registerItemCraftTuning("ilo utala sewi kiwen", excaliber, terraSword, MAUFTRIUM_NUGGET, golden_sword, GLOWSTONE_DUST, ItemStack(shrineLight, 1, 4), dice)
+		tuningFlugelEye = registerItemCraftTuning("oko pi jan sewi moli", flugelEye, ender_eye, RUNE[8], dice, ender_pearl, worldSeed, PIXIE_DUST)
+		tuningFlugelSoul = registerItemCraftTuning("kon pi jan sewi moli", flugelSoul, ItemStack(manaResource, 1, 5), *Array(8) { LIFE_ESSENCE }, *Array(8) { RUNE[it + 8] })
+		tuningGjallarhorn = registerItemCraftTuning("ilo kalama uta pi jan sewi kejemetale", gjallarhorn, grassHorn, NIFLHEIM_ESSENCE, amplifier, RUNE[8], golden_horse_armor, skull)
+		tuningGleipnir = registerItemCraftTuning("ilo linja pi jo soweli", gleipnir, lead, amplifier, DasRheingold.stack, RUNE[2], FenrirFur.stack, fish, feather)
+		tuningGungnir = registerItemCraftTuning("ilo palisa utala pi jan sewi oten", gungnir, manaGun, FenrirFur.stack, arrow, ItemStack(ancientWill, 1, 4), ItemStack(lens, 1, SUPERCONDUCTOR.meta))
+		tuningHeimdallRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi kejemetale", priestRingHeimdall, pixieRing, MAUFTRIUM_NUGGET, RUNE[15], monocle, itemFinder, bifrostPerm, ender_eye)
+		tuningInfiniteFruit = registerItemCraftTuning("kili pini ala", infiniteFruit, golden_apple, RUNE[8], dice, manaCookie, manaBottle, RUNE[10])
+		tuningKingKey = registerItemCraftTuning("ilo open pi jan lawa", kingKey, missileRod, RUNE[8], dice, golden_axe, golden_hoe, golden_sword)
+		tuningLokiRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi loki", lokiRing, pixieRing, dice, RUNE[8], RUNE[1], enderHand, sextant)
+		tuningMjolnir = registerItemCraftTuning("ilo utala wawa pi jan sewi tola", mjolnir, thunderChakram, NIFLHEIM_ESSENCE, RUNE[13], SPLINTERS_THUNDERWOOD, SPLINTERS_THUNDERWOOD, TWIG_THUNDERWOOD, teruTeruBozu)
+		tuningMoonlightBow = registerItemCraftTuning("ilo alasa palisa pi jan sewi pepa", moonlightBow, crystalBow, MAUFTRIUM_NUGGET, RUNE[8], RUNE[5], colorOverride, noteblock, QUARTZ[6])
+		tuningNjordRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi nijete", priestRingNjord, pixieRing, MAUFTRIUM_NUGGET, RUNE[0], RUNE[3], ItemStack(fish, 1, 3), overgrowthSeed)
+		tuningOdinRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi oten", odinRing, pixieRing, dice, spider_eye, magma_cream, RUNE[13])
+		tuningSifRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi sipe", priestRingSif, pixieRing, MAUFTRIUM_NUGGET, RUNE[5], RUNE[2], DasRheingold.stack, overgrowthSeed)
+		tuningSpearSubspace = registerItemCraftTuning("palisa pi ale ala", subspaceSpear, InfusedDreamwoodTwig.stack, RUNE[8], MUSPELHEIM_ESSENCE, subspacian, enlighter, manaBomb)
+		tuningTankMask = registerItemCraftTuning("len uta nasa", mask, ItemStack(cosmetic, 1, 22), MAUFTRIUM_NUGGET, SaveIvy.stack, leather_helmet, RUNE[13], manaVoid)
+		tuningThorRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi tola", thorRing, pixieRing, dice, TERRA_STEEL, temperanceStone, RUNE[13], TWIG_THUNDERWOOD)
 	}
 	
 	private inline fun <reified T: EntityLivingBase> registerSlimeGrowthTune(item: Any): TunerIncantation<EntityLivingBase> {
@@ -2681,6 +2738,35 @@ object AlfheimRecipes {
 			
 			true
 		}
+	}
+	
+	private fun registerItemCraftTuning(incantation: String, result: Item, _core: Any, vararg inputs: Any): TunerIncantationIO {
+		val core = when (_core) {
+			is Block -> ItemStack(_core)
+			is Item -> ItemStack(_core)
+			is ItemStack -> _core
+			else -> throw IllegalArgumentException()
+		}
+		
+		val tuning = AlfheimAPI.registerIncantation<ItemStack>(incantation, *inputs.map {
+			when (it) {
+				is Block -> ItemStack(it)
+				is Item -> ItemStack(it)
+				is ItemStack -> it
+				is String -> it
+				else -> throw IllegalArgumentException("$it of type ${it::class.java.name} is unexpected")
+			}
+		}.toTypedArray()) {
+			if (core.isItemEqual(it)) return@registerIncantation false
+			
+			it.func_150996_a(result)
+			it.stackSize = 1
+			it.meta = 0
+			it.tagCompound = NBTTagCompound()
+			true
+		}
+		
+		return TunerIncantationIO(tuning, core, ItemStack(result))
 	}
 	
 	private fun banRetrades() {
