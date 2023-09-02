@@ -12,6 +12,7 @@ class BlockIcyGeyser: BlockContainerMod(Material.packedIce) {
 		setBlockName("IcyGeyser")
 		setHardness(0.5F)
 		setStepSound(soundTypeGlass)
+		slipperiness = 0.98f
 	}
 	
 	override fun getIcon(side: Int, meta: Int) = Blocks.packed_ice.getIcon(side, meta)!!

@@ -62,7 +62,7 @@ class TileDomainLobby: TileImmobile() {
 	fun getPlayerBack(player: EntityPlayer): Boolean {
 		if (player.dimension != AlfheimConfigHandler.dimensionIDDomains) return false
 		
-		player.entityData.apply {
+		player.persistentData.apply {
 			if (!hasKey(TAG_DOMAIN_ENTRANCE)) return@apply
 			
 			val (x, y, z, d) = getIntArray(TAG_DOMAIN_ENTRANCE)
@@ -113,8 +113,7 @@ class TileDomainLobby: TileImmobile() {
 		try {
 			domainWorld = MinecraftServer.getServer().worldServerForDimension(AlfheimConfigHandler.dimensionIDDomains)
 		} catch (e: RuntimeException) {
-			ASJUtilities.error("Cannot load world for domains dimension: ${e.message}")
-			e.printStackTrace()
+			ASJUtilities.error("Cannot load world for domains dimension: ${e.message}", e)
 			return
 		}
 		
@@ -130,7 +129,7 @@ class TileDomainLobby: TileImmobile() {
 			} else if (getEntitiesWithinAABB(domainWorld, EntityPlayer::class.java, domain.boundBox.copy().offset(x.D, 64.0, z.D)).isNotEmpty()) continue
 			
 			players.forEach {
-				it.entityData.setIntArray(TAG_DOMAIN_ENTRANCE, center.mf().toIntArray() + it.dimension)
+				it.persistentData.setIntArray(TAG_DOMAIN_ENTRANCE, center.mf().toIntArray() + it.dimension)
 				
 				AlfheimHookHandler.allowtp = true
 				ASJUtilities.sendToDimensionWithoutPortal(it, AlfheimConfigHandler.dimensionIDDomains, x + 0.5, 65.0, z + 0.5)

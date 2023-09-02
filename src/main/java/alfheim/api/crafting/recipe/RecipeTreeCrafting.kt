@@ -1,6 +1,7 @@
 package alfheim.api.crafting.recipe
 
 import alexsocol.asjlib.*
+import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import vazkii.botania.api.recipe.RecipePetals
 
@@ -16,8 +17,8 @@ class RecipeTreeCrafting(val manaUsage: Int, output: ItemStack, val outTileId: S
 	}
 	
 	init {
-		require(inputs.size <= 8) { "Tree suffusion recipe has ${inputs.size} inputs, max is 8" }
-		requireNotNull(output.block) { "Can't fetch block from output stack '$output'" }
+		require(inputs.size <= 8) { "Tree suffusion recipe has ${inputs.size} inputs, max is 8!" }
+		require(output.block !== Blocks.air) { "Block from output stack '$output' must not be air!" }
 	}
 	
 	fun matches(items: List<ItemStack>, mid: ItemStack): Boolean {

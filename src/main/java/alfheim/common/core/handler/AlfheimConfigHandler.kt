@@ -125,7 +125,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var lightningsSpeed = 20
 	var longSeasons = true
 	var looniumOverseed = false
-	var mobElements = arrayOf("Blaze:FIRE", "Creeper:NATURE", "EnderDragon:DARKNESS", "Enderman:DARKNESS", "Ghast:AIR,PSYCHIC", "LavaSlime:FIRE,EARTH", "MushroomCow:NATURE", "SnowMan:ICE", "Slime:NATURE,WATER", "VillagerGolem:EARTH", "WitherBoss:DARKNESS", "Thaumcraft.EldritchCrab:DARKNESS", "Thaumcraft.EldritchGolem:EARTH", "Thaumcraft.EldritchGuardian:DARKNESS,PSYCHIC", "Thaumcraft.EldritchWarden:DARKNESS,PSYCHIC", "Thaumcraft.Firebat:FIRE", "Thaumcraft.Golem:EARTH", "Thaumcraft.MindSpider:PSYCHIC", "Thaumcraft.ThaumSlime:WATER,DARKNESS", "Thaumcraft.Wisp:AIR", "ThermalFoundation.Blizz:ICE", "ThermalFoundation.Blitz:ELECTRIC", "ThermalFoundation.Basalz:EARTH")
+	var mobElements = arrayOf("Blaze:FIRE", "EnderDragon:DARKNESS", "Enderman:DARKNESS", "Ghast:AIR,PSYCHIC", "LavaSlime:FIRE,EARTH", "MushroomCow:NATURE", "SnowMan:ICE", "Slime:NATURE,WATER", "VillagerGolem:EARTH", "WitherBoss:DARKNESS", "Thaumcraft.EldritchCrab:DARKNESS", "Thaumcraft.EldritchGolem:EARTH", "Thaumcraft.EldritchGuardian:DARKNESS,PSYCHIC", "Thaumcraft.EldritchWarden:DARKNESS,PSYCHIC", "Thaumcraft.Firebat:FIRE", "Thaumcraft.MindSpider:PSYCHIC", "Thaumcraft.ThaumSlime:WATER,DARKNESS", "ThermalFoundation.Blizz:ICE", "ThermalFoundation.Blitz:ELECTRIC", "ThermalFoundation.Basalz:EARTH")
 	var minimalGraphics = false
 	var mobPriests = true
 	var moonbowMaxDmg = 20
@@ -181,6 +181,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var potionIDBerserk = potionID___COUNTER++
 	var potionIDBleeding = potionID___COUNTER++
 	var potionIDButterShield = potionID___COUNTER++
+	var potionIDChampagne = potionID___COUNTER++
 	var potionIDDeathMark = potionID___COUNTER++
 	var potionIDDecay = potionID___COUNTER++
 	var potionIDEternity = potionID___COUNTER++
@@ -202,6 +203,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var potionIDTank = potionID___COUNTER++
 	var potionIDThrow = potionID___COUNTER++
 	var potionIDWellOLife = potionID___COUNTER++
+	var potionIDWhiteWine = potionID___COUNTER++
 	var potionIDWisdom = potionID___COUNTER++
 	var potionIDWtfBerry0 = potionID___COUNTER++
 	var potionIDWtfBerry2 = potionID___COUNTER++
@@ -377,6 +379,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDBerserk = loadProp(CATEGORY_POTIONS, "potionIDBerserk", potionIDBerserk, true, "Potion id for Berserk")
 		potionIDBleeding = loadProp(CATEGORY_POTIONS, "potionIDBleeding", potionIDBleeding, true, "Potion id for Bleeding")
 		potionIDButterShield = loadProp(CATEGORY_MMOP, "potionIDButterShield", potionIDButterShield, true, "Potion id for Butterfly Shield")
+		potionIDChampagne = loadProp(CATEGORY_POTIONS, "potionIDChampagne", potionIDChampagne, true, "Potion id for Champagne")
 		potionIDDeathMark = loadProp(CATEGORY_MMOP, "potionIDDeathMark", potionIDDeathMark, true, "Potion id for Death Mark")
 		potionIDDecay = loadProp(CATEGORY_MMOP, "potionIDDecay", potionIDDecay, true, "Potion id for Decay")
 		potionIDEternity = loadProp(CATEGORY_POTIONS, "potionIDEternity", potionIDEternity, true, "Potion id for Eternity")
@@ -398,6 +401,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDTank = loadProp(CATEGORY_POTIONS, "potionIDTank", potionIDTank, true, "Potion id for Tank")
 		potionIDThrow = loadProp(CATEGORY_MMOP, "potionIDThrow", potionIDThrow, true, "Potion id for Throw")
 		potionIDWellOLife = loadProp(CATEGORY_MMOP, "potionIDWellOLife", potionIDWellOLife, true, "Potion id for Well'o'Life")
+		potionIDWhiteWine = loadProp(CATEGORY_POTIONS, "potionIDWhiteWine", potionIDWhiteWine, true, "Potion id for White Wine")
 		potionIDWisdom = loadProp(CATEGORY_POTIONS, "potionIDWisdom", potionIDWisdom, true, "Potion id for Wisdom")
 		potionIDWtfBerry0 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry0", potionIDWtfBerry0, true, "Potion id for Barrier Berry")
 		potionIDWtfBerry2 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry2", potionIDWtfBerry2, true, "Potion id for Redstone Berry")

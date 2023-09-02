@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.command.CommandDimTP
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.security.InteractionSecurity
+import alexsocol.patcher.asm.ASJHookHandler
 import alfheim.AlfheimCore
 import alfheim.api.*
 import alfheim.api.block.IHourglassTrigger
@@ -14,7 +15,7 @@ import alfheim.api.lib.LibResourceLocations
 import alfheim.api.spell.SpellBase
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.client.render.entity.RenderEntityFloatingIsland
-import alfheim.common.achievement.*
+import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.*
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.block.colored.BlockAuroraDirt
@@ -44,7 +45,7 @@ import alfheim.common.item.equipment.bauble.ItemPendant
 import alfheim.common.item.equipment.bauble.ItemPendant.Companion.EnumPrimalWorldType.MUSPELHEIM
 import alfheim.common.item.equipment.bauble.faith.ItemRagnarokEmblem
 import alfheim.common.item.material.ElvenResourcesMetas
-import alfheim.common.item.relic.*
+import alfheim.common.item.relic.ItemMjolnir
 import alfheim.common.item.rod.ItemRodClicker
 import alfheim.common.potion.PotionSoulburn
 import alfheim.common.spell.earth.SpellGoldRush
@@ -52,8 +53,8 @@ import alfheim.common.world.data.CustomWorldData.Companion.customData
 import alfheim.common.world.mobspawn.MobSpawnHandler
 import baubles.common.lib.PlayerHandler
 import cofh.asmhooks.HooksCore
-import cpw.mods.fml.relauncher.*
 import cpw.mods.fml.relauncher.Side.CLIENT
+import cpw.mods.fml.relauncher.SideOnly
 import gloomyfolken.hooklib.asm.*
 import gloomyfolken.hooklib.asm.Hook.ReturnValue
 import gloomyfolken.hooklib.asm.ReturnCondition.*
@@ -64,21 +65,22 @@ import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.particle.EntityFX
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.texture.*
-import net.minecraft.command.*
+import net.minecraft.command.ICommandSender
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.*
 import net.minecraft.entity.*
+import net.minecraft.entity.ai.EntityAIAvoidEntity
 import net.minecraft.entity.boss.EntityDragon
 import net.minecraft.entity.item.*
 import net.minecraft.entity.monster.EntityCreeper
-import net.minecraft.entity.passive.EntityAnimal
+import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.*
 import net.minecraft.entity.projectile.*
 import net.minecraft.init.*
 import net.minecraft.inventory.*
 import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.pathfinding.*
+import net.minecraft.pathfinding.PathEntity
 import net.minecraft.potion.*
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.management.ServerConfigurationManager
@@ -119,7 +121,7 @@ import vazkii.botania.common.block.*
 import vazkii.botania.common.block.decor.*
 import vazkii.botania.common.block.decor.walls.BlockModWall
 import vazkii.botania.common.block.mana.*
-import vazkii.botania.common.block.subtile.generating.*
+import vazkii.botania.common.block.subtile.generating.SubTileDaybloom
 import vazkii.botania.common.block.tile.*
 import vazkii.botania.common.block.tile.mana.*
 import vazkii.botania.common.core.BotaniaCreativeTab
@@ -132,7 +134,7 @@ import vazkii.botania.common.item.equipment.bauble.ItemBauble
 import vazkii.botania.common.item.equipment.tool.ToolCommons
 import vazkii.botania.common.item.lens.LensFirework
 import vazkii.botania.common.item.material.ItemManaResource
-import vazkii.botania.common.item.relic.*
+import vazkii.botania.common.item.relic.ItemFlugelEye
 import vazkii.botania.common.item.rod.*
 import vazkii.botania.common.lib.LibBlockNames
 import java.awt.Color
@@ -257,7 +259,7 @@ object AlfheimHookHandler {
 		if (dimTo == dimensionIDDomains) return block // only with TileDomainLobby
 		
 		return when (player.dimension) {
-			dimensionIDDomains  -> dimTo != (player.entityData.getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE).getOrNull(3) ?: dimTo)
+			dimensionIDDomains  -> dimTo != (player.persistentData.getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE).getOrNull(3) ?: dimTo)
 			dimensionIDAlfheim  -> dimTo != 0 && dimTo != dimensionIDNiflheim
 			dimensionIDNiflheim -> dimTo != dimensionIDAlfheim
 			dimensionIDHelheim  -> block // no way out except TileRainbowManaFlame#exitPlayer
@@ -1927,4 +1929,11 @@ object AlfheimHookHandler {
 	@Hook(returnCondition = ON_TRUE)
 	fun damageItem(stack: ItemStack, amount: Int, holder: EntityLivingBase?) =
 		AlfheimConfigHandler.timelessProtection && stack.isItemStackDamageable && ItemNBTHelper.getBoolean(stack, ItemRegenIvy.TAG_REGEN, false) && holder is EntityPlayer && ManaItemHandler.requestManaExactForTool(stack, holder, amount * 100, true)
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE, booleanReturnConstant = false)
+	fun shouldExecute(ai: EntityAIAvoidEntity) = AlfheimConfigHandler.enableElvenStory &&
+	                                             ai.theEntity is EntityOcelot &&
+	                                             ai.targetEntityClass == EntityPlayer::class.java &&
+	                                             (ai.closestLivingEntity as? EntityPlayer)?.race == EnumRace.CAITSITH
 }

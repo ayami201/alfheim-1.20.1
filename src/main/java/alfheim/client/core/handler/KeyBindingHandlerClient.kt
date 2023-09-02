@@ -31,6 +31,7 @@ object KeyBindingHandlerClient {
 	
 	/** Toggle Keys  */
 	var toggleESMAbility = false
+	var toggleAkashic = false
 	var toggleCorn = false
 	var toggleFlight = false
 	var toggleJump = false
@@ -85,6 +86,15 @@ object KeyBindingHandlerClient {
 			}
 		} else if (toggleCorn) {
 			toggleCorn = false
+		}
+		
+		if (safeKeyDown(ClientProxy.keyAkashic)) {
+			if (!toggleAkashic) {
+				toggleAkashic = true
+				NetworkService.sendToServer(MessageKeyBindS(AKASHIC.ordinal, false, 0))
+			}
+		} else if (toggleAkashic) {
+			toggleAkashic = false
 		}
 		
 		if (AlfheimConfigHandler.enableElvenStory) {
@@ -334,6 +344,6 @@ object KeyBindingHandlerClient {
 	}
 	
 	enum class KeyBindingIDs {
-		CORN, FLIGHT, ESMABIL, CAST, UNCAST, SEL, SECRET
+		AKASHIC, CORN, FLIGHT, ESMABIL, CAST, UNCAST, SEL, SECRET
 	}
 }

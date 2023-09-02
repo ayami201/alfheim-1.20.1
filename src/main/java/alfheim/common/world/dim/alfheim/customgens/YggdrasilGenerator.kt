@@ -52,7 +52,7 @@ object YggdrasilGenerator: WE_CreateChunkGen() {
 	}
 	
 	fun makeHole(data: WE_GeneratorData, cx: Int, cz: Int) {
-		if (cx !in -32 until 32 || cz !in -32 until 32) return
+		if (cx !in -64 until 64 || cz !in -64 until 64) return
 		
 		val x16 = cx * 16
 		val z16 = cz * 16

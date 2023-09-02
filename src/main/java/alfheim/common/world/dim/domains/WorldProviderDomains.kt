@@ -25,6 +25,7 @@ import net.minecraftforge.event.entity.player.*
 import net.minecraftforge.event.world.BlockEvent.*
 import net.minecraftforge.event.world.ExplosionEvent
 import java.awt.Color
+import kotlin.math.roundToInt
 
 class WorldProviderDomains: WorldProvider() {
 	
@@ -32,7 +33,7 @@ class WorldProviderDomains: WorldProvider() {
 		worldChunkMgr = WorldChunkManagerDomains
 	}
 	
-	override fun getRespawnDimension(player: EntityPlayerMP) = player.entityData.run {
+	override fun getRespawnDimension(player: EntityPlayerMP) = player.persistentData.run {
 		setBoolean(TAG_SHOULD_TELEPORT, true)
 		getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE).getOrNull(3) ?: 0
 	}
@@ -106,7 +107,15 @@ class WorldProviderDomains: WorldProvider() {
 			return null
 		}
 		
-		fun forbid(e: Entity?) = e?.dimension == AlfheimConfigHandler.dimensionIDDomains && if (e is EntityPlayer) !e.capabilities.isCreativeMode else true
+		fun forbid(e: Entity?) = e?.dimension == AlfheimConfigHandler.dimensionIDDomains && !isInAkasha(e) && if (e is EntityPlayer) !e.capabilities.isCreativeMode else true
+		
+		fun isInAkasha(e: Entity?): Boolean {
+			val (i, j, k) = Vector3.fromEntity(e ?: return false).mf()
+			
+			return i in (AlfheimConfigHandler.domainStartX - AlfheimConfigHandler.domainDistance).bidiRange(16) &&
+			       j in 16..48 &&
+			       k in ((k / AlfheimConfigHandler.domainDistance.D).roundToInt() * 1000).bidiRange(16)
+		}
 		
 		@SubscribeEvent
 		fun removePlayersNotOnArena(e: LivingUpdateEvent) {
@@ -115,7 +124,7 @@ class WorldProviderDomains: WorldProvider() {
 			if (ASJUtilities.isClient) return
 			if (getDomainAtPlayer(player) != null) return
 			
-			player.entityData.apply {
+			player.persistentData.apply {
 				var d = 0
 				val (x, y, z) = if (hasKey(TileDomainLobby.TAG_DOMAIN_ENTRANCE)) {
 					val ints = getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE)
@@ -206,7 +215,7 @@ class WorldProviderDomains: WorldProvider() {
 		@SubscribeEvent
 		fun onPlayerClone(e: PlayerEvent.Clone) {
 			val oldData = e.original.entityData
-			e.entityPlayer.entityData.apply {
+			e.entityPlayer.persistentData.apply {
 				setBoolean(TAG_SHOULD_TELEPORT, oldData.getBoolean(TAG_SHOULD_TELEPORT))
 				val entrance = oldData.getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE)
 				if (entrance.size != 4) return@apply
@@ -216,7 +225,7 @@ class WorldProviderDomains: WorldProvider() {
 		
 		@SubscribeEvent
 		fun onPlayerRespawn(e: PlayerRespawnEvent) {
-			val nbt = e.player.entityData
+			val nbt = e.player.persistentData
 			if (!nbt.getBoolean(TAG_SHOULD_TELEPORT)) return
 			
 			nbt.setBoolean(TAG_SHOULD_TELEPORT, false)

@@ -44,9 +44,9 @@ class PagePureDaisyRecipe(unlocalizedName: String, private val recipe: RecipePur
 			}
 			
 			input = if (OreDictionary.doesOreNameExist(name)) run inner@ {
-				val ordict = OreDictionary.getOres(name).firstOrNull { it.item.toBlock() != null } ?: return@inner null
+				val ordict = OreDictionary.getOres(name).firstOrNull { it.block != Blocks.air } ?: return@inner null
 				meta = ordict.meta
-				ordict.item.toBlock()
+				ordict.block
 			} else {
 				Blocks.fire
 			}

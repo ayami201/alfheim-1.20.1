@@ -1,12 +1,14 @@
 package alfheim.common.entity
 
 import alexsocol.asjlib.*
+import alfheim.api.entity.IAlfheimMob
 import net.minecraft.entity.monster.EntityCreeper
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.World
 import vazkii.botania.common.entity.EntityManaStorm
 
-class EntityGrieferCreeper(world: World): EntityCreeper(world) {
+class EntityGrieferCreeper(world: World): EntityCreeper(world), IAlfheimMob {
 	
 	private var lastActiveTime: Int = 0
 	
@@ -82,4 +84,6 @@ class EntityGrieferCreeper(world: World): EntityCreeper(world) {
 		
 		setDead()
 	}
+	
+	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 }

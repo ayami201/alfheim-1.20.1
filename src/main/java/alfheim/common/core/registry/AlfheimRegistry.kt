@@ -7,8 +7,10 @@ import alfheim.api.AlfheimAPI.addPink
 import alfheim.api.AlfheimAPI.registerAnomaly
 import alfheim.api.AlfheimAPI.registerSpell
 import alfheim.api.block.tile.SubTileAnomalyBase.EnumAnomalyRarity.*
+import alfheim.api.entity.IAlfheimMob
 import alfheim.common.block.*
 import alfheim.common.block.tile.*
+import alfheim.common.block.tile.TileChair.Companion.EntitySit
 import alfheim.common.block.tile.corporea.*
 import alfheim.common.block.tile.sub.anomaly.*
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -74,6 +76,7 @@ object AlfheimRegistry {
 		PotionBerserk
 		PotionBleeding
 		PotionButterShield
+		PotionChampagne
 		PotionDeathMark
 		PotionAlfheim(AlfheimConfigHandler.potionIDDecay, "decay", true, 0x553355)
 		PotionEternity
@@ -95,6 +98,7 @@ object AlfheimRegistry {
 		PotionTank
 		PotionThrow
 		PotionWellOLife
+		PotionWhiteWine.eventForge()
 		PotionAlfheim(AlfheimConfigHandler.potionIDWisdom, "wisdom", false, 0xFFC880)
 		PotionWTFBerry0 // barrier
 		PotionWTFBerry2 // redstone
@@ -109,6 +113,7 @@ object AlfheimRegistry {
 	private fun registerEntities() {
 		registerEntity(EntityButterfly::class.java, "Butterfly", nextEntityID, 0, -1)
 		registerEntity(EntityDedMoroz::class.java, "DedMoroz", nextEntityID)
+		registerEntity(EntityElementalSlime::class.java, "ElementalSlime", nextEntityID, -1, 0x7EBF6E)
 		registerEntity(EntityElf::class.java, "Elf", nextEntityID, 0x1A660A, 0x4D3422)
 		registerEntity(EntityFireSpirit::class.java, "FireSpirit", nextEntityID)
 		registerEntity(EntityFenrir::class.java, "Fenrir", nextEntityID)
@@ -121,6 +126,7 @@ object AlfheimRegistry {
 		registerEntity(EntityAlfheimPixie::class.java, "Pixie", nextEntityID, 0xFF76D6, 0xFFE3FF)
 		registerEntity(EntityRollingMelon::class.java, "RollingMelon", nextEntityID, 0xBECB25, 0x5B751A)
 		registerEntity(EntityRook::class.java, "Rook", nextEntityID)
+		registerEntity(EntitySit::class.java, "Sit", nextEntityID)
 		registerEntity(EntitySnowSprite::class.java, "SnowSprite", nextEntityID, 0xEEFFFF, 0xE3F3F3)
 		registerEntity(EntitySurtr::class.java, "Surtr", nextEntityID)
 		registerEntity(EntityThrym::class.java, "Thrym", nextEntityID)
@@ -183,7 +189,7 @@ object AlfheimRegistry {
 	 * @param color1 Egg color
 	 * @param color2 Dots color
 	 */
-	fun registerEntity(entityClass: Class<out Entity>, name: String, id: Int, color1: Int, color2: Int) {
+	fun <T> registerEntity(entityClass: Class<T>, name: String, id: Int, color1: Int, color2: Int) where T: Entity, T: IAlfheimMob {
 		ItemSpawnEgg.addMapping(entityClass, color1, color2)
 		registerEntity(entityClass, name, id)
 	}
@@ -197,11 +203,13 @@ object AlfheimRegistry {
 		registerTile(TileAnyavil::class.java, "Anyavil")
 		registerTile(TileBarrel::class.java, "Barrel")
 		registerTile(TileBottomlessChest::class.java, "BottomlessChest")
+		registerTile(TileChair::class.java, "Chair")
 		registerTile(TileCorporeaAutocrafter::class.java, "CorporeaAutocrafter")
 		registerTile(TileCorporeaInjector::class.java, "CorporeaInjector")
 		registerTile(TileCorporeaRat::class.java, "CorporeaRat")
 		registerTile(TileCorporeaSparkBase::class.java, "CorporeaSparkBase")
 		registerTile(TileDomainLobby::class.java, "DomainLobby")
+		registerTile(TileDoubleBlock::class.java, "DoubleBlock")
 		registerTile(TileEnderActuator::class.java, "EnderActuator")
 		registerTile(TileFloatingFlowerRainbow::class.java, "miniIslandRainbow")
 		registerTile(TileHeadFlugel::class.java, "HeadFlugel")
@@ -215,7 +223,9 @@ object AlfheimRegistry {
 		registerTile(TileRealityAnchor::class.java, "RealityAnchor")
 		registerTile(TileRedstoneRelay::class.java, "RedstoneRelay")
 		registerTile(TileRift::class.java, "Rift")
+		registerTile(TileSecretGlass::class.java, "SecretGlass")
 		registerTile(TileSpire::class.java, "Spire")
+		registerTile(TileTable::class.java, "Table")
 		registerTile(TileTradePortal::class.java, "TradePortal")
 		registerTile(TileTreeBerry::class.java, "TreeBerry")
 		registerTile(TileVafthrudnirSoul::class.java, "VafthrudnirSoul")

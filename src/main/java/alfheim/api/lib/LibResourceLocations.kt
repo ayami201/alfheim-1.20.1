@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation
 
 object LibResourceLocations {
 	
-	val akashicBox = ResourceLocationIL(ModInfo.MODID, "textures/model/item/AkashicBox.png")
 	val akashicCube = ResourceLocationIL(ModInfo.MODID, "textures/model/item/AkashicRecordsCube.png")
 	val akashicCube_ = ResourceLocationIL(ModInfo.MODID, "textures/model/item/AkashicRecordsCube_noShader.png")
 	val akashicCyl = ResourceLocationIL(ModInfo.MODID, "textures/model/item/AkashicRecordsCyl.png")
@@ -22,7 +21,7 @@ object LibResourceLocations {
 	val avatarLightning = ResourceLocationIL(ModInfo.MODID, "textures/model/avatar/avatarLightning.png")
 	var babylon = ResourceLocationIL("botania", "textures/misc/babylon.png")
 	var barrel = ResourceLocationIL(ModInfo.MODID, "textures/model/block/Barrel.png")
-	var blank = ResourceLocationIL(ModInfo.MODID, "textures/misc/blank.png")
+	var blank = ResourceLocationIL(ModInfo.MODID, "textures/block/blank.png")
 	val blood = ResourceLocationIL(ModInfo.MODID, "textures/misc/particles/blood.png")
 	val bloodDrop = ResourceLocationIL(ModInfo.MODID, "textures/misc/particles/bloodDrop.png")
 	val butterfly = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Butterfly.png")
@@ -42,6 +41,7 @@ object LibResourceLocations {
 	val dedMorozEyes = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/DedMorozEyes.png")
 	val domainDoor = ResourceLocationIL(ModInfo.MODID, "textures/blocks/DomainLobbyCoreFull.png")
 	val elementiumBlock = ResourceLocationIL("botania", "textures/blocks/storage2.png")
+	val elementalSlime = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/ElementalSlime.png")
 	val elements = ResourceLocationIL(ModInfo.MODID, "textures/misc/elements.png")
 	val elementsUI = ResourceLocationIL(ModInfo.MODID, "textures/misc/elementsUI.png")
 	val elf = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Elf.png")

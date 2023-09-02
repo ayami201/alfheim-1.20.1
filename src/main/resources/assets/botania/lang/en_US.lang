@@ -90,8 +90,9 @@ alfheim.tagline.slimes=They were small, now they big
 alfheim.page.slimes0=If you managed to capture a small slime, and want to show it your love and care, try radiating it with some gentle &4Mana bursts&0 on your &1Mana Tuner&0 along with some of it's...flesh. As long as your new pet stays right on top of the tuner, it will grow in the blink of an eye as the tuning finishes. I promise, it won't hurt at all.
 alfheim.page.slimes1=Growing Slime
 alfheim.page.slimes2=Growing Magma Cube
-alfheim.page.slimes3=Growing Thaumic Slime
-alfheim.page.slimes4=Growing Blue Slime
+alfheim.page.slimes3=Growing Elemental Slime
+alfheim.page.slimes4=Growing Thaumic Slime
+alfheim.page.slimes5=Growing Blue Slime
 
 alfheim.entry.flowerEnderchid=Orechid Endium
 alfheim.tagline.flowerEnderchid=Creates end ores from end stone
@@ -403,6 +404,10 @@ alfheim.page.mask0=Fury and danger emanates from this mask. When you try to put 
 alfheim.entry.excaliber=Holy Sword Excaliber
 alfheim.tagline.excaliber=Not fake! Promise!
 alfheim.page.excaliber0=Lost long ago, &1Holy Sword Excaliber&0 was finally found. As the legends say, this sword is unbreakable and can shoot a mana ray on every swing, that will look for nearest hostile target and deal as much damage, as regular attack. Also you feel strange lightness while holding the sword, so you can run a little bit faster.
+
+alfheim.entry.akashic=Akashic Records
+alfheim.tagline.akashic=All relics in one!
+alfheim.page.akashic0=&1Akashic Records&0 allows one to teleport to their personal dimension where anything can be stored via sneak-rightclicking with opened via rightclick records. If a relic is placed on the &1Item Platform&0 within that dimension, it can be retrieved into hands by leftclicking the records. Relics can be selected by rotating mouse wheel while sneaking. The relic can be stored back by pressing [K].
 
 alfheim.entry.stories=Token of Banter
 alfheim.tagline.stories=Yet knowledge can be bought

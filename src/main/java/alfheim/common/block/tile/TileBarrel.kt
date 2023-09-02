@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound
 
 class TileBarrel: ASJTile() {
 	
+	var dark = false
 	var closed = true
 	var stomps = 0
 	var timer = 0
@@ -15,18 +16,23 @@ class TileBarrel: ASJTile() {
 	var wineType = WINE_TYPE_NONE
 	
 	override fun updateEntity() {
-		if (timer > 0) {
-			if (closed) {
-				if (--timer == 0) {
-					wineStage = WINE_STAGE_READY
-					
-					if (worldObj.isRemote)
-						ASJUtilities.dispatchTEToNearbyPlayers(this)
-				}
-			} else {
-				if (++timer >= MAX_OPEN_TIME)
-					reset()
+		if (timer <= 0) return
+		
+		if (worldObj.getBlockLightValue(xCoord, yCoord, zCoord) > 4) dark = false
+		
+		if (closed) {
+			if (--timer == 0) {
+				wineStage = WINE_STAGE_READY
+				if (dark && wineType == WINE_TYPE_WHITE) wineType = WINE_TYPE_CHAMP
+				
+				if (worldObj.isRemote)
+					ASJUtilities.dispatchTEToNearbyPlayers(this)
+				
+				worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType())
 			}
+		} else {
+			if (++timer >= MAX_OPEN_TIME)
+				reset()
 		}
 	}
 	
@@ -67,7 +73,8 @@ class TileBarrel: ASJTile() {
 		const val WINE_STAGE_LIQUID = 3
 		const val WINE_STAGE_READY = 4
 		
-		val WINE_TYPE_NONE = 0
+		val WINE_TYPE_NONE = -1
+		val WINE_TYPE_CHAMP = 0
 		val WINE_TYPE_WHITE = ElvenFoodMetas.WhiteGrapes.I
 		val WINE_TYPE_RED = ElvenFoodMetas.RedGrapes.I
 		

@@ -11,18 +11,20 @@ import alfheim.common.block.*
 import alfheim.common.block.tile.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
+import alfheim.common.core.helper.ElementalDamage
 import alfheim.common.crafting.recipe.*
+import alfheim.common.entity.EntityElementalSlime
 import alfheim.common.integration.thaumcraft.ThaumcraftSuffusionRecipes
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
 import alfheim.common.item.*
 import alfheim.common.item.block.*
+import alfheim.common.item.material.*
 import alfheim.common.item.material.ElvenFoodMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
-import alfheim.common.item.material.EventResourcesMetas
 import alfheim.common.lexicon.AlfheimLexiconEntry.Companion.setIcon
 import alfheim.common.lexicon.page.*
 import net.minecraft.entity.Entity
-import net.minecraft.init.*
+import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import tconstruct.tools.TinkerTools
 import thaumcraft.common.config.ConfigItems
@@ -46,6 +48,7 @@ object AlfheimLexiconData {
 	
 	// Main addon content
 	lateinit var advancedMana: LexiconEntry
+	lateinit var akashic: LexiconEntry
 	lateinit var alfheim: LexiconEntry
 	lateinit var amplifier: LexiconEntry
 	lateinit var amuletCirus: LexiconEntry
@@ -495,16 +498,19 @@ object AlfheimLexiconData {
 		
 		elementalTuning.setLexiconPages(*Array(3) { PageText("$it") },
 		                                PageTuningRecipe("3", AlfheimRecipes.tuningElementalSeer, ItemStack(ModItems.monocle)),
-										// WARNING! Dirty hacks for recipe display:
-										*AlfheimAPI.tunerIncantations.values().filterIsInstance<IncantationEquipmentElementalTuning>().map {
-											PageTuningRecipe("${it.index + 4}",
-											                 TunerIncantation(Entity::class.java,
-											                                  it.incantation,
-											                                  arrayOf(*Array(7) { LibOreDict.MANAWEAVE_CLOTH }, it.elementResource)
-											                 ) { false },
-											                 ItemStack(ModItems.manasteelSword)
-											)
-		                                }.toTypedArray()).setIcon(Blocks.fire)
+			// WARNING! Dirty hacks for recipe display:
+			                            *AlfheimAPI.tunerIncantations.values().filterIsInstance<IncantationEquipmentElementalTuning>().map {
+				                            PageTuningRecipe("${it.index + 4}",
+				                                             TunerIncantation(Entity::class.java,
+				                                                              it.incantation,
+				                                                              arrayOf(
+					                                                              *Array(7) { LibOreDict.MANAWEAVE_CLOTH },
+					                                                              ItemElvenResource.ballForElement(ElementalDamage.valueOf(it.element))
+				                                                              )
+				                                             ) { false },
+				                                             ItemStack(ModItems.manasteelSword)
+				                            )
+			                            }.toTypedArray()).icon = ItemElvenResource.ballForElement(null)
 		
 		elvenSet.setLexiconPages(PageText("0"),
 								 PageCraftingRecipe("1", AlfheimRecipes.recipeElvoriumHelmet),
@@ -783,11 +789,12 @@ object AlfheimLexiconData {
 		val slimePages = arrayListOf(
 			PageText("0"),
 		    PageTuningRecipe("1", AlfheimRecipes.tuningSlimeSize, ItemStack(Items.spawn_egg, 1, 55)),
-		    PageTuningRecipe("2", AlfheimRecipes.tuningMagmaSize, ItemStack(Items.spawn_egg, 1, 62))
+		    PageTuningRecipe("2", AlfheimRecipes.tuningMagmaSize, ItemStack(Items.spawn_egg, 1, 62)),
+		    PageTuningRecipe("3", AlfheimRecipes.tuningElementlaSlimeSize, ItemSpawnEgg.forEntity<EntityElementalSlime>()!!)
 		)
 		
-		if (AlfheimRecipes.tuningTaintSize != null) slimePages += PageTuningRecipe("3", AlfheimRecipes.tuningTaintSize!!, ItemStack(ConfigItems.itemSpawnerEgg, 1, 15))
-		if (AlfheimRecipes.tuningGelatSize != null) slimePages += PageTuningRecipe("4", AlfheimRecipes.tuningGelatSize!!, ItemStack(TinkerTools.titleIcon))
+		if (AlfheimRecipes.tuningTaintSize != null) slimePages += PageTuningRecipe("4", AlfheimRecipes.tuningTaintSize!!, ItemStack(ConfigItems.itemSpawnerEgg, 1, 15))
+		if (AlfheimRecipes.tuningGelatSize != null) slimePages += PageTuningRecipe("5", AlfheimRecipes.tuningGelatSize!!, ItemStack(TinkerTools.titleIcon))
 		
 		slimes.setLexiconPages(*slimePages.toTypedArray()).setIcon(Items.slime_ball)
 		
@@ -1138,6 +1145,10 @@ object AlfheimLexiconData {
 	}
 	
 	fun initRelics() {
+		akashic = AlfheimRelicLexiconEntry("akashic", categoryAlfheim)
+		akashic.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningAkashicRecords))
+		LexiconRecipeMappings.map(ItemStack(AlfheimItems.akashicRecords), akashic, 0)
+		
 		daolos = AlfheimRelicLexiconEntry("daolos", categoryDivinity, AlfheimItems.daolos)
 		daolos.setLexiconPages(*Array(6) { PageText("$it") }, PageTuningIORecipe("6", AlfheimRecipes.tuningDaolos))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.daolos), daolos, 0)

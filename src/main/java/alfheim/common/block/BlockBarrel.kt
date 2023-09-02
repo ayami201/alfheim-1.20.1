@@ -32,9 +32,10 @@ class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable {
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
 		val ret = onBlockActivated2(world, x, y, z, player)
 		
-		if (ret && !world.isRemote) {
+		if (ret && !world.isRemote)
 			world.getTileEntity(x, y, z)?.let { ASJUtilities.dispatchTEToNearbyPlayers(it) }
-		}
+		
+		world.notifyBlocksOfNeighborChange(x, y, z, this)
 		
 		return ret
 	}
@@ -53,7 +54,6 @@ class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable {
 		}
 		
 		if (!tile.closed) {
-			
 			when (tile.wineStage) {
 				0                           -> { // nothing
 					if (stack.item is ItemElvenFood && stack.meta == ElvenFoodMetas.WhiteGrapes.I || stack.meta == ElvenFoodMetas.RedGrapes.I) {
@@ -75,24 +75,28 @@ class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable {
 					if (stack.item is ItemElvenFood && stack.meta == ElvenFoodMetas.Nectar.I) {
 						tile.wineStage = TileBarrel.WINE_STAGE_LIQUID
 						tile.timer = TileBarrel.FERMENTATION_TIME
+						tile.dark = world.getBlockLightValue(x, y, z) <= 4
 						stack.stackSize--
 					}
 				}
 				
 				TileBarrel.WINE_STAGE_READY -> {
-					if (stack.item is ItemElvenResource && stack.meta == ElvenResourcesMetas.Jug.I && tile.wineLevel >= 4) {
+					if (stack.item is ItemElvenResource && stack.meta == ElvenResourcesMetas.Jug.I && tile.wineLevel >= 4) run give@ {
 						--stack.stackSize
 						
-						val jug = if (tile.wineType == TileBarrel.WINE_TYPE_RED) ElvenFoodMetas.RedWine.stack else ElvenFoodMetas.WhiteWine.stack
-						if (player.inventory.addItemStackToInventory(jug)) {
-							player.dropPlayerItemWithRandomChoice(jug, true)
+						val jug = when (tile.wineType) {
+							TileBarrel.WINE_TYPE_RED   -> ElvenFoodMetas.RedWine.stack
+							TileBarrel.WINE_TYPE_WHITE -> ElvenFoodMetas.WhiteWine.stack
+							TileBarrel.WINE_TYPE_CHAMP -> ElvenFoodMetas.Champagne.stack
+							else                       -> return@give
 						}
+						if (player.inventory.addItemStackToInventory(jug))
+							player.dropPlayerItemWithRandomChoice(jug, true)
 						
 						tile.wineLevel -= 4
 						
-						if (tile.wineLevel == 0) {
+						if (tile.wineLevel == 0)
 							tile.reset()
-						}
 					}
 				}
 				
@@ -103,6 +107,23 @@ class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable {
 		}
 		
 		return false
+	}
+	
+	override fun hasComparatorInputOverride() = true
+	
+	override fun getComparatorInputOverride(world: World, x: Int, y: Int, z: Int, side: Int): Int {
+		val tile = world.getTileEntity(x, y, z) as? TileBarrel ?: return 0
+		
+		var signal = 15
+		if ((tile.wineStage == 0 || tile.wineStage == TileBarrel.WINE_STAGE_GRAPE && tile.wineLevel < TileBarrel.MAX_WINE_LEVEL) && !tile.closed) signal = 0
+		if (tile.wineStage == TileBarrel.WINE_STAGE_GRAPE && tile.wineLevel == TileBarrel.MAX_WINE_LEVEL && !tile.closed) signal = 1
+		if (tile.wineStage == TileBarrel.WINE_STAGE_MASH && !tile.closed) signal = 2
+		if (tile.wineStage == TileBarrel.WINE_STAGE_LIQUID && !tile.closed) signal = 3
+		if (tile.wineStage == TileBarrel.WINE_STAGE_LIQUID && tile.closed) signal = 4
+		if (tile.wineStage == TileBarrel.WINE_STAGE_READY) signal = 5
+		if (tile.wineStage == TileBarrel.WINE_STAGE_READY && !tile.closed) signal = 6
+		
+		return signal
 	}
 	
 	override fun createNewTileEntity(world: World, meta: Int) = TileBarrel()
@@ -164,12 +185,11 @@ class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable {
 		fun onSomeoneFall(entity: Entity) {
 			val tile = entity.worldObj.getTileEntity(entity) as? TileBarrel ?: return
 			
-			if (!tile.closed && tile.wineStage == TileBarrel.WINE_STAGE_GRAPE && tile.wineLevel == TileBarrel.MAX_WINE_LEVEL) {
-				if (++tile.stomps == 8) {
-					tile.wineStage = TileBarrel.WINE_STAGE_MASH
-					ASJUtilities.dispatchTEToNearbyPlayers(tile)
-				}
-			}
+			if (tile.closed || tile.wineStage != TileBarrel.WINE_STAGE_GRAPE || tile.wineLevel != TileBarrel.MAX_WINE_LEVEL) return
+			if (++tile.stomps != 8) return
+			tile.wineStage = TileBarrel.WINE_STAGE_MASH
+			ASJUtilities.dispatchTEToNearbyPlayers(tile)
+			tile.worldObj.notifyBlocksOfNeighborChange(tile.xCoord, tile.yCoord, tile.zCoord, tile.getBlockType())
 		}
 	}
 }

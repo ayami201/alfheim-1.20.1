@@ -41,7 +41,6 @@ object AlfheimAchievements {
 	
 	val breadBoom: Achievement // they are overfed
 	val divineMarksman: Achievement // show your marksman skill
-	val newChance: Achievement // remove race with akashic
 	val rosaBomb: Achievement // bomb 'em all
 	
 	val flugelKill: Achievement
@@ -79,7 +78,6 @@ object AlfheimAchievements {
 		subspace = AlfheimAchievement("subspace", 8, 1, AlfheimItems.subspaceSpear, null)
 		
 		breadBoom = AlfheimAchievement("breadBoom", 32, 32, Items.bread, null).setSpecial()
-		newChance = AlfheimAchievement("newChance", 10, -5, Items.spawn_egg, akashic)
 		divineMarksman = AlfheimAchievement("divineMarksman", 10, -1, ItemStack(Blocks.red_flower, 1, 2), moonlightBow).setSpecial()
 		rosaBomb = AlfheimAchievement("rosaBomb", 10, 1, Blocks.red_flower, subspace).setSpecial()
 		

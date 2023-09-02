@@ -15,7 +15,7 @@ import vazkii.botania.client.core.handler.ClientTickHandler
 import vazkii.botania.common.core.handler.ConfigHandler
 import vazkii.botania.common.lexicon.page.*
 
-class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncantation<Any>, val target: Any, val result: Any? = null): PageRecipe(unlocalizedName) {
+open class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncantation<Any>, val target: Any, val result: Any? = null): PageRecipe(unlocalizedName) {
 	
 	private var ticksElapsed = 0
 	
@@ -69,7 +69,10 @@ class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncantatio
 		val y = gui.top + 100
 		PageText.renderText(x, y, width, height, "[${incantation.incantation}]")
 		
+		val oldName = unlocalizedName
+		if (!StatCollector.canTranslate(oldName)) unlocalizedName = ""
 		super.renderScreen(gui, mx, my)
+		unlocalizedName = oldName
 	}
 	
 	@SideOnly(Side.CLIENT)

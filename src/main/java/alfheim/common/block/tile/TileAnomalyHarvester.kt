@@ -31,6 +31,8 @@ import vazkii.botania.common.core.helper.Vector3 as VVec3
 
 class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 	
+	var creative = false
+	
 	var animationTicks = 0
 	var prevAnimationTicks = 0
 	
@@ -56,15 +58,19 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 		
 		if (worldObj.isBlockDirectlyGettingPowered(xCoord, yCoord, zCoord) || power <= 0) return
 		
-		val spark = attachedSpark
-		if (spark != null) {
-			val sparkEntities = SparkHelper.getSparksAround(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5)
-			for (otherSpark in sparkEntities) {
-				if (spark === otherSpark)
-					continue
-				
-				if (otherSpark.attachedTile != null && otherSpark.attachedTile is IManaPool)
-					otherSpark.registerTransfer(spark)
+		if (creative)
+			mana = maxMana
+		else {
+			val spark = attachedSpark
+			if (spark != null) {
+				val sparkEntities = SparkHelper.getSparksAround(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5)
+				for (otherSpark in sparkEntities) {
+					if (spark === otherSpark)
+						continue
+					
+					if (otherSpark.attachedTile != null && otherSpark.attachedTile is IManaPool)
+						otherSpark.registerTransfer(spark)
+				}
 			}
 		}
 		
@@ -206,6 +212,8 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 		
 		nbt.setInteger("mana", mana)
 		nbt.setInteger("power", power)
+		
+		nbt.setBoolean("creative", creative)
 	}
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
@@ -222,6 +230,8 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 		
 		mana = nbt.getInteger("mana")
 		power = nbt.getInteger("power")
+		
+		creative = nbt.getBoolean("creative")
 	}
 	
 	val maxMana get() = if ("ManaVoid" in subTiles) TilePool.MAX_MANA else TilePool.MAX_MANA_DILLUTED

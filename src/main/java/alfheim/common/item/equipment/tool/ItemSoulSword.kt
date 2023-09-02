@@ -78,7 +78,6 @@ class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem, IElementalItem 
 		if (entity is EntityLivingBase) EnchantmentHelper.func_151384_a(entity, player)
 		
 		EnchantmentHelper.func_151385_b(player, entity)
-		val itemstack: ItemStack = player.currentEquippedItem
 		
 		var target: Any = entity
 		if (target is EntityDragonPart) {
@@ -86,9 +85,10 @@ class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem, IElementalItem 
 				target = target.entityDragonObj
 		}
 		
-		if (target is EntityLivingBase) {
-			itemstack.hitEntity(target, player)
-			if (itemstack.stackSize <= 0) player.destroyCurrentEquippedItem()
+		val weapon = player.heldItem
+		if (target is EntityLivingBase && weapon != null) {
+			weapon.hitEntity(target, player)
+			if (weapon.stackSize <= 0) player.destroyCurrentEquippedItem()
 		}
 		
 		if (entity is EntityLivingBase)

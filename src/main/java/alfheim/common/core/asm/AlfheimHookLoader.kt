@@ -24,7 +24,6 @@ class AlfheimHookLoader: HookLoader() {
 	override fun registerHooks() {
 		FMLRelaunchLog.info("[${ModInfo.MODID.uppercase()}] Loaded coremod. Registering hooks...")
 		
-		
 		registerHookContainer("alfheim.common.core.asm.hook.AlfheimHookHandler")
 		if (AlfheimConfigHandler.hpHooks) registerHookContainer("alfheim.common.core.asm.hook.AlfheimHPHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.Botania18AndUpBackport")

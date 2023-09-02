@@ -1,15 +1,16 @@
 package alfheim.common.entity
 
-import alfheim.api.entity.INiflheimEntity
+import alfheim.api.entity.*
 import net.minecraft.block.Block
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.*
 import net.minecraft.entity.monster.EntityMob
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
+import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.World
 
-class EntityFrozenViking(world: World): EntityMob(world), INiflheimEntity {
+class EntityFrozenViking(world: World): EntityMob(world), INiflheimEntity, IAlfheimMob {
 	
 	init {
 		tasks.addTask(0, EntityAISwimming(this))
@@ -25,7 +26,7 @@ class EntityFrozenViking(world: World): EntityMob(world), INiflheimEntity {
 	
 	override fun applyEntityAttributes() {
 		super.applyEntityAttributes()
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).baseValue = 4.0
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).baseValue = 2.0
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).baseValue = 24.0
 		getEntityAttribute(SharedMonsterAttributes.followRange).baseValue = 32.0
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).baseValue = 0.3
@@ -45,4 +46,6 @@ class EntityFrozenViking(world: World): EntityMob(world), INiflheimEntity {
 			2 -> dropItem(Items.potato, 1)
 		}
 	}
+	
+	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 }

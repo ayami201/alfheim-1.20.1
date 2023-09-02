@@ -1,6 +1,6 @@
 package alfheim.common.world.dim.alfheim
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.ASJUtilities
 import alfheim.client.render.world.*
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -19,6 +19,8 @@ import vazkii.botania.common.block.ModBlocks
 
 class WorldProviderAlfheim: WE_WorldProvider() {
 	
+	val worldFeatures = true
+	
 	override fun genSettings(cp: WE_ChunkProvider) {
 		cp.createChunkGen_List.clear()
 		cp.decorateChunkGen_List.clear()
@@ -33,21 +35,18 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 		cp.createChunkGen_List.add(YggdrasilGenerator)
 		cp.createChunkGen_List.add(NiflheimLocationGenerator)
 		
-		val cg = WE_CaveGen()
-		cg.replaceBlocksList.clear()
-		cg.replaceBlocksMetaList.clear()
-		cg.addReplacingBlock(ModBlocks.livingrock, 0.toByte())
-		cp.createChunkGen_List.add(cg)
-		val rg = WE_RavineGen()
-		rg.replaceBlocksList.clear()
-		rg.replaceBlocksMetaList.clear()
-		rg.addReplacingBlock(ModBlocks.livingrock, 0.toByte())
-		cp.createChunkGen_List.add(rg)
-		
-//		val snowGen = WE_SnowGen()
-//		snowGen.snowPoint = 164
-//		snowGen.randomSnowPoint = 8
-//		cp.createChunkGen_InXZ_List.add(snowGen)
+		if (worldFeatures) {
+			val cg = WE_CaveGen()
+			cg.replaceBlocksList.clear()
+			cg.replaceBlocksMetaList.clear()
+			cg.addReplacingBlock(ModBlocks.livingrock, 0.toByte())
+			cp.createChunkGen_List.add(cg)
+			val rg = WE_RavineGen()
+			rg.replaceBlocksList.clear()
+			rg.replaceBlocksMetaList.clear()
+			rg.addReplacingBlock(ModBlocks.livingrock, 0.toByte())
+			cp.createChunkGen_List.add(rg)
+		}
 		
 		val ores = WE_OreGen()
 		val m = AlfheimConfigHandler.oregenMultiplier
@@ -59,11 +58,13 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 5, 4, 8, 1 * m, 1 * m, 100, 1, 48) // Lapis
 		
 		cp.decorateChunkGen_List.add(WorldGenAlfheim)
-		cp.decorateChunkGen_List.add(ores)
-		if (Botania.thaumcraftLoaded)
-			cp.decorateChunkGen_List.add(WorldGenAlfheimThaumcraft)
-		
-		cp.decorateChunkGen_List.add(AlfheimLakeGen())
+		if (worldFeatures) {
+			cp.decorateChunkGen_List.add(ores)
+			if (Botania.thaumcraftLoaded)
+				cp.decorateChunkGen_List.add(WorldGenAlfheimThaumcraft)
+			
+			cp.decorateChunkGen_List.add(AlfheimLakeGen())
+		}
 		
 		WE_Biome.addBiomeToGeneration(cp, BiomeField)
 		WE_Biome.addBiomeToGeneration(cp, BiomeIslandGiantFlowers)
@@ -77,6 +78,22 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 		WE_Biome.addBiomeToGeneration(cp, BiomeMountTopField)
 		WE_Biome.addBiomeToGeneration(cp, BiomeIslandForest)
 		WE_Biome.addBiomeToGeneration(cp, BiomePitForest)
+		
+		if (!worldFeatures)
+			listOf(BiomeField,
+				   BiomeIslandGiantFlowers,
+				   BiomeBeach,
+				   BiomeSandbank,
+				   BiomeRiver,
+				   BiomeMountLow,
+				   BiomeMountMid,
+				   BiomeMountHigh,
+				   BiomeMountTopForest,
+				   BiomeMountTopField,
+				   BiomeIslandForest,
+				   BiomePitForest).forEach {
+					   it.decorateChunkGen_List.clear()
+		}
 	}
 	
 	override fun getDefaultBiome() = BiomeField

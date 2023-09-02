@@ -2,6 +2,7 @@ package alfheim.common.entity
 
 import alexsocol.asjlib.F
 import alexsocol.asjlib.math.Vector3
+import alfheim.api.entity.IAlfheimMob
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.EventResourcesMetas
 import net.minecraft.entity.*
@@ -14,7 +15,7 @@ import net.minecraft.util.*
 import net.minecraft.world.World
 import kotlin.math.PI
 
-class EntityRollingMelon(world: World): EntityCreature(world) {
+class EntityRollingMelon(world: World): EntityCreature(world), IAlfheimMob {
 	
 	var isLava: Boolean
 		get() = getFlag(6)
@@ -95,6 +96,8 @@ class EntityRollingMelon(world: World): EntityCreature(world) {
 		isLava = nbt.getBoolean(TAG_LAVA)
 		rotation = nbt.getFloat(TAG_ROTATION)
 	}
+	
+	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 	
 	companion object {
 		

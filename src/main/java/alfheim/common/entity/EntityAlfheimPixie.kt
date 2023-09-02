@@ -2,6 +2,7 @@ package alfheim.common.entity
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.api.entity.IAlfheimMob
 import alfheim.common.core.helper.*
 import alfheim.common.item.AlfheimItems
 import alfheim.common.world.dim.alfheim.biome.*
@@ -20,7 +21,7 @@ import vazkii.botania.common.item.ModItems
 import java.util.*
 import kotlin.math.*
 
-class EntityAlfheimPixie(world: World): EntityFlyingCreature(world), IElementalEntity {
+class EntityAlfheimPixie(world: World): EntityFlyingCreature(world), IElementalEntity, IAlfheimMob {
 	
 	/** Coordinates of where the pixie spawned.  */
 	private var spawnPosition: ChunkCoordinates? = null
@@ -136,4 +137,6 @@ class EntityAlfheimPixie(world: World): EntityFlyingCreature(world), IElementalE
 	override fun isInRangeToRenderDist(distance: Double): Boolean {
 		return super.isInRangeToRenderDist(distance / 16.0)
 	}
+	
+	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 }

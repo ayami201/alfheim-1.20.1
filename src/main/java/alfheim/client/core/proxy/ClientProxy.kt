@@ -18,7 +18,7 @@ import alfheim.client.render.particle.*
 import alfheim.client.render.tile.*
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.tile.*
-import alfheim.common.core.handler.*
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.proxy.CommonProxy
 import alfheim.common.crafting.recipe.AlfheimRecipes
 import alfheim.common.entity.*
@@ -26,9 +26,9 @@ import alfheim.common.entity.EntitySubspace
 import alfheim.common.entity.EntitySubspaceSpear
 import alfheim.common.entity.boss.*
 import alfheim.common.entity.boss.primal.*
-import alfheim.common.floatingisland.EntityFloatingIsland
 import alfheim.common.entity.item.EntityItemImmortal
 import alfheim.common.entity.spell.*
+import alfheim.common.floatingisland.EntityFloatingIsland
 import alfheim.common.integration.travellersgear.TGHandlerBotaniaRenderer
 import alfheim.common.item.AlfheimItems
 import alfheim.common.lexicon.AlfheimLexiconData
@@ -69,6 +69,7 @@ object ClientProxy : CommonProxy() {
 			LibShaderIDs.idWorley = ASJShaderHelper.createProgram("shaders/position.vert", "shaders/worley.frag")
 		}
 		
+		ClientRegistry.registerKeyBinding(keyAkashic)
 		ClientRegistry.registerKeyBinding(keyLolicorn)
 		
 		MinecraftForgeClient.registerItemRenderer(AlfheimItems.akashicRecords, RenderItemAkashicRecords)
@@ -84,7 +85,9 @@ object ClientProxy : CommonProxy() {
 		
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idAnyavil, RenderBlockAnyavil)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idBarrel, RenderBlockBarrel)
+		RenderingRegistry.registerBlockHandler(LibRenderIDs.idChair, RenderBlockChair)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idDomainDoor, RenderBlockDomainLobby)
+		RenderingRegistry.registerBlockHandler(LibRenderIDs.idDoubleBlock, RenderBlockDoubleBlock)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idGrapeRedPlanted, RenderBlockGrapeRedPlanted)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idGrapeWhite, RenderBlockGrapeGreen)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idHarvester, RenderBlockAnomalyHarvester)
@@ -93,8 +96,10 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idNiflheim, RenderBlockNiflheimSet)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idPowerStone, RenderBlockPowerStone)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idPylon, RenderBlockAlfheimPylons)
+		RenderingRegistry.registerBlockHandler(LibRenderIDs.idSecretGlass, RenderBlockSecretGlass)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idShrinePanel, RenderBlockShrinePanel)
 		RenderingRegistry.registerBlockHandler(LibRenderIDs.idSpire, RenderBlockSpire)
+		RenderingRegistry.registerBlockHandler(LibRenderIDs.idTable, RenderBlockTable)
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAlfheimPortal::class.java, RenderTileAlfheimPortal)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAlfheimPylon::class.java, RenderTileAlfheimPylons)
@@ -103,7 +108,9 @@ object ClientProxy : CommonProxy() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAnomalyHarvester::class.java, RenderTileAnomalyHarvester)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAnyavil::class.java, RenderTileAnyavil)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileBarrel::class.java, RenderTileBarrel)
+		ClientRegistry.bindTileEntitySpecialRenderer(TileChair::class.java, RenderTileChair)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileDomainLobby::class.java, RenderTileDomainLobby)
+		ClientRegistry.bindTileEntitySpecialRenderer(TileDoubleBlock::class.java, RenderTileDoubleBlock)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileFloatingFlowerRainbow::class.java, TileEntityRendererDispatcher.instance.mapSpecialRenderers[TileFloatingFlower::class.java] as RenderTileFloatingFlower)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileHeadFlugel::class.java, RenderTileHeadFlugel)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileHeadMiku::class.java, RenderTileHeadMiku)
@@ -113,19 +120,22 @@ object ClientProxy : CommonProxy() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileManaTuner::class.java, RenderTileManaTuner)
 		ClientRegistry.bindTileEntitySpecialRenderer(TilePowerStone::class.java, RenderTilePowerStone)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileRaceSelector::class.java, RenderTileRaceSelector)
+		ClientRegistry.bindTileEntitySpecialRenderer(TileSecretGlass::class.java, RenderTileSecretGlass)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileSpire::class.java, RenderTileSpire)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileStar::class.java, RenderStar)
+		ClientRegistry.bindTileEntitySpecialRenderer(TileTable::class.java, RenderTileTable)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileTradePortal::class.java, RenderTileTradePortal)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileYggFlower::class.java, RenderTileYggFlower)
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityAlfheimPixie::class.java, RenderEntityAlfheimPixie)
 		RenderingRegistry.registerEntityRenderingHandler(EntityBlackBolt::class.java, RenderEntityBlackBolt)
-		RenderingRegistry.registerEntityRenderingHandler(EntityFallingHang::class.java, RenderEntityFallingHang)
-		RenderingRegistry.registerEntityRenderingHandler(EntityFloatingIsland::class.java, RenderEntityFloatingIsland)
 		RenderingRegistry.registerEntityRenderingHandler(EntityButterfly::class.java, RenderEntityButterfly)
 		RenderingRegistry.registerEntityRenderingHandler(EntityDedMoroz::class.java, RenderEntityDedMoroz)
+		RenderingRegistry.registerEntityRenderingHandler(EntityElementalSlime::class.java, RenderEntityElementalSlime)
 		RenderingRegistry.registerEntityRenderingHandler(EntityElf::class.java, RenderEntityElf)
+		RenderingRegistry.registerEntityRenderingHandler(EntityFallingHang::class.java, RenderEntityFallingHang)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFenrir::class.java, RenderEntityFenrir)
+		RenderingRegistry.registerEntityRenderingHandler(EntityFloatingIsland::class.java, RenderEntityFloatingIsland)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlugel::class.java, RenderEntityFlugel)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrozenViking::class.java, RenderEntityFrozenViking)
 		RenderingRegistry.registerEntityRenderingHandler(EntityGleipnir::class.java, RenderEntityGleipnir)
@@ -350,6 +360,7 @@ object ClientProxy : CommonProxy() {
 		MinecraftForge.EVENT_BUS.register(GUIRace)
 	}
 	
+	val keyAkashic = KeyBinding("key.akashic.desc", Keyboard.KEY_K, "key.categories.alfheim")
 	val keyLolicorn = KeyBinding("key.lolicorn.desc", Keyboard.KEY_L, "key.categories.alfheim")
 	val keyESMAbility = KeyBinding("key.esmability.desc", Keyboard.KEY_M, "key.categories.alfheim")
 	val keyFlight = KeyBinding("key.flight.desc", Keyboard.KEY_F, "key.categories.alfheim")

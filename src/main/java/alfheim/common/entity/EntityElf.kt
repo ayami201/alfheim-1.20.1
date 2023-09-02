@@ -39,7 +39,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent
 import java.util.*
 import kotlin.math.abs
 
-class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEntity, IElementalEntity {
+class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEntity, IElementalEntity, IAlfheimMob {
 	
 	var job
 		get() = EnumElfJob[dataWatcher.getWatchableObjectInt(3)]
@@ -454,6 +454,8 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 	}
 	
 	override fun allowLeashing() = false
+	
+	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 	
 	companion object {
 		

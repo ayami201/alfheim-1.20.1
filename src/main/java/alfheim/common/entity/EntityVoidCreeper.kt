@@ -1,6 +1,7 @@
 package alfheim.common.entity
 
 import alexsocol.asjlib.*
+import alfheim.api.entity.IAlfheimMob
 import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.monster.EntityCreeper
@@ -8,13 +9,14 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.World
 import vazkii.botania.common.item.ModItems
 
 /**
  * All the mana is mine mahhhaahahha
  */
-class EntityVoidCreeper(world: World): EntityCreeper(world) {
+class EntityVoidCreeper(world: World): EntityCreeper(world), IAlfheimMob {
 	
 	private var lastActiveTime: Int = 0
 	private var timeSinceIgnited: Int = 0
@@ -89,4 +91,6 @@ class EntityVoidCreeper(world: World): EntityCreeper(world) {
 		worldObj.createExplosion(this, posX, posY, posZ, 1f, false)
 		setDead()
 	}
+	
+	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 }

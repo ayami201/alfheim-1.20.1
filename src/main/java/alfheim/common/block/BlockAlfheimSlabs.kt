@@ -5,6 +5,7 @@ import alfheim.client.core.helper.IconHelper
 import net.minecraft.block.BlockSlab
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.util.IIcon
+import net.minecraft.world.IBlockAccess
 import vazkii.botania.common.block.decor.slabs.BlockLivingSlab
 
 class BlockRockShrineWhiteSlab(full: Boolean): BlockLivingSlab(full, AlfheimFluffBlocks.shrineRock, 0) {
@@ -63,6 +64,15 @@ class BlockLivingCobbleSlab2(full: Boolean): BlockLivingSlab(full, AlfheimBlocks
 	
 	override fun getIcon(side: Int, meta: Int) = if (side > 1) sideIcon else super.getIcon(side, meta)!!
 	
+}
+
+class BlockLivingMountainSlab(full: Boolean): BlockLivingSlab(full, AlfheimFluffBlocks.livingMountain, 0) {
+	
+	override fun getFullBlock() = AlfheimFluffBlocks.livingMountainSlabFull as BlockSlab
+	
+	override fun getSingleBlock() = AlfheimFluffBlocks.livingMountainSlab as BlockSlab
+	
+	override fun getIcon(world: IBlockAccess?, x: Int, y: Int, z: Int, side: Int) = AlfheimFluffBlocks.livingMountain.getIcon(world, x, y, z, side)!!
 }
 
 class BlockLivingrockDarkSlab(full: Boolean, val meta: Int): BlockLivingSlab(full, AlfheimFluffBlocks.livingrockDark, meta) {

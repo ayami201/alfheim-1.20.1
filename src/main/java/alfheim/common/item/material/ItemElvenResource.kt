@@ -11,6 +11,8 @@ import alfheim.common.core.handler.*
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
+import alfheim.common.core.helper.ElementalDamage
+import alfheim.common.entity.EntityElementalSlime
 import alfheim.common.item.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.Companion.of
@@ -84,6 +86,8 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	override fun getColorFromItemStack(stack: ItemStack, pass: Int) =
 		if ((stack.meta == ElvenWeed.I && pass == 1) || stack.meta == RiftShardEmpty.I)
 			Color.HSBtoRGB(Botania.proxy.worldElapsedTicks * 2 % 360 / 360f, 0.25f, 1f)
+		else if (stack.meta == ElementalSlimeBall.I && ItemNBTHelper.getBoolean(stack, TAG_RAINBOW, false))
+			ItemIridescent.rainbowColor()
 		else if ((stack.meta == RiftDrive.I && pass == 1)) {
 			val color = AlfheimAPI.getAnomaly(ItemNBTHelper.getString(stack, TileAnomaly.TAG_SUBTILE_NAME, "")).color
 			if (color == -1) Color.HSBtoRGB(Botania.proxy.worldElapsedTicks * 2 % 360 / 360f, 1f, 1f) else color
@@ -92,6 +96,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 			RiftShardMuspelheim.I         -> Color.HSBtoRGB(0.05f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 8 + 0.75f, 1f)
 			RiftShardNiflheim.I           -> Color.HSBtoRGB(2 / 3f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 8 + 0.75f, 1f)
 			RainbowPetal.I, RainbowDust.I -> ItemIridescent.rainbowColor()
+			ElementalSlimeBall.I          -> stack.element.color
 			else                          -> super.getColorFromItemStack(stack, pass)
 		}
 	
@@ -142,13 +147,28 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	override fun getUnlocalizedName(stack: ItemStack) =
 		if (AlfheimCore.jingleTheBells && stack.meta == InfusedDreamwoodTwig.I)
 			"item.InfusedCandy"
-		else
-			"item.${of(stack.meta).toString()}"
+		else {
+			var name = "item.${of(stack.meta).toString()}"
+			if (stack.meta == ElementalSlimeBall.I) name += ".${stack.element.name}"
+			name
+		}
 	
 	override fun getSubItems(item: Item, tab: CreativeTabs?, list: MutableList<Any?>) {
-		for (type in entries)
-			if (type !in ElvenResourcesMetas.displayBlackList)
-				list.add(type.stack)
+		for (type in entries) {
+			if (type in ElvenResourcesMetas.displayBlackList) continue
+			
+			when (type) {
+				RiftDrive          -> AlfheimAPI.anomalies.keys.forEach {
+					if (!AlfheimAPI.anomalyBehaviors.containsKey(it)) return@forEach
+					
+					val stack = RiftDrive.stack
+					ItemNBTHelper.setString(stack, TileAnomaly.TAG_SUBTILE_NAME, it)
+					list += stack
+				}
+				ElementalSlimeBall -> EntityElementalSlime.allowedElements.mapTo(list) { ballForElement(it) }
+				else               -> list += type.stack
+			}
+		}
 	}
 	
 	override fun onLeftClickEntity(stack: ItemStack, player: EntityPlayer, target: Entity): Boolean {
@@ -327,6 +347,21 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		lateinit var weed1: IIcon
 		
 		const val TAG_USAGES = "usages"
+		const val TAG_ELEMENT = "element"
+		const val TAG_RAINBOW = "rainbow"
+		
+		private val ItemStack.element get() = ElementalDamage.valueOf(ItemNBTHelper.getString(this, TAG_ELEMENT, ElementalDamage.COMMON.name))
+		
+		fun ballForElement(element: ElementalDamage?, size: Int = 1): ItemStack {
+			val stack = ElementalSlimeBall.stack(size)
+			if (element != null)
+				ItemNBTHelper.setString(stack, TAG_ELEMENT, element.name)
+			else {
+				ItemNBTHelper.setString(stack, TAG_ELEMENT, ElementalDamage.COMMON.name)
+				ItemNBTHelper.setBoolean(stack, TAG_RAINBOW, true)
+			}
+			return stack
+		}
 	}
 }
 
@@ -370,11 +405,12 @@ enum class ElvenResourcesMetas {
 	RiftDrive,
 	DomainKey,
 	SaveIvy,
+	ElementalSlimeBall,
 	;
 	
 	val I get() = ordinal
 	
-	val stack get() = ItemStack(AlfheimItems.elvenResource, 1, I)
+	val stack get() = stack(1)
 	
 	fun stack(size: Int) = ItemStack(AlfheimItems.elvenResource, size, I)
 	

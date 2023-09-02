@@ -125,6 +125,8 @@ import alfheim.common.block.AlfheimBlocks.stalactite
 import alfheim.common.block.AlfheimBlocks.stalagmite
 import alfheim.common.block.AlfheimBlocks.subspacian
 import alfheim.common.block.AlfheimBlocks.tradePortal
+import alfheim.common.block.AlfheimFluffBlocks.chair
+import alfheim.common.block.AlfheimFluffBlocks.doubleBlock
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFenceGate
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFence
@@ -138,6 +140,7 @@ import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneSlab2
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneStairs
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneWalls
 import alfheim.common.block.AlfheimFluffBlocks.livingMountain
+import alfheim.common.block.AlfheimFluffBlocks.livingMountainSlab
 import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab
 import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab1
 import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab2
@@ -157,6 +160,7 @@ import alfheim.common.block.AlfheimFluffBlocks.livingwoodFenceGate
 import alfheim.common.block.AlfheimFluffBlocks.roofTile
 import alfheim.common.block.AlfheimFluffBlocks.roofTileSlabs
 import alfheim.common.block.AlfheimFluffBlocks.roofTileStairs
+import alfheim.common.block.AlfheimFluffBlocks.secretGlass
 import alfheim.common.block.AlfheimFluffBlocks.shrineGlass
 import alfheim.common.block.AlfheimFluffBlocks.shrineLight
 import alfheim.common.block.AlfheimFluffBlocks.shrinePanel
@@ -164,6 +168,7 @@ import alfheim.common.block.AlfheimFluffBlocks.shrinePillar
 import alfheim.common.block.AlfheimFluffBlocks.shrineRock
 import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteSlab
 import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
+import alfheim.common.block.AlfheimFluffBlocks.table
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.core.asm.AlfheimClassTransformer
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -612,6 +617,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(elvenOre)
 		
 		addBlock(livingMountain)
+		addBlock(livingMountainSlab)
 		addBlock(livingcobble)
 		addBlock(livingcobbleStairs)
 		addBlock(livingcobbleStairs1)
@@ -629,6 +635,10 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(elvenSandstoneSlab2)
 		elvenSandstoneWalls.forEach { addBlock(it) }
 		
+		addBlock(yggDecor)
+		addBlock(dwarfPlanks)
+		addBlock(dwarfTrapDoor)
+		
 		addBlock(livingwoodBarkFence)
 		addBlock(livingwoodFence)
 		addBlock(livingwoodBarkFenceGate)
@@ -639,9 +649,10 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(dreamwoodBarkFenceGate)
 		addBlock(dreamwoodFenceGate)
 		
-		addBlock(yggDecor)
-		addBlock(dwarfPlanks)
-		addBlock(dwarfTrapDoor)
+		addBlock(table)
+		addBlock(chair)
+		addBlock(doubleBlock)
+		addBlock(secretGlass)
 		
 		addBlock(irisDirt)
 		addBlock(rainbowDirt)

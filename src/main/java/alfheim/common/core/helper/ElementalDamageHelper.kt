@@ -42,10 +42,11 @@ object ElementalDamageHandler {
 		DamageSource.fallingBlock.setTo(EARTH)
 	}
 	
-	private val elementalMobs: Map<String, EnumSet<ElementalDamage>> by lazy {
+	val elementalMobs: Map<String, EnumSet<ElementalDamage>> by lazy {
 		AlfheimConfigHandler.mobElements.associate { entry ->
 			val (name, eList) = entry.split(":")
 			val elements = eList.split(",").mapTo(EnumSet.noneOf(ElementalDamage::class.java), ElementalDamage::valueOf)
+			require(COMMON !in elements || elements.size == 1) { "Cannot combine COMMON with any other element" }
 			name to elements
 		}
 	}
@@ -273,18 +274,18 @@ enum class ElementalDamageBridge {
 	val real get() = ElementalDamage.entries[ordinal]
 }
 
-enum class ElementalDamage(val x2: Array<ElementalDamageBridge>, val x05: Array<ElementalDamageBridge>) {
-	COMMON(arrayOf(), arrayOf()),
-	FIRE(arrayOf(WATER_, EARTH_), arrayOf(AIR_, NATURE_)),
-	WATER(arrayOf(ICE_, ELECTRIC_), arrayOf(FIRE_, NATURE_)),
-	AIR(arrayOf(FIRE_, ICE_), arrayOf(WATER_, EARTH_)),
-	EARTH(arrayOf(WATER_, NATURE_), arrayOf(ICE_, ELECTRIC_)),
-	ICE(arrayOf(FIRE_, ELECTRIC_), arrayOf(WATER_, NATURE_)),
-	ELECTRIC(arrayOf(FIRE_, ICE_), arrayOf(WATER_, AIR_)),
-	NATURE(arrayOf(FIRE_, ICE_), arrayOf(WATER_, ELECTRIC_)),
-	LIGHTNESS(arrayOf(DARKNESS_), arrayOf()),
-	DARKNESS(arrayOf(LIGHTNESS_), arrayOf()),
-	PSYCHIC(arrayOf(DARKNESS_), arrayOf(LIGHTNESS_));
+enum class ElementalDamage(val x2: Array<ElementalDamageBridge>, val x05: Array<ElementalDamageBridge>, val color: Int) {
+	COMMON(arrayOf(), arrayOf(), 0xFFFFFF),
+	FIRE(arrayOf(WATER_, EARTH_), arrayOf(AIR_, NATURE_), 0xC5390F),
+	WATER(arrayOf(ICE_, ELECTRIC_), arrayOf(FIRE_, NATURE_), 0x207FCC),
+	AIR(arrayOf(FIRE_, ICE_), arrayOf(WATER_, EARTH_), 0xFEFBEB),
+	EARTH(arrayOf(WATER_, NATURE_), arrayOf(ICE_, ELECTRIC_), 0x71493B),
+	ICE(arrayOf(FIRE_, ELECTRIC_), arrayOf(WATER_, NATURE_), 0xA6FCDB),
+	ELECTRIC(arrayOf(FIRE_, ICE_), arrayOf(WATER_, AIR_), 0xFFC700),
+	NATURE(arrayOf(FIRE_, ICE_), arrayOf(WATER_, ELECTRIC_), 0x14A02E),
+	LIGHTNESS(arrayOf(DARKNESS_), arrayOf(), 0xFFFC40),
+	DARKNESS(arrayOf(LIGHTNESS_), arrayOf(), 0x221C1A),
+	PSYCHIC(arrayOf(DARKNESS_), arrayOf(LIGHTNESS_), 0x793A80);
 	
 	fun isVulnerable(type: ElementalDamage): Boolean {
 		return ElementalDamageBridge.entries.toTypedArray()[type.ordinal] in x2

@@ -1,7 +1,15 @@
 Innovations:
  New Niflheim worldgen features
- Frozen Viking mobs for Niflheim
+ Frozen Viking mob in Niflheim
+ Elemental slime mob
  Lens to unlink bursts from spreader
+ Finally finished Akashic Records
+ Relics now are craftable
+ Effects for wine + champagne with "hidden" craft
+ Barrels now has comparator output for ease of automation
+ New decorative blocks
+ Booba render for Flügel
+ [ESM] Ocelots won't run away from cait sith players
 
 Fixes:
  Aesir ring was dropping 3 rings

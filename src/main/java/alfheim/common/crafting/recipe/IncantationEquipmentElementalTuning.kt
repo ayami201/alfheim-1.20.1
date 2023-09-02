@@ -5,6 +5,8 @@ import alfheim.api.*
 import alfheim.api.AlfheimAPI.set
 import alfheim.api.crafting.recipe.TunerIncantation
 import alfheim.api.item.equipment.IElementalItem
+import alfheim.common.core.helper.ElementalDamage
+import alfheim.common.item.material.ItemElvenResource
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.enchantment.EnumEnchantmentType
 import net.minecraft.inventory.IInventory
@@ -13,7 +15,7 @@ import net.minecraft.util.*
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
 import vazkii.botania.common.lib.LibOreDict
 
-class IncantationEquipmentElementalTuning(val element: String, incantation: String, val elementResource: Any): TunerIncantation<ItemStack>(ItemStack::class.java, incantation, arrayOf(elementResource), {
+class IncantationEquipmentElementalTuning(val element: String, incantation: String): TunerIncantation<ItemStack>(ItemStack::class.java, incantation, arrayOf(), {
 	ItemNBTHelper.setInt(it, TAG_ELEMENT_LEVEL, ItemNBTHelper.getInt(it, TAG_ELEMENT_LEVEL, 0) + 1)
 	ItemNBTHelper.setString(it, TAG_ELEMENT, element)
 	true
@@ -40,7 +42,7 @@ class IncantationEquipmentElementalTuning(val element: String, incantation: Stri
 	
 	override fun getInputs(target: ItemStack): List<Any> {
 		val level = ItemNBTHelper.getInt(target, TAG_ELEMENT_LEVEL, 0)
-		val er = Array(level + 1) { elementResource }
+		val er = Array(level + 1) { ItemElvenResource.ballForElement(ElementalDamage.valueOf(element)) }
 		val manaWeave = Array(level + 7) { LibOreDict.MANAWEAVE_CLOTH }
 		return listOf(*er, *manaWeave)
 	}

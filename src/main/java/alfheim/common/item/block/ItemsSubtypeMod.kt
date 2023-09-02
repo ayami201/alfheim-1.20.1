@@ -24,7 +24,7 @@ open class ItemSubtypedBlockMod(block: Block): ItemBlockWithMetadata(block, bloc
 	}
 	
 	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>?, par4: Boolean) {
-		if (stack == null || stack.item.toBlock() !is BlockColoredLeaves) return
+		if (stack?.block !is BlockColoredLeaves) return
 		addStringToTooltip("&7" + StatCollector.translateToLocal("misc.${ModInfo.MODID}.color." + stack.meta) + "&r", list)
 	}
 }

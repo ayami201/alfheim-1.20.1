@@ -116,15 +116,15 @@ class ItemWireAxe(val name: String = "axeRevelation", val toolMaterial: ToolMate
 	
 	override fun addInformation(stack: ItemStack, player: EntityPlayer?, list: MutableList<Any?>, par4: Boolean) {
 		super.addInformation(stack, player, list, par4)
-		val greyitalics = "${EnumChatFormatting.GRAY}${EnumChatFormatting.ITALIC}"
-		val grey = EnumChatFormatting.GRAY
+		val grayitalics = "${EnumChatFormatting.GRAY}${EnumChatFormatting.ITALIC}"
+		val gray = EnumChatFormatting.GRAY
 		if (GuiScreen.isShiftKeyDown()) {
-			addStringToTooltip(list, "$greyitalics${StatCollector.translateToLocal("misc.${ModInfo.MODID}.wline1")}")
-			addStringToTooltip(list, "$greyitalics${StatCollector.translateToLocal("misc.${ModInfo.MODID}.wline2")}")
-			addStringToTooltip(list, "$greyitalics${StatCollector.translateToLocal("misc.${ModInfo.MODID}.wline3")}")
+			addStringToTooltip(list, "$grayitalics${StatCollector.translateToLocal("misc.${ModInfo.MODID}.wline1")}")
+			addStringToTooltip(list, "$grayitalics${StatCollector.translateToLocal("misc.${ModInfo.MODID}.wline2")}")
+			addStringToTooltip(list, "$grayitalics${StatCollector.translateToLocal("misc.${ModInfo.MODID}.wline3")}")
 			addStringToTooltip(list, "")
-			addStringToTooltip(list, "$grey\"I awaken the Ancients within all of you!")
-			addStringToTooltip(list, "${grey}From my soul's fire the world burns anew!\"")
+			addStringToTooltip(list, "$gray\"I awaken the Ancients within all of you!")
+			addStringToTooltip(list, "${gray}From my soul's fire the world burns anew!\"")
 		} else addStringToTooltip(list, StatCollector.translateToLocal("botaniamisc.shiftinfo"))
 	}
 	

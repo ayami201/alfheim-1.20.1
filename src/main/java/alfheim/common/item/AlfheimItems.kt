@@ -179,7 +179,7 @@ object AlfheimItems {
 	val royalStaff: Item
 	
 	init {
-		akashicRecords = ItemAkashicRecords().WIP()
+		akashicRecords = ItemAkashicRecords()
 		aesirCloak = ItemAesirCloak()
 		aesirEmblem = ItemAesirEmblem()
 		armilla = ItemArmilla()

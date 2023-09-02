@@ -53,7 +53,7 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 					}
 					
 					if (found) break
-				} else if (input is ItemStack && simpleAreStacksEqual(input, stack)) {
+				} else if (input is ItemStack && ASJUtilities.isItemStackEqualCrafting(input, stack)) {
 					stackIndex = j
 					break
 				}
@@ -64,8 +64,6 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 		
 		return inputsMissing.isEmpty()
 	}
-	
-	fun simpleAreStacksEqual(stack: ItemStack, stack2: ItemStack) = stack.item === stack2.item && stack.getItemDamage() == stack2.getItemDamage()
 	
 	open fun getInputs(target: @UnsafeVariance T): List<Any> = ArrayList(inputs)
 	

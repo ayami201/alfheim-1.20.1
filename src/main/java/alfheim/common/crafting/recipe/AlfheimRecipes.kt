@@ -151,6 +151,7 @@ import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneSlab2
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneStairs
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneWalls
 import alfheim.common.block.AlfheimFluffBlocks.livingMountain
+import alfheim.common.block.AlfheimFluffBlocks.livingMountainSlab
 import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab
 import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab1
 import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab2
@@ -186,6 +187,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge.ABYSS_TRUTH
 import alfheim.common.core.handler.HilarityHandler.AttributionNameChecker.getCurrentNickname
 import alfheim.common.core.helper.*
+import alfheim.common.entity.EntityElementalSlime
 import alfheim.common.integration.thaumcraft.ThaumcraftSuffusionRecipes
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
 import alfheim.common.item.AlfheimItems.akashicRecords
@@ -297,8 +299,10 @@ import alfheim.common.item.AlfheimItems.wiltedLotus
 import alfheim.common.item.block.*
 import alfheim.common.item.material.ElvenFoodMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
+import alfheim.common.item.material.ItemElvenResource
 import cpw.mods.fml.common.registry.GameRegistry.*
 import net.minecraft.block.Block
+import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.monster.*
@@ -571,8 +575,9 @@ object AlfheimRecipes {
 	lateinit var tuningElementalSeer: TunerIncantation<ItemStack>
 	lateinit var tuningAnomalyStabilization: TunerIncantation<TileAnomaly>
 	lateinit var tuningAnomalyPackaging: TunerIncantation<TileAnomaly>
-	lateinit var tuningMagmaSize: TunerIncantation<EntityLivingBase>
 	lateinit var tuningSlimeSize: TunerIncantation<EntityLivingBase>
+	lateinit var tuningMagmaSize: TunerIncantation<EntityLivingBase>
+	lateinit var tuningElementlaSlimeSize: ElementalSlimeGrowthTune
 	var tuningTaintSize: TunerIncantation<EntityLivingBase>? = null
 	var tuningGelatSize: TunerIncantation<EntityLivingBase>? = null
 	
@@ -2101,6 +2106,10 @@ object AlfheimRecipes {
 		
 		recipesLivingDecor = BotaniaAPI.getLatestAddedRecipes(3)
 		
+		addRecipe(ItemStack(livingMountainSlab, 6),
+		          "MMM",
+		          'M', ItemStack(livingMountain))
+		
 		addShapelessOreDictRecipe(ItemStack(livingcobble, 1, 3), ItemStack(livingcobble), vineBall)
 		recipeLivingCobbleMossy = BotaniaAPI.getLatestAddedRecipe()
 		
@@ -2623,7 +2632,7 @@ object AlfheimRecipes {
 		recipesAttributionHeads.add(attributionSkull(getCurrentNickname("yrsegal"), irisSeeds, 16)) // Bifrost Seeds
 		// Wire - I just love rainbows, what can I say?
 		recipesAttributionHeads.add(attributionSkull(getCurrentNickname("l0nekitsune"), elvenResource, NetherwoodCoal.I))
-		// L0ne - "hot stuff" (because I'm classy like that)
+		// Lone - "hot stuff" (because I'm classy like that)
 		recipesAttributionHeads.add(attributionSkull(getCurrentNickname("Tristaric"), coatOfArms, 6)) // Irish Shield
 		// Tris - The only item that remotely fits me.
 		
@@ -2654,22 +2663,20 @@ object AlfheimRecipes {
 	}
 	
 	private fun registerTuning() {
-		IncantationEquipmentElementalTuning(ElementalDamage.FIRE.name,      "o ken e ni: kon seli li kama jo e tomo lon insa ijo", COAL_NETHERWOOD)
-		IncantationEquipmentElementalTuning(ElementalDamage.WATER.name,     "telo tawa o tawa insa pi ijo ni",                     ItemStack(potionitem))
-		IncantationEquipmentElementalTuning(ElementalDamage.AIR.name,       "kon pi musi sike o sike o awen e ijo ni",             ItemStack(glass_bottle))
-		IncantationEquipmentElementalTuning(ElementalDamage.EARTH.name,     "o wan e ijo ni e wawa pi kiwen ale",                  ItemStack(clay))
-		IncantationEquipmentElementalTuning(ElementalDamage.ICE.name,       "o lete e ijo ni kepeken kon sina lete",               Nifleur.stack)
-		IncantationEquipmentElementalTuning(ElementalDamage.ELECTRIC.name,  "o wawa e ijo ni kepeken wawa pi jan sewi tola",       SPLINTERS_THUNDERWOOD)
-		IncantationEquipmentElementalTuning(ElementalDamage.NATURE.name,    "o namako e ijo ni kepeken sona pi linja laso kasi",   LIVINGWOOD_TWIG)
-		IncantationEquipmentElementalTuning(ElementalDamage.LIGHTNESS.name, "suno o walo e insa pi ijo ni",                        ItemStack(glowstone))
-		IncantationEquipmentElementalTuning(ElementalDamage.DARKNESS.name,  "pimeja o moku ali suno tawa ijo ni",                  ItemStack(wiltedLotus, 1, 1))
-		IncantationEquipmentElementalTuning(ElementalDamage.PSYCHIC.name,   "o pakala e sijelo ala. ijo ni li wile ala e sijelo",  ItemStack(ghast_tear))
+		IncantationEquipmentElementalTuning(ElementalDamage.FIRE.name,      "o ken e ni: kon seli li kama jo e tomo lon insa ijo")
+		IncantationEquipmentElementalTuning(ElementalDamage.WATER.name,     "telo tawa o tawa insa pi ijo ni")
+		IncantationEquipmentElementalTuning(ElementalDamage.AIR.name,       "kon pi musi sike o sike o awen e ijo ni")
+		IncantationEquipmentElementalTuning(ElementalDamage.EARTH.name,     "o wan e ijo ni e wawa pi kiwen ale")
+		IncantationEquipmentElementalTuning(ElementalDamage.ICE.name,       "o lete e ijo ni kepeken kon sina lete")
+		IncantationEquipmentElementalTuning(ElementalDamage.ELECTRIC.name,  "o wawa e ijo ni kepeken wawa pi jan sewi tola")
+		IncantationEquipmentElementalTuning(ElementalDamage.NATURE.name,    "o namako e ijo ni kepeken sona pi linja laso kasi")
+		IncantationEquipmentElementalTuning(ElementalDamage.LIGHTNESS.name, "suno o walo e insa pi ijo ni")
+		IncantationEquipmentElementalTuning(ElementalDamage.DARKNESS.name,  "pimeja o moku ali suno tawa ijo ni")
+		IncantationEquipmentElementalTuning(ElementalDamage.PSYCHIC.name,   "o pakala e sijelo ala. ijo ni li wile ala e sijelo")
 		
 		tuningElementalSeer = AlfheimAPI.registerIncantation<ItemStack>(
-			"o ken e ni: mi o kama sona e ijo ale",
-		    *AlfheimAPI.tunerIncantations.values().filterIsInstance<IncantationEquipmentElementalTuning>().map {
-				it.elementResource
-		    }.take(16).toTypedArray()
+			"o ken e ni: mi kama sona e ijo ale",
+		    *EntityElementalSlime.allowedElements.map(ItemElvenResource.Companion::ballForElement).take(16).toTypedArray()
 		) {
 			if (it.item !is IBurstViewerBauble) return@registerIncantation false
 			if (ItemNBTHelper.getBoolean(it, ElementalDamageHandler.TAG_ELEMENTAL_SEER, false)) return@registerIncantation false
@@ -2697,12 +2704,16 @@ object AlfheimRecipes {
 		
 		tuningSlimeSize = registerSlimeGrowthTune<EntitySlime>(ItemStack(slime_ball))
 		tuningMagmaSize = registerSlimeGrowthTune<EntityMagmaCube>(ItemStack(magma_cream))
+		tuningElementlaSlimeSize = ElementalSlimeGrowthTune(slimeGrowthApplication<EntityElementalSlime>())
+		
 		if (Botania.thaumcraftLoaded) tuningTaintSize = registerSlimeGrowthTune<EntityThaumicSlime>(ItemStack(ConfigItems.itemResource, 1, 11))
 		if (AlfheimCore.TiCLoaded) tuningGelatSize = registerSlimeGrowthTune<BlueSlime>(ItemStack(TinkerWorld.strangeFood))
 		
+		val smiteSword = ItemStack(golden_sword).apply { addEnchantment(Enchantment.smite, 4) }
+		
 		tuningAkashicRecords = registerItemCraftTuning("lipu pi ijo sona ale", akashicRecords, shimmerrock, book, bookshelf, monocle, lexicon, RUNE[11])
 		tuningDaolos = registerItemCraftTuning("ilo utala alasa telo", daolos, manasteelAxe, MUSPELHEIM_ESSENCE, water_bucket, JellyBottle.stack, fish, RUNE[0], RUNE[3])
-		tuningExcaliber = registerItemCraftTuning("ilo utala sewi kiwen", excaliber, terraSword, MAUFTRIUM_NUGGET, golden_sword, GLOWSTONE_DUST, ItemStack(shrineLight, 1, 4), dice)
+		tuningExcaliber = registerItemCraftTuning("ilo utala sewi kiwen", excaliber, terraSword, MAUFTRIUM_NUGGET, smiteSword, GLOWSTONE_DUST, ItemStack(shrineLight, 1, 4), dice)
 		tuningFlugelEye = registerItemCraftTuning("oko pi jan sewi moli", flugelEye, ender_eye, RUNE[8], dice, ender_pearl, worldSeed, PIXIE_DUST)
 		tuningFlugelSoul = registerItemCraftTuning("kon pi jan sewi moli", flugelSoul, ItemStack(manaResource, 1, 5), *Array(8) { LIFE_ESSENCE }, *Array(8) { RUNE[it + 8] })
 		tuningGjallarhorn = registerItemCraftTuning("ilo kalama uta pi jan sewi kejemetale", gjallarhorn, grassHorn, NIFLHEIM_ESSENCE, amplifier, RUNE[8], golden_horse_armor, skull)
@@ -2723,21 +2734,23 @@ object AlfheimRecipes {
 	}
 	
 	private inline fun <reified T: EntityLivingBase> registerSlimeGrowthTune(item: Any): TunerIncantation<EntityLivingBase> {
-		return AlfheimAPI.registerIncantation<T>("jaki o kama suli", *Array(4) { item }) {
-			if (it::class.java != T::class.java) return@registerIncantation false // no other types for this
-			val nbt = NBTTagCompound()
-			it.writeEntityToNBT(nbt)
-			val newSize = nbt.getInteger("Size") + 1
-			if (newSize > Byte.MAX_VALUE) return@registerIncantation false // no overflow
-			nbt.setInteger("Size", newSize)
-			it.readEntityFromNBT(nbt)
-			
-			if (newSize == Byte.MAX_VALUE.I) getEntitiesWithinAABB(it.worldObj, EntityPlayer::class.java, it.boundingBox(8)).forEach { p ->
-				p.triggerAchievement(AlfheimAchievements.slime)
-			}
-			
-			true
+		return AlfheimAPI.registerIncantation<T>("jaki o kama suli", *Array(4) { item }, application = slimeGrowthApplication<T>())
+	}
+	
+	private inline fun <reified T: EntityLivingBase> slimeGrowthApplication(): (T) -> Boolean = application@ {
+		if (it::class.java != T::class.java) return@application false // no other types for this
+		val nbt = NBTTagCompound()
+		it.writeEntityToNBT(nbt)
+		val newSize = nbt.getInteger("Size") + 1
+		if (newSize > Byte.MAX_VALUE) return@application false // no overflow
+		nbt.setInteger("Size", newSize)
+		it.readEntityFromNBT(nbt)
+		
+		if (newSize == Byte.MAX_VALUE.I) getEntitiesWithinAABB(it.worldObj, EntityPlayer::class.java, it.boundingBox(8)).forEach { p ->
+			p.triggerAchievement(AlfheimAchievements.slime)
 		}
+		
+		true
 	}
 	
 	private fun registerItemCraftTuning(incantation: String, result: Item, _core: Any, vararg inputs: Any): TunerIncantationIO {

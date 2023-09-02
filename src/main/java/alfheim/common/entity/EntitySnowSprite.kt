@@ -1,10 +1,9 @@
 package alfheim.common.entity
 
 import alexsocol.asjlib.*
-import alfheim.api.entity.INiflheimEntity
+import alfheim.api.entity.*
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
-import alfheim.common.core.helper.*
 import alfheim.common.entity.boss.EntityDedMoroz
 import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.world.dim.alfheim.biome.*
@@ -23,7 +22,7 @@ import vazkii.botania.common.Botania
 import vazkii.botania.common.entity.EntityFlyingCreature
 import kotlin.math.*
 
-class EntitySnowSprite(world: World): EntityFlyingCreature(world), INiflheimEntity {
+class EntitySnowSprite(world: World): EntityFlyingCreature(world), INiflheimEntity, IAlfheimMob {
 	
 	private var spawnPosition: ChunkCoordinates? = null
 	
@@ -128,6 +127,8 @@ class EntitySnowSprite(world: World): EntityFlyingCreature(world), INiflheimEnti
 	
 	@SideOnly(Side.CLIENT)
 	override fun isInRangeToRenderDist(distance: Double) = super.isInRangeToRenderDist(distance / 16.0)
+	
+	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 }
 
 object SpriteKillHandler {

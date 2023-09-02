@@ -57,6 +57,11 @@ object RenderTileBarrel: TileEntitySpecialRenderer() {
 			if (tile.wineType == TileBarrel.WINE_TYPE_WHITE)
 				ModelBarrel.greenWine.render(f5)
 			
+			if (tile.wineType == TileBarrel.WINE_TYPE_CHAMP) {
+				glColor4f(1f, 1f, 0.5f, a)
+				ModelBarrel.greenWine.render(f5)
+			}
+			
 			glDisable(GL_BLEND)
 			
 			glColor4f(1f, 1f, 1f, 1f)
