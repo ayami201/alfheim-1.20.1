@@ -8,6 +8,7 @@ Innovations:
  Effects for wine + champagne with "hidden" craft
  Barrels now has comparator output for ease of automation
  New decorative blocks
+ Crackling stars binding is now relative (will break binding of existing stars)
  Booba render for Flügel
  [ESM] Ocelots won't run away from cait sith players
 

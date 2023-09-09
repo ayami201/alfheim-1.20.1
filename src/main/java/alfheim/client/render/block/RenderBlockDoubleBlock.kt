@@ -1,37 +1,38 @@
 package alfheim.client.render.block
 
-import alexsocol.asjlib.*
-import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.lib.LibRenderIDs
-import alfheim.common.block.tile.TileDoubleBlock
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler
+import alfheim.common.block.WorldWrapper
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.RenderBlocks
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher
-import net.minecraft.world.IBlockAccess
-import org.lwjgl.opengl.GL11.*
+import net.minecraft.init.Blocks
+import net.minecraft.world.World
+import net.minecraftforge.client.ForgeHooksClient
 
-object RenderBlockDoubleBlock: ISimpleBlockRenderingHandler {
+object RenderBlockDoubleBlock: RenderBlockDoubleCamo(LibRenderIDs.idDoubleBlock, Blocks.fire, 0, Blocks.glass, 0) {
 	
-	override fun renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
-		glPushMatrix()
-		val tile = TileDoubleBlock()
-		val (x, y, z) = (mc.thePlayer?.let { Vector3.fromEntity(it).add(0, 0.1, 0) } ?: Vector3()).mf()
+	override fun renderBlock(world: World?, rb: RenderBlocks, x: Int, y: Int, z: Int, meta: Int, blockTop: Block, blockTopMeta: Int, blockBottom: Block, blockBottomMeta: Int): Boolean {
+		var did = false
 		
-		tile.xCoord = x
-		tile.yCoord = y
-		tile.zCoord = z
-		tile.blockMetadata = metadata
+		val oldWorld = rb.blockAccess
+		val wrapper = WorldWrapper(rb.blockAccess)
+		rb.blockAccess = wrapper
 		
-		ASJRenderHelper.interpolatedTranslation(mc.thePlayer)
-		glTranslated(-x.D, -y.D - 0.1, -z.D)
+		if (blockBottom.canRenderInPass(ForgeHooksClient.getWorldRenderPass())) {
+			wrapper.setOverride(x, y, z, blockBottom, blockBottomMeta)
+			world?.setBlockMetadataWithNotify(x, y, z, blockBottomMeta, 4)
+			did = rb.renderBlockByRenderType(blockBottom, x, y, z)
+		}
 		
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(tile, 0.0, 0.0, 0.0, 0f)
-		glPopMatrix()
+		if (blockTop.canRenderInPass(ForgeHooksClient.getWorldRenderPass())) {
+			wrapper.setOverride(x, y, z, blockTop, blockTopMeta)
+			world?.setBlockMetadataWithNotify(x, y, z, blockTopMeta, 4)
+			did = rb.renderBlockByRenderType(blockTop, x, y, z)
+		}
+		
+		rb.blockAccess = oldWorld
+		
+		world?.setBlockMetadataWithNotify(x, y, z, meta, 4)
+		
+		return did
 	}
-	
-	override fun renderWorldBlock(world: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderer: RenderBlocks) = false
-	override fun shouldRender3DInInventory(modelId: Int) = true
-	override fun getRenderId() = LibRenderIDs.idDoubleBlock
 }

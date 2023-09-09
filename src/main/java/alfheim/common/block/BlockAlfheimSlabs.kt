@@ -36,6 +36,13 @@ class BlockElvenSandstoneSlab2(full: Boolean): BlockLivingSlab(full, AlfheimFluf
 	override fun getSingleBlock() = AlfheimFluffBlocks.elvenSandstoneSlab2 as BlockSlab
 }
 
+class BlockDwarfPlanksSlab(full: Boolean): BlockLivingSlab(full, AlfheimFluffBlocks.dwarfPlanks, 0) {
+	
+	override fun getFullBlock() = AlfheimFluffBlocks.dwarfPlanksSlabFull as BlockSlab
+	
+	override fun getSingleBlock() = AlfheimFluffBlocks.dwarfPlanksSlab as BlockSlab
+}
+
 class BlockLivingCobbleSlab(full: Boolean): BlockLivingSlab(full, AlfheimBlocks.livingcobble, 0) {
 	
 	override fun getFullBlock() = AlfheimFluffBlocks.livingcobbleSlabFull as BlockSlab

@@ -31,26 +31,22 @@ open class TileDoubleCamo: ASJTile() {
 		nbt.setInteger(TAG_BLOCK_BOTTOM_META, blockBottomMeta)
 		nbt.setString(TAG_BLOCK_TOP, GameRegistry.findUniqueIdentifierFor(blockTop).toString())
 		nbt.setInteger(TAG_BLOCK_TOP_META, blockTopMeta)
-		
 		nbt.setBoolean(TAG_LOCKED, locked)
 	}
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
-		blockBottom = Block.getBlockFromName(nbt.getString(TAG_BLOCK_BOTTOM)) ?: Blocks.log
-		blockBottomMeta = nbt.getInteger(TAG_BLOCK_BOTTOM_META)
-		blockTop = Block.getBlockFromName(nbt.getString(TAG_BLOCK_TOP)) ?: Blocks.planks
-		blockTopMeta = nbt.getInteger(TAG_BLOCK_TOP_META)
-		
-		locked = nbt.getBoolean(TAG_LOCKED)
+		if (nbt.hasKey(TAG_BLOCK_BOTTOM)) blockBottom = Block.getBlockFromName(nbt.getString(TAG_BLOCK_BOTTOM)) ?: Blocks.log
+		if (nbt.hasKey(TAG_BLOCK_BOTTOM_META)) blockBottomMeta = nbt.getInteger(TAG_BLOCK_BOTTOM_META)
+		if (nbt.hasKey(TAG_BLOCK_TOP)) blockTop = Block.getBlockFromName(nbt.getString(TAG_BLOCK_TOP)) ?: Blocks.planks
+		if (nbt.hasKey(TAG_BLOCK_TOP_META)) blockTopMeta = nbt.getInteger(TAG_BLOCK_TOP_META)
+		if (nbt.hasKey(TAG_LOCKED)) locked = nbt.getBoolean(TAG_LOCKED)
 	}
 	
 	companion object {
-		
 		const val TAG_BLOCK_BOTTOM = "blockBottom"
 		const val TAG_BLOCK_BOTTOM_META = "blockBottomMeta"
 		const val TAG_BLOCK_TOP = "blockTop"
 		const val TAG_BLOCK_TOP_META = "blockTopMeta"
-		
 		const val TAG_LOCKED = "locked"
 	}
 }

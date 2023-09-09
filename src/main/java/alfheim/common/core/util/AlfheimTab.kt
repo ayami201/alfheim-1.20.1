@@ -126,6 +126,7 @@ import alfheim.common.block.AlfheimBlocks.stalagmite
 import alfheim.common.block.AlfheimBlocks.subspacian
 import alfheim.common.block.AlfheimBlocks.tradePortal
 import alfheim.common.block.AlfheimFluffBlocks.chair
+import alfheim.common.block.AlfheimFluffBlocks.curtainPlacer
 import alfheim.common.block.AlfheimFluffBlocks.doubleBlock
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFenceGate
@@ -133,12 +134,15 @@ import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFenceGate
 import alfheim.common.block.AlfheimFluffBlocks.dwarfLantern
 import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanks
+import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanksSlab
+import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanksStairs
 import alfheim.common.block.AlfheimFluffBlocks.dwarfTrapDoor
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstone
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneSlab
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneSlab2
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneStairs
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneWalls
+import alfheim.common.block.AlfheimFluffBlocks.floodLight
 import alfheim.common.block.AlfheimFluffBlocks.livingMountain
 import alfheim.common.block.AlfheimFluffBlocks.livingMountainSlab
 import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab
@@ -637,6 +641,8 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		
 		addBlock(yggDecor)
 		addBlock(dwarfPlanks)
+		addBlock(dwarfPlanksStairs)
+		addBlock(dwarfPlanksSlab)
 		addBlock(dwarfTrapDoor)
 		
 		addBlock(livingwoodBarkFence)
@@ -649,10 +655,12 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(dreamwoodBarkFenceGate)
 		addBlock(dreamwoodFenceGate)
 		
+		addBlock(floodLight)
+		addBlock(curtainPlacer)
+		addBlock(secretGlass)
 		addBlock(table)
 		addBlock(chair)
 		addBlock(doubleBlock)
-		addBlock(secretGlass)
 		
 		addBlock(irisDirt)
 		addBlock(rainbowDirt)

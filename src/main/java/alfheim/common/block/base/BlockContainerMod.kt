@@ -1,6 +1,6 @@
 package alfheim.common.block.base
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.ASJUtilities
 import alfheim.client.core.helper.*
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.ItemBlockLeavesMod
@@ -15,8 +15,6 @@ import net.minecraftforge.common.MinecraftForge
 
 @Suppress("LeakingThis")
 abstract class BlockContainerMod(material: Material): BlockContainer(material) {
-	
-	var originalLight: Int = 0
 	
 	init {
 		setCreativeTab(AlfheimTab)
@@ -33,11 +31,6 @@ abstract class BlockContainerMod(material: Material): BlockContainer(material) {
 	}
 	
 	open fun shouldRegisterInNameSet() = true
-	
-	override fun setLightLevel(light: Float): Block {
-		originalLight = (light * 15f).I
-		return super.setLightLevel(light)
-	}
 	
 	@SideOnly(Side.CLIENT)
 	override fun registerBlockIcons(reg: IIconRegister) {

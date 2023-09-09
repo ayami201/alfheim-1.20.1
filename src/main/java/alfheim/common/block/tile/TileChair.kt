@@ -11,12 +11,12 @@ import net.minecraft.world.World
 
 class TileChair: TileDoubleCamo() {
 	
-	fun mount(player: EntityPlayer): Boolean {
+	fun mount(player: EntityPlayer, offset: Double): Boolean {
 		if (worldObj.getEntitiesWithinAABB(EntitySit::class.java, boundingBox().offset(0, 0.5, 0)).isNotEmpty()) return false
 		
 		if (!worldObj.isRemote)
 			EntitySit(worldObj).apply {
-				setPosition(xCoord + 0.5, yCoord + 0.65, zCoord + 0.5)
+				setPosition(xCoord + 0.5, yCoord + offset, zCoord + 0.5)
 				spawn()
 				player.mountEntity(this)
 			}

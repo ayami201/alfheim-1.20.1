@@ -30,6 +30,9 @@ object AlfheimFluffBlocks {
 	val dreamwoodBarkFenceGate: Block
 	val dwarfLantern: Block
 	val dwarfPlanks: Block
+	val dwarfPlanksStairs: Block
+	val dwarfPlanksSlab: Block
+	val dwarfPlanksSlabFull: Block
 	val dwarfTrapDoor: Block
 	val elfQuartzWall: Block
 	val elvenSandstone: Block
@@ -80,12 +83,16 @@ object AlfheimFluffBlocks {
 	val table: Block
 	val doubleBlock: Block
 	val secretGlass: Block
+	val curtainPlacer: Block
+	val floodLight: Block
 	
 	init {
 		chair = BlockChair()
 		table = BlockTable()
 		doubleBlock = BlockDoubleBlock()
 		secretGlass = BlockSecretGlass()
+		curtainPlacer = BlockCurtainPlacer()
+		floodLight = BlockFloodLight()
 		
 		yggDecor = BlockYggDecor()
 		shrineRock = BlockModMeta(Material.rock, 16, ModInfo.MODID, "ShrineRock", AlfheimTab, 10f, harvLvl = 2, resist = 10000f, folder = "decor/")
@@ -151,6 +158,11 @@ object AlfheimFluffBlocks {
 			.setHarvestLevelI("pickaxe", 2)
 		
 		dwarfPlanks = BlockModMeta(Material.wood, 1, ModInfo.MODID, "DwarfPlanks", AlfheimTab, 3f, "axe", 1, 100f, "decor/")
+		dwarfPlanksStairs = BlockModStairs(dwarfPlanks, 0, "DwarfPlanksStairs").setCreativeTab(AlfheimTab)
+		dwarfPlanksSlab = BlockDwarfPlanksSlab(false).setCreativeTab(AlfheimTab).setHardness(1.5f)
+		dwarfPlanksSlabFull = BlockDwarfPlanksSlab(true).setCreativeTab(null).setHardness(1.5f)
+		(dwarfPlanksSlab as BlockModSlab).register()
+		(dwarfPlanksSlabFull as BlockModSlab).register()
 		
 		elvenSandstone = BlockElvenSandstone()
 		elvenSandstoneStairs = arrayOf(0, 2).map {

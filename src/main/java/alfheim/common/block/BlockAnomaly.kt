@@ -116,7 +116,7 @@ class BlockAnomaly: BlockContainerMod(anomaly), ILexiconable {
 	
 	companion object {
 		
-		val anomaly = MaterialPublic(MapColor.airColor).setBlocksLight().setNotOpaque().setImmovableMobility()
+		val anomaly = MaterialPublic(MapColor.airColor, blocksLight = false, opaque = false, solid = false).setImmovableMobility()
 		lateinit var iconUndefined: IIcon
 	}
 }

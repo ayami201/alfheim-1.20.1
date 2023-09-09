@@ -1,5 +1,6 @@
 package alfheim.common.block
 
+import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.*
 import alfheim.api.lib.LibRenderIDs
 import alfheim.common.block.tile.TileDoubleBlock
@@ -7,6 +8,7 @@ import net.minecraft.block.*
 import net.minecraft.block.material.Material
 import net.minecraft.entity.Entity
 import net.minecraft.init.Blocks
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.*
 import net.minecraft.world.*
 import net.minecraftforge.common.util.ForgeDirection
@@ -18,7 +20,7 @@ class BlockDoubleBlock: BlockDoubleCamo(Material.iron), IFenceConnectable, IFenc
 		setStepSound(soundTypeMetal)
 	}
 	
-	override fun topSide(world: IBlockAccess, x: Int, y: Int, z: Int) = 1
+	override fun topSide(meta: Int) = 1
 	
 	override fun addCollisionBoxesToList(world: World, x: Int, y: Int, z: Int, aabb: AxisAlignedBB?, list: MutableList<Any?>, entity: Entity?) {
 		val tile = world.getTileEntity(x, y, z) as? TileDoubleBlock ?: return super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity)
@@ -50,6 +52,50 @@ class BlockDoubleBlock: BlockDoubleCamo(Material.iron), IFenceConnectable, IFenc
 		
 		addCollisions(tile.blockTop, tile.blockTopMeta)
 		addCollisions(tile.blockBottom, tile.blockBottomMeta)
+	}
+	
+	override fun setBlockBoundsBasedOnState(world: IBlockAccess?, x: Int, y: Int, z: Int) {
+		val bb = if (world is World) getBB(world, x, y, z) else getBoundingBox(x, y, z, x + 1, y + 1, z + 1)
+		bb.offset(-x, -y, -z)
+		setBlockBounds(bb.minX.F, bb.minY.F, bb.minZ.F, bb.maxX.F, bb.maxY.F, bb.maxZ.F)
+	}
+	
+	override fun getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int) = getBB(world, x, y, z)
+	
+	@Suppress("UNCHECKED_CAST")
+	fun getBB(world: World, x: Int, y: Int, z: Int): AxisAlignedBB {
+		val bbs = mutableListOf<AxisAlignedBB>()
+		addCollisionBoxesToList(world, x, y, z, TileEntity.INFINITE_EXTENT_AABB, bbs as MutableList<Any?>, null)
+		
+		val tile = world.getTileEntity(x, y, z) as? TileDoubleBlock
+		
+		if (bbs.isEmpty()) {
+			if (ASJUtilities.isClient) {
+				tile?.blockTop?.getSelectedBoundingBoxFromPool(world, x, y, z)?.let { bbs += it }
+				tile?.blockBottom?.getSelectedBoundingBoxFromPool(world, x, y, z)?.let { bbs += it }
+			} else {
+				tile?.blockTop?.apply { bbs += getBoundingBox(blockBoundsMinX, blockBoundsMinY, blockBoundsMinZ, blockBoundsMaxX, blockBoundsMaxY, blockBoundsMaxZ) }
+				tile?.blockBottom?.apply { bbs += getBoundingBox(blockBoundsMinX, blockBoundsMinY, blockBoundsMinZ, blockBoundsMaxX, blockBoundsMaxY, blockBoundsMaxZ) }
+			}
+		}
+		
+		return getBoundingBox(bbs.minOf { it.minX }, bbs.minOf { it.minY }, bbs.minOf { it.minZ }, bbs.maxOf { it.maxX }, bbs.maxOf { it.maxY }, bbs.maxOf { it.maxZ })
+	}
+	
+	override fun isSideSolid(world: IBlockAccess?, x: Int, y: Int, z: Int, side: ForgeDirection): Boolean {
+		if (world !is World) return false
+		
+		val bb = getBB(world, x, y, z).offset(-x, -y, -z)
+		
+		return when (side) {
+			ForgeDirection.DOWN    -> bb.minX == 0.0 && bb.minZ == 0.0 && bb.minY == 0.0 && bb.maxX == 1.0                   && bb.maxZ == 1.0
+			ForgeDirection.UP      -> bb.minX == 0.0 && bb.minZ == 0.0 &&                   bb.maxX == 1.0 && bb.maxY == 1.0 && bb.maxZ == 1.0
+			ForgeDirection.NORTH   -> bb.minX == 0.0 && bb.minZ == 0.0 && bb.minY == 0.0 && bb.maxX == 1.0 && bb.maxY == 1.0
+			ForgeDirection.SOUTH   -> bb.minX == 0.0 &&                   bb.minY == 0.0 && bb.maxX == 1.0 && bb.maxY == 1.0 && bb.maxZ == 1.0
+			ForgeDirection.WEST    -> bb.minX == 0.0 && bb.minZ == 0.0 && bb.minY == 0.0                   && bb.maxY == 1.0 && bb.maxZ == 1.0
+			ForgeDirection.EAST    ->                   bb.minZ == 0.0 && bb.minY == 0.0 && bb.maxX == 1.0 && bb.maxY == 1.0 && bb.maxZ == 1.0
+			ForgeDirection.UNKNOWN -> false
+		}
 	}
 	
 	override fun getRenderType() = LibRenderIDs.idDoubleBlock
@@ -92,7 +138,7 @@ class BlockDoubleBlock: BlockDoubleCamo(Material.iron), IFenceConnectable, IFenc
 	}
 }
 
-class WorldWrapper(val world: World): IBlockAccess {
+class WorldWrapper(val original: IBlockAccess): IBlockAccess {
 	
 	var xOverride = 0
 	var yOverride = -1
@@ -110,20 +156,20 @@ class WorldWrapper(val world: World): IBlockAccess {
 	
 	override fun getBlock(x: Int, y: Int, z: Int): Block {
 		if (ChunkCoordinates(x, y, z) == ChunkCoordinates(xOverride, yOverride, zOverride)) return blockOverride
-		return world.getBlock(x, y, z)
+		return original.getBlock(x, y, z)
 	}
 	
 	override fun getBlockMetadata(x: Int, y: Int, z: Int): Int {
 		if (ChunkCoordinates(x, y, z) == ChunkCoordinates(xOverride, yOverride, zOverride)) return blockOverrideMeta
-		return world.getBlockMetadata(x, y, z)
+		return original.getBlockMetadata(x, y, z)
 	}
 	
-	override fun getTileEntity(x: Int, y: Int, z: Int) = world.getTileEntity(x, y, z)
-	override fun getLightBrightnessForSkyBlocks(x: Int, y: Int, z: Int, lightValue: Int) = world.getLightBrightnessForSkyBlocks(x, y, z, lightValue)
-	override fun isBlockProvidingPowerTo(x: Int, y: Int, z: Int, side: Int) = world.isBlockProvidingPowerTo(x, y, z, side)
-	override fun isAirBlock(x: Int, y: Int, z: Int) = world.isAirBlock(x, y, z)
-	override fun getBiomeGenForCoords(x: Int, z: Int) = world.getBiomeGenForCoords(x, z)
-	override fun getHeight() = world.height
-	override fun extendedLevelsInChunkCache() = world.extendedLevelsInChunkCache()
-	override fun isSideSolid(x: Int, y: Int, z: Int, side: ForgeDirection?, default: Boolean) = world.isSideSolid(x, y, z, side, default)
+	override fun getTileEntity(x: Int, y: Int, z: Int) = original.getTileEntity(x, y, z)
+	override fun getLightBrightnessForSkyBlocks(x: Int, y: Int, z: Int, lightValue: Int) = original.getLightBrightnessForSkyBlocks(x, y, z, lightValue)
+	override fun isBlockProvidingPowerTo(x: Int, y: Int, z: Int, side: Int) = original.isBlockProvidingPowerTo(x, y, z, side)
+	override fun isAirBlock(x: Int, y: Int, z: Int) = original.isAirBlock(x, y, z)
+	override fun getBiomeGenForCoords(x: Int, z: Int) = original.getBiomeGenForCoords(x, z)
+	override fun getHeight() = original.height
+	override fun extendedLevelsInChunkCache() = original.extendedLevelsInChunkCache()
+	override fun isSideSolid(x: Int, y: Int, z: Int, side: ForgeDirection?, default: Boolean) = original.isSideSolid(x, y, z, side, default)
 }

@@ -1,36 +1,36 @@
 package alfheim.client.render.block
 
-import alexsocol.asjlib.*
-import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.lib.LibRenderIDs
-import alfheim.common.block.tile.TileTable
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler
+import alfheim.common.block.BlockTable
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.RenderBlocks
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher
-import net.minecraft.world.IBlockAccess
-import org.lwjgl.opengl.GL11
+import net.minecraft.init.Blocks
+import net.minecraft.world.World
 
-object RenderBlockTable: ISimpleBlockRenderingHandler {
+object RenderBlockTable: RenderBlockDoubleCamo(LibRenderIDs.idTable, Blocks.planks, 0, Blocks.log, 0) {
 	
-	override fun renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
-		GL11.glPushMatrix()
-		val tile = TileTable()
-		val (x, y, z) = (mc.thePlayer?.let { Vector3.fromEntity(it).add(0, 0.1, 0) } ?: Vector3()).mf()
+	override fun renderBlock(world: World?, rb: RenderBlocks, x: Int, y: Int, z: Int, meta: Int, blockTop: Block, blockTopMeta: Int, blockBottom: Block, blockBottomMeta: Int): Boolean {
+		val offset = 0.001f
 		
-		tile.xCoord = x
-		tile.yCoord = y
-		tile.zCoord = z
+		val standFree = rb.blockAccess.getBlock(x + 1, y, z) is BlockTable &&
+		                rb.blockAccess.getBlock(x - 1, y, z) is BlockTable ||
+		                rb.blockAccess.getBlock(x, y, z + 1) is BlockTable &&
+		                rb.blockAccess.getBlock(x, y, z - 1) is BlockTable
 		
-		ASJRenderHelper.interpolatedTranslation(mc.thePlayer)
-		GL11.glTranslated(-x.D, -y.D - 0.1, -z.D)
+		var did = false
 		
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(tile, 0.0, 0.0, 0.0, 0f)
-		GL11.glPopMatrix()
+		if (!standFree) did = renderIfPossiblePreservingBounds(world, x, y, z, blockBottom, blockBottomMeta) {
+			it.setBlockBounds(6f / 16, 0f, 6f / 16, 10f / 16, 0.75f + offset, 10f / 16)
+			rb.setRenderBoundsFromBlock(it)
+			rb.renderStandardBlock(it, x, y, z)
+		}
+		
+		did = did or renderIfPossiblePreservingBounds(world, x, y, z, blockTop, blockTopMeta) {
+			it.setBlockBounds(offset, 0.75f, offset, 1 - offset, 1f, 1 - offset)
+			rb.setRenderBoundsFromBlock(it)
+			rb.renderStandardBlock(it, x, y, z)
+		}
+		
+		return did
 	}
-	
-	override fun renderWorldBlock(world: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderer: RenderBlocks) = false
-	override fun shouldRender3DInInventory(modelId: Int) = true
-	override fun getRenderId() = LibRenderIDs.idTable
 }

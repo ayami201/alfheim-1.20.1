@@ -1,6 +1,6 @@
 package alfheim.client.core.handler
 
-import alexsocol.asjlib.mc
+import alexsocol.asjlib.*
 import alfheim.common.item.AlfheimItems
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.client.gui.*
@@ -11,16 +11,15 @@ import net.minecraft.util.*
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import org.lwjgl.opengl.*
 import vazkii.botania.common.block.tile.corporea.TileCorporeaIndex
-import kotlin.math.max
 
 object HUDCorporeaRat {
 	
 	@SubscribeEvent
 	fun onDrawScreenPost(event: RenderGameOverlayEvent.Post) {
-		if (TileCorporeaIndex.InputHandler.getNearbyIndexes(mc.thePlayer).isNotEmpty() ||
-			mc.thePlayer.heldItem?.item !== AlfheimItems.corporeaRat ||
+		if (mc.thePlayer.heldItem?.item !== AlfheimItems.corporeaRat ||
 			mc.currentScreen !is GuiChat ||
-			event.type != RenderGameOverlayEvent.ElementType.ALL)
+			event.type != RenderGameOverlayEvent.ElementType.ALL ||
+			TileCorporeaIndex.InputHandler.getNearbyIndexes(mc.thePlayer).isNotEmpty())
 			return
 		
 		mc.mcProfiler.startSection("ratInHand")
@@ -30,9 +29,9 @@ object HUDCorporeaRat {
 	
 	fun renderRatInHandDisplay(res: ScaledResolution) {
 		val txt0 = StatCollector.translateToLocal("alfheimmisc.quandex")
-		val txt1 = EnumChatFormatting.GRAY.toString() + StatCollector.translateToLocal("botaniamisc.nearIndex1")
-		val txt2 = EnumChatFormatting.GRAY.toString() + StatCollector.translateToLocal("botaniamisc.nearIndex2")
-		val l = max(mc.fontRenderer.getStringWidth(txt0), max(mc.fontRenderer.getStringWidth(txt1), mc.fontRenderer.getStringWidth(txt2))) + 20
+		val txt1 = EnumChatFormatting.GRAY + StatCollector.translateToLocal("botaniamisc.nearIndex1")
+		val txt2 = EnumChatFormatting.GRAY + StatCollector.translateToLocal("botaniamisc.nearIndex2")
+		val l = listOf(mc.fontRenderer.getStringWidth(txt0), mc.fontRenderer.getStringWidth(txt1), mc.fontRenderer.getStringWidth(txt2)).max() + 20
 		val x = res.scaledWidth - l - 20
 		val y = res.scaledHeight - 60
 		Gui.drawRect(x - 6, y - 6, x + l + 6, y + 37, 0x44000000)

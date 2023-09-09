@@ -2,7 +2,6 @@ package alfheim.common.block
 
 import alexsocol.asjlib.*
 import alfheim.common.block.base.BlockMod
-import alfheim.common.block.colored.BlockColoredLamp
 import alfheim.common.lexicon.AlfheimLexiconData
 import cpw.mods.fml.common.IFuelHandler
 import cpw.mods.fml.common.registry.GameRegistry
@@ -24,29 +23,24 @@ class BlockKindling: BlockMod(Material.cloth), IFuelHandler, ILexiconable {
 		GameRegistry.registerFuelHandler(this)
 	}
 	
-	override fun onBlockActivated(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, meta: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		if (world != null && player != null) {
-			if (player.inventory.getCurrentItem() == null) {
-				if (world.getBlock(x, y + 1, z).isAir(world, x, y + 1, z)) {
-					world.setBlock(x, y + 1, z, Blocks.fire)
-					world.playSoundEffect(x.D + 0.5, y.D + 0.5, z.D + 0.5, "fire.ignite", 1f, Math.random().F * 0.4F + 0.8F)
-					return true
-				} else if (world.getBlock(x, y + 1, z) == Blocks.fire) {
-					world.setBlock(x, y + 1, z, Blocks.air)
-					world.playSoundEffect(x.D + 0.5, y.D + 0.5, z.D + 0.5, "random.fizz", 1f, Math.random().F * 0.4F + 0.8F)
-				}
-			}
+	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+		if (player.heldItem != null) return false
+		
+		if (world.getBlock(x, y + 1, z).isAir(world, x, y + 1, z)) {
+			world.setBlock(x, y + 1, z, Blocks.fire)
+			world.playSoundEffect(x.D + 0.5, y.D + 0.5, z.D + 0.5, "fire.ignite", 1f, Math.random().F * 0.4F + 0.8F)
+			return true
+		} else if (world.getBlock(x, y + 1, z) == Blocks.fire) {
+			world.setBlock(x, y + 1, z, Blocks.air)
+			world.playSoundEffect(x.D + 0.5, y.D + 0.5, z.D + 0.5, "random.fizz", 1f, Math.random().F * 0.4F + 0.8F)
+			return true
 		}
+		
 		return false
 	}
 	
 	override fun onNeighborBlockChange(world: World, x: Int, y: Int, z: Int, block: Block?) {
-		super.onNeighborBlockChange(world, x, y, z, block)
-		val lvl = BlockColoredLamp.powerLevel(world, x, y, z)
-		if (lvl == 0) return
-		
-		val fire = if (lvl == 15) Blocks.fire else Blocks.air
-		world.setBlock(x, y + 1, z, fire, 0, 1 or 2)
+		world.setBlock(x, y + 1, z, if (world.getStrongestIndirectPower(x, y, z) == 15) Blocks.fire else Blocks.air)
 	}
 	
 	override fun getBurnTime(fuel: ItemStack) = if (fuel.item === this.toItem()) 1200 else 0

@@ -9,8 +9,10 @@ object PotionWhiteWine: PotionAlfheim(AlfheimConfigHandler.potionIDWhiteWine, "w
 	@SubscribeEvent
 	fun onInteract(e: EntityInteractEvent) {
 		if (!e.entityPlayer.isPotionActive(this)) return
+		if (e.entityPlayer.riddenByEntity != null) return
 		if (e.target.riddenByEntity != null) return
-		if (e.entityPlayer.isRiding) return
+		if (e.entityPlayer.ridingEntity != null) return
+		if (e.target.ridingEntity != null) return
 		
 		e.entityPlayer.mountEntity(e.target)
 	}

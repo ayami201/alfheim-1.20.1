@@ -22,7 +22,7 @@ object LibRenderIDs {
 	val idNiflheim = RenderingRegistry.getNextAvailableRenderId()
 	val idPowerStone = RenderingRegistry.getNextAvailableRenderId()
 	val idPylon = RenderingRegistry.getNextAvailableRenderId()
-	val idSecretGlass = RenderingRegistry.getNextAvailableRenderId()
+	val idSimpleDoubleBlock = RenderingRegistry.getNextAvailableRenderId()
 	val idShrinePanel = RenderingRegistry.getNextAvailableRenderId()
 	val idSpire = RenderingRegistry.getNextAvailableRenderId()
 	val idTable = RenderingRegistry.getNextAvailableRenderId()

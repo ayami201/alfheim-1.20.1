@@ -94,7 +94,7 @@ object RagnarokEmblemCraftHandler {
 			for (p in path) {
 				val tile = p.getTileEntity(world) as? TileCracklingStar ?: continue
 				tile.color = VOID
-				tile.pos.set(0, -1, 0)
+				tile.posAbsolute.set(0, -1, 0)
 				tile.markDirty()
 			}
 			
@@ -107,21 +107,19 @@ object RagnarokEmblemCraftHandler {
 	
 	fun walkPath(
 		start: Vector3, world: World, max: Int, walked: Array<Vector3> = arrayOf(start),
-		walkedConnections: Array<Vector3> = arrayOf((start.getTileEntity(world) as TileCracklingStar).pos),
+		walkedConnections: Array<Vector3> = arrayOf((start.getTileEntity(world) as TileCracklingStar).posAbsolute),
 		walkedColors: IntArray = intArrayOf((start.getTileEntity(world) as TileCracklingStar).color),
-	)
-		: Triple<Array<Vector3>, Array<Vector3>, IntArray> {
-		
+	): Triple<Array<Vector3>, Array<Vector3>, IntArray> {
 		if (walked.size > max) return Triple(walked, walkedConnections, walkedColors)
 		val tile = start.getTileEntity(world)
 		if (tile is TileCracklingStar) {
-			val link = tile.pos.copy()
-			if (link == Vector3(0, -1, 0)) return Triple(walked, walkedConnections, walkedColors)
+			val link = tile.posAbsolute.copy()
+			if (link == TileCracklingStar.vecUnbound) return Triple(walked, walkedConnections, walkedColors)
 			if (link in walked) return Triple(walked, walkedConnections, walkedColors)
 			val linked = link.getTileEntity(world)
 			if (linked is TileCracklingStar) {
-				val linkPos = linked.pos.copy()
-				if (linkPos != Vector3(0, -1, 0))
+				val linkPos = linked.posAbsolute.copy()
+				if (linkPos != TileCracklingStar.vecUnbound)
 					return walkPath(link, world, max, arrayOf(*walked, link), arrayOf(*walkedConnections, linkPos), intArrayOf(*walkedColors, linked.color))
 			}
 		}

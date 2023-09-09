@@ -117,6 +117,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var faultLinePersistence = 3000
 	var floatingIslandPathfinder = true
 	var floatingIslandSyncedDataInitLimit = 31
+	var floodLightQuality = 10
 	var flugelSwapBlackList = emptyArray<String>()
 	var gourmaryllisDifficulty = 2
 	var hotHell = true
@@ -317,6 +318,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		faultLinePersistence = loadProp(CATEGORY_GENERAL, "faultLinePersistence", faultLinePersistence, false, "Persistence for Fault Lines (lower value - smaller faults)")
 		floatingIslandPathfinder = loadProp(CATEGORY_GENERAL, "floatingIslandPathfinder", floatingIslandPathfinder, false, "Set this to false to disable entity's pathfinding on floating islands. This will make them stand still on islands, but will also lower the server load")
 		floatingIslandSyncedDataInitLimit = loadProp(CATEGORY_GENERAL, "floatingIslandSyncedDataInitLimit", floatingIslandSyncedDataInitLimit, false, "Increase that limit ONLY if you have mods that extend DataWatcher IDs and want really large floating island")
+		floodLightQuality = loadProp(CATEGORY_GENERAL, "floodLightQuality", floodLightQuality, false, "Determines floodlight raycasting steps (lower values - more quality and CPU load). Must be an integer divisor of 360", 1, 120)
 		flugelSwapBlackList = loadProp(CATEGORY_GENERAL, "flugelSwapBlackList", flugelSwapBlackList, false, "Blacklist for items that flugel can't swap [modid:name]", false)
 		gourmaryllisDifficulty = loadProp(CATEGORY_GENERAL, "gourmaryllisDifficulty", gourmaryllisDifficulty, false, "Difficulty of Gourmaryllis functionality: 0 - default, 1 - as in 1.12.2, 2 - hardcore", 0, 2)
 		hotHell = loadProp(CATEGORY_GENERAL, "hotHell", hotHell, false, "Set this to false to remove overheating in Muspleheim (Hell/Nether)")

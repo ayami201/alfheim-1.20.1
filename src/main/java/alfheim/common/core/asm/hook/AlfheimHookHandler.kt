@@ -4,7 +4,6 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.command.CommandDimTP
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.security.InteractionSecurity
-import alexsocol.patcher.asm.ASJHookHandler
 import alfheim.AlfheimCore
 import alfheim.api.*
 import alfheim.api.block.IHourglassTrigger
