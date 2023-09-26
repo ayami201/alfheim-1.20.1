@@ -1,6 +1,5 @@
 package alfheim.common.network.packet
 
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.network.AlfheimPacket
 import alfheim.common.core.helper.*
 import alfheim.common.network.NetworkService
@@ -9,7 +8,7 @@ import net.minecraft.server.MinecraftServer
 import org.apache.commons.io.FileUtils
 import java.io.File
 
-class MessageContributor(var key: String = "", var value: String = key, var isRequest: Boolean = false): ASJPacket(), AlfheimPacket<MessageContributor> {
+class MessageContributor(var key: String = "", var value: String = key, var isRequest: Boolean = false): AlfheimPacket<MessageContributor>() {
 	
 	override fun handleClient() {
 		if (isRequest) {

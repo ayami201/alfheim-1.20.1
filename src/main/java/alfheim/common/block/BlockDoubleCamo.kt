@@ -43,8 +43,8 @@ abstract class BlockDoubleCamo(material: Material = Material.wood): BlockContain
 			else tile.blockBottomMeta = (tile.blockBottomMeta + 1) % 16
 		}
 		
-		world.markBlockForUpdate(x, y, z)
 		ASJUtilities.dispatchTEToNearbyPlayers(tile)
+		world.markBlockForUpdate(x, y, z)
 		
 		return true
 	}
@@ -69,10 +69,14 @@ abstract class BlockDoubleCamo(material: Material = Material.wood): BlockContain
 			tile.blockBottomMeta = meta
 		}
 		
-		world.markBlockForUpdate(x, y, z)
 		ASJUtilities.dispatchTEToNearbyPlayers(tile)
+		world.markBlockForUpdate(x, y, z)
 		
 		return true
+	}
+	
+	override fun getDrops(world: World, x: Int, y: Int, z: Int, metadata: Int, fortune: Int): ArrayList<ItemStack> {
+		return arrayListOf(getPickBlock(null, world, x, y, z))
 	}
 	
 	@Suppress("OVERRIDE_DEPRECATION", "DEPRECATION") // stupid WAILA uses deprecated method -_-

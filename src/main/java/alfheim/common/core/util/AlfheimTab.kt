@@ -50,6 +50,7 @@ import alfheim.common.block.AlfheimBlocks.dreamSapling
 import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.elvenSand
 import alfheim.common.block.AlfheimBlocks.enderActuator
+import alfheim.common.block.AlfheimBlocks.gaiaButton
 import alfheim.common.block.AlfheimBlocks.grapesRed
 import alfheim.common.block.AlfheimBlocks.grapesWhite
 import alfheim.common.block.AlfheimBlocks.icicle
@@ -126,6 +127,7 @@ import alfheim.common.block.AlfheimBlocks.stalagmite
 import alfheim.common.block.AlfheimBlocks.subspacian
 import alfheim.common.block.AlfheimBlocks.tradePortal
 import alfheim.common.block.AlfheimFluffBlocks.chair
+import alfheim.common.block.AlfheimFluffBlocks.composite
 import alfheim.common.block.AlfheimFluffBlocks.curtainPlacer
 import alfheim.common.block.AlfheimFluffBlocks.doubleBlock
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
@@ -189,6 +191,7 @@ import alfheim.common.item.AlfheimItems.auraRingElven
 import alfheim.common.item.AlfheimItems.auraRingGod
 import alfheim.common.item.AlfheimItems.auraRingPink
 import alfheim.common.item.AlfheimItems.balanceCloak
+import alfheim.common.item.AlfheimItems.carver
 import alfheim.common.item.AlfheimItems.chalk
 import alfheim.common.item.AlfheimItems.cloudPendant
 import alfheim.common.item.AlfheimItems.cloudPendantSuper
@@ -655,12 +658,16 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(dreamwoodBarkFenceGate)
 		addBlock(dreamwoodFenceGate)
 		
+		addBlock(gaiaButton)
+		
 		addBlock(floodLight)
 		addBlock(curtainPlacer)
 		addBlock(secretGlass)
 		addBlock(table)
 		addBlock(chair)
 		addBlock(doubleBlock)
+		addBlock(composite)
+		addItem(carver)
 		
 		addBlock(irisDirt)
 		addBlock(rainbowDirt)

@@ -32,6 +32,7 @@ import alfheim.common.core.handler.ragnarok.RagnarokHandler.noSunAndMoon
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.ragnarok
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.summer
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.summerTicks
+import alfheim.common.core.handler.ragnarok.RagnarokHandler.winter
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.crafting.recipe.*
 import alfheim.common.entity.*
@@ -1935,4 +1936,21 @@ object AlfheimHookHandler {
 	                                             ai.theEntity is EntityOcelot &&
 	                                             ai.targetEntityClass == EntityPlayer::class.java &&
 	                                             (ai.closestLivingEntity as? EntityPlayer)?.race == EnumRace.CAITSITH
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS, injectOnExit = true)
+	fun getFloatTemperature(biome: BiomeGenBase, x: Int, y: Int, z: Int, @ReturnValue result: Float): Float {
+		return when {
+			winter -> -1.5f
+			summer -> 1.5f
+			else   -> result
+		}
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS, createMethod = true)
+	fun onBlockClicked(block: BlockPlatform, world: World, x: Int, y: Int, z: Int, player: EntityPlayer) {
+		if (world.getBlockMetadata(x, y, z) != 2 || !player.isSneaking || player.heldItem?.item !== ModItems.twigWand || player !is EntityPlayerMP) return
+		world.setBlockToAir(x, y, z)
+		EntityItem(world, x + 0.5, y + 0.5, z + 0.5, ItemStack(block, 1, 2)).spawn()
+	}
 }

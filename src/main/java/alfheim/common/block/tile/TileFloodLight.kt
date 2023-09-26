@@ -10,9 +10,6 @@ class TileFloodLight: ASJTile() {
 	
 	override fun updateEntity() {
 		redstone = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)
-		
-		val newMeta = if (redstone) 1 else 0
-		if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != newMeta) worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 3)
 	}
 	
 	override fun getMaxRenderDistanceSquared() = 65536.0

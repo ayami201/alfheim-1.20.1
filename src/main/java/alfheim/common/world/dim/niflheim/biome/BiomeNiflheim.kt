@@ -27,7 +27,7 @@ open class BiomeNiflheim(id: Int, top: Block, filler: Block = top): BiomeGenBase
 		theBiomeDecorator.flowersPerChunk = 0
 		theBiomeDecorator.grassPerChunk = 0
 		waterColorMultiplier = 0x121D47
-		temperature = 0f
+		temperature = -2f
 		rainfall = 0f
 	}
 	

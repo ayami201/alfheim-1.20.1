@@ -8,7 +8,6 @@ import alexsocol.asjlib.render.ASJRenderHelper.interpolatedTranslationReverse
 import alexsocol.asjlib.render.ASJRenderHelper.setBlend
 import alexsocol.asjlib.render.ASJShaderHelper
 import alfheim.api.lib.*
-import alfheim.client.core.proxy.RenderEntityIcicle
 import alfheim.client.model.entity.*
 import alfheim.client.model.item.ModelThrymAxe
 import alfheim.client.render.world.SpellVisualizations

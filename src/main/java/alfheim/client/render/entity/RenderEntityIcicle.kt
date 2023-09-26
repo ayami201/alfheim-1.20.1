@@ -1,4 +1,4 @@
-package alfheim.client.core.proxy
+package alfheim.client.render.entity
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3

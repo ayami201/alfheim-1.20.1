@@ -22,7 +22,6 @@ import alfheim.common.block.mana.*
 import alfheim.common.block.schema.*
 import alfheim.common.block.tile.sub.flower.*
 import alfheim.common.core.handler.AlfheimConfigHandler
-import alfheim.common.core.handler.WorkInProgressItemsHandler.WIP
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.lexicon.AlfheimLexiconData
 import com.google.common.collect.BiMap
@@ -75,6 +74,7 @@ object AlfheimBlocks {
 	val enderActuator: Block
 	val flugelHeadBlock: Block
 	val flugelHead2Block: Block
+	val gaiaButton: Block
 	val grapesRed: Array<Block>
 	val grapesRedPlanted: Block
 	val grapesWhite: Block
@@ -267,6 +267,7 @@ object AlfheimBlocks {
 		enderActuator = BlockEnderActuator()
 		flugelHeadBlock = BlockHeadFlugel()
 		flugelHead2Block = BlockHeadMiku()
+		gaiaButton = BlockGaiaButton()
 		grapesRed = Array(3) { BlockGrapeRed(it) }
 		grapesRedPlanted = BlockGrapeRedPlanted()
 		grapesWhite = BlockGrapeWhite()

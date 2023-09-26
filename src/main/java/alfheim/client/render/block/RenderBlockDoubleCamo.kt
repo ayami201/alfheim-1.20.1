@@ -10,7 +10,7 @@ import net.minecraft.world.*
 import net.minecraftforge.client.ForgeHooksClient
 import org.lwjgl.opengl.GL11.*
 
-abstract class RenderBlockDoubleCamo(val id: Int, val defBT: Block, val defBTM: Int, val defBB: Block, val defBBM: Int, val ibm: Int? = null): ISimpleBlockRenderingHandler {
+abstract class RenderBlockDoubleCamo(val id: Int): ISimpleBlockRenderingHandler {
 	
 	override fun renderWorldBlock(world: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, rb: RenderBlocks): Boolean {
 		val tile = world.getTileEntity(x, y, z) as? TileDoubleCamo ?: return false
@@ -18,7 +18,7 @@ abstract class RenderBlockDoubleCamo(val id: Int, val defBT: Block, val defBTM: 
 		if (rb.blockAccess == null) rb.blockAccess = mc.theWorld
 		if (tile.worldObj == null) tile.worldObj = mc.theWorld
 		
-		return renderBlock(tile.worldObj, rb, x, y, z, world.getBlockMetadata(x, y, z), tile.blockTop, tile.blockTopMeta, tile.blockBottom, tile.blockBottomMeta)
+		return renderBlock(tile.worldObj, rb, x, y, z, world.getBlockMetadata(x, y, z), tile)
 	}
 	
 	override fun renderInventoryBlock(block: Block, meta: Int, modelID: Int, rb: RenderBlocks) {
@@ -35,7 +35,7 @@ abstract class RenderBlockDoubleCamo(val id: Int, val defBT: Block, val defBTM: 
 		for (i in 0..1) {
 			ForgeHooksClient.worldRenderPass = i
 			Tessellator.instance.startDrawingQuads()
-			renderBlock(null, rb, x, y, z, ibm ?: meta, defBT, defBTM, defBB, defBBM)
+//			renderBlock(null, rb, x, y, z, ibm ?: meta, tile)
 			Tessellator.instance.draw()
 		}
 		
@@ -68,7 +68,7 @@ abstract class RenderBlockDoubleCamo(val id: Int, val defBT: Block, val defBTM: 
 		setBlockBounds(minX.F, minY.F, minZ.F, maxX.F, maxY.F, maxZ.F)
 	}
 	
-	abstract fun renderBlock(world: World?, rb: RenderBlocks, x: Int, y: Int, z: Int, meta: Int, blockTop: Block, blockTopMeta: Int, blockBottom: Block, blockBottomMeta: Int): Boolean
-	override fun shouldRender3DInInventory(modelId: Int) = true
+	abstract fun renderBlock(world: World?, rb: RenderBlocks, x: Int, y: Int, z: Int, meta: Int, tile: TileDoubleCamo): Boolean
+	override fun shouldRender3DInInventory(modelId: Int) = false
 	override fun getRenderId() = id
 }

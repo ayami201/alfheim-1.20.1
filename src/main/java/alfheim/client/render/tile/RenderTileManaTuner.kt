@@ -1,4 +1,4 @@
-package alfheim.client.core.proxy
+package alfheim.client.render.tile
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ASJRenderHelper
@@ -48,7 +48,7 @@ object RenderTileManaTuner: TileEntitySpecialRenderer() {
 			model.renderPart("Crystal")
 			ASJRenderHelper.discard()
 			
-			val angle = tile.worldObj?.totalWorldTime?.plus(ticks)?.rem(360f) ?: 0f
+			val angle = ClientTickHandler.total % 360
 			val rad = Math.toRadians(angle.D * 4)
 			
 			glTranslated(0.0, (cos(rad) * 0.5 - 0.5) * 0.0625, 0.0)

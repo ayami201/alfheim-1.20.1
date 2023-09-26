@@ -1,7 +1,6 @@
 package alfheim.common.network.packet
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.ModInfo
 import alfheim.api.network.AlfheimPacket
 import alfheim.client.core.handler.CardinalSystemClient
@@ -14,7 +13,8 @@ import net.minecraft.client.gui.ChatLine
 import net.minecraft.event.ClickEvent
 import net.minecraft.util.*
 
-class Message1d(ty: M1d, var data1: Double, var type: Int = ty.ordinal) : ASJPacket(), AlfheimPacket<Message1d> {
+class Message1d(ty: M1d, var data1: Double, var type: Int = ty.ordinal) : AlfheimPacket<Message1d>() {
+	
 	override fun handleClient() {
 		when (M1d.entries[type]) {
 			M1d.COLD             -> mc.thePlayer.cold = data1.F

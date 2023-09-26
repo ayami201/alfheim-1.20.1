@@ -46,6 +46,7 @@ object NetworkService {
 		registerPacket(Message0dS::class, Side.SERVER)
 		registerPacket(MessageContributor::class, Side.SERVER)
 		registerPacket(MessageHotSpellS::class, Side.SERVER)
+		registerPacket(MessageFuckedUpServerPrecision::class, Side.SERVER)
 		registerPacket(MessageKeyBindS::class, Side.SERVER)
 		registerPacket(MessageNI::class, Side.SERVER)
 		registerPacket(MessageRaceSelection::class, Side.SERVER)
@@ -57,7 +58,7 @@ object NetworkService {
 		try {
 			network.registerMessage(clazz.java.newInstance(), clazz.java, id, side)
 		} catch (e: Exception) {
-			ASJUtilities.error("Can`t register packet: Class: ${clazz.qualifiedName} ID: $id Side:${side.name}")
+			ASJUtilities.error("Can't register packet: Class: ${clazz.qualifiedName} ID: $id Side:${side.name}", e)
 			throw RuntimeException(e)
 		}
 	}

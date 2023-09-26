@@ -1,11 +1,11 @@
 package alfheim.common.network.packet
 
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.network.AlfheimPacket
 import alfheim.client.core.handler.CardinalSystemClient
 import io.netty.buffer.ByteBuf
 
-class MessageHotSpellC(var ids: IntArray): ASJPacket(), AlfheimPacket<MessageHotSpellC> {
+class MessageHotSpellC(var ids: IntArray): AlfheimPacket<MessageHotSpellC>() {
+	
 	override fun fromCustomBytes(buf: ByteBuf) {
 		ids = IntArray(12) { readI(buf) }
 	}

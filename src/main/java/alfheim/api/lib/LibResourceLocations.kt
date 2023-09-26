@@ -21,7 +21,7 @@ object LibResourceLocations {
 	val avatarLightning = ResourceLocationIL(ModInfo.MODID, "textures/model/avatar/avatarLightning.png")
 	var babylon = ResourceLocationIL("botania", "textures/misc/babylon.png")
 	var barrel = ResourceLocationIL(ModInfo.MODID, "textures/model/block/Barrel.png")
-	var blank = ResourceLocationIL(ModInfo.MODID, "textures/block/blank.png")
+	var blank = ResourceLocationIL(ModInfo.MODID, "textures/blocks/blank.png")
 	val blood = ResourceLocationIL(ModInfo.MODID, "textures/misc/particles/blood.png")
 	val bloodDrop = ResourceLocationIL(ModInfo.MODID, "textures/misc/particles/bloodDrop.png")
 	val butterfly = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Butterfly.png")
@@ -291,10 +291,12 @@ object LibResourceLocations {
 					return
 				}
 				
-				mc.renderEngine.bindTexture(rl)
-				if (initLater.isEmpty()) return
-				initLater.forEach(mc.renderEngine::bindTexture)
-				initLater.clear()
+				try_ {
+					mc.renderEngine.bindTexture(rl)
+					if (initLater.isEmpty()) return
+					initLater.forEach(mc.renderEngine::bindTexture)
+					initLater.clear()
+				}
 			}
 		}
 	}

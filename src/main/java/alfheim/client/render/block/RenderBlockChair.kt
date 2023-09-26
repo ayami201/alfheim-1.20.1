@@ -1,20 +1,19 @@
 package alfheim.client.render.block
 
 import alfheim.api.lib.LibRenderIDs
-import net.minecraft.block.Block
+import alfheim.common.block.tile.TileDoubleCamo
 import net.minecraft.client.renderer.*
-import net.minecraft.init.Blocks
 import net.minecraft.world.World
 
-object RenderBlockChair: RenderBlockDoubleCamo(LibRenderIDs.idChair, Blocks.planks, 0, Blocks.log, 0) {
+object RenderBlockChair: RenderBlockDoubleCamo(LibRenderIDs.idChair) {
 	
-	override fun renderBlock(world: World?, rb: RenderBlocks, x: Int, y: Int, z: Int, meta: Int, blockTop: Block, blockTopMeta: Int, blockBottom: Block, blockBottomMeta: Int): Boolean {
+	override fun renderBlock(world: World?, rb: RenderBlocks, x: Int, y: Int, z: Int, meta: Int, tile: TileDoubleCamo): Boolean {
 		val min = 3.0 / 16
 		val max = 13.0 / 16
 		val thicc = 2.0 / 16
 		val offset = 0.001
 		
-		var did = renderIfPossiblePreservingBounds(world, x, y, z, blockBottom, blockBottomMeta) {
+		var did = renderIfPossiblePreservingBounds(world, x, y, z, tile.blockBottom, tile.blockBottomMeta) {
 			when (meta) {
 				0       -> {
 					it.setBlockBounds(0.25, 0.0, 0.25, 0.75, 1.0 / 16, 0.75)
@@ -66,7 +65,7 @@ object RenderBlockChair: RenderBlockDoubleCamo(LibRenderIDs.idChair, Blocks.plan
 			true
 		}
 		
-		did = did or renderIfPossiblePreservingBounds(world, x, y, z, blockTop, blockTopMeta) {
+		did = did or renderIfPossiblePreservingBounds(world, x, y, z, tile.blockTop, tile.blockTopMeta) {
 			when (meta) {
 				in 0..5 -> {
 					it.setBlockBounds(min, 0.5, min, max, 0.75, max)

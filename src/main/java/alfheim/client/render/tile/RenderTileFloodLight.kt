@@ -8,7 +8,6 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.Vec3
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import kotlin.collections.component1
@@ -27,22 +26,28 @@ object RenderTileFloodLight: TileEntitySpecialRenderer() {
 		glPushMatrix()
 		ASJRenderHelper.interpolatedTranslationReverse(mc.renderViewEntity)
 		ASJRenderHelper.setGlow()
+		glAlphaFunc(GL_GREATER, 0f)
 		glDisable(GL_TEXTURE_2D)
 		glDisable(GL_CULL_FACE)
 		glEnable(GL_BLEND)
-		glBlendFunc(GL_DST_COLOR, GL_ONE)
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE)
 		glDepthMask(false)
 		
 		val tes = Tessellator.instance
-		tes.startDrawing(GL_TRIANGLES)
+		tes.startDrawing(GL_TRIANGLE_FAN)
 		
 		val (r, g, b) = Color(0xFFFFCC).getRGBColorComponents(null)
-		tes.setColorRGBA_F(r, g, b, 0.5f)
+		tes.setColorRGBA_F(r, g, b, 0.2f)
 		
 		var target = tile.target
 		
 		val pos = Vector3.fromTileEntity(tile).add(0.5, -0.1, 0.5)
-		var tp = target?.let { Vector3.fromEntity(it) }
+		var tp = target?.let {
+			val i = ASJRenderHelper.interpolate(it.prevPosX, it.posX)
+			val j = ASJRenderHelper.interpolate(it.prevPosY - if (mc.thePlayer === it) 1.62 else 0.0, it.posY - if (mc.thePlayer === it) 1.62 else 0.0)
+			val k = ASJRenderHelper.interpolate(it.prevPosZ, it.posZ)
+			Vector3(i, j, k)
+		}
 		
 		val radius = if (target != null) {
 			val dist = Vector3.vecDistance(pos, tp!!)
@@ -53,32 +58,21 @@ object RenderTileFloodLight: TileEntitySpecialRenderer() {
 			} else cbrt(dist) / 2
 		} else 12.0
 		
-		var nextHit: Vec3? = null
 		val step = AlfheimConfigHandler.floodLightQuality
-		for (deg in 0 until 360 step step) {
+		tes.addVertex(pos.x, pos.y + 1, pos.z)
+		
+		for (deg in 0..360 step step) {
 			val angle = Math.toRadians(deg.D)
-			val st = Math.toRadians(step.D)
 			
-			tes.addVertex(pos.x, pos.y + 1, pos.z)
-			
-			var i = cos(angle) * radius
+			val i = cos(angle) * radius
 			val j = if (tp != null) tp.y - pos.y else -160.0
-			var k = sin(angle) * radius
+			val k = sin(angle) * radius
 			
-			var dest = pos.copy().add(i, j, k)
+			val dest = pos.copy().add(i, j, k)
 			if (tp != null) dest.add(Vector3(tp.x, 0, tp.z).sub(pos.x, 0, pos.z))
-			val hit = nextHit ?: world.func_147447_a(pos.toVec3(), dest.toVec3(), false, false, target == null)?.hitVec ?: dest.toVec3()
+			val hit = world.func_147447_a(pos.toVec3(), dest.toVec3(), false, false, target == null)?.hitVec ?: dest.toVec3()
 			
 			tes.addVertex(hit.xCoord, hit.yCoord, hit.zCoord)
-			
-			i = cos(angle + st) * radius
-			k = sin(angle + st) * radius
-			
-			dest = pos.copy().add(i, j, k)
-			if (tp != null) dest.add(Vector3(tp.x, 0, tp.z).sub(pos.x, 0, pos.z))
-			nextHit = world.func_147447_a(pos.toVec3(), dest.toVec3(), false, false, target == null)?.hitVec ?: dest.toVec3()
-			
-			tes.addVertex(nextHit.xCoord, nextHit.yCoord, nextHit.zCoord)
 		}
 		
 		tes.draw()
@@ -88,6 +82,7 @@ object RenderTileFloodLight: TileEntitySpecialRenderer() {
 		glEnable(GL_CULL_FACE)
 		glEnable(GL_LIGHTING)
 		glEnable(GL_TEXTURE_2D)
+		glAlphaFunc(GL_GREATER, 0.1f)
 		ASJRenderHelper.discard()
 		glPopMatrix()
 	}

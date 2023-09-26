@@ -113,10 +113,7 @@ object RenderItemAkashicRecords: IItemRenderer {
 		for (i in -110..110 step 110) {
 			for (j in -110..110 step 110) {
 				for (k in -110..110 step 110) {
-					if (i == 0 && j == 0 && k == 0) continue
-					if (i == 0 && j == 0) continue
-					if (i == 0 && k == 0) continue
-					if (j == 0 && k == 0) continue
+					if (i == 0 && j == 0 || i == 0 && k == 0 || j == 0 && k == 0) continue
 					
 					val f = max(0f, frame - 60) % 100 * 3.6
 					val v = Vector3(i, j, k).extend((frame - 50).coerceIn(0f, 10f) * 33).rotate(f, Vector3(1).rotateOY(f))

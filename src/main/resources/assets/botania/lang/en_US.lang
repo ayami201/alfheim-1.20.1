@@ -1136,7 +1136,7 @@ alfheim.page.amplifier1=Soaryn + Amp + Cacophonium = Dire rage
 
 alfheim.page.crysanthermum0=The &1Crysanthermum&0 is a hardy flower that can survive in any climate. However, its mana generation isn't indifferent to the climate. By feeding it &1Metamorphic Stone&0, you change its temperature. The farther its temperature is to the biome you're in, the more mana it will generate.
 alfheim.page.crysanthermum1=The hotter or colder the biome the stone comes from, the hotter or colder the flower will be after eating that stone. There are, however, a few caveats. Feeding the flower &1Fungal&0 stone can do anything, from cool the flower rapidly to heat it up immensely.
-alfheim.page.crysanthermum2=If a flower becomes too cold or too hot, it'll stop working until it gets back to normal temperature. Using a stone that was used within the last eight will give you diminishing returns for the next 8 stones, meaning that you'll occasionally have to course-correct.
+alfheim.page.crysanthermum2=If a flower becomes too cold or too hot, it'll stop working until it gets back to normal temperature. Using a stone that was used within the last four will give you diminishing returns for the next 4 stones, meaning that you'll occasionally have to course-correct.
 alfheim.page.crysanthermum3=Left by a Fortanono
 
 alfheim.page.andmyaxe0=&1Elementium&0 is a highly enchantable substance. So enchantable, in fact, it seems one can enchant it with spells and power outside the normal cycles. By flooding an axe of the stuff with six powers, you have recreated a legendary weapon: the &1Holy Blade Revelation&0. It attacks not the body, but the mind. This has interesting effects when used to attack an immortal.

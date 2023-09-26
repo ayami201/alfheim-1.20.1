@@ -85,6 +85,7 @@ object AlfheimFluffBlocks {
 	val secretGlass: Block
 	val curtainPlacer: Block
 	val floodLight: Block
+	val composite: Block
 	
 	init {
 		chair = BlockChair()
@@ -93,6 +94,7 @@ object AlfheimFluffBlocks {
 		secretGlass = BlockSecretGlass()
 		curtainPlacer = BlockCurtainPlacer()
 		floodLight = BlockFloodLight()
+		composite = BlockComposite()
 		
 		yggDecor = BlockYggDecor()
 		shrineRock = BlockModMeta(Material.rock, 16, ModInfo.MODID, "ShrineRock", AlfheimTab, 10f, harvLvl = 2, resist = 10000f, folder = "decor/")

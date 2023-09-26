@@ -1,14 +1,14 @@
 package alfheim.common.network.packet
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.AlfheimAPI
 import alfheim.api.network.AlfheimPacket
 import alfheim.client.core.handler.KeyBindingHandlerClient
 import alfheim.common.network.M0dc
 import net.minecraft.client.renderer.EntityRenderer
 
-class Message0dC(ty: M0dc, var type: Int = ty.ordinal) : ASJPacket(), AlfheimPacket<Message0dC> {
+class Message0dC(ty: M0dc, var type: Int = ty.ordinal): AlfheimPacket<Message0dC>() {
+	
 	override fun handleClient() {
 		when (M0dc.entries[type]) {
 			M0dc.MTSPELL -> {

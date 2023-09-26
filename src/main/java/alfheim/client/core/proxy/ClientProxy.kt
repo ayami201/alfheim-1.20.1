@@ -16,7 +16,7 @@ import alfheim.client.render.entity.*
 import alfheim.client.render.item.*
 import alfheim.client.render.particle.*
 import alfheim.client.render.tile.*
-import alfheim.common.block.AlfheimBlocks
+import alfheim.common.block.*
 import alfheim.common.block.tile.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.proxy.CommonProxy
@@ -61,12 +61,16 @@ object ClientProxy : CommonProxy() {
 		LibRenderIDs
 		
 		if (ShaderHelper.useShaders()) {
+			ASJShaderHelper.crashOnError = false
+			
 			LibShaderIDs.idColor3d = ASJShaderHelper.createProgram("shaders/position.vert", "shaders/color3d.frag")
 			LibShaderIDs.idGravity = ASJShaderHelper.createProgram(null, "shaders/gravity.frag")
 			LibShaderIDs.idNoise = ASJShaderHelper.createProgram("shaders/position.vert", "shaders/noise4d.frag")
 			LibShaderIDs.idShadow = ASJShaderHelper.createProgram(null, "shaders/shadow.frag")
 			LibShaderIDs.idSun = ASJShaderHelper.createProgram("shaders/position.vert", "shaders/sun.frag")
 			LibShaderIDs.idWorley = ASJShaderHelper.createProgram("shaders/position.vert", "shaders/worley.frag")
+			
+			ASJShaderHelper.crashOnError = true
 		}
 		
 		ClientRegistry.registerKeyBinding(keyAkashic)
@@ -83,23 +87,29 @@ object ClientProxy : CommonProxy() {
 		MinecraftForgeClient.registerItemRenderer(AlfheimItems.thrymAxe, RenderItemThrymAxe)
 		MinecraftForgeClient.registerItemRenderer(AlfheimBlocks.yggFlower.toItem(), RenderItemYggFlower)
 		
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idAnyavil, RenderBlockAnyavil)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idBarrel, RenderBlockBarrel)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idChair, RenderBlockChair)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idDomainDoor, RenderBlockDomainLobby)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idDoubleBlock, RenderBlockDoubleBlock)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idGrapeRedPlanted, RenderBlockGrapeRedPlanted)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idGrapeWhite, RenderBlockGrapeGreen)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idHarvester, RenderBlockAnomalyHarvester)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idManaAccelerator, RenderBlockItemHolder)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idManaTuner, RenderBlockManaTuner)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idNiflheim, RenderBlockNiflheimSet)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idPowerStone, RenderBlockPowerStone)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idPylon, RenderBlockAlfheimPylons)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idSimpleDoubleBlock, RenderSimpleDoubleBlock)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idShrinePanel, RenderBlockShrinePanel)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idSpire, RenderBlockSpire)
-		RenderingRegistry.registerBlockHandler(LibRenderIDs.idTable, RenderBlockTable)
+		MinecraftForgeClient.registerItemRenderer(AlfheimFluffBlocks.chair.toItem(), RenderItemDoubleCamo<TileChair>(LibRenderIDs.idChair))
+		MinecraftForgeClient.registerItemRenderer(AlfheimFluffBlocks.composite.toItem(), RenderItemDoubleCamo<TileComposite>(LibRenderIDs.idComposite))
+		MinecraftForgeClient.registerItemRenderer(AlfheimFluffBlocks.doubleBlock.toItem(), RenderItemDoubleCamo<TileDoubleBlock>(LibRenderIDs.idDoubleBlock))
+		MinecraftForgeClient.registerItemRenderer(AlfheimFluffBlocks.table.toItem(), RenderItemDoubleCamo<TileTable>(LibRenderIDs.idTable))
+		
+		RenderingRegistry.registerBlockHandler(RenderBlockAnyavil)
+		RenderingRegistry.registerBlockHandler(RenderBlockBarrel)
+		RenderingRegistry.registerBlockHandler(RenderBlockChair)
+		RenderingRegistry.registerBlockHandler(RenderBlockComposite)
+		RenderingRegistry.registerBlockHandler(RenderBlockDomainLobby)
+		RenderingRegistry.registerBlockHandler(RenderBlockDoubleBlock)
+		RenderingRegistry.registerBlockHandler(RenderBlockGrapeRedPlanted)
+		RenderingRegistry.registerBlockHandler(RenderBlockGrapeGreen)
+		RenderingRegistry.registerBlockHandler(RenderBlockAnomalyHarvester)
+		RenderingRegistry.registerBlockHandler(RenderBlockItemHolder)
+		RenderingRegistry.registerBlockHandler(RenderBlockManaTuner)
+		RenderingRegistry.registerBlockHandler(RenderBlockNiflheimSet)
+		RenderingRegistry.registerBlockHandler(RenderBlockPowerStone)
+		RenderingRegistry.registerBlockHandler(RenderBlockAlfheimPylons)
+		RenderingRegistry.registerBlockHandler(RenderSimpleDoubleBlock)
+		RenderingRegistry.registerBlockHandler(RenderBlockShrinePanel)
+		RenderingRegistry.registerBlockHandler(RenderBlockSpire)
+		RenderingRegistry.registerBlockHandler(RenderBlockTable)
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAlfheimPortal::class.java, RenderTileAlfheimPortal)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAlfheimPylon::class.java, RenderTileAlfheimPylons)

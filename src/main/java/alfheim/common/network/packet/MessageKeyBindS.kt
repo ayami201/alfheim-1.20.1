@@ -1,6 +1,5 @@
 package alfheim.common.network.packet
 
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.network.AlfheimPacket
 import alfheim.client.core.handler.KeyBindingHandlerClient
 import alfheim.common.core.handler.KeyBindingHandler
@@ -8,7 +7,8 @@ import alfheim.common.entity.EntityLolicorn
 import alfheim.common.item.relic.ItemAkashicRecords
 import net.minecraft.entity.player.EntityPlayerMP
 
-class MessageKeyBindS(var action: Int, var state: Boolean, var data: Int): ASJPacket(), AlfheimPacket<MessageKeyBindS> {
+class MessageKeyBindS(var action: Int, var state: Boolean, var data: Int): AlfheimPacket<MessageKeyBindS>() {
+	
 	override fun handleServer(player: EntityPlayerMP) {
 		when (KeyBindingHandlerClient.KeyBindingIDs.entries[action]) {
 			KeyBindingHandlerClient.KeyBindingIDs.AKASHIC -> ItemAkashicRecords.unpack(player)

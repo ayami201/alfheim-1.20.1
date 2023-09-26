@@ -32,7 +32,7 @@ import kotlin.math.sin
 object RenderContributors {
 	
 	val auraTextures: Map<String, ResourceLocation> by lazy { ContributorsPrivacyHelper.auras.map { (k, v) -> k to ResourceLocationIL(ModInfo.MODID, "textures/model/entity/auras/$v.png") }.toMap() }
-	val book = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/mudrbook.obj"))
+	val book by lazy { if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/mudrbook.obj")) }
 	val so = ShadedObjectHaloPlane(LibResourceLocations.babylon)
 	val modelBook = ModelBook()
 	
@@ -236,7 +236,7 @@ object RenderContributors {
 			
 			glScaled(0.1)
 			mc.renderEngine.bindTexture(LibResourceLocations.palette)
-			book.renderAll()
+			book!!.renderAll()
 			glPopMatrix()
 		}
 		

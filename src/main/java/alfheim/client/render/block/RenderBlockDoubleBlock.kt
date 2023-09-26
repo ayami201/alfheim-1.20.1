@@ -2,31 +2,30 @@ package alfheim.client.render.block
 
 import alfheim.api.lib.LibRenderIDs
 import alfheim.common.block.WorldWrapper
-import net.minecraft.block.Block
+import alfheim.common.block.tile.TileDoubleCamo
 import net.minecraft.client.renderer.RenderBlocks
-import net.minecraft.init.Blocks
 import net.minecraft.world.World
 import net.minecraftforge.client.ForgeHooksClient
 
-object RenderBlockDoubleBlock: RenderBlockDoubleCamo(LibRenderIDs.idDoubleBlock, Blocks.fire, 0, Blocks.glass, 0) {
+object RenderBlockDoubleBlock: RenderBlockDoubleCamo(LibRenderIDs.idDoubleBlock) {
 	
-	override fun renderBlock(world: World?, rb: RenderBlocks, x: Int, y: Int, z: Int, meta: Int, blockTop: Block, blockTopMeta: Int, blockBottom: Block, blockBottomMeta: Int): Boolean {
+	override fun renderBlock(world: World?, rb: RenderBlocks, x: Int, y: Int, z: Int, meta: Int, tile: TileDoubleCamo): Boolean {
 		var did = false
 		
 		val oldWorld = rb.blockAccess
 		val wrapper = WorldWrapper(rb.blockAccess)
 		rb.blockAccess = wrapper
 		
-		if (blockBottom.canRenderInPass(ForgeHooksClient.getWorldRenderPass())) {
-			wrapper.setOverride(x, y, z, blockBottom, blockBottomMeta)
-			world?.setBlockMetadataWithNotify(x, y, z, blockBottomMeta, 4)
-			did = rb.renderBlockByRenderType(blockBottom, x, y, z)
+		if (tile.blockBottom.canRenderInPass(ForgeHooksClient.getWorldRenderPass())) {
+			wrapper.setOverride(x, y, z, tile.blockBottom, tile.blockBottomMeta)
+			world?.setBlockMetadataWithNotify(x, y, z, tile.blockBottomMeta, 4)
+			did = rb.renderBlockByRenderType(tile.blockBottom, x, y, z)
 		}
 		
-		if (blockTop.canRenderInPass(ForgeHooksClient.getWorldRenderPass())) {
-			wrapper.setOverride(x, y, z, blockTop, blockTopMeta)
-			world?.setBlockMetadataWithNotify(x, y, z, blockTopMeta, 4)
-			did = rb.renderBlockByRenderType(blockTop, x, y, z)
+		if (tile.blockTop.canRenderInPass(ForgeHooksClient.getWorldRenderPass())) {
+			wrapper.setOverride(x, y, z, tile.blockTop, tile.blockTopMeta)
+			world?.setBlockMetadataWithNotify(x, y, z, tile.blockTopMeta, 4)
+			did = rb.renderBlockByRenderType(tile.blockTop, x, y, z)
 		}
 		
 		rb.blockAccess = oldWorld

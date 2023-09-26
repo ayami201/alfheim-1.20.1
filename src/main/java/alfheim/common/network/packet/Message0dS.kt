@@ -2,7 +2,6 @@ package alfheim.common.network.packet
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.network.AlfheimPacket
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.bauble.*
@@ -15,7 +14,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.StatCollector
 import vazkii.botania.common.item.equipment.bauble.ItemTravelBelt
 
-class Message0dS(ty: M0ds, var type: Int = ty.ordinal): ASJPacket(), AlfheimPacket<Message0dS> {
+class Message0dS(ty: M0ds, var type: Int = ty.ordinal): AlfheimPacket<Message0dS>() {
+	
 	override fun handleServer(player: EntityPlayerMP) {
 		when (M0ds.entries[type]) {
 			M0ds.AKASHIK_SCROLL_UP   -> scrollAkasha(player, true)

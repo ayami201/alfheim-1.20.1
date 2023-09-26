@@ -33,7 +33,7 @@ class TileManaTuner: TileSimpleInventory(), IManaReceiver {
 	override fun updateEntity() {
 		if (worldObj.isRemote) return
 		
-		for (it in AlfheimAPI.tunerIncantations[incantation]) {
+		for (it in AlfheimAPI.tunerIncantations[incantation.lowercase()]) {
 			resetTimer = 0
 			
 			@Suppress("UNCHECKED_CAST")

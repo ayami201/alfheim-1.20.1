@@ -2,13 +2,13 @@ package alfheim.common.network.packet
 
 import alexsocol.asjlib.ASJUtilities
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.network.AlfheimPacket
 import alfheim.common.block.tile.TileRaceSelector
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 
-class MessageRaceSelection(var doMeta: Boolean, var custom: Boolean, var female: Boolean, var give: Boolean, var meta: Int, var rot: Int, var arot: Int, var timer: Int, var x: Int, var y: Int, var z: Int, var dim: Int): ASJPacket(), AlfheimPacket<MessageRaceSelection> {
+class MessageRaceSelection(var doMeta: Boolean, var custom: Boolean, var female: Boolean, var give: Boolean, var meta: Int, var rot: Int, var arot: Int, var timer: Int, var x: Int, var y: Int, var z: Int, var dim: Int): AlfheimPacket<MessageRaceSelection>() {
+	
 	override fun handleServer(player: EntityPlayerMP) {
 		if (Vector3.vecEntityDistance(Vector3(x, y, z), player) > 5) return
 

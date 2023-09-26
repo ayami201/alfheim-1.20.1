@@ -1,12 +1,11 @@
 package alfheim.common.network.packet
 
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.network.AlfheimPacket
 import alfheim.common.item.rod.*
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 
-class MessageRedstoneSignalsSync(var signals: HashSet<RedstoneSignal>): ASJPacket(), AlfheimPacket<MessageRedstoneSignalsSync> {
+class MessageRedstoneSignalsSync(var signals: HashSet<RedstoneSignal>): AlfheimPacket<MessageRedstoneSignalsSync>() {
 
 	override fun fromCustomBytes(buf: ByteBuf) {
 		val size = readI(buf)

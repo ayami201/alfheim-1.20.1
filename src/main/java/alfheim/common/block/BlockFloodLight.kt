@@ -21,8 +21,8 @@ class BlockFloodLight: BlockContainerMod(Material.iron) {
 		iconSource = IconHelper.forBlock(reg, this, "Source")
 	}
 	
-	override fun getLightValue() = 15
-	override fun getLightValue(world: IBlockAccess, x: Int, y: Int, z: Int) = if (world.getBlockMetadata(x, y, z) > 0) 15 else 0
+	override fun getLightValue() = 0
+	override fun getLightValue(world: IBlockAccess, x: Int, y: Int, z: Int) = 0
 	override fun getIcon(side: Int, meta: Int) = if (side == 0) iconSource else blockIcon
 	override fun createNewTileEntity(world: World?, meta: Int) = TileFloodLight()
 }

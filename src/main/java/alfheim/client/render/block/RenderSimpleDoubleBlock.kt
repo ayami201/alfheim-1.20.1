@@ -46,8 +46,8 @@ object RenderSimpleDoubleBlock: ISimpleBlockRenderingHandler {
 		glRotatef(90f, 0f, 1f, 0f)
 		glTranslatef(-0.5f, -0.5f, -0.5f)
 		
-		val tessellator = Tessellator.instance
-		tessellator.startDrawingQuads()
+		val tes = Tessellator.instance
+		tes.startDrawingQuads()
 		
 		val tile = (block as? ITileEntityProvider)?.createNewTileEntity(mc.theWorld, metadata) as? TileDoubleCamo
 		
@@ -68,7 +68,7 @@ object RenderSimpleDoubleBlock: ISimpleBlockRenderingHandler {
 			icon = blockBottom
 			meta = blockBottomMeta
 		}
-		tessellator.setNormal(0f, -1f, 0f)
+		tes.setNormal(0f, -1f, 0f)
 		renderBlocks.renderFaceYNeg(icon, 0.0, 0.0, 0.0, renderBlocks.getIconSafe(icon.getIcon(DOWN , meta)))
 		
 		if (topSide == UP) {
@@ -78,7 +78,7 @@ object RenderSimpleDoubleBlock: ISimpleBlockRenderingHandler {
 			icon = blockBottom
 			meta = blockBottomMeta
 		}
-		tessellator.setNormal(0f, 1f, 0f)
+		tes.setNormal(0f, 1f, 0f)
 		renderBlocks.renderFaceYPos(icon, 0.0, 0.0, 0.0, renderBlocks.getIconSafe(icon.getIcon(UP   , meta)))
 		
 		if (topSide == NORTH) {
@@ -88,7 +88,7 @@ object RenderSimpleDoubleBlock: ISimpleBlockRenderingHandler {
 			icon = blockBottom
 			meta = blockBottomMeta
 		}
-		tessellator.setNormal(0f, 0f, -1f)
+		tes.setNormal(0f, 0f, -1f)
 		renderBlocks.renderFaceZNeg(icon, 0.0, 0.0, 0.0, renderBlocks.getIconSafe(icon.getIcon(NORTH, meta)))
 		
 		if (topSide == SOUTH) {
@@ -98,7 +98,7 @@ object RenderSimpleDoubleBlock: ISimpleBlockRenderingHandler {
 			icon = blockBottom
 			meta = blockBottomMeta
 		}
-		tessellator.setNormal(0f, 0f, 1f)
+		tes.setNormal(0f, 0f, 1f)
 		renderBlocks.renderFaceZPos(icon, 0.0, 0.0, 0.0, renderBlocks.getIconSafe(icon.getIcon(SOUTH, meta)))
 		
 		if (topSide == WEST) {
@@ -108,7 +108,7 @@ object RenderSimpleDoubleBlock: ISimpleBlockRenderingHandler {
 			icon = blockBottom
 			meta = blockBottomMeta
 		}
-		tessellator.setNormal(-1f, 0f, 0f)
+		tes.setNormal(-1f, 0f, 0f)
 		renderBlocks.renderFaceXNeg(icon, 0.0, 0.0, 0.0, renderBlocks.getIconSafe(icon.getIcon(WEST , meta)))
 		
 		if (topSide == EAST) {
@@ -118,10 +118,10 @@ object RenderSimpleDoubleBlock: ISimpleBlockRenderingHandler {
 			icon = blockBottom
 			meta = blockBottomMeta
 		}
-		tessellator.setNormal(1f, 0f, 0f)
+		tes.setNormal(1f, 0f, 0f)
 		renderBlocks.renderFaceXPos(icon, 0.0, 0.0, 0.0, renderBlocks.getIconSafe(icon.getIcon(EAST , meta)))
 		
-		tessellator.draw()
+		tes.draw()
 		
 		glAlphaFunc(GL_GREATER, 0.1f)
 		ASJRenderHelper.discard()

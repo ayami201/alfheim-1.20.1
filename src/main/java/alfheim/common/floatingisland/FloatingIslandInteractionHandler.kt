@@ -1,7 +1,7 @@
 package alfheim.common.floatingisland
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.math.*
+import alexsocol.asjlib.math.Vector3
 import alfheim.api.event.PlayerInteractAdequateEvent
 import alfheim.api.event.PlayerInteractAdequateEvent.RightClick.Action.*
 import alfheim.common.block.*
@@ -64,7 +64,7 @@ object FloatingIslandInteractionHandler {
 		access.setBlock(x, y, z, Blocks.air, sync = true)
 	}
 	
-	private fun AxisAlignedBB.intersectsWithLine(a: Vector3, b: Vector3): Boolean {
+	fun AxisAlignedBB.intersectsWithLine(a: Vector3, b: Vector3): Boolean {
 		return (a.x <= maxX || b.x <= maxX) && (a.x >= minX || b.x >= minX) && (a.y <= maxY || b.y <= maxY) && (a.y >= minY || b.y >= minY) && (a.z <= maxZ || b.z <= maxZ) && (a.z >= minZ || b.z >= minZ)
 	}
 	
@@ -76,7 +76,7 @@ object FloatingIslandInteractionHandler {
 	 * @return intersection point closest to [a], if any
 	 * @author ChatGPT
 	 */
-	private fun AxisAlignedBB.calculateIntersectionPoint(a: Vector3, b: Vector3): Vector3? {
+	fun AxisAlignedBB.calculateIntersectionPoint(a: Vector3, b: Vector3): Vector3? {
 		val intersectionPoint = Vector3()
 		var tNear = Double.NEGATIVE_INFINITY
 		var tFar = Double.POSITIVE_INFINITY

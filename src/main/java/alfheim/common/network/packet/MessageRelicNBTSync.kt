@@ -1,12 +1,11 @@
 package alfheim.common.network.packet
 
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.network.AlfheimPacket
 import alfheim.common.core.asm.hook.extender.RelicHooks
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 
-class MessageRelicNBTSync(var syncMap: MutableMap<String, NBTTagCompound>): ASJPacket(), AlfheimPacket<MessageRelicNBTSync> {
+class MessageRelicNBTSync(var syncMap: MutableMap<String, NBTTagCompound>): AlfheimPacket<MessageRelicNBTSync>() {
 	
 	override fun toCustomBytes(buf: ByteBuf) {
 		write(buf, syncMap.entries.size)
