@@ -1953,4 +1953,14 @@ object AlfheimHookHandler {
 		world.setBlockToAir(x, y, z)
 		EntityItem(world, x + 0.5, y + 0.5, z + 0.5, ItemStack(block, 1, 2)).spawn()
 	}
+	
+	@JvmStatic
+	@Hook
+	fun readCustomNBT(tile: TileSpecialFlower, nbt: NBTTagCompound) {
+		val tag = TileSpecialFlower.TAG_SUBTILE_NAME
+		if (!nbt.hasKey(tag)) return
+		
+		nbt.setString(SubTileEntity.TAG_TYPE, nbt.getString(tag))
+		nbt.removeTag(tag)
+	}
 }

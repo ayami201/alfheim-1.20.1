@@ -9,6 +9,7 @@ import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.*
 import vazkii.botania.api.subtile.SubTileEntity
+import vazkii.botania.common.block.tile.TileSpecialFlower
 
 @Suppress("NAME_SHADOWING", "ClassName", "unused", "LocalVariableName", "PrivatePropertyName")
 class AlfheimClassTransformer: IClassTransformer {
@@ -431,7 +432,7 @@ class AlfheimClassTransformer: IClassTransformer {
 	internal class `TileSpecialFlower$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 
 		override fun visitField(access: Int, name: String?, desc: String?, signature: String?, value: Any?): FieldVisitor {
-			val newVal = if (value == "subTileName") SubTileEntity.TAG_TYPE else value
+			val newVal = if (value == TileSpecialFlower.TAG_SUBTILE_NAME) SubTileEntity.TAG_TYPE else value
 			return super.visitField(access, name, desc, signature, newVal)
 		}
 
@@ -442,7 +443,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		internal class `TileSpecialFlower$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 
 			override fun visitLdcInsn(cst: Any?) {
-				val newCst = if (cst == "subTileName") SubTileEntity.TAG_TYPE else cst
+				val newCst = if (cst == TileSpecialFlower.TAG_SUBTILE_NAME) SubTileEntity.TAG_TYPE else cst
 
 				super.visitLdcInsn(newCst)
 			}

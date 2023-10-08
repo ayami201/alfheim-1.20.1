@@ -17,3 +17,4 @@ Innovations:
 Fixes:
  Aesir ring was dropping 3 rings
  Applied entity elements clash with existing elements
+ Existing Botania flowers breaking when first installing Alfheim
