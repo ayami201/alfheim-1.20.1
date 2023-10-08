@@ -11,6 +11,11 @@ import vazkii.botania.common.item.ItemTwigWand
 
 open class TileDoubleCamo: ASJTile() {
 	
+	/**
+	 * For the fuck's sake, why can't there just be a tile when Block#getDrops -_-
+	 * Mojang, I hate you sooo much
+	 */
+	var noDrop = false
 	var blockBottom = Blocks.log!!
 	var blockBottomMeta = 0
 	var blockTop = Blocks.planks!!
@@ -22,7 +27,7 @@ open class TileDoubleCamo: ASJTile() {
 		if (locked || ASJUtilities.isServer || mc.thePlayer.heldItem?.item !is ItemTwigWand) return
 		
 		Botania.proxy.setWispFXDepthTest(false)
-		Botania.proxy.wispFX(worldObj, xCoord + 0.5, yCoord + 1.0, zCoord + 0.5, 1f, 0f, 0f, 0.5f, -0.01f)
+		Botania.proxy.wispFX(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 1f, 0f, 0f, 0.5f, -0.01f)
 		Botania.proxy.setWispFXDepthTest(true)
 	}
 	
@@ -32,6 +37,7 @@ open class TileDoubleCamo: ASJTile() {
 		nbt.setString(TAG_BLOCK_TOP, GameRegistry.findUniqueIdentifierFor(blockTop).toString())
 		nbt.setInteger(TAG_BLOCK_TOP_META, blockTopMeta)
 		nbt.setBoolean(TAG_LOCKED, locked)
+		nbt.setBoolean(TAG_NO_DROP, noDrop)
 	}
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
@@ -40,6 +46,7 @@ open class TileDoubleCamo: ASJTile() {
 		if (nbt.hasKey(TAG_BLOCK_TOP)) blockTop = Block.getBlockFromName(nbt.getString(TAG_BLOCK_TOP)) ?: Blocks.planks
 		if (nbt.hasKey(TAG_BLOCK_TOP_META)) blockTopMeta = nbt.getInteger(TAG_BLOCK_TOP_META)
 		if (nbt.hasKey(TAG_LOCKED)) locked = nbt.getBoolean(TAG_LOCKED)
+		if (nbt.hasKey(TAG_NO_DROP)) noDrop = nbt.getBoolean(TAG_NO_DROP)
 	}
 	
 	companion object {
@@ -48,5 +55,6 @@ open class TileDoubleCamo: ASJTile() {
 		const val TAG_BLOCK_TOP = "blockTop"
 		const val TAG_BLOCK_TOP_META = "blockTopMeta"
 		const val TAG_LOCKED = "locked"
+		const val TAG_NO_DROP = "noDrop"
 	}
 }

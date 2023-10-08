@@ -7,7 +7,7 @@ import java.util.*
 
 object WorldGenTentacles {
 	
-	val structures = Array(4) { SchemaUtils.loadStructure ("${ModInfo.MODID}/schemas/niflheim/worldgen_0$it") }.toList()
+	val structures = SchemaUtils.parseWithRotations("${ModInfo.MODID}/schemas/niflheim/worldgen_0")
 	
 	fun generate(world: World, random: Random, x: Int, z: Int) {
 		val y = 32

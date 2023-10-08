@@ -12,7 +12,7 @@ import net.minecraft.world.World
 
 object ThrymDomain: Domain(ModInfo.MODID, "Thrym", 2, getBoundingBox(-45, -5, -75, 45, 50, 10)) {
 	
-	override val skyRenderer = object: SkyRendererDomains(0xFF7F7FFFU, 0xFFFFFBF2u) {}
+	override val skyRenderer = object: SkyRendererDomains(0xFF7F7FFFU, 0xFFFFFBF2U) {}
 	
 	override val firstConquerors = arrayOf("Ilya3000", "Kompotik", "Pelmeshkins")
 	override val firstConquerorsUnknown = arrayOf("ᛁᛚᛁᚨᛏᛉᛉᛉ", "ᚲᛟᛗᛈᛟᛏᛁᚲ", "ᛈᛖᛚᛗᛖᛊᚺᚲᛁᚾᛊ")

@@ -84,6 +84,7 @@ import alfheim.common.block.AlfheimBlocks.corporeaSparkBase
 import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.elvenSand
 import alfheim.common.block.AlfheimBlocks.enderActuator
+import alfheim.common.block.AlfheimBlocks.gaiaButton
 import alfheim.common.block.AlfheimBlocks.icicle
 import alfheim.common.block.AlfheimBlocks.irisDirt
 import alfheim.common.block.AlfheimBlocks.irisGrass
@@ -143,6 +144,8 @@ import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFenceGate
 import alfheim.common.block.AlfheimFluffBlocks.dwarfLantern
 import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanks
+import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanksSlab
+import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanksStairs
 import alfheim.common.block.AlfheimFluffBlocks.dwarfTrapDoor
 import alfheim.common.block.AlfheimFluffBlocks.elfQuartzWall
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstone
@@ -198,6 +201,7 @@ import alfheim.common.item.AlfheimItems.auraRingElven
 import alfheim.common.item.AlfheimItems.auraRingGod
 import alfheim.common.item.AlfheimItems.auraRingPink
 import alfheim.common.item.AlfheimItems.balanceCloak
+import alfheim.common.item.AlfheimItems.carver
 import alfheim.common.item.AlfheimItems.chalk
 import alfheim.common.item.AlfheimItems.cloudPendant
 import alfheim.common.item.AlfheimItems.cloudPendantSuper
@@ -376,6 +380,7 @@ object AlfheimRecipes {
 	lateinit var recipeCalicoPlanks: IRecipe
 	lateinit var recipeCalicoSlabs: IRecipe
 	lateinit var recipeCalicoStairs: IRecipe
+	lateinit var recipeCarver: IRecipe
 	lateinit var recipeCircuitPlanks: IRecipe
 	lateinit var recipeCircuitSlabs: IRecipe
 	lateinit var recipeCircuitStairs: IRecipe
@@ -419,6 +424,7 @@ object AlfheimRecipes {
 	lateinit var recipeFenrirHelmet: IRecipe
 	lateinit var recipeFenrirLeggings: IRecipe
 	lateinit var recipeFurnace: IRecipe
+	lateinit var recipeGaiaButton: IRecipe
 	lateinit var recipeGrenade: IRecipe
 	lateinit var recipeGoddessCharm: IRecipe
 	lateinit var recipeHyperBucket: IRecipe
@@ -447,6 +453,7 @@ object AlfheimRecipes {
 	lateinit var recipeLensSuperconductor: IRecipe
 	lateinit var recipeLensTrack: IRecipe
 	lateinit var recipeLensTripwire: IRecipe
+	lateinit var recipeLensUnlink: IRecipe
 	lateinit var recipeLivingcobble: IRecipe
 	lateinit var recipeLivingCobbleMossy: IRecipe
 	lateinit var recipesLivingDecor: List<IRecipe>
@@ -780,6 +787,12 @@ object AlfheimRecipes {
 						 "P  ", "PP ", "PPP",
 						 'P', ItemStack(calicoPlanks))
 		recipeCalicoStairs = BotaniaAPI.getLatestAddedRecipe()
+		
+		addOreDictRecipe(ItemStack(carver),
+		                 "  N", " T ", "T  ",
+		                 'N', MANASTEEL_NUGGET,
+						 'T', LIVINGWOOD_TWIG)
+		recipeCarver = BotaniaAPI.getLatestAddedRecipe()
 		
 		addRecipe(ItemStack(circuitSlabs, 6),
 				  "PPP",
@@ -1959,6 +1972,8 @@ object AlfheimRecipes {
 		
 		addOreDictRecipe(ItemStack(dwarfPlanks, 4), " P ", "PMP", " P ", 'P', ItemStack(planks, 1, 5), 'M', MANA_POWDER)
 		
+		addStairsAndSlabs(dwarfPlanks, 0, dwarfPlanksStairs, dwarfPlanksSlab)
+		
 		addOreDictRecipe(ItemStack(dwarfLantern, 8),
 						 "LCL", "CSC", "LCL",
 						 'L', ItemStack(livingrock, 1, 1),
@@ -2199,6 +2214,9 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(ItemStack(circuitPlanks, 4), circuitWood)
 		recipeCircuitPlanks = BotaniaAPI.getLatestAddedRecipe()
 		
+		addShapelessOreDictRecipe(ItemStack(gaiaButton), wooden_button, LIFE_ESSENCE)
+		recipeGaiaButton = BotaniaAPI.getLatestAddedRecipe()
+		
 		addShapelessOreDictRecipe(ItemStack(corporeaInjector), hopper, corporeaSpark)
 		recipeInjector = BotaniaAPI.getLatestAddedRecipe()
 		
@@ -2271,6 +2289,9 @@ object AlfheimRecipes {
 		
 		addShapelessOreDictRecipe(ItemStack(lens, 1, TRIPWIRE.meta), ItemStack(lens), tripwire_hook, ELEMENTIUM)
 		recipeLensTripwire = BotaniaAPI.getLatestAddedRecipe()
+		
+		addShapelessOreDictRecipe(ItemStack(lens, 1, UNLINK.meta), ItemStack(lens), RUNE[8], manasteelShears, RED_STRING)
+		recipeLensUnlink = BotaniaAPI.getLatestAddedRecipe()
 		
 		addShapelessOreDictRecipe(SaveIvy.stack, vine, DRAGONSTONE, MAUFTRIUM_NUGGET)
 		recipeSaveIvy = BotaniaAPI.getLatestAddedRecipe()
@@ -2777,7 +2798,7 @@ object AlfheimRecipes {
 				else -> throw IllegalArgumentException("$it of type ${it::class.java.name} is unexpected")
 			}
 		}.toTypedArray()) {
-			if (core.isItemEqual(it)) return@registerIncantation false
+			if (!core.isItemEqual(it)) return@registerIncantation false
 			
 			it.func_150996_a(result)
 			it.stackSize = 1

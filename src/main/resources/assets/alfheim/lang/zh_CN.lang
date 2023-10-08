@@ -433,14 +433,6 @@ alfheimmisc.cast.wrongtgt=错误的目标
 alfheimmisc.cast.nomana=魔力不足
 alfheimmisc.cast.notallow=你无法在此处施法
 
-alfheimmisc.modular.available=提供模块化的更新.
-alfheimmisc.modular.update10=服务器将会在10分钟内关闭.
-alfheimmisc.modular.update5=服务器将会在5分钟内关闭.
-alfheimmisc.modular.update2=服务器将会在2分钟内关闭.
-alfheimmisc.modular.update1=服务器将会在1分钟内关闭.
-alfheimmisc.modular.update30s=服务器将会在30秒内关闭
-alfheimmisc.modular.restart=正在停止服务器以更新艾尔夫海姆的模块,请手动重启
-
 alfheimmisc.mount.unavailable=安装不可用
 
 alfheimmisc.party.already=你已经进入这个盟约了

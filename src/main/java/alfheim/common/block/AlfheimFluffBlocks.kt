@@ -6,6 +6,7 @@ import alfheim.client.core.helper.IconHelper
 import alfheim.common.block.AlfheimBlocks.setHarvestLevelI
 import alfheim.common.block.alt.BlockYggDecor
 import alfheim.common.block.base.BlockStairsMod
+import alfheim.common.core.handler.WorkInProgressItemsHandler.WIP
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.ItemBlockLeavesMod
 import cpw.mods.fml.common.registry.GameRegistry
@@ -88,12 +89,12 @@ object AlfheimFluffBlocks {
 	val composite: Block
 	
 	init {
-		chair = BlockChair()
-		table = BlockTable()
-		doubleBlock = BlockDoubleBlock()
-		secretGlass = BlockSecretGlass()
-		curtainPlacer = BlockCurtainPlacer()
-		floodLight = BlockFloodLight()
+		chair = BlockChair().WIP()
+		table = BlockTable().WIP()
+		doubleBlock = BlockDoubleBlock().WIP()
+		secretGlass = BlockSecretGlass().WIP()
+		curtainPlacer = BlockCurtainPlacer().WIP()
+		floodLight = BlockFloodLight().WIP()
 		composite = BlockComposite()
 		
 		yggDecor = BlockYggDecor()
@@ -120,8 +121,8 @@ object AlfheimFluffBlocks {
 		roofTileStairs = (0 until roofs).map { BlockModStairs(roofTile, it, "CustomRoofStairs$it").setCreativeTab(AlfheimTab) }
 		
 		livingMountain = BlockLivingMountain()
-		livingMountainSlab = BlockLivingMountainSlab(false).setCreativeTab(AlfheimTab)
-		livingMountainSlabFull = BlockLivingMountainSlab(true).setCreativeTab(AlfheimTab)
+		livingMountainSlab = BlockLivingMountainSlab(false).setCreativeTab(AlfheimTab).setHardness(1.5f)
+		livingMountainSlabFull = BlockLivingMountainSlab(true).setCreativeTab(null).setHardness(1.5f)
 		(livingMountainSlab as BlockModSlab).register()
 		(livingMountainSlabFull as BlockModSlab).register()
 		

@@ -4,11 +4,13 @@ import alexsocol.asjlib.*
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileDoubleCamo
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.particle.*
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
@@ -75,9 +77,17 @@ abstract class BlockDoubleCamo(material: Material = Material.wood): BlockContain
 		return true
 	}
 	
-	override fun getDrops(world: World, x: Int, y: Int, z: Int, metadata: Int, fortune: Int): ArrayList<ItemStack> {
-		return arrayListOf(getPickBlock(null, world, x, y, z))
+	override fun breakBlock(world: World, x: Int, y: Int, z: Int, block: Block, meta: Int) {
+		val tile = world.getTileEntity(x, y, z) as? TileDoubleCamo
+		if (tile?.noDrop == false) {
+			val stack = ItemStack(block, 1, block.damageDropped(meta))
+			tile.writeCustomNBT(ItemNBTHelper.getNBT(stack))
+			EntityItem(world, x + 0.5, y + 0.5, z + 0.5, stack).spawn()
+		}
+		super.breakBlock(world, x, y, z, block, meta)
 	}
+	
+	override fun getDrops(world: World, x: Int, y: Int, z: Int, metadata: Int, fortune: Int) = arrayListOf<ItemStack>()
 	
 	@Suppress("OVERRIDE_DEPRECATION", "DEPRECATION") // stupid WAILA uses deprecated method -_-
 	override fun getPickBlock(target: MovingObjectPosition?, world: World, x: Int, y: Int, z: Int): ItemStack {

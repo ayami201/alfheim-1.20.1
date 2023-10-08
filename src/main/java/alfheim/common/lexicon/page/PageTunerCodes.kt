@@ -4,7 +4,7 @@ import alexsocol.asjlib.mc
 import alfheim.common.block.tile.TileManaTuner
 import cpw.mods.fml.relauncher.*
 import net.minecraft.entity.passive.EntitySheep
-import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.*
 import vazkii.botania.api.internal.IGuiLexiconEntry
 import vazkii.botania.api.lexicon.LexiconPage
 import vazkii.botania.common.Botania
@@ -21,9 +21,9 @@ object PageTunerCodes: LexiconPage("") {
 		val unicode = font.unicodeFlag
 		font.unicodeFlag = true
 		
-		val lines = TileManaTuner.map.map {
+		val lines = TileManaTuner.map.mapIndexed { id, it ->
 			val l = if (it == ' ') "\u23B5" else it
-			"${EnumChatFormatting.BOLD} $l"
+			"${EnumChatFormatting.BOLD} $l ${EnumChatFormatting.RESET}- ${StatCollector.translateToLocal("misc.alfheim.color.$id")}"
 		}
 		
 		var yOffset = y

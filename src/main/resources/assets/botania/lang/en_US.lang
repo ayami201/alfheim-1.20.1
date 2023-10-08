@@ -513,6 +513,16 @@ alfheim.page.chalk0=The &1Runic Chalk&0 is a mystical artifact bestowed upon the
 alfheim.page.chalk1=Unleash your artistic prowess and sculpt a world that reflects the colors of your soul!<br>Colors can be controlled by equipping the &1Clerical Colorizer&0. Everything you draw will be visible to anyone who has been in the same dimension with you at the time of drawing, and will disappear in five minutes after.
 alfheim.page.chalk2=Creating &1Runic Chalk&0
 
+alfheim.entry.carver=Carver
+alfheim.tagline.carver=Tool for carving blocks
+alfheim.page.carver0=The &1Carver&0 is a convenient tool for processing blocks and giving them shape. Leftclicking a block cuts it into more pieces, sneak-leftclicking - reduces the number of pieces. Right-clicking one of the pieces will remove it, and sneak-rightclick will return the piece to its place. Right-clicking with Carver on air switches its modes. You can also add pieces of other blocks by right-clicking on free space.
+alfheim.page.carver1=Shape of My Heart
+
+alfheim.entry.gaiaButton=Gaia Button
+alfheim.tagline.gaiaButton=Button with custom press duration
+alfheim.page.gaiaButton0=&1Gaia Button&0 allows one to configure it's press duration with a 10 ticks precision by rightclicking or sneak-rightclicking on it with &1Wand of the Forest&0.
+alfheim.page.gaiaButton1=It's not so big
+
 ################################################################ DIVINITY ################################################################
 
 alfheim.entry.divinity_intro=Divine Faith
@@ -588,7 +598,7 @@ alfheim.page.rod_njord2=It appears that connecting your soul to the ancient god 
 alfheim.entry.daolos=Daolos
 alfheim.tagline.daolos=Divine Axe of Lord of Seas
 alfheim.page.daolos0=Daolos - the mysterious axe of the god of the seas and a fair wind, Njord. The true name of this battle axe is one of the greatest secrets. There is one short story, told among the wisest of the line of elves:
-alfheim.page.daolos1=&oOnce Loki, the god of fire, tried to trick Njord, the god of winds and seas, and steal his battle axe by asking him for the runic name of the relic. But Njord had heard of Loki's nature and was smart enough to spot the cunning sparks in the eyes of god of lies, and refused him.
+alfheim.page.daolos1=&oOnce Loki, the god of lies, tried to trick Njord, the god of winds and seas, and steal his battle axe by asking him for the runic name of the relic. But Njord had heard of Loki's nature and was smart enough to spot the cunning sparks in the eyes of god of lies, and refused him.
 alfheim.page.daolos2=&oTo protect his relic, Njord whispered the following runic words: "And don't tell your name to anyone, no one will understand it anyway. Except... Except children. Children can hear it. Sometimes. If they have good hearts, and the stars will align, the children can hear your name. But no one else. No one ever."
 alfheim.page.daolos3=Many relic seekers ask the same question: "Is this story a fiction or was it real?". Well, one immortal and rather eccentric doctor has an excellent answer: "All the stories told actually happened, and they are considered fiction when they are forgotten".
 alfheim.page.daolos4=Of course, Daolos is not only an interesting story, but also very useful abilities. Although the axe is of battle type, it can cut down trees, and when it rains it works even better. It also has water type of damage, and even can put out fires by sneak-rightclicking.
@@ -730,6 +740,9 @@ botania.page.elvenLenses16=Purification Lens
 
 botania.page.elvenLenses17=&1Linkback Lens&0 allows burst to refill its mana on the fly while it is in the range of its source, either a &1Mana Spreader&0 or a &1Mana Blaster&0. Its most power is revealed when paired with other functional lens.
 botania.page.elvenLenses18=Linkback Lens
+
+botania.page.elvenLenses19=&1Unlink Lens&0 allows you to unlink &4Mana bursts&0 from the &1Mana Spreader&0, resulting in more frequent shots, but can result in additional &4Mana&0 losses if shots fail.
+botania.page.elvenLenses20=Unlink Lens
 
 botania.page.luminizerTransport7=Adding a &4Lever&0 to a &1Luminizer&0 turns it into a &1Toggle Luminizer&0, which accepts a &4redstone signal&0. When powered with Redstone signal, a Toggle Luminizer will drop anything passing through. It works normally when unpowered.
 botania.page.luminizerTransport8=Signal in

@@ -14,6 +14,9 @@ class BlockFloodLight: BlockContainerMod(Material.iron) {
 	
 	init {
 		setBlockName("FloodLight")
+		setHardness(5f)
+		setResistance(10f)
+		setStepSound(soundTypeMetal)
 	}
 	
 	override fun registerBlockIcons(reg: IIconRegister) {

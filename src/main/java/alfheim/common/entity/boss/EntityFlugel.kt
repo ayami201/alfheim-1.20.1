@@ -39,7 +39,7 @@ import vazkii.botania.common.block.ModBlocks
 import vazkii.botania.common.core.handler.ConfigHandler
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.item.ModItems
-import vazkii.botania.common.item.relic.*
+import vazkii.botania.common.item.relic.ItemFlugelEye
 import java.awt.Rectangle
 import java.util.regex.*
 import kotlin.math.*
@@ -418,8 +418,8 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 			}
 			
 			(player.activePotionEffects as Collection<PotionEffect>).forEach {
-				if (!Potion.potionTypes[it.potionID].isBadEffect)
-					it.amplifier = if (isUltraMode) min(it.amplifier, 0) else if (isHardMode) min(it.amplifier, 2) else it.amplifier
+				if (Potion.potionTypes[it.potionID].isBadEffect) return@forEach
+				it.amplifier = if (isUltraMode) min(it.amplifier, 0) else if (isHardMode) min(it.amplifier, 2) else it.amplifier
 			}
 			
 			// no GOD-mode allowed

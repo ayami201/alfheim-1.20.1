@@ -217,8 +217,6 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 	}
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
-		AnomalyHarvesterBehaviors
-		
 		val size = nbt.getInteger("subtiles")
 		subTiles.clear()
 		

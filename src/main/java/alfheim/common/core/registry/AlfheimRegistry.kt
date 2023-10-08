@@ -13,7 +13,7 @@ import alfheim.common.block.tile.*
 import alfheim.common.block.tile.TileChair.Companion.EntitySit
 import alfheim.common.block.tile.corporea.*
 import alfheim.common.block.tile.sub.anomaly.*
-import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.handler.*
 import alfheim.common.entity.*
 import alfheim.common.entity.boss.*
 import alfheim.common.entity.boss.primal.*
@@ -33,6 +33,8 @@ import alfheim.common.spell.sound.*
 import alfheim.common.spell.tech.*
 import alfheim.common.spell.water.*
 import alfheim.common.spell.wind.*
+import alfheim.common.world.dim.alfheim.biome.*
+import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim.Companion.addEntry
 import cpw.mods.fml.common.registry.EntityRegistry
 import cpw.mods.fml.common.registry.GameRegistry.registerTileEntity
 import net.minecraft.entity.*
@@ -64,11 +66,28 @@ object AlfheimRegistry {
 		if (AlfheimConfigHandler.looniumOverseed)
 			BotaniaAPI.looniumBlacklist.remove(ModItems.overgrowthSeed)
 		
-		val (w, n, x) = AlfheimConfigHandler.voidCreeper
-		
-		EntityRegistry.addSpawn(EntityVoidCreeper::class.java, w, n, x, EnumCreatureType.monster, *BiomeGenBase.getBiomeGenArray().filter { it != null && it.biomeID !in AlfheimConfigHandler.voidCreepBiomeBlackList }.toTypedArray())
-		
+		registerSpawns()
 		registerFlowerOres()
+		
+		AnomalyHarvesterBehaviors
+	}
+	
+	private fun registerSpawns() {
+		addAllSpawn(EntityElementalSlime::class.java, AlfheimConfigHandler.elementalSlime, AlfheimConfigHandler.elementalSlimeBiomeBlackList)
+		addAllSpawn(EntityVoidCreeper::class.java, AlfheimConfigHandler.voidCreeper, AlfheimConfigHandler.voidCreeperBiomeBlackList)
+		
+		if (HELLISH_VACATION) {
+			arrayOf(BiomeBeach, BiomeSandbank, BiomeGenBase.jungle, BiomeGenBase.jungleEdge, BiomeGenBase.jungleHills, BiomeGenBase.beach).forEach {
+				it.addEntry(EntityRollingMelon::class.java, AlfheimConfigHandler.pixieSpawn.map { v -> v * 4 }.toIntArray())
+			}
+			
+			BiomeGenBase.hell.getSpawnableList(EnumCreatureType.monster).add(BiomeGenBase.SpawnListEntry(EntityMuspelson::class.java, 20, 4, 4))
+		}
+	}
+	
+	private fun addAllSpawn(clazz: Class<out EntityLiving>, data: IntArray, blacklist: IntArray) {
+		val (w, n, x) = data
+		EntityRegistry.addSpawn(clazz, w, n, x, EnumCreatureType.monster, *BiomeGenBase.getBiomeGenArray().filter { it != null && it.biomeID !in blacklist }.toTypedArray())
 	}
 	
 	private fun registerPotions() {

@@ -65,6 +65,7 @@ object AlfheimLexiconData {
 	lateinit var barrierSapling: LexiconEntry
 	lateinit var beltRation: LexiconEntry
 	lateinit var calicoSapling: LexiconEntry
+	lateinit var carver: LexiconEntry
 	lateinit var chalk: LexiconEntry
 	lateinit var circuitSapling: LexiconEntry
 	lateinit var cloakInvis: LexiconEntry
@@ -103,6 +104,7 @@ object AlfheimLexiconData {
 	lateinit var flugel: LexiconEntry
 	lateinit var fracturedSpace: LexiconEntry
 	lateinit var frozenStar: LexiconEntry
+	lateinit var gaiaButton: LexiconEntry
 	lateinit var gjallarhorn: LexiconEntry
 	lateinit var gleipnir: LexiconEntry
 	lateinit var goddessCharm: LexiconEntry
@@ -242,6 +244,7 @@ object AlfheimLexiconData {
 		barrierSapling = AlfheimLexiconEntry("barrierSapling", categoryDendrology)
 		beltRation = AlfheimLexiconEntry("ration", categoryAlfheim)
 		calicoSapling = AlfheimLexiconEntry("calicoSapling", categoryDendrology)
+		carver = AlfheimLexiconEntry("carver", categoryAlfheim)
 		chalk = AlfheimLexiconEntry("chalk", categoryAlfheim)
 		circuitSapling = AlfheimLexiconEntry("circuitSapling", categoryDendrology)
 		cloakInvis = AlfheimLexiconEntry("cloakInv", categoryAlfheim)
@@ -279,6 +282,7 @@ object AlfheimLexiconData {
 		flugel = AlfheimLexiconEntry("flugel", categoryAlfheim)
 		fracturedSpace = AlfheimLexiconEntry("fracturedSpace", categoryAlfheim)
 		frozenStar = AlfheimLexiconEntry("starBlock", categoryAlfheim)
+		gaiaButton = AlfheimLexiconEntry("gaiaButton", categoryAlfheim)
 		goddessCharm = AlfheimLexiconEntry("goddessCharm", categoryAlfheim)
 		hyperBucket = AlfheimLexiconEntry("hyperBuk", categoryAlfheim)
 		infuser = AlfheimLexiconEntry("infuser", categoryAlfheim)
@@ -457,6 +461,8 @@ object AlfheimLexiconData {
 		
 		beltRation.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeRationBelt))
 		
+		carver.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeCarver))
+		
 		chalk.setLexiconPages(PageText("0"), PageText("1"), PageCraftingRecipe("2", AlfheimRecipes.recipeRunicChalk))
 		
 		cloakInvis.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeInvisibilityCloak))
@@ -583,6 +589,8 @@ object AlfheimLexiconData {
 								   PageCraftingRecipe("1", AlfheimRecipes.recipesStar),
 								   PageText("2"),
 								   PageCraftingRecipe("3", AlfheimRecipes.recipesStar2)).icon = ItemStarPlacer.forColor(16)
+		
+		gaiaButton.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeGaiaButton))
 		
 		goddessCharm.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeGoddessCharm))
 		
@@ -1126,13 +1134,16 @@ object AlfheimLexiconData {
 			PageText("38"), PageCraftingRecipe("39", AlfheimRecipes.recipeLensMessenger),
 			PageText("40"), PageCraftingRecipe("41", AlfheimRecipes.recipeLensPush),
 			PageText("42"), PageCraftingRecipe("43", AlfheimRecipes.recipeLensSmelt),
-			PageText("44"), PageCraftingRecipe("45", AlfheimRecipes.recipeLensTrack))
+			PageText("44"), PageCraftingRecipe("45", AlfheimRecipes.recipeLensTrack),
+		)
 		
 		LexiconData.elvenLenses.setLexiconPages(
 			PageText("11"), PageCraftingRecipe("12", AlfheimRecipes.recipeLensTripwire),
 			PageText("13"), PageCraftingRecipe("14", AlfheimRecipes.recipeLensSuperconductor),
 			PageText("15"), PageCraftingRecipe("16", AlfheimRecipes.recipeLensPurification),
-			PageText("17"), PageCraftingRecipe("18", AlfheimRecipes.recipeLensLinkback))
+			PageText("17"), PageCraftingRecipe("18", AlfheimRecipes.recipeLensLinkback),
+			PageText("19"), PageCraftingRecipe("20", AlfheimRecipes.recipeLensUnlink),
+		)
 		
 		PageText("botania.page.judgementCloaks1n").apply { LexiconData.judgementCloaks.pages[1] = this }.onPageAdded(LexiconData.judgementCloaks, 1)
 		LexiconData.judgementCloaks.setLexiconPages(PageCraftingRecipe("4", AlfheimRecipes.recipeBalanceCloak))
@@ -1302,6 +1313,7 @@ object AlfheimLexiconData {
 		flowerPetronia.knowledgeType = BotaniaAPI.elvenKnowledge
 		flugel.knowledgeType = BotaniaAPI.elvenKnowledge
 		fracturedSpace.knowledgeType = BotaniaAPI.elvenKnowledge
+		gaiaButton.knowledgeType = BotaniaAPI.elvenKnowledge
 		hyperBucket.knowledgeType = BotaniaAPI.elvenKnowledge
 		infuser.knowledgeType = BotaniaAPI.elvenKnowledge
 		ivySave.knowledgeType = BotaniaAPI.elvenKnowledge

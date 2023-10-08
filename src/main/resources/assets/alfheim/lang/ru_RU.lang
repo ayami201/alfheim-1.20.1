@@ -822,6 +822,7 @@ alfheimmisc.mount.unavailable=Призыв невозможен в этом из
 alfheimmisc.newentry=Вы открыли новое знание в своём лексиконе!
 alfheimmisc.nowayout=Прости, но я тебя не выпущу - твоя душа слишком истощена и мне она уже не интересна.
 alfheimmisc.quandex=Материальный квандекс в руках!
+alfheimmisc.relic=&6Реликвия&7
 alfheimmisc.saveIvy=С нерушимым плющом
 alfheimmisc.skintoggle0=Скин будет Ваш
 alfheimmisc.skintoggle1=Скин будет эльфийский
@@ -856,14 +857,6 @@ alfheimmisc.cast.obstruct=Цель недоступна!
 alfheimmisc.cast.wrongtgt=Неверная цель!
 alfheimmisc.cast.nomana=Недостаточно маны!
 alfheimmisc.cast.notallow=Вы не можете колдовать здесь!
-
-alfheimmisc.modular.available=Доступно обновление Alfheim Modular.
-alfheimmisc.modular.update10=Сервер будет остановлен через 10 минут.
-alfheimmisc.modular.update5=Сервер будет остановлен через 5 минут.
-alfheimmisc.modular.update2=Сервер будет остановлен через 2 минуты.
-alfheimmisc.modular.update1=Сервер будет остановлен через 1 минуту.
-alfheimmisc.modular.update30s=Сервер будет остановлен через 30 секунд.
-alfheimmisc.modular.restart=Остановка сервера для обновления Alfheim Modular. Пожалуйста, перезапустите вручную.
 
 alfheimmisc.party.already=Вы уже состоите в этой группе!
 alfheimmisc.party.full=В группе нет места!

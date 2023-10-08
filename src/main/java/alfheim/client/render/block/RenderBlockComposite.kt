@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.*
 import net.minecraft.init.Blocks
 import net.minecraft.util.IIcon
 import net.minecraft.world.*
+import net.minecraftforge.client.ForgeHooksClient
 import net.minecraftforge.common.util.ForgeDirection
 
 object RenderBlockComposite: RenderBlockDoubleCamo(LibRenderIDs.idComposite) {
@@ -15,27 +16,27 @@ object RenderBlockComposite: RenderBlockDoubleCamo(LibRenderIDs.idComposite) {
 	override fun renderBlock(world: World?, rb: RenderBlocks, x: Int, y: Int, z: Int, meta: Int, tile: TileDoubleCamo): Boolean {
 		if (tile !is TileComposite) return false
 		
-		return renderIfPossiblePreservingBounds(world, x, y, z, tile.blockBottom, tile.blockBottomMeta) {
-			val step = 1.0 / tile.size
-			
-			val oldWorld = rb.blockAccess
-			val compositeWorld = CompositionWorld(oldWorld, tile.composition, it, tile.blockBottomMeta)
-			rb.blockAccess = compositeWorld
-			
-			var did = false
-			for ((i, sub) in tile.composition.withIndex())
-				for ((j, subber) in sub.withIndex())
-					for ((k, flag) in subber.withIndex()) {
-						if (!flag) continue
-						
-						rb.setRenderBounds(i * step, j * step, k * step, (i + 1) * step, (j + 1) * step, (k + 1) * step)
-						did = did or renderStandardBlock(rb, it, x, y, z, i, j, k)
-					}
-			
-			rb.blockAccess = oldWorld
-				
-			did
-		}
+		val step = 1.0 / tile.size
+		
+		val oldWorld = rb.blockAccess
+		val compositeWorld = CompositionWorld(oldWorld, tile.composition)
+		rb.blockAccess = compositeWorld
+		
+		var did = false
+		for ((i, sub) in tile.composition.withIndex())
+			for ((j, subber) in sub.withIndex())
+				for ((k, data) in subber.withIndex()) {
+					val block = data?.first ?: continue
+					
+					if (!block.canRenderInPass(ForgeHooksClient.getWorldRenderPass())) continue
+					
+					rb.setRenderBounds(i * step, j * step, k * step, (i + 1) * step, (j + 1) * step, (k + 1) * step)
+					did = did or renderStandardBlock(rb, block, x, y, z, i, j, k)
+				}
+		
+		rb.blockAccess = oldWorld
+		
+		return did
 	}
 	
 	fun renderStandardBlock(rb: RenderBlocks, block: Block, x: Int, y: Int, z: Int, i: Int, j: Int, k: Int): Boolean {
@@ -158,14 +159,14 @@ object RenderBlockComposite: RenderBlockDoubleCamo(LibRenderIDs.idComposite) {
 	}
 }
 
-private class CompositionWorld(val original: IBlockAccess, val composition: Array<Array<Array<Boolean>>>, val block: Block, val meta: Int): IBlockAccess {
+private class CompositionWorld(val original: IBlockAccess, val composition: Array<Array<Array<Pair<Block, Int>?>>>): IBlockAccess {
 	
-	private operator fun Array<Array<Array<Boolean>>>.get(i: Int, j: Int, k: Int) = composition.getOrNull(i)?.getOrNull(j)?.getOrNull(k) == true
+	private operator fun Array<Array<Array<Pair<Block, Int>?>>>.get(i: Int, j: Int, k: Int) = composition.getOrNull(i)?.getOrNull(j)?.getOrNull(k)
 	
-	override fun getBlock(x: Int, y: Int, z: Int) = if (composition[x, y, z]) block else Blocks.air
-	override fun getBlockMetadata(x: Int, y: Int, z: Int) = if (composition[x, y, z]) meta else 0
+	override fun getBlock(x: Int, y: Int, z: Int) = composition[x, y, z]?.first ?: Blocks.air
+	override fun getBlockMetadata(x: Int, y: Int, z: Int) = composition[x, y, z]?.second ?: 0
 	override fun getTileEntity(x: Int, y: Int, z: Int) = null
-	override fun isAirBlock(x: Int, y: Int, z: Int) = !composition[x, y, z]
+	override fun isAirBlock(x: Int, y: Int, z: Int) = composition[x, y, z] == null
 	
 	override fun getLightBrightnessForSkyBlocks(x: Int, y: Int, z: Int, lightValue: Int) = original.getLightBrightnessForSkyBlocks(x, y, z, lightValue)
 	override fun isBlockProvidingPowerTo(x: Int, y: Int, z: Int, side: Int) = original.isBlockProvidingPowerTo(x, y, z, side)

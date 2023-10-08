@@ -33,11 +33,10 @@ class RenderItemDoubleCamo(val renderId: Int, val getTile: () -> TileDoubleCamo)
 		if (type == EQUIPPED_FIRST_PERSON) {
 			glRotatef(-90f, 0f, 1f, 0f)
 			glTranslated(0.0, 0.5, -0.5)
-			drawGuideArrows()
 		}
 		val (x, y, z) = (mc.thePlayer?.let { Vector3.fromEntity(it).add(0, 0.1, 0) } ?: Vector3()).mf()
 		glTranslatef(-x.F, -y.F, -z.F)
-		if (type == ENTITY) glTranslated(-0.5)
+		if (type == ENTITY || type == INVENTORY) glTranslated(-0.5)
 		
 		val prevPass = ForgeHooksClient.getWorldRenderPass()
 		

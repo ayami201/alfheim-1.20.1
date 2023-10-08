@@ -10,8 +10,8 @@ class MessageFuckedUpServerPrecision(var x: Int, var y: Int, var z: Int, var sid
 		val world = player.worldObj
 		val block = world.getBlock(x, y, z) as? BlockComposite ?: return
 		
-		val carver = player.heldItem ?: return
-		val result = block.wrapCarving(world, x, y, z, player, carver, side, hitX, hitY, hitZ)
+		val stack = player.heldItem ?: return
+		val result = block.wrapCarving(world, x, y, z, player, stack, side, hitX, hitY, hitZ)
 		
 		if (result) player.swingItem()
 	}

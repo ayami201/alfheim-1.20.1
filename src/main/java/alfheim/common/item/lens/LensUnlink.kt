@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import net.minecraft.entity.projectile.EntityThrowable
 import net.minecraft.item.ItemStack
 import vazkii.botania.api.internal.IManaBurst
+import vazkii.botania.api.mana.BurstProperties
 import vazkii.botania.common.block.tile.mana.TileSpreader
 import vazkii.botania.common.item.lens.Lens
 import java.util.*
@@ -11,6 +12,10 @@ import java.util.*
 class LensUnlink: Lens() {
 	
 	val zeroUUID = UUID(0L, 0L)
+	
+	override fun apply(stack: ItemStack?, props: BurstProperties) {
+		props.maxMana = (props.maxMana * 0.75).I
+	}
 	
 	override fun updateBurst(burst: IManaBurst, entity: EntityThrowable, stack: ItemStack?) {
 		burst.setShooterUUID(zeroUUID)

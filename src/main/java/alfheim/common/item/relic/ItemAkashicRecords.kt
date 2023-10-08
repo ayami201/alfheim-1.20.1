@@ -15,7 +15,6 @@ import alfheim.common.world.data.CustomWorldData.Companion.customData
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.PlayerEvent
 import net.minecraft.client.gui.GuiScreen
-import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -162,6 +161,8 @@ class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 	}
 	
 	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>, adv: Boolean) {
+		super.addInformation(stack, player, list, adv)
+		
 		if (GuiScreen.isShiftKeyDown()) run {
 			val relics = ItemNBTHelper.getList(stack, TAG_PEDESTALS, Constants.NBT.TAG_COMPOUND, true) ?: return@run
 			if (relics.tagCount() == 0) return@run
@@ -178,11 +179,7 @@ class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 			}
 			list.add("")
 		}
-		
-		super.addInformation(stack, player, list, adv)
 	}
-	
-	override fun registerIcons(reg: IIconRegister) = Unit
 	
 	companion object {
 		

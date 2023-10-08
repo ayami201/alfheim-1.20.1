@@ -1,6 +1,7 @@
 package alfheim.common.entity
 
 import alfheim.api.entity.*
+import alfheim.common.entity.ai.*
 import net.minecraft.block.Block
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.*
@@ -9,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.World
+import kotlin.math.min
 
 class EntityFrozenViking(world: World): EntityMob(world), INiflheimEntity, IAlfheimMob {
 	
@@ -19,8 +21,9 @@ class EntityFrozenViking(world: World): EntityMob(world), INiflheimEntity, IAlfh
 		tasks.addTask(3, EntityAIWander(this, 1.0))
 		tasks.addTask(4, EntityAIWatchClosest(this, EntityPlayer::class.java, 8f))
 		tasks.addTask(4, EntityAILookIdle(this))
-		targetTasks.addTask(1, EntityAIHurtByTarget(this, true))
-		targetTasks.addTask(2, EntityAINearestAttackableTarget(this, EntityPlayer::class.java, 0, true))
+		targetTasks.addTask(0, EntityAIFleeOnLowHP(this, 8f))
+		targetTasks.addTask(1, EntityAIHurtByTargetNotLowHP(this, true))
+		targetTasks.addTask(2, EntityAINearestAttackableTargetNotLowHP(this, EntityPlayer::class.java, 0, true))
 		setSize(0.6f, 1.8f)
 	}
 	
@@ -32,6 +35,7 @@ class EntityFrozenViking(world: World): EntityMob(world), INiflheimEntity, IAlfh
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).baseValue = 0.3
 	}
 	
+	override fun getTotalArmorValue() = min(24, super.getTotalArmorValue() + 6)
 	override fun isAIEnabled() = true
 	override fun getLivingSound() = "mob.zombie.say"
 	override fun getHurtSound() = "mob.zombie.hurt"

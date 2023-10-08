@@ -61,19 +61,21 @@ object RelicHooks {
 	
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
-	fun addBindInfo(static: ItemRelic?, list: List<String>, stack: ItemStack, player: EntityPlayer?) {
+	fun addBindInfo(static: ItemRelic?, list: MutableList<Any?>, stack: ItemStack, player: EntityPlayer?) {
 		if (GuiScreen.isShiftKeyDown()) {
+			addStringToTooltip(list, "alfheimmisc.relic")
+			
 			if (stack.item === ModItems.aesirRing)
-				ItemRelic.addStringToTooltip(StatCollector.translateToLocal("botaniamisc.dropIkea"), list)
+				addStringToTooltip(list, "botaniamisc.dropIkea")
 			
 			val name = stack.unlocalizedName + ".poem"
 			if (StatCollector.canTranslate("${name}0")) {
-				ItemRelic.addStringToTooltip("", list)
+				addStringToTooltip(list, "")
 				
 				for (i in 0..3)
-					ItemRelic.addStringToTooltip(EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal(name + i), list)
+					list.add("${EnumChatFormatting.ITALIC}${StatCollector.translateToLocal(name + i)}")
 			}
-		} else ItemRelic.addStringToTooltip(StatCollector.translateToLocal("botaniamisc.shiftinfo"), list)
+		} else addStringToTooltip(list, "botaniamisc.shiftinfo")
 	}
 	
 	// thing to prevent cheats and dupes

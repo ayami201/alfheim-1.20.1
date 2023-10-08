@@ -2,6 +2,7 @@ package alfheim.common.world.dim.niflheim.biome
 
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.entity.EntityFrozenViking
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
 import net.minecraft.world.biome.BiomeGenBase
@@ -20,6 +21,9 @@ open class BiomeNiflheim(id: Int, top: Block, filler: Block = top): BiomeGenBase
 		spawnableCreatureList.clear()
 		spawnableMonsterList.clear()
 		spawnableWaterCreatureList.clear()
+		
+		val (w, n, x) = AlfheimConfigHandler.vikingSpawn
+		spawnableMonsterList.add(SpawnListEntry(EntityFrozenViking::class.java, w, n, x))
 		
 		topBlock = top
 		fillerBlock = filler

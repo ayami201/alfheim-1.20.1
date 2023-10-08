@@ -4,6 +4,7 @@ import alexsocol.asjlib.ASJUtilities
 import alfheim.common.block.tile.TileGaiaButton
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.ItemBlockLeavesMod
+import alfheim.common.lexicon.AlfheimLexiconData
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.*
@@ -11,15 +12,18 @@ import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.world.*
+import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.api.wand.IWandable
 import vazkii.botania.common.item.ModItems
 import kotlin.math.*
 
-class BlockGaiaButton: BlockButton(false), ITileEntityProvider, IWandable {
+class BlockGaiaButton: BlockButton(false), ITileEntityProvider, IWandable, ILexiconable {
 	
 	init {
-		setCreativeTab(AlfheimTab)
 		setBlockName("GaiaButton")
+		setCreativeTab(AlfheimTab)
+		setHardness(0.5f)
+		setStepSound(soundTypeWood)
 	}
 	
 	override fun onUsedByWand(player: EntityPlayer, stack: ItemStack?, world: World, x: Int, y: Int, z: Int, side: Int): Boolean {
@@ -28,6 +32,8 @@ class BlockGaiaButton: BlockButton(false), ITileEntityProvider, IWandable {
 		if (!world.isRemote) ASJUtilities.say(player, "${tile.delay}")
 		return true
 	}
+	
+	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.gaiaButton
 	
 	// TileEntity stuff
 	

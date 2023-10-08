@@ -60,6 +60,7 @@ class TileCurtainPlacer @JvmOverloads constructor(meta: Int = 0): TileDoubleCamo
 						it.blockTop = blockTop
 						it.blockTopMeta = blockTopMeta
 						it.locked = true
+						it.noDrop = true
 					}
 					
 					if (y == yCoord - 1)
