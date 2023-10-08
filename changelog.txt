@@ -11,6 +11,7 @@ Innovations:
  New decorative blocks
  Crackling stars binding is now relative (will break binding of existing stars)
  Booba render for Flügel
+ Tuner codes got captions for colorblind people
  [ESM] Ocelots won't run away from cait sith players
 
 Fixes:
