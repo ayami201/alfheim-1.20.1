@@ -35,7 +35,7 @@ import kotlin.math.max
 class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 	
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
-		if (!player.isSneaking) {
+		if (player.isSneaking) {
 			setBoolean(stack, TAG_SWITCH, true)
 			return stack
 		}

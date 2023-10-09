@@ -39,13 +39,21 @@ object RenderItemAkashicRecords: IItemRenderer {
 		glScalef(1f / 110 / 4)
 		glTranslatef(0f, 50f, 0f)
 		
-		if (type == IItemRenderer.ItemRenderType.EQUIPPED) {
-			glRotated(-60.0, cos(Math.toRadians(60.0)), 0.0, -sin(Math.toRadians(60.0)))
-			glTranslatef(220f, 0f, 440f)
-		} else if (type == IItemRenderer.ItemRenderType.EQUIPPED_FIRST_PERSON) {
-			glTranslatef(220f, 330f, 220f)
-			glRotatef(-10f, 0f, 0f, 1f)
-			glRotatef(-5f, 1f, 0f, 0f)
+		when (type) {
+			IItemRenderer.ItemRenderType.EQUIPPED              -> {
+				glRotated(-60.0, cos(Math.toRadians(60.0)), 0.0, -sin(Math.toRadians(60.0)))
+				glTranslatef(220f, 0f, 440f)
+			}
+			IItemRenderer.ItemRenderType.EQUIPPED_FIRST_PERSON -> {
+				glTranslatef(220f, 330f, 220f)
+				glRotatef(-10f, 0f, 0f, 1f)
+				glRotatef(-5f, 1f, 0f, 0f)
+			}
+			
+			IItemRenderer.ItemRenderType.ENTITY                -> {
+				glTranslatef(0f, 137.5f, 0f)
+			}
+			else -> Unit
 		}
 		
 		val renders = arrayOf(LibResourceLocations.akashicCube to "Cylinder.0", LibResourceLocations.akashicCyl to "Cylinder.6")
