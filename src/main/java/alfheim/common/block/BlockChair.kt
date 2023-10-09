@@ -3,6 +3,8 @@ package alfheim.common.block
 import alexsocol.asjlib.*
 import alfheim.api.lib.LibRenderIDs
 import alfheim.common.block.tile.TileChair
+import alfheim.common.item.block.ItemUniqueSubtypedBlockMod
+import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
@@ -11,11 +13,15 @@ import net.minecraft.world.*
 
 class BlockChair: BlockDoubleCamo() {
 	
+	val SYBTYPES = 8
+	
 	init {
 		setBlockBoundsBasedOnMeta(0)
 		setBlockName("Chair")
-		toItem()?.hasSubtypes = true
+		GameRegistry.registerBlock(this, ItemUniqueSubtypedBlockMod::class.java, "Chair", SYBTYPES)
 	}
+	
+	override fun shouldRegisterInNameSet() = false
 	
 	override fun setBlockBoundsBasedOnState(world: IBlockAccess?, x: Int, y: Int, z: Int) =
 		setBlockBoundsBasedOnMeta(world?.getBlockMetadata(x, y, z) ?: 0)

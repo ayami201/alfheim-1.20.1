@@ -84,15 +84,13 @@ class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 	}
 	
 	override fun onUpdate(stack: ItemStack, world: World, entity: Entity, slot: Int, inHand: Boolean) {
-		if (entity.dimension == AlfheimConfigHandler.dimensionIDDomains && !world.isRemote) {
+		if (world.provider.dimensionId == AlfheimConfigHandler.dimensionIDDomains && !world.isRemote) {
 			val list = NBTTagList()
 			
-			world.loadedTileEntityList.filterIsInstance<TileItemDisplay>().forEach { te ->
+			TileItemDisplay.displaysInDomainsList.forEach { te ->
 				val relic = te[0] ?: return@forEach
 				if (relic.item !is IRelic) return@forEach
-				
 				if (getSoulbindUsernameS(relic) != entity.commandSenderName) return@forEach
-				
 				if (relic.tagCompound?.hasKey(TAG_AKASHIC_STACK) == true) return@forEach
 				
 				val data = NBTTagCompound()

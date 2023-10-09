@@ -8,7 +8,6 @@ import alfheim.common.block.tile.TileComposite
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.StatCollector
 import net.minecraft.world.World
@@ -46,15 +45,16 @@ class ItemCarver: ItemMod("Carver") {
 	
 	@SubscribeEvent
 	fun onItemLeftClick(e: PlayerInteractAdequateEvent.LeftClick) {
-		if (e.action != PlayerInteractAdequateEvent.LeftClick.Action.LEFT_CLICK_BLOCK || ASJUtilities.isClient) return
+		val player = e.player
+		if (e.action != PlayerInteractAdequateEvent.LeftClick.Action.LEFT_CLICK_BLOCK || ASJUtilities.isClient || player.capabilities.isCreativeMode) return
 		
-		val stack = e.player.heldItem ?: return
+		val stack = player.heldItem ?: return
 		if (stack.item !== this || stack.cooldown > 0) return
 		stack.cooldown = 2
 		
-		val world = e.player.worldObj
+		val world = player.worldObj
 		val block = world.getBlock(e.x, e.y, e.z)
-		if (block is BlockDoubleCamo || block === Blocks.air || world.getTileEntity(e.x, e.y, e.z) != null) return
+		if (block is BlockDoubleCamo || block.isAir(world, e.x, e.y, e.z) || world.getTileEntity(e.x, e.y, e.z) != null || block.getPlayerRelativeBlockHardness(player, world, e.x, e.y, e.z) <= 0) return
 		
 		val meta = world.getBlockMetadata(e.x, e.y, e.z)
 		

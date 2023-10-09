@@ -132,6 +132,8 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 					texture[type.I] = InterpolatedIconHelper.forName(event.map, type.toString(), "materials")
 	}
 	
+	override fun getIconFromDamage(meta: Int) = texture.safeGet(meta)
+	
 	override fun getIcon(stack: ItemStack, pass: Int) =
 		if (stack.meta == RiftDrive.I && pass == 1)
 			drive1
@@ -255,7 +257,16 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 				ItemNBTHelper.setInt(stack, TAG_USAGES, usages)
 				return if (usages >= 3) ItemStack(Items.glass_bottle) else stack
 			}
-			YggFruit -> CardinalSystem.CommonSystem.loseHearts(player, -1)
+			YggFruit -> {
+				CardinalSystem.CommonSystem.loseHearts(player, -1)
+				player.heal(player.maxHealth)
+				player.foodStats.addStats(20, 20f)
+				player.activePotionEffects.iterator().onEach { it as PotionEffect
+					if (!Potion.potionTypes[it.potionID].isBadEffect) return@onEach
+					remove()
+					player.onFinishedPotionEffect(it)
+				}
+			}
 			else -> Unit
 		}
 		

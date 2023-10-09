@@ -40,8 +40,6 @@ open class TileRainbowManaFlame: TileManaFlame() {
 		if (CardinalSystem.CommonSystem.cantLostHearts(player))
 			return ASJUtilities.say(player, "alfheimmisc.nowayout")
 		
-		CardinalSystem.CommonSystem.loseHearts(player, 1)
-		
 		player.limboCounter = 0
 		
 		val world = MinecraftServer.getServer().worldServerForDimension(AlfheimConfigHandler.dimensionIDNiflheim)

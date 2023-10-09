@@ -53,7 +53,11 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 	override fun onUpdate(stack: ItemStack, world: World, entity: Entity?, slotID: Int, inHand: Boolean) {
 		super.onUpdate(stack, world, entity, slotID, inHand)
 		setInt(stack, TAG_POSSESSION, 0)
-		if (entity is EntityPlayer && stack.cooldown > 0 && ManaItemHandler.requestManaExact(stack, entity, 1, world.isRemote))
+		if (entity !is EntityPlayer || stack.cooldown <= 0) return
+		
+		if (entity.capabilities.isCreativeMode)
+			stack.cooldown = 0
+		else if (ManaItemHandler.requestManaExact(stack, entity, 1, world.isRemote))
 			stack.cooldown--
 	}
 	
@@ -229,17 +233,18 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 		fun onEntityUpdate(e: LivingEvent.LivingUpdateEvent) {
 			val player = e.entityLiving as? EntityPlayerMP ?: return
 			
-			if (player.isEntityAlive && player.ticksExisted % 20 == 0 && player.limboCounter >= MAX_CORRUPTION && player.dimension !in limboIDs) {
+			if (!player.capabilities.isCreativeMode && player.isEntityAlive && player.ticksExisted % 20 == 0 && player.limboCounter >= MAX_CORRUPTION && player.dimension !in limboIDs) {
 				if (dimdoors && player.rng.nextBoolean()) {
 					DDTeleporter.teleportEntity(player, LimboProvider.getLimboSkySpawn(player, mod_pocketDim.properties), false)
 				} else {
 					sendToHelheim(player)
+					CardinalSystem.CommonSystem.loseHearts(player, 1)
 				}
 			}
 			
 			if (!player.hasAchievement(AlfheimAchievements.outstander)) return
-			player.getActivePotionEffect(Potion.damageBoost.id)?.let { if (it.amplifier == 0) it.duration = max(it.duration, 20) } ?: player.addPotionEffect(PotionEffectU(Potion.damageBoost.id, 20))
 			
+			player.getActivePotionEffect(Potion.damageBoost.id)?.let { if (it.amplifier == 0) it.duration = max(it.duration, 20) } ?: player.addPotionEffect(PotionEffectU(Potion.damageBoost.id, 20))
 			player.getActivePotionEffect(Potion.resistance.id)?.let { if (it.amplifier == 0) it.duration = max(it.duration, 20) } ?: player.addPotionEffect(PotionEffectU(Potion.resistance.id, 20))
 
 			NetworkService.sendToAll(MessageEffect(player, player.getActivePotionEffect(Potion.damageBoost.id)!!))

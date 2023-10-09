@@ -2,11 +2,13 @@ package alfheim.common.block.tile
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.ASJTile
+import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.*
 import net.minecraftforge.common.util.Constants
+import java.util.*
 
 // change to TileItemContainer ???
 class TileItemDisplay: ASJTile(), ISidedInventory {
@@ -84,7 +86,6 @@ class TileItemDisplay: ASJTile(), ISidedInventory {
 				inventory[b0] = ItemStack.loadItemStackFromNBT(nbti)
 			}
 		}
-		
 	}
 	
 	override fun writeCustomNBT(nbt: NBTTagCompound) {
@@ -105,9 +106,40 @@ class TileItemDisplay: ASJTile(), ISidedInventory {
 	override fun openInventory() = Unit
 	override fun closeInventory() = Unit
 	override fun getInventoryStackLimit() = 1
-	override fun canUpdate() = true
 	override fun isItemValidForSlot(par1: Int, par2ItemStack: ItemStack?) = true
 	override fun getAccessibleSlotsFromSide(par1: Int) = slots
 	override fun canInsertItem(par1: Int, par2ItemStack: ItemStack?, par3: Int) = getStackInSlot(par1) == null
 	override fun canExtractItem(par1: Int, par2ItemStack: ItemStack?, par3: Int) = true
+	
+	// some shitcode because World#loadedTileEntityList is fucked up for some reason
+	// WHY ARE YOU NOT ADDING THIS FUCKING TILES TO FUCKING LIST, FUCKING MINECRAFT?!
+	
+	override fun canUpdate() = ASJUtilities.isServer
+	
+	override fun updateEntity() {
+		if (worldObj?.provider?.dimensionId == AlfheimConfigHandler.dimensionIDDomains && canUpdate())
+			displaysInDomainsList.add(this)
+	}
+	
+	override fun invalidate() {
+		super.invalidate()
+		
+		if (worldObj?.provider?.dimensionId == AlfheimConfigHandler.dimensionIDDomains && canUpdate())
+			displaysInDomainsList.remove(this)
+	}
+	
+	override fun validate() {
+		super.validate()
+		
+		if (worldObj?.provider?.dimensionId == AlfheimConfigHandler.dimensionIDDomains && canUpdate())
+			displaysInDomainsList.add(this)
+	}
+	
+	override fun hashCode() = Objects.hash(xCoord, yCoord, zCoord)
+	
+	override fun equals(other: Any?) = if (other !is TileItemDisplay) false else other.xCoord == xCoord && other.yCoord == yCoord && other.zCoord == zCoord
+	
+	companion object {
+		val displaysInDomainsList: MutableSet<TileItemDisplay> = Collections.newSetFromMap(WeakHashMap())
+	}
 }

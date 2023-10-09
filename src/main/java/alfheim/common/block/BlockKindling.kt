@@ -28,10 +28,12 @@ class BlockKindling: BlockMod(Material.cloth), IFuelHandler, ILexiconable {
 		
 		if (world.getBlock(x, y + 1, z).isAir(world, x, y + 1, z)) {
 			world.setBlock(x, y + 1, z, Blocks.fire)
+			world.setBlockMetadataWithNotify(x, y, z, 1, 3)
 			world.playSoundEffect(x.D + 0.5, y.D + 0.5, z.D + 0.5, "fire.ignite", 1f, Math.random().F * 0.4F + 0.8F)
 			return true
 		} else if (world.getBlock(x, y + 1, z) == Blocks.fire) {
 			world.setBlock(x, y + 1, z, Blocks.air)
+			world.setBlockMetadataWithNotify(x, y, z, 0, 3)
 			world.playSoundEffect(x.D + 0.5, y.D + 0.5, z.D + 0.5, "random.fizz", 1f, Math.random().F * 0.4F + 0.8F)
 			return true
 		}
@@ -40,7 +42,7 @@ class BlockKindling: BlockMod(Material.cloth), IFuelHandler, ILexiconable {
 	}
 	
 	override fun onNeighborBlockChange(world: World, x: Int, y: Int, z: Int, block: Block?) {
-		world.setBlock(x, y + 1, z, if (world.getStrongestIndirectPower(x, y, z) == 15) Blocks.fire else Blocks.air)
+		world.setBlock(x, y + 1, z, if (world.getBlockMetadata(x, y, z) == 1 || world.getStrongestIndirectPower(x, y, z) == 15) Blocks.fire else Blocks.air)
 	}
 	
 	override fun getBurnTime(fuel: ItemStack) = if (fuel.item === this.toItem()) 1200 else 0

@@ -39,7 +39,9 @@ class ItemSpearSubspace: ItemRelic("SpearSubspace"), IManaUsingItem, ILensEffect
 		return attrib
 	}
 	
-	override fun onUpdate(stack: ItemStack, world: World, entity: Entity?, slot: Int, selected: Boolean) {
+	override fun onUpdate(stack: ItemStack, world: World, entity: Entity?, slot: Int, inHand: Boolean) {
+		super.onUpdate(stack, world, entity, slot, inHand)
+		
 		if (world.isRemote || entity !is EntityPlayer) return
 		
 		if (!isCooledDown(stack))

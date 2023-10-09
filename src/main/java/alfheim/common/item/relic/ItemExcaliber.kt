@@ -112,10 +112,12 @@ class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRel
 		val home: Entity?
 		if (homeID != -1) {
 			home = burst.worldObj.getEntityByID(homeID)
-			if (home != null) {
+			if (home != null && home.isEntityAlive) {
 				val vecMotion = Vector3.fromEntityCenter(home).sub(Vector3.fromEntityCenter(burst))
 				vecMotion.normalize().mul(Vector3(burst.motionX, burst.motionY, burst.motionZ).length())
 				burst.setMotion(vecMotion.x, vecMotion.y, vecMotion.z)
+			} else {
+				ItemNBTHelper.setInt(stack, TAG_HOME_ID, -1)
 			}
 		}
 		
