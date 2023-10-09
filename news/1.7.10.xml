@@ -1,6 +1,6 @@
 <news>
 	<version id="LATEST">
-		<val>50</val>
+		<val>52</val>
 	</version>
 	<version id="UNIVERSAL">
 		<val>$json["Official Alfheim Discord server is here! *",{"text":"click","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Join discord server","color":"gold"}},"clickEvent":{"action":"open_url","value":"https://discord.gg/dqQXZHq"}},"*"]</val>
@@ -142,5 +142,8 @@
 	</version>
 	<version id="50">
 		<val>Anomaly Harvester and Mana Tuner! That'd be fun!</val>
+	</version>
+	<version id="51">
+		<val>Finished Akashic Records and added some more stuff</val>
 	</version>
 </news>
