@@ -1,6 +1,6 @@
 package alfheim.common.block.colored.rainbow
 
-import alexsocol.asjlib.toBlock
+import alexsocol.asjlib.*
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.base.*
 import cpw.mods.fml.common.IFuelHandler
@@ -28,7 +28,7 @@ open class BlockRainbowWoodSlab(full: Boolean, source: Block = AlfheimBlocks.rai
 	
 	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = (source as ILexiconable).getEntry(world, x, y, z, player, lexicon)!!
 	
-	override fun getBurnTime(fuel: ItemStack) = if (fuel.item.toBlock() === this) if (field_150004_a) 300 else 150 else 0
+	override fun getBurnTime(fuel: ItemStack) = if (fuel.block === this) if (field_150004_a) 300 else 150 else 0
 }
 
 open class BlockRainbowWoodStairs(source: Block = AlfheimBlocks.rainbowPlanks):

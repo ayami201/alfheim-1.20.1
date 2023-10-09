@@ -5,27 +5,20 @@ import alfheim.api.*
 import alfheim.api.AlfheimAPI.set
 import alfheim.api.crafting.recipe.TunerIncantation
 import alfheim.api.item.equipment.IElementalItem
-import alfheim.common.entity.item.EntityItemImmortal
+import alfheim.common.core.helper.ElementalDamage
+import alfheim.common.item.material.ItemElvenResource
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.enchantment.EnumEnchantmentType
-import net.minecraft.entity.Entity
-import net.minecraft.entity.item.EntityItem
 import net.minecraft.inventory.IInventory
-import net.minecraft.item.ItemArmor
+import net.minecraft.item.*
 import net.minecraft.util.*
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
 import vazkii.botania.common.lib.LibOreDict
 
-class IncantationEquipmentElementalTuning(val element: String, incantation: String, val elementResource: Any): TunerIncantation<Entity>(Entity::class.java, incantation, arrayOf(elementResource), {
-	if (it !is EntityItem && it !is EntityItemImmortal)
-		false // hacks for relics -_-
-	else {
-		(if (it is EntityItem) it.entityItem else (it as EntityItemImmortal).stack)?.let { stack ->
-			ItemNBTHelper.setInt(stack, TAG_ELEMENT_LEVEL, ItemNBTHelper.getInt(stack, TAG_ELEMENT_LEVEL, 0) + 1)
-			ItemNBTHelper.setString(stack, TAG_ELEMENT, element)
-		}
-		true
-	}
+class IncantationEquipmentElementalTuning(val element: String, incantation: String): TunerIncantation<ItemStack>(ItemStack::class.java, incantation, arrayOf(), {
+	ItemNBTHelper.setInt(it, TAG_ELEMENT_LEVEL, ItemNBTHelper.getInt(it, TAG_ELEMENT_LEVEL, 0) + 1)
+	ItemNBTHelper.setString(it, TAG_ELEMENT, element)
+	true
 }) {
 	
 	val index = counter++
@@ -34,28 +27,22 @@ class IncantationEquipmentElementalTuning(val element: String, incantation: Stri
 		AlfheimAPI.tunerIncantations[incantation] = this
 	}
 	
-	override fun matches(inv: IInventory, target: Entity): Boolean {
-		if (target !is EntityItem && target !is EntityItemImmortal) return false
+	override fun matches(inv: IInventory, target: ItemStack): Boolean {
+		if (target.stackSize != 1) return false
 		
-		val stack = (if (target is EntityItem) target.entityItem else (target as EntityItemImmortal).stack) ?: return false
-		if (stack.stackSize != 1) return false
-		
-		val item = stack.item ?: return false
-		if (item is IElementalItem) return false
-		
-		if (!EnumEnchantmentType.weapon.canEnchantItem(item) && item !is ItemArmor) return false
-		
-		if (ItemNBTHelper.getString(stack, TAG_ELEMENT, element) != element) return false
-		if (ItemNBTHelper.getInt(stack, TAG_ELEMENT_LEVEL, 0) >= 4) return false
+		val item = target.item
+		if (item is IElementalItem ||
+		    !EnumEnchantmentType.weapon.canEnchantItem(item) && item !is ItemArmor ||
+			ItemNBTHelper.getString(target, TAG_ELEMENT, element) != element ||
+			ItemNBTHelper.getInt(target, TAG_ELEMENT_LEVEL, 0) >= 4)
+			return false
 		
 		return super.matches(inv, target)
 	}
 	
-	override fun getInputs(target: Entity): List<Any> {
-		if (target !is EntityItem && target !is EntityItemImmortal) return emptyList()
-		val stack = (if (target is EntityItem) target.entityItem else (target as EntityItemImmortal).stack) ?: return emptyList()
-		val level = ItemNBTHelper.getInt(stack, TAG_ELEMENT_LEVEL, 0)
-		val er = Array(level + 1) { elementResource }
+	override fun getInputs(target: ItemStack): List<Any> {
+		val level = ItemNBTHelper.getInt(target, TAG_ELEMENT_LEVEL, 0)
+		val er = Array(level + 1) { ItemElvenResource.ballForElement(ElementalDamage.valueOf(element)) }
 		val manaWeave = Array(level + 7) { LibOreDict.MANAWEAVE_CLOTH }
 		return listOf(*er, *manaWeave)
 	}

@@ -24,7 +24,6 @@ class AlfheimHookLoader: HookLoader() {
 	override fun registerHooks() {
 		FMLRelaunchLog.info("[${ModInfo.MODID.uppercase()}] Loaded coremod. Registering hooks...")
 		
-		
 		registerHookContainer("alfheim.common.core.asm.hook.AlfheimHookHandler")
 		if (AlfheimConfigHandler.hpHooks) registerHookContainer("alfheim.common.core.asm.hook.AlfheimHPHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.Botania18AndUpBackport")
@@ -39,6 +38,7 @@ class AlfheimHookLoader: HookLoader() {
 		registerHookContainer("alfheim.common.core.asm.hook.extender.ManaSpreaderExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.PureDaisyExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.QuartzExtender")
+		registerHookContainer("alfheim.common.core.asm.hook.extender.RelicHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.SparkExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.BotaniaGlowingRenderFixes")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.FlightTiaraFix")

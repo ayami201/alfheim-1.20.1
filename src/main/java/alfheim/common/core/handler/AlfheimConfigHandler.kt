@@ -14,12 +14,15 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	const val CATEGORY_INTEGRATION = CATEGORY_GENERAL + CATEGORY_SPLITTER + "integration"
 	const val CATEGORY_INT_TC = CATEGORY_INTEGRATION + CATEGORY_SPLITTER + "thaumcraft"
 	const val CATEGORY_INT_TiC = CATEGORY_INTEGRATION + CATEGORY_SPLITTER + "tconstruct"
+	const val CATEGORY_ENTITIES = CATEGORY_GENERAL + CATEGORY_SPLITTER + "entities"
 	const val CATEGORY_ALFHEIM = CATEGORY_GENERAL + CATEGORY_SPLITTER + "alfheim"
 	const val CATEGORY_NIFLHEIM = CATEGORY_GENERAL + CATEGORY_SPLITTER + "niflheim"
 	const val CATEGORY_DOMAINS = CATEGORY_GENERAL + CATEGORY_SPLITTER + "domains"
 	const val CATEGORY_WORLDGEN_A = CATEGORY_ALFHEIM + CATEGORY_SPLITTER + "worldgen"
 	const val CATEGORY_ENTITIES_A = CATEGORY_WORLDGEN_A + CATEGORY_SPLITTER + "entities"
 	const val CATEGORY_WORLDGEN_D = CATEGORY_DOMAINS + CATEGORY_SPLITTER + "worldgen"
+	const val CATEGORY_WORLDGEN_N = CATEGORY_NIFLHEIM + CATEGORY_SPLITTER + "worldgen"
+	const val CATEGORY_ENTITIES_N = CATEGORY_WORLDGEN_N + CATEGORY_SPLITTER + "entities"
 	const val CATEGORY_POTIONS = CATEGORY_GENERAL + CATEGORY_SPLITTER + "potions"
 	const val CATEGORY_ESMODE = CATEGORY_GENERAL + CATEGORY_SPLITTER + "elvenstory"
 	const val CATEGORY_MMO = CATEGORY_ESMODE + CATEGORY_SPLITTER + "mmo"
@@ -88,7 +91,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var domainStartZ = -5000
 	
 	// ENTITIES
-	// ALFHEIM
+	// - ALFHEIM
 	var butterflySpawn = intArrayOf(10, 1, 2)
 	var chickSpawn = intArrayOf(10, 4, 4)
 	var cowSpawn = intArrayOf(8, 4, 4)
@@ -97,13 +100,21 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var pigSpawn = intArrayOf(10, 4, 4)
 	var pixieSpawn = intArrayOf(10, 1, 2)
 	var sheepSpawn = intArrayOf(12, 4, 4)
-	var voidCreeper = intArrayOf(4, 1, 3)
 	
 	var despawnChunks = 2
 	var minChunks = 1
 	var maxChunks = 6
 	var playerGroupDistance = maxChunks
 	var tfMobs = true
+	
+	// - NIFLEHEIM
+	var vikingSpawn = intArrayOf(100, 4, 4)
+	
+	// - ALL
+	var elementalSlime = intArrayOf(10, 2, 4)
+	var elementalSlimeBiomeBlackList = intArrayOf(8, 9, 14, 15)
+	var voidCreeper = intArrayOf(4, 1, 3)
+	var voidCreeperBiomeBlackList = intArrayOf(8, 9, 14, 15)
 	
 	// OHTER
 	var alfheimSleepExtraCheck = true
@@ -117,6 +128,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var faultLinePersistence = 3000
 	var floatingIslandPathfinder = true
 	var floatingIslandSyncedDataInitLimit = 31
+	var floodLightQuality = 10
 	var flugelSwapBlackList = emptyArray<String>()
 	var gourmaryllisDifficulty = 2
 	var hotHell = true
@@ -125,7 +137,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var lightningsSpeed = 20
 	var longSeasons = true
 	var looniumOverseed = false
-	var mobElements = arrayOf("Blaze:FIRE", "Creeper:NATURE", "EnderDragon:DARKNESS", "Enderman:DARKNESS", "Ghast:AIR,PSYCHIC", "LavaSlime:FIRE,EARTH", "MushroomCow:NATURE", "SnowMan:ICE", "Slime:NATURE,WATER", "VillagerGolem:EARTH", "WitherBoss:DARKNESS", "Thaumcraft.EldritchCrab:DARKNESS", "Thaumcraft.EldritchGolem:EARTH", "Thaumcraft.EldritchGuardian:DARKNESS,PSYCHIC", "Thaumcraft.EldritchWarden:DARKNESS,PSYCHIC", "Thaumcraft.Firebat:FIRE", "Thaumcraft.Golem:EARTH", "Thaumcraft.MindSpider:PSYCHIC", "Thaumcraft.ThaumSlime:WATER,DARKNESS", "Thaumcraft.Wisp:AIR", "ThermalFoundation.Blizz:ICE", "ThermalFoundation.Blitz:ELECTRIC", "ThermalFoundation.Basalz:EARTH")
+	var mobElements = arrayOf("Blaze:FIRE", "EnderDragon:DARKNESS", "Enderman:DARKNESS", "Ghast:AIR,PSYCHIC", "LavaSlime:FIRE,EARTH", "MushroomCow:NATURE", "SnowMan:ICE", "Slime:NATURE,WATER", "VillagerGolem:EARTH", "WitherBoss:DARKNESS", "Thaumcraft.EldritchCrab:DARKNESS", "Thaumcraft.EldritchGolem:EARTH", "Thaumcraft.EldritchGuardian:DARKNESS,PSYCHIC", "Thaumcraft.EldritchWarden:DARKNESS,PSYCHIC", "Thaumcraft.Firebat:FIRE", "Thaumcraft.MindSpider:PSYCHIC", "Thaumcraft.ThaumSlime:WATER,DARKNESS", "ThermalFoundation.Blizz:ICE", "ThermalFoundation.Blitz:ELECTRIC", "ThermalFoundation.Basalz:EARTH")
 	var minimalGraphics = false
 	var mobPriests = true
 	var moonbowMaxDmg = 20
@@ -158,7 +170,6 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var uberBlaster = true
 	var uberSpreaderCapacity = 24000
 	var uberSpreaderSpeed = 2400
-	var voidCreepBiomeBlackList = intArrayOf(8, 9, 14, 15)
 	var wireoverpowered = true
 	lateinit var worldDestroyConfig: Map<Int, Int>
 	
@@ -181,6 +192,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var potionIDBerserk = potionID___COUNTER++
 	var potionIDBleeding = potionID___COUNTER++
 	var potionIDButterShield = potionID___COUNTER++
+	var potionIDChampagne = potionID___COUNTER++
 	var potionIDDeathMark = potionID___COUNTER++
 	var potionIDDecay = potionID___COUNTER++
 	var potionIDEternity = potionID___COUNTER++
@@ -202,6 +214,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var potionIDTank = potionID___COUNTER++
 	var potionIDThrow = potionID___COUNTER++
 	var potionIDWellOLife = potionID___COUNTER++
+	var potionIDWhiteWine = potionID___COUNTER++
 	var potionIDWisdom = potionID___COUNTER++
 	var potionIDWtfBerry0 = potionID___COUNTER++
 	var potionIDWtfBerry2 = potionID___COUNTER++
@@ -302,7 +315,13 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		pigSpawn = loadProp(CATEGORY_ENTITIES_A, "pigSpawn", pigSpawn, false, "Pig max count per player, min and max group count")
 		pixieSpawn = loadProp(CATEGORY_ENTITIES_A, "pixieSpawn", pixieSpawn, false, "Pixie max count per player, min and max group count")
 		sheepSpawn = loadProp(CATEGORY_ENTITIES_A, "sheepSpawn", sheepSpawn, false, "Sheep max count per player, min and max group count")
-		voidCreeper = loadProp(CATEGORY_ENTITIES_A, "voidCreeper", voidCreeper, false, "Manaseal Creeper spawn weight (chance), min and max group count")
+		
+		elementalSlime = loadProp(CATEGORY_ENTITIES, "elementalSlime", elementalSlime, false, "Elemental Slimes spawn weight (chance), min and max group count")
+		elementalSlimeBiomeBlackList = loadProp(CATEGORY_ENTITIES, "elementalSlimeBiomeBlackList", elementalSlimeBiomeBlackList, true, "Biome blacklist for Elemental Slimes", false)
+		voidCreeper = loadProp(CATEGORY_ENTITIES, "voidCreeper", voidCreeper, false, "Manaseal Creeper spawn weight (chance), min and max group count")
+		voidCreeperBiomeBlackList = loadProp(CATEGORY_ENTITIES, "voidCreeperBiomeBlackList", voidCreeperBiomeBlackList, true, "Biome blacklist for Manaseal Creepers", false)
+		
+		vikingSpawn = loadProp(CATEGORY_ENTITIES_N, "vikingSpawn", vikingSpawn, true, "Frozen Vikings max count per player, min and max group count")
 		
 		alfheimSleepExtraCheck = loadProp(CATEGORY_GENERAL, "alfheimSleepExtraCheck", alfheimSleepExtraCheck, false, "Set this to false if you are skipping whole day while sleeping")
 		authTimeout = loadProp(CATEGORY_GENERAL, "authTimeout", authTimeout, false, "Time limit for client to send authentication credentials", 100, 600)
@@ -315,10 +334,11 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		faultLinePersistence = loadProp(CATEGORY_GENERAL, "faultLinePersistence", faultLinePersistence, false, "Persistence for Fault Lines (lower value - smaller faults)")
 		floatingIslandPathfinder = loadProp(CATEGORY_GENERAL, "floatingIslandPathfinder", floatingIslandPathfinder, false, "Set this to false to disable entity's pathfinding on floating islands. This will make them stand still on islands, but will also lower the server load")
 		floatingIslandSyncedDataInitLimit = loadProp(CATEGORY_GENERAL, "floatingIslandSyncedDataInitLimit", floatingIslandSyncedDataInitLimit, false, "Increase that limit ONLY if you have mods that extend DataWatcher IDs and want really large floating island")
+		floodLightQuality = loadProp(CATEGORY_GENERAL, "floodLightQuality", floodLightQuality, false, "Determines floodlight raycasting steps (lower values - more quality and CPU load). Must be an integer divisor of 360", 1, 120)
 		flugelSwapBlackList = loadProp(CATEGORY_GENERAL, "flugelSwapBlackList", flugelSwapBlackList, false, "Blacklist for items that flugel can't swap [modid:name]", false)
 		gourmaryllisDifficulty = loadProp(CATEGORY_GENERAL, "gourmaryllisDifficulty", gourmaryllisDifficulty, false, "Difficulty of Gourmaryllis functionality: 0 - default, 1 - as in 1.12.2, 2 - hardcore", 0, 2)
 		hotHell = loadProp(CATEGORY_GENERAL, "hotHell", hotHell, false, "Set this to false to remove overheating in Muspleheim (Hell/Nether)")
-		imPatheticWeakAndScaredDontTouchMyWorlds = loadProp(CATEGORY_GENERAL, "imPatheticWeakAndScaredDontTouchMyWorlds", imPatheticWeakAndScaredDontTouchMyWorlds, false, "Set this to true to disable hardcoded world destruction while Ragnarok and affect ONLY Alfheim")
+		imPatheticWeakAndScaredDontTouchMyWorlds = loadProp(CATEGORY_GENERAL, "imPatheticWeakAndScaredDontTouchMyWorlds", imPatheticWeakAndScaredDontTouchMyWorlds, false, "Set this to true to disable hardcoded world destruction during Ragnarok and affect ONLY Alfheim")
 		interactEventChecks = loadProp(CATEGORY_GENERAL, "interactEventChecks", interactEventChecks, false, "Distance checks when firing interaction events, results may be unclear")
 		lightningsSpeed = loadProp(CATEGORY_GENERAL, "lightningsSpeed", lightningsSpeed, false, "How many ticks it takes between two lightings are spawned in Lightning Anomaly render")
 		longSeasons = loadProp(CATEGORY_GENERAL, "longSeasons", longSeasons, true, "Set this to false to make seasons last 1 real day instead of 3")
@@ -356,7 +376,6 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		uberBlaster = loadProp(CATEGORY_GENERAL, "uberBlaster", uberBlaster, false, "Set this to false to nerf blasters")
 		uberSpreaderCapacity = loadProp(CATEGORY_GENERAL, "uberSpreaderCapacity", uberSpreaderCapacity, false, "Mauftrium Spreader max mana cap")
 		uberSpreaderSpeed = loadProp(CATEGORY_GENERAL, "uberSpreaderSpeed", uberSpreaderSpeed, false, "Mauftrium Spreader mana per shot")
-		voidCreepBiomeBlackList = loadProp(CATEGORY_GENERAL, "voidCreepersBiomeBlackList", voidCreepBiomeBlackList, true, "Biome blacklist for Manaseal Creepers", false)
 		wireoverpowered = loadProp(CATEGORY_GENERAL, "wire.overpowered", wireoverpowered, false, "Allow WireSegal far more power than any one person should have")
 		worldDestroyConfig = loadProp(CATEGORY_GENERAL, "worldDestroyConfig", emptyArray(), false, "List of world destruction types while Ragnarok in form of string 'dimID:type' (types: 0 - none, 1 - only while ginnungagap, 2 - all)", false).map {
 			val (id, type) = it.split(':')
@@ -377,6 +396,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDBerserk = loadProp(CATEGORY_POTIONS, "potionIDBerserk", potionIDBerserk, true, "Potion id for Berserk")
 		potionIDBleeding = loadProp(CATEGORY_POTIONS, "potionIDBleeding", potionIDBleeding, true, "Potion id for Bleeding")
 		potionIDButterShield = loadProp(CATEGORY_MMOP, "potionIDButterShield", potionIDButterShield, true, "Potion id for Butterfly Shield")
+		potionIDChampagne = loadProp(CATEGORY_POTIONS, "potionIDChampagne", potionIDChampagne, true, "Potion id for Champagne")
 		potionIDDeathMark = loadProp(CATEGORY_MMOP, "potionIDDeathMark", potionIDDeathMark, true, "Potion id for Death Mark")
 		potionIDDecay = loadProp(CATEGORY_MMOP, "potionIDDecay", potionIDDecay, true, "Potion id for Decay")
 		potionIDEternity = loadProp(CATEGORY_POTIONS, "potionIDEternity", potionIDEternity, true, "Potion id for Eternity")
@@ -398,6 +418,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDTank = loadProp(CATEGORY_POTIONS, "potionIDTank", potionIDTank, true, "Potion id for Tank")
 		potionIDThrow = loadProp(CATEGORY_MMOP, "potionIDThrow", potionIDThrow, true, "Potion id for Throw")
 		potionIDWellOLife = loadProp(CATEGORY_MMOP, "potionIDWellOLife", potionIDWellOLife, true, "Potion id for Well'o'Life")
+		potionIDWhiteWine = loadProp(CATEGORY_POTIONS, "potionIDWhiteWine", potionIDWhiteWine, true, "Potion id for White Wine")
 		potionIDWisdom = loadProp(CATEGORY_POTIONS, "potionIDWisdom", potionIDWisdom, true, "Potion id for Wisdom")
 		potionIDWtfBerry0 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry0", potionIDWtfBerry0, true, "Potion id for Barrier Berry")
 		potionIDWtfBerry2 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry2", potionIDWtfBerry2, true, "Potion id for Redstone Berry")

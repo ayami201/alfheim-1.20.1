@@ -5,6 +5,7 @@ import alfheim.api.*
 import alfheim.api.item.*
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.AlfheimBlocks
+import alfheim.common.core.asm.hook.extender.RelicNBTSyncHandler
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.core.helper.*
@@ -97,6 +98,7 @@ open class CommonProxy {
 		FloatingIslandGenerator.eventFML().eventForge()
 		ISpeedUpItem.eventForge()
 		IStepupItem.eventForge()
+		RelicNBTSyncHandler.eventForge()
 		
 		FMLCommonHandler.instance().bus().register(object {
 			@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -106,14 +108,6 @@ open class CommonProxy {
 		})
 		
 		ContributorsPrivacyHelper
-		
-		if (HELLISH_VACATION) {
-			arrayOf(BiomeBeach, BiomeSandbank, BiomeGenBase.jungle, BiomeGenBase.jungleEdge, BiomeGenBase.jungleHills, BiomeGenBase.beach).forEach {
-				it.addEntry(EntityRollingMelon::class.java, AlfheimConfigHandler.pixieSpawn.map { v -> v * 4 }.toIntArray())
-			}
-			
-			BiomeGenBase.hell.getSpawnableList(EnumCreatureType.monster).add(BiomeGenBase.SpawnListEntry(EntityMuspelson::class.java, 20, 4, 4))
-		}
 	}
 	
 	open fun bloodFX(world: World, x: Double, y: Double, z: Double, lifetime: Int = 100, size: Float = 1f, gravity: Float = 1f) = Unit

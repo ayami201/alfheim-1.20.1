@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation
 
 object LibResourceLocations {
 	
-	val akashicBox = ResourceLocationIL(ModInfo.MODID, "textures/model/item/AkashicBox.png")
 	val akashicCube = ResourceLocationIL(ModInfo.MODID, "textures/model/item/AkashicRecordsCube.png")
 	val akashicCube_ = ResourceLocationIL(ModInfo.MODID, "textures/model/item/AkashicRecordsCube_noShader.png")
 	val akashicCyl = ResourceLocationIL(ModInfo.MODID, "textures/model/item/AkashicRecordsCyl.png")
@@ -22,7 +21,7 @@ object LibResourceLocations {
 	val avatarLightning = ResourceLocationIL(ModInfo.MODID, "textures/model/avatar/avatarLightning.png")
 	var babylon = ResourceLocationIL("botania", "textures/misc/babylon.png")
 	var barrel = ResourceLocationIL(ModInfo.MODID, "textures/model/block/Barrel.png")
-	var blank = ResourceLocationIL(ModInfo.MODID, "textures/misc/blank.png")
+	var blank = ResourceLocationIL(ModInfo.MODID, "textures/blocks/blank.png")
 	val blood = ResourceLocationIL(ModInfo.MODID, "textures/misc/particles/blood.png")
 	val bloodDrop = ResourceLocationIL(ModInfo.MODID, "textures/misc/particles/bloodDrop.png")
 	val butterfly = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Butterfly.png")
@@ -42,6 +41,7 @@ object LibResourceLocations {
 	val dedMorozEyes = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/DedMorozEyes.png")
 	val domainDoor = ResourceLocationIL(ModInfo.MODID, "textures/blocks/DomainLobbyCoreFull.png")
 	val elementiumBlock = ResourceLocationIL("botania", "textures/blocks/storage2.png")
+	val elementalSlime = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/ElementalSlime.png")
 	val elements = ResourceLocationIL(ModInfo.MODID, "textures/misc/elements.png")
 	val elementsUI = ResourceLocationIL(ModInfo.MODID, "textures/misc/elementsUI.png")
 	val elf = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Elf.png")
@@ -56,6 +56,7 @@ object LibResourceLocations {
 	val fenrirClaw = ResourceLocationIL(ModInfo.MODID, "textures/items/FenrirClaws0.png")
 	val fenrirClawOverlay = ResourceLocationIL(ModInfo.MODID, "textures/items/FenrirClaws1.png")
 	var flowerBagExtended = ResourceLocationIL(ModInfo.MODID, "textures/gui/flowerBagExtended.png")
+	val frozenViking = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/FrozenViking.png")
 	val futhark = ResourceLocationIL(ModInfo.MODID, "textures/misc/FutharkMono.png")
 	val gaiaPylon = ResourceLocationIL(ModInfo.MODID, "textures/model/block/GaiaPylon.png")
 	val gaiaPylonOld = ResourceLocationIL(ModInfo.MODID, "textures/model/block/GaiaPylonOld.png")
@@ -290,10 +291,12 @@ object LibResourceLocations {
 					return
 				}
 				
-				mc.renderEngine.bindTexture(rl)
-				if (initLater.isEmpty()) return
-				initLater.forEach(mc.renderEngine::bindTexture)
-				initLater.clear()
+				try_ {
+					mc.renderEngine.bindTexture(rl)
+					if (initLater.isEmpty()) return
+					initLater.forEach(mc.renderEngine::bindTexture)
+					initLater.clear()
+				}
 			}
 		}
 	}

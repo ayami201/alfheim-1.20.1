@@ -1,21 +1,20 @@
 Innovations:
- Finished Anomaly Harvester
- Mana Tuner to tune some things
- Elemental tuning mechanic and elemental combat adjustments
- Removed Alien element (check your configs!)
- Redstone relay (wireless redstone)
- Icy Geysers Niflheim worldgen
- Timeless Ivy now won't allow your items to break while you have enough mana instead of post-regen it (configurable)
- Pair of new achievements
- Reworked anomalies data save (may break existing ones!)
- Reduced Bottomless crate slots to 1024
- Improved the Rod of the Red Control
+ New Niflheim worldgen features
+ Frozen Viking mob in Niflheim
+ Elemental slime mob
+ Lens to unlink bursts from spreader
+ Finally finished Akashic Records
+ Relics now are craftable
+ Rebalanced Crysanthermum
+ Effects for wine + champagne with "hidden" craft
+ Barrels now has comparator output for ease of automation
+ New decorative blocks
+ Crackling stars binding is now relative (will break binding of existing stars)
+ Booba render for Flügel
+ Tuner codes got captions for colorblind people
+ [ESM] Ocelots won't run away from cait sith players
 
 Fixes:
- Indissoluble Ivy tooltip
- Knowledge types for lexicon
- Runic Chalk drawing dark on blocks
- Anomalies visuals
- Alfheim rune recipe dupes
- Lightning tree (#289)
- Mana Infuser achievement
+ Aesir ring was dropping 3 rings
+ Applied entity elements clash with existing elements
+ Existing Botania flowers breaking when first installing Alfheim

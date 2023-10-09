@@ -22,6 +22,7 @@ KAIIIAK                 -    for testing
 zasheibirgerhid         -    for making shrines of power
 GloomyFolken            -    for awesome hooklib which allowed me to change Botania so flexible
 JustAGod                -    for ObjectWeb ASM tutorial and explaining some features
+krumplerban             -    for various ideas and testing
 Vazkii                  -    for making Botania, 'cause without it Alfheim would never have existed
 
 Donators:
@@ -37,5 +38,6 @@ Gertchenxd Mullmensch
 lie4me
 mkrtes
 MonoShiki
+Pelmeshkin
 Savy
 Yada Kristo

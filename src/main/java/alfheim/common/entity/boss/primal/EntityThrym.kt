@@ -5,7 +5,7 @@ import alexsocol.asjlib.math.*
 import alfheim.api.ModInfo
 import alfheim.api.entity.INiflheimEntity
 import alfheim.common.achievement.AlfheimAchievements
-import alfheim.common.core.handler.*
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
@@ -44,7 +44,7 @@ class EntityThrym(world: World): EntityPrimalBoss(world), INiflheimEntity {
 		tasks.addTask(1, ThrymAISecondStageStart(this))
 	}
 	
-	private fun playSounds() {
+	override fun playSounds() {
 		if (!ASJUtilities.isClient || ticksExisted != 1) return
 		
 		mc.soundHandler.playSound(PrimalBossMovingSound(this, getChargeSound()) { host.ultAnimationTicks.also { volume = if (sucks || !ASJBitwiseHelper.getBit(it, 9) && it in 11..69) 1f else 0.01f } })

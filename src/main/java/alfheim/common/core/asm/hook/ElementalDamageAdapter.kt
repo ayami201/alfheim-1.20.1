@@ -3,7 +3,7 @@ package alfheim.common.core.asm.hook
 import alfheim.common.core.helper.*
 import alfheim.common.core.helper.ElementalDamage.*
 import alfheim.common.core.util.DamageSourceSpell
-import alfheim.common.entity.EntityMuspelson
+import alfheim.common.entity.*
 import alfheim.common.entity.boss.EntityDedMoroz
 import gloomyfolken.hooklib.asm.*
 import gloomyfolken.hooklib.asm.Hook.ReturnValue
@@ -163,9 +163,12 @@ object ElementalDamageAdapter {
 	@Hook(targetMethod = "<init>", injectOnExit = true)
 	fun `EntityDamageSource$init`(thiz: EntityDamageSource, name: String?, entity: Entity?) {
 		when (entity) {
-			is EntityWither -> thiz.setTo(DARKNESS)
-			is EntitySlime  -> thiz.setTo(NATURE)
+			is EntityWither         -> thiz.setTo(DARKNESS)
+			is EntityMagmaCube      -> thiz.setTo(FIRE)
+			is EntityElementalSlime -> thiz.setTo(entity.elements.first())
 		}
+		
+		if (entity != null && entity::class.java == EntitySlime::class.java) thiz.setTo(NATURE)
 		
 		if (Botania.thaumcraftLoaded) when (entity) {
 			is EntityEldritchGuardian -> thiz.setTo(DARKNESS)
@@ -342,7 +345,7 @@ object ElementalDamageAdapter {
 	
 	@JvmStatic
 	@Hook(createMethod = true, returnCondition = ReturnCondition.ALWAYS)
-	fun getElements(creeper: EntityCreeper) = EnumSet.of(if (creeper.powered) ELECTRIC else COMMON)!!
+	fun getElements(creeper: EntityCreeper) = EnumSet.of(if (creeper.powered) ELECTRIC else NATURE)!!
 	
 	
 	@JvmStatic

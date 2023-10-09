@@ -139,5 +139,14 @@ class ItemSpawnEgg: ItemMod("SpawnEgg") {
 		fun addMapping(clazz: Class<out Entity>, color1: Int, color2: Int) {
 			mappings.add(clazz to color1 with color2)
 		}
+		
+		@Suppress("UNUSED_PARAMETER")
+		inline fun <reified T: Entity> forEntity(entity: T) = forEntity<T>()
+		
+		inline fun <reified T: Entity> forEntity(): ItemStack? {
+			val i = mappings.indexOfFirst { it.first == T::class.java }
+			if (i == -1) return null
+			return ItemStack(AlfheimItems.spawnEgg, 1, i)
+		}
 	}
 }

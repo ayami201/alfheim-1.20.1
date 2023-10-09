@@ -9,8 +9,9 @@ import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.*
 import vazkii.botania.api.subtile.SubTileEntity
+import vazkii.botania.common.block.tile.TileSpecialFlower
 
-@Suppress("NAME_SHADOWING", "ClassName", "unused", "LocalVariableName", "PrivatePropertyName", "MayBeConstant")
+@Suppress("NAME_SHADOWING", "ClassName", "unused", "LocalVariableName", "PrivatePropertyName")
 class AlfheimClassTransformer: IClassTransformer {
 	
 	val additionalInterfaces = mapOf(
@@ -48,7 +49,7 @@ class AlfheimClassTransformer: IClassTransformer {
 			cn.interfaces.addAll(iface)
 			
 			cn.accept(cw)
-			return cw.toByteArray()
+			this.basicClass = cw.toByteArray()
 		}
 		
 		return when (transformedName) {
@@ -85,7 +86,7 @@ class AlfheimClassTransformer: IClassTransformer {
 			// fixes for stupid coders:
 			"cofh.thermalfoundation.fluid.TFFluids"                            -> core { `TFFluids$ClassVisitor`(it) }
 			"com.emoniph.witchery.client.ClientEvents\$GUIOverlay"             -> core { `ClientEvents$GUIOverlay$ClassVisitor`(it) }
-			else                                                               -> basicClass
+			else                                                               -> this.basicClass
 		}
 	}
 	
@@ -431,7 +432,7 @@ class AlfheimClassTransformer: IClassTransformer {
 	internal class `TileSpecialFlower$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 
 		override fun visitField(access: Int, name: String?, desc: String?, signature: String?, value: Any?): FieldVisitor {
-			val newVal = if (value == "subTileName") SubTileEntity.TAG_TYPE else value
+			val newVal = if (value == TileSpecialFlower.TAG_SUBTILE_NAME) SubTileEntity.TAG_TYPE else value
 			return super.visitField(access, name, desc, signature, newVal)
 		}
 
@@ -442,7 +443,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		internal class `TileSpecialFlower$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 
 			override fun visitLdcInsn(cst: Any?) {
-				val newCst = if (cst == "subTileName") SubTileEntity.TAG_TYPE else cst
+				val newCst = if (cst == TileSpecialFlower.TAG_SUBTILE_NAME) SubTileEntity.TAG_TYPE else cst
 
 				super.visitLdcInsn(newCst)
 			}
@@ -855,38 +856,13 @@ class AlfheimClassTransformer: IClassTransformer {
 				if (opcode == AASTORE) {
 					if (add) {
 						add = false
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.MESSANGER)
-						mv.visitLdcInsn("lensMessenger")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.TRIPWIRE)
-						mv.visitLdcInsn("lensTripwire")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.PUSH)
-						mv.visitLdcInsn("lensPush")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.SMELT)
-						mv.visitLdcInsn("lensSmelt")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.SUPERCONDUCTOR)
-						mv.visitLdcInsn("lensSuperconductor")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.TRACK)
-						mv.visitLdcInsn("lensTrack")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.DAISY)
-						mv.visitLdcInsn("lensDaisy")
-						mv.visitInsn(AASTORE)
-						mv.visitInsn(DUP)
-						mv.visitIntInsn(BIPUSH, ItemLensExtender.LINKBACK)
-						mv.visitLdcInsn("lensLinkback")
-						mv.visitInsn(AASTORE)
+						
+						ItemLensExtender.EnumAlfheimLens.entries.forEach {
+							mv.visitInsn(DUP)
+							mv.visitIntInsn(BIPUSH, it.meta)
+							mv.visitLdcInsn(it.unlocalizedName)
+							mv.visitInsn(AASTORE)
+						}
 					}
 				}
 			}
@@ -949,6 +925,6 @@ class AlfheimClassTransformer: IClassTransformer {
 	
 	companion object {
 		
-		val moreLenses = 8
+		val moreLenses get() = ItemLensExtender.EnumAlfheimLens.entries.size
 	}
 }

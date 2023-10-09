@@ -123,7 +123,7 @@ class TileTradePortal: ASJTile() {
 		val recipe = BotaniaAPI.elvenTradeRecipes[i]
 		
 		if (AlfheimAPI.isRetradeable(recipe.output)) {
-			if (recipe.output.item is ItemBlock && recipe.output.item.toBlock() is BlockStorage && this.worldObj.rand.nextInt(10) != 0) setRandomRecipe()
+			if (recipe.output.block is BlockStorage && this.worldObj.rand.nextInt(10) != 0) setRandomRecipe()
 			recipeMult = worldObj.rand.nextInt(16) + 1
 			setTradeRecipe(recipe)
 			recipeNum = i

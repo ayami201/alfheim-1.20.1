@@ -3,24 +3,27 @@ package alfheim.client.render.entity
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.ModInfo
-import alfheim.api.entity.*
+import alfheim.api.entity.raceID
 import alfheim.api.lib.LibResourceLocations
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.common.core.handler.AlfheimConfigHandler
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.entity.AbstractClientPlayer
+import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.entity.RenderBiped
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.*
+import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.AdvancedModelLoader
 import org.lwjgl.opengl.GL11.*
 import vazkii.botania.api.item.IBaubleRender
-import java.util.Random
+import java.util.*
 import kotlin.math.*
 
 object RenderBooba {
 	
 	val model = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/booba.obj"))
+	val model1 = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/booba_1.obj"))
+	val model2 = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/booba_2.obj"))
 	
 	@SideOnly(Side.CLIENT)
 	fun render(player: EntityPlayer) {
@@ -36,10 +39,15 @@ object RenderBooba {
 		if (invisible && !transparent) return
 		
 		glPushMatrix()
+		RenderHelper.disableStandardItemLighting()
+		glEnable(GL_LIGHTING)
+		glEnable(GL_LIGHT0)
+		glEnable(GL_LIGHT1)
+		glEnable(GL_COLOR_MATERIAL)
 		glScaled(0.0625)
 		glRotatef(180f, 0f, 1f, 0f)
-		val offset = (Random(player.commandSenderName.hashCode().toLong()).nextFloat() - 0.5f) * 2f
-		glTranslatef(0f, 2.7f, 1.9f + offset)
+		val offset = (Random(player.commandSenderName.hashCode().toLong()).nextFloat() * 0.5f - 0.5f) * 2f
+		glTranslatef(0f, 4.1f, 1.9f + offset)
 		glRotatef(180f, 0f, 0f, 1f)
 		glRotatef(-Math.toDegrees(sin(sqrt(player.getSwingProgress(mc.timer.renderPartialTicks)) * Math.PI * 2) * 0.2).F, 0f, 1f, 0f)
 		

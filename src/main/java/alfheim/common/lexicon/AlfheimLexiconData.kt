@@ -11,18 +11,20 @@ import alfheim.common.block.*
 import alfheim.common.block.tile.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
+import alfheim.common.core.helper.ElementalDamage
 import alfheim.common.crafting.recipe.*
+import alfheim.common.entity.EntityElementalSlime
 import alfheim.common.integration.thaumcraft.ThaumcraftSuffusionRecipes
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
 import alfheim.common.item.*
 import alfheim.common.item.block.*
+import alfheim.common.item.material.*
 import alfheim.common.item.material.ElvenFoodMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
-import alfheim.common.item.material.EventResourcesMetas
 import alfheim.common.lexicon.AlfheimLexiconEntry.Companion.setIcon
 import alfheim.common.lexicon.page.*
 import net.minecraft.entity.Entity
-import net.minecraft.init.*
+import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import tconstruct.tools.TinkerTools
 import thaumcraft.common.config.ConfigItems
@@ -46,6 +48,7 @@ object AlfheimLexiconData {
 	
 	// Main addon content
 	lateinit var advancedMana: LexiconEntry
+	lateinit var akashic: LexiconEntry
 	lateinit var alfheim: LexiconEntry
 	lateinit var amplifier: LexiconEntry
 	lateinit var amuletCirus: LexiconEntry
@@ -62,6 +65,7 @@ object AlfheimLexiconData {
 	lateinit var barrierSapling: LexiconEntry
 	lateinit var beltRation: LexiconEntry
 	lateinit var calicoSapling: LexiconEntry
+	lateinit var carver: LexiconEntry
 	lateinit var chalk: LexiconEntry
 	lateinit var circuitSapling: LexiconEntry
 	lateinit var cloakInvis: LexiconEntry
@@ -100,6 +104,7 @@ object AlfheimLexiconData {
 	lateinit var flugel: LexiconEntry
 	lateinit var fracturedSpace: LexiconEntry
 	lateinit var frozenStar: LexiconEntry
+	lateinit var gaiaButton: LexiconEntry
 	lateinit var gjallarhorn: LexiconEntry
 	lateinit var gleipnir: LexiconEntry
 	lateinit var goddessCharm: LexiconEntry
@@ -239,6 +244,7 @@ object AlfheimLexiconData {
 		barrierSapling = AlfheimLexiconEntry("barrierSapling", categoryDendrology)
 		beltRation = AlfheimLexiconEntry("ration", categoryAlfheim)
 		calicoSapling = AlfheimLexiconEntry("calicoSapling", categoryDendrology)
+		carver = AlfheimLexiconEntry("carver", categoryAlfheim)
 		chalk = AlfheimLexiconEntry("chalk", categoryAlfheim)
 		circuitSapling = AlfheimLexiconEntry("circuitSapling", categoryDendrology)
 		cloakInvis = AlfheimLexiconEntry("cloakInv", categoryAlfheim)
@@ -276,6 +282,7 @@ object AlfheimLexiconData {
 		flugel = AlfheimLexiconEntry("flugel", categoryAlfheim)
 		fracturedSpace = AlfheimLexiconEntry("fracturedSpace", categoryAlfheim)
 		frozenStar = AlfheimLexiconEntry("starBlock", categoryAlfheim)
+		gaiaButton = AlfheimLexiconEntry("gaiaButton", categoryAlfheim)
 		goddessCharm = AlfheimLexiconEntry("goddessCharm", categoryAlfheim)
 		hyperBucket = AlfheimLexiconEntry("hyperBuk", categoryAlfheim)
 		infuser = AlfheimLexiconEntry("infuser", categoryAlfheim)
@@ -454,6 +461,8 @@ object AlfheimLexiconData {
 		
 		beltRation.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeRationBelt))
 		
+		carver.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeCarver))
+		
 		chalk.setLexiconPages(PageText("0"), PageText("1"), PageCraftingRecipe("2", AlfheimRecipes.recipeRunicChalk))
 		
 		cloakInvis.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeInvisibilityCloak))
@@ -495,16 +504,19 @@ object AlfheimLexiconData {
 		
 		elementalTuning.setLexiconPages(*Array(3) { PageText("$it") },
 		                                PageTuningRecipe("3", AlfheimRecipes.tuningElementalSeer, ItemStack(ModItems.monocle)),
-										// WARNING! Dirty hacks for recipe display:
-										*AlfheimAPI.tunerIncantations.values().filterIsInstance<IncantationEquipmentElementalTuning>().map {
-											PageTuningRecipe("${it.index + 4}",
-											                 TunerIncantation(Entity::class.java,
-											                                  it.incantation,
-											                                  arrayOf(*Array(7) { LibOreDict.MANAWEAVE_CLOTH }, it.elementResource)
-											                 ) { false },
-											                 ItemStack(ModItems.manasteelSword)
-											)
-		                                }.toTypedArray()).setIcon(Blocks.fire)
+			// WARNING! Dirty hacks for recipe display:
+			                            *AlfheimAPI.tunerIncantations.values().filterIsInstance<IncantationEquipmentElementalTuning>().map {
+				                            PageTuningRecipe("${it.index + 4}",
+				                                             TunerIncantation(Entity::class.java,
+				                                                              it.incantation,
+				                                                              arrayOf(
+					                                                              *Array(7) { LibOreDict.MANAWEAVE_CLOTH },
+					                                                              ItemElvenResource.ballForElement(ElementalDamage.valueOf(it.element))
+				                                                              )
+				                                             ) { false },
+				                                             ItemStack(ModItems.manasteelSword)
+				                            )
+			                            }.toTypedArray()).icon = ItemElvenResource.ballForElement(null)
 		
 		elvenSet.setLexiconPages(PageText("0"),
 								 PageCraftingRecipe("1", AlfheimRecipes.recipeElvoriumHelmet),
@@ -577,6 +589,8 @@ object AlfheimLexiconData {
 								   PageCraftingRecipe("1", AlfheimRecipes.recipesStar),
 								   PageText("2"),
 								   PageCraftingRecipe("3", AlfheimRecipes.recipesStar2)).icon = ItemStarPlacer.forColor(16)
+		
+		gaiaButton.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeGaiaButton))
 		
 		goddessCharm.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeGoddessCharm))
 		
@@ -783,11 +797,12 @@ object AlfheimLexiconData {
 		val slimePages = arrayListOf(
 			PageText("0"),
 		    PageTuningRecipe("1", AlfheimRecipes.tuningSlimeSize, ItemStack(Items.spawn_egg, 1, 55)),
-		    PageTuningRecipe("2", AlfheimRecipes.tuningMagmaSize, ItemStack(Items.spawn_egg, 1, 62))
+		    PageTuningRecipe("2", AlfheimRecipes.tuningMagmaSize, ItemStack(Items.spawn_egg, 1, 62)),
+		    PageTuningRecipe("3", AlfheimRecipes.tuningElementlaSlimeSize, ItemSpawnEgg.forEntity<EntityElementalSlime>()!!)
 		)
 		
-		if (AlfheimRecipes.tuningTaintSize != null) slimePages += PageTuningRecipe("3", AlfheimRecipes.tuningTaintSize!!, ItemStack(ConfigItems.itemSpawnerEgg, 1, 15))
-		if (AlfheimRecipes.tuningGelatSize != null) slimePages += PageTuningRecipe("4", AlfheimRecipes.tuningGelatSize!!, ItemStack(TinkerTools.titleIcon))
+		if (AlfheimRecipes.tuningTaintSize != null) slimePages += PageTuningRecipe("4", AlfheimRecipes.tuningTaintSize!!, ItemStack(ConfigItems.itemSpawnerEgg, 1, 15))
+		if (AlfheimRecipes.tuningGelatSize != null) slimePages += PageTuningRecipe("5", AlfheimRecipes.tuningGelatSize!!, ItemStack(TinkerTools.titleIcon))
 		
 		slimes.setLexiconPages(*slimePages.toTypedArray()).setIcon(Items.slime_ball)
 		
@@ -1119,13 +1134,16 @@ object AlfheimLexiconData {
 			PageText("38"), PageCraftingRecipe("39", AlfheimRecipes.recipeLensMessenger),
 			PageText("40"), PageCraftingRecipe("41", AlfheimRecipes.recipeLensPush),
 			PageText("42"), PageCraftingRecipe("43", AlfheimRecipes.recipeLensSmelt),
-			PageText("44"), PageCraftingRecipe("45", AlfheimRecipes.recipeLensTrack))
+			PageText("44"), PageCraftingRecipe("45", AlfheimRecipes.recipeLensTrack),
+		)
 		
 		LexiconData.elvenLenses.setLexiconPages(
 			PageText("11"), PageCraftingRecipe("12", AlfheimRecipes.recipeLensTripwire),
 			PageText("13"), PageCraftingRecipe("14", AlfheimRecipes.recipeLensSuperconductor),
 			PageText("15"), PageCraftingRecipe("16", AlfheimRecipes.recipeLensPurification),
-			PageText("17"), PageCraftingRecipe("18", AlfheimRecipes.recipeLensLinkback))
+			PageText("17"), PageCraftingRecipe("18", AlfheimRecipes.recipeLensLinkback),
+			PageText("19"), PageCraftingRecipe("20", AlfheimRecipes.recipeLensUnlink),
+		)
 		
 		PageText("botania.page.judgementCloaks1n").apply { LexiconData.judgementCloaks.pages[1] = this }.onPageAdded(LexiconData.judgementCloaks, 1)
 		LexiconData.judgementCloaks.setLexiconPages(PageCraftingRecipe("4", AlfheimRecipes.recipeBalanceCloak))
@@ -1138,54 +1156,59 @@ object AlfheimLexiconData {
 	}
 	
 	fun initRelics() {
+		akashic = AlfheimRelicLexiconEntry("akashic", categoryAlfheim)
+		akashic.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningAkashicRecords))
+		LexiconRecipeMappings.map(ItemStack(AlfheimItems.akashicRecords), akashic, 0)
+		
 		daolos = AlfheimRelicLexiconEntry("daolos", categoryDivinity, AlfheimItems.daolos)
-		daolos.setLexiconPages(*Array(6) { PageText("$it") })
+		daolos.setLexiconPages(*Array(6) { PageText("$it") }, PageTuningIORecipe("6", AlfheimRecipes.tuningDaolos))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.daolos), daolos, 0)
 		
 		excaliber = AlfheimRelicLexiconEntry("excaliber", categoryAlfheim, AlfheimItems.excaliber)
-		excaliber.setLexiconPages(PageText("0"))
+		excaliber.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningExcaliber))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.excaliber), excaliber, 0)
 		
 		gjallarhorn = AlfheimRelicLexiconEntry("gjallarhorn", categoryDivinity, AlfheimItems.gjallarhorn)
-		gjallarhorn.setLexiconPages(PageText("0"), PageText("1"))
+		gjallarhorn.setLexiconPages(PageText("0"), PageText("1"), PageTuningIORecipe("2", AlfheimRecipes.tuningGjallarhorn))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.gjallarhorn), gjallarhorn, 0)
 		
 		gleipnir = AlfheimRelicLexiconEntry("gleipnir", categoryDivinity, AlfheimItems.gleipnir)
-		gleipnir.setLexiconPages(PageText("0"))
+		gleipnir.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningGleipnir))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.gleipnir), gleipnir, 0)
 		
 		gungnir = AlfheimRelicLexiconEntry("gungnir", categoryDivinity, AlfheimItems.gungnir)
-		gungnir.setLexiconPages(PageText("0"))
+		gungnir.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningGungnir))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.gungnir), gungnir, 0)
 		
 		mask = AlfheimRelicLexiconEntry("mask", categoryAlfheim, AlfheimItems.mask)
-		mask.setLexiconPages(PageText("0"))
+		mask.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningTankMask))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.mask), mask, 0)
 		
 		mjolnir = AlfheimRelicLexiconEntry("mjolnir", categoryDivinity, AlfheimItems.mjolnir)
-		mjolnir.setLexiconPages(PageText("0"))
+		mjolnir.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningMjolnir))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.mjolnir), mjolnir, 0)
 		
 		moonbow = AlfheimRelicLexiconEntry("moonbow", categoryAlfheim, AlfheimItems.moonlightBow)
-		moonbow.setLexiconPages(PageText("0"))
+		moonbow.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningMoonlightBow))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.moonlightBow), moonbow, 0)
 		
 		ringHeimdall = AlfheimRelicLexiconEntry("ring_heimdall", categoryDivinity, AlfheimItems.priestRingHeimdall)
-		ringHeimdall.setLexiconPages(PageText("0"))
+		ringHeimdall.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningHeimdallRing))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.priestRingHeimdall), ringHeimdall, 0)
 		
 		ringNjord = AlfheimRelicLexiconEntry("ring_njord", categoryDivinity, AlfheimItems.priestRingNjord)
-		ringNjord.setLexiconPages(PageText("0"))
+		ringNjord.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningNjordRing))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.priestRingNjord), ringNjord, 0)
 		
 		ringSif = AlfheimRelicLexiconEntry("ring_sif", categoryDivinity, AlfheimItems.priestRingSif)
-		ringSif.setLexiconPages(PageText("0"))
+		ringSif.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningSifRing))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.priestRingSif), ringSif, 0)
 		
 		soul = AlfheimRelicLexiconEntry("soul", categoryAlfheim, AlfheimItems.flugelSoul)
 		soul.setLexiconPages(*Array(9) { PageText("$it") },
 							 PageMultiblock("9", AlfheimMultiblocks.soul),
-							 PageText("10"), PageCraftingRecipe("11", AlfheimRecipes.recipeCleanPylon))
+							 PageText("10"), PageCraftingRecipe("11", AlfheimRecipes.recipeCleanPylon),
+							 PageTuningIORecipe("12", AlfheimRecipes.tuningFlugelSoul))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.flugelSoul), soul, 0)
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.alfheimPylon, 1, 2), soul, 7)
 		
@@ -1194,10 +1217,17 @@ object AlfheimLexiconData {
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.soulHorn, 1, 1), soulHorn, 2)
 		
 		subspear = AlfheimRelicLexiconEntry("subspear", categoryAlfheim, AlfheimItems.subspaceSpear)
-		subspear.setLexiconPages(PageText("0"))
+		subspear.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningSpearSubspace))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.subspaceSpear), subspear, 0)
 		
 		if (ConfigHandler.relicsEnabled) {
+			LexiconData.flugelEye.setLexiconPages(PageTuningIORecipe("2", AlfheimRecipes.tuningFlugelEye))
+			LexiconData.infiniteFruit.setLexiconPages(PageTuningIORecipe("1", AlfheimRecipes.tuningInfiniteFruit))
+			LexiconData.kingKey.setLexiconPages(PageTuningIORecipe("1", AlfheimRecipes.tuningKingKey))
+			LexiconData.lokiRing.setLexiconPages(PageTuningIORecipe("4", AlfheimRecipes.tuningLokiRing))
+			LexiconData.odinRing.setLexiconPages(PageTuningIORecipe("1", AlfheimRecipes.tuningOdinRing))
+			LexiconData.thorRing.setLexiconPages(PageTuningIORecipe("1", AlfheimRecipes.tuningThorRing))
+			
 			LexiconRecipeMappings.map(ItemStack(ModItems.dice), LexiconData.relicInfo, 0)
 			LexiconRecipeMappings.map(ItemStack(ModItems.infiniteFruit), LexiconData.infiniteFruit, 0)
 			LexiconRecipeMappings.map(ItemStack(ModItems.kingKey), LexiconData.kingKey, 0)
@@ -1283,6 +1313,7 @@ object AlfheimLexiconData {
 		flowerPetronia.knowledgeType = BotaniaAPI.elvenKnowledge
 		flugel.knowledgeType = BotaniaAPI.elvenKnowledge
 		fracturedSpace.knowledgeType = BotaniaAPI.elvenKnowledge
+		gaiaButton.knowledgeType = BotaniaAPI.elvenKnowledge
 		hyperBucket.knowledgeType = BotaniaAPI.elvenKnowledge
 		infuser.knowledgeType = BotaniaAPI.elvenKnowledge
 		ivySave.knowledgeType = BotaniaAPI.elvenKnowledge

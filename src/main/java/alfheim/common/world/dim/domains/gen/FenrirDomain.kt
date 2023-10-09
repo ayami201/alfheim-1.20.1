@@ -12,7 +12,7 @@ import net.minecraft.world.World
 
 object FenrirDomain: Domain(ModInfo.MODID, "Fenrir", 1, getBoundingBox(-63, -1, -32, 63, 31, 94), ChunkCoordinates(0, 0, 31)) {
 	
-	override val skyRenderer = object: SkyRendererDomains(0xFFFFEECCu, 0xFFFFFBF2u) {}
+	override val skyRenderer = object: SkyRendererDomains(0xFFFFEECCU, 0xFFFFFBF2U) {}
 	
 	override val firstConquerors = arrayOf("Kompotik")
 	override val firstConquerorsUnknown = arrayOf("ᚲᛟᛗᛈᛟᛏᛁᚲ")

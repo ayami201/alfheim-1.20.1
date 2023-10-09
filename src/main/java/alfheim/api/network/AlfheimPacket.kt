@@ -1,9 +1,10 @@
 package alfheim.api.network
 
+import alexsocol.asjlib.network.ASJPacket
 import cpw.mods.fml.common.network.simpleimpl.*
 import net.minecraft.entity.player.EntityPlayerMP
 
-interface AlfheimPacket<T : AlfheimPacket<T>> : IMessage, IMessageHandler<T, T> {
+abstract class AlfheimPacket<T : AlfheimPacket<T>>: ASJPacket(), IMessage, IMessageHandler<T, T> {
 	
 	override fun onMessage(packet: T, ctx: MessageContext): T? {
 		if (ctx.side.isClient)
@@ -13,6 +14,6 @@ interface AlfheimPacket<T : AlfheimPacket<T>> : IMessage, IMessageHandler<T, T> 
 		return null
 	}
 
-	fun handleClient() = Unit
-	fun handleServer(player: EntityPlayerMP) = Unit
+	open fun handleClient() = Unit
+	open fun handleServer(player: EntityPlayerMP) = Unit
 }

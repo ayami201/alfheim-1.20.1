@@ -19,5 +19,5 @@ object RenderBlockManaTuner: ISimpleBlockRenderingHandler {
 	
 	override fun renderWorldBlock(world: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderer: RenderBlocks) = false
 	override fun shouldRender3DInInventory(modelId: Int) = true
-	override fun getRenderId() = LibRenderIDs.idManaAccelerator
+	override fun getRenderId() = LibRenderIDs.idManaTuner
 }

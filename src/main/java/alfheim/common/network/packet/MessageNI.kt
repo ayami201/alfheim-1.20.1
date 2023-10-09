@@ -2,7 +2,6 @@ package alfheim.common.network.packet
 
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.mc
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.event.PlayerInteractAdequateEvent
 import alfheim.api.network.AlfheimPacket
 import alfheim.common.core.handler.*
@@ -13,9 +12,10 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraftforge.common.MinecraftForge
 import kotlin.math.max
 
-class MessageNI(ty: Mni, vararg var intArray: Int, var type: Int = ty.ordinal) : ASJPacket(), AlfheimPacket<MessageNI> {
+class MessageNI(ty: Mni, vararg var intArray: Int, var type: Int = ty.ordinal) : AlfheimPacket<MessageNI>() {
+	
 	override fun fromCustomBytes(buf: ByteBuf) {
-		intArray = IntArray(buf.readInt()) { buf.readInt() }
+		intArray = IntArray(readI(buf)) { readI(buf) }
 	}
 
 	override fun toCustomBytes(buf: ByteBuf) {

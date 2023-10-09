@@ -2,14 +2,14 @@ package alfheim.common.block
 
 import alexsocol.asjlib.*
 import alfheim.client.core.helper.IconHelper
-import alfheim.common.block.base.BlockMod
+import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileItemDisplay
 import alfheim.common.item.block.ItemUniqueSubtypedBlockMod
 import alfheim.common.lexicon.AlfheimLexiconData
 import cpw.mods.fml.common.IFuelHandler
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.*
-import net.minecraft.block.*
+import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
@@ -23,7 +23,7 @@ import net.minecraft.world.World
 import vazkii.botania.api.lexicon.ILexiconable
 import java.util.*
 
-class BlockItemDisplay: BlockMod(Material.wood), ILexiconable, ITileEntityProvider, IFuelHandler {
+class BlockItemDisplay: BlockContainerMod(Material.wood), ILexiconable, IFuelHandler {
 	
 	lateinit var icons: Array<IIcon>
 	lateinit var sideIcons: Array<IIcon>
@@ -53,12 +53,8 @@ class BlockItemDisplay: BlockMod(Material.wood), ILexiconable, ITileEntityProvid
 	override fun shouldRegisterInNameSet() = false
 	
 	override fun setBlockName(name: String): Block {
-		register(name)
-		return super.setBlockName(name)
-	}
-	
-	internal fun register(name: String) {
 		GameRegistry.registerBlock(this, ItemUniqueSubtypedBlockMod::class.java, name, TYPES)
+		return super.setBlockName(name)
 	}
 	
 	override fun addCollisionBoxesToList(world: World, x: Int, y: Int, z: Int, axis: AxisAlignedBB, bounds: MutableList<Any?>, entity: Entity?) {
@@ -131,14 +127,6 @@ class BlockItemDisplay: BlockMod(Material.wood), ILexiconable, ITileEntityProvid
 	
 	override fun renderAsNormalBlock(): Boolean = false
 	
-	override fun hasTileEntity(metadata: Int): Boolean = true
-	
-	override fun onBlockEventReceived(world: World, x: Int, y: Int, z: Int, event: Int, eventArg: Int): Boolean {
-		super.onBlockEventReceived(world, x, y, z, event, eventArg)
-		val tileentity = world.getTileEntity(x, y, z)
-		return tileentity?.receiveClientEvent(event, eventArg) ?: false
-	}
-	
 	override fun breakBlock(world: World, x: Int, y: Int, z: Int, block: Block, meta: Int) {
 		val tileEntity = world.getTileEntity(x, y, z)
 		if (tileEntity is IInventory) {
@@ -150,10 +138,7 @@ class BlockItemDisplay: BlockMod(Material.wood), ILexiconable, ITileEntityProvid
 			}
 		}
 		super.breakBlock(world, x, y, z, block, meta)
-		world.removeTileEntity(x, y, z)
 	}
-	
-	override fun createTileEntity(world: World?, meta: Int) = TileItemDisplay()
 	
 	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) =
 		AlfheimLexiconData.itemDisplay

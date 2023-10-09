@@ -27,6 +27,7 @@ class BlockAltLeaves: BlockLeavesMod(), IGlowingLayerBlock {
 	
 	init {
 		setBlockName("altLeaves")
+		setLightOpacity(0)
 	}
 	
 	override fun getExplosionResistance(entity: Entity?, world: World, x: Int, y: Int, z: Int, explosionX: Double, explosionY: Double, explosionZ: Double) =

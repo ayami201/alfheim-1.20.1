@@ -1,7 +1,7 @@
 package alfheim.common.entity
 
 import alexsocol.asjlib.*
-import alfheim.api.entity.IMuspelheimEntity
+import alfheim.api.entity.*
 import alfheim.common.core.helper.ElementalDamage
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.*
@@ -15,11 +15,11 @@ import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.*
-import net.minecraft.util.DamageSource
+import net.minecraft.util.*
 import net.minecraft.world.World
 import java.util.*
 
-class EntityMuspelson(world: World): EntityMob(world), IMuspelheimEntity {
+class EntityMuspelson(world: World): EntityMob(world), IMuspelheimEntity, IAlfheimMob {
 	
 	var noLoot
 		get() = getFlag(6)
@@ -169,4 +169,6 @@ class EntityMuspelson(world: World): EntityMob(world), IMuspelheimEntity {
 		
 		nbt.setBoolean("noLoot", noLoot)
 	}
+	
+	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 }

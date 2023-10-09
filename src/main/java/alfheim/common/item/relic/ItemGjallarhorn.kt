@@ -11,7 +11,6 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import vazkii.botania.api.mana.ManaItemHandler
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.item.relic.ItemRelic
 
 class ItemGjallarhorn: ItemRelic("Gjallarhorn") {

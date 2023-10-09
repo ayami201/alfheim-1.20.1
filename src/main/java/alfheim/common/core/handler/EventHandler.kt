@@ -146,8 +146,8 @@ object EventHandler {
 		if (e.fuel?.item is IFuelHandler) {
 			e.burnTime = (e.fuel.item as IFuelHandler).getBurnTime(e.fuel)
 			e.result = Event.Result.ALLOW
-		} else if (e.fuel?.item?.toBlock() is IFuelHandler) {
-			e.burnTime = (e.fuel.item.toBlock() as IFuelHandler).getBurnTime(e.fuel)
+		} else if (e.fuel?.block is IFuelHandler) {
+			e.burnTime = (e.fuel.block as IFuelHandler).getBurnTime(e.fuel)
 			e.result = Event.Result.ALLOW
 		}
 	}
@@ -302,8 +302,9 @@ object EventHandler {
 	
 	@SubscribeEvent
 	fun onBlockBreak(e: BlockEvent.BreakEvent) {
-		val item = e.player.currentEquippedItem?.item ?: return
-		if (item === AlfheimItems.flugelSoul && e.player.currentEquippedItem.meta != 0xFACE17) e.isCanceled = true
+		val stack = e.player.heldItem ?: return
+		if (stack.item === AlfheimItems.flugelSoul && stack.meta != 0xFACE17) e.isCanceled = true
+		if (stack.item === ModItems.twigWand || stack.item === AlfheimItems.carver) e.isCanceled = true
 	}
 	
 	@SubscribeEvent

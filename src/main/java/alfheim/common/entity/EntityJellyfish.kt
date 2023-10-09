@@ -1,6 +1,7 @@
 package alfheim.common.entity
 
 import alexsocol.asjlib.*
+import alfheim.api.entity.IAlfheimMob
 import alfheim.common.core.helper.*
 import alfheim.common.item.material.ElvenFoodMetas
 import alfheim.common.world.dim.alfheim.biome.BiomeRiver
@@ -17,7 +18,7 @@ import ru.vamig.worldengine.*
 import java.util.*
 import kotlin.math.*
 
-class EntityJellyfish(world: World): EntityWaterMob(world), IElementalEntity {
+class EntityJellyfish(world: World): EntityWaterMob(world), IElementalEntity, IAlfheimMob {
 	
 	var jellyPitch = 0f
 	var prevJellyPitch = 0f
@@ -173,4 +174,6 @@ class EntityJellyfish(world: World): EntityWaterMob(world), IElementalEntity {
 		
 		return true
 	}
+	
+	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 }

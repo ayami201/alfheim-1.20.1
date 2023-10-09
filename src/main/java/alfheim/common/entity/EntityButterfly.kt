@@ -2,6 +2,7 @@ package alfheim.common.entity
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.api.entity.IAlfheimMob
 import alfheim.common.item.material.*
 import alfheim.common.world.dim.alfheim.biome.*
 import cpw.mods.fml.relauncher.*
@@ -17,7 +18,7 @@ import vazkii.botania.common.item.ModItems
 import java.awt.Color
 import kotlin.math.*
 
-class EntityButterfly(world: World): EntityFlyingCreature(world) {
+class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 	
 	/** Coordinates of where the pixie spawned.  */
 	private var spawnPosition: ChunkCoordinates? = null
@@ -45,6 +46,7 @@ class EntityButterfly(world: World): EntityFlyingCreature(world) {
 	override fun isAIEnabled(): Boolean = true
 	override fun canTriggerWalking() = false
 	override fun doesEntityNotTriggerPressurePlate() = true
+	
 	override fun getDropItem() = null
 	
 	override fun dropFewItems(hit: Boolean, looting: Int) {
@@ -150,4 +152,6 @@ class EntityButterfly(world: World): EntityFlyingCreature(world) {
 	override fun isInRangeToRenderDist(distance: Double): Boolean {
 		return super.isInRangeToRenderDist(distance / 16.0)
 	}
+	
+	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 }

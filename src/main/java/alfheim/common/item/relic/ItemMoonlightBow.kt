@@ -25,10 +25,10 @@ import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.item.IRelic
 import vazkii.botania.api.mana.ManaItemHandler
 import vazkii.botania.common.Botania
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.item.relic.ItemRelic
 import java.util.*
 import kotlin.math.*
+
 /**
  * @author ExtraMeteorP, CKATEPTb, AlexSocol
  */
@@ -55,8 +55,7 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 	}
 	
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
-		if (isRightPlayer(player, stack))
-			player.setItemInUse(stack, getMaxItemUseDuration(stack))
+		player.setItemInUse(stack, getMaxItemUseDuration(stack))
 		return stack
 	}
 	
@@ -95,7 +94,6 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 	}
 	
 	override fun onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityPlayer, itemInUse: Int) {
-		if (!isRightPlayer(player, stack)) return
 		val m = maxDmg / 10
 		val i = ((getMaxItemUseDuration(stack) - itemInUse) * chargeVelocityMultiplier(stack)).I
 		if (i < m) return
@@ -142,13 +140,6 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 	
 	val maxDmg: Int
 		get() = AlfheimConfigHandler.moonbowMaxDmg
-	
-	override fun addInformation(stack: ItemStack, player: EntityPlayer, list: MutableList<Any?>, adv: Boolean) {
-//		list.add(StatCollector.translateToLocalFormatted("${getUnlocalizedNameInefficiently(stack)}.desc", 2 * EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack)))
-//		list.add("")
-		ItemRelic.addBindInfo(list, stack, player)
-		super.addInformation(stack, player, list, adv)
-	}
 	
 	override fun registerIcons(reg: IIconRegister) {
 		itemIcon = reg.registerIcon("${ModInfo.MODID}:PhoebusBow")
@@ -207,49 +198,16 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 	// ################################ ItemRelic ################################
 	
 	override fun onUpdate(stack: ItemStack, world: World?, entity: Entity?, slot: Int, inHand: Boolean) {
-		if (entity is EntityPlayer) {
-			updateRelic(stack, entity)
-		}
+		if (entity is EntityPlayer) ItemRelic.updateRelic(stack, entity)
 	}
 	
 	override fun getEntityLifespan(itemStack: ItemStack?, world: World?) = Int.MAX_VALUE
 	
-	fun addStringToTooltip(s: String, tooltip: MutableList<in String>) {
-		tooltip.add(s.replace("&".toRegex(), "§"))
-	}
+	override fun addInformation(stack: ItemStack, player: EntityPlayer, list: MutableList<Any?>, adv: Boolean) = ItemRelic.addBindInfo(list, stack, player)
 	
-	fun getSoulbindUsernameS(stack: ItemStack?) = ItemNBTHelper.getString(stack, "soulbind", "")!!
+	override fun bindToUsername(playerName: String?, stack: ItemStack?) = ItemRelic.bindToUsernameS(playerName, stack)
 	
-	fun updateRelic(stack: ItemStack?, player: EntityPlayer) {
-		if (stack != null && stack.item is IRelic) {
-			if (getSoulbindUsernameS(stack).isEmpty()) {
-				player.addStat((stack.item as IRelic).bindAchievement, 1)
-				bindToPlayer(player, stack)
-			}
-			
-			if (!isRightPlayer(player, stack) && player.ticksExisted % 10 == 0 && (stack.item !is ItemRelic || (stack.item as ItemRelic).shouldDamageWrongPlayer())) {
-				player.attackEntityFrom(ItemRelic.damageSource(), 2f)
-			}
-		}
-	}
-	
-	fun bindToPlayer(player: EntityPlayer, stack: ItemStack) {
-		bindToUsernameS(player.commandSenderName, stack)
-	}
-	
-	fun bindToUsernameS(username: String, stack: ItemStack) {
-		ItemNBTHelper.setString(stack, "soulbind", username)
-	}
-	
-	fun isRightPlayer(player: EntityPlayer, stack: ItemStack?) = isRightPlayer(player.commandSenderName, stack)
-	
-	fun isRightPlayer(player: String, stack: ItemStack?) = getSoulbindUsernameS(stack) == player
-	
-	override fun bindToUsername(playerName: String, stack: ItemStack) {
-		bindToUsernameS(playerName, stack)
-	}
-	
-	override fun getSoulbindUsername(stack: ItemStack) = getSoulbindUsernameS(stack)
+	override fun getSoulbindUsername(stack: ItemStack?) = ItemRelic.getSoulbindUsernameS(stack)
 	
 	override fun getBindAchievement() = AlfheimAchievements.moonlightBow
 	

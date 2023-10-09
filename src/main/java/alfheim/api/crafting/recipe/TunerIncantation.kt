@@ -17,8 +17,9 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 		type = when {
 			Block::class.java.isAssignableFrom(clazz)      -> EnumTargetType.BLOCK
 			Entity::class.java.isAssignableFrom(clazz)     -> EnumTargetType.ENTITY
+			ItemStack::class.java.isAssignableFrom(clazz)  -> EnumTargetType.ITEM
 			TileEntity::class.java.isAssignableFrom(clazz) -> EnumTargetType.TILE
-			else                                           -> throw IllegalArgumentException("Mana Tuner target class must be either a Block or an Entity")
+			else                                           -> throw IllegalArgumentException("Mana Tuner target class must be one of those types: ${EnumTargetType.entries}")
 		}
 		
 		require(inputs.size <= 16) { "Mana Tuner recipe has ${inputs.size} additional inputs, max is 16" }
@@ -38,7 +39,7 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 				val input = inputsMissing[j]
 				
 				if (input is String) {
-					val validStacks: List<ItemStack> = OreDictionary.getOres(input as String?)
+					val validStacks: List<ItemStack> = OreDictionary.getOres(input)
 					var found = false
 					for (ostack in validStacks) {
 						val cstack = ostack.copy()
@@ -52,7 +53,7 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 					}
 					
 					if (found) break
-				} else if (input is ItemStack && simpleAreStacksEqual(input, stack)) {
+				} else if (input is ItemStack && ASJUtilities.isItemStackEqualCrafting(input, stack)) {
 					stackIndex = j
 					break
 				}
@@ -64,11 +65,9 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 		return inputsMissing.isEmpty()
 	}
 	
-	fun simpleAreStacksEqual(stack: ItemStack, stack2: ItemStack) = stack.item === stack2.item && stack.getItemDamage() == stack2.getItemDamage()
-	
 	open fun getInputs(target: @UnsafeVariance T): List<Any> = ArrayList(inputs)
 	
 	enum class EnumTargetType {
-		BLOCK, TILE, ENTITY
+		BLOCK, ENTITY, ITEM, TILE
 	}
 }

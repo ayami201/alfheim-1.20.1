@@ -2,9 +2,7 @@ package alfheim.common.core.command
 
 import alexsocol.asjlib.*
 import alfheim.AlfheimCore
-import alfheim.api.ModInfo
 import alfheim.api.event.AlfheimModeChangedEvent
-import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.BlockNiflheimPortal
 import alfheim.common.block.tile.TileDomainLobby
 import alfheim.common.core.handler.*
@@ -17,7 +15,7 @@ import net.minecraft.command.*
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.*
-import net.minecraftforge.common.*
+import net.minecraftforge.common.MinecraftForge
 import java.util.*
 
 object CommandAlfheim: CommandBase() {
@@ -103,13 +101,11 @@ object CommandAlfheim: CommandBase() {
 		if (on) {
 			AlfheimConfigHandler.initWorldCoordsForElvenStory(AlfheimCore.save)
 			ESMHandler.checkAddAttrs()
-			AchievementPage.getAchievementPage(ModInfo.MODID.capitalized()).achievements.add(AlfheimAchievements.newChance)
 //			if (Botania.thaumcraftLoaded) ThaumcraftAlfheimModule.addESMRecipes()
 		} else {
 //			if (Botania.thaumcraftLoaded) ThaumcraftAlfheimModule.removeESMRecipes()
 			AlfheimConfigHandler.enableMMO = false
 			toggleMMO(AlfheimConfigHandler.enableMMO)
-			AchievementPage.getAchievementPage(ModInfo.MODID.capitalized()).achievements.remove(AlfheimAchievements.newChance)
 			
 			MinecraftServer.getServer().configurationManager.playerEntityList.forEach { (it as EntityPlayerMP).capabilities.apply { isFlying = false; allowFlying = false } }
 		}

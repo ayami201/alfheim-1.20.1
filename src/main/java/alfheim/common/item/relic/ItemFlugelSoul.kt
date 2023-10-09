@@ -73,7 +73,7 @@ class ItemFlugelSoul: ItemRelic("FlugelSoul"), ILensEffect, IImmortalHandledItem
 	}
 	
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
-		if (!isRightPlayer(player, stack) || player.isSneaking) return stack
+		if (player.isSneaking) return stack
 		
 		val metaWas = stack.meta
 		stack.meta = 0xFACE17
@@ -97,7 +97,7 @@ class ItemFlugelSoul: ItemRelic("FlugelSoul"), ILensEffect, IImmortalHandledItem
 	}
 	
 	override fun onEntitySwing(player: EntityLivingBase, stack: ItemStack): Boolean {
-		if (!player.isSneaking || player !is EntityPlayer || !isRightPlayer(player, stack)) return false
+		if (!player.isSneaking || player !is EntityPlayer) return false
 		
 		val segment = getSegmentLookedAt(stack, player)
 		val pos = getWarpPoint(stack, segment)
@@ -413,8 +413,10 @@ class ItemFlugelSoul: ItemRelic("FlugelSoul"), ILensEffect, IImmortalHandledItem
 		}
 		
 		fun setDisabled(stack: ItemStack, warp: Int, disable: Boolean) {
+			if (ASJUtilities.isClient) return
+			
 			ItemNBTHelper.setBoolean(stack, TAG_DISABLED + (warp - if (disable) 0 else 1), disable)
-			stack.tagCompound.tagMap.remove(TAG_WARP_PREFIX + warp)
+			ItemNBTHelper.getNBT(stack).tagMap.remove(TAG_WARP_PREFIX + warp)
 			setBlocked(stack, getBlocked(stack) + if (disable) 1 else -1)
 		}
 		
@@ -423,11 +425,14 @@ class ItemFlugelSoul: ItemRelic("FlugelSoul"), ILensEffect, IImmortalHandledItem
 		}
 		
 		fun setBlocked(item: ItemStack, blocked: Int) {
+			if (ASJUtilities.isClient) return
+			
 			ItemNBTHelper.setInt(item, TAG_BLOCKED, blocked)
 		}
 		
 		fun setWarpPoint(stack: ItemStack, warp: Int, x: Double, y: Double, z: Double, dim: Int) {
-			if (isDisabled(stack, warp)) return
+			if (isDisabled(stack, warp) || ASJUtilities.isClient) return
+			
 			val cmp = NBTTagCompound()
 			cmp.setDouble(TAG_POS_X, x)
 			cmp.setDouble(TAG_POS_Y, y)

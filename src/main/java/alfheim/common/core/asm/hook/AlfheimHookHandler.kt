@@ -14,6 +14,7 @@ import alfheim.api.lib.LibResourceLocations
 import alfheim.api.spell.SpellBase
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.client.render.entity.RenderEntityFloatingIsland
+import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.*
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.block.colored.BlockAuroraDirt
@@ -31,6 +32,7 @@ import alfheim.common.core.handler.ragnarok.RagnarokHandler.noSunAndMoon
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.ragnarok
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.summer
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.summerTicks
+import alfheim.common.core.handler.ragnarok.RagnarokHandler.winter
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.crafting.recipe.*
 import alfheim.common.entity.*
@@ -51,8 +53,8 @@ import alfheim.common.world.data.CustomWorldData.Companion.customData
 import alfheim.common.world.mobspawn.MobSpawnHandler
 import baubles.common.lib.PlayerHandler
 import cofh.asmhooks.HooksCore
-import cpw.mods.fml.relauncher.*
 import cpw.mods.fml.relauncher.Side.CLIENT
+import cpw.mods.fml.relauncher.SideOnly
 import gloomyfolken.hooklib.asm.*
 import gloomyfolken.hooklib.asm.Hook.ReturnValue
 import gloomyfolken.hooklib.asm.ReturnCondition.*
@@ -63,21 +65,22 @@ import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.particle.EntityFX
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.texture.*
-import net.minecraft.command.*
+import net.minecraft.command.ICommandSender
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.*
 import net.minecraft.entity.*
+import net.minecraft.entity.ai.EntityAIAvoidEntity
 import net.minecraft.entity.boss.EntityDragon
 import net.minecraft.entity.item.*
 import net.minecraft.entity.monster.EntityCreeper
-import net.minecraft.entity.passive.EntityAnimal
+import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.*
 import net.minecraft.entity.projectile.*
 import net.minecraft.init.*
 import net.minecraft.inventory.*
 import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.pathfinding.*
+import net.minecraft.pathfinding.PathEntity
 import net.minecraft.potion.*
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.management.ServerConfigurationManager
@@ -118,7 +121,7 @@ import vazkii.botania.common.block.*
 import vazkii.botania.common.block.decor.*
 import vazkii.botania.common.block.decor.walls.BlockModWall
 import vazkii.botania.common.block.mana.*
-import vazkii.botania.common.block.subtile.generating.*
+import vazkii.botania.common.block.subtile.generating.SubTileDaybloom
 import vazkii.botania.common.block.tile.*
 import vazkii.botania.common.block.tile.mana.*
 import vazkii.botania.common.core.BotaniaCreativeTab
@@ -131,7 +134,7 @@ import vazkii.botania.common.item.equipment.bauble.ItemBauble
 import vazkii.botania.common.item.equipment.tool.ToolCommons
 import vazkii.botania.common.item.lens.LensFirework
 import vazkii.botania.common.item.material.ItemManaResource
-import vazkii.botania.common.item.relic.*
+import vazkii.botania.common.item.relic.ItemFlugelEye
 import vazkii.botania.common.item.rod.*
 import vazkii.botania.common.lib.LibBlockNames
 import java.awt.Color
@@ -256,7 +259,7 @@ object AlfheimHookHandler {
 		if (dimTo == dimensionIDDomains) return block // only with TileDomainLobby
 		
 		return when (player.dimension) {
-			dimensionIDDomains  -> dimTo != (player.entityData.getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE).getOrNull(3) ?: dimTo)
+			dimensionIDDomains  -> dimTo != (player.persistentData.getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE).getOrNull(3) ?: dimTo)
 			dimensionIDAlfheim  -> dimTo != 0 && dimTo != dimensionIDNiflheim
 			dimensionIDNiflheim -> dimTo != dimensionIDAlfheim
 			dimensionIDHelheim  -> block // no way out except TileRainbowManaFlame#exitPlayer
@@ -1140,9 +1143,11 @@ object AlfheimHookHandler {
 	
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
-	fun onItemUse(eye: ItemFlugelEye, stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float) =
-		// Stupid Et Futurum
-		if (player.isSneaking) EntityFlugel.spawn(player, stack, world, x, y, z, false, false) else false
+	fun onItemUse(eye: ItemFlugelEye, stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+		if (player.hasAchievement(AlfheimAchievements.flugelSoul)) return false
+		if (player.isSneaking) return EntityFlugel.spawn(player, stack, world, x, y, z, false, false)
+		return false
+	}
 	
 	@JvmStatic
 	@Hook(returnCondition = ALWAYS, createMethod = true)
@@ -1173,34 +1178,6 @@ object AlfheimHookHandler {
 			player.dropPlayerItemWithRandomChoice(bottle, false)
 		
 		return true
-	}
-	
-	@JvmStatic
-	@Hook(returnCondition = ALWAYS)
-	fun addBindInfo(static: ItemRelic?, list: List<String>, stack: ItemStack, player: EntityPlayer?) {
-		if (GuiScreen.isShiftKeyDown()) {
-			val bind = ItemRelic.getSoulbindUsernameS(stack)
-			
-			if (bind.isEmpty())
-				ItemRelic.addStringToTooltip(StatCollector.translateToLocal("botaniamisc.relicUnbound"), list)
-			else {
-				ItemRelic.addStringToTooltip(String.format(StatCollector.translateToLocal("botaniamisc.relicSoulbound"), bind), list)
-				
-				if (!ItemRelic.isRightPlayer(player, stack))
-					ItemRelic.addStringToTooltip(String.format(StatCollector.translateToLocal("botaniamisc.notYourSagittarius"), bind), list)
-			}
-			
-			if (stack.item === ModItems.aesirRing)
-				ItemRelic.addStringToTooltip(StatCollector.translateToLocal("botaniamisc.dropIkea"), list)
-			
-			val name = stack.unlocalizedName + ".poem"
-			if (StatCollector.canTranslate("${name}0")) {
-				ItemRelic.addStringToTooltip("", list)
-				
-				for (i in 0..3)
-					ItemRelic.addStringToTooltip(EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal(name + i), list)
-			}
-		} else ItemRelic.addStringToTooltip(StatCollector.translateToLocal("botaniamisc.shiftinfo"), list)
 	}
 	
 	@JvmStatic
@@ -1952,4 +1929,38 @@ object AlfheimHookHandler {
 	@Hook(returnCondition = ON_TRUE)
 	fun damageItem(stack: ItemStack, amount: Int, holder: EntityLivingBase?) =
 		AlfheimConfigHandler.timelessProtection && stack.isItemStackDamageable && ItemNBTHelper.getBoolean(stack, ItemRegenIvy.TAG_REGEN, false) && holder is EntityPlayer && ManaItemHandler.requestManaExactForTool(stack, holder, amount * 100, true)
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE, booleanReturnConstant = false)
+	fun shouldExecute(ai: EntityAIAvoidEntity) = AlfheimConfigHandler.enableElvenStory &&
+	                                             ai.theEntity is EntityOcelot &&
+	                                             ai.targetEntityClass == EntityPlayer::class.java &&
+	                                             (ai.closestLivingEntity as? EntityPlayer)?.race == EnumRace.CAITSITH
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS, injectOnExit = true)
+	fun getFloatTemperature(biome: BiomeGenBase, x: Int, y: Int, z: Int, @ReturnValue result: Float): Float {
+		return when {
+			winter -> -1.5f
+			summer -> 1.5f
+			else   -> result
+		}
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS, createMethod = true)
+	fun onBlockClicked(block: BlockPlatform, world: World, x: Int, y: Int, z: Int, player: EntityPlayer) {
+		if (world.getBlockMetadata(x, y, z) != 2 || !player.isSneaking || player.heldItem?.item !== ModItems.twigWand || player !is EntityPlayerMP) return
+		world.setBlockToAir(x, y, z)
+		EntityItem(world, x + 0.5, y + 0.5, z + 0.5, ItemStack(block, 1, 2)).spawn()
+	}
+	
+	@JvmStatic
+	@Hook
+	fun readCustomNBT(tile: TileSpecialFlower, nbt: NBTTagCompound) {
+		val tag = TileSpecialFlower.TAG_SUBTILE_NAME
+		if (!nbt.hasKey(tag)) return
+		
+		nbt.setString(SubTileEntity.TAG_TYPE, nbt.getString(tag))
+		nbt.removeTag(tag)
+	}
 }

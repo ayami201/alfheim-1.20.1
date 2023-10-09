@@ -6,19 +6,20 @@ import alexsocol.asjlib.render.*
 import alfheim.AlfheimCore
 import alfheim.api.ModInfo
 import alfheim.api.lib.LibResourceLocations
-import alfheim.client.render.entity.RenderEntityFlugel
+import alfheim.client.render.entity.*
 import alfheim.common.core.handler.*
 import alfheim.common.entity.boss.EntityFlugel
 import alfheim.common.item.material.ItemElvenResource
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.texture.TextureMap
-import net.minecraft.entity.*
+import net.minecraft.entity.Entity
 import net.minecraft.util.*
 import net.minecraftforge.client.model.AdvancedModelLoader
 import org.lwjgl.opengl.GL11.*
+import vazkii.botania.api.item.IBaubleRender
 import vazkii.botania.common.item.equipment.bauble.ItemFlightTiara
-import kotlin.math.sin
+import kotlin.math.*
 
 object ModelEntityFlugel: ModelBipedNew() {
 	
@@ -26,6 +27,8 @@ object ModelEntityFlugel: ModelBipedNew() {
 	val model2 = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/Miku2.obj"))!!
 	
 	override fun render(entity: Entity, time: Float, amplitude: Float, ticksExisted: Float, yawHead: Float, pitchHead: Float, size: Float) {
+		entity as EntityFlugel
+		
 		if (entity.dataWatcher?.getWatchableObjectString(10) == "Hatsune Miku") {
 			chest.showModel = !HELLISH_VACATION
 			rightglove.showModel = !HELLISH_VACATION
@@ -46,7 +49,7 @@ object ModelEntityFlugel: ModelBipedNew() {
 				glPopMatrix()
 			}
 			
-			if (entity is EntityLivingBase && model2 != null) {
+			if (model2 != null) {
 				glPushMatrix()
 				glRotated(ASJRenderHelper.interpolate(entity.prevRenderYawOffset.D, entity.renderYawOffset.D), 0.0, -1.0, 0.0)
 				glRotated(ASJRenderHelper.interpolate(entity.prevRotationYawHead.D, entity.rotationYawHead.D) - 270, 0.0, 1.0, 0.0)
@@ -58,6 +61,24 @@ object ModelEntityFlugel: ModelBipedNew() {
 			}
 			
 			mc.renderEngine.bindTexture(LibResourceLocations.miku0)
+			
+			(if (HELLISH_VACATION) RenderBooba.model1 else RenderBooba.model2)?.let {
+				glPushMatrix()
+				glScaled(0.0625)
+				glRotatef(180f, 0f, 1f, 0f)
+				glTranslatef(0f, 4.1f, 1.5f)
+				glRotatef(180f, 0f, 0f, 1f)
+				glRotatef(-Math.toDegrees(sin(sqrt(entity.getSwingProgress(mc.timer.renderPartialTicks)) * Math.PI * 2) * 0.2).F, 0f, 1f, 0f)
+				
+				if (entity.isSneaking) {
+					IBaubleRender.Helper.applySneakingRotation()
+					glTranslatef(0f, -1f, -0.5f)
+				}
+				
+				it.renderAll()
+				glPopMatrix()
+			}
+			
 			super.render(entity, time, amplitude, ticksExisted, yawHead, pitchHead, size)
 			glDisable(GL_BLEND)
 			
@@ -88,6 +109,24 @@ object ModelEntityFlugel: ModelBipedNew() {
 			glPopMatrix()
 			
 			return
+		}
+		
+		RenderBooba.model1?.let {
+			glPushMatrix()
+			glScaled(0.0625)
+			glRotatef(180f, 0f, 1f, 0f)
+			glTranslatef(0f, 4.1f, 2f)
+			glRotatef(180f, 0f, 0f, 1f)
+			glRotatef(-Math.toDegrees(sin(sqrt(entity.getSwingProgress(mc.timer.renderPartialTicks)) * Math.PI * 2) * 0.2).F, 0f, 1f, 0f)
+			
+			if (entity.isSneaking) {
+				IBaubleRender.Helper.applySneakingRotation()
+				glTranslatef(0f, -1f, -0.5f)
+			}
+			
+			mc.renderEngine.bindTexture(if (entity.isUltraMode) LibResourceLocations.jibrilDark else LibResourceLocations.jibril)
+			it.renderAll()
+			glPopMatrix()
 		}
 		
 		super.render(entity, time, amplitude, ticksExisted, yawHead, pitchHead, size) // ItemFlightTiara

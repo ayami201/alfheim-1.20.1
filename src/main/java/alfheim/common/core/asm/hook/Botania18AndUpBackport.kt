@@ -25,6 +25,7 @@ import net.minecraft.item.*
 import net.minecraft.potion.*
 import net.minecraft.util.*
 import net.minecraft.world.*
+import vazkii.botania.api.item.IRelic
 import vazkii.botania.client.core.proxy.ClientProxy
 import vazkii.botania.common.block.ModBlocks
 import vazkii.botania.common.block.subtile.functional.*
@@ -203,16 +204,18 @@ object Botania18AndUpBackport {
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS) // fuck it, I'll just overwrite that shit
 	fun onItemRightClick(dice: ItemDice, stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
-		if (!ItemRelic.isRightPlayer(player, stack) || player.worldObj.isRemote) return stack
+		if (player.worldObj.isRemote) return stack
 		
 		var relic = ItemDice.SIDES_FOR_MOON_PHASES[world.provider.getMoonPhase(world.worldTime)]
+		
 		if (dice.hasRelicAlready(player, relic)) {
-			val possible = java.util.ArrayList<Int>()
-			val alreadyHas = java.util.ArrayList<Int>()
+			val possible = ArrayList<Int>()
+			val alreadyHas = ArrayList<Int>()
 			for (i in 0..5) (if (dice.hasRelicAlready(player, i)) alreadyHas else possible).add(i)
 			if (alreadyHas.size > 0) possible.add(alreadyHas.random(world.rand)!!)
 			relic = possible.random(world.rand)!!
 		}
+		
 		world.playSoundAtEntity(player, "random.bow", 0.5f, 0.4f / (world.rand.nextFloat() * 0.4f + 0.8f))
 		if (dice.hasRelicAlready(player, relic)) {
 			val s = if (DiceDropsHelper.addRewards(player, relic)) "botaniamisc.diceRoll" else "botaniamisc.dudDiceRoll"
@@ -220,8 +223,12 @@ object Botania18AndUpBackport {
 			stack.stackSize--
 			return stack
 		}
+		
 		player.addChatMessage(ChatComponentTranslation("botaniamisc.diceRoll", relic + 1).setChatStyle(ChatStyle().setColor(EnumChatFormatting.DARK_GREEN)))
-		return ItemDice.relicStacks[relic].copy()
+		val newRelic = ItemDice.relicStacks[relic].copy()
+		
+		(newRelic?.item as? IRelic)?.bindAchievement?.let { player.triggerAchievement(it) }
+		return newRelic
 	}
 	
 	// ######## https://botaniamod.net/changelog.html#r1-8-311-fake #4

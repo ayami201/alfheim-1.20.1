@@ -7,11 +7,13 @@ import alfheim.api.AlfheimAPI.addPink
 import alfheim.api.AlfheimAPI.registerAnomaly
 import alfheim.api.AlfheimAPI.registerSpell
 import alfheim.api.block.tile.SubTileAnomalyBase.EnumAnomalyRarity.*
+import alfheim.api.entity.IAlfheimMob
 import alfheim.common.block.*
 import alfheim.common.block.tile.*
+import alfheim.common.block.tile.TileChair.Companion.EntitySit
 import alfheim.common.block.tile.corporea.*
 import alfheim.common.block.tile.sub.anomaly.*
-import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.handler.*
 import alfheim.common.entity.*
 import alfheim.common.entity.boss.*
 import alfheim.common.entity.boss.primal.*
@@ -31,6 +33,8 @@ import alfheim.common.spell.sound.*
 import alfheim.common.spell.tech.*
 import alfheim.common.spell.water.*
 import alfheim.common.spell.wind.*
+import alfheim.common.world.dim.alfheim.biome.*
+import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim.Companion.addEntry
 import cpw.mods.fml.common.registry.EntityRegistry
 import cpw.mods.fml.common.registry.GameRegistry.registerTileEntity
 import net.minecraft.entity.*
@@ -62,11 +66,28 @@ object AlfheimRegistry {
 		if (AlfheimConfigHandler.looniumOverseed)
 			BotaniaAPI.looniumBlacklist.remove(ModItems.overgrowthSeed)
 		
-		val (w, n, x) = AlfheimConfigHandler.voidCreeper
-		
-		EntityRegistry.addSpawn(EntityVoidCreeper::class.java, w, n, x, EnumCreatureType.monster, *BiomeGenBase.getBiomeGenArray().filter { it != null && it.biomeID !in AlfheimConfigHandler.voidCreepBiomeBlackList }.toTypedArray())
-		
+		registerSpawns()
 		registerFlowerOres()
+		
+		AnomalyHarvesterBehaviors
+	}
+	
+	private fun registerSpawns() {
+		addAllSpawn(EntityElementalSlime::class.java, AlfheimConfigHandler.elementalSlime, AlfheimConfigHandler.elementalSlimeBiomeBlackList)
+		addAllSpawn(EntityVoidCreeper::class.java, AlfheimConfigHandler.voidCreeper, AlfheimConfigHandler.voidCreeperBiomeBlackList)
+		
+		if (HELLISH_VACATION) {
+			arrayOf(BiomeBeach, BiomeSandbank, BiomeGenBase.jungle, BiomeGenBase.jungleEdge, BiomeGenBase.jungleHills, BiomeGenBase.beach).forEach {
+				it.addEntry(EntityRollingMelon::class.java, AlfheimConfigHandler.pixieSpawn.map { v -> v * 4 }.toIntArray())
+			}
+			
+			BiomeGenBase.hell.getSpawnableList(EnumCreatureType.monster).add(BiomeGenBase.SpawnListEntry(EntityMuspelson::class.java, 20, 4, 4))
+		}
+	}
+	
+	private fun addAllSpawn(clazz: Class<out EntityLiving>, data: IntArray, blacklist: IntArray) {
+		val (w, n, x) = data
+		EntityRegistry.addSpawn(clazz, w, n, x, EnumCreatureType.monster, *BiomeGenBase.getBiomeGenArray().filter { it != null && it.biomeID !in blacklist }.toTypedArray())
 	}
 	
 	private fun registerPotions() {
@@ -74,6 +95,7 @@ object AlfheimRegistry {
 		PotionBerserk
 		PotionBleeding
 		PotionButterShield
+		PotionChampagne
 		PotionDeathMark
 		PotionAlfheim(AlfheimConfigHandler.potionIDDecay, "decay", true, 0x553355)
 		PotionEternity
@@ -95,6 +117,7 @@ object AlfheimRegistry {
 		PotionTank
 		PotionThrow
 		PotionWellOLife
+		PotionWhiteWine.eventForge()
 		PotionAlfheim(AlfheimConfigHandler.potionIDWisdom, "wisdom", false, 0xFFC880)
 		PotionWTFBerry0 // barrier
 		PotionWTFBerry2 // redstone
@@ -109,10 +132,12 @@ object AlfheimRegistry {
 	private fun registerEntities() {
 		registerEntity(EntityButterfly::class.java, "Butterfly", nextEntityID, 0, -1)
 		registerEntity(EntityDedMoroz::class.java, "DedMoroz", nextEntityID)
+		registerEntity(EntityElementalSlime::class.java, "ElementalSlime", nextEntityID, -1, 0x7EBF6E)
 		registerEntity(EntityElf::class.java, "Elf", nextEntityID, 0x1A660A, 0x4D3422)
 		registerEntity(EntityFireSpirit::class.java, "FireSpirit", nextEntityID)
 		registerEntity(EntityFenrir::class.java, "Fenrir", nextEntityID)
 		registerEntity(EntityFlugel::class.java, "Flugel", nextEntityID)
+		registerEntity(EntityFrozenViking::class.java, "FrozenViking", nextEntityID, 0x26DBFF, 0x2D86B3)
 		registerEntity(EntityGrieferCreeper::class.java, "GrieferCreeper", nextEntityID, 0xFFFFFF, 0)
 		registerEntity(EntityJellyfish::class.java, "Jellyfish", nextEntityID, 0xFFFFFF, -1)
 		registerEntity(EntityLolicorn::class.java, "Lolicorn", nextEntityID)
@@ -120,6 +145,7 @@ object AlfheimRegistry {
 		registerEntity(EntityAlfheimPixie::class.java, "Pixie", nextEntityID, 0xFF76D6, 0xFFE3FF)
 		registerEntity(EntityRollingMelon::class.java, "RollingMelon", nextEntityID, 0xBECB25, 0x5B751A)
 		registerEntity(EntityRook::class.java, "Rook", nextEntityID)
+		registerEntity(EntitySit::class.java, "Sit", nextEntityID)
 		registerEntity(EntitySnowSprite::class.java, "SnowSprite", nextEntityID, 0xEEFFFF, 0xE3F3F3)
 		registerEntity(EntitySurtr::class.java, "Surtr", nextEntityID)
 		registerEntity(EntityThrym::class.java, "Thrym", nextEntityID)
@@ -182,61 +208,69 @@ object AlfheimRegistry {
 	 * @param color1 Egg color
 	 * @param color2 Dots color
 	 */
-	fun registerEntity(entityClass: Class<out Entity>, name: String, id: Int, color1: Int, color2: Int) {
+	fun <T> registerEntity(entityClass: Class<T>, name: String, id: Int, color1: Int, color2: Int) where T: Entity, T: IAlfheimMob {
 		ItemSpawnEgg.addMapping(entityClass, color1, color2)
 		registerEntity(entityClass, name, id)
 	}
 	
 	private fun registerTileEntities() {
-		registerTile(TileAlfheimPortal::class.java, "AlfheimPortal")
-		registerTile(TileAlfheimPylon::class.java, "AlfheimPylon")
-		registerTile(TileAnimatedTorch::class.java, "AnimatedTorch")
-		registerTile(TileAnomaly::class.java, "Anomaly")
-		registerTile(TileAnomalyHarvester::class.java, "AnomalyHarvester")
-		registerTile(TileAnyavil::class.java, "Anyavil")
-		registerTile(TileBarrel::class.java, "Barrel")
-		registerTile(TileBottomlessChest::class.java, "BottomlessChest")
-		registerTile(TileCorporeaAutocrafter::class.java, "CorporeaAutocrafter")
-		registerTile(TileCorporeaInjector::class.java, "CorporeaInjector")
-		registerTile(TileCorporeaRat::class.java, "CorporeaRat")
-		registerTile(TileCorporeaSparkBase::class.java, "CorporeaSparkBase")
-		registerTile(TileDomainLobby::class.java, "DomainLobby")
-		registerTile(TileEnderActuator::class.java, "EnderActuator")
-		registerTile(TileFloatingFlowerRainbow::class.java, "miniIslandRainbow")
-		registerTile(TileHeadFlugel::class.java, "HeadFlugel")
-		registerTile(TileHeadMiku::class.java, "HeadMiku")
-		registerTile(TileIcyGeyser::class.java, "IcyGeyser")
-		registerTile(TileManaAccelerator::class.java, "ItemHolder")
-		registerTile(TileManaInfuser::class.java, "ManaInfuser")
-		registerTile(TileManaTuner::class.java, "ManaTuner")
-		registerTile(TilePowerStone::class.java, "PowerStone")
-		registerTile(TileRaceSelector::class.java, "RaceSelector")
-		registerTile(TileRealityAnchor::class.java, "RealityAnchor")
-		registerTile(TileRedstoneRelay::class.java, "RedstoneRelay")
-		registerTile(TileRift::class.java, "Rift")
-		registerTile(TileSpire::class.java, "Spire")
-		registerTile(TileTradePortal::class.java, "TradePortal")
-		registerTile(TileTreeBerry::class.java, "TreeBerry")
-		registerTile(TileVafthrudnirSoul::class.java, "VafthrudnirSoul")
-		registerTile(TileYggFlower::class.java, "YggFlower")
+		registerTile<TileAlfheimPortal>("AlfheimPortal")
+		registerTile<TileAlfheimPylon>("AlfheimPylon")
+		registerTile<TileAnimatedTorch>("AnimatedTorch")
+		registerTile<TileAnomaly>("Anomaly")
+		registerTile<TileAnomalyHarvester>("AnomalyHarvester")
+		registerTile<TileAnyavil>("Anyavil")
+		registerTile<TileBarrel>("Barrel")
+		registerTile<TileBottomlessChest>("BottomlessChest")
+		registerTile<TileChair>("Chair")
+		registerTile<TileComposite>("Composite")
+		registerTile<TileCorporeaAutocrafter>("CorporeaAutocrafter")
+		registerTile<TileCorporeaInjector>("CorporeaInjector")
+		registerTile<TileCorporeaRat>("CorporeaRat")
+		registerTile<TileCorporeaSparkBase>("CorporeaSparkBase")
+		registerTile<TileCurtainPlacer>("CurtainPlacer")
+		registerTile<TileDomainLobby>("DomainLobby")
+		registerTile<TileDoubleBlock>("DoubleBlock")
+		registerTile<TileEnderActuator>("EnderActuator")
+		registerTile<TileFloatingFlowerRainbow>("miniIslandRainbow")
+		registerTile<TileFloodLight>("FloodLight")
+		registerTile<TileHeadFlugel>("HeadFlugel")
+		registerTile<TileHeadMiku>("HeadMiku")
+		registerTile<TileGaiaButton>("GaiaButton")
+		registerTile<TileIcyGeyser>("IcyGeyser")
+		registerTile<TileManaAccelerator>("ItemHolder")
+		registerTile<TileManaInfuser>("ManaInfuser")
+		registerTile<TileManaTuner>("ManaTuner")
+		registerTile<TilePowerStone>("PowerStone")
+		registerTile<TileRaceSelector>("RaceSelector")
+		registerTile<TileRealityAnchor>("RealityAnchor")
+		registerTile<TileRedstoneRelay>("RedstoneRelay")
+		registerTile<TileRift>("Rift")
+		registerTile<TileSecretGlass>("SecretGlass")
+		registerTile<TileSpire>("Spire")
+		registerTile<TileTable>("Table")
+		registerTile<TileTradePortal>("TradePortal")
+		registerTile<TileTreeBerry>("TreeBerry")
+		registerTile<TileVafthrudnirSoul>("VafthrudnirSoul")
+		registerTile<TileYggFlower>("YggFlower")
 		
 		registerAnomalies()
 		
-		registerTile(TileCracklingStar::class.java, "StarPlacer2")
-		registerTile(TileStar::class.java, "StarPlacer")
-		registerTile(TileItemDisplay::class.java, "ItemDisplay")
-		registerTile(TileLightningRod::class.java, "RodLightning")
-		registerTile(TileLivingwoodFunnel::class.java, "LivingwoodFunnel")
-		registerTile(TileRainbowManaFlame::class.java, "ManaFlame")
-		registerTile(TileSchemaController::class.java, "SchemaController")
-		registerTile(TileSchemaAnnihilator::class.java, "SchemaAnnihilator")
-		registerTile(TileTreeCook::class.java, "TreeCook")
-		registerTile(TileTreeCrafter::class.java, "TreeCrafter")
-		registerTile(TileTreeWind::class.java, "TreeWind")
+		registerTile<TileCracklingStar>("StarPlacer2")
+		registerTile<TileStar>("StarPlacer")
+		registerTile<TileItemDisplay>("ItemDisplay")
+		registerTile<TileLightningRod>("RodLightning")
+		registerTile<TileLivingwoodFunnel>("LivingwoodFunnel")
+		registerTile<TileRainbowManaFlame>("ManaFlame")
+		registerTile<TileSchemaController>("SchemaController")
+		registerTile<TileSchemaAnnihilator>("SchemaAnnihilator")
+		registerTile<TileTreeCook>("TreeCook")
+		registerTile<TileTreeCrafter>("TreeCrafter")
+		registerTile<TileTreeWind>("TreeWind")
 	}
 	
-	private fun registerTile(tileEntityClass: Class<out TileEntity>, id: String) {
-		registerTileEntity(tileEntityClass, "${ModInfo.MODID}:$id")
+	private inline fun <reified T: TileEntity> registerTile(id: String) {
+		registerTileEntity(T::class.java, "${ModInfo.MODID}:$id")
 	}
 	
 	private fun registerAnomalies() {

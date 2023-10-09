@@ -6,11 +6,11 @@ import alfheim.api.ModInfo
 import alfheim.api.lib.LibResourceLocations
 import alfheim.api.lib.LibResourceLocations.ResourceLocationIL
 import alfheim.client.model.entity.*
-import alfheim.client.model.item.ModelAkashicBox
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
 import alfheim.common.item.material.ItemElvenResource
 import baubles.common.lib.PlayerHandler
+import net.minecraft.client.model.ModelBook
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.entity.player.EntityPlayer
@@ -22,6 +22,7 @@ import net.minecraftforge.client.model.AdvancedModelLoader
 import org.lwjgl.opengl.GL11.*
 import vazkii.botania.api.item.IBaubleRender
 import vazkii.botania.api.item.IBaubleRender.Helper
+import vazkii.botania.client.core.handler.ClientTickHandler
 import vazkii.botania.common.Botania
 import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.item.equipment.bauble.ItemFlightTiara
@@ -31,8 +32,9 @@ import kotlin.math.sin
 object RenderContributors {
 	
 	val auraTextures: Map<String, ResourceLocation> by lazy { ContributorsPrivacyHelper.auras.map { (k, v) -> k to ResourceLocationIL(ModInfo.MODID, "textures/model/entity/auras/$v.png") }.toMap() }
-	val book = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/mudrbook.obj"))
+	val book by lazy { if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/mudrbook.obj")) }
 	val so = ShadedObjectHaloPlane(LibResourceLocations.babylon)
+	val modelBook = ModelBook()
 	
 	fun render(e: RenderPlayerEvent.Specials.Post, player: EntityPlayer) {
 		if (player.isInvisible || player.isInvisibleToPlayer(mc.thePlayer) || player.isPotionActive(Potion.invisibility)) return
@@ -52,11 +54,11 @@ object RenderContributors {
 			
 			run { // babylon circle
 				glPushMatrix()
-				glRotated(90.0, 1.0, 0.0, 0.0)
+				glRotatef(90f, 1f, 0f, 0f)
 				Helper.rotateIfSneaking(player)
 				glTranslated(0.0, 0.15, -0.25)
 				
-				glRotated(mc.theWorld.totalWorldTime / 2.0 + mc.timer.renderPartialTicks, 0.0, 1.0, 0.0)
+				glRotatef(ClientTickHandler.total / 2, 0f, 1f, 0f)
 				glScaled(0.2)
 				
 				so.addTranslation()
@@ -80,7 +82,7 @@ object RenderContributors {
 				glPushMatrix()
 				glEnable(GL_BLEND)
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-				glColor4d(1.0, 1.0, 1.0, 1.0)
+				glColor4f(1f, 1f, 1f, 1f)
 				
 				val lastX = OpenGlHelper.lastBrightnessX
 				val lastY = OpenGlHelper.lastBrightnessY
@@ -115,7 +117,7 @@ object RenderContributors {
 				
 				glDisable(GL_BLEND)
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastX, lastY)
-				glColor4d(1.0, 1.0, 1.0, 1.0)
+				glColor4f(1f, 1f, 1f, 1f)
 				glPopMatrix()
 			}
 		}
@@ -125,14 +127,14 @@ object RenderContributors {
 			
 			glPushMatrix()
 			glEnable(GL_CULL_FACE)
-			val t = sin((mc.theWorld.totalWorldTime + mc.timer.renderPartialTicks) / 10.0)
+			val t = sin(ClientTickHandler.total / 10)
 			
-			glTranslated(0.0, -(0.9 + t * 0.05), 0.0)
-			glRotated(180.0, 1.0, 0.0, 0.0)
-			glRotated(-90.0, 0.0, 1.0, 0.0)
-			glRotated(60.0, 0.0, 0.0, 1.0)
+			glTranslatef(0f, -0.9f + t * 0.05f, 0f)
+			glRotatef(180f, 1f, 0f, 0f)
+			glRotatef(-90f, 0f, 1f, 0f)
+			glRotatef(60f, 0f, 0f, 1f)
 			mc.renderEngine.bindTexture(LibResourceLocations.lexica)
-			ModelAkashicBox.bookModel.render(null, 0f, 0.075f + (t * 0.025).F, 0.925f - (t * 0.025).F, 1f, 0f, 0.0625f)
+			modelBook.render(null, 0f, 0.075f + t * 0.025f, 0.925f - t * 0.025f, 1f, 0f, 0.0625f)
 			glPopMatrix()
 		}
 		
@@ -154,8 +156,8 @@ object RenderContributors {
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f)
 			glShadeModel(GL_SMOOTH)
 			
-			glTranslated(0.0, 1.35, 0.0)
-			glRotated(mc.theWorld.totalWorldTime / 2.0 + mc.timer.renderPartialTicks, 0.0, 1.0, 0.0)
+			glTranslatef(0f, 1.35f, 0f)
+			glRotatef(ClientTickHandler.total / 2, 0f, 1f, 0f)
 			glScalef(player.width * 10 / 3)
 			
 			ASJRenderHelper.glColor1u(Color.HSBtoRGB(Botania.proxy.worldElapsedTicks * 2 % 360 / 360f, 1f, 1f))
@@ -202,7 +204,7 @@ object RenderContributors {
 			glRotatef(yaw - 270, 0f, 1f, 0f)
 			glRotatef(pitch, 0f, 0f, 1f)
 			
-			glRotated(-90.0, 0.0, 1.0, 0.0)
+			glRotatef(-90f, 0f, 1f, 0f)
 			mc.renderEngine.bindTexture(LibResourceLocations.miko2)
 			ModelEntityFlugel.model2.renderAll()
 			glPopMatrix()
@@ -228,13 +230,13 @@ object RenderContributors {
 			
 			glRotatef(180f, 1f, 0f, 0f)
 			glTranslated(-0.5, 1.0, 0.5)
-			glRotatef(mc.theWorld.totalWorldTime % 360f, 0f, 1f, 0f)
-			// glTranslatef(0f, sin(mc.theWorld.totalWorldTime / 16f % 360f) / 10, 0f)
+			glRotatef(ClientTickHandler.total, 0f, 1f, 0f)
+			// glTranslatef(0f, sin(ClientTickHandler.total / 16) / 10, 0f)
 			glTranslated(-0.45, -0.55, 0.4)
 			
 			glScaled(0.1)
 			mc.renderEngine.bindTexture(LibResourceLocations.palette)
-			book.renderAll()
+			book!!.renderAll()
 			glPopMatrix()
 		}
 		

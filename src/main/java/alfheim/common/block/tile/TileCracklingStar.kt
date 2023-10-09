@@ -11,7 +11,14 @@ import java.util.*
 
 class TileCracklingStar: ASJTile() {
 	
-	var pos: Vector3 = Vector3(0.0, -1.0, 0.0)
+	var posAbsolute = vecUnbound.copy()
+		set(value) {
+			field = value
+			posRelative = value.copy().sub(xCoord, yCoord, zCoord)
+		}
+	
+	var posRelative = Vector3()
+	
 	val rand = Random()
 	
 	private val TAG_COLOR = "color"
@@ -22,21 +29,20 @@ class TileCracklingStar: ASJTile() {
 	override fun writeCustomNBT(nbt: NBTTagCompound) {
 		nbt.setInteger(TAG_COLOR, color)
 		nbt.setFloat(TAG_SIZE, size)
-		nbt.setDouble("toX", pos.x)
-		nbt.setDouble("toY", pos.y)
-		nbt.setDouble("toZ", pos.z)
+		nbt.setDouble("relX", posRelative.x)
+		nbt.setDouble("relY", posRelative.y)
+		nbt.setDouble("relZ", posRelative.z)
 	}
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
 		color = nbt.getInteger(TAG_COLOR)
 		size = nbt.getFloat(TAG_SIZE)
-		pos = Vector3(nbt.getDouble("toX"), nbt.getDouble("toY"), nbt.getDouble("toZ"))
+		posRelative = Vector3(nbt.getDouble("relX"), nbt.getDouble("relY"), nbt.getDouble("relZ"))
+		posAbsolute = posRelative.copy().add(xCoord, yCoord, zCoord)
 	}
 	
 	fun getLightColor(): Int {
-		val r = (color shr 16 and 255).F / 255f
-		val g = (color shr 8 and 255).F / 255f
-		val b = (color and 255).F / 255f
+		val (r, g, b) = Color(color).getRGBColorComponents(null)
 		return ColoredLightHelper.makeRGBLightValue(r, g, b, 1f)
 	}
 	
@@ -44,18 +50,18 @@ class TileCracklingStar: ASJTile() {
 		if (worldObj.isRemote) {
 			val cur = Vector3.fromTileEntity(this)
 			
-			if (pos.y != -1.0 && pos != cur) {
-				val vec = Vector3(pos).sub(Vector3.fromTileEntity(this))
+			if (posAbsolute != vecUnbound && posAbsolute != cur) {
+				val vec = posAbsolute.copy().sub(Vector3.fromTileEntity(this))
 				wispLine(Vector3.fromTileEntity(this).add(0.5 + (Math.random() - 0.5) * 0.05, 0.5 + (Math.random() - 0.5) * 0.05, 0.5 + (Math.random() - 0.5) * 0.05), vec, colorFromInt(color), Math.random() * 6.0, 10)
-				wispLine(Vector3(pos).add(0.5 + (Math.random() - 0.5) * 0.05, 0.5 + (Math.random() - 0.5) * 0.05, 0.5 + (Math.random() - 0.5) * 0.05), vec.negate(), colorFromInt(color), Math.random() * 6.0, 10)
+				wispLine(posAbsolute.copy().add(0.5 + (Math.random() - 0.5) * 0.05, 0.5 + (Math.random() - 0.5) * 0.05, 0.5 + (Math.random() - 0.5) * 0.05), vec.negate(), colorFromInt(color), Math.random() * 6.0, 10)
 			} else {
 				val c = Color(colorFromIntAndPos(color, cur))
 				Botania.proxy.wispFX(worldObj, cur.x + 0.5, cur.y + 0.5, cur.z + 0.5, c.red / 255f, c.green / 255f, c.blue / 255f, 0.25f)
 			}
 		} else {
-			val other = worldObj.getTileEntity(pos.x.mfloor(), pos.y.mfloor(), pos.z.mfloor()) as? TileCracklingStar
+			val other = worldObj.getTileEntity(posAbsolute.x.mfloor(), posAbsolute.y.mfloor(), posAbsolute.z.mfloor()) as? TileCracklingStar
 			if (other == null) {
-				pos.set(0, -1, 0)
+				posAbsolute = vecUnbound.copy()
 				ASJUtilities.dispatchTEToNearbyPlayers(this)
 			}
 		}
@@ -90,5 +96,9 @@ class TileCracklingStar: ASJTile() {
 			
 			Botania.proxy.wispFX(worldObj, x, y, z, r, g, b, time * 0.0125f)
 		}
+	}
+	
+	companion object {
+		val vecUnbound = Vector3(0, 1, 0)
 	}
 }

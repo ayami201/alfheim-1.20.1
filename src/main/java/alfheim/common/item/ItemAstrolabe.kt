@@ -82,7 +82,7 @@ class ItemAstrolabe: ItemMod("Astrolabe") {
 		if (!ManaItemHandler.requestManaExact(requestor, player, 320, true)) return
 		
 		val world = player.worldObj
-		val block = blockToPlace.item.toBlock() ?: return
+		val block = blockToPlace.block
 		val meta = blockToPlace.meta
 		
 		if (InteractionSecurity.isPlacementBanned(player, x, y, z, world, block, meta)) return

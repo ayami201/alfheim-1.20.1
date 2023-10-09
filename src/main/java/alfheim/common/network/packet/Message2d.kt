@@ -1,7 +1,6 @@
 package alfheim.common.network.packet
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.AlfheimAPI
 import alfheim.api.entity.*
 import alfheim.api.network.AlfheimPacket
@@ -13,7 +12,8 @@ import alfheim.common.entity.spell.EntitySpellFireball
 import alfheim.common.network.M2d
 import net.minecraft.entity.EntityLivingBase
 
-class Message2d(ty: M2d, var data1: Double, var data2: Double, var type: Int = ty.ordinal) : ASJPacket(), AlfheimPacket<Message2d> {
+class Message2d(ty: M2d, var data1: Double, var data2: Double, var type: Int = ty.ordinal): AlfheimPacket<Message2d>() {
+	
 	override fun handleClient() {
 		when (M2d.entries[type]) {
 			M2d.ATTRIBUTE -> {

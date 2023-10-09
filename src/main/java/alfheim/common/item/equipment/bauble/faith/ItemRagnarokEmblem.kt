@@ -120,7 +120,7 @@ class ItemRagnarokEmblem: ItemBauble("aesirEmblemWeak"), IBaubleRender, IManaDis
 				val slot = ASJUtilities.getSlotWithItem(it, player.inventory)
 				if (slot == -1) return@any false
 				val relic = player.inventory[slot]
-				relic != null && ItemRelic.isRightPlayer(player, relic)
+				relic != null
 			}) {
 			
 			stack.instability++

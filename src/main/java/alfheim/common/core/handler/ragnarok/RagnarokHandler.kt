@@ -5,7 +5,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.patcher.event.*
 import alfheim.AlfheimCore
-import alfheim.api.*
+import alfheim.api.ModInfo
 import alfheim.api.entity.*
 import alfheim.common.block.*
 import alfheim.common.block.tile.TileRealityAnchor
@@ -74,16 +74,17 @@ object RagnarokHandler {
 	
 	var winter = false
 		set(value) {
-			BiomeAlfheim.alfheimBiomes.forEach { it.temperature = if (value) 0f else 0.5f }
 			field = value
+			BiomeAlfheim.alfheimBiomes.forEach { it.temperature = if (value) -1.5f else if (AlfheimCore.winter) -0.25f else 0.5f }
 		}
 	var winterTicks = 0
 	val MAX_WINTER_TICKS = 20 * 60 * 60 * 24 * if (AlfheimConfigHandler.longSeasons) 3 else 1
 	
 	var summer = false
 		set(value) {
-			BlockSnowGrass.meltDelay = if (value) 1 else 20
 			field = value
+			BlockSnowGrass.meltDelay = if (value) 1 else 20
+			BiomeAlfheim.alfheimBiomes.forEach { it.temperature = if (value) 1.5f else if (AlfheimCore.winter) -0.25f else 0.5f }
 		}
 	var summerTicks = 0
 	val MAX_SUMMER_TICKS = 20 * 60 * 60 * 24 * if (AlfheimConfigHandler.longSeasons) 3 else 1

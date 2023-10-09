@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.AlfheimAPI
 import alfheim.api.item.ISpeedUpItem
+import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.core.helper.*
 import alfheim.common.core.util.AlfheimTab
 import net.minecraft.enchantment.EnchantmentHelper
@@ -33,8 +34,6 @@ import java.util.*
  */
 class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRelic, ILensEffect, ISpeedUpItem {
 	
-	internal lateinit var achievement: Achievement
-	
 	init {
 		creativeTab = AlfheimTab
 	}
@@ -42,7 +41,7 @@ class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRel
 	override fun onUpdate(stack: ItemStack, world: World, player: Entity?, slotID: Int, inHand: Boolean) {
 		if (player !is EntityPlayer) return
 		ItemRelic.updateRelic(stack, player)
-		if (!ItemRelic.isRightPlayer(player, stack)) return
+		
 		val haste = player.getActivePotionEffect(Potion.digSpeed.id)
 		val check = if (haste == null) 1f / 6f else if (haste.getAmplifier() == 0) 0.4f else if (haste.getAmplifier() == 2) 1f / 3f else 0.5f
 		if (world.isRemote || !inHand || player.swingProgress != check) return
@@ -52,19 +51,15 @@ class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRel
 	
 	override fun getIsRepairable(stack: ItemStack?, material: ItemStack?) = false
 	
-	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, infoList: List<Any?>, advTooltip: Boolean) =
-		ItemRelic.addBindInfo(infoList, stack, player)
+	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, infoList: List<Any?>, advTooltip: Boolean) = ItemRelic.addBindInfo(infoList, stack, player)
 	
-	override fun bindToUsername(playerName: String, stack: ItemStack) =
-		ItemRelic.bindToUsernameS(playerName, stack)
+	override fun bindToUsername(playerName: String, stack: ItemStack) = ItemRelic.bindToUsernameS(playerName, stack)
 	
 	override fun getSoulbindUsername(stack: ItemStack) = ItemRelic.getSoulbindUsernameS(stack)!!
 	
-	override fun getBindAchievement() = achievement
+	override fun getBindAchievement() = AlfheimAchievements.excaliber
 	
-	override fun setBindAchievement(achievement: Achievement) {
-		this.achievement = achievement
-	}
+	override fun setBindAchievement(achievement: Achievement) = Unit
 	
 	override fun usesMana(stack: ItemStack?) = false
 	
@@ -117,10 +112,12 @@ class ItemExcaliber: ItemManasteelSword(AlfheimAPI.EXCALIBER, "Excaliber"), IRel
 		val home: Entity?
 		if (homeID != -1) {
 			home = burst.worldObj.getEntityByID(homeID)
-			if (home != null) {
+			if (home != null && home.isEntityAlive) {
 				val vecMotion = Vector3.fromEntityCenter(home).sub(Vector3.fromEntityCenter(burst))
 				vecMotion.normalize().mul(Vector3(burst.motionX, burst.motionY, burst.motionZ).length())
 				burst.setMotion(vecMotion.x, vecMotion.y, vecMotion.z)
+			} else {
+				ItemNBTHelper.setInt(stack, TAG_HOME_ID, -1)
 			}
 		}
 		

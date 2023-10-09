@@ -1,6 +1,6 @@
 package alfheim.common.block.colored
 
-import alexsocol.asjlib.toBlock
+import alexsocol.asjlib.*
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.base.*
 import alfheim.common.item.block.ItemColoredSlabMod
@@ -37,7 +37,7 @@ class BlockAuroraWoodSlab(full: Boolean, source: Block = AlfheimBlocks.auroraPla
 	
 	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = (source as ILexiconable).getEntry(world, x, y, z, player, lexicon)!!
 	
-	override fun getBurnTime(fuel: ItemStack) = if (fuel.item.toBlock() === this) if (field_150004_a) 300 else 150 else 0
+	override fun getBurnTime(fuel: ItemStack) = if (fuel.block === this) if (field_150004_a) 300 else 150 else 0
 }
 
 class BlockAuroraWoodStairs(source: Block = AlfheimBlocks.auroraPlanks):

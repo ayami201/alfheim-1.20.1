@@ -3,7 +3,6 @@ package alfheim.common.item
 import alfheim.api.ModInfo
 import alfheim.api.lib.LibOreDict
 import alfheim.common.block.AlfheimBlocks
-import alfheim.common.core.handler.WorkInProgressItemsHandler.WIP
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.*
 import alfheim.common.item.creator.*
@@ -43,6 +42,7 @@ object AlfheimItems {
 	val auraRingGod: Item
 	val auraRingPink: Item
 	val balanceCloak: Item
+	val carver: Item
 	val chalk: Item
 	val cloudPendant: Item
 	val cloudPendantSuper: Item
@@ -179,7 +179,7 @@ object AlfheimItems {
 	val royalStaff: Item
 	
 	init {
-		akashicRecords = ItemAkashicRecords().WIP()
+		akashicRecords = ItemAkashicRecords()
 		aesirCloak = ItemAesirCloak()
 		aesirEmblem = ItemAesirEmblem()
 		armilla = ItemArmilla()
@@ -189,6 +189,7 @@ object AlfheimItems {
 		auraRingGod = ItemAuraRingAlfheim("AuraRingGod", 2)
 		auraRingPink = ItemAuraRingAlfheim("AuraRingPink", 50, 0.075f)
 		balanceCloak = ItemBalanceCloak()
+		carver = ItemCarver()
 		chalk = ItemChalk()
 		cloudPendant = ItemCloudPendant()
 		cloudPendantSuper = ItemCloudPendant("SuperCloudPendant", 3)

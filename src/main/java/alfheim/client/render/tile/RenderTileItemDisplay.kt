@@ -37,7 +37,7 @@ object RenderTileItemDisplay: TileEntitySpecialRenderer() {
 			glTranslatef(0f, 0f, 0.5f)
 			glRotatef(90f, 0f, 1f, 0f)
 			glTranslated(0.0, 0.15 * sin(var27 / 7.5), 0.0)
-			val scale = tile.get(0)
+			val scale = tile[0]
 			
 			if (scale != null) {
 				mc.renderEngine.bindTexture(if (scale.item is ItemBlock) TextureMap.locationBlocksTexture else TextureMap.locationItemsTexture)
@@ -46,13 +46,13 @@ object RenderTileItemDisplay: TileEntitySpecialRenderer() {
 				if (!ForgeHooksClient.renderEntityItem(EntityItem(tile.worldObj, tile.xCoord.D, tile.yCoord.D, tile.zCoord.D, scale), scale, 0f, 0f, tile.worldObj.rand, mc.renderEngine, renderBlocks, 1)) {
 					glTranslatef(-0.25f, 0f, 0f)
 					glScaled(0.5)
-					if (scale.item is ItemBlock && RenderBlocks.renderItemIn3d(scale.item.toBlock()?.renderType ?: 0)) {
+					if (scale.item is ItemBlock && RenderBlocks.renderItemIn3d(scale.block.renderType)) {
 						glScaled(0.5)
 						glTranslatef(1f, 1.1f, 0f)
-						renderBlocks.renderBlockAsItem(scale.item.toBlock(), scale.meta, 1f)
+						renderBlocks.renderBlockAsItem(scale.block, scale.meta, 1f)
 						glTranslatef(-1f, -1.1f, 0f)
 						glScalef(2f)
-					} else if (scale.item is ItemBlock && !RenderBlocks.renderItemIn3d(scale.item.toBlock()?.renderType ?: 0)) {
+					} else if (scale.item is ItemBlock && !RenderBlocks.renderItemIn3d(scale.block.renderType)) {
 						val entityitem: EntityItem?
 						glPushMatrix()
 						

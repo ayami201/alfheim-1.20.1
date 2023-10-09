@@ -6,7 +6,7 @@ import alfheim.api.ModInfo
 import alfheim.api.entity.IMuspelheimEntity
 import alfheim.client.sound.EntityBoundMovingSound
 import alfheim.common.achievement.AlfheimAchievements
-import alfheim.common.core.handler.*
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
@@ -49,7 +49,7 @@ class EntitySurtr(world: World): EntityPrimalBoss(world), IMuspelheimEntity {
 		tasks.addTask(1, SurtrAISecondStageStart(this))
 	}
 	
-	private fun playSounds() {
+	override fun playSounds() {
 		if (!ASJUtilities.isClient || ticksExisted != 1) return
 		
 		mc.soundHandler.playSound(EntityBoundMovingSound(mc.thePlayer, "${ModInfo.MODID}:surtr.wall.exist") {
@@ -67,8 +67,6 @@ class EntitySurtr(world: World): EntityPrimalBoss(world), IMuspelheimEntity {
 	
 	override fun onLivingUpdate() {
 		super.onLivingUpdate()
-		
-		playSounds()
 		
 		if (invulnerabilityTicks > 0) --invulnerabilityTicks
 		

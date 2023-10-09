@@ -13,7 +13,7 @@ import net.minecraft.world.*
 open class EntityItemImmortal: Entity {
 	
 	var age = 0
-	var delayBeforeCanPickup = 30
+	var delayBeforeCanPickup = 0
 	var hoverStart = (Math.random() * Math.PI * 2.0).F
 	var lifespan = 6000
 	

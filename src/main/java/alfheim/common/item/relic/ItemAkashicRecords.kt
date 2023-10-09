@@ -1,30 +1,33 @@
 package alfheim.common.item.relic
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.render.ASJRenderHelper
+import alexsocol.asjlib.math.Vector3
 import alfheim.api.ModInfo
-import alfheim.api.item.relic.record.AkashicRecord
-import alfheim.api.lib.LibResourceLocations
-import alfheim.client.model.item.ModelAkashicBox
+import alfheim.client.gui.ItemsRemainingRenderHandler
+import alfheim.common.block.AlfheimBlocks
+import alfheim.common.block.tile.*
+import alfheim.common.core.asm.hook.AlfheimHookHandler
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.AlfheimItems
-import alfheim.common.item.relic.record.AkashicRecordNewChance
+import alfheim.common.network.*
+import alfheim.common.network.packet.Message0dS
+import alfheim.common.world.data.CustomWorldData.Companion.customData
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.PlayerEvent
-import cpw.mods.fml.relauncher.*
-import net.minecraft.client.renderer.RenderHelper
-import net.minecraft.client.renderer.entity.RenderManager
-import net.minecraft.client.renderer.texture.IIconRegister
+import net.minecraft.client.gui.GuiScreen
 import net.minecraft.entity.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.ResourceLocation
+import net.minecraft.nbt.*
+import net.minecraft.server.MinecraftServer
+import net.minecraft.util.EnumChatFormatting
 import net.minecraft.world.World
-import net.minecraftforge.client.event.RenderWorldLastEvent
+import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.common.util.Constants
 import net.minecraftforge.event.entity.item.ItemTossEvent
-import org.lwjgl.opengl.GL11.*
-import org.lwjgl.opengl.GL12
-import vazkii.botania.api.mana.ManaItemHandler
+import org.lwjgl.input.Mouse
+import vazkii.botania.api.item.IRelic
 import vazkii.botania.common.core.helper.ItemNBTHelper.*
 import vazkii.botania.common.item.relic.ItemRelic
 import kotlin.math.max
@@ -32,44 +35,74 @@ import kotlin.math.max
 class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 	
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
-		// ASJUtilities.chatLog("Set in use")
-		player.setItemInUse(stack, getMaxItemUseDuration(stack))
+		if (player.isSneaking) {
+			setBoolean(stack, TAG_SWITCH, true)
+			return stack
+		}
+		
+		if (!isOpen(stack) || world.isRemote) return stack
+		if (player.dimension == AlfheimConfigHandler.dimensionIDDomains) return stack
+		
+		val cd = MinecraftServer.getServer().worldServerForDimension(0).customData
+		val akashas = cd.nbtData.tagMap.computeIfAbsent(TAG_AKASHAS) { NBTTagCompound() } as NBTTagCompound
+		
+		val nbt = akashas.tagMap.computeIfAbsent(player.commandSenderName) {
+			val nbt = NBTTagCompound()
+			val x = AlfheimConfigHandler.domainStartX - AlfheimConfigHandler.domainDistance
+			var z = AlfheimConfigHandler.domainStartZ
+			val dimWorld = MinecraftServer.getServer().worldServerForDimension(AlfheimConfigHandler.dimensionIDDomains)
+			while (!dimWorld.isAirBlock(x, 0, z)) z += AlfheimConfigHandler.domainDistance
+			
+			nbt.setInteger("x", x)
+			nbt.setInteger("z", z)
+			
+			dimWorld.setBlock(x, 0, z, AlfheimBlocks.barrier)
+			
+			for (i in 0.bidiRange(16))
+				for (j in 16..48)
+					for (k in 0.bidiRange(16))
+						if (i == -16 || i == 16 || j == 16 || j == 48 || k == -16 || k == 16)
+							dimWorld.setBlock(x + i, j, z + k, AlfheimBlocks.altPlanks, 6, 0)
+			
+			dimWorld.setBlock(x, 16, z, AlfheimBlocks.domainDoor, 1, 0)
+			
+			cd.markDirty()
+			
+			nbt
+		} as NBTTagCompound
+		
+		val (i, j, k) = Vector3.fromEntity(player).mf()
+		player.persistentData.setIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE, intArrayOf(i, j, k, player.dimension))
+		val x = nbt.getInteger("x") + 0.5
+		val y = 17.0
+		val z = nbt.getInteger("z") + 0.5
+		
+		AlfheimHookHandler.allowtp = true
+		ASJUtilities.sendToDimensionWithoutPortal(player, AlfheimConfigHandler.dimensionIDDomains, x, y, z)
+		
 		return stack
 	}
 	
-	override fun onUsingTick(stack: ItemStack, player: EntityPlayer, left: Int) {
-		// ASJUtilities.chatLog("Use tick ($left left)")
-		
-		// play some "progress" sound
-	}
-	
-	override fun getMaxItemUseDuration(stack: ItemStack) = 1200
-	
-	override fun onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityPlayer, left: Int) {
-		// ASJUtilities.chatLog("Stopped. Left: $left")
-		
-		if (left > getMaxItemUseDuration(stack) - 20) {
-			if (player.isSneaking) {
-				setBoolean(stack, TAG_SWITCH, true)
-			} else {
-				if (isOpen(stack))
-					nextRecord(player, stack)
+	override fun onUpdate(stack: ItemStack, world: World, entity: Entity, slot: Int, inHand: Boolean) {
+		if (world.provider.dimensionId == AlfheimConfigHandler.dimensionIDDomains && !world.isRemote) {
+			val list = NBTTagList()
+			
+			TileItemDisplay.displaysInDomainsList.forEach { te ->
+				val relic = te[0] ?: return@forEach
+				if (relic.item !is IRelic) return@forEach
+				if (getSoulbindUsernameS(relic) != entity.commandSenderName) return@forEach
+				if (relic.tagCompound?.hasKey(TAG_AKASHIC_STACK) == true) return@forEach
+				
+				val data = NBTTagCompound()
+				data.setIntArray(TAG_RELIC_COORDS, intArrayOf(te.xCoord, te.yCoord, te.zCoord))
+				data.setTag(TAG_RELIC_STACK, NBTTagCompound().also { relic.writeToNBT(it) })
+				
+				list.appendTag(data)
 			}
-		} else Unit // play some "fail" sound
-	}
-	
-	override fun onEaten(stack: ItemStack, world: World?, player: EntityPlayer): ItemStack {
-		// ASJUtilities.chatLog("Eaten!")
+			
+			ItemNBTHelper.setList(stack, TAG_PEDESTALS, list)
+		}
 		
-		if (isOpen(stack))
-			generateRecord(player, stack)
-		
-		player.clearItemInUse()
-		
-		return stack
-	}
-	
-	override fun onUpdate(stack: ItemStack, world: World?, entity: Entity, slot: Int, inHand: Boolean) {
 		super.onUpdate(stack, world, entity, slot, inHand)
 		
 		if (!inHand) {
@@ -77,8 +110,6 @@ class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 			setInt(stack, TAG_FRAME, 0)
 			return
 		}
-		
-		if (!entity.isSneaking) setFloat(stack, TAG_ROTATION, ItemFlugelSoul.getCheckingAngle(entity))
 		
 		var frame = (getInt(stack, TAG_FRAME, 0) + getInt(stack, TAG_MULT, -1))
 		
@@ -93,109 +124,145 @@ class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 		}
 	}
 	
-	override fun onEntitySwing(living: EntityLivingBase, stack: ItemStack): Boolean {
-		if (living is EntityPlayer && isOpen(stack))
-			cast(living, stack)
+	override fun onEntitySwing(entity: EntityLivingBase, stack: ItemStack): Boolean {
+		if (entity.worldObj.isRemote) return false
+		
+		val list = ItemNBTHelper.getList(stack, TAG_PEDESTALS, Constants.NBT.TAG_COMPOUND, true) ?: return false
+		if (list.tagCount() == 0) return false
+		
+		if (!ItemNBTHelper.getNBT(stack).hasKey(TAG_SCROLL)) return false
+		val scroll = ItemNBTHelper.getInt(stack, TAG_SCROLL, 0)
+		
+		var index = scroll % list.tagCount()
+		if (index < 0) index += list.tagCount()
+		val data = list.getCompoundTagAt(index)
+		
+		if (data.getBoolean(TAG_TAKEN)) return false
+		
+		val dimWorld = MinecraftServer.getServer().worldServerForDimension(AlfheimConfigHandler.dimensionIDDomains) ?: return false
+		val (x, y, z) = data.getIntArray(TAG_RELIC_COORDS)
+		
+		val tile = dimWorld.getTileEntity(x, y, z) as? TileItemDisplay ?: return false
+		val relic = tile[0] ?: return false
+		tile[0] = null
+		
+		data.setBoolean(TAG_TAKEN, true)
+		
+		ItemNBTHelper.initNBT(relic)
+		relic.tagCompound.setTag(TAG_AKASHIC_STACK, stack.writeToNBT(NBTTagCompound()))
+		
+		entity.setCurrentItemOrArmor(0, relic)
+		
+		MinecraftServer.getServer().worldServerForDimension(0).customData.markDirty()
 		
 		return true
 	}
 	
-	override fun registerIcons(reg: IIconRegister) = Unit
+	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>, adv: Boolean) {
+		super.addInformation(stack, player, list, adv)
+		
+		if (GuiScreen.isShiftKeyDown()) run {
+			val relics = ItemNBTHelper.getList(stack, TAG_PEDESTALS, Constants.NBT.TAG_COMPOUND, true) ?: return@run
+			if (relics.tagCount() == 0) return@run
+			
+			var index = ItemNBTHelper.getInt(stack, TAG_SCROLL, 0) % relics.tagCount()
+			if (index < 0) index += relics.tagCount()
+			
+			list.add("")
+			for (i in 0 until relics.tagCount()) {
+				val data = relics.getCompoundTagAt(i)
+				val relic = ItemStack.loadItemStackFromNBT(data.getCompoundTag(TAG_RELIC_STACK))
+				
+				list.add("${if (index == i) EnumChatFormatting.GREEN else ""}${if (data.getBoolean("taken")) EnumChatFormatting.STRIKETHROUGH else ""}${i + 1}. ${relic.displayName}")
+			}
+			list.add("")
+		}
+	}
 	
 	companion object {
 		
-		const val TAG_ROTATION = "rotation"
+		const val TAG_SCROLL = "scroll"
+		const val TAG_PEDESTALS = "pedestals"
+		const val TAG_RELIC_COORDS = "relic_coords"
+		const val TAG_RELIC_STACK = "relic_stack"
+		const val TAG_AKASHIC_STACK = "${ModInfo.MODID}_akashic_stack"
+		const val TAG_TAKEN = "taken"
 		
 		const val TAG_FRAME = "frame"
 		const val TAG_MULT = "mult"
 		const val TAG_SWITCH = "switch"
 		
-		const val MANA_PER_RECORD = 1000000
-		const val MAX_RECORDS = 20
-		const val TAG_RECORD_PREF = "record_"
-		const val TAG_RECORD_COUNT = "records"
-		const val TAG_RECORD_SELECT = "record"
-		
-		val records = HashMap<String, AkashicRecord>()
-		val recordTextures = HashMap<String, ResourceLocation>()
+		const val TAG_AKASHAS = "player_akashas"
 		
 		init {
 			MinecraftForge.EVENT_BUS.register(this)
-			
-			// registerRecord(AkashicRecordGinnungagap)
-			registerRecord(AkashicRecordNewChance)
 		}
 		
 		fun isOpen(stack: ItemStack) = getInt(stack, TAG_FRAME, 0) > 60 && getInt(stack, TAG_MULT, -1) == 1 && !getBoolean(stack, TAG_SWITCH, false)
 		
-		fun generateRecord(player: EntityPlayer, stack: ItemStack) {
-			if (generateRecordActual(player, stack)) {
-				// play some "success" sound
-			} else {
-				// play some "fail" sound
-			}
-		}
-		
-		fun generateRecordActual(player: EntityPlayer, stack: ItemStack): Boolean {
-			if (records.isEmpty()) return false
+		fun unpack(player: EntityPlayer) {
+			val stack = player.heldItem ?: return
+			if (stack.tagCompound?.hasKey(TAG_AKASHIC_STACK) != true) return
 			
-			val contains = getInt(stack, TAG_RECORD_COUNT, 0)
-			if (contains == MAX_RECORDS) return false
-			require(contains <= MAX_RECORDS) { "Records count in Akashic Records cannot be greater than $MAX_RECORDS. Holder: ${player.commandSenderName}" }
+			val akashic = ItemStack.loadItemStackFromNBT(stack.tagCompound.getCompoundTag(TAG_AKASHIC_STACK)) ?: return
 			
-			var record = records.values.random()!!
-			var tries = 32
-			
-			while (tries-- > 0) {
-				if (record.canGet(player, stack)) break
-				record = records.values.random()!!
+			fun giveBack() {
+				stack.tagCompound.removeTag(TAG_AKASHIC_STACK)
+				if (!player.inventory.addItemStackToInventory(akashic))
+					player.entityDropItem(akashic, 0f)
 			}
 			
-			if (tries < 0) return false
-			if (!ManaItemHandler.requestManaExact(stack, player, MANA_PER_RECORD, true)) return false
+			val list = ItemNBTHelper.getList(akashic, TAG_PEDESTALS, Constants.NBT.TAG_COMPOUND, true)
+			if (list == null || list.tagCount() == 0) return giveBack()
 			
-			setInt(stack, TAG_RECORD_COUNT, contains + 1)
+			val index = (0 until list.tagCount()).firstOrNull {
+				val data = list.getCompoundTagAt(it)
+				val copy = ItemStack.loadItemStackFromNBT(data.getCompoundTag(TAG_RELIC_STACK)) ?: return@firstOrNull false
+				return@firstOrNull stack.isItemEqual(copy)
+			} ?: return giveBack()
 			
-			for (i in 0 until MAX_RECORDS) {
-				if (!verifyExistance(stack, "$TAG_RECORD_PREF$i")) {
-					setString(stack, "$TAG_RECORD_PREF$i", record.name)
-					break
-				}
+			val data = list.getCompoundTagAt(index)
+			
+			val dimWorld = MinecraftServer.getServer().worldServerForDimension(AlfheimConfigHandler.dimensionIDDomains)
+			val (x, y, z) = data.getIntArray(TAG_RELIC_COORDS)
+			val tile = dimWorld.getTileEntity(x, y, z) as? TileItemDisplay ?: return giveBack()
+			
+			data.removeTag(TAG_TAKEN)
+			stack.tagCompound.removeTag(TAG_AKASHIC_STACK)
+			tile[0] = stack
+			
+			player.setCurrentItemOrArmor(0, akashic)
+			
+			MinecraftServer.getServer().worldServerForDimension(0).customData.markDirty()
+		}
+		
+		@SubscribeEvent
+		fun onWheel(e: MouseEvent) {
+			val i = Mouse.getEventDWheel()
+			if (i == 0) return
+			
+			val player = mc.thePlayer ?: return
+			if (!player.isSneaking) return
+			
+			val stack = player.heldItem ?: return
+			if (stack.item !== AlfheimItems.akashicRecords) return
+			
+			NetworkService.sendToServer(Message0dS(if (i > 0) M0ds.AKASHIK_SCROLL_UP else M0ds.AKASHIK_SCROLL_DOWN))
+			
+			run {
+				val relics = ItemNBTHelper.getList(stack, TAG_PEDESTALS, Constants.NBT.TAG_COMPOUND, true) ?: return@run
+				if (relics.tagCount() == 0) return@run
+				
+				var index = (ItemNBTHelper.getInt(stack, TAG_SCROLL, 0) + if (i > 0) -1 else 1) % relics.tagCount()
+				if (index < 0) index += relics.tagCount()
+				
+				val data = relics.getCompoundTagAt(index)
+				val relic = ItemStack.loadItemStackFromNBT(data.getCompoundTag(TAG_RELIC_STACK))
+				
+				ItemsRemainingRenderHandler.set(relic, "${if (data.getBoolean("taken")) EnumChatFormatting.STRIKETHROUGH else ""}${relic.displayName}")
 			}
 			
-			return true
-		}
-		
-		fun nextRecord(player: EntityPlayer, stack: ItemStack) {
-			val contains = getInt(stack, TAG_RECORD_COUNT, 0)
-			if (contains <= 0) return
-			if (contains > MAX_RECORDS)
-				throw IllegalArgumentException("Records count in Akashik Records cannot be greater than $MAX_RECORDS. Holder: ${player.commandSenderName}")
-			
-			val startedAt = getInt(stack, TAG_RECORD_SELECT, 0)
-			var cycle = startedAt
-			do {
-				cycle = (cycle + 1) % MAX_RECORDS
-				if (verifyExistance(stack, "$TAG_RECORD_PREF$cycle")) break
-			} while (cycle != startedAt)
-			
-			setInt(stack, TAG_RECORD_SELECT, cycle)
-		}
-		
-		fun cast(player: EntityPlayer, stack: ItemStack) {
-			records[getString(stack, "$TAG_RECORD_PREF${getInt(stack, TAG_RECORD_SELECT, 0)}", "")]?.let {
-				if (it.apply(player, stack)) {
-					stack.tagCompound.tagMap.remove("$TAG_RECORD_PREF${getInt(stack, TAG_RECORD_SELECT, 0)}")
-					setInt(stack, TAG_RECORD_COUNT, getInt(stack, TAG_RECORD_COUNT, 0) - 1)
-					nextRecord(player, stack)
-				}
-			}
-		}
-		
-		fun registerRecord(rec: AkashicRecord) {
-			records[rec.name] = rec
-			if (ASJUtilities.isClient)
-				recordTextures[rec.name] = LibResourceLocations.ResourceLocationIL(ModInfo.MODID, "textures/model/item/record/${rec.name}.png")
+			e.isCanceled = true
 		}
 		
 		@SubscribeEvent
@@ -216,77 +283,6 @@ class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 				setInt(stack, TAG_MULT, -1)
 				setInt(stack, TAG_FRAME, 0)
 			}
-		}
-		
-		@SubscribeEvent
-		@SideOnly(Side.CLIENT)
-		fun onRenderWorldLast(e: RenderWorldLastEvent) {
-			val player = mc.thePlayer
-			val stack = player.currentEquippedItem
-			if (stack != null && stack.item === AlfheimItems.akashicRecords)
-				render(stack, player)
-		}
-		
-		@SideOnly(Side.CLIENT)
-		fun render(stack: ItemStack, player: EntityPlayer) {
-			val frame = getInt(stack, TAG_FRAME, 0)
-			if (frame <= 0) return
-			
-			glPushMatrix()
-			glEnable(GL_BLEND)
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-			
-			ASJRenderHelper.interpolatedTranslation(player)
-			glTranslated(-RenderManager.renderPosX, -RenderManager.renderPosY, -RenderManager.renderPosZ)
-			glRotatef(getFloat(stack, TAG_ROTATION, 0f) + 15f, 0f, 1f, 0f)
-			
-			var num = 0
-			
-			RenderHelper.enableStandardItemLighting()
-			glEnable(GL_LIGHTING)
-			glEnable(GL12.GL_RESCALE_NORMAL)
-			glAlphaFunc(GL_GREATER, 0f)
-			for (i in 0..1) {
-				glColor4f(1f, 1f, 1f, frame / 60f)
-				
-				glPushMatrix()
-				glRotatef(60f * (i - 1), 0f, 1f, 0f)
-				glTranslatef(-2f, 0f, 0f)
-				glRotatef(90f, 0f, 1f, 0f)
-				
-				mc.renderEngine.bindTexture(LibResourceLocations.akashicBox)
-				ModelAkashicBox.render(0.0625f)
-				
-				glRotatef(90f, 0f, 1f, 0f)
-				glTranslated(-0.5, 0.0, 0.5)
-				
-				for (b in 0 until 7) {
-					glTranslatef(0f, 0f, -0.125f)
-					if (!verifyExistance(stack, "$TAG_RECORD_PREF${num++}")) continue
-					
-					recordTextures[getString(stack, "$TAG_RECORD_PREF${num - 1}", "")]?.also { mc.renderEngine.bindTexture(it) }
-					ModelAkashicBox.bookModel.render(null, 0f, 0f, 0f, 0f, 0f, 1f / 16f)
-					
-					if (getInt(stack, TAG_RECORD_SELECT, 0) == num - 1) {
-						glDisable(GL_TEXTURE_2D)
-						glColor4f(1f, 0f, 0f, frame / 60f)
-						glLineWidth(3f)
-						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
-						ModelAkashicBox.bookModel.render(null, 0f, 0f, 0f, 0f, 0f, 1f / 16f)
-						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
-						glColor4f(1f, 1f, 1f, frame / 60f)
-						glEnable(GL_TEXTURE_2D)
-					}
-				}
-				
-				glPopMatrix()
-			}
-			glAlphaFunc(GL_GREATER, 0.1f)
-			RenderHelper.disableStandardItemLighting()
-			
-			glDisable(GL_BLEND)
-			glColor4f(1f, 1f, 1f, 1f)
-			glPopMatrix()
 		}
 	}
 }

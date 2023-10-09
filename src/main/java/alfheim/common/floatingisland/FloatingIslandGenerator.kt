@@ -49,7 +49,7 @@ object FloatingIslandGenerator {
 		val j = WE_Biome.getBiomeAt((world.provider as WorldProviderAlfheim).chunkProvider, x, z).biomeSurfaceHeight
 		val y = j + world.rand.nextInt(32) + 32
 		
-		if (Vector3.pointDistancePlane(x, z, 0, 0) < 256) return // dist to Ygg
+		if (Vector3.pointDistancePlane(x, z, 0, 0) < 1024) return // dist to Ygg
 		if (fis.any { Vector3.pointDistancePlane(x, z, it.posX, it.posY) < 64 }) return // dist to other
 		
 		world.getBlock(x, y, z) // load chunk

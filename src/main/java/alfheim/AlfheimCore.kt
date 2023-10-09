@@ -12,7 +12,7 @@ import alfheim.common.integration.thaumcraft.*
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
 import alfheim.common.integration.travellersgear.TravellersGearAlfheimConfig
 import alfheim.common.integration.waila.WAILAAlfheimConfig
-import alfheim.common.network.*
+import alfheim.common.network.NetworkService
 import cpw.mods.fml.common.*
 import cpw.mods.fml.common.Mod.*
 import cpw.mods.fml.common.Mod.EventHandler
@@ -69,7 +69,7 @@ object AlfheimCore {
 		
 		if (AlfheimConfigHandler.notifications) InfoLoader.start()
 		
-		NetworkService.register()
+		NetworkService
 		
 		proxy.preInit()
 		if (Botania.thaumcraftLoaded) ThaumcraftAlfheimModule.preInit()

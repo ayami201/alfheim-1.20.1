@@ -1,14 +1,14 @@
 package alfheim.common.network.packet
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.network.AlfheimPacket
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.client.core.proxy.ClientProxy
 import alfheim.common.core.handler.CardinalSystem.PartySystem.Party.PartyStatus
 import alfheim.common.network.M3d
 
-class Message3d(ty: M3d, var data1: Double, var data2: Double, var data3: Double, var type: Int = ty.ordinal) : ASJPacket(), AlfheimPacket<Message3d> {
+class Message3d(ty: M3d, var data1: Double, var data2: Double, var data3: Double, var type: Int = ty.ordinal) : AlfheimPacket<Message3d>() {
+	
 	override fun handleClient() {
 		when (M3d.entries[type]) {
 			M3d.KEY_BIND     -> Unit

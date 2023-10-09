@@ -4,11 +4,11 @@ import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.world.dim.alfheim.customgens.NiflheimLocationGenerator
 import alfheim.common.world.dim.alfheim.structure.StructureDreamsTree
 import net.minecraft.entity.EnumCreatureType
 import net.minecraft.init.Blocks
-import net.minecraft.server.MinecraftServer
 import net.minecraft.world.biome.BiomeGenBase
 import net.minecraftforge.common.*
 import net.minecraftforge.common.BiomeDictionary.Type
@@ -31,7 +31,12 @@ abstract class BiomeAlfheim(
 		setColor(0x08F500)
 		grassColor = 0x08F500
 		waterColorMultiplier = if (AlfheimCore.winter) 0x1D1D4E else 0x00FFFF
-		temperature = if (AlfheimCore.winter) 0f else 0.5f
+		temperature = when {
+			RagnarokHandler.winter -> -1.5f
+			RagnarokHandler.summer ->  1.5f
+			AlfheimCore.winter     -> -0.25f
+			else                   ->  0.5f
+		}
 		
 		createChunkGen_InXZ_List.clear()
 		decorateChunkGen_List.clear()
@@ -42,7 +47,13 @@ abstract class BiomeAlfheim(
 	override fun getFloatTemperature(x: Int, y: Int, z: Int): Float {
 		val world = if (ASJUtilities.isServer) DimensionManager.getWorld(AlfheimConfigHandler.dimensionIDAlfheim) else mc.theWorld
 		val (xOff, zOff) = if (world == null) 0 to 0 else NiflheimLocationGenerator.portalXZ(world)
-		return if (AlfheimCore.winter || NiflheimLocationGenerator.yobaFunction2d(x - xOff, z - zOff)) 0f else 0.5f
+		return when {
+			RagnarokHandler.winter                                       -> -1.5f
+			RagnarokHandler.summer                                       ->  1.5f
+			AlfheimCore.winter ||
+			NiflheimLocationGenerator.yobaFunction2d(x - xOff, z - zOff) -> -0.25f
+			else                                                         ->  0.5f
+		}
 	}
 	
 	override fun getSkyColorByTemp(temp: Float) = if (AlfheimCore.winter || temp < 0.5f) 0x576cd9 else 0x266eff

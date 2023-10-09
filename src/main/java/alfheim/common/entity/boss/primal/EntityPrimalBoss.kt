@@ -4,7 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.render.ICustomArmSwingEndEntity
 import alfheim.AlfheimCore
-import alfheim.api.*
+import alfheim.api.AlfheimAPI
 import alfheim.api.boss.IBotaniaBossWithName
 import alfheim.api.entity.IIntersectAttackEntity
 import alfheim.client.render.world.VisualEffectHandlerClient
@@ -18,8 +18,6 @@ import alfheim.common.entity.boss.EntityFlugel.Companion.isRecordPlaying
 import alfheim.common.entity.boss.EntityFlugel.Companion.playRecord
 import alfheim.common.entity.boss.EntityFlugel.Companion.stopRecord
 import alfheim.common.entity.boss.primal.ai.*
-import alfheim.common.item.*
-import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.entity.*
@@ -33,7 +31,6 @@ import net.minecraft.stats.Achievement
 import net.minecraft.util.*
 import net.minecraft.world.*
 import vazkii.botania.client.core.handler.BossBarHandler
-import vazkii.botania.common.item.relic.ItemRelic
 import java.awt.Rectangle
 import kotlin.math.*
 
@@ -113,7 +110,7 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 		addRandomArmor()
 	}
 	
-	private fun playSounds() {
+	protected open fun playSounds() {
 		if (!ASJUtilities.isClient || ticksExisted != 1) return
 		
 		mc.soundHandler.playSound(PrimalBossMovingSound(this, getSpinningSound()) { volume = if (host.ultAnimationTicks > 512) 1f else 0.01f })
@@ -500,7 +497,6 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 				val stack = ItemStack(data.second)
 				
 				player.triggerAchievement(data.first)
-				ItemRelic.bindToPlayer(player, stack)
 				entityDropItem(stack, 0f)
 				return@run
 			}

@@ -1,18 +1,18 @@
 package alfheim.common.network.packet
 
-import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.network.AlfheimPacket
 import alfheim.client.render.world.VisualEffectHandlerClient
 import io.netty.buffer.ByteBuf
 
-class MessageVisualEffect(var type: Int, vararg var data: Double): ASJPacket(), AlfheimPacket<MessageVisualEffect> {
+class MessageVisualEffect(var type: Int, vararg var data: Double): AlfheimPacket<MessageVisualEffect>() {
+	
 	override fun fromCustomBytes(buf: ByteBuf) {
-		data = DoubleArray(buf.readInt()) { buf.readDouble() }
+		data = DoubleArray(readI(buf)) { readD(buf) }
 	}
 
 	override fun toCustomBytes(buf: ByteBuf) {
-		buf.writeInt(data.size)
-		for (d in data) buf.writeDouble(d)
+		write(buf, data.size)
+		for (d in data) write(buf, d)
 	}
 
 	override fun handleClient() {

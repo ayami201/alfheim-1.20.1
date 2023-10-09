@@ -90,8 +90,9 @@ alfheim.tagline.slimes=They were small, now they big
 alfheim.page.slimes0=If you managed to capture a small slime, and want to show it your love and care, try radiating it with some gentle &4Mana bursts&0 on your &1Mana Tuner&0 along with some of it's...flesh. As long as your new pet stays right on top of the tuner, it will grow in the blink of an eye as the tuning finishes. I promise, it won't hurt at all.
 alfheim.page.slimes1=Growing Slime
 alfheim.page.slimes2=Growing Magma Cube
-alfheim.page.slimes3=Growing Thaumic Slime
-alfheim.page.slimes4=Growing Blue Slime
+alfheim.page.slimes3=Growing Elemental Slime
+alfheim.page.slimes4=Growing Thaumic Slime
+alfheim.page.slimes5=Growing Blue Slime
 
 alfheim.entry.flowerEnderchid=Orechid Endium
 alfheim.tagline.flowerEnderchid=Creates end ores from end stone
@@ -398,11 +399,15 @@ alfheim.page.soulHorn3=To fill horn with soul fragments just drop both items on 
 
 alfheim.entry.mask=Mysterious Mask
 alfheim.tagline.mask=I've already seen this somewhere...
-alfheim.page.mask0=Fury and danger emanates from this mask. When you try to put it on you, nothing comes out, and it just falls from your face. However, if you are on the verge of death, it materializes on you from your in your inventory, giving you unparalleled strength and endurance. But do not abuse it, otherwise the dark spirit will consume you...
+alfheim.page.mask0=Fury and danger emanates from this mask. When you try to put it on you, nothing comes out, and it just falls from your face. However, if you are on the verge of death, it materializes on you from your inventory, giving you unparalleled strength and endurance. But do not abuse it, otherwise the dark spirit will consume you...
 
 alfheim.entry.excaliber=Holy Sword Excaliber
 alfheim.tagline.excaliber=Not fake! Promise!
 alfheim.page.excaliber0=Lost long ago, &1Holy Sword Excaliber&0 was finally found. As the legends say, this sword is unbreakable and can shoot a mana ray on every swing, that will look for nearest hostile target and deal as much damage, as regular attack. Also you feel strange lightness while holding the sword, so you can run a little bit faster.
+
+alfheim.entry.akashic=Akashic Records
+alfheim.tagline.akashic=All relics in one!
+alfheim.page.akashic0=&1Akashic Records&0 allows one to teleport to their personal dimension where anything can be stored via rightclicking with opened via sneak-rightclick records. If a relic is placed on the &1Item Platform&0 within said dimension, it can be retrieved into hands by leftclicking the records. Relics can be selected by rotating mouse wheel while sneaking. The relic can be stored back by pressing [K].
 
 alfheim.entry.stories=Token of Banter
 alfheim.tagline.stories=Yet knowledge can be bought
@@ -508,6 +513,16 @@ alfheim.page.chalk0=The &1Runic Chalk&0 is a mystical artifact bestowed upon the
 alfheim.page.chalk1=Unleash your artistic prowess and sculpt a world that reflects the colors of your soul!<br>Colors can be controlled by equipping the &1Clerical Colorizer&0. Everything you draw will be visible to anyone who has been in the same dimension with you at the time of drawing, and will disappear in five minutes after.
 alfheim.page.chalk2=Creating &1Runic Chalk&0
 
+alfheim.entry.carver=Carver
+alfheim.tagline.carver=Tool for carving blocks
+alfheim.page.carver0=The &1Carver&0 is a convenient tool for processing blocks and giving them shape. Leftclicking a block cuts it into more pieces, sneak-leftclicking - reduces the number of pieces. Right-clicking one of the pieces will remove it, and sneak-rightclick will return the piece to its place. Right-clicking with Carver on air switches its modes. You can also add pieces of other blocks by right-clicking on free space.
+alfheim.page.carver1=Shape of My Heart
+
+alfheim.entry.gaiaButton=Gaia Button
+alfheim.tagline.gaiaButton=Button with custom press duration
+alfheim.page.gaiaButton0=&1Gaia Button&0 allows one to configure it's press duration with a 10 ticks precision by rightclicking or sneak-rightclicking on it with &1Wand of the Forest&0.
+alfheim.page.gaiaButton1=It's not so big
+
 ################################################################ DIVINITY ################################################################
 
 alfheim.entry.divinity_intro=Divine Faith
@@ -583,7 +598,7 @@ alfheim.page.rod_njord2=It appears that connecting your soul to the ancient god 
 alfheim.entry.daolos=Daolos
 alfheim.tagline.daolos=Divine Axe of Lord of Seas
 alfheim.page.daolos0=Daolos - the mysterious axe of the god of the seas and a fair wind, Njord. The true name of this battle axe is one of the greatest secrets. There is one short story, told among the wisest of the line of elves:
-alfheim.page.daolos1=&oOnce Loki, the god of fire, tried to trick Njord, the god of winds and seas, and steal his battle axe by asking him for the runic name of the relic. But Njord had heard of Loki's nature and was smart enough to spot the cunning sparks in the eyes of god of lies, and refused him.
+alfheim.page.daolos1=&oOnce Loki, the god of lies, tried to trick Njord, the god of winds and seas, and steal his battle axe by asking him for the runic name of the relic. But Njord had heard of Loki's nature and was smart enough to spot the cunning sparks in the eyes of god of lies, and refused him.
 alfheim.page.daolos2=&oTo protect his relic, Njord whispered the following runic words: "And don't tell your name to anyone, no one will understand it anyway. Except... Except children. Children can hear it. Sometimes. If they have good hearts, and the stars will align, the children can hear your name. But no one else. No one ever."
 alfheim.page.daolos3=Many relic seekers ask the same question: "Is this story a fiction or was it real?". Well, one immortal and rather eccentric doctor has an excellent answer: "All the stories told actually happened, and they are considered fiction when they are forgotten".
 alfheim.page.daolos4=Of course, Daolos is not only an interesting story, but also very useful abilities. Although the axe is of battle type, it can cut down trees, and when it rains it works even better. It also has water type of damage, and even can put out fires by sneak-rightclicking.
@@ -725,6 +740,9 @@ botania.page.elvenLenses16=Purification Lens
 
 botania.page.elvenLenses17=&1Linkback Lens&0 allows burst to refill its mana on the fly while it is in the range of its source, either a &1Mana Spreader&0 or a &1Mana Blaster&0. Its most power is revealed when paired with other functional lens.
 botania.page.elvenLenses18=Linkback Lens
+
+botania.page.elvenLenses19=&1Unlink Lens&0 allows you to unlink &4Mana bursts&0 from the &1Mana Spreader&0, resulting in more frequent shots, but can result in additional &4Mana&0 losses if shots fail.
+botania.page.elvenLenses20=Unlink Lens
 
 botania.page.luminizerTransport7=Adding a &4Lever&0 to a &1Luminizer&0 turns it into a &1Toggle Luminizer&0, which accepts a &4redstone signal&0. When powered with Redstone signal, a Toggle Luminizer will drop anything passing through. It works normally when unpowered.
 botania.page.luminizerTransport8=Signal in
@@ -1131,7 +1149,7 @@ alfheim.page.amplifier1=Soaryn + Amp + Cacophonium = Dire rage
 
 alfheim.page.crysanthermum0=The &1Crysanthermum&0 is a hardy flower that can survive in any climate. However, its mana generation isn't indifferent to the climate. By feeding it &1Metamorphic Stone&0, you change its temperature. The farther its temperature is to the biome you're in, the more mana it will generate.
 alfheim.page.crysanthermum1=The hotter or colder the biome the stone comes from, the hotter or colder the flower will be after eating that stone. There are, however, a few caveats. Feeding the flower &1Fungal&0 stone can do anything, from cool the flower rapidly to heat it up immensely.
-alfheim.page.crysanthermum2=If a flower becomes too cold or too hot, it'll stop working until it gets back to normal temperature. Using a stone that was used within the last eight will give you diminishing returns for the next 8 stones, meaning that you'll occasionally have to course-correct.
+alfheim.page.crysanthermum2=If a flower becomes too cold or too hot, it'll stop working until it gets back to normal temperature. Using a stone that was used within the last four will give you diminishing returns for the next 4 stones, meaning that you'll occasionally have to course-correct.
 alfheim.page.crysanthermum3=Left by a Fortanono
 
 alfheim.page.andmyaxe0=&1Elementium&0 is a highly enchantable substance. So enchantable, in fact, it seems one can enchant it with spells and power outside the normal cycles. By flooding an axe of the stuff with six powers, you have recreated a legendary weapon: the &1Holy Blade Revelation&0. It attacks not the body, but the mind. This has interesting effects when used to attack an immortal.

@@ -12,11 +12,15 @@ import kotlin.reflect.KClass
 
 object NetworkService {
 	
-	val network: SimpleNetworkWrapper = SimpleNetworkWrapper(ModInfo.MODID)
+	private val network: SimpleNetworkWrapper = SimpleNetworkWrapper(ModInfo.MODID)
 	
-	var nextPacketID = 0
+	private var nextPacketID = 0
 	
-	fun register() {
+	init {
+		register()
+	}
+	
+	private fun register() {
 		registerPacket(Message0dC::class, Side.CLIENT)
 		registerPacket(Message1d::class, Side.CLIENT)
 		registerPacket(Message1l::class, Side.CLIENT)
@@ -32,6 +36,7 @@ object NetworkService {
 		registerPacket(MessageParty::class, Side.CLIENT)
 		registerPacket(MessageRaceInfo::class, Side.CLIENT)
 		registerPacket(MessageRedstoneSignalsSync::class, Side.CLIENT)
+		registerPacket(MessageRelicNBTSync::class, Side.CLIENT)
 		registerPacket(MessageSkinInfo::class, Side.CLIENT)
 		registerPacket(MessageSpellParams::class, Side.CLIENT)
 		registerPacket(MessageTileItem::class, Side.CLIENT)
@@ -41,6 +46,7 @@ object NetworkService {
 		registerPacket(Message0dS::class, Side.SERVER)
 		registerPacket(MessageContributor::class, Side.SERVER)
 		registerPacket(MessageHotSpellS::class, Side.SERVER)
+		registerPacket(MessageFuckedUpServerPrecision::class, Side.SERVER)
 		registerPacket(MessageKeyBindS::class, Side.SERVER)
 		registerPacket(MessageNI::class, Side.SERVER)
 		registerPacket(MessageRaceSelection::class, Side.SERVER)
@@ -52,7 +58,7 @@ object NetworkService {
 		try {
 			network.registerMessage(clazz.java.newInstance(), clazz.java, id, side)
 		} catch (e: Exception) {
-			ASJUtilities.error("Can`t register packet: Class: ${clazz.qualifiedName} ID: $id Side:${side.name}")
+			ASJUtilities.error("Can't register packet: Class: ${clazz.qualifiedName} ID: $id Side:${side.name}", e)
 			throw RuntimeException(e)
 		}
 	}
