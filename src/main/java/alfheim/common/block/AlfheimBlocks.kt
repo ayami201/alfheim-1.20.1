@@ -152,6 +152,7 @@ object AlfheimBlocks {
 	val treeCrafterBlock: Block
 	val treeCrafterBlockRB: Block
 	val treeCrafterBlockAU: Block
+	val worldTree: Block
 	val yggFlower: Block
 	
 	// DENDROLOGY
@@ -351,6 +352,7 @@ object AlfheimBlocks {
 		treeCrafterBlock = BlockTreeCrafter("treeCrafter", irisPlanks)
 		treeCrafterBlockRB = BlockTreeCrafter("treeCrafterRB", rainbowPlanks)
 		treeCrafterBlockAU = BlockTreeCrafter("treeCrafterAU", auroraPlanks)
+		worldTree = BlockWorldTree()
 		yggFlower = BlockYggFlower()
 		
 		// DENDOROLOGY

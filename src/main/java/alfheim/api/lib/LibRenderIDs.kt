@@ -27,4 +27,5 @@ object LibRenderIDs {
 	val idShrinePanel = RenderingRegistry.getNextAvailableRenderId()
 	val idSpire = RenderingRegistry.getNextAvailableRenderId()
 	val idTable = RenderingRegistry.getNextAvailableRenderId()
+	val idWorldTree = RenderingRegistry.getNextAvailableRenderId()
 }

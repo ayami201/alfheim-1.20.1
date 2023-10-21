@@ -252,6 +252,7 @@ object AlfheimRegistry {
 		registerTile<TileTradePortal>("TradePortal")
 		registerTile<TileTreeBerry>("TreeBerry")
 		registerTile<TileVafthrudnirSoul>("VafthrudnirSoul")
+		registerTile<TileWorldTree>("WorldTree")
 		registerTile<TileYggFlower>("YggFlower")
 		
 		registerAnomalies()

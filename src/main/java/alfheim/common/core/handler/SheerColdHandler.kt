@@ -20,7 +20,8 @@ import net.minecraft.potion.Potion
 import net.minecraft.util.MathHelper
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.*
-import net.minecraftforge.event.entity.living.LivingEvent.*
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
+import vazkii.botania.common.block.tile.TileAltar
 import kotlin.math.*
 
 object SheerColdHandler {
@@ -57,13 +58,20 @@ object SheerColdHandler {
 			
 			for (i in x.bidiRange(2))
 				for (j in y.bidiRange(2))
-					for (k in z.bidiRange(2)) {
+					for (k in z.bidiRange(2)) run loop@ {
+						(target.worldObj.getTileEntity(i, j, k) as? TileAltar)?.apply {
+							if (!hasLava || defaultDelta >= 0) return@loop
+							
+							defaultDelta = -1f
+							return@run
+						}
+						
 						val near = target.worldObj.getBlock(i, j, k)
 						
 						defaultDelta = when (near) {
-							in AlfheimAPI.coldBlocks -> if (defaultDelta > 0) 1f else continue
-							in AlfheimAPI.warmBlocks -> if (defaultDelta < 0) -1f else continue
-							else                     -> continue
+							in AlfheimAPI.coldBlocks -> if (defaultDelta > 0) 1f else return@loop
+							in AlfheimAPI.warmBlocks -> if (defaultDelta < 0) -1f else return@loop
+							else                     -> return@loop
 						}
 						
 						return@run

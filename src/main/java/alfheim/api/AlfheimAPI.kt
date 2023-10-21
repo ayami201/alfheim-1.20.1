@@ -78,7 +78,7 @@ object AlfheimAPI {
 	val coldBlocks = mutableSetOf(Blocks.ice, Blocks.packed_ice, Blocks.snow)
 	
 	/** Set of blocks that can reduce entity's sheer cold value */
-	val warmBlocks = mutableSetOf(Blocks.fire, Blocks.lava, Blocks.flowing_lava, Blocks.lit_furnace, Blocks.torch, Blocks.lit_pumpkin)
+	val warmBlocks = mutableSetOf(Blocks.fire, Blocks.lava, Blocks.flowing_lava, Blocks.lit_furnace, Blocks.torch, Blocks.lit_pumpkin, Blocks.brewing_stand)
 	
 	val treeRecipes: MutableList<RecipeTreeCrafting> = ArrayList()
 	val treeVariants: MutableList<IIridescentSaplingVariant> = ArrayList()

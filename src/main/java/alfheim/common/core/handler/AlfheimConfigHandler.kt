@@ -107,7 +107,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var playerGroupDistance = maxChunks
 	var tfMobs = true
 	
-	// - NIFLEHEIM
+	// - NIFLHEIM
 	var vikingSpawn = intArrayOf(100, 4, 4)
 	
 	// - ALL

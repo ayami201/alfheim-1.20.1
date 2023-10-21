@@ -45,6 +45,7 @@ object NetworkService {
 		
 		registerPacket(Message0dS::class, Side.SERVER)
 		registerPacket(MessageContributor::class, Side.SERVER)
+		registerPacket(MessageCorporeaRequest::class, Side.SERVER)
 		registerPacket(MessageHotSpellS::class, Side.SERVER)
 		registerPacket(MessageFuckedUpServerPrecision::class, Side.SERVER)
 		registerPacket(MessageKeyBindS::class, Side.SERVER)

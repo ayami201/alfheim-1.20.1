@@ -126,6 +126,7 @@ import alfheim.common.block.AlfheimBlocks.stalactite
 import alfheim.common.block.AlfheimBlocks.stalagmite
 import alfheim.common.block.AlfheimBlocks.subspacian
 import alfheim.common.block.AlfheimBlocks.tradePortal
+import alfheim.common.block.AlfheimBlocks.worldTree
 import alfheim.common.block.AlfheimFluffBlocks.chair
 import alfheim.common.block.AlfheimFluffBlocks.composite
 import alfheim.common.block.AlfheimFluffBlocks.curtainPlacer
@@ -358,6 +359,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(Blocks.furnace, 8)
 		addBlock(ModBlocks.spreader, 4)
 		addBlock(anyavil)
+		addBlock(worldTree)
 		addBlock(spire)
 		addBlock(alfheimPylon)
 		addBlock(manaAccelerator)

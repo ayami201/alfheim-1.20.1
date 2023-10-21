@@ -110,6 +110,7 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerBlockHandler(RenderBlockShrinePanel)
 		RenderingRegistry.registerBlockHandler(RenderBlockSpire)
 		RenderingRegistry.registerBlockHandler(RenderBlockTable)
+		RenderingRegistry.registerBlockHandler(RenderBlockWorldTree)
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAlfheimPortal::class.java, RenderTileAlfheimPortal)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAlfheimPylon::class.java, RenderTileAlfheimPylons)
@@ -132,6 +133,7 @@ object ClientProxy : CommonProxy() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileSpire::class.java, RenderTileSpire)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileStar::class.java, RenderStar)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileTradePortal::class.java, RenderTileTradePortal)
+		ClientRegistry.bindTileEntitySpecialRenderer(TileWorldTree::class.java, RenderTileWorldTree)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileYggFlower::class.java, RenderTileYggFlower)
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityAlfheimPixie::class.java, RenderEntityAlfheimPixie)

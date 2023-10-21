@@ -51,7 +51,7 @@ import vazkii.botania.common.block.tile.TileAlfPortal
 import vazkii.botania.common.block.tile.string.TileRedStringFertilizer
 import vazkii.botania.common.entity.EntityDoppleganger
 import vazkii.botania.common.item.ModItems
-import kotlin.math.max
+import kotlin.math.*
 
 @Suppress("unused")
 object EventHandler {
@@ -457,5 +457,23 @@ object EventHandler {
 			heat -= 0.0375f
 		
 		e.delta = (e.delta ?: 0f) + heat
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOW)
+	fun slowdownFreezing(e: SheerColdHandler.SheerColdTickEvent) {
+		if (e.delta == null) return
+		
+		var sum = 0f
+		for (i in 1..4) sum += when (e.entityLiving.getEquipmentInSlot(i)?.item) {
+			Items.leather_helmet -> 1f
+			Items.leather_chestplate -> 3f
+			Items.leather_leggings -> 2f
+			Items.leather_boots -> 1f
+			else -> 0f
+		}
+		
+		if (sum == 0f) return
+		
+		e.delta = min(e.delta!!, e.delta!! / sum) // minimal so that if other source heats - it won't override
 	}
 }

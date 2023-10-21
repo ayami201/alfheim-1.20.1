@@ -41,6 +41,7 @@ class AlfheimHookLoader: HookLoader() {
 		registerHookContainer("alfheim.common.core.asm.hook.extender.RelicHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.SparkExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.BotaniaGlowingRenderFixes")
+		registerHookContainer("alfheim.common.core.asm.hook.fixes.CorporeaInputFix")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.FlightTiaraFix")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.GodAttributesHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.RecipeAncientWillsFix")

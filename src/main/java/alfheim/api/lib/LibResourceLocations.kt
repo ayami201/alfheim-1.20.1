@@ -143,6 +143,7 @@ object LibResourceLocations {
 	val warBanner = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/warBanner.png")
 	val warBannerAlt = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/warBannerAlt.png")
 	val wind = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/wind.png")
+	val worldTree = ResourceLocationIL(ModInfo.MODID, "textures/model/block/WorldTree.png")
 	val yggFlower = ResourceLocationIL(ModInfo.MODID, "textures/model/block/YggFlower.png")
 	val yordinPylon = ResourceLocationIL(ModInfo.MODID, "textures/model/block/ElvenPylon.png")
 	val yordinPylonOld = ResourceLocationIL(ModInfo.MODID, "textures/model/block/ElvenPylonOld.png")

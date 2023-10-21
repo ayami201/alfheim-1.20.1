@@ -85,7 +85,6 @@ import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.elvenSand
 import alfheim.common.block.AlfheimBlocks.enderActuator
 import alfheim.common.block.AlfheimBlocks.gaiaButton
-import alfheim.common.block.AlfheimBlocks.icicle
 import alfheim.common.block.AlfheimBlocks.irisDirt
 import alfheim.common.block.AlfheimBlocks.irisGrass
 import alfheim.common.block.AlfheimBlocks.irisLamp
@@ -1183,8 +1182,6 @@ object AlfheimRecipes {
 		                 'D', MANA_DIAMOND,
 		                 'S', RUNE[4])
 		recipeGoddessCharm = BotaniaAPI.getLatestAddedRecipe()
-		
-		addShapedRecipe(ItemStack(ice), "MM", "MM", 'M', icicle)
 		
 		addOreDictRecipe(ItemStack(invisibilityCloak),
 						 "PWP", "GWG", "GJG",
