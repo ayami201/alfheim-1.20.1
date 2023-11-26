@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+
+<book>
+    <page type="intro">
+        <text>Natural Materials
+Alfheim x Tinker's Construct
+
+By AlexSocol</text>
+    </page>
+
+    <page type="contents">
+        <text>Table of Contents</text>
+        <link>
+            <text>Materials</text>
+            <icon>elvorium</icon>
+            <jump>2</jump>
+        </link>
+        <link>
+            <text>Modifiers</text>
+            <icon>manarepair</icon>
+            <jump>4</jump>
+        </link>
+    </page>
+
+    <page type="text">
+        <text>Welcome [TODO GedeonGrays]</text>
+    </page>
+
+    <page type="sectionpage">
+        <title>Natural Material Traits</title>
+        <text>Some materials have traits that augment their natural uses.
+
+ - Manarepair: Uses Mana to restore tool durability
+ - Manaregen: Passive Mana generation on Mana Tablets
+ - Pixie Call: 10% chance to summon a pixie</text>
+    </page>
+
+    <page type="materialstats">
+        <title>Elementium</title>
+        <icon>elementium</icon>
+        <text>Elementium [TODO GedeonGrays]</text>
+        <material>
+            <main>elementium</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Elvorium</title>
+        <icon>elvorium</icon>
+        <text>Elvorium [TODO GedeonGrays]</text>
+        <material>
+            <main>elvorium</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Manasteel</title>
+        <icon>manasteel</icon>
+        <text>Manasteel [TODO GedeonGrays]</text>
+        <material>
+            <main>manasteel</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Mauftrium</title>
+        <icon>mauftrium</icon>
+        <text>Mauftrium [TODO GedeonGrays]</text>
+        <material>
+            <main>mauftrium</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Terrasteel</title>
+        <icon>terrasteel</icon>
+        <text>Terrasteel [TODO GedeonGrays]</text>
+        <material>
+            <main>terrasteel</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Dreamwood</title>
+        <icon>dreamwood</icon>
+        <text>Dreamwood [TODO GedeonGrays]</text>
+        <material>
+            <main>dreamwood</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Livingwood</title>
+        <icon>livingwood</icon>
+        <text>Livingwood [TODO GedeonGrays]</text>
+        <material>
+            <main>livingwood</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Livingrock</title>
+        <icon>livingrock</icon>
+        <text>Livingrock [TODO GedeonGrays]</text>
+        <material>
+            <main>livingrock</main>
+        </material>
+    </page>
+
+    <page type="sectionpage">
+        <title>Auto-Repair</title>
+        <text>The tool with Mana Infusion Core attaching to it appears to be capable of regenerating wear and tear at the cost of some mana.
+
+ Effects:
+ - The tool repairs itself
+
+ Type: Single-use
+ Stackable: No</text>
+    </page>
+
+    <page type="modifier">
+        <tooltype>tool</tooltype>
+        <recipe>manarepair</recipe>
+    </page>
+</book>

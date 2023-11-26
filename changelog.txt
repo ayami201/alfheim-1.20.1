@@ -1,9 +1,20 @@
 Innovations:
+ Fenrir AI rework (in progress)
  Miniature world tree to teleport between linked points
  Improved frozen vikings AI
  Changed loot in Niflheim chests
  Infernal fruit effect can now keep player warm
  Leather set can slow down sheer cold accumulation
+ Gaia returns summon item on despawn #298
+ zh_CN langs update
+ [TiC] New book for natural materials
 
 Fixes:
- Fixed Corporea NEI [c] requests when client lang is different from server
+ Tuner recipes with uppercase not working
+ Flugel was not summonable with certain tech blocks
+ Daolos crash on water hits
+ Gaia liquid check range
+ [MMO] Crash on team mana sync
+ [NEI] Corporea button requests when client lang is different from server
+ [TC] Vis discount on revealing helmets
+ [TiC] Material parts and shards were visible

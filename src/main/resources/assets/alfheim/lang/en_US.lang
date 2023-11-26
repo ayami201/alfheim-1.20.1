@@ -934,6 +934,7 @@ death.attack.missile=%s was torn to shreds by %s's rocket storm
 death.attack.mortar=%s was smashed by %s's mortar
 death.attack.shadow=%s died from %s's shadows
 death.attack.water=%s was cut into pieces by %s's water stream
+death.attack.wind=%s was shredded to death in %s's hurricane
 death.attack.windblade=%s was cut into halfs by %s's wind blade
 
 entity.alfheim.Butterfly.name=Butterfly
@@ -1193,13 +1194,14 @@ elvenstory.selectgender=Select Gender
 elvenstory.selectrace=Select Race
 
 key.categories.alfheim=Alfheim
-key.lolicorn.desc=Call Lolicorn
-key.esmability.desc=Toggle Elven Ability
+key.akashic.desc=Store relic back
 key.cast.desc=Spell Cast
-key.uncast.desc=Cancel Cast
+key.esmability.desc=Toggle Elven Ability
 key.flight.desc=Elven Flight
+key.lolicorn.desc=Call Lolicorn
 key.selmob.desc=Select Mob
 key.selteam.desc=Select Party Member
+key.uncast.desc=Cancel Cast
 mes.flight.unavailable=Flight is not available in this dimension
 
 race.HUMAN.name=HUMAN

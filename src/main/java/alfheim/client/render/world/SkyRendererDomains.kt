@@ -10,7 +10,9 @@ import org.lwjgl.opengl.*
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 
-open class SkyRendererDomains(/** 0xAARRGGBBu */ val color: UInt, val secondaryColor: UInt): IRenderHandler() {
+open class SkyRendererDomains(val colorsProvider: () -> Pair<UInt, UInt>): IRenderHandler() {
+	
+	constructor(color: UInt, secondaryColor: UInt): this({ color to secondaryColor })
 	
 	override fun render(partialTicks: Float, world: WorldClient?, mc: Minecraft) {
 		val size = mc.gameSettings.renderDistanceChunks - 1
@@ -23,12 +25,14 @@ open class SkyRendererDomains(/** 0xAARRGGBBu */ val color: UInt, val secondaryC
 		glDisable(GL_LIGHTING)
 		glDisable(GL_TEXTURE_2D)
 		
-		ASJRenderHelper.glColor1u(color)
+		val (col1, col2) = colorsProvider()
+		
+		ASJRenderHelper.glColor1u(col1)
 
 		if (RenderPostShaders.allowShaders)
 			ASJShaderHelper.useShader(LibShaderIDs.idNoise) {
-				val (r, g, b) = Color(secondaryColor.toInt()).getRGBColorComponents(null)
-				GL20.glUniform3f(GL20.glGetUniformLocation(it, "color2"), r, g, b)
+				val (r, g, b, a) = Color(col2.toInt()).getRGBComponents(null)
+				GL20.glUniform4f(GL20.glGetUniformLocation(it, "color2"), r, g, b, a)
 			}
 		
 		SpellVisualizations.renderSphere(32.0)

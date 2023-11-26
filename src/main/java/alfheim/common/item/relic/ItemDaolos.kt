@@ -205,6 +205,7 @@ class ItemDaolos: ItemAxe(AlfheimAPI.RUNEAXE), IRelic {
 		
 		@SubscribeEvent
 		fun onWaterLeftClick(e: PlayerInteractAdequateEvent.LeftClick) {
+			if (!ASJUtilities.isServer) return
 			if (e.action != PlayerInteractAdequateEvent.LeftClick.Action.LEFT_CLICK_LIQUID) return
 			val stack = e.player.heldItem ?: return
 			if (stack.item !== AlfheimItems.daolos) return

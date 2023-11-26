@@ -1193,13 +1193,14 @@ elvenstory.selectgender=Выберите пол
 elvenstory.selectrace=Выберите расу
 
 key.categories.alfheim=Альфхейм
-key.lolicorn.desc=Призвать Лоликорна
+key.akashic.desc=Сложить реликвию обратно
 key.esmability.desc=Переключение эльфийской способности
 key.cast.desc=Каст заклинания
-key.uncast.desc=Отмена каста
 key.flight.desc=Эльфийский полёт
+key.lolicorn.desc=Призвать Лоликорна
 key.selmob.desc=Выбор вражеской цели
 key.selteam.desc=Выбор участника группы
+key.uncast.desc=Отмена каста
 mes.flight.unavailable=Полёт не доступен в этом измерении
 
 race.HUMAN.name=ЧЕЛОВЕК

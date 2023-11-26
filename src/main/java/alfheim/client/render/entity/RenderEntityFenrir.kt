@@ -9,7 +9,7 @@ import alfheim.common.entity.boss.EntityFenrir
 import net.minecraft.client.renderer.entity.RenderLiving
 import net.minecraft.entity.*
 import net.minecraft.util.ResourceLocation
-import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL11.glTranslated
 import vazkii.botania.client.core.handler.BossBarHandler
 
 object RenderEntityFenrir: RenderLiving(ModelEntityFenrir, 2f) {
@@ -42,13 +42,7 @@ object RenderEntityFenrir: RenderLiving(ModelEntityFenrir, 2f) {
 	override fun shouldRenderPass(wolf: EntityLivingBase, pass: Int, ticks: Float): Int {
 		wolf as EntityFenrir
 		return when {
-			pass == 0 && wolf.getWolfShaking() -> {
-				val f1 = wolf.getBrightness(ticks) * wolf.getShadingWhileShaking(ticks)
-				bindTexture(getEntityTexture(wolf))
-				glColor3f(f1, f1, f1)
-				1
-			}
-			pass == 1 && wolf.stage > 0        -> {
+			pass == 1 && wolf.stage > 0 -> {
 				ASJRenderHelper.setGlow()
 				bindTexture(LibResourceLocations.fenrir2)
 				1
@@ -73,8 +67,5 @@ object RenderEntityFenrir: RenderLiving(ModelEntityFenrir, 2f) {
 		
 		glTranslated(0.32, 0.0, -0.5)
 		glScaled(5.0)
-		
-		if (entity.spinCooldown in 270..280)
-			glRotatef((280 - entity.spinCooldown + ticks) * 36 + entity.spinStartYaw, 0f, -1f, 0f)
 	}
 }

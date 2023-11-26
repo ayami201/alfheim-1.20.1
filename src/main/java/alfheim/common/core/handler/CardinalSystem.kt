@@ -502,18 +502,14 @@ object CardinalSystem {
 		@Suppress("unused") // Used in ASM class: `EntityTrackerEntry$tryStartWachingThis$MethodVisitor`
 		@JvmStatic
 		fun notifySpawn(e: Entity) {
-			if (e is EntityLivingBase) {
-				for (segment in playerSegments.values) {
-					if (segment.party.isMember(e)) {
-						for (i in 0 until segment.party.count) {
-							if (segment.party.isPlayer(i)) {
-								val mr = segment.party[i]
-								if (mr is EntityPlayerMP) {
-									NetworkService.sendTo(Message2d(M2d.UUID, e.getEntityId().D, segment.party.indexOf(e).D), mr)
-								}
-							}
-						}
-					}
+			if (e !is EntityLivingBase) return
+			for (segment in playerSegments.values) {
+				if (!segment.party.isMember(e)) continue
+				for (i in 0 until segment.party.count) {
+					if (!segment.party.isPlayer(i)) continue
+					val mr = segment.party[i]
+					if (mr !is EntityPlayerMP) continue
+					NetworkService.sendTo(Message2d(M2d.UUID, e.getEntityId().D, segment.party.indexOf(e).D), mr)
 				}
 			}
 		}
@@ -653,18 +649,18 @@ object CardinalSystem {
 			
 			fun setDead(mr: EntityLivingBase, d: Boolean) {
 				val i = indexOf(mr)
-				if (i != -1) {
-					if (mr is EntityPlayer) {
-						members[i]?.isDead = d
-						sendDead(i, d)
-					} else if (d) {
-						remove(mr)
-						for (j in 0 until count) {
-							if (members[j]?.isPlayer == true) {
-								val e = get(j)
-								if (e is EntityPlayer)
-									ASJUtilities.say(e, "alfheimmisc.party.memberdied", mr.commandSenderName)
-							}
+				if (i == -1) return
+				
+				if (mr is EntityPlayer) {
+					members[i]?.isDead = d
+					sendDead(i, d)
+				} else if (d) {
+					remove(mr)
+					for (j in 0 until count) {
+						if (members[j]?.isPlayer == true) {
+							val e = get(j)
+							if (e is EntityPlayer)
+								ASJUtilities.say(e, "alfheimmisc.party.memberdied", mr.commandSenderName)
 						}
 					}
 				}
@@ -794,6 +790,7 @@ object CardinalSystem {
 			
 			fun sendMana(player: EntityPlayer, mana: Int) {
 				val index = indexOf(player)
+				if (index == -1) return
 				
 				for (i in 0 until count) {
 					val e = get(i)

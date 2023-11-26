@@ -135,12 +135,12 @@ object SoulRestructuringHandler {
 	private fun noWaterCheat(gaia: EntityDoppleganger) {
 		val world = gaia.worldObj
 		val (x, y, z) = Vector3.fromEntity(gaia).mf()
-		val range = -3..3
+		val range = 12
 		
-		for (i in range)
-			for (j in range)
-				for (k in range)
-					if (world.getBlock(x + i, y + j, z + k).material.isLiquid)
-						world.setBlockToAir(x + i, y + j, z + k)
+		for (i in x.bidiRange(range))
+			for (j in y.bidiRange(range))
+				for (k in z.bidiRange(range))
+					if (Vector3.pointDistancePlane(x, z, i, k) <= range && world.getBlock(i, j, k).material.isLiquid)
+						world.setBlockToAir(i, j, k)
 	}
 }

@@ -39,7 +39,7 @@ class WorldProviderDomains: WorldProvider() {
 	}
 	
 	override fun getFogColor(sunAngle: Float, partialTicks: Float): Vec3 {
-		return Color((getDomainAtPlayer(mc.thePlayer)?.skyRenderer as? SkyRendererDomains)?.color?.toInt() ?: return Color.BLACK.toVec3(), true).toVec3()
+		return Color((getDomainAtPlayer(mc.thePlayer)?.skyRenderer as? SkyRendererDomains)?.colorsProvider?.invoke()?.first?.toInt() ?: return Color.BLACK.toVec3(), true).toVec3()
 	}
 	
 	override fun registerWorldChunkManager() = Unit

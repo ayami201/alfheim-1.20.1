@@ -3,6 +3,7 @@ package alfheim.client.core.proxy
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.*
 import alfheim.AlfheimCore
+import alfheim.api.ModInfo
 import alfheim.api.event.AlfheimModeChangedEvent
 import alfheim.api.item.DoubleBoundItemRender
 import alfheim.api.lib.*
@@ -61,7 +62,7 @@ object ClientProxy : CommonProxy() {
 		LibRenderIDs
 		
 		if (ShaderHelper.useShaders()) {
-			ASJShaderHelper.crashOnError = false
+			ASJShaderHelper.crashOnError = ModInfo.DEV
 			
 			LibShaderIDs.idColor3d = ASJShaderHelper.createProgram("shaders/position.vert", "shaders/color3d.frag")
 			LibShaderIDs.idGravity = ASJShaderHelper.createProgram(null, "shaders/gravity.frag")
@@ -144,6 +145,8 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityElf::class.java, RenderEntityElf)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFallingHang::class.java, RenderEntityFallingHang)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFenrir::class.java, RenderEntityFenrir)
+		RenderingRegistry.registerEntityRenderingHandler(EntityFenrirDome::class.java, RenderEntityFenrirDome)
+		RenderingRegistry.registerEntityRenderingHandler(EntityFenrirSlash::class.java, RenderEntityFenrirSlash)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFloatingIsland::class.java, RenderEntityFloatingIsland)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlugel::class.java, RenderEntityFlugel)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrozenViking::class.java, RenderEntityFrozenViking)

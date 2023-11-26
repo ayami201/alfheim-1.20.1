@@ -18,7 +18,9 @@ class ItemElementalEarthChest: ElementalArmor(1, "ElementalEarthChest"), IElemen
 	}
 	
 	override fun onArmorTick(world: World, player: EntityPlayer, stack: ItemStack) {
-		if (!ItemStack.areItemStacksEqual(player.inventory.armorInventory[2], stack)) return
+		super.onArmorTick(world, player, stack)
+		
+		if (player.inventory.armorInventory[2] !== stack) return
 		
 		if (ManaItemHandler.requestManaExact(stack, player, 1, !world.isRemote))
 			player.addPotionEffect(PotionEffectU(Potion.resistance.id, 1, 1))

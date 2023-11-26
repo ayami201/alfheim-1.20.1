@@ -44,7 +44,7 @@ class EntitySpellLeafStorm(world: World, val caster: EntityLivingBase?): Entity(
 			if (Vector3.entityDistance(caster, it) > SpellLeafStorm.radius) return@forEach
 			
 			if (CardinalSystem.PartySystem.mobsSameParty(caster, it)) it.addPotionEffect(PotionEffect(Potion.moveSpeed.id, 50, SpellLeafStorm.efficiency.I))
-			else if (InteractionSecurity.canHurtEntity(caster, it)) it.attackEntityFrom(DamageSourceSpell.wind, SpellBase.over(caster, SpellLeafStorm.damage.D))
+			else if (InteractionSecurity.canHurtEntity(caster, it)) it.attackEntityFrom(DamageSourceSpell.wind(this, caster).setDamageBypassesArmor(), SpellBase.over(caster, SpellLeafStorm.damage.D))
 		}
 	}
 	

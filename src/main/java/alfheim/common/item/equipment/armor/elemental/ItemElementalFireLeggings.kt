@@ -18,7 +18,10 @@ class ItemElementalFireLeggings: ElementalArmor(2, "ElementalFireLeggings"), ISp
 	}
 	
 	override fun onArmorTick(world: World, player: EntityPlayer, stack: ItemStack) {
-		if (player.inventory.armorInventory[1] != stack) return // Vazkii, you're an idiot
+		super.onArmorTick(world, player, stack)
+		
+		if (player.inventory.armorInventory[1] !== stack) return
+		
 		if (player.isBurning && ManaItemHandler.requestManaExact(stack, player, 10, !world.isRemote)) player.extinguish()
 	}
 	

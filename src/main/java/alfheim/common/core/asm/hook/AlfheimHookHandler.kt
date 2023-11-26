@@ -479,6 +479,22 @@ object AlfheimHookHandler {
 	
 	@JvmStatic
 	@Hook
+	fun setDead(e: EntityDoppleganger) {
+		if (e.health <= 0f) return
+		
+		val (x, y, z) = e.source
+		EntityItem(e.worldObj, x.D, y + 0.5, z.D,
+		           if (e.isHardMode)
+					   ItemStack(ModItems.manaResource, 1, 14)
+		           else if (e.worldObj.provider.dimensionId == dimensionIDAlfheim)
+					   ElvenResourcesMetas.ElvoriumIngot.stack
+		           else
+					   ItemStack(ModItems.manaResource, 1, 4)
+		).spawn()
+	}
+	
+	@JvmStatic
+	@Hook
 	fun onLivingUpdate(e: EntityDoppleganger) {
 		updatingEntity = true
 		EntityDoppleganger.isPlayingMusic = false

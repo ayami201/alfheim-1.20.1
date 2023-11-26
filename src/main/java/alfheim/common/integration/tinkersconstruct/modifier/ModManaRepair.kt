@@ -38,7 +38,7 @@ object AModNatural: ActiveToolMod() {
 		val tag = ItemNBTHelper.getCompound(stack, tool.baseTagName, true) ?: return
 		
 		repair(stack, tag, player)
-		generareMana(stack, tag, player)
+		generateMana(stack, tag, player)
 	}
 	
 	fun repair(stack: ItemStack, tag: NBTTagCompound, player: EntityPlayer) {
@@ -52,7 +52,7 @@ object AModNatural: ActiveToolMod() {
 		}
 	}
 	
-	fun generareMana(stack: ItemStack, tag: NBTTagCompound, player: EntityPlayer) {
+	fun generateMana(stack: ItemStack, tag: NBTTagCompound, player: EntityPlayer) {
 		val headMaterial = tag.getInteger("Head")
 		
 		val addDelay = if (stack === player.currentEquippedItem) 1 else 10

@@ -43,8 +43,6 @@ open class DamageSourceSpell(type: String): DamageSource(type) {
 		/** Red Flame */
 		val soulburn = DamageSource("soulburn").setDamageBypassesArmor().setDamageIsAbsolute().setTo(PSYCHIC).setTo(FIRE)
 		
-		val wind = DamageSourceSpell("wind").setDamageBypassesArmor().setTo(AIR)
-		
 		fun explosion(dm: EntitySpellDriftingMine, caster: EntityLivingBase?) =
 			EntityDamageSourceIndirectSpell("explosion.player", caster, dm).setFireDamage().setExplosion()!!
 		
@@ -107,8 +105,11 @@ open class DamageSourceSpell(type: String): DamageSource(type) {
 		fun water(caster: EntityLivingBase?) =
 			EntityDamageSourceSpell("water", caster).setDamageBypassesArmor().setTo(WATER)
 		
-		fun windblade(wb: EntitySpellWindBlade, caster: EntityLivingBase?) =
-			EntityDamageSourceIndirectSpell("windblade", caster, wb).setDamageBypassesArmor().setTo(AIR)
+		fun wind(indirect: Entity, caster: Entity?) =
+			EntityDamageSourceIndirectSpell("wind", caster, indirect).setTo(AIR)
+		
+		fun windblade(projectile: Entity, caster: Entity?) =
+			EntityDamageSourceIndirectSpell("windblade", caster, projectile).setDamageBypassesArmor().setTo(AIR)
 	}
 }
 

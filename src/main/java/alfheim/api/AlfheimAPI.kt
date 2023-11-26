@@ -177,7 +177,7 @@ object AlfheimAPI {
 	
 	inline fun <reified T: Any> registerIncantation(incantation: String, vararg inputs: Any, noinline application: (T) -> Boolean): TunerIncantation<T> {
 		val ti = TunerIncantation(T::class.java, incantation, inputs, application)
-		tunerIncantations[incantation] = ti
+		tunerIncantations[incantation.lowercase()] = ti
 		return ti
 	}
 	

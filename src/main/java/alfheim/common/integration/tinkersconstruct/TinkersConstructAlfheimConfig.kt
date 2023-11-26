@@ -5,7 +5,6 @@ import alfheim.AlfheimCore
 import alfheim.api.AlfheimAPI
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.AlfheimConfigHandler.materialIDs
-import alfheim.common.integration.ThermalFoundationIntegration
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenResourcesMetas
 import cpw.mods.fml.common.Loader
@@ -19,9 +18,11 @@ import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fluids.*
 import tconstruct.TConstruct
 import tconstruct.library.TConstructRegistry
-import tconstruct.library.crafting.Smeltery
+import tconstruct.library.crafting.*
 import tconstruct.smeltery.TinkerSmeltery
+import tconstruct.tools.TinkerTools
 import tconstruct.util.IMCHandler
+import tconstruct.util.config.PHConstruct
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.common.block.ModBlocks
 import vazkii.botania.common.item.ModItems
@@ -36,7 +37,7 @@ object TinkersConstructAlfheimConfig {
 		addMaterial(materialIDs[ELEMENTIUM], "Elementium", BotaniaAPI.elementiumToolMaterial, 1.4f, Color(0xDC6DF2).rgb, EnumChatFormatting.LIGHT_PURPLE.toString(), 52, 5.3f, 3.1f, 0.9f, 1)
 		addMaterial(materialIDs[ELVORIUM], "Elvorium", AlfheimAPI.elvoriumToolMaterial, 2.4f, Color(0xE58A2E).rgb, EnumChatFormatting.GOLD.toString(), 58, 5.5f, 3.5f, 2.8f, 2)
 		addMaterial(materialIDs[MANASTEEL], "Manasteel", BotaniaAPI.manasteelToolMaterial, 1.2f, Color(0x4C9ED9).rgb, EnumChatFormatting.AQUA.toString(), 56, 5.1f, 3.0f, 0.7f, 1)
-		addMaterial(materialIDs[MAUFTRIUM], "Mauftrium", AlfheimAPI.mauftriumToolmaterial, 4.5f, Color(0xFFE359).rgb, EnumChatFormatting.YELLOW.toString(), 64, 5.6f, 4.0f, 3.6f, 3)
+		addMaterial(materialIDs[MAUFTRIUM], "Mauftrium", AlfheimAPI.mauftriumToolmaterial, 4.5f, Color(0xFFC713).rgb, EnumChatFormatting.YELLOW.toString(), 64, 5.6f, 4.0f, 3.6f, 3)
 		addMaterial(materialIDs[TERRASTEEL], "Terrasteel", BotaniaAPI.terrasteelToolMaterial, 2.2f, Color(0x52CC29).rgb, EnumChatFormatting.GREEN.toString(), 60, 5.4f, 3.8f, 2.5f, 1)
 		
 		addSmelteryMeltCastGroup(materialIDs[ELEMENTIUM], TinkersConstructAlfheimModule.liquidElementium, ModBlocks.storage, 2, ModItems.manaResource, 7, ModItems.manaResource, 19)
@@ -53,25 +54,22 @@ object TinkersConstructAlfheimConfig {
 			TConstructRegistry.getTableCasting().addCastingRecipe(ItemStack(TinkersConstructAlfheimModule.naturalBucket, 1, id), FluidStack(it, 1000), ItemStack(Items.bucket), true, 50)
 			FluidContainerRegistry.registerFluidContainer(it, ItemStack(TinkersConstructAlfheimModule.naturalBucket, 1, id))
 		}
-		TConstructRegistry.getTableCasting().addCastingRecipe(ItemStack(TinkerSmeltery.buckets, 1, 29), FluidStack(TinkerSmeltery.moltenMithrilFluid, 1000), ItemStack(Items.bucket), true, 50)
 		
 		// Building materials
-		if (materialIDs[LIVIVNGWOOD] != -1) addMaterial(materialIDs[LIVIVNGWOOD], "Livingwood", 1, 175, 550, 3, 1.1f, Color(0x4D2113).rgb, EnumChatFormatting.DARK_RED.toString(), 16, 3.4f, 0.7F, 0.8F)
-		if (materialIDs[DREAMWOOD] != -1) addMaterial(materialIDs[DREAMWOOD], "Dreamwood", 1, 200, 600, 3, 1.2f, Color(0xCED9D9).rgb, EnumChatFormatting.GRAY.toString(), 24, 3.2f, 0.6F, 1.1F)
-		if (materialIDs[LIVINGROCK] != -1) addMaterial(materialIDs[LIVINGROCK], "Livingrock", 1, 131, 460, 1, 0.5f, Color(0xFFFEE8).rgb, EnumChatFormatting.GRAY.toString(), 80, 1.1f, 2.0F, 1.0F, stoneBound = 1f)
+		addMaterial(materialIDs[LIVINGWOOD], "Livingwood", 1, 175, 550, 3, 1.1f, Color(0x4D2113).rgb, EnumChatFormatting.DARK_RED.toString(), 16, 3.4f, 0.7F, 0.8F)
+		addMaterial(materialIDs[DREAMWOOD], "Dreamwood", 1, 200, 600, 3, 1.2f, Color(0xCED9D9).rgb, EnumChatFormatting.GRAY.toString(), 24, 3.2f, 0.6F, 1.1F)
+		addMaterial(materialIDs[LIVINGROCK], "Livingrock", 1, 131, 460, 1, 0.5f, Color(0xFFFEE8).rgb, EnumChatFormatting.GRAY.toString(), 80, 1.1f, 2.0F, 1.0F, stoneBound = 1f)
 		
-		if (materialIDs[LIVIVNGWOOD] != -1) ModBlocks.livingwood.toItem()?.let { addPartBuilderMaterial(materialIDs[LIVIVNGWOOD], ModItems.manaResource, 3, it, 0, 4) }
+		if (materialIDs[LIVINGWOOD] != -1) ModBlocks.livingwood.toItem()?.let { addPartBuilderMaterial(materialIDs[LIVINGWOOD], ModItems.manaResource, 3, it, 0, 4) }
 		if (materialIDs[DREAMWOOD] != -1) ModBlocks.dreamwood.toItem()?.let { addPartBuilderMaterial(materialIDs[DREAMWOOD], ModItems.manaResource, 13, it, 0, 4) }
 		if (materialIDs[LIVINGROCK] != -1) ModBlocks.livingrock.toItem()?.let { addPartBuilderMaterial(materialIDs[LIVINGROCK], it, 0, null, 0, 4) }
 		
 		// Bowstring
-		if (materialIDs[REDSTRING] != -1) TConstructRegistry.addBowstringMaterial(materialIDs[REDSTRING], 2, ItemStack(ModItems.manaResource, 1, 12), ItemStack(TinkersConstructAlfheimModule.naturalMaterial), 0.9f, 0.8f, 1.2f, Color(0xE52222).rgb)
+		if (materialIDs[REDSTRING] != -1) TConstructRegistry.addBowstringMaterial(materialIDs[REDSTRING], 2, ItemStack(ModItems.manaResource, 1, 12), ItemStack(TinkersConstructAlfheimModule.naturalMaterial), 0.9f    , 0.8f, 1.2f, Color(0xE52222).rgb)
 		if (materialIDs[MANASTRING] != -1) TConstructRegistry.addBowstringMaterial(materialIDs[MANASTRING], 2, ItemStack(ModItems.manaResource, 1, 16), ItemStack(TinkersConstructAlfheimModule.naturalMaterial, 1, 1), 0.9f, 1.1f, 1.1f, Color(0xCCFFF2).rgb)
 		
 		if (!AlfheimCore.stupidMode && materialIDs[MAUFTRIUM] != -1)
 			TConstructRegistry.getBasinCasting().addCastingRecipe(ItemStack(ModBlocks.spreader, 1, 4), FluidStack(TinkersConstructAlfheimModule.liquidMauftrium, TConstruct.ingotLiquidValue * 8), ItemStack(ModBlocks.spreader, 1, 3), true, 360)
-		
-		ThermalFoundationIntegration.addTinkersCastingIfNotLoaded()
 	}
 	
 	/**
@@ -96,6 +94,9 @@ object TinkersConstructAlfheimConfig {
 		if (id == -1) return
 		
 		TConstructRegistry.addToolMaterial(id, name, tooltip, harvest, durability, efficiency, damage, handle, reinforced, stoneBound, style, color)
+		TConstructRegistry.addDefaultToolPartMaterial(id)
+		if (PHConstruct.craftMetalTools) TConstructRegistry.addDefaultShardMaterial(id)
+		PatternBuilder.instance.registerMaterialSet(name, ItemStack(TinkerTools.toolShard, 1, id), ItemStack(TinkerTools.toolRod, 1, id), id)
 		
 		require(!((bowSpeed == null) xor (projSpeed == null))) { "Both bowSpeed ($bowSpeed) and projSpeed ($projSpeed) must be present" }
 		if (bowSpeed != null && projSpeed != null) TConstructRegistry.addBowMaterial(id, bowSpeed, projSpeed)
@@ -181,7 +182,7 @@ object TinkersConstructAlfheimConfig {
 	 *
 	 * Note: [ingot] and [nugget] are optional params while [block] is required because of render
 	 */
-	fun addSmelteryMeltCastGroup(id: Int, fluid: Fluid, block: Block, blockMeta: Int = 0, ingot: Item? = null, ingotMeta: Int = 0, nugget: Item? = null, nuggetMeta: Int = 0, blockOut: Int = TConstruct.blockLiquidValue, ingotOut: Int = TConstruct.ingotLiquidValue, nuggetOut: Int = TConstruct.nuggetLiquidValue) {
+	fun addSmelteryMeltCastGroup(id: Int, fluid: Fluid, block: Block, blockMeta: Int = 0, ingot: Item? = null, ingotMeta: Int = 0, nugget: Item? = null, nuggetMeta: Int = 0, shard: Item? = TinkerTools.toolShard, shardMeta: Int = id, blockOut: Int = TConstruct.blockLiquidValue, ingotOut: Int = TConstruct.ingotLiquidValue, nuggetOut: Int = TConstruct.nuggetLiquidValue, shardOut: Int = TConstruct.chunkLiquidValue) {
 		if (id == -1) return
 		
 		addSmelteryMelting(block, blockMeta, fluid, blockOut)
@@ -196,6 +197,9 @@ object TinkersConstructAlfheimConfig {
 			addSmelteryMelting(nugget, nuggetMeta, block, blockMeta, fluid, nuggetOut)
 			TConstructRegistry.getTableCasting().addCastingRecipe(ItemStack(nugget, 1, nuggetMeta), FluidStack(fluid, nuggetOut), ItemStack(TinkerSmeltery.metalPattern, 1, 27), false, 50)
 		}
+		
+		if (shard != null)
+			addSmelteryMelting(shard, shardMeta, block, blockMeta, fluid, shardOut)
 	}
 	
 	/**
@@ -221,7 +225,7 @@ object TinkersConstructAlfheimConfig {
 	const val TERRASTEEL = 4
 	
 	const val DREAMWOOD = 5
-	const val LIVIVNGWOOD = 6
+	const val LIVINGWOOD = 6
 	const val LIVINGROCK = 7
 	
 	const val REDSTRING = 8

@@ -156,6 +156,8 @@ object AlfheimRegistry {
 		registerEntity(EntityEarthquake::class.java, "Earthquake", nextEntityID)
 		registerEntity(EntityEarthquakeFracture::class.java, "EarthquakeFracture", nextEntityID)
 		registerEntity(EntityFallingHang::class.java, "FallingHang", nextEntityID)
+		registerEntity(EntityFenrirDome::class.java, "FenrirDome", nextEntityID)
+		registerEntity(EntityFenrirSlash::class.java, "FenrirSlash", nextEntityID)
 		registerEntity(EntityFireAura::class.java, "FireAura", nextEntityID)
 		registerEntity(EntityFireTornado::class.java, "FireTornado", nextEntityID)
 		registerEntity(EntityFloatingIsland::class.java, "FloatingIsland", nextEntityID)
@@ -173,6 +175,7 @@ object AlfheimRegistry {
 		registerEntity(EntityThrowableItem::class.java, "ThrownItem", nextEntityID)
 		registerEntity(EntityThrownPotion::class.java, "ThrownPotion", nextEntityID)
 		registerEntity(EntityThunderChakram::class.java, "ThunderChakram", nextEntityID)
+		registerEntity(EntityTornado::class.java, "Tornado", nextEntityID)
 		registerEntity(EntityWarBanner::class.java, "WarBanner", nextEntityID)
 		
 		registerEntity(EntityGleipnir::class.java, "Gleipnir", nextEntityID)

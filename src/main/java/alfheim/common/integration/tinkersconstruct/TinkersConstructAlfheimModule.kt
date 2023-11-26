@@ -54,6 +54,7 @@ object TinkersConstructAlfheimModule {
 	val naturalFluidBlocks: Array<Block>
 	
 	val naturalBucket: Item
+	val naturalManual: Item
 	val naturalMaterial: Item
 	
 	val manaGenMaterials = intArrayOf(AlfheimConfigHandler.materialIDs[ELVORIUM], AlfheimConfigHandler.materialIDs[MAUFTRIUM], AlfheimConfigHandler.materialIDs[TERRASTEEL])
@@ -125,11 +126,13 @@ object TinkersConstructAlfheimModule {
 				
 				TConstructClientRegistry.addEffectRenderMapping(it, AlfheimConfigHandler.modifierIDs[0], "tinker", "modifiers/ManaCore/mana_core", false)
 			}
+		
+		naturalManual = ItemNaturalManual()
 	}
 	
 	fun registerSmelteryFluid(name: String, renderBlock: Block, renderMeta: Int, texture: String = "liquids/liquid_$name", fluidName: String = "$name.molten", blockName: String = "fluid.molten.$name", density: Int = 3000, viscosity: Int = 6000, temperature: Int = 1300, material: Material = Material.lava) =
 		TinkerSmeltery.registerFluid(name, fluidName, blockName, texture, density, viscosity, temperature, material).also {
-			FluidType.registerFluidType(name, renderBlock, renderMeta, it.temperature, it, false)
+			FluidType.registerFluidType(fluidName, renderBlock, renderMeta, it.temperature, it, true)
 		}!!
 }
 

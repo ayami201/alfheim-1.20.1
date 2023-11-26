@@ -5,6 +5,8 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.AxisAlignedBB
 import java.util.*
 
+interface IAncientWolf
+
 interface IMuspelheimEntity: IElementalEntity {
 	override val elements get() = EnumSet.of(ElementalDamage.FIRE)!!
 }

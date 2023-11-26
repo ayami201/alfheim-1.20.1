@@ -377,7 +377,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		uberSpreaderCapacity = loadProp(CATEGORY_GENERAL, "uberSpreaderCapacity", uberSpreaderCapacity, false, "Mauftrium Spreader max mana cap")
 		uberSpreaderSpeed = loadProp(CATEGORY_GENERAL, "uberSpreaderSpeed", uberSpreaderSpeed, false, "Mauftrium Spreader mana per shot")
 		wireoverpowered = loadProp(CATEGORY_GENERAL, "wire.overpowered", wireoverpowered, false, "Allow WireSegal far more power than any one person should have")
-		worldDestroyConfig = loadProp(CATEGORY_GENERAL, "worldDestroyConfig", emptyArray(), false, "List of world destruction types while Ragnarok in form of string 'dimID:type' (types: 0 - none, 1 - only while ginnungagap, 2 - all)", false).map {
+		worldDestroyConfig = loadProp(CATEGORY_GENERAL, "worldDestroyConfig", emptyArray(), false, "List of world destruction types during Ragnarok in form of string 'dimID:type' (types: 0 - none, 1 - only while ginnungagap, 2 - all)", false).map {
 			val (id, type) = it.split(':')
 			id.toInt() to type.toInt()
 		}.associate { it }
