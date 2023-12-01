@@ -14,6 +14,8 @@ Fixes:
  Flugel was not summonable with certain tech blocks
  Daolos crash on water hits
  Gaia liquid check range
+ Earth elemental mobs dying from poison
+ Pathfinding through anomalies
  [MMO] Crash on team mana sync
  [NEI] Corporea button requests when client lang is different from server
  [TC] Vis discount on revealing helmets

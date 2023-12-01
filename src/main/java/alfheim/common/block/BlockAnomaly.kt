@@ -18,7 +18,7 @@ import net.minecraft.entity.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
 import net.minecraft.util.*
-import net.minecraft.world.World
+import net.minecraft.world.*
 import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.common.Botania
 import vazkii.botania.common.core.helper.ItemNBTHelper.getNBT
@@ -104,9 +104,10 @@ class BlockAnomaly: BlockContainerMod(anomaly), ILexiconable {
 		return true
 	}
 	
+	override fun getBlocksMovement(world: IBlockAccess?, x: Int, y: Int, z: Int) = false
 	override fun getExplosionResistance(entity: Entity?) = Float.MAX_VALUE / 3f
 	override fun createNewTileEntity(world: World, meta: Int) = TileAnomaly()
-	override fun getCollisionBoundingBoxFromPool(p_149668_1_: World?, p_149668_2_: Int, p_149668_3_: Int, p_149668_4_: Int) = null
+	override fun getCollisionBoundingBoxFromPool(world: World?, x: Int, y: Int, z: Int) = null
 	override fun isOpaqueCube() = false
 	override fun renderAsNormalBlock() = false
 	override fun getRenderType() = -1

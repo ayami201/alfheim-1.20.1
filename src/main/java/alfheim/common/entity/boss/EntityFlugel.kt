@@ -664,7 +664,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 		else
 			1
 		
-		aiTask = AITask.entries.toTypedArray()[nbt.getInteger(TAG_AI_TASK)]
+		aiTask = AITask.entries[nbt.getInteger(TAG_AI_TASK)]
 		
 		//if (ModInfo.DEV) ASJUtilities.log("Scrolling AIs for " + nbt.getString(TAG_AI));
 		for (e in tasks.taskEntries) {

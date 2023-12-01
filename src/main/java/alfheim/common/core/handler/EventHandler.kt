@@ -201,13 +201,13 @@ object EventHandler {
 	@SubscribeEvent
 	fun onEntityHurt(e: LivingHurtEvent) {
 		val target = e.entityLiving
-		val attacker = e.source.entity
+		val attacker = e.source.entity as? EntityLivingBase
 		
-		if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDBerserk) == true)
+		if (attacker?.isPotionActive(AlfheimConfigHandler.potionIDBerserk) == true)
 			e.ammount *= 1.2f
-		if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDOvermage) == true && e.source.isMagical)
+		if (attacker?.isPotionActive(AlfheimConfigHandler.potionIDOvermage) == true && e.source.isMagical)
 			e.ammount *= 1.2f
-		if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDNinja) == true)
+		if (attacker?.isPotionActive(AlfheimConfigHandler.potionIDNinja) == true)
 			e.ammount *= 0.8f
 		
 		if (AlfheimConfigHandler.enableMMO) {
@@ -216,7 +216,7 @@ object EventHandler {
 				return
 			}
 			
-			if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDQuadDamage) == true) {
+			if (attacker?.isPotionActive(AlfheimConfigHandler.potionIDQuadDamage) == true) {
 				e.ammount *= 4f
 				VisualEffectHandler.sendPacket(VisualEffects.QUADH, attacker)
 			}
@@ -242,7 +242,7 @@ object EventHandler {
 						e.isCanceled = true
 						return
 					}
-				} else if (attacker is EntityLivingBase && attacker.isEntityAlive && target.worldObj.rand.nextInt(3) == 0) {
+				} else if (attacker?.isEntityAlive == true && target.worldObj.rand.nextInt(3) == 0) {
 					attacker.attackEntityFrom(e.source, e.ammount / 2)
 				}
 			}
@@ -273,6 +273,12 @@ object EventHandler {
 				if (ASJUtilities.isServer) NetworkService.sendToAll(MessageEffect(target.entityId, pe.potionID, dur, pe.amplifier))
 			}
 		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	fun noPoisonDeath(e: LivingHurtEvent) {
+		if (e.source.damageType !== DamageSourceSpell.poison.damageType) return
+		e.ammount = min(e.entityLiving.health - 1, e.ammount)
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST) // if something can cancel death

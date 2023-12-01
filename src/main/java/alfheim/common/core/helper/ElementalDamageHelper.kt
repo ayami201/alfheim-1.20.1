@@ -184,7 +184,7 @@ object ElementalDamageHandler {
 		if (e.ammount > 0 && newAmount <= 0) e.isCanceled = true
 	}
 	
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.LOW)
 	fun onHurt(e: LivingHurtEvent) {
 		e.ammount = calculateElements(e.source, e.entityLiving, e.ammount)
 		if (e.ammount > 0 && e.ammount <= 0f) e.isCanceled = true
@@ -288,11 +288,11 @@ enum class ElementalDamage(val x2: Array<ElementalDamageBridge>, val x05: Array<
 	PSYCHIC(arrayOf(DARKNESS_), arrayOf(LIGHTNESS_), 0x793A80);
 	
 	fun isVulnerable(type: ElementalDamage): Boolean {
-		return ElementalDamageBridge.entries.toTypedArray()[type.ordinal] in x2
+		return ElementalDamageBridge.entries[type.ordinal] in x2
 	}
 	
 	fun isResistant(type: ElementalDamage): Boolean {
-		return ElementalDamageBridge.entries.toTypedArray()[type.ordinal] in x05
+		return ElementalDamageBridge.entries[type.ordinal] in x05
 	}
 	
 	fun isImmune(type: ElementalDamage): Boolean {

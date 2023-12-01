@@ -225,11 +225,11 @@ object GUIParty: Gui() {
 				if (l == null) {
 					color = 0xCCCCCC
 					col = when (val it = pt.getType(i)) {
-						in EnumRace.entries.toTypedArray().indices -> EnumRace.getRGBColor(it)
-						LibResourceLocations.BOSS                  -> 0xA2018C
-						LibResourceLocations.NPC     -> -0xFF5501
-						LibResourceLocations.MOB     -> col
-						else                         -> -0x777778
+						in EnumRace.entries.indices -> EnumRace.getRGBColor(it)
+						LibResourceLocations.BOSS   -> 0xA2018C
+						LibResourceLocations.NPC    -> -0xFF5501
+						LibResourceLocations.MOB    -> col
+						else                        -> -0x777778
 					}
 					hpm = pt.getMaxHealth(i)
 					hp = min(pt.getHealth(i), hpm)

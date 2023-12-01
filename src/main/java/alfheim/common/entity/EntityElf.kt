@@ -518,7 +518,7 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 		}
 		
 		companion object {
-			operator fun get(i: Int) = if (i !in entries.toTypedArray().indices) CITIZEN else entries[i]
+			operator fun get(i: Int) = if (i !in entries.indices) CITIZEN else entries[i]
 		}
 	}
 }
