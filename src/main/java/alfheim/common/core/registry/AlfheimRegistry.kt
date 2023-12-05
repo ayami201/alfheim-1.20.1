@@ -107,6 +107,8 @@ object AlfheimRegistry {
 		PotionAlfheim(AlfheimConfigHandler.potionIDNineLifes, "nineLifes", false, 0xDD2222)
 		PotionNinja
 		PotionNoclip
+		if (AlfheimConfigHandler.potionIDOvercold != -1) PotionAlfheim(AlfheimConfigHandler.potionIDOvercold, "overcold", false, 0xBFF4FF)
+		if (AlfheimConfigHandler.potionIDOverheat != -1) PotionAlfheim(AlfheimConfigHandler.potionIDOverheat, "overheat", false, 0xFF4D00)
 		PotionAlfheim(AlfheimConfigHandler.potionIDOvermage, "overmage", false, 0x88FFFF)
 		PotionAlfheim(AlfheimConfigHandler.potionIDPossession, "possession", true, 0xCC0000)
 		PotionQuadDamage

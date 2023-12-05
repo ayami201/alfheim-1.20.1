@@ -1541,6 +1541,12 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
 	fun updatePlayerMoveState(input: MovementInputFromOptions): Boolean {
+		when (AlfheimConfigHandler.hotControls) {
+			0 -> return false
+			1 -> if (mc.theWorld.difficultySetting != EnumDifficulty.HARD) return false
+			2 -> Unit // pass
+		}
+		
 		if (mc.thePlayer.capabilities.isCreativeMode || mc.thePlayer.cold > -90f) return false
 		if (ItemPendant.canProtect(mc.thePlayer, MUSPELHEIM, 0)) return false
 		

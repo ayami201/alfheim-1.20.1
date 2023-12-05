@@ -41,6 +41,8 @@ object SheerColdHandler {
 	@SubscribeEvent
 	fun onLivingUpdate(e: LivingUpdateEvent) {
 		val target = e.entityLiving
+		
+		if (!AlfheimConfigHandler.mobTemperature && target !is EntityPlayer) return
 		if (target.worldObj.isRemote || !target.isEntityAlive) return
 		
 		if (target is EntityPlayerMP && target.capabilities.isCreativeMode) {
@@ -88,13 +90,35 @@ object SheerColdHandler {
 		if (EntityList.getEntityString(target) in AlfheimConfigHandler.overcoldBlacklist) target.cold = min(0f, target.cold)
 		if (EntityList.getEntityString(target) in AlfheimConfigHandler.overheatBlacklist) target.cold = max(0f, target.cold)
 		
-		if (target.cold >= 100f && target !is INiflheimEntity && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, target.maxHealth * 0.01f + 0.15f)
-		if (target.cold <= -100f && target !is IMuspelheimEntity && !canProtect(target, MUSPELHEIM)) target.attackEntityFrom(DamageSourceSpell.soulburn, target.maxHealth * 0.01f + 0.15f)
+		val cold = target.cold
+		
+		if (AlfheimConfigHandler.potionIDOvercold != -1) {
+			if (cold >= 25f)
+				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOvercold, 101, (cold / 25).I - 1))
+			else
+				target.removePotionEffect(AlfheimConfigHandler.potionIDOvercold)
+		}
+		if (AlfheimConfigHandler.potionIDOverheat != -1) {
+			if (cold <= -25f)
+				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOverheat, 101, when {
+					cold <= -90f -> 2
+					cold <= -50f -> 1
+					else         -> 0
+				}))
+			else
+				target.removePotionEffect(AlfheimConfigHandler.potionIDOverheat)
+		}
+		
+		// DoT instead of constant
+		if (target.ticksExisted % 50 != 0) return
+		
+		if (cold >= 100f && target !is INiflheimEntity && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, (target.maxHealth * 0.01f + 0.15f) * 50)
+		if (cold <= -100f && target !is IMuspelheimEntity && !canProtect(target, MUSPELHEIM)) target.attackEntityFrom(DamageSourceSpell.soulburn, (target.maxHealth * 0.01f + 0.15f) * 50)
 	}
 	
-	private fun canProtect(target: EntityLivingBase, type: ItemPendant.Companion.EnumPrimalWorldType): Boolean {
+	private fun canProtect(target: EntityLivingBase, type: ItemPendant.Companion.EnumPrimalWorldType, cost: Int = 1): Boolean {
 		if (target !is EntityPlayer) return false
-		return ItemPendant.canProtect(target, type, 1)
+		return ItemPendant.canProtect(target, type, cost)
 	}
 	
 	val neutralSounds = arrayOf("bat.idle", "cat.meow", "chicken.say", "cow.say", "pig.say", "sheep.say", "wolf.bark")
@@ -107,14 +131,14 @@ object SheerColdHandler {
 	
 	@SubscribeEvent
 	fun onPlayerOvercold(e: LivingUpdateEvent) {
-		val player = e.entityLiving as? EntityPlayer ?: return
-		if (ItemPendant.canProtect(player, NIFLHEIM, 0)) return
+		val target = e.entityLiving
+		if (target is INiflheimEntity) return
 		
-		val cold = player.cold
-		if (cold < 25f) return
+		val cold = target.cold
 		
-		val amp = (cold / 25).I - 1
-		player.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 100, amp))
+		if (cold >= 25f && !canProtect(target, NIFLHEIM, 0)) target.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 100, (cold / 25).I - 1))
+		
+		if (target.cold >= 100f && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, target.maxHealth * 0.01f + 0.15f)
 	}
 	
 	// additional "lag" with controls - AlfheimHookHandler#updatePlayerMoveState
@@ -128,7 +152,7 @@ object SheerColdHandler {
 		val heat = -player.cold
 		
 		if (heat < 25f) return
-		if (player.rng.nextInt(1000) == 0) return player.playSoundAtEntity("mob." + (if (ASJUtilities.chance((heat + 50) * -2)) hostileSounds else neutralSounds).random(), 1f, 1f)
+		if (player.rng.nextInt(1000) == 0) return player.playSoundAtEntity("mob." + (if (ASJUtilities.chance((heat + 50) * 2)) hostileSounds else neutralSounds).random(), 1f, 1f)
 		
 		if (heat < 50f) return
 		if (player.rng.nextInt(3000) == 0) {
@@ -144,10 +168,11 @@ object SheerColdHandler {
 				entity = EntityItem(mc.theWorld, 0.0, 0.0, 0.0, ItemStack(item))
 			}
 			
+			var tries = 50
 			do {
 				val (x, _, z) = Vector3().rand().mul(64).add(player)
 				entity.setPosition(x, mc.theWorld.getTopSolidOrLiquidBlock(x.I, z.I) + 1.0, z)
-			} while (!ASJUtilities.isNotInFieldOfVision(entity, player))
+			} while (!ASJUtilities.isNotInFieldOfVision(entity, player) && --tries > 0)
 			
 			entity.spawn()
 		}

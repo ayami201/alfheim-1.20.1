@@ -131,6 +131,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var floodLightQuality = 10
 	var flugelSwapBlackList = emptyArray<String>()
 	var gourmaryllisDifficulty = 2
+	var hotControls = 2
 	var hotHell = true
 	var imPatheticWeakAndScaredDontTouchMyWorlds = false
 	var interactEventChecks = false
@@ -140,6 +141,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var mobElements = arrayOf("Blaze:FIRE", "EnderDragon:DARKNESS", "Enderman:DARKNESS", "Ghast:AIR,PSYCHIC", "LavaSlime:FIRE,EARTH", "MushroomCow:NATURE", "SnowMan:ICE", "Slime:NATURE,WATER", "VillagerGolem:EARTH", "WitherBoss:DARKNESS", "Thaumcraft.EldritchCrab:DARKNESS", "Thaumcraft.EldritchGolem:EARTH", "Thaumcraft.EldritchGuardian:DARKNESS,PSYCHIC", "Thaumcraft.EldritchWarden:DARKNESS,PSYCHIC", "Thaumcraft.Firebat:FIRE", "Thaumcraft.MindSpider:PSYCHIC", "Thaumcraft.ThaumSlime:WATER,DARKNESS", "ThermalFoundation.Blizz:ICE", "ThermalFoundation.Blitz:ELECTRIC", "ThermalFoundation.Basalz:EARTH")
 	var minimalGraphics = false
 	var mobPriests = true
+	var mobTemperature = true
 	var moonbowMaxDmg = 20
 	var moonbowVelocity = 0.5f
 	var mountAlfheimOnly = false
@@ -204,6 +206,8 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var potionIDNineLifes = potionID___COUNTER++
 	var potionIDNinja = potionID___COUNTER++
 	var potionIDNoclip = potionID___COUNTER++
+	var potionIDOvercold = potionID___COUNTER++
+	var potionIDOverheat = potionID___COUNTER++
 	var potionIDOvermage = potionID___COUNTER++
 	var potionIDPossession = potionID___COUNTER++
 	var potionIDQuadDamage = potionID___COUNTER++
@@ -337,6 +341,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		floodLightQuality = loadProp(CATEGORY_GENERAL, "floodLightQuality", floodLightQuality, false, "Determines floodlight raycasting steps (lower values - more quality and CPU load). Must be an integer divisor of 360", 1, 120)
 		flugelSwapBlackList = loadProp(CATEGORY_GENERAL, "flugelSwapBlackList", flugelSwapBlackList, false, "Blacklist for items that flugel can't swap [modid:name]", false)
 		gourmaryllisDifficulty = loadProp(CATEGORY_GENERAL, "gourmaryllisDifficulty", gourmaryllisDifficulty, false, "Difficulty of Gourmaryllis functionality: 0 - default, 1 - as in 1.12.2, 2 - hardcore", 0, 2)
+		hotControls = loadProp(CATEGORY_GENERAL, "hotControls", hotControls, false, "High overheat value would mess your controls if set to 2, only on Hard difficulty if set to 1, would not mess completely if set to 0", 0, 2)
 		hotHell = loadProp(CATEGORY_GENERAL, "hotHell", hotHell, false, "Set this to false to remove overheating in Muspleheim (Hell/Nether)")
 		imPatheticWeakAndScaredDontTouchMyWorlds = loadProp(CATEGORY_GENERAL, "imPatheticWeakAndScaredDontTouchMyWorlds", imPatheticWeakAndScaredDontTouchMyWorlds, false, "Set this to true to disable hardcoded world destruction during Ragnarok and affect ONLY Alfheim")
 		interactEventChecks = loadProp(CATEGORY_GENERAL, "interactEventChecks", interactEventChecks, false, "Distance checks when firing interaction events, results may be unclear")
@@ -346,6 +351,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		minimalGraphics = loadProp(CATEGORY_GENERAL, "minimalGraphics", minimalGraphics, true, "Set this to true to disable .obj models and shaders")
 		mobElements = loadProp(CATEGORY_GENERAL, "mobElements", mobElements, true, "Array of mob names to the list of their elements", false)
 		mobPriests = loadProp(CATEGORY_GENERAL, "mobPriests", mobPriests, false, "Set this to false so that only players can be priests")
+		mobTemperature = loadProp(CATEGORY_GENERAL, "mobTemperature", mobTemperature, false, "Set this to false to disable mobs getting overcold and overheat effects (may break some mechanics)")
 		moonbowMaxDmg = loadProp(CATEGORY_GENERAL, "moonbowMaxDmg", moonbowMaxDmg, false, "Max base damage for Phoebus Catastrophe")
 		moonbowVelocity = loadProp(CATEGORY_GENERAL, "moonbowVelocity", moonbowVelocity.D, false, "Phoebus Catastrophe charge speed").F
 		mountAlfheimOnly = loadProp(CATEGORY_GENERAL, "mountAlfheimOnly", mountAlfheimOnly, false, "Set this to false to make mounts summonable only in Alfheim")
@@ -408,6 +414,8 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDNineLifes = loadProp(CATEGORY_MMOP, "potionIDNineLifes", potionIDNineLifes, true, "Potion id for Nine Lifes")
 		potionIDNinja = loadProp(CATEGORY_POTIONS, "potionIDNinja", potionIDNinja, true, "Potion id for Ninja")
 		potionIDNoclip = loadProp(CATEGORY_MMOP, "potionIDNoclip", potionIDNoclip, true, "Potion id for Noclip")
+		potionIDOvercold = loadProp(CATEGORY_POTIONS, "potionIDOvercold", potionIDOvercold, true, "Potion id for Overcold (only for visual information, set to -1 to disable)")
+		potionIDOverheat = loadProp(CATEGORY_POTIONS, "potionIDOverheat", potionIDOverheat, true, "Potion id for Overheat (only for visual information, set to -1 to disable)")
 		potionIDOvermage = loadProp(CATEGORY_POTIONS, "potionIDOvermage", potionIDOvermage, true, "Potion id for Overmage")
 		potionIDPossession = loadProp(CATEGORY_POTIONS, "potionIDPossession", potionIDPossession, true, "Potion id for Possession")
 		potionIDQuadDamage = loadProp(CATEGORY_MMOP, "potionIDQuadDamage", potionIDQuadDamage, true, "Potion id for Quad Damage")

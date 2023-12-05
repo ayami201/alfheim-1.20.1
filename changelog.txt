@@ -6,6 +6,7 @@ Innovations:
  Infernal fruit effect can now keep player warm
  Leather set can slow down sheer cold accumulation
  Gaia returns summon item on despawn #298
+ Temperature mechanic improvements
  zh_CN langs update
  [TiC] New book for natural materials
 
