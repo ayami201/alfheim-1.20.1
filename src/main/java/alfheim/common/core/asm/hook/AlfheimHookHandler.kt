@@ -53,8 +53,12 @@ import alfheim.common.world.data.CustomWorldData.Companion.customData
 import alfheim.common.world.mobspawn.MobSpawnHandler
 import baubles.common.lib.PlayerHandler
 import cofh.asmhooks.HooksCore
+import cpw.mods.fml.common.network.internal.FMLMessage.EntitySpawnMessage
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler
+import cpw.mods.fml.common.registry.EntityRegistry
+import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration
+import cpw.mods.fml.relauncher.*
 import cpw.mods.fml.relauncher.Side.CLIENT
-import cpw.mods.fml.relauncher.SideOnly
 import gloomyfolken.hooklib.asm.*
 import gloomyfolken.hooklib.asm.Hook.ReturnValue
 import gloomyfolken.hooklib.asm.ReturnCondition.*
@@ -80,6 +84,7 @@ import net.minecraft.init.*
 import net.minecraft.inventory.*
 import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.network.Packet
 import net.minecraft.pathfinding.PathEntity
 import net.minecraft.potion.*
 import net.minecraft.server.MinecraftServer
@@ -134,9 +139,9 @@ import vazkii.botania.common.item.equipment.bauble.ItemBauble
 import vazkii.botania.common.item.equipment.tool.ToolCommons
 import vazkii.botania.common.item.lens.LensFirework
 import vazkii.botania.common.item.material.ItemManaResource
-import vazkii.botania.common.item.relic.ItemFlugelEye
+import vazkii.botania.common.item.relic.*
 import vazkii.botania.common.item.rod.*
-import vazkii.botania.common.lib.LibBlockNames
+import vazkii.botania.common.lib.*
 import java.awt.Color
 import java.util.*
 import java.util.regex.*
@@ -1163,6 +1168,13 @@ object AlfheimHookHandler {
 		if (player.hasAchievement(AlfheimAchievements.flugelSoul)) return false
 		if (player.isSneaking) return EntityFlugel.spawn(player, stack, world, x, y, z, false, false)
 		return false
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun onUsingTick(eye: ItemInfiniteFruit, stack: ItemStack, player: EntityPlayer, count: Int) {
+		if (count % 5 == 0 && player.canEat(false) && ManaItemHandler.requestManaExact(stack, player, 900, true)) player.foodStats.addStats(1, 1f)
+		if (count == 5 && player.canEat(false)) player.itemInUseCount = 20
 	}
 	
 	@JvmStatic

@@ -558,6 +558,7 @@ object AlfheimRecipes {
 	lateinit var recipeRainFlower: RecipePetals
 	lateinit var recipeSnowFlower: RecipePetals
 	lateinit var recipeStormFlower: RecipePetals
+	lateinit var recipeTradescantia: RecipePetals
 	lateinit var recipeWitherAconite: RecipePetals
 	lateinit var recipeWindFlower: RecipePetals
 	
@@ -2602,6 +2603,12 @@ object AlfheimRecipes {
 														   *Array(4) { PETAL[3] }, // Light Blue
 														   PETAL[11], // Blue
 														   RUNE[13])  // Wrath
+		
+		recipeTradescantia = BotaniaAPI.registerPetalRecipe(BotaniaAPI.internalHandler.getSubTileAsStack("tradescantia"),
+															PETAL[0], // White
+															PETAL[6], // Pink
+															*Array(2) { PETAL[7] }, // Gray
+															RUNE[11]) // Greed
 		
 		recipeWindFlower = BotaniaAPI.registerPetalRecipe(BotaniaAPI.internalHandler.getSubTileAsStack("windFlower"),
 														  PETAL[4], PETAL[4], // Yellow

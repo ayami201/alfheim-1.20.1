@@ -30,7 +30,7 @@ object RenderTileWorldTree: TileEntitySpecialRenderer() {
 		for ((id, it) in tile.boundList.withIndex()) {
 			if (!forcedApples && it == null) continue
 			
-			ASJRenderHelper.glColor1u(ASJRenderHelper.addAlpha(Color.HSBtoRGB(id * (360 / 16f) / 360f, 1f, 1f), 255))
+			ASJRenderHelper.glColor1u(Color.HSBtoRGB(id * (360 / 16f) / 360f, 1f, 1f))
 			model.renderPart("apple$id")
 		}
 		

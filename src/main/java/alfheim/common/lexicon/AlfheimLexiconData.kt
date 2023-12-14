@@ -100,6 +100,7 @@ object AlfheimLexiconData {
 	lateinit var flowerRain: LexiconEntry
 	lateinit var flowerSnow: LexiconEntry
 	lateinit var flowerStorm: LexiconEntry
+	lateinit var flowerTradescantia: LexiconEntry
 	lateinit var flowerWind: LexiconEntry
 	lateinit var flugel: LexiconEntry
 	lateinit var fracturedSpace: LexiconEntry
@@ -278,6 +279,7 @@ object AlfheimLexiconData {
 		flowerRain = AlfheimLexiconEntry("flowerRain", categoryAlfheim)
 		flowerSnow = AlfheimLexiconEntry("flowerSnow", categoryAlfheim)
 		flowerStorm = AlfheimLexiconEntry("flowerStorm", categoryAlfheim)
+		flowerTradescantia = AlfheimLexiconEntry("flowerTradescantia", categoryAlfheim)
 		flowerWind = AlfheimLexiconEntry("flowerWind", categoryAlfheim)
 		flugel = AlfheimLexiconEntry("flugel", categoryAlfheim)
 		fracturedSpace = AlfheimLexiconEntry("fracturedSpace", categoryAlfheim)
@@ -574,6 +576,7 @@ object AlfheimLexiconData {
 		flowerRain.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeRainFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("rainFlower")
 		flowerSnow.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeSnowFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("snowFlower")
 		flowerStorm.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeStormFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("stormFlower")
+		flowerTradescantia.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeTradescantia)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("tradescantia")
 		flowerWind.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeWindFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("windFlower")
 		
 		flugel.setLexiconPages(*Array(3) { PageText("$it") }).icon = ItemStack(ModItems.flightTiara, 1, 1)

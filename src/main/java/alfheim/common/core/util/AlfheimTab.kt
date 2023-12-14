@@ -239,7 +239,6 @@ import alfheim.common.item.AlfheimItems.gaiaSlayer
 import alfheim.common.item.AlfheimItems.gjallarhorn
 import alfheim.common.item.AlfheimItems.gleipnir
 import alfheim.common.item.AlfheimItems.gungnir
-import alfheim.common.item.AlfheimItems.holyGlass
 import alfheim.common.item.AlfheimItems.hyperBucket
 import alfheim.common.item.AlfheimItems.invisibilityCloak
 import alfheim.common.item.AlfheimItems.invisibleFlameLens
@@ -443,7 +442,6 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(triquetrum)
 		addItem(armilla)
 		addItem(enlighter)
-		addItem(holyGlass)
 		addItem(lootInterceptor)
 		addItem(hyperBucket)
 		addItem(manaMirrorImba)
