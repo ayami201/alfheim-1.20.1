@@ -1,7 +1,6 @@
 package alfheim.common.spell.illusion
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.client.render.world.VisualEffectHandlerClient
@@ -24,7 +23,7 @@ object SpellShadowVortex: SpellBase("shadowvortex", EnumRace.SPRIGGAN, 2000, 80,
 		
 		val list = getEntitiesWithinAABB(caster.worldObj, EntityLivingBase::class.java, caster.boundingBox.expand(radius, 0.0, radius))
 		list.forEach {
-			if (it == caster || CardinalSystem.PartySystem.mobsSameParty(caster, it) || !InteractionSecurity.canHurtEntity(caster, it)) return@forEach
+			if (it == caster || CardinalSystem.PartySystem.mobsSameParty(caster, it)) return@forEach
 			for (i in 1..50) {
 				if (!it.teleportRandomly(efficiency * 2)) continue
 				VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.SHADOW, it)

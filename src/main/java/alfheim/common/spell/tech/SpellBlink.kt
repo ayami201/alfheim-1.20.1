@@ -2,7 +2,6 @@ package alfheim.common.spell.tech
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import net.minecraft.entity.EntityLivingBase
@@ -38,8 +37,6 @@ object SpellBlink: SpellBase("blink", EnumRace.LEPRECHAUN, 10000, 1200, 5) {
 				5 -> ++x
 			}
 		}
-		
-		if (InteractionSecurity.isInteractionBanned(caster, x, y, z)) return SpellCastResult.NOTALLOW
 		
 		if (caster.worldObj.isAirBlock(x, y, z)) {
 			if (caster.worldObj.isAirBlock(x, y + 1, z)) {

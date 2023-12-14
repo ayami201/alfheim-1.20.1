@@ -1,7 +1,6 @@
 package alfheim.common.spell.darkness
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
@@ -26,8 +25,6 @@ object SpellDeathMark: SpellBase("deathmark", EnumRace.IMP, 24000, 3000, 10) {
 			return SpellCastResult.WRONGTGT
 		
 		if (ASJUtilities.isNotInFieldOfVision(tg.target, caster)) return SpellCastResult.NOTSEEING
-		
-		if (!InteractionSecurity.canHurtEntity(caster, tg.target)) return SpellCastResult.NOTALLOW
 		
 		val result = checkCast(caster)
 		if (result != SpellCastResult.OK) return result

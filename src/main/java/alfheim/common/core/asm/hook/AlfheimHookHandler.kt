@@ -3,7 +3,6 @@ package alfheim.common.core.asm.hook
 import alexsocol.asjlib.*
 import alexsocol.asjlib.command.CommandDimTP
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.AlfheimCore
 import alfheim.api.*
 import alfheim.api.block.IHourglassTrigger
@@ -53,12 +52,8 @@ import alfheim.common.world.data.CustomWorldData.Companion.customData
 import alfheim.common.world.mobspawn.MobSpawnHandler
 import baubles.common.lib.PlayerHandler
 import cofh.asmhooks.HooksCore
-import cpw.mods.fml.common.network.internal.FMLMessage.EntitySpawnMessage
-import cpw.mods.fml.common.network.internal.FMLNetworkHandler
-import cpw.mods.fml.common.registry.EntityRegistry
-import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration
-import cpw.mods.fml.relauncher.*
 import cpw.mods.fml.relauncher.Side.CLIENT
+import cpw.mods.fml.relauncher.SideOnly
 import gloomyfolken.hooklib.asm.*
 import gloomyfolken.hooklib.asm.Hook.ReturnValue
 import gloomyfolken.hooklib.asm.ReturnCondition.*
@@ -84,7 +79,6 @@ import net.minecraft.init.*
 import net.minecraft.inventory.*
 import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.network.Packet
 import net.minecraft.pathfinding.PathEntity
 import net.minecraft.potion.*
 import net.minecraft.server.MinecraftServer
@@ -141,7 +135,7 @@ import vazkii.botania.common.item.lens.LensFirework
 import vazkii.botania.common.item.material.ItemManaResource
 import vazkii.botania.common.item.relic.*
 import vazkii.botania.common.item.rod.*
-import vazkii.botania.common.lib.*
+import vazkii.botania.common.lib.LibBlockNames
 import java.awt.Color
 import java.util.*
 import java.util.regex.*
@@ -598,7 +592,6 @@ object AlfheimHookHandler {
 					} && !entity.worldObj.isRemote && pos.entityHit?.isSneaking == false
 		
 		if (!allow) return false
-		if (entity.thrower != null && !InteractionSecurity.canInteractWithEntity(entity.thrower, pos.entityHit)) return false
 		
 		val fireworkStack = lens.generateFirework(burst.color)
 		val rocket = EntityFireworkRocket(entity.worldObj, entity.posX, entity.posY, entity.posZ, fireworkStack)

@@ -1,7 +1,6 @@
 package alfheim.common.item.rod
 
 import alexsocol.asjlib.mfloor
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.item.ItemMod
 import alfheim.common.item.relic.ItemSifRing
@@ -65,7 +64,6 @@ class ItemRodGrass: ItemMod("grassRod"), IManaUsingItem {
 		
 		fun place(stack: ItemStack?, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, block: Block, cost: Int, r: Float, g: Float, b: Float): Boolean {
 			if (!ManaItemHandler.requestManaExactForTool(stack, player, cost, false)) return false
-			if (InteractionSecurity.isInteractionBanned(player, x, y, z, world)) return false
 			
 			ManaItemHandler.requestManaExactForTool(stack, player, cost, world.isRemote)
 			if (!world.isRemote)

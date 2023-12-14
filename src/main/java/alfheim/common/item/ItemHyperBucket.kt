@@ -1,7 +1,6 @@
 package alfheim.common.item
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.client.gui.ItemsRemainingRenderHandler
 import alfheim.common.core.util.AlfheimTab
 import net.minecraft.entity.player.*
@@ -57,8 +56,6 @@ class ItemHyperBucket: ItemMod("HyperpolatedBucket") {
 							if (block === Blocks.water && at === Blocks.flowing_water) ; else
 								if (block === Blocks.flowing_water && at === Blocks.water) ; else
 									if (at !== block) continue
-					
-					if (InteractionSecurity.isBreakingBanned(player, i, j, k, world, at, 1)) continue
 					
 					if (at is IFluidBlock) at.drain(world, i, j, k, true)
 					else world.setBlockToAir(i, j, k)

@@ -1,7 +1,6 @@
 package alfheim.common.item.rod
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.ModInfo
 import alfheim.api.item.ColorOverrideHelper
 import alfheim.api.lib.LibResourceLocations
@@ -78,8 +77,6 @@ open class ItemRodInterdiction(name: String = "rodInterdiction"): ItemMod(name),
 	fun pushEntities(x: Double, y: Double, z: Double, range: Int, velocity: Double, player: EntityPlayer?, entities: List<Entity>): Boolean {
 		var flag = false
 		for (entity in entities) {
-			if (player != null && !InteractionSecurity.canInteractWithEntity(player, entity)) continue
-			
 			val xDif = entity.posX - x
 			val yDif = entity.posY - (y + 1)
 			val zDif = entity.posZ - z

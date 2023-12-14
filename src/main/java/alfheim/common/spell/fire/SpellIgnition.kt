@@ -1,7 +1,6 @@
 package alfheim.common.spell.fire
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.*
 import alfheim.api.event.SpellCastEvent
 import alfheim.api.spell.SpellBase
@@ -28,7 +27,6 @@ object SpellIgnition: SpellBase("ignition", EnumRace.SALAMANDER, 2000, 100, 5) {
 			val tgt = tg.target ?: return@run
 			
 			if (tg.isParty) return SpellCastResult.WRONGTGT
-			if (!InteractionSecurity.canHurtEntity(caster, tgt)) return SpellCastResult.NOTALLOW
 			if (ASJUtilities.isNotInFieldOfVision(tgt, caster)) return SpellCastResult.NOTSEEING
 			
 			val result = SpellDispel.checkCastOver(caster)

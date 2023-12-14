@@ -4,7 +4,6 @@ package alfheim.common.core.handler
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alexsocol.patcher.event.*
 import alfheim.AlfheimCore
 import alfheim.api.*
@@ -968,8 +967,6 @@ object CardinalSystem {
 			
 			for (tsa in tsAreas[e.dimension] ?: return false) {
 				if (Vector3.vecEntityDistance(tsa.pos, e) < SpellTimeStop.radius) {
-					if (MinecraftServer.getServer().configurationManager.playerEntityList.firstOrNull { it as EntityPlayerMP; it.uniqueID == tsa.uuid }?.let { !InteractionSecurity.canInteractWithEntity(it as EntityPlayerMP, e) } != false) return false
-					
 					if (e is ITimeStopSpecific && (e as ITimeStopSpecific).affectedBy(tsa.uuid)) return true
 					
 					if (e is EntityLivingBase) {

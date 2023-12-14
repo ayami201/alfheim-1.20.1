@@ -1680,7 +1680,6 @@ potionIDTank=承载于浩土
 
 general.integration=整合
 chatLimiters=聊天限制器
-interactionSecurity=交互安全
 poolRainbowCapacity=神话魔力池
 
 general.integration.notenoughitems=NEI

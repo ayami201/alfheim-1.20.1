@@ -2,7 +2,6 @@ package alfheim.common.entity.spell
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.spell.*
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
 import alfheim.common.core.handler.*
@@ -38,7 +37,7 @@ class EntitySpellAcidMyst(world: World, val caster: EntityLivingBase?): Entity(w
 		val l = getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, getBoundingBox(posX, posY, posZ).expand(SpellAcidMyst.radius))
 		l.remove(caster)
 		l.forEach {
-			if (!PartySystem.mobsSameParty(caster, it) && Vector3.entityDistance(caster, it) <= SpellAcidMyst.radius && InteractionSecurity.canHurtEntity(caster, it))
+			if (!PartySystem.mobsSameParty(caster, it) && Vector3.entityDistance(caster, it) <= SpellAcidMyst.radius)
 				it.attackEntityFrom(DamageSourceSpell.poisonMagic, SpellBase.over(caster, SpellAcidMyst.damage.D))
 		}
 	}

@@ -2,7 +2,6 @@ package alfheim.common.item.equipment.bauble.faith
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.item.ColorOverrideHelper
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.item.AlfheimItems
@@ -98,7 +97,7 @@ object FaithHandlerSif: IFaithHandler {
 		
 		val pair = grow.random() ?: return
 		val (x, y, z) = pair.first
-		bonemeal(world, pair.second, x, y, z, player, stack, 10, true)
+		bonemeal(world, pair.second, x, y, z, player, stack, 10)
 		
 		grow.clear()
 	}
@@ -119,8 +118,8 @@ object FaithHandlerSif: IFaithHandler {
 		val block = world.getBlock(e.x, e.y, e.z)
 		
 		if (block is IGrowable && block !== Blocks.grass && block.func_149851_a(world, e.x, e.y, e.z, world.isRemote) &&
-			bonemeal(world, block, e.x, e.y, e.z, player, emblem, 50, false) &&
-			!world.isRemote && !player.capabilities.isCreativeMode)
+		    bonemeal(world, block, e.x, e.y, e.z, player, emblem, 50) &&
+		    !world.isRemote && !player.capabilities.isCreativeMode)
 			setInt(emblem, TAG_COOLDOWN, COOLDOWN_PLANT)
 		
 		val lvl = getGodPowerLevel(player)
@@ -129,7 +128,6 @@ object FaithHandlerSif: IFaithHandler {
 		val newMeta = world.rand.nextInt(16)
 		if (!world.isRemote && block === Blocks.grass && e.face == 1 &&
 			world.getBlock(e.x, e.y + 1, e.z).isAir(world, e.x, e.y + 1, e.z) &&
-			!InteractionSecurity.isPlacementBanned(player, e.x, e.y + 1, e.z, world, ModBlocks.flower, newMeta) &&
 			(!world.provider.hasNoSky || e.y < 255) &&
 			ModBlocks.flower.canBlockStay(world, e.x, e.y + 1, e.z) &&
 			ManaItemHandler.requestManaExact(emblem, e.entityPlayer, 500, true) &&
@@ -138,10 +136,7 @@ object FaithHandlerSif: IFaithHandler {
 			setInt(emblem, TAG_COOLDOWN, COOLDOWN_FLOWER)
 	}
 	
-	fun bonemeal(world: World, block: IGrowable, x: Int, y: Int, z: Int, player: EntityPlayer, stack: ItemStack, cost: Int, interactCheck: Boolean): Boolean {
-		if (interactCheck && InteractionSecurity.isInteractionBanned(player, x, y, z, world))
-			return false
-		
+	fun bonemeal(world: World, block: IGrowable, x: Int, y: Int, z: Int, player: EntityPlayer, stack: ItemStack, cost: Int): Boolean {
 		val event = BonemealEvent(player, world, block as Block, x, y, z)
 		if (MinecraftForge.EVENT_BUS.post(event))
 			return false

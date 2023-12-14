@@ -1,7 +1,6 @@
 package alfheim.common.spell.earth
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import net.minecraft.entity.EntityLivingBase
@@ -37,8 +36,6 @@ object SpellWallWarp: SpellBase("wallwarp", EnumRace.GNOME, 4000, 600, 5) {
 		}
 		
 		for (i in 0..radius.I) {
-			if (InteractionSecurity.isInteractionBanned(caster, mop.blockX, mop.blockY, mop.blockZ)) return SpellCastResult.NOTALLOW
-			
 			if (caster.worldObj.isAirBlock(mop.blockX, mop.blockY, mop.blockZ)) {
 				if (caster.worldObj.isAirBlock(mop.blockX, mop.blockY - 1, mop.blockZ)) {
 					result = checkCast(caster)

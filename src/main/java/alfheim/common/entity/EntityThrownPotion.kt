@@ -1,7 +1,6 @@
 package alfheim.common.entity
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.core.handler.VisualEffectHandler
 import alfheim.common.item.*
@@ -72,12 +71,6 @@ class EntityThrownPotion: EntityThrowable {
 			var d1 = 1.0 - sqrt(d0) / 4.0
 			
 			if (living === movingObject.entityHit) d1 = 1.0
-			
-			if (effects.any { Potion.potionTypes[it.potionID].isBadEffect }) {
-				if (!InteractionSecurity.canHurtEntity(thrower ?: return@forEach, living)) return@forEach
-			} else {
-				if (!InteractionSecurity.canInteractWithEntity(thrower ?: return@forEach, living)) return@forEach
-			}
 			
 			for (e: PotionEffect in effects) {
 				if (!Potion.potionTypes[e.potionID].isInstant) {

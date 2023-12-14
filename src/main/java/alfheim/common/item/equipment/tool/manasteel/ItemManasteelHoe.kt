@@ -1,7 +1,6 @@
 package alfheim.common.item.equipment.tool.manasteel
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
@@ -81,7 +80,6 @@ open class ItemManasteelHoe @JvmOverloads constructor(mat: ToolMaterial = Botani
 	
 	fun useHoe(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int): Boolean {
 		if (!player.canPlayerEdit(x, y, z, side, stack)) return false
-		if (InteractionSecurity.isInteractionBanned(player, x, y, z, world)) return false
 		
 		val event = UseHoeEvent(player, stack, world, x, y, z)
 		if (MinecraftForge.EVENT_BUS.post(event))

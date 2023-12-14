@@ -2,7 +2,6 @@ package alfheim.common.item.relic
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.*
 import alfheim.api.event.PlayerInteractAdequateEvent
 import alfheim.client.core.helper.IconHelper
@@ -131,7 +130,6 @@ class ItemDaolos: ItemAxe(AlfheimAPI.RUNEAXE), IRelic {
 					if (atATime <= 0) return
 					
 					if (world.getBlock(i, j, k) !== Blocks.fire) continue
-					if (InteractionSecurity.isBreakingBanned(player, i, j ,k, world, Blocks.fire)) continue
 					
 					if (ManaItemHandler.requestManaExact(stack, player, if (world.isRaining) 2 else 8, true)) {
 						world.setBlockToAir(i, j, k)
@@ -223,7 +221,6 @@ class ItemDaolos: ItemAxe(AlfheimAPI.RUNEAXE), IRelic {
 			
 			list.forEach {
 				if (world.getBlock(it) !== block) return@forEach
-				if (!InteractionSecurity.canHurtEntity(e.player, it)) return@forEach
 				if (AlfheimConfigHandler.enableMMO && e.player.worldObj.isRemote && CardinalSystem.PartySystem.sameParty(e.player, it)) return@forEach
 				
 				if (ManaItemHandler.requestManaExact(stack, e.player, if (world.isRaining) 25 else 100, true))

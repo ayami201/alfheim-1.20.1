@@ -2,7 +2,6 @@ package alfheim.common.item
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.item.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import cpw.mods.fml.common.registry.GameRegistry
@@ -93,8 +92,6 @@ class ItemTriquetrum: ItemMod("Triquetrum"), IDoubleBoundItem, IRotationDisplay 
 							
 							val meta = world.getBlockMetadata(i, j, k)
 							
-							if (InteractionSecurity.isBreakingBanned(player, i, j, k, world, block, meta)) continue
-							
 							val nbt = NBTTagCompound()
 							
 							world.getTileEntity(i, j, k)?.writeToNBT(nbt)
@@ -107,8 +104,6 @@ class ItemTriquetrum: ItemMod("Triquetrum"), IDoubleBoundItem, IRotationDisplay 
 								if (!world.isAirBlock(x, y, z)) return false // do not replace blocks
 								if (world.isAirBlock(i, j, k)) return false // no sense in moving air
 								if (!block.canPlaceBlockAt(world, x, y, z)) return false // no more cactus on bedrock
-								
-								if (InteractionSecurity.isPlacementBanned(player, x, y, z, world, block, meta)) return false
 								
 								if (!world.setBlock(x, y, z, block, meta, 3)) return false
 								

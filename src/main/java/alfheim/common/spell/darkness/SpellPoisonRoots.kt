@@ -2,7 +2,6 @@ package alfheim.common.spell.darkness
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.common.core.handler.CardinalSystem.PartySystem
@@ -38,7 +37,6 @@ object SpellPoisonRoots: SpellBase("poisonroots", EnumRace.IMP, 60000, 6000, 30)
 		if (!flagBadEffs) return SpellCastResult.WRONGTGT
 		
 		val l = getEntitiesWithinAABB(caster.worldObj, EntityLivingBase::class.java, caster.boundingBox.expand(radius))
-		l.removeAll { !InteractionSecurity.canHurtEntity(caster, it) }
 		val flagNotParty = l.any { !pt.isMember(it) }
 		
 		if (!flagNotParty) return SpellCastResult.NOTARGET

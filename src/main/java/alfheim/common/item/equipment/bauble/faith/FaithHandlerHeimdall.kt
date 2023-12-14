@@ -2,7 +2,6 @@ package alfheim.common.item.equipment.bauble.faith
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.item.ColorOverrideHelper
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.item.*
@@ -84,9 +83,6 @@ object FaithHandlerHeimdall: IFaithHandler {
 		for (i in -2..2)
 			for (k in -2..2) {
 				if (abs(i) == 2 && abs(k) == 2) continue
-				
-				if (InteractionSecurity.isPlacementBanned(player, x + i, y, z + k, world, ModBlocks.bifrost))
-					continue
 				
 				val block = world.getBlock(x + i, y, z + k)
 				if (block is IFluidBlock) continue

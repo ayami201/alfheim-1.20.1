@@ -2,7 +2,6 @@ package alfheim.common.entity
 
 import alexsocol.asjlib.getEntitiesWithinAABB
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.EntityThrowable
@@ -23,7 +22,6 @@ class EntityThrowableItem: EntityThrowable {
 		
 		getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox.expand(8.0, 2.0, 8.0)).forEach { living ->
 			if (getDistanceSqToEntity(living) >= 16.0) return@forEach
-			if (!InteractionSecurity.canHurtEntity(thrower, living)) return@forEach
 			living.attackEntityFrom(EntityDamageSourceIndirect("fireball", this, thrower).setFireDamage(), 3f)
 			living.setFire(10)
 		}
@@ -44,7 +42,6 @@ class EntityThrowableItem: EntityThrowable {
 	}
 	
 	private fun tryToSetFire(x: Int, y: Int, z: Int) {
-		if (InteractionSecurity.isPlacementBanned(thrower ?: return, x, y, z, worldObj, Blocks.fire)) return
 		if (!worldObj.isAirBlock(x, y, z) || !Blocks.fire.canPlaceBlockAt(worldObj, x, y, z)) return
 		worldObj.setBlock(x, y, z, Blocks.fire)
 	}

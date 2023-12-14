@@ -3,7 +3,6 @@ package alfheim.common.item.relic
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.render.ASJRenderHelper
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.lib.LibResourceLocations
 import alfheim.common.core.asm.hook.AlfheimHookHandler
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -82,14 +81,12 @@ class ItemFlugelSoul: ItemRelic("FlugelSoul"), ILensEffect, IImmortalHandledItem
 		val pos = getWarpPoint(stack, segment)
 		if (pos.isValid) {
 			if (!world.isRemote && player is EntityPlayerMP && ManaItemHandler.requestManaExact(stack, player, pos.mana(player), true) &&
-				!InteractionSecurity.isInteractionBanned(player, pos.x, pos.y, pos.z, MinecraftServer.getServer().worldServerForDimension(pos.dim)) &&
 				player.dimension != AlfheimConfigHandler.dimensionIDHelheim) {
 				player.playSoundAtEntity("mob.endermen.portal", 1f, 1f)
 				AlfheimHookHandler.allowtp = true
 				ASJUtilities.sendToDimensionWithoutPortal(player, pos.dim, pos.x, pos.y, pos.z)
 			}
-		} else if (!InteractionSecurity.isInteractionBanned(player))
-			setWarpPoint(stack, segment, player.posX, player.posY, player.posZ, world.provider.dimensionId)
+		} else setWarpPoint(stack, segment, player.posX, player.posY, player.posZ, world.provider.dimensionId)
 		
 		stack.meta = metaWas
 		

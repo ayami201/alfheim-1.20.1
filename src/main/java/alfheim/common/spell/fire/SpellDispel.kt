@@ -1,7 +1,6 @@
 package alfheim.common.spell.fire
 
 import alexsocol.asjlib.ASJUtilities
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
@@ -22,8 +21,6 @@ object SpellDispel: SpellBase("dispel", EnumRace.SALAMANDER, 1000, 600, 25) {
 		val tgt = tg.target ?: return SpellCastResult.NOTARGET
 		
 		if (tgt !== caster && ASJUtilities.isNotInFieldOfVision(tgt, caster)) return SpellCastResult.NOTSEEING
-		
-		if (!tg.isParty && !InteractionSecurity.canInteractWithEntity(caster, tgt)) return SpellCastResult.NOTALLOW
 		
 		val result = checkCast(caster)
 		if (result != SpellCastResult.OK) return result

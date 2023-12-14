@@ -60,7 +60,6 @@ object FaithHandlerOdin: IFaithHandler {
 		}
 		
 		potions.forEach {
-//				if (InteractionSecurity.canDoSomethingWithEntity(player, it))
 			it.worldObj.removeEntity(it)
 		}
 	}
@@ -75,7 +74,6 @@ object FaithHandlerOdin: IFaithHandler {
 				it as EntityPlayer
 				Vector3.entityDistance(e.entity, it) < 6 &&
 				ItemPriestCloak.getCloak(5, it) != null
-//				InteractionSecurity.canDoSomethingWithEntity(it, e.entity)
 			})
 			e.isCanceled = true
 	}

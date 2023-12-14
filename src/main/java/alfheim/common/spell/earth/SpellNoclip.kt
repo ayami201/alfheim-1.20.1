@@ -1,7 +1,6 @@
 package alfheim.common.spell.earth
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
@@ -22,8 +21,6 @@ object SpellNoclip: SpellBase("noclip", EnumRace.GNOME, 24000, 2400, 20) {
 		val tgt = tg.target ?: return SpellCastResult.NOTARGET
 		if (tgt is EntityPlayer && !tgt.capabilities.allowFlying) return SpellCastResult.WRONGTGT
 		if (tgt !== caster && ASJUtilities.isNotInFieldOfVision(tg.target, caster)) return SpellCastResult.NOTSEEING
-		
-		if (!tg.isParty && !InteractionSecurity.canInteractWithEntity(caster, tgt)) return SpellCastResult.NOTALLOW
 		
 		val result = checkCast(caster)
 		if (result != SpellCastResult.OK) return result

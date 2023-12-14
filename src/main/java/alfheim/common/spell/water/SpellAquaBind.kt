@@ -2,7 +2,6 @@ package alfheim.common.spell.water
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.lib.LibResourceLocations
 import alfheim.api.spell.SpellBase
@@ -42,7 +41,6 @@ object SpellAquaBind: SpellBase("aquabind", EnumRace.UNDINE, 4000, 600, 15) {
 			val mob = Vector3.fromEntityCenter(it)
 			mob.y = hit.y
 			if (hit.copy().sub(mob).length() > radius) return@forEach
-			if (!InteractionSecurity.canHurtEntity(caster, it)) return@forEach
 			
 			it.addPotionEffect(PotionEffect(Potion.moveSlowdown.id, duration, efficiency.I))
 		}

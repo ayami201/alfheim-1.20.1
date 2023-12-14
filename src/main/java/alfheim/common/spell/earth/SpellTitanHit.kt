@@ -1,7 +1,6 @@
 package alfheim.common.spell.earth
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import net.minecraft.block.material.Material
@@ -68,8 +67,6 @@ object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 1, 1, 1) {
 		
 		val block = world.getBlock(x, y, z)
 		val meta = world.getBlockMetadata(x, y, z)
-		
-		if (InteractionSecurity.isBreakingBanned(player, x, y, z, world, block, meta)) return 0
 		
 		var mana = 0
 		

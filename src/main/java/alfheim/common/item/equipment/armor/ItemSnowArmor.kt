@@ -1,7 +1,6 @@
 package alfheim.common.item.equipment.armor
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.ModInfo
 import alfheim.client.core.helper.IconHelper
 import alfheim.client.model.armor.ModelSnowArmor
@@ -83,11 +82,11 @@ open class ItemSnowArmor(type: Int, name: String): ItemManasteelArmor(type, name
 		repair(stack, world, player)
 		
 		if (stack.item === AlfheimItems.snowBoots && hasArmorSet(player) && player.isSneaking) {
-			fun checkSet(world: World, player: EntityPlayer, x: Int, y: Int, z: Int) {
+			fun checkSet(world: World, x: Int, y: Int, z: Int) {
 				val block = world.getBlock(x, y, z)
 				
 				for (pair in replacePairs)
-					if (pair.first === block && InteractionSecurity.isPlacementBanned(player, x, y, z, world, pair.second))
+					if (pair.first === block)
 						world.setBlock(x, y, z, pair.second)
 			}
 			
@@ -97,7 +96,7 @@ open class ItemSnowArmor(type: Int, name: String): ItemManasteelArmor(type, name
 			
 			for (i in -1..1)
 				for (j in -1..1)
-					checkSet(world, player, x + i, y, z + j)
+					checkSet(world, x + i, y, z + j)
 		}
 	}
 	
