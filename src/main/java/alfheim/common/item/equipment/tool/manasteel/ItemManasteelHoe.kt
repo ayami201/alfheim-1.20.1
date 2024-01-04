@@ -98,10 +98,9 @@ open class ItemManasteelHoe @JvmOverloads constructor(mat: ToolMaterial = Botani
 		val block1 = Blocks.farmland
 		world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block1.stepSound.stepResourcePath, (block1.stepSound.getVolume() + 1) * 0.5f, block1.stepSound.pitch * 0.8f)
 		
-		if (world.isRemote)
-			return true
+		if (!world.isRemote)
+			world.setBlock(x, y, z, block1)
 		
-		world.setBlock(x, y, z, block1)
 		ToolCommons.damageItem(stack, 1, player, MANA_PER_DAMAGE)
 		return true
 	}

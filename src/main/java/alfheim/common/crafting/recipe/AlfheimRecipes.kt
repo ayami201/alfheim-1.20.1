@@ -2680,6 +2680,8 @@ object AlfheimRecipes {
 		RecipeSorter.register("${ModInfo.MODID}:looterclean", RecipeLootInterceptorClear::class.java, RecipeSorter.Category.SHAPELESS, "")
 		addRecipe(RecipeCleanRelic)
 		RecipeSorter.register("${ModInfo.MODID}:cleanrelic", RecipeCleanRelic::class.java, RecipeSorter.Category.SHAPELESS, "")
+		addRecipe(RecipeClearLoki)
+		RecipeSorter.register("${ModInfo.MODID}:clearloki", RecipeClearLoki::class.java, RecipeSorter.Category.SHAPELESS, "")
 		addRecipe(RecipeThrowablePotion)
 		RecipeSorter.register("${ModInfo.MODID}:throwpotion", RecipeThrowablePotion::class.java, RecipeSorter.Category.SHAPELESS, "")
 		addRecipe(RecipeElvenWeed)

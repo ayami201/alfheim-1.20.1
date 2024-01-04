@@ -22,7 +22,7 @@ import vazkii.botania.api.wand.IWandable
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import kotlin.math.max
 
-abstract class BlockDoubleCamo(material: Material = Material.wood): BlockContainerMod(material), IWandable {
+abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boolean = true): BlockContainerMod(material), IWandable {
 	
 	init {
 		setStepSound(soundTypeWood)
@@ -185,7 +185,8 @@ abstract class BlockDoubleCamo(material: Material = Material.wood): BlockContain
 		
 		@SubscribeEvent
 		fun provideCompositeDetails(e: ItemTooltipEvent) {
-			if (e.itemStack?.block !is BlockDoubleCamo) return
+			val block = e.itemStack?.block as? BlockDoubleCamo ?: return
+			if (!block.info) return
 			
 			val tile = TileDoubleCamo()
 			tile.readCustomNBT(e.itemStack.tagCompound ?: return)

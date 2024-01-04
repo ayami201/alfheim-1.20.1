@@ -2,6 +2,7 @@ package alfheim.common.core.asm.hook.extender
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.common.entity.item.EntityItemImmortalRelic
 import alfheim.common.item.AlfheimItems
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageRelicNBTSync
@@ -161,7 +162,9 @@ object RelicNBTSyncHandler {
 					if (stack.tagCompound?.getString("soulbind") == player.commandSenderName)
 						stack.tagCompound?.removeTag("soulbind")
 					
-					EntityItem(player.worldObj, player.posX, player.posY, player.posZ, stack).spawn()
+					EntityItemImmortalRelic(EntityItem(player.worldObj, player.posX, player.posY, player.posZ, stack)).spawn()
+					
+					ASJUtilities.say(player, "alfheimmisc.relic.fail", stack.displayName)
 				}
 			}
 			

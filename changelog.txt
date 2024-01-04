@@ -8,6 +8,7 @@ Innovations:
  Leather set can slow down sheer cold accumulation
  Gaia returns summon item on despawn #298
  Temperature mechanic improvements
+ Loki Ring now clears in craft grid instead of on unequip
  zh_CN langs update
  [TiC] New book for natural materials
 
@@ -19,6 +20,7 @@ Fixes:
  Gaia liquid check range
  Earth elemental mobs dying from poison
  Pathfinding through anomalies
+ Animated torch block updates
  [MMO] Crash on team mana sync
  [NEI] Corporea button requests when client lang is different from server
  [TC] Vis discount on revealing helmets

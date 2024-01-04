@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER", "UNCHECKED_CAST")
+@file:Suppress("UNUSED_PARAMETER")
 
 package alfheim.common.core.asm
 
@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.launchwrapper.IClassTransformer
 import net.minecraft.util.*
 import org.objectweb.asm.*
-import org.objectweb.asm.tree.*
+import org.objectweb.asm.tree.ClassNode
 import thaumcraft.api.IVisDiscountGear
 import thaumcraft.api.aspects.Aspect
 import vazkii.botania.common.Botania
@@ -27,7 +27,7 @@ class BotaniaVisDiscountHooks: IClassTransformer {
 	)
 	
 	override fun transform(name: String, transformedName: String, basicClass: ByteArray?): ByteArray? {
-		if (basicClass == null || basicClass.isEmpty() || transformedName !in classes) return basicClass
+		if (basicClass == null || basicClass.isEmpty() || transformedName !in classes || !Botania.thaumcraftLoaded) return basicClass
 		
 		var resultClass = basicClass
 		
@@ -40,11 +40,11 @@ class BotaniaVisDiscountHooks: IClassTransformer {
 		
 		cn.interfaces.add(iface)
 		
-		val interfaceListAnnotation = cn.visibleAnnotations.first { "Lcpw/mods/fml/common/Optional\$InterfaceList;" == it.desc }
-		val valueIndex = interfaceListAnnotation.values.indexOfFirst { it == "value" } + 1
-		val an = AnnotationNode(Opcodes.ASM5, "Lcpw/mods/fml/common/Optional\$Interface;")
-		an.values = listOf("modid", "Thaumcraft", "iface", "thaumcraft.api.IVisDiscountGear", "striprefs", java.lang.Boolean.TRUE)
-		(interfaceListAnnotation.values[valueIndex] as java.util.ArrayList<AnnotationNode>).add(an)
+//		val interfaceListAnnotation = cn.visibleAnnotations.first { "Lcpw/mods/fml/common/Optional\$InterfaceList;" == it.desc }
+//		val valueIndex = interfaceListAnnotation.values.indexOfFirst { it == "value" } + 1
+//		val an = AnnotationNode(Opcodes.ASM5, "Lcpw/mods/fml/common/Optional\$Interface;")
+//		an.values = listOf("modid", "Thaumcraft", "iface", "thaumcraft.api.IVisDiscountGear", "striprefs", java.lang.Boolean.TRUE)
+//		(interfaceListAnnotation.values[valueIndex] as java.util.ArrayList<AnnotationNode>).add(an)
 		
 		cn.accept(cw)
 		resultClass = cw.toByteArray()

@@ -72,24 +72,19 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 			return false
 		
 		if (event.result == Event.Result.ALLOW) {
-			if (!world.isRemote)
-				ToolCommons.damageItem(stack, 1, player, MANA_PER_ACTION)
-			
+			ToolCommons.damageItem(stack, 1, player, MANA_PER_ACTION)
 			return true
 		}
-		
 		
 		if (!block.func_149851_a(world, x, y, z, world.isRemote)) {
 			block.updateTick(world, x, y, z, world.rand)
 			return false
 		}
 		
-		if (!world.isRemote) {
-			if (block.func_149852_a(world, world.rand, x, y, z))
-				block.func_149853_b(world, world.rand, x, y, z)
-			
-			ToolCommons.damageItem(stack, 1, player, MANA_PER_ACTION)
-		}
+		if (!world.isRemote && block.func_149852_a(world, world.rand, x, y, z))
+			block.func_149853_b(world, world.rand, x, y, z)
+		
+		ToolCommons.damageItem(stack, 1, player, MANA_PER_ACTION)
 		
 		return true
 	}

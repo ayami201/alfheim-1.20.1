@@ -181,6 +181,7 @@ object CommandAlfheim: CommandBase() {
 		
 		data.structures.removeAll("Surtr")
 		data.data.remove("SurtrY")
+		data.markDirty()
 		
 		ASJUtilities.say(sender, "Surtr domain data reset.")
 	}

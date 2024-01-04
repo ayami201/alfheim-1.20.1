@@ -3,9 +3,8 @@ package alfheim.client.core.handler
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.render.ASJRenderHelper
-import alexsocol.patcher.PatcherConfigHandler
 import alexsocol.patcher.event.EntityUpdateEvent
-import alfheim.api.*
+import alfheim.api.AlfheimAPI
 import alfheim.api.entity.raceID
 import alfheim.api.lib.LibResourceLocations
 import alfheim.client.core.handler.CardinalSystemClient.PlayerSegmentClient
@@ -29,18 +28,16 @@ import cpw.mods.fml.relauncher.*
 import net.minecraft.block.material.Material
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.renderer.*
-import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.boss.IBossDisplayData
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.potion.Potion
-import net.minecraft.util.StatCollector
 import net.minecraftforge.client.event.*
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
 import net.minecraftforge.event.entity.player.*
 import org.lwjgl.opengl.GL11.*
 import vazkii.botania.common.Botania
-import vazkii.botania.common.item.*
+import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.item.equipment.bauble.ItemMonocle
 
 object EventHandlerClient {
@@ -250,24 +247,11 @@ object EventHandlerClient {
 	@SubscribeEvent(receiveCanceled = true)
 	@SideOnly(Side.CLIENT)
 	fun onFog(e: EntityViewRenderEvent.FogDensity) {
-		val entitylivingbase = e.renderer.mc.renderViewEntity
-		
-		if (e.block.material === Material.water) {
-			glFogi(GL_FOG_MODE, GL_EXP)
-			
-			if (entitylivingbase.isPotionActive(Potion.waterBreathing) || (AlfheimConfigHandler.enableMMO && entitylivingbase.isPotionActive(AlfheimConfigHandler.potionIDNoclip))) {
-				e.density = if (PatcherConfigHandler.clearWater) 0.01f else 0.05f
-			} else {
-				e.density = if (PatcherConfigHandler.clearWater) 0.01f else 0.1f - EnchantmentHelper.getRespiration(entitylivingbase).F * 0.03f
-			}
-			
-			e.isCanceled = true
-		} else if (e.block.material === Material.lava) {
-			glFogi(GL_FOG_MODE, GL_EXP)
-			glFogf(GL_FOG_DENSITY, if (AlfheimConfigHandler.enableMMO && entitylivingbase.isPotionActive(AlfheimConfigHandler.potionIDNoclip)) 0.05f else 2f)
-			
-			e.isCanceled = true
-		}
+		val rve = e.renderer.mc.renderViewEntity
+		if (rve is EntityPlayer && rve.capabilities.isCreativeMode || !AlfheimConfigHandler.enableMMO || !rve.isPotionActive(AlfheimConfigHandler.potionIDNoclip) || e.block.material !== Material.water && e.block.material !== Material.lava) return
+		glFogi(GL_FOG_MODE, GL_EXP)
+		e.density = 0.05f
+		e.isCanceled = true
 	}
 	
 	@SubscribeEvent

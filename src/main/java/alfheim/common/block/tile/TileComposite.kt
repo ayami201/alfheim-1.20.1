@@ -1,8 +1,10 @@
 package alfheim.common.block.tile
 
-import alexsocol.asjlib.ASJUtilities
+import alexsocol.asjlib.*
 import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.block.Block
+import net.minecraft.entity.item.EntityItem
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
 class TileComposite: TileDoubleCamo() {
@@ -15,8 +17,12 @@ class TileComposite: TileDoubleCamo() {
 	override fun updateEntity() {
 		super.updateEntity()
 		
-		if (worldObj.totalWorldTime % 20 == 0L && composition.all { s -> s.all { ss -> ss.all { it == null } } })
-			worldObj.setBlockToAir(xCoord, yCoord, zCoord)
+		if (worldObj.totalWorldTime % 20 != 0L || !composition.all { s -> s.all { ss -> ss.all { it == null } } }) return
+		
+		noDrop = true
+		worldObj.setBlockToAir(xCoord, yCoord, zCoord)
+		
+		if (!worldObj.isRemote) EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, ItemStack(blockBottom, 1, blockBottomMeta)).spawn()
 	}
 	
 	override fun writeCustomNBT(nbt: NBTTagCompound) {

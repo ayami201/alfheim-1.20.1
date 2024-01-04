@@ -22,7 +22,7 @@ import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 import kotlin.math.*
 
-class BlockComposite: BlockDoubleCamo() {
+class BlockComposite: BlockDoubleCamo(info = false) {
 	
 	init {
 		setBlockName("Composite")

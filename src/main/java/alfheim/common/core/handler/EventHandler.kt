@@ -363,7 +363,9 @@ object EventHandler {
 		if (entity.entityItem.item is IRelic) {
 			e.isCanceled = true
 			entity.setDead()
-			EntityItemImmortalRelic(entity).spawn()
+			EntityItemImmortalRelic(entity).apply {
+				delayBeforeCanPickup = 40
+			}.spawn()
 		}
 	}
 	

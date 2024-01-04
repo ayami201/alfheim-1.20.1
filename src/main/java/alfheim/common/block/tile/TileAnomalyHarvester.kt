@@ -83,14 +83,14 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 		
 		if (mana > 0) {
 			val aoe = getAoE()
-			val area = ceil((aoe.maxX - aoe.minX) * (aoe.maxY - aoe.minY) * (aoe.maxZ - aoe.minZ)).I
+			val volume = ceil((aoe.maxX - aoe.minX) * (aoe.maxY - aoe.minY) * (aoe.maxZ - aoe.minZ)).I
 			val tunnel = subTiles.containsAll(tunnels)
 			if (tunnel) {
 				val effect = AlfheimAPI.anomalyBehaviors["Tunnel"]!!
 				var cost = 0
 				
 				cost += effect.effect(this) * effect.costPerApplication
-				cost += effect.costPerBlock * area
+				cost += effect.costPerBlock * volume
 				
 				mana -= cost
 				
@@ -105,7 +105,7 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 				var cost = 0
 				
 				cost += effect.effect(this) * effect.costPerApplication
-				cost += effect.costPerBlock * area
+				cost += effect.costPerBlock * volume
 				
 				mana -= cost
 				
@@ -122,6 +122,7 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 	
 	fun getAoE(): AxisAlignedBB = getBoundingBox(xCoord, yCoord, zCoord).expand(radius.x / 2, radius.y / 2, radius.z / 2).getOffsetBoundingBox(offset.x + 0.5, offset.y + 0.5, offset.z + 0.5)
 	
+	@Suppress("DuplicatedCode")
 	fun renderBoundBox() {
 		var i: Double
 		val aabb = getAoE()
@@ -390,6 +391,7 @@ object AnomalyHarvesterBehaviors {
 			}
 			
 			if (!it.attackEntityFrom(DamageSourceSpell.anomaly, Math.random().F * tile.power / 2f + tile.power / 2f)) return@let
+			
 			Botania.proxy.lightningFX(tile.worldObj, VVec3(x, y, z), VVec3.fromEntityCenter(it), 1f, tile.worldObj.rand.nextLong(), 0, 0xFF0000)
 			return tile.power
 		}

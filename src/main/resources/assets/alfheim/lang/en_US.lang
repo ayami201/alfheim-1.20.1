@@ -772,6 +772,7 @@ alfheimmisc.flugel.notallowed=Foolish mortal! You can't even fly without help! Y
 alfheimmisc.flugel.peacefulNoob=You try to offer your sacrifice, but the peaceful vibes of your world prevent you from doing so. Perhaps you should do something about that.
 alfheimmisc.flugel.tooweak.false=You try to activate the ritual, but the soul falls out of your shaking hands. You think that before summoning such a powerful creature you should try yourself in some less dangerous battle.
 alfheimmisc.flugel.tooweak.true=You try to activate the ritual, but the horn falls out of your shaking hands. You think that before summoning such a powerful creature you should try yourself in some less dangerous battle.
+alfheimmisc.flugel.used=As you try to offer your sacrifice, no energy is coming as it was before. Perhaps, it is just worn out and there nothing you can do.
 
 alfheimmisc.gaia.wrongitem=This sacrifice seem to have no effect in this world...
 
@@ -870,6 +871,7 @@ alfheimmisc.newentry=You have unlocked new knowledge in your lexicon
 alfheimmisc.nowayout=Sorry, but I won't let you out - your soul is too depleted and I'm no longer interested in it.
 alfheimmisc.quandex=Corporea Quandex equiped!
 alfheimmisc.relic=&6Relic&7
+alfheimmisc.relic.fail=You cannot hold %s in your hands
 alfheimmisc.saveIvy=Has Indissoluble Ivy
 alfheimmisc.skintoggle0=Skin will be your own
 alfheimmisc.skintoggle1=Skin will be set to elven

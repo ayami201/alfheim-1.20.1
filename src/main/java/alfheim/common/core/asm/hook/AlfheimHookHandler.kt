@@ -1158,7 +1158,11 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
 	fun onItemUse(eye: ItemFlugelEye, stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		if (player.hasAchievement(AlfheimAchievements.flugelSoul)) return false
+		if (player.hasAchievement(AlfheimAchievements.flugelSoul)) {
+			ASJUtilities.say(player, "alfheimmisc.flugel.used")
+			return false
+		}
+		
 		if (player.isSneaking) return EntityFlugel.spawn(player, stack, world, x, y, z, false, false)
 		return false
 	}

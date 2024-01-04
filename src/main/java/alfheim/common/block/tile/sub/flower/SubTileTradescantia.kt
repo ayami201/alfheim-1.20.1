@@ -1,21 +1,23 @@
 package alfheim.common.block.tile.sub.flower
 
 import alexsocol.asjlib.*
-import alfheim.common.entity.item.EntityItemImmortal
+import alfheim.common.block.tile.sub.flower.AlfheimSignature.Companion.isOnSpecialSoil
+import alfheim.common.entity.item.*
 import alfheim.common.item.rod.ItemRodClicker
 import alfheim.common.lexicon.AlfheimLexiconData
-import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.item.EntityItemFrame
-import net.minecraft.entity.passive.EntityVillager
-import net.minecraft.item.ItemStack
-import net.minecraft.tileentity.*
+import net.minecraft.entity.IMerchant
+import net.minecraft.entity.item.*
+import net.minecraft.item.*
+import net.minecraft.tileentity.TileEntityChest
 import net.minecraft.util.*
 import net.minecraft.village.MerchantRecipe
 import net.minecraftforge.common.util.ForgeDirection
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.subtile.*
+import vazkii.botania.common.block.decor.IFloatingFlower
 import vazkii.botania.common.core.helper.InventoryHelper
 import vazkii.botania.common.lib.LibMisc
+import kotlin.math.min
 
 class SubTileTradescantia: SubTileFunctional() {
 	
@@ -24,6 +26,7 @@ class SubTileTradescantia: SubTileFunctional() {
 		
 		if (supertile.worldObj.isRemote) return
 		if (redstoneSignal > 0 || mana < COST) return
+		if (ticksExisted % (if (isOnSpecialSoil) 10 else 20) != 0) return
 		
 		val x = supertile.xCoord
 		val y = supertile.yCoord
@@ -31,13 +34,16 @@ class SubTileTradescantia: SubTileFunctional() {
 		
 		val buyer = ItemRodClicker.getFake(supertile.worldObj.provider.dimensionId)
 		
+		val merchants = getEntitiesWithinAABB(supertile.worldObj, IMerchant::class.java, supertile.boundingBox().expand(RANGE, 1, RANGE)).apply { shuffle() }
+		if (merchants.isEmpty()) return
+		
 		val cashs = collectCash()
 		if (cashs.isEmpty()) return
 		
-		val villagers = getEntitiesWithinAABB(supertile.worldObj, EntityVillager::class.java, supertile.boundingBox().expand(RANGE, 1, RANGE))
-		if (villagers.isEmpty()) return
+		var complete = false
+		val cantTrade = { mana < COST || complete }
 		
-		for (dir in ForgeDirection.VALID_DIRECTIONS) if (mana < COST) break else {
+		for (dir in ForgeDirection.VALID_DIRECTIONS) if (cantTrade()) break else {
 			val i = x + dir.offsetX
 			val j = y + dir.offsetY
 			val k = z + dir.offsetZ
@@ -47,8 +53,8 @@ class SubTileTradescantia: SubTileFunctional() {
 			val filters = getFilterForInventory(i, j, k)
 			val boughts = ArrayList<ItemStack>()
 			
-			for (villager in villagers) if (mana < COST) break else {
-				for (recipe in villager.getRecipes(buyer)) if (mana < COST) break else {
+			for (merchant in merchants) if (cantTrade()) break else {
+				for (recipe in merchant.getRecipes(buyer).apply { shuffle() }) if (cantTrade()) break else {
 					recipe as MerchantRecipe
 					
 					if (recipe.isRecipeDisabled) continue
@@ -61,8 +67,9 @@ class SubTileTradescantia: SubTileFunctional() {
 						ItemNBTHelper.setBoolean(buy1, ASJUtilities.TAG_ASJIGNORENBT, true)
 					
 					val cash1i = cashs.indexOfFirst {
-						if (buy1.hasTagCompound()) ItemNBTHelper.initNBT(it)
-						it.stackSize >= buy1.stackSize && ASJUtilities.isItemStackEqualCrafting(buy1, it)
+						val copy = it.copy()
+						ItemNBTHelper.initNBT(copy)
+						copy.stackSize >= buy1.stackSize && ASJUtilities.isItemStackEqualCrafting(buy1, copy)
 					}
 					
 					if (cash1i == -1) continue
@@ -77,12 +84,15 @@ class SubTileTradescantia: SubTileFunctional() {
 							ItemNBTHelper.setBoolean(buy2, ASJUtilities.TAG_ASJIGNORENBT, true)
 						
 						cash2i = cashs.indexOfFirst {
-							if (buy2.hasTagCompound()) ItemNBTHelper.initNBT(it)
-							it.stackSize >= buy2.stackSize && ASJUtilities.isItemStackEqualCrafting(buy2, it)
+							val copy = it.copy()
+							ItemNBTHelper.initNBT(copy)
+							copy.stackSize >= buy2.stackSize && ASJUtilities.isItemStackEqualCrafting(buy2, copy)
 						}
 						
 						if (cash2i == -1) continue
 					}
+					
+					if (InventoryHelper.testInventoryInsertion(inv, recipe.itemToSell, dir.opposite) != recipe.itemToSell.stackSize) continue
 					
 					boughts += recipe.itemToSell.copy()
 					
@@ -91,8 +101,10 @@ class SubTileTradescantia: SubTileFunctional() {
 					if (cash2i != -1)
 						cashs[cash2i].stackSize -= recipe.secondItemToBuy.stackSize
 					
+					merchant.useRecipe(recipe)
+					
 					mana -= COST
-					villager.useRecipe(recipe)
+					complete = true
 				}
 			}
 			
@@ -102,32 +114,36 @@ class SubTileTradescantia: SubTileFunctional() {
 				if (bought.stackSize < 1) continue
 				
 				EntityItem(supertile.worldObj, x + dir.offsetX * 2 + 0.5, y + dir.offsetY * 2 + 0.5, z + dir.offsetZ * 2 + 0.5, bought).apply {
-					setMotion(0.0,0.0,0.0)
+					setMotion(0.0, 0.0, 0.0)
 					spawn()
 				}
 			}
 		}
 		
+		val floating = supertile is IFloatingFlower
 		for (cash in cashs) {
 			if (cash.stackSize < 1) continue
 			
-			EntityItemImmortal(supertile.worldObj, x + 0.5, y + 0.5, z + 0.5, cash).apply {
-				setMotion(0.0,0.0,0.0)
+			EntityItemImmortal(supertile.worldObj, x + 0.5, y + if (floating) 1.115 else 0.125, z + 0.5, cash).apply {
+				setMotion(0.0, 0.0, 0.0)
 				spawn()
 			}
 		}
 	}
 	
-	fun getFilterForInventory(x: Int, y: Int, z: Int): List<ItemStack> {
+	fun getFilterForInventory(x: Int, y: Int, z: Int, recursiveForDoubleChest: Boolean = true): List<ItemStack> {
 		val filters = ArrayList<ItemStack>()
-		val tileEntity = supertile.worldObj.getTileEntity(x, y, z)
-		val chest = supertile.worldObj.getBlock(x, y, z)
 		
-		if (tileEntity is TileEntityChest)
-			for (dir in LibMisc.CARDINAL_DIRECTIONS) if (supertile.worldObj.getBlock(x + dir.offsetX, y, z + dir.offsetZ) === chest) {
-				filters.addAll(getFilterForInventory(x + dir.offsetX, y, z + dir.offsetZ))
-				break
-			}
+		if (recursiveForDoubleChest) {
+			val tileEntity = supertile.worldObj.getTileEntity(x, y, z)
+			val chest = supertile.worldObj.getBlock(x, y, z)
+		
+			if (tileEntity is TileEntityChest)
+				for (dir in LibMisc.CARDINAL_DIRECTIONS) if (supertile.worldObj.getBlock(x + dir.offsetX, y, z + dir.offsetZ) === chest) {
+					filters.addAll(getFilterForInventory(x + dir.offsetX, y, z + dir.offsetZ, false))
+					break
+				}
+		}
 		
 		val orientationToDir = intArrayOf(
 			3, 4, 2, 5
@@ -149,31 +165,62 @@ class SubTileTradescantia: SubTileFunctional() {
 	}
 	
 	fun collectCash(): List<ItemStack> {
-		val cash = ArrayList<ItemStack>()
+		val cashs = ArrayList<ItemStack>()
+		
+		val slowdown = slowdownFactor
 		
 		getEntitiesWithinAABB(supertile.worldObj, EntityItem::class.java, supertile.boundingBox()).forEach {
 			if (it.isDead || it.entityItem == null || it.entityItem.stackSize < 1)
 				return@forEach it.setDead()
 			
-			cash += it.entityItem.copy()
+			if (it.age >= slowdown)
+				return@forEach
 			
-			it.setEntityItemStack(null)
+			cashs += it.entityItem.copy()
+			
+			it.entityItem.stackSize = 0
+			it.setEntityItemStack(ItemStack(null as Item?))
 			it.setDead()
 		}
 		
 		getEntitiesWithinAABB(supertile.worldObj, EntityItemImmortal::class.java, supertile.boundingBox()).forEach {
+			if (it is EntityItemImmortalRelic) return@forEach
+			
 			val stack = it.stack
 			
 			if (it.isDead || stack == null || stack.stackSize < 1)
 				return@forEach it.setDead()
 			
-			cash += stack.copy()
+			cashs += stack.copy()
 			
 			it.stack = null
 			it.setDead()
 		}
 		
-		return cash
+		val sortedCash = ArrayList<ItemStack>()
+		
+		outer@ for (cash in cashs) {
+			if (sortedCash.isEmpty()) {
+				sortedCash.add(cash)
+				continue
+			}
+			
+			for (sort in sortedCash) {
+				if (cash.stackSize <= 0) break
+				
+				val canAdd = sort.maxStackSize - sort.stackSize
+				
+				if (canAdd > 0 && cash.isItemEqual(sort) && ItemStack.areItemStackTagsEqual(cash, sort)) {
+					val toAdd = min(canAdd, cash.stackSize)
+					sort.stackSize += toAdd
+					cash.stackSize -= toAdd
+				}
+			}
+			
+			if (cash.stackSize > 0) sortedCash.add(cash)
+		}
+		
+		return sortedCash
 	}
 	
 	override fun getRadius() = RadiusDescriptor.Square(toChunkCoordinates(), RANGE)
