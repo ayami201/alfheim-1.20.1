@@ -10,7 +10,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
-import alfheim.common.core.helper.*
+import alfheim.common.core.helper.ElementalDamage
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.entity.*
 import alfheim.common.entity.boss.primal.ai.surtr.*
@@ -26,6 +26,7 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.util.DamageSource
 import net.minecraft.world.World
 import java.awt.Rectangle
+import java.util.*
 
 class EntitySurtr(world: World): EntityPrimalBoss(world), IMuspelheimEntity {
 	
@@ -178,8 +179,6 @@ class EntitySurtr(world: World): EntityPrimalBoss(world), IMuspelheimEntity {
 	override fun applyCustomWeaponDamage(target: Entity) {
 		heldItem?.item?.let { (it as? ItemSurtrSword)?.leftClickEntity(this, target) }
 	}
-	override fun isShieldBreakingType(type: DamageSource) = type.elements().any(ElementalDamage.FIRE::isVulnerable)
-	override fun isDamageTypeCritical(type: DamageSource) = isShieldBreakingType(type)
 	override fun summonProtector() {
 		for (i in 0..2) EntityMuspelson(worldObj).apply {
 			setPosition(this@EntitySurtr)
@@ -252,6 +251,8 @@ class EntitySurtr(world: World): EntityPrimalBoss(world), IMuspelheimEntity {
 	override val shieldColor = 0xFFFF4D00U
 	
 	override val battleMusicDisc get() = AlfheimItems.discSurtr
+	
+	override val elements = EnumSet.of(ElementalDamage.FIRE)!!
 	
 	companion object {
 		val equipment = arrayOf(AlfheimItems.surtrSword, AlfheimItems.volcanoBoots, AlfheimItems.volcanoLeggings, AlfheimItems.volcanoChest, AlfheimItems.volcanoHelmet)

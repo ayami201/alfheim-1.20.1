@@ -72,36 +72,8 @@ object ElementalDamageHandler {
 	fun calculateElements(source: DamageSource, target: EntityLivingBase, amount: Float): Float {
 		val attackEl = source.elements()
 		
-		val attunementLevel: Int
-		
-		val attacker = source.entity as? EntityLivingBase
-		if (attacker != null) run {
-			val stack = attacker.heldItem
-			
-			if (stack == null) {
-				attunementLevel = 0
-				return@run
-			}
-			
-			val item = stack.item
-			
-			val element: ElementalDamage
-			
-			if (item is IElementalItem) {
-				element = item.getElement(stack)
-				attunementLevel = item.getElementLevel(stack)
-			} else {
-				val name = ItemNBTHelper.getString(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT, COMMON.name)
-				element = ElementalDamage.valueOf(name)
-				val level = ItemNBTHelper.getInt(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT_LEVEL, 0)
-				attunementLevel = if (level == 4) 5 else level
-			}
-			
-			attackEl += element
-		} else {
-			attunementLevel = 0
-		}
-		
+		val (heldElement, attunementLevel) = getHeldElements(source)
+		if (heldElement != null) attackEl += heldElement
 		if (attackEl.size == 1 && attackEl.first() == COMMON) return amount
 		
 		val targetEl = EnumSet.copyOf(target.elements)
@@ -176,6 +148,27 @@ object ElementalDamageHandler {
 		}
 		
 		return commonDamage + elementalDamages.values.sum()
+	}
+	
+	fun getHeldElements(source: DamageSource): Pair<ElementalDamage?, Int> {
+		val attacker = source.entity as? EntityLivingBase ?: return null to 0
+		val stack = attacker.heldItem ?: return null to 0
+		
+		val item = stack.item
+		val element: ElementalDamage
+		val attunementLevel: Int
+		
+		if (item is IElementalItem) {
+			element = item.getElement(stack)
+			attunementLevel = item.getElementLevel(stack)
+		} else {
+			val name = ItemNBTHelper.getString(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT, COMMON.name)
+			element = ElementalDamage.valueOf(name)
+			val level = ItemNBTHelper.getInt(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT_LEVEL, 0)
+			attunementLevel = if (level == 4) 5 else level
+		}
+		
+		return element to attunementLevel
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

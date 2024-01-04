@@ -19,6 +19,7 @@ Fixes:
  Daolos crash on water hits
  Gaia liquid check range
  Earth elemental mobs dying from poison
+ Elemental damage for primal bosses
  Pathfinding through anomalies
  Animated torch block updates
  [MMO] Crash on team mana sync

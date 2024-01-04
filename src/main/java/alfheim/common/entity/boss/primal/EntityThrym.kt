@@ -9,7 +9,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
-import alfheim.common.core.helper.*
+import alfheim.common.core.helper.ElementalDamage
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.entity.*
 import alfheim.common.entity.boss.EntityDedMoroz
@@ -24,9 +24,9 @@ import net.minecraft.entity.*
 import net.minecraft.entity.player.*
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.potion.Potion
-import net.minecraft.util.DamageSource
 import net.minecraft.world.World
 import java.awt.Rectangle
+import java.util.*
 import kotlin.math.*
 
 class EntityThrym(world: World): EntityPrimalBoss(world), INiflheimEntity {
@@ -123,8 +123,6 @@ class EntityThrym(world: World): EntityPrimalBoss(world), INiflheimEntity {
 	override fun applyCustomWeaponDamage(target: Entity) {
 		heldItem?.item?.let { (it as? ItemThrymAxe)?.leftClickEntity(this, target) }
 	}
-	override fun isShieldBreakingType(type: DamageSource) = type.damageType == "fireball"
-	override fun isDamageTypeCritical(type: DamageSource) = type.elements().any(ElementalDamage.ICE::isVulnerable)
 	override fun summonProtector() = EntityDedMoroz(worldObj, posX, posY, posZ).apply {
 		noLoot = true
 		forceSpawn = true
@@ -179,6 +177,8 @@ class EntityThrym(world: World): EntityPrimalBoss(world), INiflheimEntity {
 	override val shieldColor = 0xFFBFF4FFU
 	
 	override val battleMusicDisc get() = AlfheimItems.discThrym
+	
+	override val elements = EnumSet.of(ElementalDamage.ICE)!!
 	
 	companion object {
 		

@@ -10,6 +10,7 @@ import alfheim.api.entity.IIntersectAttackEntity
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.client.sound.EntityBoundMovingSound
 import alfheim.common.core.handler.*
+import alfheim.common.core.helper.*
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.entity.*
 import alfheim.common.entity.ai.AIAttackOnIntersect
@@ -37,7 +38,7 @@ import kotlin.math.*
 typealias PrimalBossMovingSound = EntityBoundMovingSound<EntityPrimalBoss>
 
 @Suppress("LeakingThis")
-abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBossWithName, IIntersectAttackEntity, ICustomArmSwingEndEntity, IForceKill {
+abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBossWithName, IIntersectAttackEntity, ICustomArmSwingEndEntity, IForceKill, IElementalEntity {
 	
 	private var maxHit = 1f
 	private var lastHit = 0f
@@ -266,18 +267,25 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 	override fun attackEntityFrom(source: DamageSource, damage: Float): Boolean {
 		val player = source.entity as? EntityPlayer ?: return false
 		
-		if (isShieldBreakingType(source) && whirl) return releaseWhirledEnergy(mod = 1)
+		val (heldElement, attunementLevel) = ElementalDamageHandler.getHeldElements(source)
+		val elements = source.elements()
+		
+		fun vulnerable(element: ElementalDamage) = this.elements.first().isVulnerable(element)
+		fun elementalCheck() = elements.any(::vulnerable) || heldElement != null && attunementLevel > 0 && vulnerable(heldElement)
+		
+		if (elementalCheck() && whirl) return releaseWhirledEnergy(mod = 1)
 		
 		if ((source.damageType != "player" && source !is DamageSourceSpell) || !EntityFlugel.isTruePlayer(player) || invulnerable || hurtTimeActual > 0)  return false
 		if (!player.capabilities.isCreativeMode && player.capabilities.disableDamage) return false
 		if (getEntitiesWithinAABB(worldObj, protectorEntityClass(), arenaBB).isNotEmpty()) return false
 		
 		val crit = player.fallDistance > 0f && !player.onGround && !player.isOnLadder && !player.isInWater && !player.isPotionActive(Potion.blindness) && player.ridingEntity == null
+		val newDamage = ElementalDamageHandler.calculateElements(source, this, damage)
 		
-		maxHit = if (player.capabilities.isCreativeMode) Float.MAX_VALUE else (if (crit) 60f else 40f) * if (isDamageTypeCritical(source)) 1.5f else 1f
-		lastHit = min(maxHit, damage)
+		maxHit = if (player.capabilities.isCreativeMode) Float.MAX_VALUE else if (crit) 60f else 40f
+		lastHit = min(maxHit, newDamage)
 		
-		if (isShieldBreakingType(source) && shield > 0) {
+		if (elementalCheck() && shield > 0) {
 			shield -= lastHit
 			recentlyHit = 60
 			hurtTimeActual = 20
@@ -300,7 +308,7 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 		if (!ASJBitwiseHelper.getBit(ultAnimationTicks, 9) && ultAnimationTicks > 80) ultAnimationTicks = -100
 		
 		if (shield > 0) {
-			if (!isDamageTypeCritical(source) && !player.capabilities.isCreativeMode) {
+			if (elementalCheck() && !player.capabilities.isCreativeMode) {
 				lastHit = 0f
 				maxHit = 0f
 				
@@ -326,17 +334,6 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 		
 		return super.attackEntityFrom(source, lastHit)
 	}
-	
-	/** This type can effectively decrease shield value */
-	abstract fun isShieldBreakingType(type: DamageSource): Boolean
-	
-	/**
-	 * This source can decrease shield value after all checks.
-	 * This will also rise upper damage limit for 50%.
-	 *
-	 * The type will be "player" or from spell
-	 */
-	abstract fun isDamageTypeCritical(type: DamageSource): Boolean
 	
 	open fun tickWhirl(players: MutableList<EntityPlayer>) {
 		if (--whirlTicks <= 0) releaseWhirledEnergy(players)
