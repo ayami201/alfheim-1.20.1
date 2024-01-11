@@ -173,7 +173,7 @@ class SubTileTradescantia: SubTileFunctional() {
 			if (it.isDead || it.entityItem == null || it.entityItem.stackSize < 1)
 				return@forEach it.setDead()
 			
-			if (it.age >= slowdown)
+			if (it.age < 60 + slowdown)
 				return@forEach
 			
 			cashs += it.entityItem.copy()

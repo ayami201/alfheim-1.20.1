@@ -22,8 +22,8 @@ class ItemGaiaSlayer: ItemMod("GaiaSlayer") {
 	
 	override fun hitEntity(stack: ItemStack, target: EntityLivingBase, attacker: EntityLivingBase): Boolean {
 		if (target is EntityDoppleganger) {
-			if (target.health >= 0.5f)
-				target.health = 0.5f
+			if (target.health > 0f)
+				target.health = 0f
 			
 			target.mobSpawnTicks = 0
 			target.tpDelay = 10000

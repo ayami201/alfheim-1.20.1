@@ -479,7 +479,7 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook
 	fun setDead(e: EntityDoppleganger) {
-		if (e.health <= 0f) return
+		if (e.health <= 0f || e.worldObj.isRemote) return
 		
 		val (x, y, z) = e.source
 		EntityItem(e.worldObj, x.D, y + 0.5, z.D,
