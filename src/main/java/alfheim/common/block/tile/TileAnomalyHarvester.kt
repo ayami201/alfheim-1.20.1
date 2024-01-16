@@ -409,7 +409,7 @@ object AnomalyHarvesterBehaviors {
 			return 0
 		}
 		
-		getEntitiesWithinAABB(tile.worldObj, EntityLivingBase::class.java, tile.getAoE()).filterNot(EntityLivingBase::isChild).random(tile.worldObj.rand)?.let {
+		getEntitiesWithinAABB(tile.worldObj, EntityLivingBase::class.java, tile.getAoE()).random(tile.worldObj.rand)?.let {
 			if (it.attackEntityFrom(DamageSourceSpell.anomaly, (Math.random() * tile.power / 2 + tile.power / 2).F))
 				return tile.power
 		}

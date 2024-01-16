@@ -112,8 +112,8 @@ object SheerColdHandler {
 		// DoT instead of constant
 		if (target.ticksExisted % 50 != 0) return
 		
-		if (cold >= 100f && target !is INiflheimEntity && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, (target.maxHealth * 0.01f + 0.15f) * 50)
-		if (cold <= -100f && target !is IMuspelheimEntity && !canProtect(target, MUSPELHEIM)) target.attackEntityFrom(DamageSourceSpell.soulburn, (target.maxHealth * 0.01f + 0.15f) * 50)
+		if (cold >= 100f && target !is INiflheimEntity && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, (target.maxHealth * 0.01f + 0.15f))
+		if (cold <= -100f && target !is IMuspelheimEntity && !canProtect(target, MUSPELHEIM)) target.attackEntityFrom(DamageSourceSpell.soulburn, (target.maxHealth * 0.01f + 0.15f))
 	}
 	
 	private fun canProtect(target: EntityLivingBase, type: ItemPendant.Companion.EnumPrimalWorldType, cost: Int = 1): Boolean {
