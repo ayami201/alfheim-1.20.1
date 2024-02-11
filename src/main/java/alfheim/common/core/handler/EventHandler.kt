@@ -484,4 +484,13 @@ object EventHandler {
 		
 		e.delta = min(e.delta!!, e.delta!! / sum) // minimal so that if other source heats - it won't override
 	}
+	
+//	@SubscribeEvent
+//	fun addXPOnDeath(e: LivingDeathEvent) {
+//		if (e.source !is DamageSourceSpell) return
+//		val target = e.entityLiving as? EntityLiving ?: return
+//
+//		val xpDrop = target.experienceValue * 0.2f
+//		EntityXPOrb(target.worldObj, target.posX, target.posY, target.posZ, xpDrop.I).spawn()
+//	}
 }

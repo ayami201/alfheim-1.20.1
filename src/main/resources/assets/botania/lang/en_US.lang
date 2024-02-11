@@ -520,7 +520,7 @@ alfheim.page.carver1=Shape of My Heart
 
 alfheim.entry.gaiaButton=Gaia Button
 alfheim.tagline.gaiaButton=Button with custom press duration
-alfheim.page.gaiaButton0=&1Gaia Button&0 allows one to configure it's press duration with a 10 ticks precision by rightclicking or sneak-rightclicking on it with &1Wand of the Forest&0.
+alfheim.page.gaiaButton0=&1Gaia Button&0 allows one to configure it's press duration with a 10 ticks precision by rightclicking or sneak-rightclicking on it with &1Wand of the Forest&0. By rightclicking with &1Runic Chalk&0 you can add short display text.
 alfheim.page.gaiaButton1=It's not so big
 
 ################################################################ DIVINITY ################################################################

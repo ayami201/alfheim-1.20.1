@@ -1,9 +1,9 @@
-package alfheim.common.entity.boss.ai.fenrir
+package alfheim.common.entity.boss.ai.fenrirnew
 
 import alexsocol.asjlib.PotionEffectU
 import alexsocol.asjlib.math.Vector3
 import alfheim.common.core.handler.AlfheimConfigHandler
-import alfheim.common.entity.boss.EntityFenrir
+import alfheim.common.entity.boss.EntityFenrirNew
 import net.minecraft.util.DamageSource
 
 /**
@@ -12,7 +12,7 @@ import net.minecraft.util.DamageSource
  * 10-14 - raises paw
  * 15-20 - lowers paw
  */
-class EntityAIFenrirHit(host: EntityFenrir): EntityAIFenrirSkillBase(host, EnumFenrirSkill.HIT, EnumActionComponents.ATTACK, EnumActionComponents.MOTION) {
+class EntityAIFenrirHit(host: EntityFenrirNew): EntityAIFenrirSkillBase(host, EnumFenrirSkill.HIT, EnumActionComponents.ATTACK, EnumActionComponents.MOTION) {
 	
 	override fun canStartTask() = Vector3.entityDistancePlane(host, host.attackTarget) < 7
 	

@@ -62,7 +62,7 @@ class ItemNaturalManual: ItemMod("NaturalManual") {
 	
 	@SideOnly(Side.CLIENT)
 	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>, adv: Boolean) {
-		list.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("alfheimmisc.naturalmanual.tooltip"))
+		list.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("$unlocalizedName.tooltip"))
 	}
 	
 	companion object {

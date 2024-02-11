@@ -2,7 +2,6 @@ package alfheim.common.block
 
 import alfheim.api.ModInfo
 import alfheim.api.block.IHourglassTrigger
-import alfheim.api.lib.LibRenderIDs
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileAnimatedTorch
 import alfheim.common.lexicon.AlfheimLexiconData
@@ -66,7 +65,7 @@ class BlockAnimatedTorch: BlockContainerMod(Material.circuits), IHourglassTrigge
 		return if (TileAnimatedTorch.SIDES[tile.side].ordinal == side) 15 else 0
 	}
 	
-	override fun getRenderType() = LibRenderIDs.idAniTorch
+	override fun getRenderType() = -1
 	override fun isOpaqueCube() = false
 	override fun renderAsNormalBlock() = false
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, lexicon: ItemStack) = AlfheimLexiconData.animatedTorch

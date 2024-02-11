@@ -20,11 +20,11 @@ import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimBlocks.starBlock
 import alfheim.common.block.AlfheimBlocks.starBlock2
 import alfheim.common.block.tile.*
+import alfheim.common.core.superwrapper.SuperWrapperHandler
 import alfheim.common.item.ItemIridescent
 import cpw.mods.fml.relauncher.*
 import gloomyfolken.hooklib.asm.*
 import net.minecraft.client.renderer.entity.RenderSheep
-import net.minecraft.entity.Entity
 import net.minecraft.entity.passive.EntitySheep
 import net.minecraft.entity.projectile.EntityThrowable
 import net.minecraft.init.Blocks
@@ -41,9 +41,6 @@ import vazkii.botania.common.item.lens.*
 import java.awt.Color
 
 object LensPaintExtender {
-	
-	val setFlag by lazy { ASJReflectionHelper.getMethod(Entity::class.java, arrayOf("setFlag", "func_70052_a"), arrayOf(Int::class.java, Boolean::class.java))?.apply { isAccessible = true } }
-	val getFlag by lazy { ASJReflectionHelper.getMethod(Entity::class.java, arrayOf("getFlag", "func_70083_f"), arrayOf(Int::class.java))?.apply { isAccessible = true } }
 	
 	val colorDirt by lazy { arrayOf(Blocks.dirt, irisDirt, rainbowDirt) }
 	val colorWoods by lazy { arrayOf(irisWood0, irisWood1, irisWood2, irisWood3, rainbowWood) }
@@ -63,19 +60,17 @@ object LensPaintExtender {
 		
 		if (entityHit is EntitySheep) {
 			val r = 20
-			val targetColor = if (getFlag?.invoke(entityHit, 6) == true) 16 else entityHit.fleeceColor
+			val targetColor = if (SuperWrapperHandler.getFlag(entityHit, 6)) 16 else entityHit.fleeceColor
 			val sheepList = getEntitiesWithinAABB(world, EntitySheep::class.java, getBoundingBox(entityHit.posX, entityHit.posY, entityHit.posZ).expand(r))
 			for (sheep in sheepList) {
-				if ((if (getFlag?.invoke(sheep, 6) == true) 16 else sheep.fleeceColor) != targetColor) continue
+				if ((if (SuperWrapperHandler.getFlag(sheep, 6)) 16 else sheep.fleeceColor) != targetColor) continue
 				
 				if (storedColor == 16) {
 					sheep.fleeceColor = 0
-					setFlag?.invoke(sheep, 6, true) ?: run {
-						sheep.fleeceColor = sheep.rng.nextInt(16)
-					}
+					SuperWrapperHandler.setFlag(sheep, 6, true)
 				} else {
 					sheep.fleeceColor = storedColor
-					setFlag?.invoke(sheep, 6, false)
+					SuperWrapperHandler.setFlag(sheep, 6, false)
 				}
 			}
 			return true
@@ -198,7 +193,7 @@ object LensPaintExtender {
 	@JvmStatic
 	@Hook(injectOnExit = true, isMandatory = false)
 	fun shouldRenderPass(render: RenderSheep, sheep: EntitySheep, pass: Int, ticks: Float, @Hook.ReturnValue result: Int): Int {
-		if (result != 1 || getFlag?.invoke(sheep, 6) != true) return result
+		if (result != 1 || !SuperWrapperHandler.getFlag(sheep, 6)) return result
 		
 		val (r, g, b) = Color.getHSBColor((sheep.ticksExisted * 2 + sheep.entityId + ticks) % 360 / 360F, 1F, 1F).getRGBColorComponents(null)
 		GL11.glColor3f(r, g, b)
@@ -208,13 +203,13 @@ object LensPaintExtender {
 	@JvmStatic
 	@Hook(injectOnExit = true, isMandatory = false)
 	fun writeEntityToNBT(sheep: EntitySheep, nbt: NBTTagCompound) {
-		nbt.setBoolean(TAG_RAINBOW, getFlag?.invoke(sheep, 6) == true)
+		nbt.setBoolean(TAG_RAINBOW, SuperWrapperHandler.getFlag(sheep, 6))
 	}
 	
 	@JvmStatic
 	@Hook(injectOnExit = true, isMandatory = false)
 	fun readEntityFromNBT(sheep: EntitySheep, nbt: NBTTagCompound) {
-		setFlag?.invoke(sheep, 6, nbt.getBoolean(TAG_RAINBOW))
+		SuperWrapperHandler.setFlag(sheep, 6, nbt.getBoolean(TAG_RAINBOW))
 	}
 	
 	const val TAG_RAINBOW = "${ModInfo.MODID}:rainbow"

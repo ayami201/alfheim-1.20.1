@@ -1,5 +1,4 @@
 Innovations:
- Fenrir AI rework (in progress)
  Miniature world tree to teleport between linked points
  Flower to automate villager trades
  Improved frozen vikings AI

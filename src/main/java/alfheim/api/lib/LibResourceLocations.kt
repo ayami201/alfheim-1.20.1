@@ -2,6 +2,7 @@ package alfheim.api.lib
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ResourceLocationAnimated
+import alexsocol.patcher.asm.ASJHookLoader
 import alfheim.api.ModInfo
 import net.minecraft.util.ResourceLocation
 
@@ -56,6 +57,7 @@ object LibResourceLocations {
 	val fenrirClaw = ResourceLocationIL(ModInfo.MODID, "textures/items/FenrirClaws0.png")
 	val fenrirClawOverlay = ResourceLocationIL(ModInfo.MODID, "textures/items/FenrirClaws1.png")
 	var flowerBagExtended = ResourceLocationIL(ModInfo.MODID, "textures/gui/flowerBagExtended.png")
+	val freezing = ResourceLocationIL(ModInfo.MODID, "textures/misc/freezing.png")
 	val frozenViking = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/FrozenViking.png")
 	val futhark = ResourceLocationIL(ModInfo.MODID, "textures/misc/FutharkMono.png")
 	val gaiaPylon = ResourceLocationIL(ModInfo.MODID, "textures/model/block/GaiaPylon.png")
@@ -70,6 +72,7 @@ object LibResourceLocations {
 	val harp = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/harp.png")
 	val harvester = ResourceLocationIL(ModInfo.MODID, "textures/model/block/Harvester.png")
 	val health = ResourceLocationIL(ModInfo.MODID, "textures/gui/health.png")
+	val heating = ResourceLocationIL(ModInfo.MODID, "textures/misc/heating.png")
 	val hotSpells = ResourceLocationIL(ModInfo.MODID, "textures/gui/HotSpells.png")
 	val ice = ResourceLocation("textures/blocks/ice.png")
 	val iceLens = ResourceLocationIL(ModInfo.MODID, "textures/misc/IceLens.png")
@@ -286,7 +289,7 @@ object LibResourceLocations {
 			val initLater = HashSet<ResourceLocationIL>()
 			
 			fun init(rl: ResourceLocationIL) {
-				if (ModInfo.OBF) return
+				if (ASJHookLoader.OBF) return
 				
 				if (mc.renderEngine == null) {
 					initLater.add(rl)

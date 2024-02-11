@@ -197,6 +197,7 @@ tile.alfheim:ManaTuner.name=Мана-настройщик
 tile.alfheim:MikuHeadBlock.name=Голова Мику
 tile.botania:miniIslandRainbow0.name=Парящий цветок Бифроста
 tile.alfheim:MuspelheimFire.name=Вечный огонь Муспельхейма
+tile.NidhoggTooth.name=Осколок зуба Нидхёгга
 tile.NiflheimBlock.Bricks.name=Промёрзшие каменные кирпичи
 tile.NiflheimBlock.Chiseled.name=Резные промёрзшие каменные кирпичи
 tile.NiflheimBlock.Cobblestone.name=Промёрзший булыжник
@@ -330,6 +331,9 @@ tile.alfheim:stormFlower.lore=Шокирующе мощный!
 tile.alfheim:Subspacian.name=Подпространственник
 tile.alfheim:Table.name=Стол
 tile.alfheim:TradePortal.name=Ядро врат Мидгарда
+tile.alfheim:tradescantia.name=Традесканция
+tile.botania:flower.tradescantia.name=Традесканция
+tile.alfheim:tradescantia.lore=Самый еврейский из всех
 tile.vafthrudnir.name=Душа Вафтруднира
 tile.WhiteGrape.name=Зелёный виноград
 tile.alfheim:windFlower.name=Ветролистник
@@ -341,6 +345,7 @@ tile.alfheim:witherAconite.lore=Он пожирает адские звёзды.
 tile.Wisdomwood0.name=Замшелые доски из Иггдрасиля
 tile.Wisdomwood1.name=Обрамлённые доски из Иггдрасиля
 tile.Wisdomwood2.name=Резные доски из Иггдрасиля
+tile.alfheim:WorldTree.name=Миниатюрное мировое древо
 tile.alfheim:YggdrasilFlower.name=Цветок Иггдрасиля
 
 #########################################################___ПРЕДМЕТЫ___#########################################################

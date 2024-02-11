@@ -106,6 +106,7 @@ object AlfheimBlocks {
 	val manaFluidBlock: Block
 	val manaInfuser: Block
 	val manaTuner: Block
+	val nidhoggTooth: Block
 	val niflheimBlock: Block
 	val niflheimPortal: Block
 	val poisonIce: Block
@@ -302,6 +303,7 @@ object AlfheimBlocks {
 		manaFluidBlock = BlockManaFluid()
 		manaInfuser = BlockManaInfuser()
 		manaTuner = BlockManaTuner()
+		nidhoggTooth = BlockNidhoggTooth()
 		niflheimBlock = BlockNiflheim()
 		niflheimPortal = BlockNiflheimPortal()
 		poisonIce = BlockNiflheimIce()
@@ -773,9 +775,7 @@ object AlfheimBlocks {
 	
 	fun registerFlora() {
 		if (AlfheimConfigHandler.gourmaryllisDifficulty > 0) {
-			val subTiles = ASJReflectionHelper.getStaticValue<BotaniaAPI, BiMap<String, Class<out SubTileEntity>>>(BotaniaAPI::class.java, "subTiles")!!
-			
-			subTiles[LibBlockNames.SUBTILE_GOURMARYLLIS] =
+			BotaniaAPI.subTiles[LibBlockNames.SUBTILE_GOURMARYLLIS] =
 				if (AlfheimConfigHandler.gourmaryllisDifficulty == 1)
 					SubTileGourmaryllisHard::class.java
 				else

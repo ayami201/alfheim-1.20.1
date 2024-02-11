@@ -1,8 +1,6 @@
 package alfheim.common.block.tile
 
-import alexsocol.asjlib.SchemaUtils
 import alfheim.common.block.AlfheimBlocks
-import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
 import vazkii.botania.api.lexicon.multiblock.*
 import vazkii.botania.common.block.ModBlocks
@@ -16,8 +14,8 @@ class TileSpire: TileEntity() {
 		fun makeMultiblockSet(): MultiblockSet {
 			val mb = Multiblock()
 			
-			for (ele in SchemaUtils.parse(TileAlfheimPylon.schema)) {
-				val block = Block.getBlockFromName(ele.block) ?: continue
+			for (ele in TileAlfheimPylon.schema) {
+				val block = ele.block ?: continue
 				
 				for (loc in ele.location) mb.addComponent(loc.x, loc.y + 3, loc.z, block, loc.meta)
 			}

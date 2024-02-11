@@ -1,21 +1,12 @@
 package alfheim.common.core.asm.hook.extender
 
-import alexsocol.asjlib.ASJReflectionHelper
 import gloomyfolken.hooklib.asm.*
-import net.minecraft.item.*
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import vazkii.botania.common.item.equipment.bauble.ItemAuraRing
 
 @Suppress("UNUSED_PARAMETER", "unused")
 object ItemAuraRingExtender {
-	
-	val getDelay by lazy {
-		val m = ASJReflectionHelper.getMethod(ItemAuraRing::class.java, "getDelay", arrayOf())
-		m?.isAccessible = true
-		m
-	}
-	
-	val delays = HashMap<Int, Int>()
 	
 	@JvmStatic
 	@Hook(createMethod = true, returnCondition = ReturnCondition.ALWAYS)
@@ -39,7 +30,7 @@ object ItemAuraRingExtender {
 	
 	@JvmStatic
 	@Hook(createMethod = true, returnCondition = ReturnCondition.ALWAYS)
-	fun canExportManaToPool(ring: ItemAuraRing, stack: ItemStack?, pool: TileEntity) = pool.worldObj.totalWorldTime % delays.computeIfAbsent(Item.getIdFromItem(ring)) { getDelay?.invoke(ring) as? Int ?: 10 } == 0L
+	fun canExportManaToPool(ring: ItemAuraRing, stack: ItemStack?, pool: TileEntity) = pool.worldObj.totalWorldTime % ring.delay == 0L
 	
 	@JvmStatic
 	@Hook(createMethod = true, returnCondition = ReturnCondition.ALWAYS)

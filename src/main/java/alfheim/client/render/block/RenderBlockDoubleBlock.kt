@@ -12,6 +12,8 @@ object RenderBlockDoubleBlock: RenderBlockDoubleCamo(LibRenderIDs.idDoubleBlock)
 	override fun renderBlock(world: World?, rb: RenderBlocks, x: Int, y: Int, z: Int, meta: Int, tile: TileDoubleCamo): Boolean {
 		var did = false
 		
+		val oldMeta = world?.getBlockMetadata(x, y, z) ?: 0
+		
 		val oldWorld = rb.blockAccess
 		val wrapper = WorldWrapper(rb.blockAccess)
 		rb.blockAccess = wrapper
@@ -30,7 +32,7 @@ object RenderBlockDoubleBlock: RenderBlockDoubleCamo(LibRenderIDs.idDoubleBlock)
 		
 		rb.blockAccess = oldWorld
 		
-		world?.setBlockMetadataWithNotify(x, y, z, meta, 4)
+		world?.setBlockMetadataWithNotify(x, y, z, oldMeta, 4)
 		
 		return did
 	}

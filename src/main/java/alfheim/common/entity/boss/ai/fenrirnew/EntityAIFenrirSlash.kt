@@ -1,9 +1,9 @@
-package alfheim.common.entity.boss.ai.fenrir
+package alfheim.common.entity.boss.ai.fenrirnew
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.common.entity.EntityFenrirSlash
-import alfheim.common.entity.boss.EntityFenrir
+import alfheim.common.entity.boss.*
 
 /**
  * Animation:
@@ -12,7 +12,7 @@ import alfheim.common.entity.boss.EntityFenrir
  * 20 - hits with second paw
  * 21-30 - lands back
  */
-class EntityAIFenrirSlash(host: EntityFenrir): EntityAIFenrirSkillBase(host, EnumFenrirSkill.SLASH, EnumActionComponents.ATTACK) {
+class EntityAIFenrirSlash(host: EntityFenrirNew): EntityAIFenrirSkillBase(host, EnumFenrirSkill.SLASH, EnumActionComponents.ATTACK) {
 	
 	override fun canStartTask() = Vector3.entityDistancePlane(host, host.attackTarget) > 20
 	

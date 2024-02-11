@@ -1,6 +1,6 @@
 package alfheim.common.core.asm
 
-import alfheim.api.ModInfo.OBF
+import alexsocol.patcher.asm.ASJHookLoader.Companion.OBF
 import alfheim.common.core.asm.hook.extender.ItemLensExtender
 import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.launchwrapper.IClassTransformer

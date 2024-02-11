@@ -88,6 +88,7 @@ import alfheim.common.block.AlfheimBlocks.netherSapling
 import alfheim.common.block.AlfheimBlocks.netherSlabs
 import alfheim.common.block.AlfheimBlocks.netherStairs
 import alfheim.common.block.AlfheimBlocks.netherWood
+import alfheim.common.block.AlfheimBlocks.nidhoggTooth
 import alfheim.common.block.AlfheimBlocks.niflheimBlock
 import alfheim.common.block.AlfheimBlocks.powerStone
 import alfheim.common.block.AlfheimBlocks.rainbowDirt
@@ -620,6 +621,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(stalactite)
 		addBlock(stalagmite)
 		addBlock(icicle)
+		addBlock(nidhoggTooth)
 		
 		addBlock(elvenOre)
 		

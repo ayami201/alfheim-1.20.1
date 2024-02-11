@@ -21,6 +21,7 @@ import net.minecraft.util.MathHelper
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.*
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
+import net.minecraftforge.event.entity.player.ItemTooltipEvent
 import vazkii.botania.common.block.tile.TileAltar
 import kotlin.math.*
 
@@ -94,13 +95,13 @@ object SheerColdHandler {
 		
 		if (AlfheimConfigHandler.potionIDOvercold != -1) {
 			if (cold >= 25f)
-				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOvercold, 101, (cold / 25).I - 1))
+				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOvercold, 10, (cold / 25).I - 1))
 			else
 				target.removePotionEffect(AlfheimConfigHandler.potionIDOvercold)
 		}
 		if (AlfheimConfigHandler.potionIDOverheat != -1) {
 			if (cold <= -25f)
-				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOverheat, 101, when {
+				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOverheat, 10, when {
 					cold <= -90f -> 2
 					cold <= -50f -> 1
 					else         -> 0
@@ -187,6 +188,17 @@ object SheerColdHandler {
 
 		if (ASJUtilities.chance(0.5))
 			e.player.dropOneItem(true)
+	}
+	
+	@Suppress("UNCHECKED_CAST")
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	fun blockTemperatureInfo(e: ItemTooltipEvent) {
+		val block = e.itemStack.block
+		if (block in AlfheimAPI.coldBlocks)
+			addStringToTooltip(e.toolTip as MutableList<Any?>, "alfheimmisc.blockcold")
+		else if (block in AlfheimAPI.warmBlocks)
+			addStringToTooltip(e.toolTip as MutableList<Any?>, "alfheimmisc.blockwarm")
 	}
 	
 	/**

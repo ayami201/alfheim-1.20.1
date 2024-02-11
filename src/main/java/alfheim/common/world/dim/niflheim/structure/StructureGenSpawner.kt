@@ -9,7 +9,12 @@ object StructureGenSpawner {
 	
 	fun generate(world: World, random: Random, type: Int, i: Int, j: Int, k: Int): Boolean {
 		world.setBlock(i, j, k, Blocks.mob_spawner, 0, 3)
-		val tile = world.getTileEntity(i, j, k) as TileEntityMobSpawner
+		
+		val tile = world.getTileEntity(i, j, k) as? TileEntityMobSpawner ?: run {
+			world.setBlockToAir(i, j, k)
+			return false
+		}
+		
 		val mobID = when (type) {
 			0 -> spawner0(random)
 			1 -> spawner1(random)
@@ -18,6 +23,7 @@ object StructureGenSpawner {
 			4 -> spawner4(random)
 			else -> "Zombie"
 		}
+		
 		tile.func_145881_a().setEntityName(mobID)
 		return true
 	}

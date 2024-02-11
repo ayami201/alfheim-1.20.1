@@ -247,7 +247,7 @@ object EventHandlerClient {
 	@SubscribeEvent(receiveCanceled = true)
 	@SideOnly(Side.CLIENT)
 	fun onFog(e: EntityViewRenderEvent.FogDensity) {
-		val rve = e.renderer.mc.renderViewEntity
+		val rve = mc.renderViewEntity
 		if (rve is EntityPlayer && rve.capabilities.isCreativeMode || !AlfheimConfigHandler.enableMMO || !rve.isPotionActive(AlfheimConfigHandler.potionIDNoclip) || e.block.material !== Material.water && e.block.material !== Material.lava) return
 		glFogi(GL_FOG_MODE, GL_EXP)
 		e.density = 0.05f

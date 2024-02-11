@@ -73,7 +73,7 @@ object FlowerBagExtender {
 	@JvmStatic
 	@Hook(injectOnExit = true, targetMethod = "<clinit>")
 	fun `InventoryFlowerBag$clinit`(static: InventoryFlowerBag?) {
-		ASJReflectionHelper.setStaticFinalValue(InventoryFlowerBag::class.java, arrayOfNulls<ItemStack>(34), "InventoryFlowerBag")
+		InventoryFlowerBag.FALLBACK_INVENTORY = arrayOfNulls<ItemStack>(34)
 	}
 	
 	@JvmStatic
@@ -85,7 +85,7 @@ object FlowerBagExtender {
 	@JvmStatic
 	@Hook(injectOnExit = true, targetMethod = "<clinit>")
 	fun `GuiFlowerBag$clinit`(static: GuiFlowerBag?) {
-		ASJReflectionHelper.setStaticFinalValue(GuiFlowerBag::class.java, LibResourceLocations.flowerBagExtended, "texture")
+		GuiFlowerBag.texture = LibResourceLocations.flowerBagExtended
 	}
 	
 	@JvmStatic
@@ -96,7 +96,7 @@ object FlowerBagExtender {
 	
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
-	fun drawGuiContainerForegroundLayer(gui: GuiFlowerBag, p_146979_1_: Int, p_146979_2_: Int) {
+	fun drawGuiContainerForegroundLayer(gui: GuiFlowerBag, mouseX: Int, mouseY: Int) {
 		val s = StatCollector.translateToLocal("item.botania:flowerBag.name")
 		gui.fontRendererObj.drawString(s, gui.xSize / 2 - gui.fontRendererObj.getStringWidth(s) / 2, 6, 4210752)
 		gui.fontRendererObj.drawString(I18n.format("container.inventory"), 8, gui.ySize - 94, 4210752)
@@ -104,7 +104,7 @@ object FlowerBagExtender {
 	
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
-	fun drawGuiContainerBackgroundLayer(gui: GuiFlowerBag, p_146976_1_: Float, p_146976_2_: Int, p_146976_3_: Int) {
+	fun drawGuiContainerBackgroundLayer(gui: GuiFlowerBag, ticks: Float, mouseX: Int, mouseY: Int) {
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f)
 		mc.textureManager.bindTexture(LibResourceLocations.flowerBagExtended)
 		val k = (gui.width - gui.xSize) / 2

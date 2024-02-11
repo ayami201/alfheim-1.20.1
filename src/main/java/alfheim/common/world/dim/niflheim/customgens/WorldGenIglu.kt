@@ -18,10 +18,6 @@ import vazkii.botania.common.item.ModItems as Botaniai
 
 object WorldGenIglu {
 	
-	val iglu1 = SchemaUtils.parseWithRotations("${ModInfo.MODID}/schemas/niflheim/worldgen_5") // broken
-	val iglu2 = SchemaUtils.parseWithRotations("${ModInfo.MODID}/schemas/niflheim/worldgen_6") // small
-	val iglu3 = SchemaUtils.parseWithRotations("${ModInfo.MODID}/schemas/niflheim/worldgen_7") // big
-	
 	private const val y = 32
 	
 	fun generate(world: World, random: Random, x: Int, z: Int) {
@@ -39,7 +35,7 @@ object WorldGenIglu {
 							if (!world.isAirBlock(i, j, k))
 								return
 				
-				SchemaUtils.generate(world, x, y, z, iglu1.random(random)!!)
+				SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/niflheim/worldgen_5", true, true, true, random.nextInt(3)) // broken
 				searchAndGenChests(world, random, x, z, 13, 9)
 			}
 			1 -> {
@@ -49,7 +45,7 @@ object WorldGenIglu {
 							if (!world.isAirBlock(i, j, k))
 								return
 				
-				SchemaUtils.generate(world, x, y, z, iglu2.random(random)!!)
+				SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/niflheim/worldgen_6", true, true, true, random.nextInt(3)) // small
 				searchAndGenChests(world, random, x, z, 5, 4)
 			}
 			2 -> {
@@ -59,7 +55,7 @@ object WorldGenIglu {
 							if (!world.isAirBlock(i, j, k))
 								return
 				
-				SchemaUtils.generate(world, x, y, z, iglu3.random(random)!!)
+				SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/niflheim/worldgen_7", true, true, true, random.nextInt(3)) // big
 				searchAndGenChests(world, random, x, z, 8, 5)
 			}
 		}

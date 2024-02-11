@@ -353,6 +353,7 @@ object AlfheimItems {
 		OreDictionary.registerOre(LibOreDict.ARUNE[1], MuspelheimRune.stack)
 		OreDictionary.registerOre(LibOreDict.ARUNE[2], NiflheimRune.stack)
 		OreDictionary.registerOre(LibOreDict.INFUSED_DREAM_TWIG, InfusedDreamwoodTwig.stack)
+		OreDictionary.registerOre("slimeball", ElementalSlimeBall.stack)
 		
 		// Iridescense
 		

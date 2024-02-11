@@ -10,6 +10,9 @@ item.alfheim:NaturalBucket.Manasteel.name=Ведро расплавленной 
 item.alfheim:NaturalBucket.Mauftrium.name=Ведро расплавленного мауфтрия
 item.alfheim:NaturalBucket.Terrasteel.name=Ведро расплавленной террастали
 
+item.alfheim:NaturalManual.name=Природа и Вы
+item.NaturalManual.tooltip=Автор: AlexSocol
+
 item.alfheim:RedBowstring.name=Красная нить лука
 item.alfheim:ManaBowstring.name=Наполненная маной нить лука
 

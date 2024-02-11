@@ -13,6 +13,6 @@ object StructurePortalToNiflheim {
 		if (xOff shr 4 != chunkX || zOff shr 4 != chunkZ) return
 		
 		ASJUtilities.log("Generated portal to Niflheim at $xOff $zOff")
-		SchemaUtils.generate(world, xOff, 33, zOff, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/PortalToNiflheim"))
+		SchemaUtils.generate(world, xOff, 33, zOff, "${ModInfo.MODID}/schemas/PortalToNiflheim", false)
 	}
 }

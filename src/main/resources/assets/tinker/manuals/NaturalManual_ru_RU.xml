@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+
+<book>
+    <page type="intro">
+        <text>Природа и Вы
+Alfheim x Tinker's Construct
+
+Автор: AlexSocol</text>
+    </page>
+
+    <page type="contents">
+        <text>Содержание</text>
+        <link>
+            <text>Материалы</text>
+            <icon>elvorium</icon>
+            <jump>2</jump>
+        </link>
+        <link>
+            <text>Модификаторы</text>
+            <icon>manarepair</icon>
+            <jump>4</jump>
+        </link>
+    </page>
+
+    <page type="text">
+        <text>Добро пожаловать в единственное издание книги "Природа и Вы: Alfheim x Tinker's Construct". На этих страницах Вы найдёте всё необходимое, чтобы эффективно использовать силу природы, применяя все свои навыки ботаника.
+
+Эта книга - магическая копия; она обновляется, когда её оригинал изменяется. Иногда в ней появляется новая информация о новых предметах, следите за обновлениями.</text>
+    </page>
+
+    <page type="sectionpage">
+        <title>Свойства природных материалов</title>
+        <text>Некоторые материалы обладают свойствами, дополняющими их естественное применение.
+
+ - Манапочинка: Использует ману для восстановления прочности инструмента
+ - Манарегенерация: Пассивная генерация маны в планшеты маны
+ - Призыв феи: 10% шанс призвать фею</text>
+    </page>
+
+    <page type="materialstats">
+        <title>Элементий</title>
+        <icon>elementium</icon>
+        <text>Инструменты из элементиума</text>
+        <material>
+            <main>elementium</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Эльворий</title>
+        <icon>elvorium</icon>
+        <text>Инструменты из эльвория</text>
+        <material>
+            <main>elvorium</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Манасталь</title>
+        <icon>manasteel</icon>
+        <text>Инструменты из манастали</text>
+        <material>
+            <main>manasteel</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Мауфтрий</title>
+        <icon>mauftrium</icon>
+        <text>Инструменты из мауфтрия</text>
+        <material>
+            <main>mauftrium</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Террасталь</title>
+        <icon>terrasteel</icon>
+        <text>Инструменты из террастали</text>
+        <material>
+            <main>terrasteel</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Древесина мечтаний</title>
+        <icon>dreamwood</icon>
+        <text>Инструменты из древесины мечтаний</text>
+        <material>
+            <main>dreamwood</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Жизнедерево</title>
+        <icon>livingwood</icon>
+        <text>Инструменты из жизнедерева</text>
+        <material>
+            <main>livingwood</main>
+        </material>
+    </page>
+
+    <page type="materialstats">
+        <title>Жизнекамень</title>
+        <icon>livingrock</icon>
+        <text>Инструменты из жизнекамня</text>
+        <material>
+            <main>livingrock</main>
+        </material>
+    </page>
+
+    <page type="sectionpage">
+        <title>Авто-починка</title>
+        <text>Инструмент с прикреплённым к нему ядром мана-наполнителя, похоже, способен регенерировать износ за счёт некоторого количества маны.
+
+ Эффекты:
+ - Инструмент чинит себя
+
+ Тип: Одноразовый
+ Складывается: Нет</text>
+    </page>
+
+    <page type="modifier">
+        <tooltype>tool</tooltype>
+        <recipe>manarepair</recipe>
+    </page>
+</book>

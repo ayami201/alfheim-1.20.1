@@ -3,7 +3,6 @@ package alfheim.client.render.item
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.render.ASJRenderHelper.discard
-import alexsocol.asjlib.render.ASJRenderHelper.drawGuideArrows
 import alexsocol.asjlib.render.ASJRenderHelper.setBlend
 import alfheim.client.render.block.RenderBlockDoubleCamo
 import alfheim.common.block.tile.TileDoubleCamo

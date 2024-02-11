@@ -1,4 +1,4 @@
-package alfheim.common.entity.boss.ai.fenrir
+package alfheim.common.entity.boss.ai.fenrirnew
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
@@ -6,10 +6,10 @@ import alfheim.api.entity.IAncientWolf
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.core.handler.VisualEffectHandler
 import alfheim.common.entity.EntityFenrirSlash
-import alfheim.common.entity.boss.EntityFenrir
+import alfheim.common.entity.boss.EntityFenrirNew
 import net.minecraft.entity.EntityLivingBase
 
-class EntityAIFenrirJump(host: EntityFenrir): EntityAIFenrirSkillBase(host, EnumFenrirSkill.JUMP, EnumActionComponents.ATTACK, EnumActionComponents.MOTION) {
+class EntityAIFenrirJump(host: EntityFenrirNew): EntityAIFenrirSkillBase(host, EnumFenrirSkill.JUMP, EnumActionComponents.ATTACK, EnumActionComponents.MOTION) {
 	
 	override fun canStartTask() = host.health < host.maxHealth * 0.8f
 	

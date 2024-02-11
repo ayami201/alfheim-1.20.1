@@ -17,7 +17,6 @@ import java.io.File
 class AlfheimHookLoader: HookLoader() {
 	
 	init {
-		ModInfo.OBF = ASJHookLoader.OBF
 		AlfheimConfigHandler.loadConfig(File("config/Alfheim/Alfheim.cfg"))
 	}
 	
@@ -51,7 +50,7 @@ class AlfheimHookLoader: HookLoader() {
 		registerHookContainer("alfheim.common.integration.tinkersconstruct.TraitFairySpawner")
 		registerHookContainer("alfheim.common.item.rod.RedstoneRodHookHandler")
 		
-		if (ModInfo.OBF) ASJASM.registerFieldHookContainer("alfheim.common.core.asm.hook.AlfheimFieldHookHandler")
+		if (ASJHookLoader.OBF) ASJASM.registerFieldHookContainer("alfheim.common.core.asm.hook.AlfheimFieldHookHandler")
 		
 		registerHookContainer("alfheim.common.core.asm.BotaniaVisDiscountHooks")
 		

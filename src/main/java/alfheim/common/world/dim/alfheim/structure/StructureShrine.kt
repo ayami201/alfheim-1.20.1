@@ -14,11 +14,11 @@ import java.util.*
 object StructureShrine: StructureBaseClass() {
 	
 	val shrines = listOf(
-		SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/shrineBerserk"),
-		SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/shrineNinja"),
-		SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/shrineOvermage"),
-		SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/shrineTank")
-	                     )
+		"${ModInfo.MODID}/schemas/shrineBerserk",
+		"${ModInfo.MODID}/schemas/shrineNinja",
+		"${ModInfo.MODID}/schemas/shrineOvermage",
+		"${ModInfo.MODID}/schemas/shrineTank"
+	)
 	
 	override fun generate(world: World, rand: Random, x: Int, y: Int, z: Int, chunkProvider: WE_ChunkProvider): Boolean {
 		if (ASJUtilities.isClient) return false // just in case
@@ -34,7 +34,7 @@ object StructureShrine: StructureBaseClass() {
 		
 		if (locs.any { Vector3.pointDistancePlane(x, z, it.first, it.second) < 128 }) return false
 		
-		SchemaUtils.generate(world, x, y, z, shrines.random(rand)!!)
+		SchemaUtils.generate(world, x, y, z, shrines.random(rand)!!, true)
 
 		for (i in 0..2) {
 			val tile = world.getTileEntity(x, y + i, z) as? TilePowerStone ?: continue

@@ -12,7 +12,7 @@ import net.minecraftforge.client.IRenderHandler
 abstract class Domain(val modid: String, val name: String, val minPlayers: Int, val boundBox: AxisAlignedBB, val genOffset: ChunkCoordinates = ChunkCoordinates()) {
 	
 	val id = nextDomainID
-	val schema = SchemaUtils.loadStructure("${modid}/schemas/${name}")
+	val schema = "${modid}/schemas/${name}"
 	
 	init {
 		require(AlfheimAPI.domains.put(name, this) == null) { "Domain with name $name already exists" }

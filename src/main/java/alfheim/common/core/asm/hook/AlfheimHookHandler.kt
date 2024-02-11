@@ -1652,44 +1652,44 @@ object AlfheimHookHandler {
 		
 		when (end.coordBaseMode) {
 			0 -> {
-				SchemaUtils.generate(world, x, y, z + 6, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeNS"))
+				SchemaUtils.generate(world, x, y, z + 6, ("${ModInfo.MODID}/schemas/SurtrBridgeNS"), false)
 				
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeEXP"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeWXN"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeSZP"))
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeEXP"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeWXN"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeSZP"), false)
 			}
 			1 -> {
-				SchemaUtils.generate(world, x - 6, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeEW"))
+				SchemaUtils.generate(world, x - 6, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeEW"), false)
 				
 				x -= 23
 				z -= 23
 				
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeNZN"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeWXN"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeSZP"))
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeNZN"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeWXN"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeSZP"), false)
 			}
 			2 -> {
-				SchemaUtils.generate(world, x, y, z - 6, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeNS"))
+				SchemaUtils.generate(world, x, y, z - 6, ("${ModInfo.MODID}/schemas/SurtrBridgeNS"), false)
 				
 				z -= 46
 				
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeNZN"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeEXP"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeWXN"))
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeNZN"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeEXP"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeWXN"), false)
 			}
 			3 -> {
-				SchemaUtils.generate(world, x + 6, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeEW"))
+				SchemaUtils.generate(world, x + 6, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeEW"), false)
 				
 				x += 23
 				z -= 23
 				
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeNZN"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeEXP"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeSZP"))
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeNZN"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeEXP"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeSZP"), false)
 			}
 		}
 		
-		SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrTower"))
+		SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrTower"), false)
 		ASJUtilities.fillGenHoles(world, Blocks.nether_brick, 0, x, y - 9, z + 23, 11)
 		
 		data.structures.put("Surtr", x to z)
@@ -1994,4 +1994,8 @@ object AlfheimHookHandler {
 		nbt.setString(SubTileEntity.TAG_TYPE, nbt.getString(tag))
 		nbt.removeTag(tag)
 	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun onUpdate(item: ItemBottledMana, stack: ItemStack?, world: World?, entity: Entity?, slot: Int, inHand: Boolean) = Unit
 }

@@ -1,7 +1,7 @@
-package alfheim.common.entity.boss.ai.fenrir
+package alfheim.common.entity.boss.ai.fenrirnew
 
 import alexsocol.asjlib.math.Vector3
-import alfheim.common.entity.boss.EntityFenrir
+import alfheim.common.entity.boss.EntityFenrirNew
 import net.minecraft.potion.*
 import net.minecraft.util.DamageSource
 
@@ -11,7 +11,7 @@ import net.minecraft.util.DamageSource
  * 9-11 - closes jaws
  * 12-20 - rotates back
  */
-class EntityAIFenrirBite(host: EntityFenrir): EntityAIFenrirSkillBase(host, EnumFenrirSkill.BITE, EnumActionComponents.ATTACK) {
+class EntityAIFenrirBite(host: EntityFenrirNew): EntityAIFenrirSkillBase(host, EnumFenrirSkill.BITE, EnumActionComponents.ATTACK) {
 	
 	override fun canStartTask() = Vector3.entityDistancePlane(host, host.attackTarget) < 5
 	

@@ -18,7 +18,7 @@ object RenderEntityFenrir: RenderLiving(ModelEntityFenrir, 2f) {
 		setRenderPassModel(ModelEntityFenrir)
 	}
 	
-	override fun doRender(entity: Entity, p_76986_2_: Double, p_76986_4_: Double, p_76986_6_: Double, p_76986_8_: Float, p_76986_9_: Float) {
+	override fun doRender(entity: Entity, x: Double, y: Double, z: Double, yaw: Float, ticks: Float) {
 		entity as EntityLivingBase
 		
 //		glPushMatrix()
@@ -36,7 +36,7 @@ object RenderEntityFenrir: RenderLiving(ModelEntityFenrir, 2f) {
 //
 //		glPopMatrix()
 		
-		super.doRender(entity, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_)
+		super.doRender(entity, x, y, z, yaw, ticks)
 	}
 	
 	override fun shouldRenderPass(wolf: EntityLivingBase, pass: Int, ticks: Float): Int {

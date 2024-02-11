@@ -31,12 +31,12 @@ object StructureSpawnpoint {
 	
 	fun generatePortal(world: World, x: Int, y: Int, z: Int) {
 		world.setSpawnLocation(x, y, z - 3)
-		SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/portal"))
+		SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/portal", false)
 	}
 	
 	fun generateStartBox(world: World, x: Int, y: Int, z: Int, rand: Random) {
 		world.setSpawnLocation(x, y + 2, z)
-		SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/spawnbox"))
+		SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/spawnbox", false)
 		world.setBlock(x, y, z, Blocks.bedrock)
 		
 		if (!AlfheimConfigHandler.bonusChest) return

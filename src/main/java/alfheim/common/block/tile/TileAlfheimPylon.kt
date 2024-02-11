@@ -117,7 +117,7 @@ class TileAlfheimPylon: ASJTile() {
 	}
 	
 	fun checkStructure(): TilePool? {
-		if (!SchemaUtils.checkStructure(worldObj, xCoord, yCoord, zCoord, schema)) return null
+		if (!UnsafeSchemaUtils.checkStructure(worldObj, xCoord, yCoord, zCoord, schema)) return null
 		return worldObj.getTileEntity(xCoord, yCoord - 2, zCoord) as? TilePool ?: return null
 	}
 	
@@ -145,7 +145,7 @@ class TileAlfheimPylon: ASJTile() {
 		const val MANA_PER_TICK = 2000
 		const val TAG_GG_TICKS = "ggticks"
 		
-		val schema = SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/Cosmogonic")
+		val schema = UnsafeSchemaUtils.loadStructure("${ModInfo.MODID}/schemas/Cosmogonic")
 		
 		fun doCreationParticles(x: Double, y: Double, z: Double, ticks: Int) {
 			for (k in arrayOf(-5, 5)) {

@@ -2,7 +2,7 @@
 
 <book>
     <page type="intro">
-        <text>Natural Materials
+        <text>Nature and You
 Alfheim x Tinker's Construct
 
 By AlexSocol</text>
@@ -23,7 +23,9 @@ By AlexSocol</text>
     </page>
 
     <page type="text">
-        <text>Welcome [TODO GedeonGrays]</text>
+        <text>Welcome to the only edition of Nature and You: Alfheim x Tinker's Construct. Within these pages you will find everything you need to effectively harness the power of nature with all of your botanist skills.
+
+This book is a magic copy; it updates whenever the original has been modified. Check back occasionally for information on new things.</text>
     </page>
 
     <page type="sectionpage">
@@ -38,7 +40,7 @@ By AlexSocol</text>
     <page type="materialstats">
         <title>Elementium</title>
         <icon>elementium</icon>
-        <text>Elementium [TODO GedeonGrays]</text>
+        <text>Tools made of Elementium</text>
         <material>
             <main>elementium</main>
         </material>
@@ -47,7 +49,7 @@ By AlexSocol</text>
     <page type="materialstats">
         <title>Elvorium</title>
         <icon>elvorium</icon>
-        <text>Elvorium [TODO GedeonGrays]</text>
+        <text>Tools made of Elvorium</text>
         <material>
             <main>elvorium</main>
         </material>
@@ -56,7 +58,7 @@ By AlexSocol</text>
     <page type="materialstats">
         <title>Manasteel</title>
         <icon>manasteel</icon>
-        <text>Manasteel [TODO GedeonGrays]</text>
+        <text>Tools made of Manasteel</text>
         <material>
             <main>manasteel</main>
         </material>
@@ -65,7 +67,7 @@ By AlexSocol</text>
     <page type="materialstats">
         <title>Mauftrium</title>
         <icon>mauftrium</icon>
-        <text>Mauftrium [TODO GedeonGrays]</text>
+        <text>Tools made of Mauftrium</text>
         <material>
             <main>mauftrium</main>
         </material>
@@ -74,7 +76,7 @@ By AlexSocol</text>
     <page type="materialstats">
         <title>Terrasteel</title>
         <icon>terrasteel</icon>
-        <text>Terrasteel [TODO GedeonGrays]</text>
+        <text>Tools made of Terrasteel</text>
         <material>
             <main>terrasteel</main>
         </material>
@@ -83,7 +85,7 @@ By AlexSocol</text>
     <page type="materialstats">
         <title>Dreamwood</title>
         <icon>dreamwood</icon>
-        <text>Dreamwood [TODO GedeonGrays]</text>
+        <text>Tools made of Dreamwood</text>
         <material>
             <main>dreamwood</main>
         </material>
@@ -92,7 +94,7 @@ By AlexSocol</text>
     <page type="materialstats">
         <title>Livingwood</title>
         <icon>livingwood</icon>
-        <text>Livingwood [TODO GedeonGrays]</text>
+        <text>Tools made of Livingwood</text>
         <material>
             <main>livingwood</main>
         </material>
@@ -101,7 +103,7 @@ By AlexSocol</text>
     <page type="materialstats">
         <title>Livingrock</title>
         <icon>livingrock</icon>
-        <text>Livingrock [TODO GedeonGrays]</text>
+        <text>Tools made of Livingrock</text>
         <material>
             <main>livingrock</main>
         </material>

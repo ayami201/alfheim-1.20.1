@@ -1,8 +1,8 @@
-package alfheim.common.entity.boss.ai.fenrir
+package alfheim.common.entity.boss.ai.fenrirnew
 
 import alexsocol.asjlib.knockback
 import alexsocol.asjlib.math.Vector3
-import alfheim.common.entity.boss.EntityFenrir
+import alfheim.common.entity.boss.*
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.util.DamageSource
@@ -11,7 +11,7 @@ import net.minecraft.util.DamageSource
  * 0-18 rotates
  * 19-20 stops
  */
-class EntityAIFenrirTailSwipe(host: EntityFenrir): EntityAIFenrirSkillBase(host, EnumFenrirSkill.TAIL, EnumActionComponents.ATTACK) {
+class EntityAIFenrirTailSwipe(host: EntityFenrirNew): EntityAIFenrirSkillBase(host, EnumFenrirSkill.TAIL, EnumActionComponents.ATTACK) {
 	
 	override fun canStartTask() = Vector3.entityDistancePlane(host, host.attackTarget) < 5
 	

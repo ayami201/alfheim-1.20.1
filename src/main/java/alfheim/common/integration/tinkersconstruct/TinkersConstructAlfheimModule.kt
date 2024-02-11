@@ -11,6 +11,7 @@ import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig.TERRASTEEL
 import alfheim.common.integration.tinkersconstruct.modifier.*
 import alfheim.common.item.compat.tinkersconstruct.*
+import cpw.mods.fml.common.registry.GameRegistry
 import gloomyfolken.hooklib.asm.*
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -128,6 +129,7 @@ object TinkersConstructAlfheimModule {
 			}
 		
 		naturalManual = ItemNaturalManual()
+		GameRegistry.addShapelessRecipe(ItemStack(naturalManual), ItemStack(TinkerTools.manualBook, 1, 3))
 	}
 	
 	fun registerSmelteryFluid(name: String, renderBlock: Block, renderMeta: Int, texture: String = "liquids/liquid_$name", fluidName: String = "$name.molten", blockName: String = "fluid.molten.$name", density: Int = 3000, viscosity: Int = 6000, temperature: Int = 1300, material: Material = Material.lava) =

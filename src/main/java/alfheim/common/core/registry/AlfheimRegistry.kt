@@ -85,9 +85,9 @@ object AlfheimRegistry {
 		}
 	}
 	
-	private fun addAllSpawn(clazz: Class<out EntityLiving>, data: IntArray, blacklist: IntArray) {
+	private fun addAllSpawn(clazz: Class<out EntityLiving>, data: IntArray, blacklist: IntArray, type: EnumCreatureType = EnumCreatureType.monster) {
 		val (w, n, x) = data
-		EntityRegistry.addSpawn(clazz, w, n, x, EnumCreatureType.monster, *BiomeGenBase.getBiomeGenArray().filter { it != null && it.biomeID !in blacklist }.toTypedArray())
+		EntityRegistry.addSpawn(clazz, w, n, x, type, *BiomeGenBase.getBiomeGenArray().filter { it != null && it.biomeID !in blacklist }.toTypedArray())
 	}
 	
 	private fun registerPotions() {

@@ -68,7 +68,7 @@ object Botania18AndUpBackport {
 	
 	@JvmStatic
 	@Hook(injectOnExit = true, targetMethod = "getEntitiesWithinAABB")
-	fun originalNameAppearsInCodeCompletionSoMovedItToTargetMethodName(clazz: Class<*>, axisAlignedBB: AxisAlignedBB, @ReturnValue result: MutableList<*>?): List<*>? {
+	fun originalNameAppearsInCodeCompletionSoMovedItToTargetMethodName(world: World?, clazz: Class<*>, axisAlignedBB: AxisAlignedBB, @ReturnValue result: MutableList<*>?): List<*>? {
 		if (shouldntHookRannuncarpus || result == null || filter.isEmpty()) return result
 		shouldntHookRannuncarpus = false
 		

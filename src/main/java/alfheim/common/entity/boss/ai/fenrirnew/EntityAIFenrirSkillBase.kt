@@ -1,11 +1,11 @@
-package alfheim.common.entity.boss.ai.fenrir
+package alfheim.common.entity.boss.ai.fenrirnew
 
 import alexsocol.asjlib.ASJBitwiseHelper
-import alfheim.common.entity.boss.EntityFenrir
+import alfheim.common.entity.boss.*
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.EntityAIBase
 
-abstract class EntityAIFenrirSkillBase(val host: EntityFenrir, val skill: EnumFenrirSkill, comp: EnumActionComponents, vararg comps: EnumActionComponents): EntityAIBase() {
+abstract class EntityAIFenrirSkillBase(val host: EntityFenrirNew, val skill: EnumFenrirSkill, comp: EnumActionComponents, vararg comps: EnumActionComponents): EntityAIBase() {
 	
 	init {
 		mutexBits = arrayOf(comp, *comps).fold(0) { acc, it -> ASJBitwiseHelper.setBit(acc, it.ordinal, true) }

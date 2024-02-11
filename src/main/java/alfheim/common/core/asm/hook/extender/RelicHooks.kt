@@ -40,7 +40,7 @@ object RelicHooks {
 	
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
-	fun bindToUsernameS(username: String?, stack: ItemStack) {
+	fun bindToUsernameS(static: ItemRelic?, username: String?, stack: ItemStack) {
 		AItemNBTHelper.initNBT(stack)
 		stack.tagCompound?.setString("soulbind", username)
 	}
@@ -113,11 +113,14 @@ object RelicHooks {
 		val hostName = stack.tagCompound?.getString("soulbind")
 		val statId = item.bindAchievement?.statId ?: GameRegistry.findUniqueIdentifierFor(stack.item).toString()
 		
+		if (hostName.isNullOrEmpty()) {
+			if (stack.tagCompound == null) stack.tagCompound = NBTTagCompound()
+			return stack.tagCompound
+		}
+		
 		if (ASJUtilities.isClient)
 			return relicNBTClient.computeIfAbsent("$hostName>>>$statId") { NBTTagCompound() }
 
-		if (hostName.isNullOrEmpty()) return null
-		
 		val nbtData = MinecraftServer.getServer().worldServerForDimension(0).customData.nbtData
 		val relicNBT = nbtData.tagMap.computeIfAbsent(TAG_RELIC_NBT) { NBTTagCompound() } as NBTTagCompound
 		val userData = relicNBT.tagMap.computeIfAbsent(hostName) { NBTTagCompound() } as NBTTagCompound

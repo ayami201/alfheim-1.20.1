@@ -1,15 +1,15 @@
-package alfheim.common.entity.boss.ai.fenrir
+package alfheim.common.entity.boss.ai.fenrirnew
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.entity.IAncientWolf
 import alfheim.common.entity.EntityFenrirDome
-import alfheim.common.entity.boss.EntityFenrir
+import alfheim.common.entity.boss.*
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.DamageSource
 
-class EntityAIFenrirOnslaught(host: EntityFenrir): EntityAIFenrirSkillBase(host, EnumFenrirSkill.ONSLAUGHT, EnumActionComponents.ATTACK, EnumActionComponents.MOTION) {
+class EntityAIFenrirOnslaught(host: EntityFenrirNew): EntityAIFenrirSkillBase(host, EnumFenrirSkill.ONSLAUGHT, EnumActionComponents.ATTACK, EnumActionComponents.MOTION) {
 	
 	var playerPos = Vector3()
 	var hasLeaped = false

@@ -45,10 +45,10 @@ class TileCurtainPlacer @JvmOverloads constructor(meta: Int = 0): TileDoubleCamo
 			if (down) {
 				var y = yCoord
 				
-				while (y > 0) {
+				while (y >= 0) {
 					val at = worldObj.getBlock(xCoord, --y, zCoord)
 					if (at == AlfheimFluffBlocks.curtainPlacer) continue
-					if (!at.isAir(worldObj, xCoord, y, zCoord)) {
+					if (y < 0 || !at.isAir(worldObj, xCoord, y, zCoord)) {
 						doing = false
 						break
 					}
@@ -77,7 +77,7 @@ class TileCurtainPlacer @JvmOverloads constructor(meta: Int = 0): TileDoubleCamo
 			} else {
 				var y = yCoord
 				
-				while (y > 0) {
+				while (y >= 0) {
 					val at = worldObj.getBlock(xCoord, --y, zCoord)
 					if (at == AlfheimFluffBlocks.curtainPlacer) continue
 					

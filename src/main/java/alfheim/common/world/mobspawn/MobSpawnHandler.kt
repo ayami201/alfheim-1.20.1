@@ -18,6 +18,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler.pigSpawn
 import alfheim.common.core.handler.AlfheimConfigHandler.pixieSpawn
 import alfheim.common.core.handler.AlfheimConfigHandler.playerGroupDistance
 import alfheim.common.core.handler.AlfheimConfigHandler.sheepSpawn
+import alfheim.common.core.superwrapper.SuperWrapperHandler
 import alfheim.common.world.dim.alfheim.WorldProviderAlfheim
 import alfheim.common.world.dim.alfheim.biome.*
 import alfheim.common.world.dim.alfheim.customgens.NiflheimLocationGenerator
@@ -234,15 +235,12 @@ object MobSpawnHandler {
 		return candidates.filter { c -> max(abs(center.chunkXPos - c.chunkXPos), abs(center.chunkZPos - c.chunkZPos)) == distance }.random(rand)
 	}
 	
-	// FUCKING PROTECTED METHODS
-	val canDespawn = ASJReflectionHelper.getMethod(EntityLiving::class.java, arrayOf("canDespawn", "func_70692_ba", "v"), emptyArray())
-	
 	fun doDespawn(world: World) {
 		val namesForWorld = mobNames.computeIfAbsent(world.provider.dimensionId) { HashSet() }
 		
 		world.loadedEntityList.filter { EntityList.getEntityString(it as Entity) in namesForWorld }.forEach { entity ->
 			if (entity !is EntityLiving) return@forEach
-			if (!ASJReflectionHelper.invoke<Nothing, Boolean>(canDespawn, entity, emptyArray())!!) return@forEach
+			if (!SuperWrapperHandler.canDespawn(entity)) return@forEach
 			
 			if (entity.isNoDespawnRequired) {
 				entity.entityAge = 0

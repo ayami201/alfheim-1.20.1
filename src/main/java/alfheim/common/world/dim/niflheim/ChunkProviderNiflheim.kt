@@ -625,7 +625,7 @@ class ChunkProviderNiflheim(world: World, val seed: Long, structures: Boolean): 
 		run {
 			x = i + random.nextInt(16) + 8
 			z = k + random.nextInt(16) + 8
-			WorldGenGigaRoot.generate(world, x, z)
+			WorldGenGigaRoot.generate(world, random, x, z)
 		}
 		if (random.nextInt(16) == 0) {
 			x = i + random.nextInt(16) + 8
@@ -665,7 +665,7 @@ class ChunkProviderNiflheim(world: World, val seed: Long, structures: Boolean): 
 			}
 		}
 		
-		SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/Domain"))
+		SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/Domain", false)
 		
 		val lobby = world.getTileEntity(x, y + 3, z + 3) as TileDomainLobby
 		lobby.name = "Thrym"

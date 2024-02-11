@@ -857,7 +857,7 @@ object RagnarokHandler {
 			6 -> if (world.loadedEntityList.count { EntityList.getEntityString(it as Entity) == "VoidMonster.Void Monster" } > 3) return else {
 				EntityList.createEntityByName("VoidMonster.Void Monster", world)?.apply {
 					setPosition(x.D, y.D, z.D)
-					ASJReflectionHelper.setValue(this, true, "forceSpawn")
+					forceSpawn = true
 				} ?: return
 			}
 			7 -> EntityBlackBolt(world).apply { setPosition(x + 0.5, y + 0.5, z + 0.5) }

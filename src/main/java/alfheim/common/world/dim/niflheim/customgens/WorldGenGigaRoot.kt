@@ -3,12 +3,11 @@ package alfheim.common.world.dim.niflheim.customgens
 import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import net.minecraft.world.World
+import java.util.*
 
 object WorldGenGigaRoot {
 	
-	val gigaroot = SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/niflheim/worldgen_3")
-	
-	fun generate(world: World, x: Int, z: Int) {
+	fun generate(world: World, random: Random, x: Int, z: Int) {
 		var y = 100
 		while (world.isAirBlock(x, y, z) && y < 110) y++
 		--y
@@ -19,6 +18,6 @@ object WorldGenGigaRoot {
 					if (!world.isAirBlock(i, j, k))
 						return
 		
-		SchemaUtils.generate(world, x, ++y, z, gigaroot)
+		SchemaUtils.generate(world, x, ++y, z, "${ModInfo.MODID}/schemas/niflheim/worldgen_3", true, true, true, random.nextInt(3))
 	}
 }

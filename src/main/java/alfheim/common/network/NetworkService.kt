@@ -51,6 +51,7 @@ object NetworkService {
 		registerPacket(MessageKeyBindS::class, Side.SERVER)
 		registerPacket(MessageNI::class, Side.SERVER)
 		registerPacket(MessageRaceSelection::class, Side.SERVER)
+		registerPacket(MessageUpdateGaiaButton::class, Side.SERVER)
 	}
 
 	private fun <T : AlfheimPacket<T>> registerPacket(clazz: KClass<out T>, side: Side) {
