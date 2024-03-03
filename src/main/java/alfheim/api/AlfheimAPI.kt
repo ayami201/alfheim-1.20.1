@@ -352,7 +352,7 @@ object AlfheimAPI {
 	fun getTreeVariant(soil: Block, meta: Int) =
 		treeVariants.firstOrNull { it.matchesSoil(soil, meta) }
 	
-	object FallbackAnomaly: SubTileAnomalyBase() {
+	private object FallbackAnomaly: SubTileAnomalyBase() {
 		override val targets: List<Any> = emptyList()
 		override fun performEffect(target: Any) = Unit
 	}

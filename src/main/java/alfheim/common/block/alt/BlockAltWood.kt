@@ -5,7 +5,6 @@ import alfheim.api.lib.LibOreDict.ALT_TYPES
 import alfheim.client.core.helper.*
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.base.BlockModRotatedPillar
-import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.block.ItemUniqueSubtypedBlockMod
 import alfheim.common.lexicon.AlfheimLexiconData
 import cpw.mods.fml.common.IFuelHandler
@@ -16,7 +15,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.*
+import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
 import net.minecraft.util.IIcon
@@ -57,21 +56,11 @@ class BlockAltWood(val set: Int): BlockModRotatedPillar(Material.wood), IFuelHan
 		val meta = world.getBlockMetadata(x, y, z)
 		
 		return if (set == 1 &&
-		           meta % 4 == 2 &&
-		           player.heldItem?.let { it.item === AlfheimBlocks.nidhoggTooth.toItem() } == true &&
-		           player.worldObj.provider.dimensionId != AlfheimConfigHandler.dimensionIDAlfheim)
-			player.getBreakSpeed(this, false, meta, x, y, z) / blockHardness / 30f
+		           meta != 14 && meta % 4 == 2 &&
+		           player.heldItem?.let { it.item === AlfheimBlocks.nidhoggTooth.toItem() } == true)
+			player.getBreakSpeed(this, false, meta, x, y, z) / blockHardness / 100f
 		else
 			super.getPlayerRelativeBlockHardness(player, world, x, y, z)
-	}
-	
-	override fun onBlockPlacedBy(world: World, x: Int, y: Int, z: Int, placer: EntityLivingBase?, stack: ItemStack?) {
-		val meta = world.getBlockMetadata(x, y, z) % 4
-		if (set != 1 || meta != 2) return
-		if (world.provider.dimensionId != AlfheimConfigHandler.dimensionIDAlfheim) return
-		if (placer !is EntityPlayer || placer.capabilities.isCreativeMode) return
-		world.setBlockToAir(x, y, z)
-		dropBlockAsItem(world, x, y, z, ItemStack(this, 1, meta))
 	}
 	
 	override fun canSustainLeaves(world: IBlockAccess, x: Int, y: Int, z: Int) = !(set == 1 && world.getBlockMetadata(x, y, z) % 4 == 2)

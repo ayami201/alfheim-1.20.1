@@ -9,7 +9,7 @@ import net.minecraft.util.IIcon
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
 
-class BlockYggDecor: BlockModMeta(Material.wood, 3, ModInfo.MODID, "Wisdomwood", AlfheimTab, -1f, resist = Float.MAX_VALUE, folder = "decor/") {
+class BlockYggDecor: BlockModMeta(Material.wood, 3, ModInfo.MODID, "Wisdomwood", AlfheimTab, 100f, resist = 1000f, folder = "decor/") {
 	
 	lateinit var topIcon: IIcon
 	

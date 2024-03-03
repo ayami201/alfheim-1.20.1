@@ -56,7 +56,7 @@ open class ItemPendant(name: String): ItemBauble(name), IBaubleRender {
 		
 		fun canProtect(player: EntityPlayer, type: EnumPrimalWorldType, cost: Int): Boolean {
 			val amulet = PlayerHandler.getPlayerBaubles(player)[0] ?: return false
-			return (amulet.item === (if (type == EnumPrimalWorldType.NIFLHEIM) AlfheimItems.elfIcePendant else AlfheimItems.elfFirePendant) || amulet.item === AlfheimItems.aesirEmblem || amulet.item === AlfheimItems.ragnarokEmblem) && ManaItemHandler.requestManaExact(amulet, player, cost, true)
+			return (amulet.item === (if (type == EnumPrimalWorldType.NIFLHEIM) AlfheimItems.elfIcePendant else AlfheimItems.elfFirePendant) || amulet.item === AlfheimItems.aesirEmblem || amulet.item === AlfheimItems.ragnarokEmblem) && if (cost > 0) ManaItemHandler.requestManaExact(amulet, player, cost, true) else true
 		}
 		
 		enum class EnumPrimalWorldType {

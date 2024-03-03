@@ -7,17 +7,18 @@ import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileWorldTree
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.relauncher.*
 import net.minecraft.block.material.Material
-import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
-import vazkii.botania.api.wand.*
+import net.minecraftforge.client.event.RenderGameOverlayEvent
+import vazkii.botania.api.wand.IWandable
 import java.awt.Color
 
-class BlockWorldTree: BlockContainerMod(Material.wood), IWandable, IWandHUD {
+class BlockWorldTree: BlockContainerMod(Material.wood), IWandable {
 	
 	init {
 		setBlockBounds(1/16f, 0f, 1/16f, 15/16f, 1f, 15/16f)
@@ -44,20 +45,28 @@ class BlockWorldTree: BlockContainerMod(Material.wood), IWandable, IWandHUD {
 	
 	override fun onUsedByWand(player: EntityPlayer?, stack: ItemStack?, world: World?, x: Int, y: Int, z: Int, side: Int) = false
 	
-	override fun renderHUD(mc: Minecraft, res: ScaledResolution, world: World, x: Int, y: Int, z: Int) {
-		val tile = world.getTileEntity(x, y, z) as? TileWorldTree ?: return
+	companion object {
 		
-		val (hitX, hitY, hitZ) = Vector3(mc.objectMouseOver.hitVec).sub(x, y, z).mul(16).F
+		init {
+			if (ASJUtilities.isClient) eventForge()
+		}
 		
-		val idHover = TileWorldTree.appleCoords.indexOfFirst { hitX in it.first && hitY in it.second && hitZ in it.third }
-		if (idHover == -1) return
-		
-		val (i, j, k) = tile.boundList[idHover] ?: return
-		val other = world.getTileEntity(i, j, k) as? TileWorldTree ?: return
-		
-		val u = res.scaledWidth / 2 + 10
-		val v = res.scaledHeight / 2 - mc.fontRenderer.FONT_HEIGHT / 2
-		
-		mc.fontRenderer.drawStringWithShadow("'${other.name.takeIf { it.isNotBlank() } ?: ItemStack(this).displayName}' ($i $j $k)", u, v, Color.HSBtoRGB(idHover * (360 / 16f) / 360f, 1f, 1f))
+		@SideOnly(Side.CLIENT)
+		@SubscribeEvent
+		fun onDrawScreenPost(e: RenderGameOverlayEvent.Post) {
+			if (e.type != RenderGameOverlayEvent.ElementType.ALL) return
+			val pos = mc.objectMouseOver ?: return
+			val (hitX, hitY, hitZ) = Vector3(pos.hitVec ?: return).sub(pos.blockX, pos.blockY, pos.blockZ).mul(16).F
+			val tile = mc.theWorld.getTileEntity(pos.blockX, pos.blockY, pos.blockZ) as? TileWorldTree ?: return
+			val idHover = TileWorldTree.appleCoords.indexOfFirst { hitX in it.first && hitY in it.second && hitZ in it.third }
+			if (idHover == -1) return
+			
+			val (i, j, k) = tile.boundList[idHover] ?: return
+			val other = mc.theWorld.getTileEntity(i, j, k) as? TileWorldTree ?: return
+			val u = e.resolution.scaledWidth / 2 + 10
+			val v = e.resolution.scaledHeight / 2 - mc.fontRenderer.FONT_HEIGHT / 2
+			
+			mc.fontRenderer.drawStringWithShadow("'${other.name.takeIf { it.isNotBlank() } ?: ItemStack(AlfheimBlocks.worldTree).displayName}' ($i $j $k)", u, v, Color.HSBtoRGB(idHover * (360 / 16f) / 360f, 1f, 1f))
+		}
 	}
 }

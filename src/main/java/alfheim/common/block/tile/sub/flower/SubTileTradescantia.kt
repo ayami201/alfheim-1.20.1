@@ -5,21 +5,31 @@ import alfheim.common.block.tile.sub.flower.AlfheimSignature.Companion.isOnSpeci
 import alfheim.common.entity.item.*
 import alfheim.common.item.rod.ItemRodClicker
 import alfheim.common.lexicon.AlfheimLexiconData
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.entity.IMerchant
 import net.minecraft.entity.item.*
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.inventory.IInventory
 import net.minecraft.item.*
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityChest
 import net.minecraft.util.*
 import net.minecraft.village.MerchantRecipe
 import net.minecraftforge.common.util.ForgeDirection
+import org.lwjgl.opengl.GL11.*
 import vazkii.botania.api.BotaniaAPI
+import vazkii.botania.api.mana.IManaItem
 import vazkii.botania.api.subtile.*
 import vazkii.botania.common.block.decor.IFloatingFlower
 import vazkii.botania.common.core.helper.InventoryHelper
 import vazkii.botania.common.lib.LibMisc
+import java.util.*
 import kotlin.math.min
 
 class SubTileTradescantia: SubTileFunctional() {
+	
+	var filterType = 0
 	
 	override fun onUpdate() {
 		super.onUpdate()
@@ -43,14 +53,20 @@ class SubTileTradescantia: SubTileFunctional() {
 		var complete = false
 		val cantTrade = { mana < COST || complete }
 		
-		for (dir in ForgeDirection.VALID_DIRECTIONS) if (cantTrade()) break else {
+		val invsAndFilters = LinkedList<Triple<ForgeDirection, IInventory, List<ItemStack?>>>()
+		
+		ForgeDirection.VALID_DIRECTIONS.forEach { dir ->
 			val i = x + dir.offsetX
 			val j = y + dir.offsetY
 			val k = z + dir.offsetZ
 			
-			val inv = InventoryHelper.getInventory(supertile.worldObj, i, j, k) ?: continue
-			
+			val inv = InventoryHelper.getInventory(supertile.worldObj, i, j, k) ?: return@forEach
 			val filters = getFilterForInventory(i, j, k)
+			
+			if (filters.isNotEmpty()) invsAndFilters.addFirst(dir to inv with filters) else invsAndFilters.addLast(dir to inv with filters)
+		}
+		
+		for ((dir, inv, filters) in invsAndFilters) if (cantTrade()) break else {
 			val boughts = ArrayList<ItemStack>()
 			
 			for (merchant in merchants) if (cantTrade()) break else {
@@ -58,7 +74,7 @@ class SubTileTradescantia: SubTileFunctional() {
 					recipe as MerchantRecipe
 					
 					if (recipe.isRecipeDisabled) continue
-					if (filters.isNotEmpty() && filters.none { ASJUtilities.isItemStackEqualData(it, recipe.itemToSell) }) continue
+					if (!canAcceptItem(recipe.itemToSell, filters, filterType)) continue
 					
 					val buy1 = recipe.itemToBuy.copy()
 					if (buy1.hasTagCompound())
@@ -131,8 +147,41 @@ class SubTileTradescantia: SubTileFunctional() {
 		}
 	}
 	
-	fun getFilterForInventory(x: Int, y: Int, z: Int, recursiveForDoubleChest: Boolean = true): List<ItemStack> {
-		val filters = ArrayList<ItemStack>()
+	fun canAcceptItem(stack: ItemStack?, filter: List<ItemStack?>, filterType: Int): Boolean {
+		if (stack == null) return false
+		
+		if (filter.isEmpty()) return true
+		
+		when (filterType) {
+			0    -> {
+				// Accept items in frames only
+				var anyFilter = false
+				for (filterEntry in filter) {
+					if (filterEntry == null) continue
+					
+					anyFilter = true
+					
+					val itemEqual = stack.item === filterEntry.item
+					val damageEqual = stack.getItemDamage() == filterEntry.getItemDamage()
+					val nbtEqual = ItemStack.areItemStackTagsEqual(filterEntry, stack)
+					
+					if (itemEqual && damageEqual && nbtEqual) return true
+					
+					if (!stack.hasSubtypes && stack.isItemStackDamageable && stack.maxStackSize == 1 && itemEqual && nbtEqual) return true
+					
+					if (stack.item is IManaItem && itemEqual) return true
+				}
+				
+				return !anyFilter
+			}
+			
+			1    -> return !canAcceptItem(stack, filter, 0) // Accept items not in frames only
+			else -> return true // Accept all items
+		}
+	}
+	
+	fun getFilterForInventory(x: Int, y: Int, z: Int, recursiveForDoubleChest: Boolean = true): List<ItemStack?> {
+		val filters = ArrayList<ItemStack?>()
 		
 		if (recursiveForDoubleChest) {
 			val tileEntity = supertile.worldObj.getTileEntity(x, y, z)
@@ -154,10 +203,9 @@ class SubTileTradescantia: SubTileFunctional() {
 			val frames = getEntitiesWithinAABB(supertile.worldObj, EntityItemFrame::class.java, aabb)
 			
 			for (frame in frames) {
-				if (frame.displayedItem == null) continue
-				
 				val orientation = frame.hangingDirection
-				if (orientationToDir[orientation] == dir.ordinal) filters.add(frame.displayedItem)
+				if (orientationToDir[orientation] == dir.ordinal)
+					filters.add(frame.displayedItem)
 			}
 		}
 		
@@ -223,20 +271,56 @@ class SubTileTradescantia: SubTileFunctional() {
 		return sortedCash
 	}
 	
+	override fun onWanded(player: EntityPlayer?, wand: ItemStack?): Boolean {
+		if (player == null) return false
+		
+		if (!player.isSneaking) return super.onWanded(player, wand)
+		
+		filterType = if (filterType == 2) 0 else filterType + 1
+		sync()
+		
+		return true
+	}
+	
+	override fun renderHUD(mc: Minecraft, res: ScaledResolution) {
+		super.renderHUD(mc, res)
+		
+		val filter = StatCollector.translateToLocal("botaniamisc.filter$filterType")
+		
+		glEnable(GL_BLEND)
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+		val x = res.scaledWidth / 2 - mc.fontRenderer.getStringWidth(filter) / 2
+		val y = res.scaledHeight / 2 + 30
+		
+		mc.fontRenderer.drawStringWithShadow(filter, x, y, color)
+		glDisable(GL_BLEND)
+	}
+	
+	override fun writeToPacketNBT(nbt: NBTTagCompound) {
+		super.writeToPacketNBT(nbt)
+		nbt.setInteger(TAG_FILTER_TYPE, filterType)
+	}
+	
+	override fun readFromPacketNBT(nbt: NBTTagCompound) {
+		super.readFromPacketNBT(nbt)
+		filterType = nbt.getInteger(TAG_FILTER_TYPE)
+	}
+	
 	override fun getRadius() = RadiusDescriptor.Square(toChunkCoordinates(), RANGE)
 	
 	override fun acceptsRedstone() = true
 	
 	override fun getColor() = 0xF444FF
 	
-	override fun getMaxMana() = 1000
+	override fun getMaxMana() = 30000
 	
 	override fun getEntry() = AlfheimLexiconData.flowerTradescantia
 	
 	override fun getIcon(): IIcon? = BotaniaAPI.getSignatureForName("tradescantia").getIconForStack(null)
 	
 	companion object {
-		const val COST = 50
+		const val TAG_FILTER_TYPE = "filterType"
+		const val COST = 1500
 		const val RANGE = 7
 	}
 }

@@ -197,7 +197,7 @@ tile.alfheim:ManaTuner.name=Мана-настройщик
 tile.alfheim:MikuHeadBlock.name=Голова Мику
 tile.botania:miniIslandRainbow0.name=Парящий цветок Бифроста
 tile.alfheim:MuspelheimFire.name=Вечный огонь Муспельхейма
-tile.NidhoggTooth.name=Осколок зуба Нидхёгга
+tile.NidhoggTooth.name=Обломок зуба Нидхёгга
 tile.NiflheimBlock.Bricks.name=Промёрзшие каменные кирпичи
 tile.NiflheimBlock.Chiseled.name=Резные промёрзшие каменные кирпичи
 tile.NiflheimBlock.Cobblestone.name=Промёрзший булыжник
@@ -395,6 +395,7 @@ item.ElvoriumBoots.name=Ботинки из эльвория
 item.ElvoriumChestplate.name=Кираса из эльвория
 item.ElvoriumHelmet.name=Шлем из эльвория
 item.ElvoriumHelmetRevealing.name=Шлем откровения из эльвория
+item.alfheim:ElementalSlimeBall.COMMON.name=Элементальный сгусток слизи
 item.alfheim:ElementalSlimeBall.AIR.name=Сгусток слизи воздуха
 item.alfheim:ElementalSlimeBall.DARKNESS.name=Сгусток слизи тьмы
 item.alfheim:ElementalSlimeBall.EARTH.name=Сгусток слизи земли
@@ -927,24 +928,25 @@ alfheimmisc.waila.trade.request=Запрос:
 
 death.attack.anomaly=%s подошёл слишком близко к аномалии
 death.attack.bleeding=%s истёк кровью
-death.attack.gravity=%s раздавлен гравитацией
+death.attack.gravity=%s был раздавлен гравитацией
 death.attack.lightning=%s был убит молнией
 death.attack.mark=%s умер от проклятия
 death.attack.nifleice=%s замёрз навечно
 death.attack.poison=%s умер от отравления
-death.attack.possession=%s поглощён пустотой
+death.attack.possession=%s был поглощён пустотой
 death.attack.sacrifice=%s принёс себя в жертву Тьме
 death.attack.soulburn=Душа %s сгорела
 
-death.attack.darkness_FF=%s убит в обмен на жертву %s
+death.attack.darkness_FF=%s был убит в обмен на жертву %s
 death.attack.firewall=%s умер при попытке пройти сквозь стену огня %s
 death.attack.hammerfall=%s пал от могучего молота %s
-death.attack.indirectLightning=%s убит молнией %s
-death.attack.lightningShieldEffect=%s убит молнией %s
+death.attack.indirectLightning=%s был убит молнией %s
+death.attack.lightningShieldEffect=%s был убит молнией %s
 death.attack.missile=%s был разорван в клочья ракетным штормом %s
 death.attack.mortar=%s был раздавлен мортирой %s
 death.attack.shadow=%s умер от теней %s
-death.attack.water=%s разрезан на части водным потоком %s
+death.attack.water=%s был разрезан на части водным потоком %s
+death.attack.wind=%s был разорван в клочья ураганом %s
 death.attack.windblade=%s был разрезан пополам косой ветра %s
 
 entity.alfheim.Butterfly.name=Бабочка
@@ -1406,7 +1408,7 @@ misc.alfheim.tline3=Она воскликнула о развращённост�
 
 attribute.name.alfheim.godSlayingAttackDamage=к когнитивному урону
 
-death.attack.alfheim.oculus.player=%1$s был убит идеальным решением %2$s
+death.attack.alfheim.oculus.player=%1$s был сражен идеальной реакцией %2$s
 
 misc.alfheim:temperature.0=Предупреждение о переохлаждении
 misc.alfheim:temperature.1=Мучительно холодно
@@ -1917,7 +1919,7 @@ wire.overpowered.tooltip=Установите значение этого пар
 
 ##########################################################___Dialogs___#########################################################
 
-dialog.occupied=Подожди, я уже разговариваю!
+dialog.occupied=Wait, I'm already talking!
 dialog.nodialog-1=Get away from me!
 dialog.nodialog0=I have nothing to say to you.
 

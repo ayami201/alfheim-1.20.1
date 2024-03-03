@@ -12,6 +12,7 @@ object LibRenderIDs {
 	val idDomainDoor = RenderingRegistry.getNextAvailableRenderId()
 	val idDoubleBlock = RenderingRegistry.getNextAvailableRenderId()
 	val idDoubleFlower = RenderingRegistry.getNextAvailableRenderId()
+	val idFloodlight = RenderingRegistry.getNextAvailableRenderId()
 	val idGrapeRedPlanted = RenderingRegistry.getNextAvailableRenderId()
 	val idGrapeWhite = RenderingRegistry.getNextAvailableRenderId()
 	val idHarvester = RenderingRegistry.getNextAvailableRenderId()

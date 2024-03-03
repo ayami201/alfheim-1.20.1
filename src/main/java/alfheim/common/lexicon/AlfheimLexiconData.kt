@@ -136,6 +136,7 @@ object AlfheimLexiconData {
 	lateinit var moonbow: LexiconEntry
 	lateinit var multbauble: LexiconEntry
 	lateinit var netherSapling: LexiconEntry
+	lateinit var nidhoggTooth: LexiconEntry
 	lateinit var openChest: LexiconEntry
 	lateinit var ores: LexiconEntry
 	lateinit var pastoralSeeds: LexiconEntry
@@ -311,6 +312,7 @@ object AlfheimLexiconData {
 		mobs = AlfheimLexiconEntry("mobs", categoryAlfheim)
 		multbauble = AlfheimLexiconEntry("multbaub", categoryAlfheim)
 		netherSapling = AlfheimLexiconEntry("infernalSapling", categoryDendrology)
+		nidhoggTooth = AlfheimLexiconEntry("nidhoggTooth", categoryAlfheim)
 		openChest = AlfheimLexiconEntry("openChest", categoryAlfheim)
 		ores = AlfheimLexiconEntry("ores", categoryAlfheim)
 		pastoralSeeds = AlfheimLexiconEntry("irisSeeds", categoryAlfheim)
@@ -512,7 +514,7 @@ object AlfheimLexiconData {
 		                          PageText("7"),
 		                          PageCraftingRecipe("8", AlfheimRecipes.recipesDecorGlass),
 		                          PageText("9"),
-		                          PageCraftingRecipe("10", AlfheimRecipes.recipesDecorLight)).icon = ItemStack(AlfheimFluffBlocks.chair, 1, 3)
+		                          PageCraftingRecipe("10", AlfheimRecipes.recipesDecorLight)).icon = ItemStack(AlfheimFluffBlocks.floodLight, 1, 3)
 		
 		elementalSet.setLexiconPages(PageText("0"),
 									 PageCraftingRecipe("1", AlfheimRecipes.recipeElementalHelmet),
@@ -594,7 +596,7 @@ object AlfheimLexiconData {
 		flowerRain.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeRainFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("rainFlower")
 		flowerSnow.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeSnowFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("snowFlower")
 		flowerStorm.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeStormFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("stormFlower")
-		flowerTradescantia.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeTradescantia)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("tradescantia")
+		flowerTradescantia.setLexiconPages(PageText("0"), PageText("1"), PagePetalRecipe("2", AlfheimRecipes.recipeTradescantia)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("tradescantia")
 		flowerWind.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeWindFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("windFlower")
 		
 		flugel.setLexiconPages(*Array(3) { PageText("$it") }).icon = ItemStack(ModItems.flightTiara, 1, 1)
@@ -709,6 +711,9 @@ object AlfheimLexiconData {
 		LexiconRecipeMappings.map(JellyBottle.stack, mobs, 3)
 		
 		multbauble.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeMultibauble))
+		
+		nidhoggTooth.setLexiconPages(PageText("0"), PageText("1"))
+		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.nidhoggTooth), nidhoggTooth, 0)
 		
 		openChest.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeOpenChest))
 		

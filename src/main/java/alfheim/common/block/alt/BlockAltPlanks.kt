@@ -43,13 +43,13 @@ class BlockAltPlanks: BlockMod(Material.wood), ILexiconable, IFuelHandler {
 	
 	override fun getExplosionResistance(entity: Entity?, world: World, x: Int, y: Int, z: Int, explosionX: Double, explosionY: Double, explosionZ: Double) =
 		if (world.getBlockMetadata(x, y, z) == BlockAltLeaves.yggMeta)
-			Float.MAX_VALUE
+			1000f
 		else
 			super.getExplosionResistance(entity, world, x, y, z, explosionX, explosionY, explosionZ)
 	
 	override fun getBlockHardness(world: World, x: Int, y: Int, z: Int) =
 		if (world.getBlockMetadata(x, y, z) == BlockAltLeaves.yggMeta)
-			-1f
+			100f
 		else
 			super.getBlockHardness(world, x, y, z)
 	

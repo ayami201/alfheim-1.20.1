@@ -929,13 +929,13 @@ object AlfheimRecipes {
 		recipesDecorDouble = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(secretGlass, 6),
-		                 "GG ", "S G", "GG ",
+		                 "GG", "SG", "GG",
 		                 'G', "blockGlassBlack",
 		                 'S', ItemStack(stonebrick))
 		recipesDecorGlass = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(floodLight),
-		                 "LLG", " F ", "SSS",
+		                 "SSS", " F ", "LLG",
 		                 'L', ItemStack(livingwood, 1, 4),
 		                 'G', ItemStack(shrineLight, 1, 4),
 		                 'F', livingwoodFence,
@@ -1956,7 +1956,7 @@ object AlfheimRecipes {
 		
 		addOreDictRecipe(ItemStack(worldTree),
 		                 "LLL", "AYA", "WDW",
-		                 'L', LEAVES[17],
+		                 'L', LEAVES[16],
 		                 'A', apple,
 		                 'Y', ItemStack(altWood1, 1, 2),
 		                 'W', DREAM_WOOD,
@@ -2677,9 +2677,13 @@ object AlfheimRecipes {
 														   RUNE[13])  // Wrath
 		
 		recipeTradescantia = BotaniaAPI.registerPetalRecipe(BotaniaAPI.internalHandler.getSubTileAsStack("tradescantia"),
-															PETAL[0], // White
-															PETAL[6], // Pink
-															*Array(2) { PETAL[7] }, // Gray
+		                                                    PIXIE_DUST,
+		                                                    PETAL[2], // Magenta
+		                                                    PETAL[4], // Yellow
+		                                                    PETAL[5], PETAL[5], // Lime
+		                                                    PETAL[10], // Purple
+		                                                    PETAL[13], // Green
+															RUNE[0], // Water
 															RUNE[11]) // Greed
 		
 		recipeWindFlower = BotaniaAPI.registerPetalRecipe(BotaniaAPI.internalHandler.getSubTileAsStack("windFlower"),

@@ -26,13 +26,13 @@ class BlockAltWoodSlab(full: Boolean, source: Block = AlfheimBlocks.altPlanks):
 	
 	override fun getExplosionResistance(entity: Entity?, world: World, x: Int, y: Int, z: Int, explosionX: Double, explosionY: Double, explosionZ: Double) =
 		if (world.getBlockMetadata(x, y, z) % 8 == 6)
-			Float.MAX_VALUE
+			1000f
 		else
 			super.getExplosionResistance(entity, world, x, y, z, explosionX, explosionY, explosionZ)
 	
 	override fun getBlockHardness(world: World, x: Int, y: Int, z: Int) =
 		if (world.getBlockMetadata(x, y, z) % 8 == 6)
-			-1f
+			100f
 		else
 			super.getBlockHardness(world, x, y, z)
 	
@@ -82,23 +82,15 @@ open class BlockAltWoodStairs(meta: Int, source: Block = AlfheimBlocks.altPlanks
 
 class BlockYggStairs: BlockAltWoodStairs(BlockAltLeaves.yggMeta), IFuelHandler {
 	
-	init {
-		setBlockUnbreakable()
-	}
+	override fun getExplosionResistance(entity: Entity?, world: World, x: Int, y: Int, z: Int, explosionX: Double, explosionY: Double, explosionZ: Double) = 1000f
 	
-	override fun getExplosionResistance(entity: Entity?, world: World, x: Int, y: Int, z: Int, explosionX: Double, explosionY: Double, explosionZ: Double) = Float.MAX_VALUE
-	
-	override fun getBlockHardness(world: World, x: Int, y: Int, z: Int) = -1f
+	override fun getBlockHardness(world: World, x: Int, y: Int, z: Int) = 100f
 	
 	override fun getFlammability(world: IBlockAccess, x: Int, y: Int, z: Int, face: ForgeDirection?) = 0
 	
 	override fun getFireSpreadSpeed(world: IBlockAccess, x: Int, y: Int, z: Int, face: ForgeDirection?) = 0
 	
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = null
-	
-	override fun isToolEffective(type: String?, metadata: Int) = false
-	
-	override fun getHarvestTool(metadata: Int) = "Odin"
 	
 	override fun getBurnTime(fuel: ItemStack) = if (fuel.item === this.toItem()) Int.MAX_VALUE / 13 / 8 * 3 else 0
 }
