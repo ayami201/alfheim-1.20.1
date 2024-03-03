@@ -5,7 +5,6 @@ import cpw.mods.fml.client.registry.RenderingRegistry
 object LibRenderIDs {
 	
 	// Alfheim
-	val idAniTorch = RenderingRegistry.getNextAvailableRenderId()
 	val idAnyavil = RenderingRegistry.getNextAvailableRenderId()
 	val idBarrel = RenderingRegistry.getNextAvailableRenderId()
 	val idChair = RenderingRegistry.getNextAvailableRenderId()
@@ -13,6 +12,7 @@ object LibRenderIDs {
 	val idDomainDoor = RenderingRegistry.getNextAvailableRenderId()
 	val idDoubleBlock = RenderingRegistry.getNextAvailableRenderId()
 	val idDoubleFlower = RenderingRegistry.getNextAvailableRenderId()
+	val idFloodlight = RenderingRegistry.getNextAvailableRenderId()
 	val idGrapeRedPlanted = RenderingRegistry.getNextAvailableRenderId()
 	val idGrapeWhite = RenderingRegistry.getNextAvailableRenderId()
 	val idHarvester = RenderingRegistry.getNextAvailableRenderId()
@@ -21,10 +21,12 @@ object LibRenderIDs {
 	val idManaTuner = RenderingRegistry.getNextAvailableRenderId()
 	val idMultipass = RenderingRegistry.getNextAvailableRenderId()
 	val idNiflheim = RenderingRegistry.getNextAvailableRenderId()
+	val idNidhoggTooth = RenderingRegistry.getNextAvailableRenderId()
 	val idPowerStone = RenderingRegistry.getNextAvailableRenderId()
 	val idPylon = RenderingRegistry.getNextAvailableRenderId()
 	val idSimpleDoubleBlock = RenderingRegistry.getNextAvailableRenderId()
 	val idShrinePanel = RenderingRegistry.getNextAvailableRenderId()
 	val idSpire = RenderingRegistry.getNextAvailableRenderId()
 	val idTable = RenderingRegistry.getNextAvailableRenderId()
+	val idWorldTree = RenderingRegistry.getNextAvailableRenderId()
 }

@@ -2,7 +2,6 @@ package alfheim.common.spell.sound
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.common.entity.boss.EntityFlugel
@@ -24,7 +23,6 @@ object SpellOutdare: SpellBase("outdare", EnumRace.POOKA, 6000, 2400, 20) {
 		
 		l.forEach {
 			if (Vector3.entityDistance(caster, it) >= radius) return@forEach
-			if (!InteractionSecurity.canInteractWithEntity(caster, it)) return@forEach
 			
 			if (it is EntityFlugel) {
 				if (caster is EntityPlayer) it.playersDamage[caster.commandSenderName] = it.playersDamage.getOrDefault(caster.commandSenderName, 0f) + 1000f

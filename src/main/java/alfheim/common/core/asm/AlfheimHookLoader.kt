@@ -4,22 +4,23 @@ import alexsocol.asjlib.asm.ASJASM
 import alexsocol.patcher.asm.ASJHookLoader
 import alfheim.api.ModInfo
 import alfheim.common.core.handler.AlfheimConfigHandler
+import com.KAIIIAK.superwrapper.SuperWrapperTransformer
 import cpw.mods.fml.relauncher.FMLRelaunchLog
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin.*
 import gloomyfolken.hooklib.minecraft.HookLoader
 import java.io.File
 
 // -Dfml.coreMods.load=alfheim.common.core.asm.AlfheimHookLoader
 // -username=AlexSocol
 @MCVersion(value = "1.7.10")
+@TransformerExclusions("alfheim.common.core.asm")
 class AlfheimHookLoader: HookLoader() {
 	
 	init {
-		ModInfo.OBF = ASJHookLoader.OBF
 		AlfheimConfigHandler.loadConfig(File("config/Alfheim/Alfheim.cfg"))
 	}
 	
-	override fun getASMTransformerClass() = arrayOf(AlfheimClassTransformer::class.java.name)
+	override fun getASMTransformerClass() = arrayOf(AlfheimClassTransformer::class.java.name, BotaniaVisDiscountHooks::class.java.name)
 	
 	override fun registerHooks() {
 		FMLRelaunchLog.info("[${ModInfo.MODID.uppercase()}] Loaded coremod. Registering hooks...")
@@ -41,6 +42,7 @@ class AlfheimHookLoader: HookLoader() {
 		registerHookContainer("alfheim.common.core.asm.hook.extender.RelicHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.SparkExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.BotaniaGlowingRenderFixes")
+		registerHookContainer("alfheim.common.core.asm.hook.fixes.CorporeaInputFix")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.FlightTiaraFix")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.GodAttributesHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.RecipeAncientWillsFix")
@@ -48,6 +50,10 @@ class AlfheimHookLoader: HookLoader() {
 		registerHookContainer("alfheim.common.integration.tinkersconstruct.TraitFairySpawner")
 		registerHookContainer("alfheim.common.item.rod.RedstoneRodHookHandler")
 		
-		if (ModInfo.OBF) ASJASM.registerFieldHookContainer("alfheim.common.core.asm.hook.AlfheimFieldHookHandler")
+		if (ASJHookLoader.OBF) ASJASM.registerFieldHookContainer("alfheim.common.core.asm.hook.AlfheimFieldHookHandler")
+		
+		registerHookContainer("alfheim.common.core.asm.BotaniaVisDiscountHooks")
+		
+		SuperWrapperTransformer.registerSuperWrapperContainer("alfheim.common.core.superwrapper.SuperWrapperHandler")
 	}
 }

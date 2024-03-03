@@ -72,36 +72,8 @@ object ElementalDamageHandler {
 	fun calculateElements(source: DamageSource, target: EntityLivingBase, amount: Float): Float {
 		val attackEl = source.elements()
 		
-		val attunementLevel: Int
-		
-		val attacker = source.entity as? EntityLivingBase
-		if (attacker != null) run {
-			val stack = attacker.heldItem
-			
-			if (stack == null) {
-				attunementLevel = 0
-				return@run
-			}
-			
-			val item = stack.item
-			
-			val element: ElementalDamage
-			
-			if (item is IElementalItem) {
-				element = item.getElement(stack)
-				attunementLevel = item.getElementLevel(stack)
-			} else {
-				val name = ItemNBTHelper.getString(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT, COMMON.name)
-				element = ElementalDamage.valueOf(name)
-				val level = ItemNBTHelper.getInt(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT_LEVEL, 0)
-				attunementLevel = if (level == 4) 5 else level
-			}
-			
-			attackEl += element
-		} else {
-			attunementLevel = 0
-		}
-		
+		val (heldElement, attunementLevel) = getHeldElements(source)
+		if (heldElement != null) attackEl += heldElement
 		if (attackEl.size == 1 && attackEl.first() == COMMON) return amount
 		
 		val targetEl = EnumSet.copyOf(target.elements)
@@ -178,13 +150,34 @@ object ElementalDamageHandler {
 		return commonDamage + elementalDamages.values.sum()
 	}
 	
+	fun getHeldElements(source: DamageSource): Pair<ElementalDamage?, Int> {
+		val attacker = source.entity as? EntityLivingBase ?: return null to 0
+		val stack = attacker.heldItem ?: return null to 0
+		
+		val item = stack.item
+		val element: ElementalDamage
+		val attunementLevel: Int
+		
+		if (item is IElementalItem) {
+			element = item.getElement(stack)
+			attunementLevel = item.getElementLevel(stack)
+		} else {
+			val name = ItemNBTHelper.getString(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT, COMMON.name)
+			element = ElementalDamage.valueOf(name)
+			val level = ItemNBTHelper.getInt(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT_LEVEL, 0)
+			attunementLevel = if (level == 4) 5 else level
+		}
+		
+		return element to attunementLevel
+	}
+	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	fun onAttacked(e: LivingAttackEvent) {
 		val newAmount = calculateElements(e.source, e.entityLiving, e.ammount)
 		if (e.ammount > 0 && newAmount <= 0) e.isCanceled = true
 	}
 	
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.LOW)
 	fun onHurt(e: LivingHurtEvent) {
 		e.ammount = calculateElements(e.source, e.entityLiving, e.ammount)
 		if (e.ammount > 0 && e.ammount <= 0f) e.isCanceled = true
@@ -288,11 +281,11 @@ enum class ElementalDamage(val x2: Array<ElementalDamageBridge>, val x05: Array<
 	PSYCHIC(arrayOf(DARKNESS_), arrayOf(LIGHTNESS_), 0x793A80);
 	
 	fun isVulnerable(type: ElementalDamage): Boolean {
-		return ElementalDamageBridge.entries.toTypedArray()[type.ordinal] in x2
+		return ElementalDamageBridge.entries[type.ordinal] in x2
 	}
 	
 	fun isResistant(type: ElementalDamage): Boolean {
-		return ElementalDamageBridge.entries.toTypedArray()[type.ordinal] in x05
+		return ElementalDamageBridge.entries[type.ordinal] in x05
 	}
 	
 	fun isImmune(type: ElementalDamage): Boolean {

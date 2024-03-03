@@ -1,7 +1,6 @@
 package alfheim.common.spell.darkness
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
@@ -24,8 +23,6 @@ object SpellDecay: SpellBase("decay", EnumRace.IMP, 12000, 2400, 25) {
 			return SpellCastResult.WRONGTGT
 		
 		if (ASJUtilities.isNotInFieldOfVision(tgt, caster)) return SpellCastResult.NOTSEEING
-		
-		if (!InteractionSecurity.canHurtEntity(caster, tgt)) return SpellCastResult.NOTALLOW
 		
 		val result = checkCast(caster)
 		if (result != SpellCastResult.OK) return result

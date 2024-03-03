@@ -1,7 +1,6 @@
 package alfheim.common.item.lens
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.projectile.EntityThrowable
 import net.minecraft.init.Blocks
@@ -42,7 +41,6 @@ class LensSmelt: Lens() {
 			return isDead
 		
 		if (burst.hasAlreadyCollidedAt(x, y, z) || burst.isFake || entity.worldObj.isRemote) return isDead
-		if (entity.thrower != null && InteractionSecurity.isBreakingBanned(entity.thrower, x, y, z, world, block, meta)) return isDead
 		
 		val target = ItemStack(block, 1, meta)
 		if (target.item == null) return isDead

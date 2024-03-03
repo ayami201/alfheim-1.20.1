@@ -26,7 +26,9 @@ open class ItemElementalWaterHelm: ElementalArmor, IManaDiscountArmor, IElementa
 	}
 	
 	override fun onArmorTick(world: World, player: EntityPlayer, stack: ItemStack) {
-		if (world.isRemote) return
+		super.onArmorTick(world, player, stack)
+		
+		if (player.inventory.armorInventory[3] !== stack) return
 		
 		if (world.getBlock(player, y = 1).material == Material.water && ManaItemHandler.requestManaExact(stack, player, 1, !world.isRemote)) {
 			player.addPotionEffect(PotionEffectU(Potion.waterBreathing.id, 5, -1))
@@ -39,8 +41,8 @@ open class ItemElementalWaterHelm: ElementalArmor, IManaDiscountArmor, IElementa
 	override fun getElementLevel(stack: ItemStack) = 4
 	
 	@SideOnly(Side.CLIENT)
-	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>, b: Boolean) {
+	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>, adv: Boolean) {
 		list.add(StatCollector.translateToLocal("item.ElementalArmor.desc4"))
-		super.addInformation(stack, player, list, b)
+		super.addInformation(stack, player, list, adv)
 	}
 }

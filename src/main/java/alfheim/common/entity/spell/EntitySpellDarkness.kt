@@ -2,7 +2,6 @@ package alfheim.common.entity.spell
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.spell.ITimeStopSpecific
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.core.handler.*
@@ -47,8 +46,6 @@ class EntitySpellDarkness(world: World?, val caster: EntityLivingBase?): Entity(
 				it.addPotionEffect(PotionEffectU(Potion.moveSpeed.id, 100, 5))
 				it.addPotionEffect(PotionEffectU(Potion.regeneration.id, 100))
 			} else {
-				if (!InteractionSecurity.canHurtEntity(caster, it)) return@forEach
-				
 				it.addPotionEffect(PotionEffectU(Potion.blindness.id, 100, 4))
 				it.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 100, 4))
 			}

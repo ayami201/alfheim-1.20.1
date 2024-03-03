@@ -96,7 +96,6 @@ object AlfheimItems {
 	val gjallarhorn: Item
 	val gleipnir: Item
 	val gungnir: Item
-	val holyGlass: Item
 	val hyperBucket: Item
 	val invisibilityCloak: Item
 	val invisibleFlameLens: Item
@@ -243,7 +242,6 @@ object AlfheimItems {
 		gjallarhorn = ItemGjallarhorn()
 		gleipnir = ItemGleipnir()
 		gungnir = ItemGungnir()
-		holyGlass = ItemHolyGlass()
 		hyperBucket = ItemHyperBucket()
 		invisibilityCloak = ItemInvisibilityCloak()
 		invisibleFlameLens = ItemLensFlashInvisible()
@@ -355,6 +353,7 @@ object AlfheimItems {
 		OreDictionary.registerOre(LibOreDict.ARUNE[1], MuspelheimRune.stack)
 		OreDictionary.registerOre(LibOreDict.ARUNE[2], NiflheimRune.stack)
 		OreDictionary.registerOre(LibOreDict.INFUSED_DREAM_TWIG, InfusedDreamwoodTwig.stack)
+		OreDictionary.registerOre("slimeball", ElementalSlimeBall.stack)
 		
 		// Iridescense
 		

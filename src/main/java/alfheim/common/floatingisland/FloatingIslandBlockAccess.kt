@@ -2,7 +2,7 @@ package alfheim.common.floatingisland
 
 import alexsocol.asjlib.*
 import alfheim.common.network.NetworkService
-import alfheim.common.network.packet.*
+import alfheim.common.network.packet.MessageFIBlock
 import alfheim.common.world.dim.alfheim.biome.BiomeField
 import com.google.gson.*
 import cpw.mods.fml.common.registry.GameRegistry
@@ -36,7 +36,7 @@ class FloatingIslandBlockAccess(blocks: List<BlockElement>, val host: EntityFloa
 	
 	init {
 		blocks.forEach { e ->
-			val block = Block.getBlockFromName(e.block) ?: return@forEach
+			val block = e.block ?: return@forEach
 			
 			if (block === Blocks.air) return@forEach
 			

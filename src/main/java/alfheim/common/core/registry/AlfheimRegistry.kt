@@ -85,9 +85,9 @@ object AlfheimRegistry {
 		}
 	}
 	
-	private fun addAllSpawn(clazz: Class<out EntityLiving>, data: IntArray, blacklist: IntArray) {
+	private fun addAllSpawn(clazz: Class<out EntityLiving>, data: IntArray, blacklist: IntArray, type: EnumCreatureType = EnumCreatureType.monster) {
 		val (w, n, x) = data
-		EntityRegistry.addSpawn(clazz, w, n, x, EnumCreatureType.monster, *BiomeGenBase.getBiomeGenArray().filter { it != null && it.biomeID !in blacklist }.toTypedArray())
+		EntityRegistry.addSpawn(clazz, w, n, x, type, *BiomeGenBase.getBiomeGenArray().filter { it != null && it.biomeID !in blacklist }.toTypedArray())
 	}
 	
 	private fun registerPotions() {
@@ -107,6 +107,8 @@ object AlfheimRegistry {
 		PotionAlfheim(AlfheimConfigHandler.potionIDNineLifes, "nineLifes", false, 0xDD2222)
 		PotionNinja
 		PotionNoclip
+		if (AlfheimConfigHandler.potionIDOvercold != -1) PotionAlfheim(AlfheimConfigHandler.potionIDOvercold, "overcold", false, 0xBFF4FF)
+		if (AlfheimConfigHandler.potionIDOverheat != -1) PotionAlfheim(AlfheimConfigHandler.potionIDOverheat, "overheat", false, 0xFF4D00)
 		PotionAlfheim(AlfheimConfigHandler.potionIDOvermage, "overmage", false, 0x88FFFF)
 		PotionAlfheim(AlfheimConfigHandler.potionIDPossession, "possession", true, 0xCC0000)
 		PotionQuadDamage
@@ -156,6 +158,8 @@ object AlfheimRegistry {
 		registerEntity(EntityEarthquake::class.java, "Earthquake", nextEntityID)
 		registerEntity(EntityEarthquakeFracture::class.java, "EarthquakeFracture", nextEntityID)
 		registerEntity(EntityFallingHang::class.java, "FallingHang", nextEntityID)
+		registerEntity(EntityFenrirDome::class.java, "FenrirDome", nextEntityID)
+		registerEntity(EntityFenrirSlash::class.java, "FenrirSlash", nextEntityID)
 		registerEntity(EntityFireAura::class.java, "FireAura", nextEntityID)
 		registerEntity(EntityFireTornado::class.java, "FireTornado", nextEntityID)
 		registerEntity(EntityFloatingIsland::class.java, "FloatingIsland", nextEntityID)
@@ -173,6 +177,7 @@ object AlfheimRegistry {
 		registerEntity(EntityThrowableItem::class.java, "ThrownItem", nextEntityID)
 		registerEntity(EntityThrownPotion::class.java, "ThrownPotion", nextEntityID)
 		registerEntity(EntityThunderChakram::class.java, "ThunderChakram", nextEntityID)
+		registerEntity(EntityTornado::class.java, "Tornado", nextEntityID)
 		registerEntity(EntityWarBanner::class.java, "WarBanner", nextEntityID)
 		
 		registerEntity(EntityGleipnir::class.java, "Gleipnir", nextEntityID)
@@ -252,6 +257,7 @@ object AlfheimRegistry {
 		registerTile<TileTradePortal>("TradePortal")
 		registerTile<TileTreeBerry>("TreeBerry")
 		registerTile<TileVafthrudnirSoul>("VafthrudnirSoul")
+		registerTile<TileWorldTree>("WorldTree")
 		registerTile<TileYggFlower>("YggFlower")
 		
 		registerAnomalies()

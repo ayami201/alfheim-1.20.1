@@ -1,8 +1,11 @@
 package alfheim.common.block
 
-import alexsocol.asjlib.ASJUtilities
+import alexsocol.asjlib.*
+import alfheim.api.item.ColorOverrideHelper
+import alfheim.client.gui.GUIEditGaiaButton
 import alfheim.common.block.tile.TileGaiaButton
 import alfheim.common.core.util.AlfheimTab
+import alfheim.common.item.AlfheimItems
 import alfheim.common.item.block.ItemBlockLeavesMod
 import alfheim.common.lexicon.AlfheimLexiconData
 import cpw.mods.fml.common.registry.GameRegistry
@@ -46,7 +49,21 @@ class BlockGaiaButton: BlockButton(false), ITileEntityProvider, IWandable, ILexi
 	override fun tickRate(world: World?) = 10 // ignoring this
 	
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		if (player?.heldItem?.item === ModItems.twigWand) return false
+		val stack = player?.heldItem
+		if (stack?.item === AlfheimItems.chalk) {
+			val tile = world.getTileEntity(x, y, z) as? TileGaiaButton ?: return false
+			
+			if (!world.isRemote) {
+				tile.color = ColorOverrideHelper.getColor(player, 0xFFD400)
+				ASJUtilities.dispatchTEToNearbyPlayers(tile)
+			} else {
+				mc.displayGuiScreen(GUIEditGaiaButton(tile))
+			}
+			
+			return true
+		}
+		
+		if (stack?.item === ModItems.twigWand) return false
 		
 		val meta = world.getBlockMetadata(x, y, z)
 		val isPressed = 8 - (meta and 8)

@@ -59,11 +59,13 @@ object WorldGenHelheim: IWorldGenerator {
 	val soulColors = EnumRace.entries.map { it.rgbColor }
 	
 	fun genStairs(world: World) {
-		val stairs = SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/helstairs")
+		val stairs = "${ModInfo.MODID}/schemas/helstairs"
 		val yStart = world.getTopSolidOrLiquidBlock(0, 0)
 		
 		for (y in yStart until 256 step 4)
-			SchemaUtils.generate(world, 0, y, 0, stairs)
+			SchemaUtils.generate(world, 0, y, 0, stairs, true)
+		
+		SchemaUtils.uncache(stairs)
 		
 		for (x in -4..4)
 			for (z in -4..4)

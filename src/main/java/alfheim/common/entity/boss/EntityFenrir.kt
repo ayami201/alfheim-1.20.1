@@ -6,10 +6,9 @@ import alfheim.api.ModInfo
 import alfheim.api.boss.IBotaniaBossWithName
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.achievement.AlfheimAchievements
-import alfheim.common.block.tile.*
 import alfheim.common.core.handler.VisualEffectHandler
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
-import alfheim.common.core.util.*
+import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.entity.EntitySniceBall
 import alfheim.common.entity.boss.EntityFlugel.Companion.isRecordPlaying
 import alfheim.common.entity.boss.EntityFlugel.Companion.playRecord
@@ -29,10 +28,9 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
-import net.minecraft.world.*
+import net.minecraft.world.World
 import vazkii.botania.client.core.handler.BossBarHandler
 import vazkii.botania.common.Botania
-import vazkii.botania.common.item.relic.ItemRelic
 import java.awt.Rectangle
 import kotlin.math.*
 

@@ -2,7 +2,6 @@ package alfheim.common.spell.sound
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.common.core.handler.CardinalSystem.PartySystem
@@ -28,7 +27,6 @@ object SpellDragonGrowl: SpellBase("dragongrowl", EnumRace.POOKA, 12000, 2400, 2
 		
 		list.forEach {
 			if (PartySystem.mobsSameParty(caster, it) || Vector3.entityDistance(it, caster) > radius * 2) return@forEach
-			if (!InteractionSecurity.canHurtEntity(caster, it)) return@forEach
 			
 			it.addPotionEffect(PotionEffectU(Potion.blindness.id, duration))
 			it.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, duration, (efficiency * 2.5).I))

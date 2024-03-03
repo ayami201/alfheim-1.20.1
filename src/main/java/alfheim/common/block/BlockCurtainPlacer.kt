@@ -14,7 +14,6 @@ class BlockCurtainPlacer: BlockDoubleCamo(MaterialPublic(MapColor.clothColor, op
 	
 	init {
 		setBlockName("CurtainPlacer")
-		setLightOpacity(255)
 		setStepSound(soundTypeCloth)
 	}
 	
@@ -33,7 +32,7 @@ class BlockCurtainPlacer: BlockDoubleCamo(MaterialPublic(MapColor.clothColor, op
 		if (world.getBlockMetadata(x, y, z) != 0) ArrayList() else super.getDrops(world, x, y, z, metadata, fortune)
 	
 	override fun getCollisionBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int) =
-		if (world.getBlockMetadata(x, y, z) == 1) null else super.getCollisionBoundingBoxFromPool(world, x, y, z)
+		if (world.getBlockMetadata(x, y, z) != 0) null else super.getCollisionBoundingBoxFromPool(world, x, y, z)
 	
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float) =
 		if (world.getBlockMetadata(x, y, z) != 0) false else super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ)
@@ -61,7 +60,7 @@ class BlockCurtainPlacer: BlockDoubleCamo(MaterialPublic(MapColor.clothColor, op
 	}
 	
 	override fun topSide(meta: Int) = if (meta == 0) 0 else -1
-	override fun isSideSolid(world: IBlockAccess?, x: Int, y: Int, z: Int, side: ForgeDirection?) = true
+	override fun isSideSolid(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection?) = world.getBlockMetadata(x, y, z) == 0
 	override fun getRenderType() = LibRenderIDs.idSimpleDoubleBlock
 	override fun createNewTileEntity(world: World?, meta: Int) = TileCurtainPlacer(meta)
 }

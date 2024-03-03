@@ -29,7 +29,7 @@ object SpellVisualizations {
 			}
 			
 			override fun drawMesh(data: Array<out Any?>) {
-				GL20.glUniform3f(GL20.glGetUniformLocation(shaderID, "color2"), 0f, 0f, 0f)
+				GL20.glUniform4f(GL20.glGetUniformLocation(shaderID, "color2"), 0f, 0f, 0f, 1f)
 				renderSphere(data[0] as Double)
 			}
 			

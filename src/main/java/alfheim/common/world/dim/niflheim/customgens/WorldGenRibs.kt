@@ -8,9 +8,6 @@ import java.util.*
 
 object WorldGenRibs {
 	
-	val structure = SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/niflheim/worldgen_1")
-	val structureRotated = SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/niflheim/worldgen_1r")
-	
 	fun generate(world: World, random: Random, x: Int, z: Int) {
 		val y = 32
 		
@@ -37,8 +34,8 @@ object WorldGenRibs {
 		}
 		
 		if (rotated)
-			SchemaUtils.generate(world, x, y, z, structureRotated)
+			SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/niflheim/worldgen_1r", true)
 		else
-			SchemaUtils.generate(world, x, y, z, structure)
+			SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/niflheim/worldgen_1", true)
 	}
 }

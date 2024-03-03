@@ -3,7 +3,7 @@
 precision highp float;
 precision highp int;
 
-uniform vec3 color2 = vec3(0.0);
+uniform vec4 color2;
 uniform float ftime;
 float speed = 0.1;
 varying vec3 vPos;
@@ -106,18 +106,18 @@ float _sn_3_octive(vec3 loc){
 }
 
 
-vec3 _sn_4_floatToColor(float v){
-    return abs(vec3(v));
+vec4 _sn_4_floatToColor(float v){
+    return abs(vec4(v));
 }
 
 // Original shader from https://shaderfrog.com/app/view/1883
 void main() {
     vec3 _io_4_return = vPos / 10.0 + ftime * speed;
     float _io_5_return = _sn_3_octive(_io_4_return);
-    vec3 multiplier = _sn_4_floatToColor(_io_5_return);
+    vec4 multiplier = _sn_4_floatToColor(_io_5_return);
 
-    vec3 primaryColor = vec3(gl_Color.r, gl_Color.g, gl_Color.b) * multiplier;
-    vec3 secondaryColor = color2 * (vec3(1.0) - multiplier);
+    vec4 primaryColor = gl_Color * multiplier;
+    vec4 secondaryColor = color2 * (vec4(1.0) - multiplier);
 
-    gl_FragColor = vec4(primaryColor + secondaryColor, 1.0);
+    gl_FragColor = primaryColor + secondaryColor;
 }

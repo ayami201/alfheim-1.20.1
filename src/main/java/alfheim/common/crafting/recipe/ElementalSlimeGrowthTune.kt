@@ -9,7 +9,7 @@ import alfheim.common.item.material.ItemElvenResource
 class ElementalSlimeGrowthTune(application: (EntityElementalSlime) -> Boolean): TunerIncantation<EntityElementalSlime>(EntityElementalSlime::class.java, "jaki o kama suli", Array(4) { ItemElvenResource.ballForElement(null) }, application) {
 	
 	init {
-		AlfheimAPI.tunerIncantations[incantation] = this
+		AlfheimAPI.tunerIncantations[incantation.lowercase()] = this
 	}
 	
 	override fun getInputs(target: EntityElementalSlime) = Array(4) { ItemElvenResource.ballForElement(target.elements.first()) }.toList()

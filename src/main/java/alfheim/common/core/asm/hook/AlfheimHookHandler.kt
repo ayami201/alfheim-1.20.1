@@ -3,7 +3,6 @@ package alfheim.common.core.asm.hook
 import alexsocol.asjlib.*
 import alexsocol.asjlib.command.CommandDimTP
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.AlfheimCore
 import alfheim.api.*
 import alfheim.api.block.IHourglassTrigger
@@ -134,7 +133,7 @@ import vazkii.botania.common.item.equipment.bauble.ItemBauble
 import vazkii.botania.common.item.equipment.tool.ToolCommons
 import vazkii.botania.common.item.lens.LensFirework
 import vazkii.botania.common.item.material.ItemManaResource
-import vazkii.botania.common.item.relic.ItemFlugelEye
+import vazkii.botania.common.item.relic.*
 import vazkii.botania.common.item.rod.*
 import vazkii.botania.common.lib.LibBlockNames
 import java.awt.Color
@@ -479,6 +478,22 @@ object AlfheimHookHandler {
 	
 	@JvmStatic
 	@Hook
+	fun setDead(e: EntityDoppleganger) {
+		if (e.health <= 0f || e.worldObj.isRemote) return
+		
+		val (x, y, z) = e.source
+		EntityItem(e.worldObj, x.D, y + 0.5, z.D,
+		           if (e.isHardMode)
+					   ItemStack(ModItems.manaResource, 1, 14)
+		           else if (e.worldObj.provider.dimensionId == dimensionIDAlfheim)
+					   ElvenResourcesMetas.ElvoriumIngot.stack
+		           else
+					   ItemStack(ModItems.manaResource, 1, 4)
+		).spawn()
+	}
+	
+	@JvmStatic
+	@Hook
 	fun onLivingUpdate(e: EntityDoppleganger) {
 		updatingEntity = true
 		EntityDoppleganger.isPlayingMusic = false
@@ -577,7 +592,6 @@ object AlfheimHookHandler {
 					} && !entity.worldObj.isRemote && pos.entityHit?.isSneaking == false
 		
 		if (!allow) return false
-		if (entity.thrower != null && !InteractionSecurity.canInteractWithEntity(entity.thrower, pos.entityHit)) return false
 		
 		val fireworkStack = lens.generateFirework(burst.color)
 		val rocket = EntityFireworkRocket(entity.worldObj, entity.posX, entity.posY, entity.posZ, fireworkStack)
@@ -1144,9 +1158,20 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
 	fun onItemUse(eye: ItemFlugelEye, stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		if (player.hasAchievement(AlfheimAchievements.flugelSoul)) return false
+		if (player.hasAchievement(AlfheimAchievements.flugelSoul)) {
+			ASJUtilities.say(player, "alfheimmisc.flugel.used")
+			return false
+		}
+		
 		if (player.isSneaking) return EntityFlugel.spawn(player, stack, world, x, y, z, false, false)
 		return false
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun onUsingTick(eye: ItemInfiniteFruit, stack: ItemStack, player: EntityPlayer, count: Int) {
+		if (count % 5 == 0 && player.canEat(false) && ManaItemHandler.requestManaExact(stack, player, 900, true)) player.foodStats.addStats(1, 1f)
+		if (count == 5 && player.canEat(false)) player.itemInUseCount = 20
 	}
 	
 	@JvmStatic
@@ -1525,6 +1550,12 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
 	fun updatePlayerMoveState(input: MovementInputFromOptions): Boolean {
+		when (AlfheimConfigHandler.hotControls) {
+			0 -> return false
+			1 -> if (mc.theWorld.difficultySetting != EnumDifficulty.HARD) return false
+			2 -> Unit // pass
+		}
+		
 		if (mc.thePlayer.capabilities.isCreativeMode || mc.thePlayer.cold > -90f) return false
 		if (ItemPendant.canProtect(mc.thePlayer, MUSPELHEIM, 0)) return false
 		
@@ -1621,44 +1652,44 @@ object AlfheimHookHandler {
 		
 		when (end.coordBaseMode) {
 			0 -> {
-				SchemaUtils.generate(world, x, y, z + 6, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeNS"))
+				SchemaUtils.generate(world, x, y, z + 6, ("${ModInfo.MODID}/schemas/SurtrBridgeNS"), false)
 				
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeEXP"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeWXN"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeSZP"))
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeEXP"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeWXN"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeSZP"), false)
 			}
 			1 -> {
-				SchemaUtils.generate(world, x - 6, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeEW"))
+				SchemaUtils.generate(world, x - 6, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeEW"), false)
 				
 				x -= 23
 				z -= 23
 				
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeNZN"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeWXN"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeSZP"))
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeNZN"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeWXN"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeSZP"), false)
 			}
 			2 -> {
-				SchemaUtils.generate(world, x, y, z - 6, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeNS"))
+				SchemaUtils.generate(world, x, y, z - 6, ("${ModInfo.MODID}/schemas/SurtrBridgeNS"), false)
 				
 				z -= 46
 				
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeNZN"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeEXP"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeWXN"))
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeNZN"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeEXP"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeWXN"), false)
 			}
 			3 -> {
-				SchemaUtils.generate(world, x + 6, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeEW"))
+				SchemaUtils.generate(world, x + 6, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeEW"), false)
 				
 				x += 23
 				z -= 23
 				
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeNZN"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeEXP"))
-				SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrBridgeSZP"))
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeNZN"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeEXP"), false)
+				SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrBridgeSZP"), false)
 			}
 		}
 		
-		SchemaUtils.generate(world, x, y, z, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/SurtrTower"))
+		SchemaUtils.generate(world, x, y, z, ("${ModInfo.MODID}/schemas/SurtrTower"), false)
 		ASJUtilities.fillGenHoles(world, Blocks.nether_brick, 0, x, y - 9, z + 23, 11)
 		
 		data.structures.put("Surtr", x to z)
@@ -1963,4 +1994,8 @@ object AlfheimHookHandler {
 		nbt.setString(SubTileEntity.TAG_TYPE, nbt.getString(tag))
 		nbt.removeTag(tag)
 	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun onUpdate(item: ItemBottledMana, stack: ItemStack?, world: World?, entity: Entity?, slot: Int, inHand: Boolean) = Unit
 }

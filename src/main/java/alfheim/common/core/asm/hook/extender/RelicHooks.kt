@@ -2,6 +2,7 @@ package alfheim.common.core.asm.hook.extender
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.common.entity.item.EntityItemImmortalRelic
 import alfheim.common.item.AlfheimItems
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageRelicNBTSync
@@ -39,7 +40,7 @@ object RelicHooks {
 	
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
-	fun bindToUsernameS(username: String?, stack: ItemStack) {
+	fun bindToUsernameS(static: ItemRelic?, username: String?, stack: ItemStack) {
 		AItemNBTHelper.initNBT(stack)
 		stack.tagCompound?.setString("soulbind", username)
 	}
@@ -112,11 +113,14 @@ object RelicHooks {
 		val hostName = stack.tagCompound?.getString("soulbind")
 		val statId = item.bindAchievement?.statId ?: GameRegistry.findUniqueIdentifierFor(stack.item).toString()
 		
+		if (hostName.isNullOrEmpty()) {
+			if (stack.tagCompound == null) stack.tagCompound = NBTTagCompound()
+			return stack.tagCompound
+		}
+		
 		if (ASJUtilities.isClient)
 			return relicNBTClient.computeIfAbsent("$hostName>>>$statId") { NBTTagCompound() }
 
-		if (hostName.isNullOrEmpty()) return null
-		
 		val nbtData = MinecraftServer.getServer().worldServerForDimension(0).customData.nbtData
 		val relicNBT = nbtData.tagMap.computeIfAbsent(TAG_RELIC_NBT) { NBTTagCompound() } as NBTTagCompound
 		val userData = relicNBT.tagMap.computeIfAbsent(hostName) { NBTTagCompound() } as NBTTagCompound
@@ -161,7 +165,9 @@ object RelicNBTSyncHandler {
 					if (stack.tagCompound?.getString("soulbind") == player.commandSenderName)
 						stack.tagCompound?.removeTag("soulbind")
 					
-					EntityItem(player.worldObj, player.posX, player.posY, player.posZ, stack).spawn()
+					EntityItemImmortalRelic(EntityItem(player.worldObj, player.posX, player.posY, player.posZ, stack)).spawn()
+					
+					ASJUtilities.say(player, "alfheimmisc.relic.fail", stack.displayName)
 				}
 			}
 			

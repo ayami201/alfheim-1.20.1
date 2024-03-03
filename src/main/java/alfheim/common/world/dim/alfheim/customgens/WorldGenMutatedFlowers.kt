@@ -13,12 +13,14 @@ import java.util.*
 
 object WorldGenMutatedFlowers: StructureBaseClass() {
 	
-	val flowerStructures: Map<Int, List<String>> = (0..16).associateWith {
+	val flowerStructures = (0..16).associateWith {
 		val subStructures = mutableListOf<String>()
 		var i = 0
 		while (true) {
 			try {
-				subStructures += SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/flowers/$it-${i++}")
+				val path = "${ModInfo.MODID}/schemas/flowers/$it-${i++}"
+				if (SchemaUtils.javaClass.getResourceAsStream("/assets/$path") == null) break
+				subStructures += path
 			} catch (e: IOException) {
 				break
 			} catch (e: NullPointerException) {
@@ -47,7 +49,7 @@ object WorldGenMutatedFlowers: StructureBaseClass() {
 			world.setBlock(i, j, k, flowerBlock, flowerMeta, 3)
 		}
 		
-		SchemaUtils.generate(world, x, y, z, flower)
+		SchemaUtils.generate(world, x, y, z, flower, true)
 		return true
 	}
 }

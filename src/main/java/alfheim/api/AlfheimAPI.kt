@@ -78,7 +78,7 @@ object AlfheimAPI {
 	val coldBlocks = mutableSetOf(Blocks.ice, Blocks.packed_ice, Blocks.snow)
 	
 	/** Set of blocks that can reduce entity's sheer cold value */
-	val warmBlocks = mutableSetOf(Blocks.fire, Blocks.lava, Blocks.flowing_lava, Blocks.lit_furnace, Blocks.torch, Blocks.lit_pumpkin)
+	val warmBlocks = mutableSetOf(Blocks.fire, Blocks.lava, Blocks.flowing_lava, Blocks.lit_furnace, Blocks.torch, Blocks.lit_pumpkin, Blocks.brewing_stand)
 	
 	val treeRecipes: MutableList<RecipeTreeCrafting> = ArrayList()
 	val treeVariants: MutableList<IIridescentSaplingVariant> = ArrayList()
@@ -177,7 +177,7 @@ object AlfheimAPI {
 	
 	inline fun <reified T: Any> registerIncantation(incantation: String, vararg inputs: Any, noinline application: (T) -> Boolean): TunerIncantation<T> {
 		val ti = TunerIncantation(T::class.java, incantation, inputs, application)
-		tunerIncantations[incantation] = ti
+		tunerIncantations[incantation.lowercase()] = ti
 		return ti
 	}
 	
@@ -352,7 +352,7 @@ object AlfheimAPI {
 	fun getTreeVariant(soil: Block, meta: Int) =
 		treeVariants.firstOrNull { it.matchesSoil(soil, meta) }
 	
-	object FallbackAnomaly: SubTileAnomalyBase() {
+	private object FallbackAnomaly: SubTileAnomalyBase() {
 		override val targets: List<Any> = emptyList()
 		override fun performEffect(target: Any) = Unit
 	}

@@ -12,7 +12,7 @@ import kotlin.math.*
 class EntityTornadoFX(world: World?, originX: Double, yPos: Double, originZ: Double, val radius: Double, val velX: Double, val velZ: Double, block: Block, meta: Int, side: Int, maxAge: Int): EntityDiggingFX(world, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, block, meta, side) {
     
     var angle = rand.nextDouble() * Math.PI * 2
-    val speed = rand.nextDouble() * 2 + 1
+    var speed = rand.nextDouble() * 2 + 1
     var fullBrightness = false
     
     init {

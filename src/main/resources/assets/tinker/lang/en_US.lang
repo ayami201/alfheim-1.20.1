@@ -10,6 +10,9 @@ item.alfheim:NaturalBucket.Manasteel.name=Molten Manasteel Bucket
 item.alfheim:NaturalBucket.Mauftrium.name=Molten Mauftrium Bucket
 item.alfheim:NaturalBucket.Terrasteel.name=Molten Terrasteel Bucket
 
+item.alfheim:NaturalManual.name=Nature and You
+item.NaturalManual.tooltip=By: AlexSocol
+
 item.alfheim:RedBowstring.name=Red Bowstring
 item.alfheim:ManaBowstring.name=Mana Infused Bowstring
 

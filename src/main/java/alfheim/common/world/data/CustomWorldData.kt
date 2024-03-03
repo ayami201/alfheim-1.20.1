@@ -4,11 +4,16 @@ import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.common.core.handler.AlfheimConfigHandler
 import com.google.common.collect.*
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.gameevent.TickEvent
+import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent
 import net.minecraft.nbt.*
 import net.minecraft.util.ChunkCoordinates
 import net.minecraft.world.*
 
 class CustomWorldData(datakey: String): WorldSavedData(datakey) {
+	
+	var dimensionId = 0
 	
 	var spawnpoint: ChunkCoordinates? = null
 		set(value) {
@@ -22,7 +27,13 @@ class CustomWorldData(datakey: String): WorldSavedData(datakey) {
 	val data = HashMap<String, String>()
 	var nbtData = NBTTagCompound()
 	
+	init {
+		eventFML()
+	}
+	
 	override fun writeToNBT(nbt: NBTTagCompound) {
+		nbt.setInteger(TAG_DIM_ID, dimensionId)
+		
 		spawnpoint?.let {
 			val (x, y, z) = it
 			nbt.setIntArray(TAG_SPAWNPOINT, intArrayOf(x, y, z))
@@ -48,6 +59,8 @@ class CustomWorldData(datakey: String): WorldSavedData(datakey) {
 	}
 	
 	override fun readFromNBT(nbt: NBTTagCompound) {
+		if (nbt.hasKey(TAG_DIM_ID)) dimensionId = nbt.getInteger(TAG_DIM_ID)
+		
 		val ints = nbt.getIntArray(TAG_SPAWNPOINT)
 		if (ints.size == 3) {
 			val (x, y, z) = ints
@@ -75,8 +88,24 @@ class CustomWorldData(datakey: String): WorldSavedData(datakey) {
 		nbtData = nbt.getCompoundTag(TAG_NBT_DATA)
 	}
 	
+	var oldNbt = ""
+	
+	// if you know a better solution - let me know :3
+	@SubscribeEvent
+	fun watchNBT(e: WorldTickEvent) {
+		if (e.world.provider.dimensionId != dimensionId || e.phase != TickEvent.Phase.END) return
+		if (e.world.totalWorldTime % 100 != 0L) return
+		
+		val nbt = nbtData.toString()
+		if (nbt == oldNbt) return
+		
+		oldNbt = nbt
+		if (oldNbt.isNotEmpty()) markDirty()
+	}
+	
 	companion object {
 		
+		const val TAG_DIM_ID = "dim"
 		const val TAG_DATA = "data"
 		const val TAG_NBT_DATA = "nbtData"
 		const val TAG_SPAWNPOINT = "spawnpoint"
@@ -95,6 +124,7 @@ class CustomWorldData(datakey: String): WorldSavedData(datakey) {
 				var data = perWorldStorage.loadData(CustomWorldData::class.java, name) as? CustomWorldData
 				if (data == null) {
 					data = CustomWorldData(name)
+					data.dimensionId = dimensionId
 					data.markDirty()
 					perWorldStorage.setData(name, data)
 				}

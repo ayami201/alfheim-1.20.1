@@ -19,15 +19,43 @@ import kotlin.math.*
 
 class TileAnimatedTorch: ASJTile() {
 	
-	var side: Int = 0
-	var rotation: Double = 0.D
-	var rotating: Boolean = false
-	var lastTickRotation: Double = 0.D
-	var nextRandomRotation: Int = 0
-	var currentRandomRotation: Int = 0
+	var side = 0
+		set(value) {
+			field = value
+			
+			val world = worldObj
+			val x = xCoord
+			val y = yCoord
+			val z = zCoord
+			
+			when (value) {
+				0 -> {
+					world.notifyBlockOfNeighborChange(x, y, z + 1, blockType)
+					world.notifyBlocksOfNeighborChange(x, y, z + 1, blockType, 2)
+				}
+				1 -> {
+					world.notifyBlockOfNeighborChange(x - 1, y, z, blockType)
+					world.notifyBlocksOfNeighborChange(x - 1, y, z, blockType, 5)
+				}
+				2 -> {
+					world.notifyBlockOfNeighborChange(x, y, z - 1, blockType)
+					world.notifyBlocksOfNeighborChange(x, y, z - 1, blockType, 3)
+				}
+				3 -> {
+					world.notifyBlockOfNeighborChange(x + 1, y, z, blockType)
+					world.notifyBlocksOfNeighborChange(x + 1, y, z, blockType, 4)
+				}
+			}
+		}
 	
-	private var rotationTicks: Int = 0
-	var anglePerTick: Double = 0.D
+	var rotation = 0.D
+	var rotating = false
+	var lastTickRotation = 0.D
+	var nextRandomRotation = 0
+	var currentRandomRotation = 0
+	
+	private var rotationTicks = 0
+	var anglePerTick = 0.D
 	
 	private var torchMode = TorchMode.TOGGLE
 	
@@ -47,16 +75,15 @@ class TileAnimatedTorch: ASJTile() {
 	}
 	
 	fun toggle() {
-		if (!worldObj.isRemote) {
-			worldObj.addBlockEvent(xCoord, yCoord, zCoord, AlfheimBlocks.animatedTorch, 0, torchMode.rotate(this, side))
-			nextRandomRotation = worldObj.rand.nextInt(4)
-			ASJUtilities.dispatchTEToNearbyPlayers(this)
-		}
+		if (worldObj.isRemote) return
+		
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, AlfheimBlocks.animatedTorch, 0, torchMode.rotate(this, side))
+		nextRandomRotation = worldObj.rand.nextInt(4)
+		ASJUtilities.dispatchTEToNearbyPlayers(this)
 	}
 	
 	fun onWanded() {
-		val modes = TorchMode.entries.toTypedArray()
-		torchMode = modes[(torchMode.ordinal + 1) % modes.size]
+		torchMode = TorchMode.entries[(torchMode.ordinal + 1) % TorchMode.entries.size]
 		ASJUtilities.dispatchTEToNearbyPlayers(this)
 	}
 	
@@ -144,8 +171,7 @@ class TileAnimatedTorch: ASJTile() {
 		nextRandomRotation = nbt.getInteger(TAG_NEXT_RANDOM_ROTATION)
 		
 		val modeOrdinal = nbt.getInteger(TAG_TORCH_MODE)
-		val modes = TorchMode.entries.toTypedArray()
-		torchMode = modes[modeOrdinal % modes.size]
+		torchMode = TorchMode.entries[modeOrdinal % TorchMode.entries.size]
 	}
 	
 	enum class TorchMode {

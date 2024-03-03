@@ -2,7 +2,6 @@ package alfheim.common.block
 
 import alfheim.api.ModInfo
 import alfheim.api.block.IHourglassTrigger
-import alfheim.api.lib.LibRenderIDs
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileAnimatedTorch
 import alfheim.common.lexicon.AlfheimLexiconData
@@ -66,14 +65,19 @@ class BlockAnimatedTorch: BlockContainerMod(Material.circuits), IHourglassTrigge
 		return if (TileAnimatedTorch.SIDES[tile.side].ordinal == side) 15 else 0
 	}
 	
-	override fun getRenderType() = LibRenderIDs.idAniTorch
+	override fun getRenderType() = -1
 	override fun isOpaqueCube() = false
 	override fun renderAsNormalBlock() = false
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, lexicon: ItemStack) = AlfheimLexiconData.animatedTorch
-	override fun createNewTileEntity(p_149915_1_: World, p_149915_2_: Int) = TileAnimatedTorch()
+	override fun createNewTileEntity(world: World, meta: Int) = TileAnimatedTorch()
 	
 	override fun onBlockDestroyedByPlayer(world: World, x: Int, y: Int, z: Int, meta: Int) {
-		world.notifyBlocksOfNeighborChange(x, y, z, this)
+		world.notifyBlocksOfNeighborChange(x + 1, y, z, this)
+		world.notifyBlocksOfNeighborChange(x - 1, y, z, this)
+		world.notifyBlocksOfNeighborChange(x, y, z + 1, this)
+		world.notifyBlocksOfNeighborChange(x, y, z - 1, this)
+		world.notifyBlocksOfNeighborChange(x, y - 1, z, this)
+		world.notifyBlocksOfNeighborChange(x, y + 1, z, this)
 		super.onBlockDestroyedByPlayer(world, x, y, z, meta)
 	}
 }

@@ -51,7 +51,7 @@ import vazkii.botania.common.block.tile.TileAlfPortal
 import vazkii.botania.common.block.tile.string.TileRedStringFertilizer
 import vazkii.botania.common.entity.EntityDoppleganger
 import vazkii.botania.common.item.ModItems
-import kotlin.math.max
+import kotlin.math.*
 
 @Suppress("unused")
 object EventHandler {
@@ -201,13 +201,13 @@ object EventHandler {
 	@SubscribeEvent
 	fun onEntityHurt(e: LivingHurtEvent) {
 		val target = e.entityLiving
-		val attacker = e.source.entity
+		val attacker = e.source.entity as? EntityLivingBase
 		
-		if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDBerserk) == true)
+		if (attacker?.isPotionActive(AlfheimConfigHandler.potionIDBerserk) == true)
 			e.ammount *= 1.2f
-		if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDOvermage) == true && e.source.isMagical)
+		if (attacker?.isPotionActive(AlfheimConfigHandler.potionIDOvermage) == true && e.source.isMagical)
 			e.ammount *= 1.2f
-		if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDNinja) == true)
+		if (attacker?.isPotionActive(AlfheimConfigHandler.potionIDNinja) == true)
 			e.ammount *= 0.8f
 		
 		if (AlfheimConfigHandler.enableMMO) {
@@ -216,7 +216,7 @@ object EventHandler {
 				return
 			}
 			
-			if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDQuadDamage) == true) {
+			if (attacker?.isPotionActive(AlfheimConfigHandler.potionIDQuadDamage) == true) {
 				e.ammount *= 4f
 				VisualEffectHandler.sendPacket(VisualEffects.QUADH, attacker)
 			}
@@ -242,7 +242,7 @@ object EventHandler {
 						e.isCanceled = true
 						return
 					}
-				} else if (attacker is EntityLivingBase && attacker.isEntityAlive && target.worldObj.rand.nextInt(3) == 0) {
+				} else if (attacker?.isEntityAlive == true && target.worldObj.rand.nextInt(3) == 0) {
 					attacker.attackEntityFrom(e.source, e.ammount / 2)
 				}
 			}
@@ -273,6 +273,12 @@ object EventHandler {
 				if (ASJUtilities.isServer) NetworkService.sendToAll(MessageEffect(target.entityId, pe.potionID, dur, pe.amplifier))
 			}
 		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	fun noPoisonDeath(e: LivingHurtEvent) {
+		if (e.source.damageType !== DamageSourceSpell.poison.damageType) return
+		e.ammount = min(e.entityLiving.health - 1, e.ammount)
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST) // if something can cancel death
@@ -357,7 +363,9 @@ object EventHandler {
 		if (entity.entityItem.item is IRelic) {
 			e.isCanceled = true
 			entity.setDead()
-			EntityItemImmortalRelic(entity).spawn()
+			EntityItemImmortalRelic(entity).apply {
+				delayBeforeCanPickup = 40
+			}.spawn()
 		}
 	}
 	
@@ -458,4 +466,31 @@ object EventHandler {
 		
 		e.delta = (e.delta ?: 0f) + heat
 	}
+	
+	@SubscribeEvent(priority = EventPriority.LOW)
+	fun slowdownFreezing(e: SheerColdHandler.SheerColdTickEvent) {
+		if (e.delta == null) return
+		
+		var sum = 0f
+		for (i in 1..4) sum += when (e.entityLiving.getEquipmentInSlot(i)?.item) {
+			Items.leather_helmet -> 1f
+			Items.leather_chestplate -> 3f
+			Items.leather_leggings -> 2f
+			Items.leather_boots -> 1f
+			else -> 0f
+		}
+		
+		if (sum == 0f) return
+		
+		e.delta = min(e.delta!!, e.delta!! / sum) // minimal so that if other source heats - it won't override
+	}
+	
+//	@SubscribeEvent
+//	fun addXPOnDeath(e: LivingDeathEvent) {
+//		if (e.source !is DamageSourceSpell) return
+//		val target = e.entityLiving as? EntityLiving ?: return
+//
+//		val xpDrop = target.experienceValue * 0.2f
+//		EntityXPOrb(target.worldObj, target.posX, target.posY, target.posZ, xpDrop.I).spawn()
+//	}
 }

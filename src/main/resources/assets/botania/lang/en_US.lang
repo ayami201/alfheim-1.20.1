@@ -35,7 +35,7 @@ alfheim.page.anomalyHarvester2=Lastly, by (sneak)-rightclicking with bare hand, 
 alfheim.page.anomalyHarvester3=Taz-powered
 alfheim.page.anomalyHarvester4=Anomaly stabilization
 alfheim.page.anomalyHarvester5=Anomaly displacement
-alfheim.page.anomalyHarvester6=The behavior of contained anomalies will remain pretty much the same, but there are some exceptions. &1Manavortex&0 will increase internal mana buffer. &1Warp&0 will teleport every entity to the block next to the harvester. &1Clot of Dark Energy&0 will hurt only monsters. &1Eye of Death&0 won't oneshot and will target every living entity except players and babies.
+alfheim.page.anomalyHarvester6=The behavior of contained anomalies will remain pretty much the same, but there are some exceptions. &1Manavortex&0 will increase internal mana buffer. &1Warp&0 will teleport every entity to the block next to the harvester. &1Clot of Dark Energy&0 will hurt only monsters. &1Eye of Death&0 won't oneshot and will target every living entity except children.
 alfheim.page.anomalyHarvester7=One single harvester can combine anomalies. Combination of &1Antigravity&0 and &1Gravity Vortex&0 will form new effect that will move every entity within work zone in the direction where small pyramid is facing. Work zones of two different harvesters can safely overlap.
 
 alfheim.entry.elves=Elves
@@ -80,6 +80,12 @@ alfheim.page.worldgen5=Creating &1Livingrock pickaxe&0
 alfheim.page.worldgen6=Creating &1Furnace&0
 alfheim.page.worldgen7=Creating &1Living Petal Apothecary&0
 
+alfheim.entry.worldTree=Miniature World Tree
+alfheim.tagline.worldTree=The center of the universe on your windowsill
+alfheim.page.worldTree0=&1Miniature World Tree&0, created under inspiration from the real &1Yggdrasil&0 by a group of the wisest of the elves. Although it can hardly encroach on the cosmic influence of the original, this world tree is capable of connecting points in space within certain limits.
+alfheim.page.worldTree1=First of all, link two such trees by sneak-rightclicking with the &1Wand of the Forest&0 on both. A fruit will appear on the first tree that will send you to the second when you rightclick it with an empty hand. For convenience, the tree can be renamed using a &4Name Tag&0, which will appear on the tree itself, as well as on the fruit associated with it.
+alfheim.page.worldTree2=May contain traces of Nidhogg
+
 alfheim.entry.shrines=Shrines of Power
 alfheim.tagline.shrines=Praise the Sun!
 alfheim.page.shrines0=Traveling around the Alfheim, one can notice different small-scaled ruins, looking like specific temples. Those are called Shrines of Power. In every shrine there is a place to pray to ancient gods - &1Stones of Power&0. Using such stones, one can gain some temporal paired-effect buffs at a cost of some &4Mana&0, to increase one skill by decreasing another. Those are not combinable.
@@ -123,6 +129,12 @@ alfheim.entry.flowerStorm=Thunderbloom
 alfheim.tagline.flowerStorm=Produces mana from lightning
 alfheim.page.flowerStorm0=&1Thunderbloom&0 is another weather-dependent flower except this one isn't a passive one. It generates mana when a lightning strickes it. Afterwards generates a lot of mana. This process heats the flower and it needs &4roughly a minute&0 to cool down.
 alfheim.page.flowerStorm1=Essentially an energy converter!
+
+alfheim.entry.flowerTradescantia=Tradescantia
+alfheim.tagline.flowerTradescantia=Automated trading
+alfheim.page.flowerTradescantia0=&1Tradescantia&0 is a flower that will help you in trading. Throw the items you want to sell on it, and the flower itself will begin to conduct transactions with nearby merchants, such as villagers. This flower is a real avid merchant, so he will charge a considerable amount of &4mana&0 for his services.
+alfheim.page.flowerTradescantia1=Tradescantia will place the proceeds from the sale into adjacent inventories (for example, chests). Placing item frames on inventories will determine which items can be purchased.
+alfheim.page.flowerTradescantia2=SA SA                       LE LE
 
 alfheim.entry.flowerWind=Windifolia
 alfheim.tagline.flowerWind=Produces mana from wind
@@ -451,6 +463,20 @@ alfheim.tagline.deathSeed=Get back your drops in no time
 alfheim.page.deathSeed0=The Seed of Death is an unusual artifact that aspires to the player's last place of death, even through dimensions. The reason for this phenomenon is simple: the seed absorbs a piece of the player's soul at the moment of death.<br>To return to the place of death, simply right-click with the seed in your hand. The move will be instantaneous and, fortunately, safe, but only for a few seconds.
 alfheim.page.deathSeed1=Second chance?
 
+alfheim.entry.dumbDecor=Functional decor
+alfheim.tagline.dumbDecor=Beauty inside and outside
+alfheim.page.dumbDecor0=&1Wooden furniture&0 has one feature - it can mimic the material of any block. To do this, you need to rightclick with the desired block in your hand on its side or top side. When you are ready to decide on the texture of the furniture, sneak-rightclick with the &1Wand of the Forest&0 to protect it from accidental changes.
+alfheim.page.dumbDecor1=Each piece of wooden furniture retains its appearance until the next change, so you can customize it once and then move it anywhere. Also, for reasons of etiquette, you can sit on everything except the table. Try it, it's very convenient!
+alfheim.page.dumbDecor2=Creating &1furniture&0
+alfheim.page.dumbDecor3=&1Curtain placer&0 lowers and rises with the redstone signal. It looks especially impressive when it is combined in a long row. The curtain can also mimic any block, and it can also be protected from changes.
+alfheim.page.dumbDecor4=Creating &1Curtain Placer&0
+alfheim.page.dumbDecor5=&1Double Block&0 is the ultimate decorative element, which in the right hands can become anything. It can take the form of two blocks in one. This works similar to wood furniture, but the entire block is changed, not just the texture. And, of course, it can also be protected from changes.
+alfheim.page.dumbDecor6=Creating &1Double Block&0
+alfheim.page.dumbDecor7=&1Secret Glass&0 is a great way to spy on someone in secret... Or just beautifully decorate walls and windows. On the front side it has one texture, and on all the rest - another, and both can be changed to anything else. And yes, it can also be protected from changes.
+alfheim.page.dumbDecor8=Creating &1Secret Glass&0
+alfheim.page.dumbDecor9=The &1Floodlight&0 differs from other decorative blocks in its simplicity. All you have to do is place it at the desired height and give a redstone signal. Done! A beam of light for any performance. Please note that the light created does not prevent monsters from appearing.
+alfheim.page.dumbDecor10=Creating &1Floodlight&0
+
 alfheim.entry.legends=Legends of the Nine Worlds
 alfheim.tagline.legends=Fiction or reality?
 alfheim.page.legends0=&oThe world tree Yggdrasil is the foundation of the entire universe and extends from Helheim to Asgard, uniting the nine worlds into a single whole. Normally it is invisible in these worlds, but because of the shifts that occurred during the Shattering, it was imprinted in the space of Alfheim and now its top and trunk are in the center of the world.
@@ -492,6 +518,11 @@ alfheim.tagline.warBanner=Show your fighting spirit
 alfheim.page.warBanner0=&1War Banners&0 are cosmetic baubles that may not only serve as a sign of your battle determination, but will also help you to celebrate your glorious victories, standing atop of your foes' corpses.
 alfheim.page.warBanner1=Heavy losses were expected
 
+alfheim.entry.nidhoggTooth=Nidhogg Tooth Shard
+alfheim.tagline.nidhoggTooth=Outlandish instrument
+alfheim.page.nidhoggTooth0=In the dark depths of &1Niflheim&0 lurks one of several great serpents - &4Nidhogg&0, a dragon that has been gnawing on the roots of &1Yggdrasil&0 for centuries. Sometimes on the roots you can see traces of his atrocities in the form of stuck fragments of his teeth.
+alfheim.page.nidhoggTooth1=Such a Tooth is capable of extracting life energy from the roots of the world tree, which may be enough to extract a small part of them. But the broken Tooth also does not have its former strength - it is hardly enough for several uses.
+
 alfheim.entry.openChest=Bottomless Crate
 alfheim.tagline.openChest=It has no bottom. Literally.
 alfheim.page.openChest0=The &1Bottomless Crate&0 is the upgraded version of &1Open Crate&0, with one single difference - it has no internal buffer or capacity limit, so it will drop all your stuff at once (even 100 stacks), and that's it.
@@ -520,7 +551,7 @@ alfheim.page.carver1=Shape of My Heart
 
 alfheim.entry.gaiaButton=Gaia Button
 alfheim.tagline.gaiaButton=Button with custom press duration
-alfheim.page.gaiaButton0=&1Gaia Button&0 allows one to configure it's press duration with a 10 ticks precision by rightclicking or sneak-rightclicking on it with &1Wand of the Forest&0.
+alfheim.page.gaiaButton0=&1Gaia Button&0 allows one to configure it's press duration with a 10 ticks precision by rightclicking or sneak-rightclicking on it with &1Wand of the Forest&0. By rightclicking with &1Runic Chalk&0 you can add short display text.
 alfheim.page.gaiaButton1=It's not so big
 
 ################################################################ DIVINITY ################################################################
@@ -699,13 +730,13 @@ alfheim.page.vafthrudnir3=Anchor of Reality
 alfheim.page.vafthrudnir4=We all remember well this world creation myth: originally there was &4Ginnungagap&0, and &4Muspelheim&0 and &4Niflheim&0 were the two realms from which all things came, that they gave birth to &4Ymir&0, who was killed later by the gods and from whom &4Midgard&0 was created... What good can this knowledge do us in these dark days?
 alfheim.page.vafthrudnir5=In order to repair the universe, one must understand the following: The Abyss is a cursed chaos without law. And Ymir was not born because of a mere accident, but because of the union of the two primal elements. And afterward there was a murder, which ordered existence. So the law appeared where there was no law, in the gaping void.
 alfheim.page.vafthrudnir6=So we need access to the two primal worlds in order to draw the necessary energies from them. This task is performed by &1realm power collectors&0, who then focus it into a single point.
-alfheim.page.vafthrudnir7=At this point, one should place a &1pylon of creation&0 that unites the two primal elements into a single whole. The resulting power of creation will be channeled into two &1yawning spires&0 that transform it into the &4energy of order&0. In turn, the spires will direct it upward, stitching the wounds of reality like spokes knitting the fabric of the universe.
+alfheim.page.vafthrudnir7=At this point, one should place a &1pylon of creation&0 that unites the two primal elements into a single whole. The resulting power of creation will be channeled into two &1gapning spires&0 that transform it into the &4energy of order&0. In turn, the spires will direct it upward, stitching the wounds of reality like spokes knitting the fabric of the universe.
 alfheim.page.vafthrudnir8=The &1empty rift shards&0 are items that collect the fabric of reality that once made up the world, but is becoming more chaotic because of the reality rift. That fabric is still somewhat ordered, but has acquired the traits of Ginnungagap, so they can be used in the creation and manipulation of objects.
 alfheim.page.vafthrudnir9=The fabric of reality can be collected in three ways: by interacting with the rifts that appear directly in the world, by absorbing the icy power of Niflheim from the coldest of its rivers, and by absorbing the power of fire from the deepest blazing lakes of Muspelheim.
 alfheim.page.vafthrudnir10=Creating &1Empty Rift Shard&0
 alfheim.page.vafthrudnir11=Creating &1Realm Power Collector Cores&0
 alfheim.page.vafthrudnir12=Creating &1Realm Power Collector Frames&0
-alfheim.page.vafthrudnir13=Creating &1Yawning Spire&0
+alfheim.page.vafthrudnir13=Creating &1Gaping Spire&0
 alfheim.page.vafthrudnir14=Creating &1Pylon of Creation&0
 alfheim.page.vafthrudnir15=Cosmogonic Act
 alfheim.page.vafthrudnir16=&oPave your soul through a thousand steps on Bifrost, 'til the aether radiates your sins, for the sake of Heimdal.<br>&oWash your soul in the coldest river of Niflheim, 'til the water wipes your sins, for the sake of Njord.<br>&oStrike your soul with the mightiest lightnings from the skies, 'til the thunder purges your sins, for the sake of Thor.

@@ -2,7 +2,6 @@ package alfheim.common.item.relic
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.item.AlfheimItems
 import baubles.api.BaubleType
@@ -57,10 +56,7 @@ class ItemSifRing: ItemRelicBauble("SifRing") {
 						list.add(ChunkCoordinates(x + i, y + j, z + k) to if (cactus) Blocks.cactus else Blocks.sapling)
 				}
 		
-		val (pos, block) = list.firstOrNull {
-			val (i, j, k) = it.first
-			!InteractionSecurity.isPlacementBanned(player, i, j, k, world, Blocks.cactus)
-		} ?: return
+		val (pos, block) = list.firstOrNull() ?: return
 		
 		val (i, j, k) = pos
 		world.setBlock(i, j, k, block)
@@ -78,7 +74,6 @@ class ItemSifRing: ItemRelicBauble("SifRing") {
 		val list = getEntitiesWithinAABB(player.worldObj, EntityAgeable::class.java, player.boundingBox(8))
 		list.removeAll { !it.isChild }
 		list.forEach {
-			if (!InteractionSecurity.canInteractWithEntity(player, it)) return
 			if (!ManaItemHandler.requestManaExact(stack, player, 1, true)) return
 			it.growingAge++
 		}

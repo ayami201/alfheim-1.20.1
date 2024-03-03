@@ -2,7 +2,6 @@ package alfheim.common.spell.illusion
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
@@ -25,7 +24,6 @@ object SpellSmokeScreen: SpellBase("smokescreen", EnumRace.SPRIGGAN, 5000, 600, 
 		val list = getEntitiesWithinAABB(caster.worldObj, EntityLivingBase::class.java, caster.boundingBox.expand(radius))
 		list.forEach {
 			if (PartySystem.mobsSameParty(caster, it) || Vector3.entityDistance(it, caster) > radius) return@forEach
-			if (!InteractionSecurity.canHurtEntity(caster, it)) return@forEach
 			
 			it.addPotionEffect(PotionEffect(Potion.blindness.id, duration))
 		}

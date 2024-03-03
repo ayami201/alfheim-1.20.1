@@ -85,7 +85,6 @@ import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.elvenSand
 import alfheim.common.block.AlfheimBlocks.enderActuator
 import alfheim.common.block.AlfheimBlocks.gaiaButton
-import alfheim.common.block.AlfheimBlocks.icicle
 import alfheim.common.block.AlfheimBlocks.irisDirt
 import alfheim.common.block.AlfheimBlocks.irisGrass
 import alfheim.common.block.AlfheimBlocks.irisLamp
@@ -138,6 +137,10 @@ import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
 import alfheim.common.block.AlfheimBlocks.spire
 import alfheim.common.block.AlfheimBlocks.subspacian
 import alfheim.common.block.AlfheimBlocks.tradePortal
+import alfheim.common.block.AlfheimBlocks.worldTree
+import alfheim.common.block.AlfheimFluffBlocks.chair
+import alfheim.common.block.AlfheimFluffBlocks.curtainPlacer
+import alfheim.common.block.AlfheimFluffBlocks.doubleBlock
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFenceGate
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFence
@@ -153,6 +156,7 @@ import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneSlab
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneSlab2
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneStairs
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneWalls
+import alfheim.common.block.AlfheimFluffBlocks.floodLight
 import alfheim.common.block.AlfheimFluffBlocks.livingMountain
 import alfheim.common.block.AlfheimFluffBlocks.livingMountainSlab
 import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab
@@ -174,6 +178,7 @@ import alfheim.common.block.AlfheimFluffBlocks.livingwoodFenceGate
 import alfheim.common.block.AlfheimFluffBlocks.roofTile
 import alfheim.common.block.AlfheimFluffBlocks.roofTileSlabs
 import alfheim.common.block.AlfheimFluffBlocks.roofTileStairs
+import alfheim.common.block.AlfheimFluffBlocks.secretGlass
 import alfheim.common.block.AlfheimFluffBlocks.shrineGlass
 import alfheim.common.block.AlfheimFluffBlocks.shrineLight
 import alfheim.common.block.AlfheimFluffBlocks.shrinePanel
@@ -181,6 +186,7 @@ import alfheim.common.block.AlfheimFluffBlocks.shrinePillar
 import alfheim.common.block.AlfheimFluffBlocks.shrineRock
 import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteSlab
 import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
+import alfheim.common.block.AlfheimFluffBlocks.table
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.block.BlockNiflheim.NiflheimBlockMetas
 import alfheim.common.block.tile.TileAnomaly
@@ -312,7 +318,6 @@ import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.monster.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks.*
-import net.minecraft.init.Items
 import net.minecraft.init.Items.*
 import net.minecraft.item.*
 import net.minecraft.item.crafting.*
@@ -333,8 +338,6 @@ import vazkii.botania.common.block.tile.mana.TilePool
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.crafting.*
 import vazkii.botania.common.item.ModItems.*
-import vazkii.botania.common.item.block.ItemBlockSpecialFlower
-import vazkii.botania.common.lib.LibBlockNames
 import vazkii.botania.common.lib.LibOreDict.*
 import net.minecraft.init.Items.dye as justDye
 import net.minecraft.init.Items.skull as skullPlacer
@@ -403,6 +406,11 @@ object AlfheimRecipes {
 	lateinit var recipeCreationPylon: IRecipe
 	lateinit var recipeCrescentAmulet: IRecipe
 	lateinit var recipeDeathSeed: IRecipe
+	lateinit var recipesDecor: List<IRecipe>
+	lateinit var recipesDecorCurtain: IRecipe
+	lateinit var recipesDecorDouble: IRecipe
+	lateinit var recipesDecorGlass: IRecipe
+	lateinit var recipesDecorLight: IRecipe
 	lateinit var recipeDodgeRing: IRecipe
 	lateinit var recipeElementalBoots: IRecipe
 	lateinit var recipeElementalChestplate: IRecipe
@@ -542,6 +550,7 @@ object AlfheimRecipes {
 	lateinit var recipeUberSpreader: IRecipe
 	lateinit var recipeWarBanner0: IRecipe
 	lateinit var recipeWarBanner1: IRecipe
+	lateinit var recipeWorldTree: IRecipe
 	
 	lateinit var recipeInfusedDreamTwig: RecipeManaInfusion
 	lateinit var recipesPastoralSeeds: List<RecipeManaInfusion>
@@ -559,6 +568,7 @@ object AlfheimRecipes {
 	lateinit var recipeRainFlower: RecipePetals
 	lateinit var recipeSnowFlower: RecipePetals
 	lateinit var recipeStormFlower: RecipePetals
+	lateinit var recipeTradescantia: RecipePetals
 	lateinit var recipeWitherAconite: RecipePetals
 	lateinit var recipeWindFlower: RecipePetals
 	
@@ -868,11 +878,69 @@ object AlfheimRecipes {
 		
 		addOreDictRecipe(ItemStack(deathSeed),
 		                 " H ", "GIG", " R ",
-		                 'H', ItemStack(Items.skull, 1, 3),
+		                 'H', ItemStack(skullPlacer, 1, 3),
 		                 'G', LIFE_ESSENCE,
 		                 'I', keepIvy,
 		                 'R', RUNE[12]) // sloth
 		recipeDeathSeed = BotaniaAPI.getLatestAddedRecipe()
+		
+		addOreDictRecipe(ItemStack(chair, 3),
+		                 "CCC", " W ", " S ",
+		                 'C', ItemStack(chair, 1, 7),
+		                 'W', ItemStack(log),
+		                 'S', ItemStack(wooden_slab))
+		
+		addOreDictRecipe(ItemStack(chair, 3, 1),
+		                 "CCC", "W W", " S ",
+		                 'C', ItemStack(chair, 1, 7),
+		                 'W', ItemStack(log))
+		
+		addOreDictRecipe(ItemStack(chair, 1, 3),
+		                 "F", "C",
+		                 'F', fence_gate,
+		                 'C', ItemStack(chair, 1, 1))
+		
+		addOreDictRecipe(ItemStack(chair, 5, 6),
+		                 "C",
+		                 'C', ItemStack(chair, 1, 7))
+		
+		addOreDictRecipe(ItemStack(chair, 3, 7),
+		                 "PPP", "WWW",
+		                 'P', wooden_pressure_plate,
+		                 'W', ItemStack(log))
+		
+		addOreDictRecipe(ItemStack(table, 3),
+		                 "SSS", " W ", " W ",
+		                 'W', ItemStack(log),
+		                 'S', ItemStack(wooden_slab))
+		recipesDecor = BotaniaAPI.getLatestAddedRecipes(6)
+		
+		addOreDictRecipe(ItemStack(curtainPlacer, 8),
+		                 "WWW", "WDW", "WRW",
+		                 'W', ItemStack(wool, 1, 15),
+		                 'R', ItemStack(wool, 1, 14),
+		                 'D', dispenser)
+		recipesDecorCurtain = BotaniaAPI.getLatestAddedRecipe()
+		
+		addOreDictRecipe(ItemStack(doubleBlock, 8),
+		                 "SSS", "SPS", "SSS",
+		                 'S', secretGlass,
+		                 'P', PLACEHOLDER)
+		recipesDecorDouble = BotaniaAPI.getLatestAddedRecipe()
+		
+		addOreDictRecipe(ItemStack(secretGlass, 6),
+		                 "GG", "SG", "GG",
+		                 'G', "blockGlassBlack",
+		                 'S', ItemStack(stonebrick))
+		recipesDecorGlass = BotaniaAPI.getLatestAddedRecipe()
+		
+		addOreDictRecipe(ItemStack(floodLight),
+		                 "SSS", " F ", "LLG",
+		                 'L', ItemStack(livingwood, 1, 4),
+		                 'G', ItemStack(shrineLight, 1, 4),
+		                 'F', livingwoodFence,
+		                 'S', livingwoodPlankSlab)
+		recipesDecorLight = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(dodgeRing),
 						 "EM ", "M M", " MR",
@@ -1184,8 +1252,6 @@ object AlfheimRecipes {
 		                 'S', RUNE[4])
 		recipeGoddessCharm = BotaniaAPI.getLatestAddedRecipe()
 		
-		addShapedRecipe(ItemStack(ice), "MM", "MM", 'M', icicle)
-		
 		addOreDictRecipe(ItemStack(invisibilityCloak),
 						 "PWP", "GWG", "GJG",
 						 'P', PRISMARINE_SHARD,
@@ -1274,12 +1340,7 @@ object AlfheimRecipes {
 						 'I', IFFESAL_DUST)
 		recipeLensSuperconductor = BotaniaAPI.getLatestAddedRecipe()
 		
-		addOreDictRecipe(ItemStack(lens, 1, DAISY.meta),
-						 " P ", "RLR", " I ",
-						 'P', ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_PUREDAISY),
-						 'L', ItemStack(lens),
-						 'R', RUNE[8], // mana
-						 'I', IFFESAL_DUST)
+		CraftingManager.getInstance().recipeList.add(RecipeLensPurification)
 		recipeLensPurification = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(Lembas.stack,
@@ -1892,6 +1953,15 @@ object AlfheimRecipes {
 						 'W', ItemStack(wool, 1, 9),
 						 'D', DYES[4])
 		recipeWarBanner1 = BotaniaAPI.getLatestAddedRecipe()
+		
+		addOreDictRecipe(ItemStack(worldTree),
+		                 "LLL", "AYA", "WDW",
+		                 'L', LEAVES[16],
+		                 'A', apple,
+		                 'Y', ItemStack(altWood1, 1, 2),
+		                 'W', DREAM_WOOD,
+		                 'D', "dirt")
+		recipeWorldTree = BotaniaAPI.getLatestAddedRecipe()
 		
 		// #############################################################################################################
 		// ################################################ DECO BLOCKS ################################################
@@ -2606,6 +2676,16 @@ object AlfheimRecipes {
 														   PETAL[11], // Blue
 														   RUNE[13])  // Wrath
 		
+		recipeTradescantia = BotaniaAPI.registerPetalRecipe(BotaniaAPI.internalHandler.getSubTileAsStack("tradescantia"),
+		                                                    PIXIE_DUST,
+		                                                    PETAL[2], // Magenta
+		                                                    PETAL[4], // Yellow
+		                                                    PETAL[5], PETAL[5], // Lime
+		                                                    PETAL[10], // Purple
+		                                                    PETAL[13], // Green
+															RUNE[0], // Water
+															RUNE[11]) // Greed
+		
 		recipeWindFlower = BotaniaAPI.registerPetalRecipe(BotaniaAPI.internalHandler.getSubTileAsStack("windFlower"),
 														  PETAL[4], PETAL[4], // Yellow
 														  PETAL[5], PETAL[5], // Lime
@@ -2676,6 +2756,8 @@ object AlfheimRecipes {
 		RecipeSorter.register("${ModInfo.MODID}:looterclean", RecipeLootInterceptorClear::class.java, RecipeSorter.Category.SHAPELESS, "")
 		addRecipe(RecipeCleanRelic)
 		RecipeSorter.register("${ModInfo.MODID}:cleanrelic", RecipeCleanRelic::class.java, RecipeSorter.Category.SHAPELESS, "")
+		addRecipe(RecipeClearLoki)
+		RecipeSorter.register("${ModInfo.MODID}:clearloki", RecipeClearLoki::class.java, RecipeSorter.Category.SHAPELESS, "")
 		addRecipe(RecipeThrowablePotion)
 		RecipeSorter.register("${ModInfo.MODID}:throwpotion", RecipeThrowablePotion::class.java, RecipeSorter.Category.SHAPELESS, "")
 		addRecipe(RecipeElvenWeed)
@@ -2739,26 +2821,28 @@ object AlfheimRecipes {
 		
 		val smiteSword = ItemStack(golden_sword).apply { addEnchantment(Enchantment.smite, 4) }
 		
+		val diceStack = ItemStack(dice).apply { ItemNBTHelper.setBoolean(this, ASJUtilities.TAG_ASJIGNORENBT, true) }
+		
 		tuningAkashicRecords = registerItemCraftTuning("lipu pi ijo sona ale", akashicRecords, shimmerrock, book, bookshelf, monocle, lexicon, RUNE[11])
 		tuningDaolos = registerItemCraftTuning("ilo utala alasa telo", daolos, manasteelAxe, MUSPELHEIM_ESSENCE, water_bucket, JellyBottle.stack, fish, RUNE[0], RUNE[3])
-		tuningExcaliber = registerItemCraftTuning("ilo utala sewi kiwen", excaliber, terraSword, MAUFTRIUM_NUGGET, smiteSword, GLOWSTONE_DUST, ItemStack(shrineLight, 1, 4), dice)
-		tuningFlugelEye = registerItemCraftTuning("oko pi jan sewi moli", flugelEye, ender_eye, RUNE[8], dice, ender_pearl, worldSeed, PIXIE_DUST)
+		tuningExcaliber = registerItemCraftTuning("ilo utala sewi kiwen", excaliber, terraSword, MAUFTRIUM_NUGGET, smiteSword, GLOWSTONE_DUST, ItemStack(shrineLight, 1, 4), diceStack.copy())
+		tuningFlugelEye = registerItemCraftTuning("oko pi jan sewi moli", flugelEye, ender_eye, RUNE[8], diceStack.copy(), ender_pearl, worldSeed, PIXIE_DUST)
 		tuningFlugelSoul = registerItemCraftTuning("kon pi jan sewi moli", flugelSoul, ItemStack(manaResource, 1, 5), *Array(8) { LIFE_ESSENCE }, *Array(8) { RUNE[it + 8] })
-		tuningGjallarhorn = registerItemCraftTuning("ilo kalama uta pi jan sewi Kejemetale", gjallarhorn, grassHorn, NIFLHEIM_ESSENCE, amplifier, RUNE[8], golden_horse_armor, skull)
+		tuningGjallarhorn = registerItemCraftTuning("ilo kalama uta pi jan sewi Kejemetale", gjallarhorn, grassHorn, NIFLHEIM_ESSENCE, amplifier, RUNE[8], golden_horse_armor, skullPlacer)
 		tuningGleipnir = registerItemCraftTuning("ilo linja pi jo soweli", gleipnir, lead, amplifier, DasRheingold.stack, RUNE[2], FenrirFur.stack, fish, feather)
 		tuningGungnir = registerItemCraftTuning("ilo palisa utala pi jan sewi Oten", gungnir, manaGun, FenrirFur.stack, arrow, ItemStack(ancientWill, 1, 4), ItemStack(lens, 1, SUPERCONDUCTOR.meta))
 		tuningHeimdallRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi Kejemetale", priestRingHeimdall, pixieRing, MAUFTRIUM_NUGGET, RUNE[15], monocle, itemFinder, bifrostPerm, ender_eye)
-		tuningInfiniteFruit = registerItemCraftTuning("kili pini ala", infiniteFruit, golden_apple, RUNE[8], dice, manaCookie, manaBottle, RUNE[10])
-		tuningKingKey = registerItemCraftTuning("ilo open pi jan lawa", kingKey, missileRod, RUNE[8], dice, golden_axe, golden_hoe, golden_sword)
-		tuningLokiRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi Loki", lokiRing, pixieRing, dice, RUNE[8], RUNE[1], enderHand, sextant)
+		tuningInfiniteFruit = registerItemCraftTuning("kili pini ala", infiniteFruit, golden_apple, RUNE[8], diceStack.copy(), manaCookie, manaBottle, RUNE[10])
+		tuningKingKey = registerItemCraftTuning("ilo open pi jan lawa", kingKey, missileRod, RUNE[8], diceStack.copy(), golden_axe, golden_hoe, golden_sword)
+		tuningLokiRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi Loki", lokiRing, pixieRing, diceStack.copy(), RUNE[8], RUNE[1], enderHand, sextant)
 		tuningMjolnir = registerItemCraftTuning("ilo utala wawa pi jan sewi Tola", mjolnir, thunderChakram, NIFLHEIM_ESSENCE, RUNE[13], SPLINTERS_THUNDERWOOD, SPLINTERS_THUNDERWOOD, TWIG_THUNDERWOOD, teruTeruBozu)
 		tuningMoonlightBow = registerItemCraftTuning("ilo alasa palisa pi jan sewi pepa", moonlightBow, crystalBow, MAUFTRIUM_NUGGET, RUNE[8], RUNE[5], colorOverride, noteblock, QUARTZ[6])
 		tuningNjordRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi Nijete", priestRingNjord, pixieRing, MAUFTRIUM_NUGGET, RUNE[0], RUNE[3], ItemStack(fish, 1, 3), overgrowthSeed)
-		tuningOdinRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi Oten", odinRing, pixieRing, dice, spider_eye, magma_cream, RUNE[13])
+		tuningOdinRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi Oten", odinRing, pixieRing, diceStack.copy(), spider_eye, magma_cream, RUNE[13])
 		tuningSifRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi Sipe", priestRingSif, pixieRing, MAUFTRIUM_NUGGET, RUNE[5], RUNE[2], DasRheingold.stack, overgrowthSeed)
 		tuningSpearSubspace = registerItemCraftTuning("palisa pi ale ala", subspaceSpear, InfusedDreamwoodTwig.stack, RUNE[8], MUSPELHEIM_ESSENCE, subspacian, enlighter, manaBomb)
 		tuningTankMask = registerItemCraftTuning("len uta nasa", mask, ItemStack(cosmetic, 1, 22), MAUFTRIUM_NUGGET, SaveIvy.stack, leather_helmet, RUNE[13], manaVoid)
-		tuningThorRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi Tola", thorRing, pixieRing, dice, TERRA_STEEL, temperanceStone, RUNE[13], TWIG_THUNDERWOOD)
+		tuningThorRing = registerItemCraftTuning("sike pi palisa luka en pi jan sewi Tola", thorRing, pixieRing, diceStack.copy(), TERRA_STEEL, temperanceStone, RUNE[13], TWIG_THUNDERWOOD)
 	}
 	
 	private inline fun <reified T: EntityLivingBase> registerSlimeGrowthTune(item: Any): TunerIncantation<EntityLivingBase> {

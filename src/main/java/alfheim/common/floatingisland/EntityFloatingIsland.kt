@@ -127,7 +127,7 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 			
 			val blockList: List<BlockElement>
 			try {
-				blockList = SchemaUtils.parse(schemaText)
+				blockList = UnsafeSchemaUtils.parseText(schemaText)
 			} catch (e: JsonParseException) {
 				return@run
 			}

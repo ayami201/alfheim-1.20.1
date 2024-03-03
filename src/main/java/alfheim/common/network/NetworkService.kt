@@ -45,11 +45,13 @@ object NetworkService {
 		
 		registerPacket(Message0dS::class, Side.SERVER)
 		registerPacket(MessageContributor::class, Side.SERVER)
+		registerPacket(MessageCorporeaRequest::class, Side.SERVER)
 		registerPacket(MessageHotSpellS::class, Side.SERVER)
 		registerPacket(MessageFuckedUpServerPrecision::class, Side.SERVER)
 		registerPacket(MessageKeyBindS::class, Side.SERVER)
 		registerPacket(MessageNI::class, Side.SERVER)
 		registerPacket(MessageRaceSelection::class, Side.SERVER)
+		registerPacket(MessageUpdateGaiaButton::class, Side.SERVER)
 	}
 
 	private fun <T : AlfheimPacket<T>> registerPacket(clazz: KClass<out T>, side: Side) {

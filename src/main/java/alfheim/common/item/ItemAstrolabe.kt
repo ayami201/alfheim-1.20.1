@@ -2,7 +2,6 @@ package alfheim.common.item
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.client.gui.ItemsRemainingRenderHandler
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.Block
@@ -84,8 +83,6 @@ class ItemAstrolabe: ItemMod("Astrolabe") {
 		val world = player.worldObj
 		val block = blockToPlace.block
 		val meta = blockToPlace.meta
-		
-		if (InteractionSecurity.isPlacementBanned(player, x, y, z, world, block, meta)) return
 		
 		world.setBlock(x, y, z, block, meta, 3) // FIXME fire block place event and call all corresponding methods from block like onBlockPlacedBy etc.
 		

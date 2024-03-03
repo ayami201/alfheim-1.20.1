@@ -1,9 +1,6 @@
 package alfheim.common.integration
 
 import alexsocol.asjlib.*
-import alfheim.AlfheimCore
-import alfheim.common.core.handler.AlfheimConfigHandler
-import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
 import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.block.Block
@@ -11,9 +8,6 @@ import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.oredict.OreDictionary
-import tconstruct.smeltery.TinkerSmeltery
-import vazkii.botania.common.block.ModBlocks
-import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.lib.LibOreDict
 
 object ThermalFoundationIntegration {
@@ -37,13 +31,6 @@ object ThermalFoundationIntegration {
 			OreDictionary.registerOre(LibOreDict.MANA_STEEL, ItemStack(it, 1, 70))
 			OreDictionary.registerOre(LibOreDict.MANASTEEL_NUGGET, ItemStack(it, 1, 102))
 		}
-	}
-	
-	fun addTinkersCastingIfNotLoaded() {
-		if (loaded) return
-		if (!AlfheimCore.TiCLoaded) return // just in case
-		
-		TinkersConstructAlfheimConfig.addSmelteryMeltCastGroup(AlfheimConfigHandler.materialIDs[TinkersConstructAlfheimConfig.MANASTEEL], TinkerSmeltery.moltenMithrilFluid, ModBlocks.storage, 0, ModItems.manaResource, 0, ModItems.manaResource, 17)
 	}
 	
 	@Suppress("unused")

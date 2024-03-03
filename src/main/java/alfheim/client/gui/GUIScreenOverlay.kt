@@ -3,6 +3,8 @@ package alfheim.client.gui
 import alexsocol.asjlib.*
 import alfheim.api.lib.LibResourceLocations
 import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.handler.SheerColdHandler.cold
+import alfheim.common.item.equipment.bauble.ItemPendant
 import alfheim.common.item.relic.ItemTankMask.Companion.MAX_CORRUPTION
 import alfheim.common.item.relic.ItemTankMask.Companion.limboCounter
 import cpw.mods.fml.common.eventhandler.*
@@ -18,6 +20,18 @@ object GUIScreenOverlay: Gui() {
 	fun onOverlayRendering(event: RenderGameOverlayEvent.Post) {
 		if (event.type != RenderGameOverlayEvent.ElementType.HELMET) return
 		val player = mc.thePlayer
+		
+		val cold = player.cold / 100f
+		
+		if (cold > 0f && !ItemPendant.canProtect(player, ItemPendant.Companion.EnumPrimalWorldType.NIFLHEIM, 0)) {
+			glColor4f(1f, 1f, 1f, cold)
+			drawScreen(LibResourceLocations.freezing)
+			glColor4f(1f, 1f, 1f, 1f)
+		} else if (cold < 0f && !ItemPendant.canProtect(player, ItemPendant.Companion.EnumPrimalWorldType.MUSPELHEIM, 0)) {
+			glColor4f(1f, 1f, 1f, -cold)
+			drawScreen(LibResourceLocations.heating)
+			glColor4f(1f, 1f, 1f, 1f)
+		}
 		
 		val corrupt = player.limboCounter / MAX_CORRUPTION.F
 		if (corrupt > 0 && !player.capabilities.isCreativeMode) {

@@ -5,8 +5,8 @@ import alfheim.api.ModInfo
 import alfheim.api.entity.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
+import thaumcraft.common.tiles.TileInfusionMatrix
 
 class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 	
@@ -40,12 +40,14 @@ class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 		if (!ModInfo.DEV) return false
 		
 		try {
-			val te = world.getTileEntity(x, y, z)
-			if (te != null) {
-				val nbt = NBTTagCompound()
-				te.writeToNBT(nbt)
-				for (s in ASJUtilities.toString(nbt).split("\n")) ASJUtilities.chatLog(s, world)
-			}
+			val te = world.getTileEntity(x, y, z) as TileInfusionMatrix
+			ASJUtilities.chatLog("${te.symmetry}")
+			te.checkSurroundings = true
+//			if (te != null) {
+//				val nbt = NBTTagCompound()
+//				te.writeToNBT(nbt)
+//				for (s in ASJUtilities.toString(nbt).split("\n")) ASJUtilities.chatLog(s, world)
+//			}
 		} catch (e: Throwable) {
 			ASJUtilities.log("Oops!")
 			e.printStackTrace()

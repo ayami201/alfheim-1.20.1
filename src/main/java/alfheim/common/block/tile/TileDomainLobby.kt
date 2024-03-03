@@ -123,7 +123,7 @@ class TileDomainLobby: TileImmobile() {
 			
 			if (domainWorld.isAirBlock(x, 0, z)) {
 				val (i, j, k) = domain.genOffset
-				SchemaUtils.generate(domainWorld, x + i, 64 + j, z + k, domain.schema)
+				SchemaUtils.generate(domainWorld, x + i, 64 + j, z + k, domain.schema, true)
 				// mark that domain is generated
 				domainWorld.setBlock(x, 0, z, AlfheimBlocks.barrier)
 			} else if (getEntitiesWithinAABB(domainWorld, EntityPlayer::class.java, domain.boundBox.copy().offset(x.D, 64.0, z.D)).isNotEmpty()) continue

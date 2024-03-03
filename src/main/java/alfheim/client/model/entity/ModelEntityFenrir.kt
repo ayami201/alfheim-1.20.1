@@ -1,7 +1,6 @@
 package alfheim.client.model.entity
 
 import alexsocol.asjlib.*
-import alfheim.common.entity.boss.EntityFenrir
 import net.minecraft.client.model.*
 import net.minecraft.entity.*
 import net.minecraft.util.MathHelper
@@ -204,25 +203,12 @@ object ModelEntityFenrir: ModelBase() {
 	}
 	
 	override fun setLivingAnimations(entity: EntityLivingBase, f1: Float, f2: Float, f3: Float) {
-		val (hz, mz, bz, tz) = if (entity is EntityFenrir) {
-			arrayOf(entity.getShakeAngle(f3, 0f),
-			        entity.getShakeAngle(f3, -0.08f),
-			        entity.getShakeAngle(f3, -0.16f),
-			        entity.getShakeAngle(f3, -0.2f))
-		} else {
-			Array(4) { 0f }
-		}
-		
 		tail.rotateAngleY = 0f
 		tail.setRotationPoint(0f, 12f, 8f)
 		leg1.rotateAngleX = MathHelper.cos(f1 * 0.6662f) * 1.4f * f2
 		leg2.rotateAngleX = MathHelper.cos(f1 * 0.6662f + Math.PI.F) * 1.4f * f2
 		leg3.rotateAngleX = MathHelper.cos(f1 * 0.6662f + Math.PI.F) * 1.4f * f2
 		leg4.rotateAngleX = MathHelper.cos(f1 * 0.6662f) * 1.4f * f2
-		head.rotateAngleZ = hz
-		mane.rotateAngleZ = mz
-		body.rotateAngleZ = bz
-		tail.rotateAngleZ = tz
 	}
 	
 	override fun setRotationAngles(f: Float, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float, entity: Entity) {

@@ -1,7 +1,6 @@
 package alfheim.common.entity
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.common.core.handler.*
 import alfheim.common.potion.PotionEternity
 import cpw.mods.fml.relauncher.*
@@ -43,7 +42,6 @@ class EntityGleipnir: Entity {
 		
 		val targets = getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox)
 		targets.remove(thrower)
-		targets.removeAll { !InteractionSecurity.canInteractWithEntity(thrower, it) }
 		
 		if (AlfheimConfigHandler.enableMMO) {
 			val pt = CardinalSystem.PartySystem.getParty(thrower)

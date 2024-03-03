@@ -32,7 +32,6 @@ import vazkii.botania.common.block.subtile.functional.*
 import vazkii.botania.common.block.subtile.generating.*
 import vazkii.botania.common.block.tile.TileAlfPortal
 import vazkii.botania.common.core.handler.InternalMethodHandler
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.entity.EntityMagicLandmine
 import vazkii.botania.common.item.ItemGrassHorn
 import vazkii.botania.common.item.relic.*
@@ -69,7 +68,7 @@ object Botania18AndUpBackport {
 	
 	@JvmStatic
 	@Hook(injectOnExit = true, targetMethod = "getEntitiesWithinAABB")
-	fun originalNameAppearsInCodeCompletionSoMovedItToTargetMethodName(clazz: Class<*>, axisAlignedBB: AxisAlignedBB, @ReturnValue result: MutableList<*>?): List<*>? {
+	fun originalNameAppearsInCodeCompletionSoMovedItToTargetMethodName(world: World?, clazz: Class<*>, axisAlignedBB: AxisAlignedBB, @ReturnValue result: MutableList<*>?): List<*>? {
 		if (shouldntHookRannuncarpus || result == null || filter.isEmpty()) return result
 		shouldntHookRannuncarpus = false
 		
@@ -136,15 +135,11 @@ object Botania18AndUpBackport {
 		shouldHookVines = false
 	}
 	
-	// ######## https://botaniamod.net/changelog.html#r1-15-384-fake #5
+	// ######## https://discord.com/channels/697393117791256607/1186914153613508700
 	
 	@JvmStatic
-	@Hook
-	fun onUnequipped(ring: ItemLokiRing, stack: ItemStack?, player: EntityLivingBase?) {
-		ItemNBTHelper.setInt(stack, "xOrigin", 0)
-		ItemNBTHelper.setInt(stack, "yOrigin", -1)
-		ItemNBTHelper.setInt(stack, "zOrigin", 0)
-	}
+	@Hook(returnCondition = ReturnCondition.ALWAYS)
+	fun onUnequipped(ring: ItemLokiRing, stack: ItemStack?, player: EntityLivingBase?) = Unit
 	
 	// ######## https://botaniamod.net/changelog.html#r1-11-378-fake #16
 	

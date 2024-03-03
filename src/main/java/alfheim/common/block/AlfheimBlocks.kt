@@ -106,6 +106,7 @@ object AlfheimBlocks {
 	val manaFluidBlock: Block
 	val manaInfuser: Block
 	val manaTuner: Block
+	val nidhoggTooth: Block
 	val niflheimBlock: Block
 	val niflheimPortal: Block
 	val poisonIce: Block
@@ -152,6 +153,7 @@ object AlfheimBlocks {
 	val treeCrafterBlock: Block
 	val treeCrafterBlockRB: Block
 	val treeCrafterBlockAU: Block
+	val worldTree: Block
 	val yggFlower: Block
 	
 	// DENDROLOGY
@@ -301,6 +303,7 @@ object AlfheimBlocks {
 		manaFluidBlock = BlockManaFluid()
 		manaInfuser = BlockManaInfuser()
 		manaTuner = BlockManaTuner()
+		nidhoggTooth = BlockNidhoggTooth()
 		niflheimBlock = BlockNiflheim()
 		niflheimPortal = BlockNiflheimPortal()
 		poisonIce = BlockNiflheimIce()
@@ -351,6 +354,7 @@ object AlfheimBlocks {
 		treeCrafterBlock = BlockTreeCrafter("treeCrafter", irisPlanks)
 		treeCrafterBlockRB = BlockTreeCrafter("treeCrafterRB", rainbowPlanks)
 		treeCrafterBlockAU = BlockTreeCrafter("treeCrafterAU", auroraPlanks)
+		worldTree = BlockWorldTree()
 		yggFlower = BlockYggFlower()
 		
 		// DENDOROLOGY
@@ -771,9 +775,7 @@ object AlfheimBlocks {
 	
 	fun registerFlora() {
 		if (AlfheimConfigHandler.gourmaryllisDifficulty > 0) {
-			val subTiles = ASJReflectionHelper.getStaticValue<BotaniaAPI, BiMap<String, Class<out SubTileEntity>>>(BotaniaAPI::class.java, "subTiles")!!
-			
-			subTiles[LibBlockNames.SUBTILE_GOURMARYLLIS] =
+			BotaniaAPI.subTiles[LibBlockNames.SUBTILE_GOURMARYLLIS] =
 				if (AlfheimConfigHandler.gourmaryllisDifficulty == 1)
 					SubTileGourmaryllisHard::class.java
 				else
@@ -789,6 +791,7 @@ object AlfheimBlocks {
 		addSubFlower(SubTileRainFlower::class.java, "rainFlower")
 		addSubFlower(SubTileSnowFlower::class.java, "snowFlower")
 		addSubFlower(SubTileStormFlower::class.java, "stormFlower")
+		addSubFlower(SubTileTradescantia::class.java, "tradescantia")
 		addSubFlower(SubTileWindFlower::class.java, "windFlower")
 		addSubFlower(SubTileWitherAconite::class.java, "witherAconite")
 		

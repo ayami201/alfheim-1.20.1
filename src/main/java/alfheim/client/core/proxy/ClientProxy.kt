@@ -3,6 +3,7 @@ package alfheim.client.core.proxy
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.*
 import alfheim.AlfheimCore
+import alfheim.api.ModInfo
 import alfheim.api.event.AlfheimModeChangedEvent
 import alfheim.api.item.DoubleBoundItemRender
 import alfheim.api.lib.*
@@ -61,7 +62,7 @@ object ClientProxy : CommonProxy() {
 		LibRenderIDs
 		
 		if (ShaderHelper.useShaders()) {
-			ASJShaderHelper.crashOnError = false
+			ASJShaderHelper.crashOnError = ModInfo.DEV
 			
 			LibShaderIDs.idColor3d = ASJShaderHelper.createProgram("shaders/position.vert", "shaders/color3d.frag")
 			LibShaderIDs.idGravity = ASJShaderHelper.createProgram(null, "shaders/gravity.frag")
@@ -92,24 +93,27 @@ object ClientProxy : CommonProxy() {
 		MinecraftForgeClient.registerItemRenderer(AlfheimFluffBlocks.doubleBlock.toItem(), RenderItemDoubleCamo<TileDoubleBlock>(LibRenderIDs.idDoubleBlock))
 		MinecraftForgeClient.registerItemRenderer(AlfheimFluffBlocks.table.toItem(), RenderItemDoubleCamo<TileTable>(LibRenderIDs.idTable))
 		
+		RenderingRegistry.registerBlockHandler(RenderBlockAlfheimPylons)
 		RenderingRegistry.registerBlockHandler(RenderBlockAnyavil)
 		RenderingRegistry.registerBlockHandler(RenderBlockBarrel)
 		RenderingRegistry.registerBlockHandler(RenderBlockChair)
 		RenderingRegistry.registerBlockHandler(RenderBlockComposite)
 		RenderingRegistry.registerBlockHandler(RenderBlockDomainLobby)
 		RenderingRegistry.registerBlockHandler(RenderBlockDoubleBlock)
+		RenderingRegistry.registerBlockHandler(RenderBlockFloodlight)
 		RenderingRegistry.registerBlockHandler(RenderBlockGrapeRedPlanted)
 		RenderingRegistry.registerBlockHandler(RenderBlockGrapeGreen)
 		RenderingRegistry.registerBlockHandler(RenderBlockAnomalyHarvester)
 		RenderingRegistry.registerBlockHandler(RenderBlockItemHolder)
 		RenderingRegistry.registerBlockHandler(RenderBlockManaTuner)
+		RenderingRegistry.registerBlockHandler(RenderBlockNidhoggTooth)
 		RenderingRegistry.registerBlockHandler(RenderBlockNiflheimSet)
 		RenderingRegistry.registerBlockHandler(RenderBlockPowerStone)
-		RenderingRegistry.registerBlockHandler(RenderBlockAlfheimPylons)
 		RenderingRegistry.registerBlockHandler(RenderSimpleDoubleBlock)
 		RenderingRegistry.registerBlockHandler(RenderBlockShrinePanel)
 		RenderingRegistry.registerBlockHandler(RenderBlockSpire)
 		RenderingRegistry.registerBlockHandler(RenderBlockTable)
+		RenderingRegistry.registerBlockHandler(RenderBlockWorldTree)
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAlfheimPortal::class.java, RenderTileAlfheimPortal)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAlfheimPylon::class.java, RenderTileAlfheimPylons)
@@ -121,6 +125,7 @@ object ClientProxy : CommonProxy() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileDomainLobby::class.java, RenderTileDomainLobby)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileFloatingFlowerRainbow::class.java, TileEntityRendererDispatcher.instance.mapSpecialRenderers[TileFloatingFlower::class.java] as RenderTileFloatingFlower)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileFloodLight::class.java, RenderTileFloodLight)
+		ClientRegistry.bindTileEntitySpecialRenderer(TileGaiaButton::class.java, RenderTileGaiaButton)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileHeadFlugel::class.java, RenderTileHeadFlugel)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileHeadMiku::class.java, RenderTileHeadMiku)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileIcyGeyser::class.java, RenderTileIcyGeyser)
@@ -132,6 +137,7 @@ object ClientProxy : CommonProxy() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileSpire::class.java, RenderTileSpire)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileStar::class.java, RenderStar)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileTradePortal::class.java, RenderTileTradePortal)
+		ClientRegistry.bindTileEntitySpecialRenderer(TileWorldTree::class.java, RenderTileWorldTree)
 		ClientRegistry.bindTileEntitySpecialRenderer(TileYggFlower::class.java, RenderTileYggFlower)
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityAlfheimPixie::class.java, RenderEntityAlfheimPixie)
@@ -142,6 +148,8 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityElf::class.java, RenderEntityElf)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFallingHang::class.java, RenderEntityFallingHang)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFenrir::class.java, RenderEntityFenrir)
+		RenderingRegistry.registerEntityRenderingHandler(EntityFenrirDome::class.java, RenderEntityFenrirDome)
+		RenderingRegistry.registerEntityRenderingHandler(EntityFenrirSlash::class.java, RenderEntityFenrirSlash)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFloatingIsland::class.java, RenderEntityFloatingIsland)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlugel::class.java, RenderEntityFlugel)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrozenViking::class.java, RenderEntityFrozenViking)

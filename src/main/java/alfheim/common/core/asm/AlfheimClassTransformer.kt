@@ -1,6 +1,6 @@
 package alfheim.common.core.asm
 
-import alfheim.api.ModInfo.OBF
+import alexsocol.patcher.asm.ASJHookLoader.Companion.OBF
 import alfheim.common.core.asm.hook.extender.ItemLensExtender
 import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.launchwrapper.IClassTransformer
@@ -28,11 +28,6 @@ class AlfheimClassTransformer: IClassTransformer {
 	var basicClass = byteArrayOf()
 	
 	override fun transform(name: String, transformedName: String, basicClass: ByteArray?): ByteArray? {
-		@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
-		transformedName as java.lang.String // fix of java.lang.ClassCircularityError: kotlin/text/StringsKt
-		
-		if (transformedName.startsWith("kotlin") || transformedName.startsWith("gloomyfolken")) return basicClass
-		
 		if (basicClass == null || basicClass.isEmpty()) return basicClass
 		
 		this.transformedName = transformedName

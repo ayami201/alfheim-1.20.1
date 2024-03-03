@@ -1,7 +1,6 @@
 package alfheim.common.item.lens
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import net.minecraft.block.Block
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.projectile.EntityThrowable
@@ -44,7 +43,6 @@ class LensDaisy: Lens() {
 			return isDead
 		
 		if (burst.hasAlreadyCollidedAt(x, y, z) || burst.isFake || entity.worldObj.isRemote) return false
-		if (entity.thrower != null && InteractionSecurity.isBreakingBanned(entity.thrower, x, y, z, world, block, meta)) return true
 		
 		if (block.isAir(world, x, y, z)) return false
 		

@@ -12,9 +12,19 @@ import net.minecraft.world.*
 
 open class EntityItemImmortal: Entity {
 	
+	var stack: ItemStack?
+		get() = dataWatcher.getWatchableObjectItemStack(2)
+		set(stack) {
+			dataWatcher.updateObject(2, stack)
+			dataWatcher.setObjectWatched(2)
+		}
+	
+	var hoverStart
+		get() = dataWatcher.getWatchableObjectFloat(3)
+		set(value) = dataWatcher.updateObject(3, value)
+	
 	var age = 0
 	var delayBeforeCanPickup = 0
-	var hoverStart = (Math.random() * Math.PI * 2.0).F
 	var lifespan = 6000
 	
 	constructor(world: World, origin: Entity, stack: ItemStack?): this(world, origin.posX, origin.posY, origin.posZ, stack) {
@@ -38,13 +48,14 @@ open class EntityItemImmortal: Entity {
 		
 		rotationYaw = (Math.random() * 360.0).F
 		isImmuneToFire = true
-//		motionX = (Math.random() * 0.20000000298023224 - 0.10000000149011612)
-//		motionY = 0.20000000298023224
-//		motionZ = (Math.random() * 0.20000000298023224 - 0.10000000149011612)
+		motionX = 0.0
+		motionY = 0.0
+		motionZ = 0.0
 	}
 	
 	override fun entityInit() {
-		getDataWatcher().addObjectByDataType(10, 5)
+		dataWatcher.addObjectByDataType(2, 5)
+		dataWatcher.addObject(3, (Math.random() * Math.PI * 2.0).F)
 	}
 	
 	override fun canTriggerWalking() = false
@@ -56,62 +67,49 @@ open class EntityItemImmortal: Entity {
 			}
 		}
 		
-		val stack = stack
+		val stack = stack ?: return setDead()
 		
-		if (stack == null) {
-			setDead()
-		} else {
-			super.onUpdate()
-			
-			if (delayBeforeCanPickup > 0) {
-				--delayBeforeCanPickup
+		super.onUpdate()
+		
+		if (delayBeforeCanPickup > 0) --delayBeforeCanPickup
+		
+		prevPosX = posX
+		prevPosY = posY
+		prevPosZ = posZ
+		
+		motionY -= 0.04
+		
+		noClip = func_145771_j(posX, (boundingBox.minY + boundingBox.maxY) / 2.0, posZ)
+		
+		moveEntity(motionX, motionY, motionZ)
+		
+		val flag = prevPosX.I != posX.I || prevPosY.I != posY.I || prevPosZ.I != posZ.I
+		
+		if (flag || ticksExisted % 25 == 0) {
+			if (worldObj.getBlock(this).material === Material.lava) {
+				motionY = 0.2
+				motionX = ((rand.nextDouble() - rand.nextDouble()) * 0.2)
+				motionZ = ((rand.nextDouble() - rand.nextDouble()) * 0.2)
+				playSound("random.fizz", 0.4f, 2f + rand.nextFloat() * 0.4f)
 			}
-			
-			prevPosX = posX
-			prevPosY = posY
-			prevPosZ = posZ
-			
-			motionY -= 0.04
-			
-			noClip = func_145771_j(posX, (boundingBox.minY + boundingBox.maxY) / 2.0, posZ)
-			
-			moveEntity(motionX, motionY, motionZ)
-			
-			val flag = prevPosX.I != posX.I || prevPosY.I != posY.I || prevPosZ.I != posZ.I
-			
-			if (flag || ticksExisted % 25 == 0) {
-				if (worldObj.getBlock(this).material === Material.lava) {
-					motionY = 0.2
-					motionX = ((rand.nextDouble() - rand.nextDouble()) * 0.2)
-					motionZ = ((rand.nextDouble() - rand.nextDouble()) * 0.2)
-					playSound("random.fizz", 0.4f, 2f + rand.nextFloat() * 0.4f)
-				}
-			}
-			
-			val f =
-				if (onGround)
-					worldObj.getBlock(this, y = -1).slipperiness * 0.98f
-				else
-					0.98f
-			
-			motionX *= f.D
-			motionY *= 0.98
-			motionZ *= f.D
-			
-			if (onGround) {
-				motionY *= -0.5
-			}
-			
-			++age
-			
-			val item = getDataWatcher().getWatchableObjectItemStack(10)
-			
-			if (!worldObj.isRemote && age >= lifespan && item == null)
-				setDead()
-			
-			if (item != null && item.stackSize <= 0)
-				setDead()
 		}
+		
+		val f =
+			if (onGround)
+				worldObj.getBlock(this, y = -1).slipperiness * 0.98f
+			else
+				0.98f
+		
+		motionX *= f.D
+		motionY *= 0.98
+		motionZ *= f.D
+		
+		if (onGround) motionY *= -0.5
+		
+		++age
+		
+		if (!worldObj.isRemote && age >= lifespan) setDead()
+		if (stack.stackSize <= 0) setDead()
 	}
 	
 	override fun handleWaterMovement() =
@@ -143,49 +141,33 @@ open class EntityItemImmortal: Entity {
 		val itemNBT = nbt.getCompoundTag("Item")
 		stack = ItemStack.loadItemStackFromNBT(itemNBT)
 		
-		val item = getDataWatcher().getWatchableObjectItemStack(10)
-		if (item == null || item.stackSize <= 0) {
+		if ((stack?.stackSize ?: 0) <= 0)
 			setDead()
-		}
 	}
 	
 	override fun onCollideWithPlayer(player: EntityPlayer) {
-		if (!worldObj.isRemote) {
-			if (delayBeforeCanPickup > 0)
-				return
+		if (worldObj.isRemote) return
+		if (delayBeforeCanPickup > 0) return
+		if (!canBePickedByPlayer(player)) return
+		
+		val itemstack = stack ?: return
+		val i = itemstack.stackSize
+		
+		if (delayBeforeCanPickup <= 0 /*&& lifespan - age <= 200*/ && (i <= 0 || player.inventory.addItemStackToInventory(itemstack))) {
+			player.playSoundAtEntity("random.pop", 0.2f, ((rand.nextFloat() - rand.nextFloat()) * 0.7f + 1f) * 2f)
 			
-			if (!canBePickedByPlayer(player))
-				return
+			if (!worldObj.isRemote) {
+				val entitytracker = (worldObj as WorldServer).entityTracker
+				entitytracker.func_151247_a(this, S0DPacketCollectItem(entityId, player.entityId))
+			}
 			
-			val itemstack = stack ?: return
-			
-			val i = itemstack.stackSize
-			
-			if (delayBeforeCanPickup <= 0 /*&& lifespan - age <= 200*/ && (i <= 0 || player.inventory.addItemStackToInventory(itemstack))) {
-				player.playSoundAtEntity("random.pop", 0.2f, ((rand.nextFloat() - rand.nextFloat()) * 0.7f + 1f) * 2f)
-				
-				if (!worldObj.isRemote) {
-					val entitytracker = (worldObj as WorldServer).entityTracker
-					entitytracker.func_151247_a(this, S0DPacketCollectItem(entityId, player.entityId))
-				}
-				
-				if (itemstack.stackSize <= 0) {
-					setDead()
-				}
+			if (itemstack.stackSize <= 0) {
+				setDead()
 			}
 		}
 	}
 	
 	open fun canBePickedByPlayer(player: EntityPlayer) = true
 	
-	override fun getCommandSenderName(): String {
-		return stack?.displayName ?: "-null-"
-	}
-	
-	var stack: ItemStack?
-		get() = getDataWatcher().getWatchableObjectItemStack(10)
-		set(stack) {
-			getDataWatcher().updateObject(10, stack)
-			getDataWatcher().setObjectWatched(10)
-		}
+	override fun getCommandSenderName() = stack?.displayName ?: "-null-"
 }

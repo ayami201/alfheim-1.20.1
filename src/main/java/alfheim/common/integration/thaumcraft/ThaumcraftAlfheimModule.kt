@@ -313,11 +313,11 @@ object ThaumcraftAlfheimModule {
 		CraftingManager.getInstance().recipeList.add(recipeElementiumWandCap)
 		
 		var cap = WandCap.caps[capElementiumName]!!
-		ASJReflectionHelper.setValue(cap, 0.95f, "baseCostModifier")
+		cap.baseCostModifier = 0.95f
 		cap.craftCost = 5
 		
 		cap = WandCap.caps[capElvoriumName]!!
-		ASJReflectionHelper.setValue(cap, 0.85f, "baseCostModifier")
+		cap.baseCostModifier = 0.85f
 		cap.craftCost = 8
 	}
 	
@@ -325,11 +325,11 @@ object ThaumcraftAlfheimModule {
 		CraftingManager.getInstance().recipeList.remove(recipeElementiumWandCap)
 		
 		var cap = WandCap.caps[capElementiumName]!!
-		ASJReflectionHelper.setValue(cap, 0.9f, "baseCostModifier")
+		cap.baseCostModifier = 0.9f
 		cap.craftCost = 6
 		
 		cap = WandCap.caps[capElvoriumName]!!
-		ASJReflectionHelper.setValue(cap, 0.8f, "baseCostModifier")
+		cap.baseCostModifier = 0.8f
 		cap.craftCost = 9
 	}
 	

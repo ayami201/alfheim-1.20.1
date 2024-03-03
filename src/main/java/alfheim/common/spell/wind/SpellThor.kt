@@ -2,7 +2,6 @@ package alfheim.common.spell.wind
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import net.minecraft.entity.EntityLivingBase
@@ -39,8 +38,6 @@ object SpellThor: SpellBase("thor", EnumRace.SYLPH, 6000, 1200, 30) {
 				5 -> ++x
 			}
 		}
-		
-		if (InteractionSecurity.isInteractionBanned(caster, x, y, z)) return SpellCastResult.NOTALLOW
 		
 		if (caster.worldObj.canBlockSeeTheSky(x, y, z) && caster.worldObj.getPrecipitationHeight(x, z) <= y) {
 			result = checkCast(caster)

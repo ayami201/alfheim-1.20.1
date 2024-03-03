@@ -99,15 +99,8 @@ open class CommonProxy {
 		ISpeedUpItem.eventForge()
 		IStepupItem.eventForge()
 		RelicNBTSyncHandler.eventForge()
-		
-		FMLCommonHandler.instance().bus().register(object {
-			@SubscribeEvent(priority = EventPriority.HIGHEST)
-			fun onConfigChanged(e: ConfigChangedEvent.OnConfigChangedEvent) {
-				if (e.modID == ModInfo.MODID) AlfheimConfigHandler.syncConfig()
-			}
-		})
-		
 		ContributorsPrivacyHelper
+		AlfheimConfigHandler.registerChangeHandler(ModInfo.MODID)
 	}
 	
 	open fun bloodFX(world: World, x: Double, y: Double, z: Double, lifetime: Int = 100, size: Float = 1f, gravity: Float = 1f) = Unit

@@ -88,6 +88,7 @@ import alfheim.common.block.AlfheimBlocks.netherSapling
 import alfheim.common.block.AlfheimBlocks.netherSlabs
 import alfheim.common.block.AlfheimBlocks.netherStairs
 import alfheim.common.block.AlfheimBlocks.netherWood
+import alfheim.common.block.AlfheimBlocks.nidhoggTooth
 import alfheim.common.block.AlfheimBlocks.niflheimBlock
 import alfheim.common.block.AlfheimBlocks.powerStone
 import alfheim.common.block.AlfheimBlocks.rainbowDirt
@@ -126,6 +127,7 @@ import alfheim.common.block.AlfheimBlocks.stalactite
 import alfheim.common.block.AlfheimBlocks.stalagmite
 import alfheim.common.block.AlfheimBlocks.subspacian
 import alfheim.common.block.AlfheimBlocks.tradePortal
+import alfheim.common.block.AlfheimBlocks.worldTree
 import alfheim.common.block.AlfheimFluffBlocks.chair
 import alfheim.common.block.AlfheimFluffBlocks.composite
 import alfheim.common.block.AlfheimFluffBlocks.curtainPlacer
@@ -238,7 +240,6 @@ import alfheim.common.item.AlfheimItems.gaiaSlayer
 import alfheim.common.item.AlfheimItems.gjallarhorn
 import alfheim.common.item.AlfheimItems.gleipnir
 import alfheim.common.item.AlfheimItems.gungnir
-import alfheim.common.item.AlfheimItems.holyGlass
 import alfheim.common.item.AlfheimItems.hyperBucket
 import alfheim.common.item.AlfheimItems.invisibilityCloak
 import alfheim.common.item.AlfheimItems.invisibleFlameLens
@@ -358,6 +359,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(Blocks.furnace, 8)
 		addBlock(ModBlocks.spreader, 4)
 		addBlock(anyavil)
+		addBlock(worldTree)
 		addBlock(spire)
 		addBlock(alfheimPylon)
 		addBlock(manaAccelerator)
@@ -441,7 +443,6 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(triquetrum)
 		addItem(armilla)
 		addItem(enlighter)
-		addItem(holyGlass)
 		addItem(lootInterceptor)
 		addItem(hyperBucket)
 		addItem(manaMirrorImba)
@@ -620,6 +621,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(stalactite)
 		addBlock(stalagmite)
 		addBlock(icicle)
+		addBlock(nidhoggTooth)
 		
 		addBlock(elvenOre)
 		

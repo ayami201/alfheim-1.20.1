@@ -3,6 +3,7 @@ package alfheim.common.block.alt
 import alexsocol.asjlib.*
 import alfheim.api.lib.LibOreDict.ALT_TYPES
 import alfheim.client.core.helper.*
+import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.base.BlockModRotatedPillar
 import alfheim.common.item.block.ItemUniqueSubtypedBlockMod
 import alfheim.common.lexicon.AlfheimLexiconData
@@ -32,7 +33,7 @@ class BlockAltWood(val set: Int): BlockModRotatedPillar(Material.wood), IFuelHan
 	init {
 		setBlockName("altWood$set")
 		isBlockContainer = true
-		blockHardness = 2F
+		blockHardness = 2f
 		if (ASJUtilities.isClient)
 			MinecraftForge.EVENT_BUS.register(this)
 		
@@ -50,6 +51,17 @@ class BlockAltWood(val set: Int): BlockModRotatedPillar(Material.wood), IFuelHan
 			-1f
 		else
 			super.getBlockHardness(world, x, y, z)
+	
+	override fun getPlayerRelativeBlockHardness(player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Float {
+		val meta = world.getBlockMetadata(x, y, z)
+		
+		return if (set == 1 &&
+		           meta != 14 && meta % 4 == 2 &&
+		           player.heldItem?.let { it.item === AlfheimBlocks.nidhoggTooth.toItem() } == true)
+			player.getBreakSpeed(this, false, meta, x, y, z) / blockHardness / 100f
+		else
+			super.getPlayerRelativeBlockHardness(player, world, x, y, z)
+	}
 	
 	override fun canSustainLeaves(world: IBlockAccess, x: Int, y: Int, z: Int) = !(set == 1 && world.getBlockMetadata(x, y, z) % 4 == 2)
 	

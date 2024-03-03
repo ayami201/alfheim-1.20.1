@@ -1,20 +1,27 @@
 Innovations:
- New Niflheim worldgen features
- Frozen Viking mob in Niflheim
- Elemental slime mob
- Lens to unlink bursts from spreader
- Finally finished Akashic Records
- Relics now are craftable
- Rebalanced Crysanthermum
- Effects for wine + champagne with "hidden" craft
- Barrels now has comparator output for ease of automation
- New decorative blocks
- Crackling stars binding is now relative (will break binding of existing stars)
- Booba render for Flügel
- Tuner codes got captions for colorblind people
- [ESM] Ocelots won't run away from cait sith players
+ Miniature world tree to teleport between linked points
+ Flower to automate villager trades
+ Improved frozen vikings AI
+ Changed loot in Niflheim chests
+ Infernal fruit effect can now keep player warm
+ Leather set can slow down sheer cold accumulation
+ Gaia returns summon item on despawn #298
+ Temperature mechanic improvements
+ Loki Ring now clears in craft grid instead of on unequip
+ zh_CN langs update
+ [TiC] New book for natural materials
 
 Fixes:
- Aesir ring was dropping 3 rings
- Applied entity elements clash with existing elements
- Existing Botania flowers breaking when first installing Alfheim
+ Tuner recipes with uppercase not working
+ Flugel was not summonable with certain tech blocks
+ Fruit of Grisaia bad mana consumption algo
+ Daolos crash on water hits
+ Gaia liquid check range
+ Earth elemental mobs dying from poison
+ Elemental damage for primal bosses
+ Pathfinding through anomalies
+ Animated torch block updates
+ [MMO] Crash on team mana sync
+ [NEI] Corporea button requests when client lang is different from server
+ [TC] Vis discount on revealing helmets
+ [TiC] Material parts and shards were visible

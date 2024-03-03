@@ -1,7 +1,6 @@
 package alfheim.common.item.equipment.tool.terrasteel
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.item.equipment.tool.manasteel.ItemManasteelHoe
 import alfheim.common.item.relic.*
@@ -64,8 +63,6 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 	}
 	
 	fun applyBonemeal(stack: ItemStack, world: World, x: Int, y: Int, z: Int, player: EntityPlayer): Boolean {
-		if (InteractionSecurity.isInteractionBanned(player, x, y, z, world)) return false // nope
-		
 		val block = world.getBlock(x, y, z) as? IGrowable ?: return false
 		
 		if (GameRegistry.findUniqueIdentifierFor(block as Block).toString() == "ExtraUtilities:plant/ender_lilly") return false
@@ -75,31 +72,24 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 			return false
 		
 		if (event.result == Event.Result.ALLOW) {
-			if (!world.isRemote)
-				ToolCommons.damageItem(stack, 1, player, MANA_PER_ACTION)
-			
+			ToolCommons.damageItem(stack, 1, player, MANA_PER_ACTION)
 			return true
 		}
-		
 		
 		if (!block.func_149851_a(world, x, y, z, world.isRemote)) {
 			block.updateTick(world, x, y, z, world.rand)
 			return false
 		}
 		
-		if (!world.isRemote) {
-			if (block.func_149852_a(world, world.rand, x, y, z))
-				block.func_149853_b(world, world.rand, x, y, z)
-			
-			ToolCommons.damageItem(stack, 1, player, MANA_PER_ACTION)
-		}
+		if (!world.isRemote && block.func_149852_a(world, world.rand, x, y, z))
+			block.func_149853_b(world, world.rand, x, y, z)
+		
+		ToolCommons.damageItem(stack, 1, player, MANA_PER_ACTION)
 		
 		return true
 	}
 	
 	fun replant(stack: ItemStack, world: World, x: Int, y: Int, z: Int, player: EntityPlayer): Boolean {
-		if (InteractionSecurity.isInteractionBanned(player, x, y, z, world)) return false // nope
-		
 		val block = world.getBlock(x, y, z) as? BlockCrops ?: return false
 		val meta = world.getBlockMetadata(x, y, z)
 		
@@ -127,7 +117,6 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 	}
 	
 	fun plantAvailableSeeds(stack: ItemStack, world: World, x: Int, y: Int, z: Int, player: EntityPlayer): Boolean {
-		if (InteractionSecurity.isPlacementBanned(player, x, y + 1, z, world)) return false // nope
 		if (!world.isAirBlock(x, y + 1, z)) return false // no place
 		
 		val soil = world.getBlock(x, y, z)

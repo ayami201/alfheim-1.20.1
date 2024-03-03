@@ -39,7 +39,7 @@ object WorldGenAlfheim: IWorldGenerator {
 			(world.getTileEntity(2, 226, -45) as TileYggFlower).setup()
 		}
 		if (chunkX == 0 && chunkZ == -6) {
-			SchemaUtils.generate(world, 0, 6, -96, SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/FenrirCave"))
+			SchemaUtils.generate(world, 0, 6, -96, "${ModInfo.MODID}/schemas/FenrirCave", false)
 			(world.getTileEntity(0, 8, -70) as TileDomainLobby).apply {
 				lock(0, 8, -70, AlfheimConfigHandler.dimensionIDAlfheim)
 				name = "Fenrir"

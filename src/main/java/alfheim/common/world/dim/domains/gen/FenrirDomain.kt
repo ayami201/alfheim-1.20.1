@@ -1,18 +1,26 @@
 package alfheim.common.world.dim.domains.gen
 
-import alexsocol.asjlib.getBoundingBox
+import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.api.world.domain.Domain
 import alfheim.client.render.world.SkyRendererDomains
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.entity.boss.EntityFenrir
+import alfheim.common.world.dim.domains.WorldProviderDomains
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ChunkCoordinates
 import net.minecraft.world.World
 
 object FenrirDomain: Domain(ModInfo.MODID, "Fenrir", 1, getBoundingBox(-63, -1, -32, 63, 31, 94), ChunkCoordinates(0, 0, 31)) {
 	
-	override val skyRenderer = object: SkyRendererDomains(0xFFFFEECCU, 0xFFFFFBF2U) {}
+	override val skyRenderer = object: SkyRendererDomains({
+		val stage2 = WorldProviderDomains.getDomainAtPlayer(mc.thePlayer)
+			?.takeIf { it is FenrirDomain }
+			?.let { getEntitiesWithinAABB(mc.theWorld, EntityFenrir::class.java, it.boundBox).firstOrNull() }
+			?.let { it.stage > 1 } ?: false
+		
+		if (stage2) 0XFF00407FU to 0xFF000000U else 0xFFFFEECCU to 0xFFFFFBF2U
+	}) {}
 	
 	override val firstConquerors = arrayOf("Kompotik")
 	override val firstConquerorsUnknown = arrayOf("ᚲᛟᛗᛈᛟᛏᛁᚲ")

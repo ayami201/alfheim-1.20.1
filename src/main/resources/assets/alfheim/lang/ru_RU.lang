@@ -197,6 +197,7 @@ tile.alfheim:ManaTuner.name=Мана-настройщик
 tile.alfheim:MikuHeadBlock.name=Голова Мику
 tile.botania:miniIslandRainbow0.name=Парящий цветок Бифроста
 tile.alfheim:MuspelheimFire.name=Вечный огонь Муспельхейма
+tile.NidhoggTooth.name=Обломок зуба Нидхёгга
 tile.NiflheimBlock.Bricks.name=Промёрзшие каменные кирпичи
 tile.NiflheimBlock.Chiseled.name=Резные промёрзшие каменные кирпичи
 tile.NiflheimBlock.Cobblestone.name=Промёрзший булыжник
@@ -330,6 +331,9 @@ tile.alfheim:stormFlower.lore=Шокирующе мощный!
 tile.alfheim:Subspacian.name=Подпространственник
 tile.alfheim:Table.name=Стол
 tile.alfheim:TradePortal.name=Ядро врат Мидгарда
+tile.alfheim:tradescantia.name=Традесканция
+tile.botania:flower.tradescantia.name=Традесканция
+tile.alfheim:tradescantia.lore=Самый еврейский из всех
 tile.vafthrudnir.name=Душа Вафтруднира
 tile.WhiteGrape.name=Зелёный виноград
 tile.alfheim:windFlower.name=Ветролистник
@@ -341,6 +345,7 @@ tile.alfheim:witherAconite.lore=Он пожирает адские звёзды.
 tile.Wisdomwood0.name=Замшелые доски из Иггдрасиля
 tile.Wisdomwood1.name=Обрамлённые доски из Иггдрасиля
 tile.Wisdomwood2.name=Резные доски из Иггдрасиля
+tile.alfheim:WorldTree.name=Миниатюрное мировое древо
 tile.alfheim:YggdrasilFlower.name=Цветок Иггдрасиля
 
 #########################################################___ПРЕДМЕТЫ___#########################################################
@@ -390,6 +395,7 @@ item.ElvoriumBoots.name=Ботинки из эльвория
 item.ElvoriumChestplate.name=Кираса из эльвория
 item.ElvoriumHelmet.name=Шлем из эльвория
 item.ElvoriumHelmetRevealing.name=Шлем откровения из эльвория
+item.alfheim:ElementalSlimeBall.COMMON.name=Элементальный сгусток слизи
 item.alfheim:ElementalSlimeBall.AIR.name=Сгусток слизи воздуха
 item.alfheim:ElementalSlimeBall.DARKNESS.name=Сгусток слизи тьмы
 item.alfheim:ElementalSlimeBall.EARTH.name=Сгусток слизи земли
@@ -723,6 +729,10 @@ alfheim.potion.nineLifes=Девять жизней
 alfheim.potion.nineLifes.postfix=Зелье девяти жизней
 alfheim.potion.noclip=Ноклип
 alfheim.potion.noclip.postfix=Зелье ноклипа
+alfheim.potion.overcold=Чрезвычайный холод
+alfheim.potion.overcold.postfix=Зелье сильнейшего холода
+alfheim.potion.overheat=Пылающая жара
+alfheim.potion.overheat.postfix=Зелье пылающего жара
 alfheim.potion.overmage=Овермаг
 alfheim.potion.overmage.postfix=Зелье концентрации маны
 alfheim.potion.possession=Одержимость
@@ -768,6 +778,7 @@ alfheimmisc.flugel.notallowed=Глупый смертный! Ты даже не 
 alfheimmisc.flugel.peacefulNoob=Вы пытаетесь активировать ритуал, но миролюбивая атмосфера Вашего мира мешает Вам. Возможно, Вам стоит что-то с этим сделать.
 alfheimmisc.flugel.tooweak.false=Вы пытаетесь активировать ритуал, но душа выпадает из Ваших дрожащих рук. Вы думаете, что прежде чем призывать такое могущественное существо, Вам следует попробовать себя в каком-нибудь менее опасном сражении.
 alfheimmisc.flugel.tooweak.true=Вы пытаетесь активировать ритуал, но горн выпадает из Ваших дрожащих рук. Вы думаете, что прежде чем призывать такое могущественное существо, Вам следует попробовать себя в каком-нибудь менее опасном сражении.
+alfheimmisc.flugel.used=Когда вы пытаетесь активировать ритуал, энергия в него не поступает так, как раньше. Возможно, он просто изношен и ничего не поделаешь.
 
 alfheimmisc.gaia.wrongitem=Похоже, эта жертва не приводит ни к какому эффекту в этом мире...
 
@@ -866,6 +877,7 @@ alfheimmisc.newentry=Вы открыли новое знание в своём �
 alfheimmisc.nowayout=Прости, но я тебя не выпущу - твоя душа слишком истощена и мне она уже не интересна.
 alfheimmisc.quandex=Материальный квандекс в руках!
 alfheimmisc.relic=&6Реликвия&7
+alfheimmisc.relic.fail=Вы не можете удержать %s в руках
 alfheimmisc.saveIvy=С нерушимым плющом
 alfheimmisc.skintoggle0=Скин будет Ваш
 alfheimmisc.skintoggle1=Скин будет эльфийский
@@ -916,24 +928,25 @@ alfheimmisc.waila.trade.request=Запрос:
 
 death.attack.anomaly=%s подошёл слишком близко к аномалии
 death.attack.bleeding=%s истёк кровью
-death.attack.gravity=%s раздавлен гравитацией
+death.attack.gravity=%s был раздавлен гравитацией
 death.attack.lightning=%s был убит молнией
 death.attack.mark=%s умер от проклятия
 death.attack.nifleice=%s замёрз навечно
 death.attack.poison=%s умер от отравления
-death.attack.possession=%s поглощён пустотой
+death.attack.possession=%s был поглощён пустотой
 death.attack.sacrifice=%s принёс себя в жертву Тьме
 death.attack.soulburn=Душа %s сгорела
 
-death.attack.darkness_FF=%s убит в обмен на жертву %s
+death.attack.darkness_FF=%s был убит в обмен на жертву %s
 death.attack.firewall=%s умер при попытке пройти сквозь стену огня %s
 death.attack.hammerfall=%s пал от могучего молота %s
-death.attack.indirectLightning=%s убит молнией %s
-death.attack.lightningShieldEffect=%s убит молнией %s
+death.attack.indirectLightning=%s был убит молнией %s
+death.attack.lightningShieldEffect=%s был убит молнией %s
 death.attack.missile=%s был разорван в клочья ракетным штормом %s
 death.attack.mortar=%s был раздавлен мортирой %s
 death.attack.shadow=%s умер от теней %s
-death.attack.water=%s разрезан на части водным потоком %s
+death.attack.water=%s был разрезан на части водным потоком %s
+death.attack.wind=%s был разорван в клочья ураганом %s
 death.attack.windblade=%s был разрезан пополам косой ветра %s
 
 entity.alfheim.Butterfly.name=Бабочка
@@ -1193,13 +1206,14 @@ elvenstory.selectgender=Выберите пол
 elvenstory.selectrace=Выберите расу
 
 key.categories.alfheim=Альфхейм
-key.lolicorn.desc=Призвать Лоликорна
+key.akashic.desc=Сложить реликвию обратно
 key.esmability.desc=Переключение эльфийской способности
 key.cast.desc=Каст заклинания
-key.uncast.desc=Отмена каста
 key.flight.desc=Эльфийский полёт
+key.lolicorn.desc=Призвать Лоликорна
 key.selmob.desc=Выбор вражеской цели
 key.selteam.desc=Выбор участника группы
+key.uncast.desc=Отмена каста
 mes.flight.unavailable=Полёт не доступен в этом измерении
 
 race.HUMAN.name=ЧЕЛОВЕК
@@ -1394,7 +1408,7 @@ misc.alfheim.tline3=Она воскликнула о развращённост�
 
 attribute.name.alfheim.godSlayingAttackDamage=к когнитивному урону
 
-death.attack.alfheim.oculus.player=%1$s был убит идеальным решением %2$s
+death.attack.alfheim.oculus.player=%1$s был сражен идеальной реакцией %2$s
 
 misc.alfheim:temperature.0=Предупреждение о переохлаждении
 misc.alfheim:temperature.1=Мучительно холодно
@@ -1726,8 +1740,6 @@ general.integration=Интеграция
 general.integration.tooltip=Интеграция с другими модификациями.
 chatLimiters=Ограничители чата
 chatLimiters.tooltip=Ограничители чата для форматирования особенных строк чата при использовании плагинов чата.
-interactionSecurity=Взаимодействие с регионами
-interactionSecurity.tooltip=Менеджер безопасности регионов. Посетите вики Alfheim для получения дополнительной информации.
 poolRainbowCapacity=Сказочный бассейн маны
 poolRainbowCapacity.tooltip=Ёмкость сказочного бассейна маны [для пользовательских модпаков с ОГРОМНЫМ оборотом маны. Применимо только к НОВЫМ бассейнам маны].
 
@@ -1907,7 +1919,7 @@ wire.overpowered.tooltip=Установите значение этого пар
 
 ##########################################################___Dialogs___#########################################################
 
-dialog.occupied=Подожди, я уже разговариваю!
+dialog.occupied=Wait, I'm already talking!
 dialog.nodialog-1=Get away from me!
 dialog.nodialog0=I have nothing to say to you.
 

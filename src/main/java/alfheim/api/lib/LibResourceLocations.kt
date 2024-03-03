@@ -2,6 +2,7 @@ package alfheim.api.lib
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ResourceLocationAnimated
+import alexsocol.patcher.asm.ASJHookLoader
 import alfheim.api.ModInfo
 import net.minecraft.util.ResourceLocation
 
@@ -55,7 +56,9 @@ object LibResourceLocations {
 	val fenrirArea = ResourceLocationIL(ModInfo.MODID, "textures/misc/IceArea.png")
 	val fenrirClaw = ResourceLocationIL(ModInfo.MODID, "textures/items/FenrirClaws0.png")
 	val fenrirClawOverlay = ResourceLocationIL(ModInfo.MODID, "textures/items/FenrirClaws1.png")
+	var floodlight = ResourceLocationIL(ModInfo.MODID, "textures/model/block/Floodlight.png")
 	var flowerBagExtended = ResourceLocationIL(ModInfo.MODID, "textures/gui/flowerBagExtended.png")
+	val freezing = ResourceLocationIL(ModInfo.MODID, "textures/misc/freezing.png")
 	val frozenViking = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/FrozenViking.png")
 	val futhark = ResourceLocationIL(ModInfo.MODID, "textures/misc/FutharkMono.png")
 	val gaiaPylon = ResourceLocationIL(ModInfo.MODID, "textures/model/block/GaiaPylon.png")
@@ -70,6 +73,7 @@ object LibResourceLocations {
 	val harp = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/harp.png")
 	val harvester = ResourceLocationIL(ModInfo.MODID, "textures/model/block/Harvester.png")
 	val health = ResourceLocationIL(ModInfo.MODID, "textures/gui/health.png")
+	val heating = ResourceLocationIL(ModInfo.MODID, "textures/misc/heating.png")
 	val hotSpells = ResourceLocationIL(ModInfo.MODID, "textures/gui/HotSpells.png")
 	val ice = ResourceLocation("textures/blocks/ice.png")
 	val iceLens = ResourceLocationIL(ModInfo.MODID, "textures/misc/IceLens.png")
@@ -111,7 +115,8 @@ object LibResourceLocations {
 	val roricorn = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Roricorn.png")
 	val sandstormWeather = ResourceLocationIL(ModInfo.MODID, "textures/environment/sandstorm.png")
 	val skin = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/AlexSocol.png")
-	val slash = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/slash.png")
+	val slashSun = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/slash_sun.png")
+	val slashWind = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/slash_wind.png")
 	val sleipnir = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Sleipnir.png")
 	val snow = ResourceLocation("textures/blocks/snow.png")
 	val snowKatana = ResourceLocationIL(ModInfo.MODID, "textures/model/item/Katana.png")
@@ -143,6 +148,7 @@ object LibResourceLocations {
 	val warBanner = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/warBanner.png")
 	val warBannerAlt = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/warBannerAlt.png")
 	val wind = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/wind.png")
+	val worldTree = ResourceLocationIL(ModInfo.MODID, "textures/model/block/WorldTree.png")
 	val yggFlower = ResourceLocationIL(ModInfo.MODID, "textures/model/block/YggFlower.png")
 	val yordinPylon = ResourceLocationIL(ModInfo.MODID, "textures/model/block/ElvenPylon.png")
 	val yordinPylonOld = ResourceLocationIL(ModInfo.MODID, "textures/model/block/ElvenPylonOld.png")
@@ -284,7 +290,7 @@ object LibResourceLocations {
 			val initLater = HashSet<ResourceLocationIL>()
 			
 			fun init(rl: ResourceLocationIL) {
-				if (ModInfo.OBF) return
+				if (ASJHookLoader.OBF) return
 				
 				if (mc.renderEngine == null) {
 					initLater.add(rl)

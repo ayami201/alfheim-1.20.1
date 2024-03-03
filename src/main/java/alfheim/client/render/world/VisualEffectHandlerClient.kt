@@ -478,8 +478,8 @@ object VisualEffectHandlerClient {
 	                         )
 	
 	fun spawnWhirl(x: Double, y: Double, z: Double, set: Int) {
-		for (i in 0..90) {
-			mc.effectRenderer.addEffect(EntityTornadoFX(mc.theWorld, x, y + i * 0.1, z, i * 0.1 / 3 + 1, 0.0, 0.0, whirlBlocks[set].random(mc.theWorld.rand)!!, 0, 0, 20))
+		repeat(90) {
+			mc.effectRenderer.addEffect(EntityTornadoFX(mc.theWorld, x, y + it * 0.1, z, it * 0.1 / 3 + 1, 0.0, 0.0, whirlBlocks[set].random(mc.theWorld.rand)!!, 0, 0, 20))
 		}
 	}
 	

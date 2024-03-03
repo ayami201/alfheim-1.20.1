@@ -3,11 +3,15 @@ package alfheim.client.render.tile
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.render.ASJRenderHelper
+import alfheim.api.ModInfo
+import alfheim.api.lib.LibResourceLocations
 import alfheim.common.block.tile.TileFloodLight
 import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.ResourceLocation
+import net.minecraftforge.client.model.AdvancedModelLoader
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import kotlin.collections.component1
@@ -17,9 +21,20 @@ import kotlin.math.*
 
 object RenderTileFloodLight: TileEntitySpecialRenderer() {
 	
+	val model = AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/Floodlight.obj"))!!
+	
 	override fun renderTileEntityAt(tile: TileEntity, x: Double, y: Double, z: Double, partialTicks: Float) {
-		if (tile !is TileFloodLight || !tile.redstone) return
+		if (tile !is TileFloodLight) return
 		
+		glPushMatrix()
+		glTranslated(x, y, z)
+		glRotatef(180f, 0f, 0f, 1f)
+		glTranslatef(-0.5f, -1f, 0.5f)
+		mc.renderEngine.bindTexture(LibResourceLocations.floodlight)
+		model.renderAll()
+		glPopMatrix()
+		
+		if (!tile.redstone) return
 		val world = tile.worldObj ?: mc.theWorld ?: return
 		if (world.getBlock(tile.xCoord, tile.yCoord - 1, tile.zCoord)?.isOpaqueCube == true) return
 		
@@ -59,7 +74,7 @@ object RenderTileFloodLight: TileEntitySpecialRenderer() {
 		} else 12.0
 		
 		val step = AlfheimConfigHandler.floodLightQuality
-		tes.addVertex(pos.x, pos.y + 1, pos.z)
+		tes.addVertex(pos.x, pos.y + 0.5, pos.z)
 		
 		for (deg in 0..360 step step) {
 			val angle = Math.toRadians(deg.D)

@@ -9,7 +9,7 @@ import alfheim.common.entity.boss.EntityFenrir
 import net.minecraft.client.renderer.entity.RenderLiving
 import net.minecraft.entity.*
 import net.minecraft.util.ResourceLocation
-import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL11.glTranslated
 import vazkii.botania.client.core.handler.BossBarHandler
 
 object RenderEntityFenrir: RenderLiving(ModelEntityFenrir, 2f) {
@@ -18,7 +18,7 @@ object RenderEntityFenrir: RenderLiving(ModelEntityFenrir, 2f) {
 		setRenderPassModel(ModelEntityFenrir)
 	}
 	
-	override fun doRender(entity: Entity, p_76986_2_: Double, p_76986_4_: Double, p_76986_6_: Double, p_76986_8_: Float, p_76986_9_: Float) {
+	override fun doRender(entity: Entity, x: Double, y: Double, z: Double, yaw: Float, ticks: Float) {
 		entity as EntityLivingBase
 		
 //		glPushMatrix()
@@ -36,19 +36,13 @@ object RenderEntityFenrir: RenderLiving(ModelEntityFenrir, 2f) {
 //
 //		glPopMatrix()
 		
-		super.doRender(entity, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_)
+		super.doRender(entity, x, y, z, yaw, ticks)
 	}
 	
 	override fun shouldRenderPass(wolf: EntityLivingBase, pass: Int, ticks: Float): Int {
 		wolf as EntityFenrir
 		return when {
-			pass == 0 && wolf.getWolfShaking() -> {
-				val f1 = wolf.getBrightness(ticks) * wolf.getShadingWhileShaking(ticks)
-				bindTexture(getEntityTexture(wolf))
-				glColor3f(f1, f1, f1)
-				1
-			}
-			pass == 1 && wolf.stage > 0        -> {
+			pass == 1 && wolf.stage > 0 -> {
 				ASJRenderHelper.setGlow()
 				bindTexture(LibResourceLocations.fenrir2)
 				1
@@ -73,8 +67,5 @@ object RenderEntityFenrir: RenderLiving(ModelEntityFenrir, 2f) {
 		
 		glTranslated(0.32, 0.0, -0.5)
 		glScaled(5.0)
-		
-		if (entity.spinCooldown in 270..280)
-			glRotatef((280 - entity.spinCooldown + ticks) * 36 + entity.spinStartYaw, 0f, -1f, 0f)
 	}
 }

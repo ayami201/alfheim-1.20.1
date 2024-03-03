@@ -12,8 +12,8 @@ class SubTileAquapanthus: SubTileFunctional() {
 		
 		if (supertile.worldObj.isRemote) return
 		
-		if (redstoneSignal > 0 || mana < 5) return
-		mana -= 5
+		if (redstoneSignal > 0 || mana < COST) return
+		mana -= COST
 		
 		for (i in -RANGE..RANGE)
 			for (j in -RANGE..RANGE)
@@ -39,6 +39,7 @@ class SubTileAquapanthus: SubTileFunctional() {
 	override fun getIcon(): IIcon? = BotaniaAPI.getSignatureForName("aquapanthus").getIconForStack(null)
 	
 	companion object {
+		const val COST = 5
 		const val RANGE = 3
 	}
 }

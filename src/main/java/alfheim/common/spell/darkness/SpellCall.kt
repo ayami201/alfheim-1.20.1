@@ -2,7 +2,6 @@ package alfheim.common.spell.darkness
 
 import alexsocol.asjlib.ASJUtilities
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.common.core.handler.CardinalSystem
@@ -25,7 +24,6 @@ object SpellCall: SpellBase("call", EnumRace.IMP, 10000, 1800, 30) {
 		} else {
 			tgt = tg.target ?: return SpellCastResult.NOTARGET
 			if (ASJUtilities.isNotInFieldOfVision(tgt, caster)) return SpellCastResult.NOTSEEING
-			if (!InteractionSecurity.canInteractWithEntity(caster, tgt)) return SpellCastResult.NOTALLOW
 		}
 		
 		if (tgt === caster) return SpellCastResult.WRONGTGT
@@ -33,8 +31,6 @@ object SpellCall: SpellBase("call", EnumRace.IMP, 10000, 1800, 30) {
 		if (tgt !is EntityPlayer && tgt.dimension != caster.dimension) return SpellCastResult.WRONGTGT
 		
 		val (cx, cy, cz) = Vector3.fromEntity(caster)
-		if (InteractionSecurity.isInteractionBanned(caster)) return SpellCastResult.NOTALLOW
-		if (InteractionSecurity.isInteractionBanned(tgt, cx, cy, cz, caster.worldObj)) return SpellCastResult.NOTALLOW
 		
 		val result = checkCast(caster)
 		if (result == SpellCastResult.OK) {

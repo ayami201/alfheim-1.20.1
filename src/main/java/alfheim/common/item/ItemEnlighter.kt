@@ -1,7 +1,6 @@
 package alfheim.common.item
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.client.core.helper.IconHelper
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.tile.TileRainbowManaFlame
@@ -62,7 +61,6 @@ class ItemEnlighter: ItemMod("Enlighter"), IManaUsingItem {
 		if (block.material == Material.water || below.material == Material.water) return
 		if (block.material == Material.lava || below.material == Material.lava) return
 		if (!ManaItemHandler.requestManaExactForTool(stack, entity, ItemRodPrismatic.COST, false)) return
-		if (InteractionSecurity.isInteractionBanned(entity, x, y, z, world)) return
 		
 		val toPlace = ItemStack(AlfheimBlocks.rainbowFlame)
 		toPlace.tryPlaceItemIntoWorld(entity, world, x, y, z, 1, 0f, 0f, 0f)

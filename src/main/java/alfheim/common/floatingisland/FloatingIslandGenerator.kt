@@ -10,7 +10,7 @@ import alfheim.common.world.dim.alfheim.WorldProviderAlfheim
 import alfheim.common.world.dim.alfheim.customgens.*
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.TickEvent
-import net.minecraft.block.Block
+import net.minecraft.block.BlockLeavesBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.*
@@ -165,7 +165,8 @@ object FloatingIslandGenerator {
 		
 		if (isForest && rand.nextFloat() < 0.15) {
 			(if (rand.nextFloat() < 0.33) dreamTreeSchema else sadOakSchema).forEach { e ->
-				val block = Block.getBlockFromName(e.block)
+				val block = e.block ?: return@forEach
+				
 				e.location.forEach l@ { l ->
 					val Y =  y + l.y - 1
 					if (block.isLeaves(world, x + l.x, Y, z + l.z) && !world.getBlock(x + l.x, Y, z + l.z).let { it.isAir(world, x + l.x, Y, z + l.z) || it.isLeaves(world, x + l.x, Y, z + l.z) })
@@ -335,7 +336,8 @@ object FloatingIslandGenerator {
 		} ?: 16) + 1
 		
 		structure.forEach { e ->
-			val block = Block.getBlockFromName(e.block)
+			val block = e.block ?: return@forEach
+			
 			e.location.forEach { l ->
 				val Y = y + l.y
 				val tile = if (l.nbt != null) TileEntity.createAndLoadEntity(JsonToNBT.func_150315_a(l.nbt) as NBTTagCompound).apply {
@@ -351,8 +353,8 @@ object FloatingIslandGenerator {
 		return Vector3(x, y, z)
 	}
 	
-	private val pools = Array(7) { SchemaUtils.parse(SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/fi/pool$it")) }.toList()
-	private val ruins = Array(12) { SchemaUtils.parse(SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/fi/ruin$it")) }.toList()
+	private val pools = Array(7) { UnsafeSchemaUtils.loadStructure("${ModInfo.MODID}/schemas/fi/pool$it") }.toList()
+	private val ruins = Array(12) { UnsafeSchemaUtils.loadStructure("${ModInfo.MODID}/schemas/fi/ruin$it") }.toList()
 	
 	private val lootboxes = hashMapOf(
 		0 to listOf(0 to 0 with 0),
@@ -381,11 +383,11 @@ object FloatingIslandGenerator {
 	
 	private val lootboxTypes = mapOf(0 to 0, 2 to 0, 3 to 0, 8 to 0, 9 to 0, 10 to 0, 11 to 1)
 	
-	private val dreamTreeSchema = SchemaUtils.parse(SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/fi/DreamTree"))
+	private val dreamTreeSchema = UnsafeSchemaUtils.loadStructure("${ModInfo.MODID}/schemas/fi/DreamTree")
 	
 	private val sadOakSchema = dreamTreeSchema.map { old ->
-		val leaves = old.block.endsWith("Leaves")
-		BlockElement(if (leaves) "minecraft:leaves" else "minecraft:log", old.location.map {
+		val leaves = old.block is BlockLeavesBase
+		BlockElement(if (leaves) Blocks.leaves else Blocks.log, old.location.map {
 			LocationElement(it.x, it.y, it.z, if (leaves) 0 else it.meta - 3, null)
 		})
 	}

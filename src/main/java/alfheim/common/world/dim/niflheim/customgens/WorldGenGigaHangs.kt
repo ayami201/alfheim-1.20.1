@@ -7,9 +7,6 @@ import java.util.*
 
 object WorldGenGigaHangs {
 	
-	val lower = SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/niflheim/worldgen_2-1")
-	val upper = SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/niflheim/worldgen_2-2")
-	
 	fun generate(world: World, random: Random, x: Int, z: Int) {
 		fun genUpper() {
 			var y = 100
@@ -22,7 +19,7 @@ object WorldGenGigaHangs {
 						if (!world.isAirBlock(i, j, k))
 							return
 			
-			SchemaUtils.generate(world, x, y, z, upper)
+			SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/niflheim/worldgen_2-2", true, true, true, random.nextInt(3))
 		}
 		
 		val r = random.nextInt(9)
@@ -36,7 +33,7 @@ object WorldGenGigaHangs {
 							if (!world.isAirBlock(i, j, k))
 								return
 				
-				SchemaUtils.generate(world, x, y, z, lower)
+				SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/niflheim/worldgen_2-1", true, true, true, random.nextInt(3))
 				
 				if (r == 4) genUpper()
 			}

@@ -13,7 +13,7 @@ import cpw.mods.fml.common.Optional
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.model.ModelBiped
 import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.entity.*
+import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.ai.attributes.AttributeModifier
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -89,10 +89,20 @@ open class ItemElvoriumArmor(type: Int, name: String): ItemManasteelArmor(type, 
 	override fun addArmorSetDescription(stack: ItemStack?, list: List<String>) {
 		addStringToTooltip(StatCollector.translateToLocal("alfheim.armorset.elvorium.desc0"), list)    // -30% mana cost
 		addStringToTooltip(StatCollector.translateToLocal("alfheim.armorset.elvorium.desc1"), list)    // Powerful rods
-		if (Botania.thaumcraftLoaded) addStringToTooltip(EnumChatFormatting.DARK_PURPLE.toString() + StatCollector.translateToLocal("alfheim.armorset.elvorium.desc2"), list)    // -20% vis discount
-		if (Botania.thaumcraftLoaded) addStringToTooltip(EnumChatFormatting.GOLD.toString() + StatCollector.translateToLocal("alfheim.armorset.elvorium.desc3"), list)    // 8 pts of runic shield
+		if (Botania.thaumcraftLoaded) addStringToTooltip(StatCollector.translateToLocal("alfheim.armorset.elvorium.desc2"), list)    // -20% vis discount
+		if (Botania.thaumcraftLoaded) addStringToTooltip(StatCollector.translateToLocal("alfheim.armorset.elvorium.desc3"), list)    // 8 pts of runic shield
 		addStringToTooltip(StatCollector.translateToLocal("botania.armorset.terrasteel.desc1"), list)    // Regen w/o full hungerbar
 		addStringToTooltip(StatCollector.translateToLocal("botania.armorset.terrasteel.desc2"), list)    // Passive mana regen
+	}
+	
+	override fun addInformation(stack: ItemStack, player: EntityPlayer, list: MutableList<Any?>, adv: Boolean) {
+		super.addInformation(stack, player, list, adv)
+		if (!Botania.thaumcraftLoaded) return
+		
+		val discount = getVisDiscount(stack, player, null)
+		
+		if (discount > 0)
+			list.add(EnumChatFormatting.DARK_PURPLE.toString() + StatCollector.translateToLocal("tc.visdiscount") + ": " + discount + "%")
 	}
 	
 	override fun onArmorTick(world: World, player: EntityPlayer, stack: ItemStack) {
@@ -114,7 +124,7 @@ open class ItemElvoriumArmor(type: Int, name: String): ItemManasteelArmor(type, 
 	}
 	
 	@Optional.Method(modid = "Thaumcraft")
-	override fun getVisDiscount(stack: ItemStack, player: EntityPlayer, aspect: Aspect): Int {
+	override fun getVisDiscount(stack: ItemStack, player: EntityPlayer, aspect: Aspect?): Int {
 		return if (hasArmorSet(player)) 5 else 0
 	}
 	

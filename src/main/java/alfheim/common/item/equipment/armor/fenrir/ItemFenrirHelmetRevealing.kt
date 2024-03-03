@@ -10,17 +10,21 @@ import cpw.mods.fml.common.Optional
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.IIcon
-import thaumcraft.api.IGoggles
+import net.minecraft.util.*
+import thaumcraft.api.*
+import thaumcraft.api.aspects.Aspect
 import thaumcraft.api.nodes.IRevealer
+import vazkii.botania.common.Botania
 import vazkii.botania.common.core.handler.ConfigHandler
 
 @Optional.InterfaceList(
 	Optional.Interface(modid = "Thaumcraft", iface = "thaumcraft.api.IGoggles", striprefs = true),
-	Optional.Interface(modid = "Thaumcraft", iface = "thaumcraft.api.nodes.IRevealer", striprefs = true)
+	Optional.Interface(modid = "Thaumcraft", iface = "thaumcraft.api.nodes.IRevealer", striprefs = true),
+	Optional.Interface(modid = "Thaumcraft", iface = "thaumcraft.api.IVisDiscountGear", striprefs = true)
 )
-class ItemFenrirHelmetRevealing: ItemFenrirArmor(0, "FenrirHelmetRevealing"), IGoggles, IRevealer {
+class ItemFenrirHelmetRevealing: ItemFenrirArmor(0, "FenrirHelmetRevealing"), IGoggles, IRevealer, IVisDiscountGear {
 	
 	init {
 		creativeTab = ThaumcraftAlfheimModule.tcnTab
@@ -51,5 +55,14 @@ class ItemFenrirHelmetRevealing: ItemFenrirArmor(0, "FenrirHelmetRevealing"), IG
 		val t = type?.run { capitalized() + "Revealing" } ?: ""
 		
 		return "${ModInfo.MODID}:textures/model/armor/FenrirArmor${if (ConfigHandler.enableArmorModels) "" else "2"}$t.png"
+	}
+	
+	override fun getVisDiscount(stack: ItemStack?, player: EntityPlayer?, aspect: Aspect?) = 5
+	
+	override fun addInformation(stack: ItemStack, player: EntityPlayer, list: MutableList<Any?>, adv: Boolean) {
+		super.addInformation(stack, player, list, adv)
+		if (!Botania.thaumcraftLoaded) return
+		
+		list.add(EnumChatFormatting.DARK_PURPLE.toString() + StatCollector.translateToLocal("tc.visdiscount") + ": " + getVisDiscount(stack, player, null) + "%")
 	}
 }

@@ -37,7 +37,7 @@ object CommandAlfheim: CommandBase() {
 	}
 	
 	override fun addTabCompletionOptions(sender: ICommandSender?, args: Array<String>): MutableList<Any?> {
-		if (args.size == 1) return getListOfStringsMatchingLastWord(args, "help", "mode", "randgen", "knowledge")
+		if (args.size == 1) return getListOfStringsMatchingLastWord(args, "help", "mode", "randgen", "knowledge", "surtrregen")
 		
 		if (args.size == 2 || args.size == 3)
 			when (args[0]) {
@@ -181,6 +181,7 @@ object CommandAlfheim: CommandBase() {
 		
 		data.structures.removeAll("Surtr")
 		data.data.remove("SurtrY")
+		data.markDirty()
 		
 		ASJUtilities.say(sender, "Surtr domain data reset.")
 	}

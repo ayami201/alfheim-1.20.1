@@ -9,7 +9,7 @@ import vazkii.botania.common.block.ModBlocks
 class SubTileKiller: SubTileAnomalyBase() {
 	
 	override val targets: List<Any> get() {
-		return getEntitiesWithinAABB(worldObj, Entity::class.java, superTile?.boundingBox(0.25) ?: return emptyList())
+		return getEntitiesWithinAABB(worldObj, Entity::class.java, superTile?.boundingBox(-0.25) ?: return emptyList())
 	}
 	
 	override fun performEffect(target: Any) {

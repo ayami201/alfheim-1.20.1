@@ -2,7 +2,6 @@ package alfheim.common.entity.spell
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.spell.*
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
 import alfheim.common.core.handler.*
@@ -44,8 +43,6 @@ class EntitySpellGravityTrap @JvmOverloads constructor(world: World, var caster:
 			
 			if (Vector3.entityDistancePlane(it, this) <= SpellGravityTrap.radius) {
 				it.attackEntityFrom(DamageSourceSpell.gravity(this, caster), SpellBase.over(caster, SpellGravityTrap.damage.D))
-				
-				if (!InteractionSecurity.canInteractWithEntity(caster ?: return@forEach, it)) return@forEach
 				
 				val dist = Vector3.fromEntity(it).sub(this)
 				

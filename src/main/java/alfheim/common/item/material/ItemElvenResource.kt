@@ -151,7 +151,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 			"item.InfusedCandy"
 		else {
 			var name = "item.${of(stack.meta).toString()}"
-			if (stack.meta == ElementalSlimeBall.I) name += ".${stack.element.name}"
+			if (stack.meta == ElementalSlimeBall.I && stack.element != null) name += ".${stack.element.name}"
 			name
 		}
 	
@@ -287,7 +287,9 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		}
 	}
 	
-	override fun getItemStackLimit(stack: ItemStack) = if (stack.meta == WisdomBottle.I || stack.meta == DomainKey.I) 1 else 64
+	val singles = arrayOf(WisdomBottle.I, DomainKey.I)
+	
+	override fun getItemStackLimit(stack: ItemStack) = if (stack.meta in singles) 1 else 64
 	
 	override fun onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, par8: Float, par9: Float, par10: Float): Boolean {
 		val block = world.getBlock(x, y, z)

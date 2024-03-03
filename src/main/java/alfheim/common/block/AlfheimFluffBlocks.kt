@@ -89,11 +89,11 @@ object AlfheimFluffBlocks {
 	val composite: Block
 	
 	init {
-		chair = BlockChair().WIP()
-		table = BlockTable().WIP()
-		doubleBlock = BlockDoubleBlock().WIP()
-		secretGlass = BlockSecretGlass().WIP()
-		curtainPlacer = BlockCurtainPlacer().WIP()
+		chair = BlockChair()
+		table = BlockTable()
+		doubleBlock = BlockDoubleBlock()
+		secretGlass = BlockSecretGlass()
+		curtainPlacer = BlockCurtainPlacer()
 		floodLight = BlockFloodLight().WIP()
 		composite = BlockComposite()
 		

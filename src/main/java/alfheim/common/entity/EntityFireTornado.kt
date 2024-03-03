@@ -28,7 +28,7 @@ class EntityFireTornado(world: World): Entity(world) {
 		moveEntity(motionX, motionY, motionZ)
 		
 		if (worldObj.isRemote) {
-			for (i in 0..64) {
+			repeat(64) {
 				val yPos = rand.nextDouble() * 34 - 2
 				mc.effectRenderer.addEffect(EntityTornadoFX(worldObj, posX, posY + yPos, posZ, rand.nextDouble() * yPos / 3 + 0.5, motionX, motionZ, Blocks.fire, 0, 0, 100))
 			}

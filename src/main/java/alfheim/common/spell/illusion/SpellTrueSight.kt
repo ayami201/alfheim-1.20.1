@@ -1,7 +1,6 @@
 package alfheim.common.spell.illusion
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
@@ -25,7 +24,6 @@ object SpellTrueSight: SpellBase("truesight", EnumRace.SPRIGGAN, 2000, 2500, 40)
 		
 		if (tgt !is EntityPlayer || tgt === caster) return SpellCastResult.WRONGTGT
 		if (ASJUtilities.isNotInFieldOfVision(tgt, caster)) return SpellCastResult.NOTSEEING
-		if (!tg.isParty && !InteractionSecurity.canInteractWithEntity(caster, tgt)) return SpellCastResult.NOTALLOW
 		
 		val result = checkCast(caster)
 		if (result == SpellCastResult.OK) {

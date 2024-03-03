@@ -39,8 +39,6 @@ object ItemLensExtender {
 	}
 	
 	/**
-	 * Change [alfheim.common.core.asm.AlfheimClassTransformer.moreLenses] when adding new lens.
-	 *
 	 * Add name in [alfheim.common.core.asm.AlfheimClassTransformer].LibItemNames$ClassVisitor.LibItemNames$clinit$MethodVisitor
 	 */
 	@JvmStatic

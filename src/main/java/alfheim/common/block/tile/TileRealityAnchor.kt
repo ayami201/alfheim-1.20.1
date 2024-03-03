@@ -7,7 +7,6 @@ import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.asm.hook.extender.SparkExtender.attachTile
 import alfheim.common.core.handler.ChunkLoadingHandler
-import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.BlockFluidBase
 import vazkii.botania.api.lexicon.multiblock.*
@@ -42,7 +41,7 @@ class TileRealityAnchor: ASJTile(), ISparkAttachable {
 					if ((worldObj.getBlock(xCoord + i, yCoord + j, zCoord + k) as? BlockFluidBase)?.fluid?.name != "mana") return false
 				}
 		
-		return SchemaUtils.checkStructure(worldObj, xCoord, yCoord, zCoord, schema)
+		return UnsafeSchemaUtils.checkStructure(worldObj, xCoord, yCoord, zCoord, schema)
 	}
 	
 	override fun getCurrentMana() = mana
@@ -77,13 +76,13 @@ class TileRealityAnchor: ASJTile(), ISparkAttachable {
 		
 		const val MAX_MANA = TilePool.MAX_MANA * 10
 		
-		val schema = SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/RealityAnchor")
+		val schema = UnsafeSchemaUtils.loadStructure("${ModInfo.MODID}/schemas/RealityAnchor")
 		
 		fun makeMultiblockSet(): MultiblockSet {
 			val mb = Multiblock()
 			
-			for (ele in SchemaUtils.parse(schema)) {
-				val block = Block.getBlockFromName(ele.block) ?: continue
+			for (ele in schema) {
+				val block = ele.block ?: continue
 				
 				for (loc in ele.location)
 					mb.addComponent(loc.x, loc.y + 4, loc.z, block, loc.meta)

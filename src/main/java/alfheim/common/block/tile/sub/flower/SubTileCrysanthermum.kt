@@ -79,8 +79,7 @@ class SubTileCrysanthermum: SubTileGenerating() {
 		val items = getEntitiesWithinAABB(supertile.worldObj, EntityItem::class.java, supertile.boundingBox(1))
 		val slowdown = slowdownFactor
 		
-		if (ticksExisted % 600 == 0) {
-			// 30 seconds
+		if (ticksExisted % 600 == 0) { // 30 seconds
 			val bt = biomeTemp
 			if (temp > bt) temp--
 			else if (temp < bt) temp++

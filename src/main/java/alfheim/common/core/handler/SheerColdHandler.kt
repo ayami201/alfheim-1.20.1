@@ -20,7 +20,9 @@ import net.minecraft.potion.Potion
 import net.minecraft.util.MathHelper
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.*
-import net.minecraftforge.event.entity.living.LivingEvent.*
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
+import net.minecraftforge.event.entity.player.ItemTooltipEvent
+import vazkii.botania.common.block.tile.TileAltar
 import kotlin.math.*
 
 object SheerColdHandler {
@@ -40,6 +42,8 @@ object SheerColdHandler {
 	@SubscribeEvent
 	fun onLivingUpdate(e: LivingUpdateEvent) {
 		val target = e.entityLiving
+		
+		if (!AlfheimConfigHandler.mobTemperature && target !is EntityPlayer) return
 		if (target.worldObj.isRemote || !target.isEntityAlive) return
 		
 		if (target is EntityPlayerMP && target.capabilities.isCreativeMode) {
@@ -57,13 +61,20 @@ object SheerColdHandler {
 			
 			for (i in x.bidiRange(2))
 				for (j in y.bidiRange(2))
-					for (k in z.bidiRange(2)) {
+					for (k in z.bidiRange(2)) run loop@ {
+						(target.worldObj.getTileEntity(i, j, k) as? TileAltar)?.apply {
+							if (!hasLava || defaultDelta >= 0) return@loop
+							
+							defaultDelta = -1f
+							return@run
+						}
+						
 						val near = target.worldObj.getBlock(i, j, k)
 						
 						defaultDelta = when (near) {
-							in AlfheimAPI.coldBlocks -> if (defaultDelta > 0) 1f else continue
-							in AlfheimAPI.warmBlocks -> if (defaultDelta < 0) -1f else continue
-							else                     -> continue
+							in AlfheimAPI.coldBlocks -> if (defaultDelta > 0) 1f else return@loop
+							in AlfheimAPI.warmBlocks -> if (defaultDelta < 0) -1f else return@loop
+							else                     -> return@loop
 						}
 						
 						return@run
@@ -80,13 +91,35 @@ object SheerColdHandler {
 		if (EntityList.getEntityString(target) in AlfheimConfigHandler.overcoldBlacklist) target.cold = min(0f, target.cold)
 		if (EntityList.getEntityString(target) in AlfheimConfigHandler.overheatBlacklist) target.cold = max(0f, target.cold)
 		
-		if (target.cold >= 100f && target !is INiflheimEntity && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, target.maxHealth * 0.01f + 0.15f)
-		if (target.cold <= -100f && target !is IMuspelheimEntity && !canProtect(target, MUSPELHEIM)) target.attackEntityFrom(DamageSourceSpell.soulburn, target.maxHealth * 0.01f + 0.15f)
+		val cold = target.cold
+		
+		if (AlfheimConfigHandler.potionIDOvercold != -1) {
+			if (cold >= 25f)
+				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOvercold, 10, (cold / 25).I - 1))
+			else
+				target.removePotionEffect(AlfheimConfigHandler.potionIDOvercold)
+		}
+		if (AlfheimConfigHandler.potionIDOverheat != -1) {
+			if (cold <= -25f)
+				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOverheat, 10, when {
+					cold <= -90f -> 2
+					cold <= -50f -> 1
+					else         -> 0
+				}))
+			else
+				target.removePotionEffect(AlfheimConfigHandler.potionIDOverheat)
+		}
+		
+		// DoT instead of constant
+		if (target.ticksExisted % 50 != 0) return
+		
+		if (cold >= 100f && target !is INiflheimEntity && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, (target.maxHealth * 0.01f + 0.15f))
+		if (cold <= -100f && target !is IMuspelheimEntity && !canProtect(target, MUSPELHEIM)) target.attackEntityFrom(DamageSourceSpell.soulburn, (target.maxHealth * 0.01f + 0.15f))
 	}
 	
-	private fun canProtect(target: EntityLivingBase, type: ItemPendant.Companion.EnumPrimalWorldType): Boolean {
+	private fun canProtect(target: EntityLivingBase, type: ItemPendant.Companion.EnumPrimalWorldType, cost: Int = 1): Boolean {
 		if (target !is EntityPlayer) return false
-		return ItemPendant.canProtect(target, type, 1)
+		return ItemPendant.canProtect(target, type, cost)
 	}
 	
 	val neutralSounds = arrayOf("bat.idle", "cat.meow", "chicken.say", "cow.say", "pig.say", "sheep.say", "wolf.bark")
@@ -99,14 +132,14 @@ object SheerColdHandler {
 	
 	@SubscribeEvent
 	fun onPlayerOvercold(e: LivingUpdateEvent) {
-		val player = e.entityLiving as? EntityPlayer ?: return
-		if (ItemPendant.canProtect(player, NIFLHEIM, 0)) return
+		val target = e.entityLiving
+		if (target is INiflheimEntity) return
 		
-		val cold = player.cold
-		if (cold < 25f) return
+		val cold = target.cold
 		
-		val amp = (cold / 25).I - 1
-		player.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 100, amp))
+		if (cold >= 25f && !canProtect(target, NIFLHEIM, 0)) target.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 100, (cold / 25).I - 1))
+		
+		if (target.cold >= 100f && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, target.maxHealth * 0.01f + 0.15f)
 	}
 	
 	// additional "lag" with controls - AlfheimHookHandler#updatePlayerMoveState
@@ -120,7 +153,7 @@ object SheerColdHandler {
 		val heat = -player.cold
 		
 		if (heat < 25f) return
-		if (player.rng.nextInt(1000) == 0) return player.playSoundAtEntity("mob." + (if (ASJUtilities.chance((heat + 50) * -2)) hostileSounds else neutralSounds).random(), 1f, 1f)
+		if (player.rng.nextInt(1000) == 0) return player.playSoundAtEntity("mob." + (if (ASJUtilities.chance((heat + 50) * 2)) hostileSounds else neutralSounds).random(), 1f, 1f)
 		
 		if (heat < 50f) return
 		if (player.rng.nextInt(3000) == 0) {
@@ -136,10 +169,11 @@ object SheerColdHandler {
 				entity = EntityItem(mc.theWorld, 0.0, 0.0, 0.0, ItemStack(item))
 			}
 			
+			var tries = 50
 			do {
 				val (x, _, z) = Vector3().rand().mul(64).add(player)
 				entity.setPosition(x, mc.theWorld.getTopSolidOrLiquidBlock(x.I, z.I) + 1.0, z)
-			} while (!ASJUtilities.isNotInFieldOfVision(entity, player))
+			} while (!ASJUtilities.isNotInFieldOfVision(entity, player) && --tries > 0)
 			
 			entity.spawn()
 		}
@@ -154,6 +188,17 @@ object SheerColdHandler {
 
 		if (ASJUtilities.chance(0.5))
 			e.player.dropOneItem(true)
+	}
+	
+	@Suppress("UNCHECKED_CAST")
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	fun blockTemperatureInfo(e: ItemTooltipEvent) {
+		val block = e.itemStack.block
+		if (block in AlfheimAPI.coldBlocks)
+			addStringToTooltip(e.toolTip as MutableList<Any?>, "alfheimmisc.blockcold")
+		else if (block in AlfheimAPI.warmBlocks)
+			addStringToTooltip(e.toolTip as MutableList<Any?>, "alfheimmisc.blockwarm")
 	}
 	
 	/**

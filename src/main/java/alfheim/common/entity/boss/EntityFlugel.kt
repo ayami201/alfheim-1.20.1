@@ -3,15 +3,20 @@ package alfheim.common.entity.boss
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.boss.IBotaniaBossWithName
+import alfheim.api.entity.*
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.tile.TileAnomaly
+import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.helper.ElvenFlightHelper
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.entity.boss.ai.flugel.*
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.item.relic.ItemFlugelSoul
 import baubles.common.lib.PlayerHandler
+import cpw.mods.fml.common.Loader
+import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.audio.ISound
 import net.minecraft.client.gui.ScaledResolution
@@ -43,6 +48,8 @@ import vazkii.botania.common.item.relic.ItemFlugelEye
 import java.awt.Rectangle
 import java.util.regex.*
 import kotlin.math.*
+
+private const val s = "warpdrive.asphyxia"
 
 class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 	
@@ -135,6 +142,13 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 	}
 	
 	override fun attackEntityFrom(source: DamageSource, damage: Float): Boolean {
+		// GalactiCraft and WarpDrive integration
+		if (source.damageType in setOf("warpdrive.asphyxia", "oxygenSuffocation")) {
+			maxHit = damage
+			lastHit = damage
+			return super.attackEntityFrom(source, lastHit)
+		}
+		
 		val player = source.entity as? EntityPlayer ?: return false
 		
 		if ((source.damageType != "player" && source !is DamageSourceSpell) || !isTruePlayer(player) && isEntityInvulnerable)
@@ -432,6 +446,8 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 			
 			if (tiara?.item === ModItems.flightTiara && tiara!!.meta == 1 && wasHere)
 				ItemNBTHelper.setInt(tiara, TAG_TIME_LEFT, 1200)
+			else if (AlfheimConfigHandler.enableElvenStory && player.race == EnumRace.HUMAN)
+				ElvenFlightHelper[player] = ElvenFlightHelper.max
 			else {
 				if (!worldObj.isRemote) {
 					if (wasHere)
@@ -648,7 +664,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 		else
 			1
 		
-		aiTask = AITask.entries.toTypedArray()[nbt.getInteger(TAG_AI_TASK)]
+		aiTask = AITask.entries[nbt.getInteger(TAG_AI_TASK)]
 		
 		//if (ModInfo.DEV) ASJUtilities.log("Scrolling AIs for " + nbt.getString(TAG_AI));
 		for (e in tasks.taskEntries) {
@@ -966,6 +982,28 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 		
 		/*	================================	UTILITY STUFF	================================	*/
 		
+		val airBlocks by lazy {
+			val set = mutableSetOf(Blocks.air)
+			
+			if (Loader.isModLoaded("GalacticraftCore")) {
+				set.add(GameRegistry.findBlock("GalacticraftCore", "tile.breatheableAir"))
+				set.add(GameRegistry.findBlock("GalacticraftCore", "tile.brightAir"))
+				set.add(GameRegistry.findBlock("GalacticraftCore", "tile.brightBreathableAir"))
+			}
+			
+			if (Loader.isModLoaded("Railcraft")) {
+				set.add(GameRegistry.findBlock("Railcraft", "residual.heat"))
+			}
+			
+			if (Loader.isModLoaded("WarpDrive")) {
+				set.add(GameRegistry.findBlock("WarpDrive", "blockAir"))
+				set.add(GameRegistry.findBlock("WarpDrive", "blockAirFlow"))
+				set.add(GameRegistry.findBlock("WarpDrive", "blockAirSource"))
+			}
+			
+			set
+		}
+		
 		val PYLON_LOCATIONS = arrayOf(intArrayOf(4, 1, 4), intArrayOf(4, 1, -4), intArrayOf(-4, 1, 4), intArrayOf(-4, 1, -4))
 		
 		fun checkArena(world: World, sx: Int, sy: Int, sz: Int, destroy: Boolean): Boolean {
@@ -983,7 +1021,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 						val z = sz + k
 						
 						val block = world.getBlock(x, y, z)
-						if (block !== Blocks.air) {
+						if (block inln airBlocks) {
 							proper = false
 							
 							if (destroy) {

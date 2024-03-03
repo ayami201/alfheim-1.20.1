@@ -43,7 +43,7 @@ object RenderWings {
 		if (player.isInvisible || player.isPotionActive(Potion.invisibility) || player.isInvisibleToPlayer(mc.thePlayer)) return
 		
 		val wings = PlayerHandler.getPlayerBaubles(player)[0]
-		if (wings?.item === ModItems.flightTiara!! && wings.meta != 0 && (wings.item as? IPhantomInkable)?.hasPhantomInk(wings) != true) return
+		if (wings?.item === ModItems.flightTiara!! && (wings.item as? IPhantomInkable)?.hasPhantomInk(wings) != true) return
 		
 		glPushMatrix()
 		glDisable(GL_CULL_FACE)

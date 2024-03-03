@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 import alfheim.common.block.base.BlockMod
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
+import alfheim.common.core.superwrapper.SuperWrapperHandler
 import alfheim.common.core.util.AlfheimTab
 import net.minecraft.block.*
 import net.minecraft.block.material.Material
@@ -42,8 +43,7 @@ class BlockSnowGrass: BlockMod(Material.grass), IGrowable {
 	override fun getItemDropped(meta: Int, random: Random?, fortune: Int) = Blocks.dirt.toItem()
 	
 	override fun canSustainPlant(world: IBlockAccess, x: Int, y: Int, z: Int, direction: ForgeDirection, plantable: IPlantable): Boolean {
-		// fuck you mojang and your protected shit!
-		if (plantable is BlockBush && canPlaceBlockOn?.invoke(plantable, Blocks.grass) == true) {
+		if (plantable is BlockBush && SuperWrapperHandler.canPlaceBlockOn(plantable, Blocks.grass)) {
 			return true
 		}
 		
@@ -98,8 +98,6 @@ class BlockSnowGrass: BlockMod(Material.grass), IGrowable {
 	}
 	
 	companion object {
-		
 		var meltDelay = 20
-		val canPlaceBlockOn = ASJReflectionHelper.getMethod(BlockBush::class.java, arrayOf("canPlaceBlockOn", "func_149854_a", "a"), arrayOf(Block::class.java))?.also { it.isAccessible = true }
 	}
 }

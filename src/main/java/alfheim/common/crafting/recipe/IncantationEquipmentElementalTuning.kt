@@ -24,7 +24,7 @@ class IncantationEquipmentElementalTuning(val element: String, incantation: Stri
 	val index = counter++
 	
 	init {
-		AlfheimAPI.tunerIncantations[incantation] = this
+		AlfheimAPI.tunerIncantations[incantation.lowercase()] = this
 	}
 	
 	override fun matches(inv: IInventory, target: ItemStack): Boolean {

@@ -7,8 +7,6 @@ import java.util.*
 
 object WorldGenTentacles {
 	
-	val structures = SchemaUtils.parseWithRotations("${ModInfo.MODID}/schemas/niflheim/worldgen_0")
-	
 	fun generate(world: World, random: Random, x: Int, z: Int) {
 		val y = 32
 		
@@ -18,6 +16,6 @@ object WorldGenTentacles {
 					if (!world.isAirBlock(i, j, k))
 						return
 		
-		SchemaUtils.generate(world, x, y, z, structures.random(random)!!)
+		SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/niflheim/worldgen_0", true, true, true, random.nextInt(4))
 	}
 }

@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package alfheim.common.lexicon
 
 import alexsocol.asjlib.ASJUtilities
@@ -78,6 +80,7 @@ object AlfheimLexiconData {
 	lateinit var dasGold: LexiconEntry
 	lateinit var daolos: LexiconEntry
 	lateinit var deathSeed: LexiconEntry
+	lateinit var dumbDecor: LexiconEntry
 	lateinit var elementalSet: LexiconEntry
 	lateinit var elementalTuning: LexiconEntry
 	lateinit var elvenSet: LexiconEntry
@@ -100,6 +103,7 @@ object AlfheimLexiconData {
 	lateinit var flowerRain: LexiconEntry
 	lateinit var flowerSnow: LexiconEntry
 	lateinit var flowerStorm: LexiconEntry
+	lateinit var flowerTradescantia: LexiconEntry
 	lateinit var flowerWind: LexiconEntry
 	lateinit var flugel: LexiconEntry
 	lateinit var fracturedSpace: LexiconEntry
@@ -132,6 +136,7 @@ object AlfheimLexiconData {
 	lateinit var moonbow: LexiconEntry
 	lateinit var multbauble: LexiconEntry
 	lateinit var netherSapling: LexiconEntry
+	lateinit var nidhoggTooth: LexiconEntry
 	lateinit var openChest: LexiconEntry
 	lateinit var ores: LexiconEntry
 	lateinit var pastoralSeeds: LexiconEntry
@@ -179,6 +184,7 @@ object AlfheimLexiconData {
 	lateinit var warBanner: LexiconEntry
 	lateinit var winery: LexiconEntry
 	lateinit var worldgen: LexiconEntry
+	lateinit var worldTree: LexiconEntry
 	
 	// Elven Story information
 	var esm: LexiconEntry? = null
@@ -257,6 +263,7 @@ object AlfheimLexiconData {
 		dagger = AlfheimRelicLexiconEntry("dagger", categoryAlfheim)
 		dasGold = AlfheimLexiconEntry("dasGold", categoryAlfheim)
 		deathSeed = AlfheimLexiconEntry("deathSeed", categoryAlfheim)
+		dumbDecor = AlfheimLexiconEntry("dumbDecor", categoryAlfheim)
 		elementalSet = AlfheimLexiconEntry("elemSet", categoryAlfheim)
 		elementalTuning = AlfheimLexiconEntry("elementalTuning", categoryAlfheim)
 		elvenSet = AlfheimLexiconEntry("elvenSet", categoryAlfheim)
@@ -278,6 +285,7 @@ object AlfheimLexiconData {
 		flowerRain = AlfheimLexiconEntry("flowerRain", categoryAlfheim)
 		flowerSnow = AlfheimLexiconEntry("flowerSnow", categoryAlfheim)
 		flowerStorm = AlfheimLexiconEntry("flowerStorm", categoryAlfheim)
+		flowerTradescantia = AlfheimLexiconEntry("flowerTradescantia", categoryAlfheim)
 		flowerWind = AlfheimLexiconEntry("flowerWind", categoryAlfheim)
 		flugel = AlfheimLexiconEntry("flugel", categoryAlfheim)
 		fracturedSpace = AlfheimLexiconEntry("fracturedSpace", categoryAlfheim)
@@ -304,6 +312,7 @@ object AlfheimLexiconData {
 		mobs = AlfheimLexiconEntry("mobs", categoryAlfheim)
 		multbauble = AlfheimLexiconEntry("multbaub", categoryAlfheim)
 		netherSapling = AlfheimLexiconEntry("infernalSapling", categoryDendrology)
+		nidhoggTooth = AlfheimLexiconEntry("nidhoggTooth", categoryAlfheim)
 		openChest = AlfheimLexiconEntry("openChest", categoryAlfheim)
 		ores = AlfheimLexiconEntry("ores", categoryAlfheim)
 		pastoralSeeds = AlfheimLexiconEntry("irisSeeds", categoryAlfheim)
@@ -346,6 +355,7 @@ object AlfheimLexiconData {
 		warBanner = AlfheimLexiconEntry("warBanner", categoryAlfheim)
 		winery = AlfheimLexiconEntry("winery", categoryAlfheim)
 		worldgen = AlfheimLexiconEntry("worldgen", categoryAlfheim)
+		worldTree = AlfheimLexiconEntry("worldTree", categoryAlfheim)
 		
 		
 		
@@ -495,6 +505,17 @@ object AlfheimLexiconData {
 		
 		deathSeed.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeDeathSeed))
 		
+		dumbDecor.setLexiconPages(*Array(2) { PageText("$it") },
+		                          PageCraftingRecipe("2", AlfheimRecipes.recipesDecor),
+		                          PageText("3"),
+		                          PageCraftingRecipe("4", AlfheimRecipes.recipesDecorCurtain),
+		                          PageText("5"),
+		                          PageCraftingRecipe("6", AlfheimRecipes.recipesDecorDouble),
+		                          PageText("7"),
+		                          PageCraftingRecipe("8", AlfheimRecipes.recipesDecorGlass),
+		                          PageText("9"),
+		                          PageCraftingRecipe("10", AlfheimRecipes.recipesDecorLight)).icon = ItemStack(AlfheimFluffBlocks.floodLight, 1, 3)
+		
 		elementalSet.setLexiconPages(PageText("0"),
 									 PageCraftingRecipe("1", AlfheimRecipes.recipeElementalHelmet),
 									 PageCraftingRecipe("2", AlfheimRecipes.recipeElementalChestplate),
@@ -517,6 +538,7 @@ object AlfheimLexiconData {
 				                                             ItemStack(ModItems.manasteelSword)
 				                            )
 			                            }.toTypedArray()).icon = ItemElvenResource.ballForElement(null)
+		LexiconRecipeMappings.map(ElementalSlimeBall.stack, elementalTuning, 3)
 		
 		elvenSet.setLexiconPages(PageText("0"),
 								 PageCraftingRecipe("1", AlfheimRecipes.recipeElvoriumHelmet),
@@ -574,6 +596,7 @@ object AlfheimLexiconData {
 		flowerRain.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeRainFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("rainFlower")
 		flowerSnow.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeSnowFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("snowFlower")
 		flowerStorm.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeStormFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("stormFlower")
+		flowerTradescantia.setLexiconPages(PageText("0"), PageText("1"), PagePetalRecipe("2", AlfheimRecipes.recipeTradescantia)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("tradescantia")
 		flowerWind.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeWindFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("windFlower")
 		
 		flugel.setLexiconPages(*Array(3) { PageText("$it") }).icon = ItemStack(ModItems.flightTiara, 1, 1)
@@ -688,6 +711,9 @@ object AlfheimLexiconData {
 		LexiconRecipeMappings.map(JellyBottle.stack, mobs, 3)
 		
 		multbauble.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeMultibauble))
+		
+		nidhoggTooth.setLexiconPages(PageText("0"), PageText("1"))
+		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.nidhoggTooth), nidhoggTooth, 0)
 		
 		openChest.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeOpenChest))
 		
@@ -870,6 +896,8 @@ object AlfheimLexiconData {
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.altLeaves, 1, 7), worldgen, 0)
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.dreamSapling), worldgen, 0)
 		LexiconRecipeMappings.map(DreamCherry.stack, worldgen, 0)
+		
+		worldTree.setLexiconPages(*Array(2) { PageText("$it") }, PageCraftingRecipe("2", AlfheimRecipes.recipeWorldTree))
 		
 		(LexiconData.vineBall.pages[4] as PageCraftingRecipe).apply {
 			recipes = recipes.toMutableList()
@@ -1351,6 +1379,7 @@ object AlfheimLexiconData {
 		uberSpreader.knowledgeType = BotaniaAPI.elvenKnowledge
 		winery.knowledgeType = BotaniaAPI.elvenKnowledge
 		worldgen.knowledgeType = BotaniaAPI.elvenKnowledge
+		worldTree.knowledgeType = BotaniaAPI.elvenKnowledge
 		
 		abyss.knowledgeType = BotaniaAPI.elvenKnowledge
 		vafthrudnir.knowledgeType = BotaniaAPI.elvenKnowledge

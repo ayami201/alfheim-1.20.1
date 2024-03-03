@@ -65,7 +65,7 @@ object RenderEntityMuspelheimSunSlash: Render() {
 		glPopMatrix()
 	}
 	
-	override fun getEntityTexture(entity: Entity?) = LibResourceLocations.slash
+	override fun getEntityTexture(entity: Entity?) = LibResourceLocations.slashSun
 	override fun doRender(entity: Entity?, x: Double, y: Double, z: Double, yaw: Float, ticks: Float) = Unit
 	
 	private data class SlashRenderQueueEntry(val x: Double, val y: Double, val z: Double, val r: Float, val t: Int)

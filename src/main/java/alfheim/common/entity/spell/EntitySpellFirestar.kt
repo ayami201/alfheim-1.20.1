@@ -2,7 +2,6 @@ package alfheim.common.entity.spell
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.security.InteractionSecurity
 import alfheim.api.spell.*
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.core.handler.*
@@ -44,8 +43,6 @@ class EntitySpellFirestar(world: World, val caster: EntityLivingBase?): Entity(w
 				it.addPotionEffect(PotionEffectU(Potion.fireResistance.id, 100))
 				it.heal(SpellFirestar.efficiency.F)
 			} else {
-				if (!InteractionSecurity.canHurtEntity(caster, it)) return@forEach
-				
 				it.attackEntityFrom(DamageSource.inFire, SpellBase.over(caster, SpellDarkness.damage.D))
 			}
 		}

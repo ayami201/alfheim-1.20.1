@@ -18,8 +18,6 @@ object StructureArena: StructureBaseClass() {
 	val xs = arrayOf(0, 0, 0, 20, 20, 20, 40, 40, 40)
 	val zs = arrayOf(0, 20, 40, 0, 20, 40, 0, 20, 40)
 	
-	val arenaSchema = SchemaUtils.loadStructure("${ModInfo.MODID}/schemas/Arena")
-	
 	override fun generate(world: World, rand: Random, x: Int, y: Int, z: Int, chunkProvider: WE_ChunkProvider): Boolean {
 		if (ASJUtilities.isClient) return false // custom data is only on server
 		if (x shr 4 in -32 until 32 || z shr 4 in -32 until 32) return false // no arenas in Yggdrasil pit
@@ -43,7 +41,7 @@ object StructureArena: StructureBaseClass() {
 	}
 	
 	fun generate01(world: World, x: Int, y: Int, z: Int) {
-		SchemaUtils.generate(world, x, y, z, arenaSchema)
+		SchemaUtils.generate(world, x, y, z, "${ModInfo.MODID}/schemas/Arena", true)
 		
 		ASJUtilities.fillGenHoles(world, Blocks.grass, 0, x + 20, y, z + 20, 22)
 		
