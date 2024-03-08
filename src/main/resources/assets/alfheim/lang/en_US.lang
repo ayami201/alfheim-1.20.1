@@ -192,6 +192,7 @@ tile.lostsoul.IMP.name=Imp Soul
 tile.lostsoul.ALV.name=Alv Soul
 tile.alfheim:ManaAccelerator.name=Mana Accelerator
 tile.manaFluid.name=Liquid Mana
+fluid.mana=Liquid Mana
 tile.alfheim:ManaInfuser.name=Mana Infuser
 tile.alfheim:ManaTuner.name=Mana Tuner
 tile.alfheim:MikuHeadBlock.name=Miku Head

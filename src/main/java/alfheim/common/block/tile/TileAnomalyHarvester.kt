@@ -274,7 +274,7 @@ object AnomalyHarvesterBehaviors {
 		AlfheimAPI.anomalyBehaviors["Lightning"] = AlfheimAPI.AnomalyBehavior(1, 12) { doLightning(it as TileAnomalyHarvester) }
 		AlfheimAPI.anomalyBehaviors["Killer"] = AlfheimAPI.AnomalyBehavior(1, 15) { doKiller(it as TileAnomalyHarvester) }
 		AlfheimAPI.anomalyBehaviors["SpeedUp"] = AlfheimAPI.AnomalyBehavior(10, 100) { doSpeedUp(it as TileAnomalyHarvester) }
-		AlfheimAPI.anomalyBehaviors["Warp"] = AlfheimAPI.AnomalyBehavior(1, 50) { doWarp(it as TileAnomalyHarvester) }
+		AlfheimAPI.anomalyBehaviors["Warp"] = AlfheimAPI.AnomalyBehavior(1, 1) { doWarp(it as TileAnomalyHarvester) }
 		
 		AlfheimAPI.anomalyBehaviors["ManaTornado"] = AlfheimAPI.AnomalyBehavior(0, 0) { 0 }
 		AlfheimAPI.anomalyBehaviors["ManaVoid"] = AlfheimAPI.AnomalyBehavior(0, 0) { 0 }
@@ -465,26 +465,20 @@ object AnomalyHarvesterBehaviors {
 		val applicable = getEntitiesWithinAABB(tile.worldObj, Entity::class.java, tile.getAoE()).filterTo(ArrayList()) { !it.isSneaking }
 		if (applicable.isEmpty()) return 0
 		
-		val targets = ArrayList<Entity>()
-		for (i in 0 until tile.power)
-			targets += applicable.removeRandom() ?: break
+		val target = applicable.removeRandom() ?: return 0
 		
 		val d = ForgeDirection.entries[tile.getBlockMetadata()]
 		val (x, y, z) = Vector3.fromTileEntityCenter(tile).add(d.offsetX, d.offsetY, d.offsetZ)
 		
-		var applications = 0
+		val cost = (Vector3.vecEntityDistance(Vector3(x, y, z), target)).mfloor() * 10
 		
-		targets.forEach {
-			if (it is EntityLivingBase)
-				it.setPositionAndUpdate(x, y, z)
-			else
-				it.setPosition(x, y, z)
-			
-			it.setMotion(0.0, 0.0, 0.0)
-			
-			applications++
-		}
+		if (target is EntityLivingBase)
+			target.setPositionAndUpdate(x, y, z)
+		else
+			target.setPosition(x, y, z)
 		
-		return applications * tile.power
+		target.setMotion(0.0, 0.0, 0.0)
+		
+		return cost
 	}
 }

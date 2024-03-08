@@ -594,7 +594,7 @@ object AlfheimRecipes {
 	lateinit var tuningAnomalyPackaging: TunerIncantation<TileAnomaly>
 	lateinit var tuningSlimeSize: TunerIncantation<EntityLivingBase>
 	lateinit var tuningMagmaSize: TunerIncantation<EntityLivingBase>
-	lateinit var tuningElementlaSlimeSize: ElementalSlimeGrowthTune
+	lateinit var tuningElementalSlimeSize: ElementalSlimeGrowthTune
 	var tuningTaintSize: TunerIncantation<EntityLivingBase>? = null
 	var tuningGelatSize: TunerIncantation<EntityLivingBase>? = null
 	
@@ -2814,12 +2814,12 @@ object AlfheimRecipes {
 		
 		tuningSlimeSize = registerSlimeGrowthTune<EntitySlime>(ItemStack(slime_ball))
 		tuningMagmaSize = registerSlimeGrowthTune<EntityMagmaCube>(ItemStack(magma_cream))
-		tuningElementlaSlimeSize = ElementalSlimeGrowthTune(slimeGrowthApplication<EntityElementalSlime>())
+		tuningElementalSlimeSize = ElementalSlimeGrowthTune(slimeGrowthApplication<EntityElementalSlime>())
 		
 		if (Botania.thaumcraftLoaded) tuningTaintSize = registerSlimeGrowthTune<EntityThaumicSlime>(ItemStack(ConfigItems.itemResource, 1, 11))
 		if (AlfheimCore.TiCLoaded) tuningGelatSize = registerSlimeGrowthTune<BlueSlime>(ItemStack(TinkerWorld.strangeFood))
 		
-		val smiteSword = ItemStack(golden_sword).apply { addEnchantment(Enchantment.smite, 4) }
+		val smiteSword = ItemStack(golden_sword).apply { addEnchantment(Enchantment.smite, 5) }
 		
 		val diceStack = ItemStack(dice).apply { ItemNBTHelper.setBoolean(this, ASJUtilities.TAG_ASJIGNORENBT, true) }
 		
@@ -2865,12 +2865,12 @@ object AlfheimRecipes {
 		true
 	}
 	
-	private fun registerItemCraftTuning(incantation: String, result: Item, _core: Any, vararg inputs: Any): TunerIncantationIO {
+	fun registerItemCraftTuning(incantation: String, result: Item, _core: Any, vararg inputs: Any): TunerIncantationIO {
 		val core = when (_core) {
 			is Block -> ItemStack(_core)
 			is Item -> ItemStack(_core)
 			is ItemStack -> _core
-			else -> throw IllegalArgumentException()
+			else -> throw IllegalArgumentException("Tuning core $_core of type ${_core::class.java.name} is unexpected")
 		}
 		
 		val tuning = AlfheimAPI.registerIncantation<ItemStack>(incantation, *inputs.map {
@@ -2879,7 +2879,7 @@ object AlfheimRecipes {
 				is Item -> ItemStack(it)
 				is ItemStack -> it
 				is String -> it
-				else -> throw IllegalArgumentException("$it of type ${it::class.java.name} is unexpected")
+				else -> throw IllegalArgumentException("Tuning input $it of type ${it::class.java.name} is unexpected")
 			}
 		}.toTypedArray()) {
 			if (!core.isItemEqual(it)) return@registerIncantation false

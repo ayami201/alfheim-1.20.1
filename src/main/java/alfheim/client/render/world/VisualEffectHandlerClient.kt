@@ -23,6 +23,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityFallingBlock
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
+import net.minecraft.nbt.*
 import net.minecraft.world.World
 import vazkii.botania.client.fx.FXWisp
 import vazkii.botania.common.Botania
@@ -63,6 +64,7 @@ object VisualEffectHandlerClient {
 			FENRIR_AREA_END    -> spawnFenrirAreaEnd(d[0], d[1], d[2])
 			FENRIR_DASH        -> spawnFenrirDash(d[0].I, d[1], d[2])
 			FLAMESTAR          -> spawnFlameStar(d[0], d[1], d[2], d[3], d[4], d[5], d[6].F)
+			FIREWORK           -> spawnFirework(d[0], d[1], d[2], d[3].I)
 			GAIA_SOUL          -> spawnGaiaSoul(d[0], d[1], d[2])
 			GRAVITY            -> spawnGravity(d[0], d[1], d[2], d[3], d[4], d[5])
 			GUNGNIR            -> spawnGungnir(d[0].I, d[1].I)
@@ -285,6 +287,10 @@ object VisualEffectHandlerClient {
 		Botania.proxy.sparkleFX(mc.theWorld, x, y, z, r.F, g.F, b.F, size, 5)
 	}
 	
+	fun spawnFirework(x: Double, y: Double, z: Double, color: Int) {
+		mc.theWorld.makeFireworks(x, y, z, 0.0, 0.0, 0.0, JsonToNBT.func_150315_a("{Explosions:[0:{Type:0b,Colors:[$color]}]}") as NBTTagCompound)
+	}
+	
 	fun spawnGaiaSoul(x: Double, y: Double, z: Double) {
 		(mc.theWorld.getTileEntity(x.I, y.I, z.I) as? TileManaInfuser)?.soulParticlesTime = 20
 	}
@@ -491,7 +497,7 @@ object VisualEffectHandlerClient {
 	}
 	
 	enum class VisualEffects {
-		ACID, AQUABIND, AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CHALK, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, ENDER, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FLAMESTAR, GAIA_SOUL, GRAVITY, GUNGNIR, HEAL, HORN, ICELENS, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SNICE_MARK, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
+		ACID, AQUABIND, AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CHALK, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, ENDER, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FLAMESTAR, FIREWORK, GAIA_SOUL, GRAVITY, GUNGNIR, HEAL, HORN, ICELENS, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SNICE_MARK, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
 	}
 	
 	fun onDeath(target: EntityLivingBase) {

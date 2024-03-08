@@ -127,7 +127,7 @@ alfheim.page.flowerSnow1=Cold to the touch!
 
 alfheim.entry.flowerStorm=Thunderbloom
 alfheim.tagline.flowerStorm=Produces mana from lightning
-alfheim.page.flowerStorm0=&1Thunderbloom&0 is another weather-dependent flower except this one isn't a passive one. It generates mana when a lightning strickes it. Afterwards generates a lot of mana. This process heats the flower and it needs &4roughly a minute&0 to cool down.
+alfheim.page.flowerStorm0=&1Thunderbloom&0 is another weather-dependent flower except this one isn't a passive one. It generates mana when a lightning strickes it. Afterwards generates a lot of mana. This process heats the flower and it needs some time to cool down.
 alfheim.page.flowerStorm1=Essentially an energy converter!
 
 alfheim.entry.flowerTradescantia=Tradescantia

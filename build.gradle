@@ -32,7 +32,7 @@ repositories {
 }
 
 group = "main"
-version = "53"
+version = "54-dev"
 archivesBaseName = "Alfheim"
 
 minecraft {

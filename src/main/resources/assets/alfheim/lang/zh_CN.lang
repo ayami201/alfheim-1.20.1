@@ -192,6 +192,7 @@ tile.lostsoul.IMP.name=魔精灵之魂
 tile.lostsoul.ALV.name=艾尔夫之魂
 tile.alfheim:ManaAccelerator.name=魔力加速器
 tile.manaFluid.name=液态魔力
+fluid.mana=液态魔力
 tile.alfheim:ManaInfuser.name=魔力注入器核心
 tile.alfheim:ManaTuner.name=魔力调谐器
 tile.alfheim:MikuHeadBlock.name=Miku Head

@@ -789,6 +789,7 @@ object AlfheimBlocks {
 		addSubFlower(SubTileOrechidAlfarem::class.java, "orechidAlfarem")
 		addSubFlower(SubTilePetronia::class.java, "petronia")
 		addSubFlower(SubTileRainFlower::class.java, "rainFlower")
+		addSubFlower(SubTileRattlerose::class.java, "rattlerose")
 		addSubFlower(SubTileSnowFlower::class.java, "snowFlower")
 		addSubFlower(SubTileStormFlower::class.java, "stormFlower")
 		addSubFlower(SubTileTradescantia::class.java, "tradescantia")

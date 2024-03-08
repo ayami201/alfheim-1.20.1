@@ -192,6 +192,7 @@ tile.lostsoul.IMP.name=Душа импа
 tile.lostsoul.ALV.name=Душа альва
 tile.alfheim:ManaAccelerator.name=Ускоритель маны
 tile.manaFluid.name=Жидкая мана
+fluid.mana=Жидкая мана
 tile.alfheim:ManaInfuser.name=Мана-наполнитель
 tile.alfheim:ManaTuner.name=Мана-настройщик
 tile.alfheim:MikuHeadBlock.name=Голова Мику

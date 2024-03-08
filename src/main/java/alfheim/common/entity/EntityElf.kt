@@ -183,7 +183,7 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 		super.onLivingUpdate()
 //		if (dialog != null) { navigator.clearPathEntity() }
 		
-		heal(0.02f)
+		if (ticksExisted % 20 == 0) heal(0.5f)
 		
 		if (attackTarget?.isEntityAlive == false)
 			attackTarget = null

@@ -9,12 +9,9 @@ import net.minecraft.entity.effect.EntityLightningBolt
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.IIcon
 import vazkii.botania.api.BotaniaAPI
-import vazkii.botania.api.subtile.RadiusDescriptor
-import vazkii.botania.api.subtile.signature.PassiveFlower
-import vazkii.botania.common.block.subtile.generating.SubTilePassiveGenerating
+import vazkii.botania.api.subtile.*
 
-@PassiveFlower
-class SubTileStormFlower: SubTilePassiveGenerating() {
+class SubTileStormFlower: SubTileGenerating() {
 	
 	var cooldown = 0
 	
@@ -26,7 +23,7 @@ class SubTileStormFlower: SubTilePassiveGenerating() {
 			
 			if ((e is EntityLightningBolt || e is FakeLightning) && !e.isDead && Vector3.entityTileDistance(e, supertile) < 2) {
 				e.setDead()
-				cooldown = 50
+				cooldown = if (isOnSpecialSoil) 100 else 200
 				addMana(maxMana)
 			}
 		}
@@ -43,7 +40,7 @@ class SubTileStormFlower: SubTilePassiveGenerating() {
 	}
 	
 	override fun getMaxMana(): Int {
-		return if (isOnSpecialSoil) 6000 else 3000
+		return 6000
 	}
 	
 	override fun getColor(): Int {

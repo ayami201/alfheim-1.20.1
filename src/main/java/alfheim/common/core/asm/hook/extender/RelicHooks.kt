@@ -3,7 +3,20 @@ package alfheim.common.core.asm.hook.extender
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.common.entity.item.EntityItemImmortalRelic
-import alfheim.common.item.AlfheimItems
+import alfheim.common.item.AlfheimItems.akashicRecords
+import alfheim.common.item.AlfheimItems.daolos
+import alfheim.common.item.AlfheimItems.excaliber
+import alfheim.common.item.AlfheimItems.flugelSoul
+import alfheim.common.item.AlfheimItems.gjallarhorn
+import alfheim.common.item.AlfheimItems.gleipnir
+import alfheim.common.item.AlfheimItems.gungnir
+import alfheim.common.item.AlfheimItems.mask
+import alfheim.common.item.AlfheimItems.mjolnir
+import alfheim.common.item.AlfheimItems.moonlightBow
+import alfheim.common.item.AlfheimItems.priestRingHeimdall
+import alfheim.common.item.AlfheimItems.priestRingNjord
+import alfheim.common.item.AlfheimItems.priestRingSif
+import alfheim.common.item.AlfheimItems.subspaceSpear
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageRelicNBTSync
 import alfheim.common.world.data.CustomWorldData.Companion.customData
@@ -25,7 +38,7 @@ import net.minecraft.util.*
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
 import vazkii.botania.api.item.IRelic
 import vazkii.botania.common.core.helper.ItemNBTHelper
-import vazkii.botania.common.item.ModItems
+import vazkii.botania.common.item.ModItems.*
 import vazkii.botania.common.item.relic.*
 import alexsocol.asjlib.ItemNBTHelper as AItemNBTHelper
 
@@ -49,15 +62,26 @@ object RelicHooks {
 	@Hook(returnCondition = ReturnCondition.ON_TRUE)
 	fun isRightPlayer(static: ItemRelic?, player: String, stack: ItemStack?) = stack?.item !is ItemDice
 	
+	private val underControl by lazy { arrayOf(infiniteFruit, kingKey, flugelEye, thorRing, odinRing, lokiRing, flugelSoul, mask, excaliber, subspaceSpear, moonlightBow, gleipnir, mjolnir, daolos, gungnir, gjallarhorn, priestRingHeimdall, priestRingNjord, priestRingSif, akashicRecords) }
+	
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
 	fun updateRelic(static: ItemRelic?, stack: ItemStack?, player: EntityPlayer) {
-		if (stack == null || stack.item !is IRelic) return
+		val item = stack?.item ?: return
+		if (item !is IRelic) return
 		
 		AItemNBTHelper.initNBT(stack)
 		
-		if (ItemRelic.getSoulbindUsernameS(stack).isEmpty())
-			ItemRelic.bindToPlayer(player, stack)
+		if (ItemRelic.getSoulbindUsernameS(stack).isNotEmpty()) return
+		
+		// can't be sure that relics from other mods are correct + no tuner recipe, so should be OK
+		if (item inl underControl) {
+			if (item.bindAchievement != null && !player.hasAchievement(item.bindAchievement)) return
+		} else {
+			player.triggerAchievement(item.bindAchievement)
+		}
+		
+		ItemRelic.bindToPlayer(player, stack)
 	}
 	
 	@JvmStatic
@@ -66,7 +90,7 @@ object RelicHooks {
 		if (GuiScreen.isShiftKeyDown()) {
 			addStringToTooltip(list, "alfheimmisc.relic")
 			
-			if (stack.item === ModItems.aesirRing)
+			if (stack.item === aesirRing)
 				addStringToTooltip(list, "botaniamisc.dropIkea")
 			
 			val name = stack.unlocalizedName + ".poem"
@@ -81,7 +105,7 @@ object RelicHooks {
 	
 	// thing to prevent cheats and dupes
 	
-	val aesirRingComponents by lazy { arrayOf(ModItems.thorRing, ModItems.lokiRing, ModItems.odinRing, AlfheimItems.priestRingSif, AlfheimItems.priestRingNjord, AlfheimItems.priestRingHeimdall) }
+	val aesirRingComponents by lazy { arrayOf(thorRing, lokiRing, odinRing, priestRingSif, priestRingNjord, priestRingHeimdall) }
 	
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ON_TRUE, booleanReturnConstant = false)

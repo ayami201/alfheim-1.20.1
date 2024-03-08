@@ -824,7 +824,7 @@ object AlfheimLexiconData {
 			PageText("0"),
 		    PageTuningRecipe("1", AlfheimRecipes.tuningSlimeSize, ItemStack(Items.spawn_egg, 1, 55)),
 		    PageTuningRecipe("2", AlfheimRecipes.tuningMagmaSize, ItemStack(Items.spawn_egg, 1, 62)),
-		    PageTuningRecipe("3", AlfheimRecipes.tuningElementlaSlimeSize, ItemSpawnEgg.forEntity<EntityElementalSlime>()!!)
+		    PageTuningRecipe("3", AlfheimRecipes.tuningElementalSlimeSize, ItemSpawnEgg.forEntity<EntityElementalSlime>()!!)
 		)
 		
 		if (AlfheimRecipes.tuningTaintSize != null) slimePages += PageTuningRecipe("4", AlfheimRecipes.tuningTaintSize!!, ItemStack(ConfigItems.itemSpawnerEgg, 1, 15))
