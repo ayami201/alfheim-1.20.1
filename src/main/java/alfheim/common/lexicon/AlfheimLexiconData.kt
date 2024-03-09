@@ -2,7 +2,7 @@
 
 package alfheim.common.lexicon
 
-import alexsocol.asjlib.ASJUtilities
+import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.BlockModMeta
 import alfheim.AlfheimCore
 import alfheim.api.*
@@ -446,11 +446,16 @@ object AlfheimLexiconData {
 		}
 		anomaly.icon = anomalyIcon
 		
+		val anomalyIcons = AlfheimAPI.anomalies.keys.map { ItemBlockAnomaly.ofType(it) }.toTypedArray()
+		val stableAnomalyIcons = anomalyIcons.map { ai -> ai.copy().also { ItemNBTHelper.setBoolean(it, TileAnomaly.TAG_STABLE, true) } }.toTypedArray()
+		val riftDriveIcons = anomalyIcons.map { ai -> RiftDrive.stack.also { ItemNBTHelper.setString(it, TileAnomaly.TAG_SUBTILE_NAME, ItemBlockAnomaly.getType(ai)) } }.toTypedArray()
+		
 		anomalyHarvester.setLexiconPages(*Array(3) { PageText("$it") },
 		                                 PageCraftingRecipe("3", AlfheimRecipes.recipeAnomalyHarvester),
-		                                 PageTuningRecipe("4", AlfheimRecipes.tuningAnomalyStabilization, anomalyIcon),
-		                                 PageTuningRecipe("5", AlfheimRecipes.tuningAnomalyPackaging, anomalyIcon),
+		                                 PageTuningRecipe("4", AlfheimRecipes.tuningAnomalyStabilization, anomalyIcons, stableAnomalyIcons),
+		                                 PageTuningRecipe("5", AlfheimRecipes.tuningAnomalyPackaging, stableAnomalyIcons, riftDriveIcons),
 		                                 PageText("6"), PageText("7"))
+		LexiconRecipeMappings.map(RiftDrive.stack, anomalyHarvester, 5)
 		
 		anyavil.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeAnyavil))
 		

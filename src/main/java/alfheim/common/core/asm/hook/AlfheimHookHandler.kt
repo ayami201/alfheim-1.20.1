@@ -52,6 +52,7 @@ import alfheim.common.world.data.CustomWorldData.Companion.customData
 import alfheim.common.world.mobspawn.MobSpawnHandler
 import baubles.common.lib.PlayerHandler
 import cofh.asmhooks.HooksCore
+import com.google.common.collect.Multimap
 import cpw.mods.fml.relauncher.Side.CLIENT
 import cpw.mods.fml.relauncher.SideOnly
 import gloomyfolken.hooklib.asm.*
@@ -69,6 +70,7 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.*
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.EntityAIAvoidEntity
+import net.minecraft.entity.ai.attributes.AttributeModifier
 import net.minecraft.entity.boss.EntityDragon
 import net.minecraft.entity.item.*
 import net.minecraft.entity.monster.EntityCreeper
@@ -1998,4 +2000,20 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ALWAYS)
 	fun onUpdate(item: ItemBottledMana, stack: ItemStack?, world: World?, entity: Entity?, slot: Int, inHand: Boolean) = Unit
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun fillModifiers(item: ItemOdinRing, attributes: Multimap<String?, AttributeModifier?>, stack: ItemStack?) {
+		if (ASJUtilities.isClient) return
+		
+		attributes.put(SharedMonsterAttributes.maxHealth.attributeUnlocalizedName, AttributeModifier(UUID.fromString("c4fba2b2-503a-4210-97b3-dc900ee2409c"), "Bauble modifier", 20.0, 0))
+	}
+
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun fillModifiers(item: ItemAesirRing, attributes: Multimap<String?, AttributeModifier?>, stack: ItemStack?) {
+		if (ASJUtilities.isClient) return
+		
+		attributes.put(SharedMonsterAttributes.maxHealth.attributeUnlocalizedName, AttributeModifier(UUID.fromString("c4fba2b2-503a-4210-97b3-dc900ee2409c"), "Bauble modifier", 20.0, 0))
+	}
 }

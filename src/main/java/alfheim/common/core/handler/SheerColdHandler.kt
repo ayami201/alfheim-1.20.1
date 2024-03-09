@@ -138,8 +138,6 @@ object SheerColdHandler {
 		val cold = target.cold
 		
 		if (cold >= 25f && !canProtect(target, NIFLHEIM, 0)) target.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 100, (cold / 25).I - 1))
-		
-		if (target.cold >= 100f && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, target.maxHealth * 0.01f + 0.15f)
 	}
 	
 	// additional "lag" with controls - AlfheimHookHandler#updatePlayerMoveState

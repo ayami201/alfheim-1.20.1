@@ -186,12 +186,15 @@ object RelicNBTSyncHandler {
 					if (ach == null || player.hasAchievement(ach)) continue
 					
 					inv[i] = null
-					if (stack.tagCompound?.getString("soulbind") == player.commandSenderName)
+					
+					val owner = stack.tagCompound?.getString("soulbind")
+					
+					if (owner == player.commandSenderName) {
 						stack.tagCompound?.removeTag("soulbind")
-					
-					EntityItemImmortalRelic(EntityItem(player.worldObj, player.posX, player.posY, player.posZ, stack)).spawn()
-					
-					ASJUtilities.say(player, "alfheimmisc.relic.fail", stack.displayName)
+						
+						EntityItemImmortalRelic(EntityItem(player.worldObj, player.posX, player.posY, player.posZ, stack)).spawn()
+						ASJUtilities.say(player, "alfheimmisc.relic.fail", stack.displayName)
+					}
 				}
 			}
 			

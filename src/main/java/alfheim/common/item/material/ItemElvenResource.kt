@@ -151,7 +151,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 			"item.InfusedCandy"
 		else {
 			var name = "item.${of(stack.meta).toString()}"
-			if (stack.meta == ElementalSlimeBall.I && stack.element != null) name += ".${stack.element.name}"
+			if (stack.meta == ElementalSlimeBall.I) name += ".${stack.element.name}"
 			name
 		}
 	
@@ -184,55 +184,57 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	
 	val usable = arrayOf(ElvenWeed.I, WisdomBottle.I, YggFruit.I)
 	
-	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack? {
+	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
 		if (stack.meta in usable) {
 			if (stack.meta == WisdomBottle.I && (!RagnarokHandler.ginnungagap || player is EntityPlayerMP && KnowledgeSystem.know(player, Knowledge.ABYSS_TRUTH))) return stack
 			player.setItemInUse(stack, getMaxItemUseDuration(stack))
 		} else
 		// rift shard filling
 		if (stack.meta == RiftShardEmpty.I) {
-//			if (!RagnarokHandler.ginnungagap || player !is EntityPlayerMP || !KnowledgeSystem.know(player, Knowledge.ABYSS_TRUTH)) return stack
-			if (player !is EntityPlayerMP) return stack
+			if (!RagnarokHandler.ginnungagap || player !is EntityPlayerMP) return stack
 			
 			val mop = ASJUtilities.getSelectedBlock(player, player.theItemInWorldManager.blockReachDistance, true)
 			if (mop?.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return stack
 			val (x, y, z) = intArrayOf(mop.blockX, mop.blockY, mop.blockZ)
 			
-			val give = when (player.dimension) {
-				-1 -> {
-					if (y > 31) return stack
+			val give = if (world.getBlock(x, y, z) === AlfheimBlocks.rift) {
+				val nextMeta = world.getBlockMetadata(x, y, z) + 1
+				if (nextMeta > 15) return stack
+				world.setBlockMetadataWithNotify(x, y, z, nextMeta, 0)
+				
+				RiftShardGinnungagap.stack
+			} else {
+				when (player.dimension) {
+					-1 -> {
+						if (y > 31) return stack
+						
+						for (i in x.bidiRange(5))
+							for (j in (y - 5)..y)
+								for (k in z.bidiRange(5))
+									if (world.getBlock(i, j, k) != Blocks.lava)
+										return stack
+						
+						RiftShardMuspelheim.stack
+					}
 					
-					for (i in x.bidiRange(5))
-						for (j in (y - 5)..y)
-							for (k in z.bidiRange(5))
-								if (world.getBlock(i, j, k) != Blocks.lava)
-									return stack
+					AlfheimConfigHandler.dimensionIDNiflheim -> {
+						if (y != 127 || ChunkProviderNiflheim.f(x) !in z.bidiRange(6)) return stack
+						
+						RiftShardNiflheim.stack
+					}
 					
-					RiftShardMuspelheim.stack
+					else -> return stack
 				}
-				AlfheimConfigHandler.dimensionIDNiflheim -> {
-					if (y != 127 || ChunkProviderNiflheim.f(x) !in z.bidiRange(6)) return stack
-					
-					RiftShardNiflheim.stack
-				}
-				!in emptyArray<Int>() -> { // bruh
-					if (world.getBlock(x, y, z) !== AlfheimBlocks.rift) return stack
-					val nextMeta = world.getBlockMetadata(x, y, z) + 1
-					if (nextMeta > 15) return stack
-					world.setBlockMetadataWithNotify(x, y, z, nextMeta, 0)
-					
-					RiftShardGinnungagap.stack
-				}
-				else -> return stack
 			}
 			
-			stack.stackSize--
+			if (--stack.stackSize <= 0)
+				return give
 			
 			if (!player.inventory.addItemStackToInventory(give))
-				player.dropPlayerItemWithRandomChoice(stack, false)
+				player.dropPlayerItemWithRandomChoice(give, false)
 		}
 		
-		return if (stack.stackSize <= 0) null else stack
+		return stack
 	}
 	
 	override fun getMaxItemUseDuration(stack: ItemStack) = if (stack.meta in usable) 40 else 0

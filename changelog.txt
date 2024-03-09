@@ -4,4 +4,7 @@ Innovations:
 
 Fixes:
  Relics from some other addons being unpickupable w/o achievement
- Thunderbloom cd and mana balance
+ Weather flowers cd and mana balance
+ Tree fruits breaking leaves gen
+ Crash on filling rift shards
+ Max health dupe with Odin/Aesir ring

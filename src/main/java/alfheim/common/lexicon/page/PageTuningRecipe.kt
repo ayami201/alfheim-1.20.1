@@ -15,12 +15,31 @@ import vazkii.botania.client.core.handler.ClientTickHandler
 import vazkii.botania.common.core.handler.ConfigHandler
 import vazkii.botania.common.lexicon.page.*
 
-open class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncantation<Any>, val target: Any, val result: Any? = null): PageRecipe(unlocalizedName) {
+open class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncantation<Any>, val targets: Array<Any>, val results: Array<Any>? = null): PageRecipe(unlocalizedName) {
 	
 	private var ticksElapsed = 0
 	
+	private var recipeAt = 0
+	
+	@Suppress("UNCHECKED_CAST")
+	constructor(unlocalizedName: String, incantation: TunerIncantation<Any>, target: Any, result: Any? = null): // some shitty type fuckery down
+			this(unlocalizedName, incantation, if (target is Array<*>) target as Array<Any> else arrayOf(target), if (result == null) null else if (result is Array<*>) result as Array<Any> else arrayOf(result))
+	
+	init {
+		val target = targets.getOrNull(0)
+		if (target != null && target !is ItemStack && target !is String)
+			throw IllegalArgumentException("Targets elements must be either stack or string")
+		
+		val result = results?.getOrNull(0)
+		if (result != null && result !is ItemStack && result !is String)
+			throw IllegalArgumentException("Results elements must be either stack or string")
+	}
+	
 	override fun renderScreen(gui: IGuiLexiconEntry, mx: Int, my: Int) {
 		mc.renderEngine.bindTexture(LibResourceLocations.petalOverlay)
+		
+		val target = targets[recipeAt]
+		val result = results?.get(recipeAt)
 		
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -78,6 +97,13 @@ open class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncan
 	@SideOnly(Side.CLIENT)
 	override fun updateScreen() {
 		if (GuiScreen.isShiftKeyDown()) return
+		
+		if (ticksElapsed % 20 == 0) {
+			recipeAt++
+			
+			if (recipeAt == targets.size) recipeAt = 0
+		}
+		
 		++ticksElapsed
 	}
 }

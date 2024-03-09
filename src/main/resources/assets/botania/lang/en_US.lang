@@ -35,7 +35,7 @@ alfheim.page.anomalyHarvester2=Lastly, by (sneak)-rightclicking with bare hand, 
 alfheim.page.anomalyHarvester3=Taz-powered
 alfheim.page.anomalyHarvester4=Anomaly stabilization
 alfheim.page.anomalyHarvester5=Anomaly displacement
-alfheim.page.anomalyHarvester6=The behavior of contained anomalies will remain pretty much the same, but there are some exceptions. &1Manavortex&0 will increase internal mana buffer. &1Warp&0 will teleport every entity to the block next to the harvester. &1Clot of Dark Energy&0 will hurt only monsters. &1Eye of Death&0 won't oneshot and will target every living entity except children.
+alfheim.page.anomalyHarvester6=The behavior of contained anomalies will remain pretty much the same, but there are some exceptions. &1Manavortex&0 will increase internal mana buffer. &1Warp&0 will teleport every entity to the block next to the harvester. &1Clot of Dark Energy&0 will hurt only monsters. &1Eye of Death&0 won't oneshot and will target every living entity.
 alfheim.page.anomalyHarvester7=One single harvester can combine anomalies. Combination of &1Antigravity&0 and &1Gravity Vortex&0 will form new effect that will move every entity within work zone in the direction where small pyramid is facing. Work zones of two different harvesters can safely overlap.
 
 alfheim.entry.elves=Elves
