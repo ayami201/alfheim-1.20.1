@@ -17,7 +17,7 @@ class EntityItemImmortalRelic: EntityItemImmortal {
 		super.onUpdate()
 		
 		if (posY < 0) {
-			val owner = worldObj.playerEntities.firstOrNull { (it as EntityPlayer).commandSenderName == getOwner() } as EntityPlayer?
+			val owner = worldObj.playerEntities.firstOrNull { (it as EntityPlayer).commandSenderName == owner } as EntityPlayer?
 			
 			setMotion(0.0)
 			
@@ -31,9 +31,14 @@ class EntityItemImmortalRelic: EntityItemImmortal {
 	}
 	
 	override fun canBePickedByPlayer(player: EntityPlayer) =
-		player.capabilities.isCreativeMode || getOwner().let { it.isNullOrEmpty() || it == player.commandSenderName } && getAchievement().let { it == null || player.hasAchievement(it) }
+		if (player.capabilities.isCreativeMode)
+			true
+		else if (owner.let { it.isNullOrEmpty() || it == player.commandSenderName })
+			bindAhievement.let { it == null || player.hasAchievement(it) }
+		else
+			true
 	
-	fun getOwner() = (stack?.item as? IRelic)?.getSoulbindUsername(stack)
+	val owner get() = (stack?.item as? IRelic)?.getSoulbindUsername(stack)
 	
-	fun getAchievement() = (stack?.item as? IRelic)?.bindAchievement
+	val bindAhievement get() = (stack?.item as? IRelic)?.bindAchievement
 }

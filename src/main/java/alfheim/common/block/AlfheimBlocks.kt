@@ -1,7 +1,7 @@
 package alfheim.common.block
 
-import alexsocol.asjlib.*
 import alexsocol.asjlib.ASJUtilities.setBurnable
+import alexsocol.asjlib.capitalized
 import alexsocol.asjlib.extendables.block.*
 import alfheim.api.*
 import alfheim.api.lib.LibOreDict
@@ -24,7 +24,6 @@ import alfheim.common.block.tile.sub.flower.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.lexicon.AlfheimLexiconData
-import com.google.common.collect.BiMap
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
@@ -39,6 +38,8 @@ import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.api.subtile.SubTileEntity
 import vazkii.botania.common.block.*
 import vazkii.botania.common.lib.LibBlockNames
+import kotlin.collections.forEachIndexed
+import kotlin.collections.set
 import vazkii.botania.common.lib.LibOreDict as BLibOreDict
 
 object AlfheimBlocks {
@@ -141,6 +142,8 @@ object AlfheimBlocks {
 	val shimmerQuartzSlab: Block
 	val shimmerQuartzSlabFull: Block
 	val shimmerQuartzStairs: Block
+	val snakeBody: Block
+	val snakeObject: Block
 	val snowGrass: Block
 	val snowLayer: Block
 	val spire: Block
@@ -342,6 +345,8 @@ object AlfheimBlocks {
 		shimmerQuartzSlab.register()
 		shimmerQuartzSlabFull.register()
 		shimmerQuartzStairs = BlockShimmerQuartzStairs(shimmerQuartz)
+		snakeBody = BlockSnakeBody()
+		snakeObject = BlockSnakeObject()
 		snowGrass = BlockSnowGrass()
 		snowLayer = BlockSnowLayer()
 		spire = BlockSpire()
@@ -522,11 +527,6 @@ object AlfheimBlocks {
 		
 		registerOre("treeSapling", irisSapling)
 		
-		registerOre(LibOreDict.DIRT[16], ItemStack(rainbowDirt))
-		registerOre(LibOreDict.IRIS_DIRT, ItemStack(rainbowDirt))
-		registerOre(LibOreDict.DIRT[17], ItemStack(auroraDirt))
-		registerOre(LibOreDict.IRIS_DIRT, ItemStack(auroraDirt))
-		
 		registerOre("treeLeaves", ItemStack(lightningLeaves))
 		registerOre("plankWood", ItemStack(lightningPlanks))
 		registerOre("treeSapling", ItemStack(lightningSapling))
@@ -595,13 +595,18 @@ object AlfheimBlocks {
 			registerOre("slabWood", ItemStack(altSlabsFull, 1, i))
 		}
 		
-		var t: ItemStack
-		
 		registerOre(LibOreDict.IRIS_DIRT, ItemStack(irisDirt, 1, WILDCARD_VALUE))
 		
 		LibOreDict.DIRT.forEachIndexed { id, it ->
 			registerOre(it, ItemStack(irisDirt, 1, id))
 		}
+		
+		registerOre(LibOreDict.DIRT[16], ItemStack(rainbowDirt))
+		registerOre(LibOreDict.IRIS_DIRT, ItemStack(rainbowDirt))
+		registerOre(LibOreDict.DIRT[17], ItemStack(auroraDirt))
+		registerOre(LibOreDict.IRIS_DIRT, ItemStack(auroraDirt))
+		
+		var t: ItemStack
 		
 		arrayOf(lightningWood, netherWood, sealingWood, calicoWood, circuitWood, altWood0).forEach {
 			registerOre("logWood", ItemStack(it, 1, WILDCARD_VALUE))
@@ -789,6 +794,7 @@ object AlfheimBlocks {
 		addSubFlower(SubTileOrechidAlfarem::class.java, "orechidAlfarem")
 		addSubFlower(SubTilePetronia::class.java, "petronia")
 		addSubFlower(SubTileRainFlower::class.java, "rainFlower")
+		addSubFlower(SubTileRattlerose::class.java, "rattlerose")
 		addSubFlower(SubTileSnowFlower::class.java, "snowFlower")
 		addSubFlower(SubTileStormFlower::class.java, "stormFlower")
 		addSubFlower(SubTileTradescantia::class.java, "tradescantia")

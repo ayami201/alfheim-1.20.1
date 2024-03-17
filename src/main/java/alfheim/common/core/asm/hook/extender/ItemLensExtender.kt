@@ -25,7 +25,7 @@ object ItemLensExtender {
 	
 	enum class EnumAlfheimLens(val meta: Int, val unlocalizedName: String, val prop: Int, val instance: Lens) {
 		// Botania
-		MESSANGER(22, "lensMessenger", PROP_POWER, LensMessanger()),
+		MESSENGER(22, "lensMessenger", PROP_POWER, LensMessenger()),
 		TRIPWIRE(23, "lensTripwire", PROP_CONTROL, LensTripwire()),
 		// ExtraBotany
 		PUSH(24, "lensPush", PROP_NONE, LensPush()),

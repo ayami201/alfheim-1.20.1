@@ -2,7 +2,7 @@
 
 package alfheim.common.lexicon
 
-import alexsocol.asjlib.ASJUtilities
+import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.BlockModMeta
 import alfheim.AlfheimCore
 import alfheim.api.*
@@ -145,6 +145,7 @@ object AlfheimLexiconData {
 	lateinit var pylons: LexiconEntry
 	lateinit var corpQuandex: LexiconEntry
 	lateinit var rainbowFlora: LexiconEntry
+	lateinit var flowerRattlerose: LexiconEntry
 	lateinit var reality: LexiconEntry
 	lateinit var redstoneRelay: LexiconEntry
 	lateinit var ringsAura: LexiconEntry
@@ -283,6 +284,7 @@ object AlfheimLexiconData {
 		flowerEnderchid = AlfheimLexiconEntry("flowerEnderchid", categoryAlfheim)
 		flowerPetronia = AlfheimLexiconEntry("flowerPetronia", categoryAlfheim)
 		flowerRain = AlfheimLexiconEntry("flowerRain", categoryAlfheim)
+		flowerRattlerose = AlfheimLexiconEntry("flowerRattlerose", categoryAlfheim)
 		flowerSnow = AlfheimLexiconEntry("flowerSnow", categoryAlfheim)
 		flowerStorm = AlfheimLexiconEntry("flowerStorm", categoryAlfheim)
 		flowerTradescantia = AlfheimLexiconEntry("flowerTradescantia", categoryAlfheim)
@@ -446,11 +448,16 @@ object AlfheimLexiconData {
 		}
 		anomaly.icon = anomalyIcon
 		
+		val anomalyIcons = AlfheimAPI.anomalies.keys.map { ItemBlockAnomaly.ofType(it) }.toTypedArray()
+		val stableAnomalyIcons = anomalyIcons.map { ai -> ai.copy().also { ItemNBTHelper.setBoolean(it, TileAnomaly.TAG_STABLE, true) } }.toTypedArray()
+		val riftDriveIcons = anomalyIcons.map { ai -> RiftDrive.stack.also { ItemNBTHelper.setString(it, TileAnomaly.TAG_SUBTILE_NAME, ItemBlockAnomaly.getType(ai)) } }.toTypedArray()
+		
 		anomalyHarvester.setLexiconPages(*Array(3) { PageText("$it") },
 		                                 PageCraftingRecipe("3", AlfheimRecipes.recipeAnomalyHarvester),
-		                                 PageTuningRecipe("4", AlfheimRecipes.tuningAnomalyStabilization, anomalyIcon),
-		                                 PageTuningRecipe("5", AlfheimRecipes.tuningAnomalyPackaging, anomalyIcon),
+		                                 PageTuningRecipe("4", AlfheimRecipes.tuningAnomalyStabilization, anomalyIcons, stableAnomalyIcons),
+		                                 PageTuningRecipe("5", AlfheimRecipes.tuningAnomalyPackaging, stableAnomalyIcons, riftDriveIcons),
 		                                 PageText("6"), PageText("7"))
+		LexiconRecipeMappings.map(RiftDrive.stack, anomalyHarvester, 5)
 		
 		anyavil.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeAnyavil))
 		
@@ -594,10 +601,15 @@ object AlfheimLexiconData {
 		flowerEnderchid.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeOrechidEndium)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("orechidEndium")
 		flowerPetronia.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipePetronia)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("petronia")
 		flowerRain.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeRainFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("rainFlower")
+		flowerRattlerose.setLexiconPages(*Array(5) { PageText("$it") }, PagePetalRecipe("5", AlfheimRecipes.recipeRattlerose), PageRuneRecipe("6", AlfheimRecipes.recipeSnakeEgg)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("rattlerose")
 		flowerSnow.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeSnowFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("snowFlower")
 		flowerStorm.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeStormFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("stormFlower")
 		flowerTradescantia.setLexiconPages(PageText("0"), PageText("1"), PagePetalRecipe("2", AlfheimRecipes.recipeTradescantia)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("tradescantia")
 		flowerWind.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeWindFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("windFlower")
+		
+		for (i in 0..15)
+			LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.snakeBody, 1, i), flowerRattlerose, 0)
+		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.snakeObject, 1, 1), flowerRattlerose, 0)
 		
 		flugel.setLexiconPages(*Array(3) { PageText("$it") }).icon = ItemStack(ModItems.flightTiara, 1, 1)
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.discFlugel), flugel, 0)
@@ -824,7 +836,7 @@ object AlfheimLexiconData {
 			PageText("0"),
 		    PageTuningRecipe("1", AlfheimRecipes.tuningSlimeSize, ItemStack(Items.spawn_egg, 1, 55)),
 		    PageTuningRecipe("2", AlfheimRecipes.tuningMagmaSize, ItemStack(Items.spawn_egg, 1, 62)),
-		    PageTuningRecipe("3", AlfheimRecipes.tuningElementlaSlimeSize, ItemSpawnEgg.forEntity<EntityElementalSlime>()!!)
+		    PageTuningRecipe("3", AlfheimRecipes.tuningElementalSlimeSize, ItemSpawnEgg.forEntity<EntityElementalSlime>()!!)
 		)
 		
 		if (AlfheimRecipes.tuningTaintSize != null) slimePages += PageTuningRecipe("4", AlfheimRecipes.tuningTaintSize!!, ItemStack(ConfigItems.itemSpawnerEgg, 1, 15))

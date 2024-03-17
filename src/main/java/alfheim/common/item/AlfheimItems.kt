@@ -330,8 +330,11 @@ object AlfheimItems {
 										ItemStack(excaliber),
 										ItemStack(subspaceSpear),
 										ItemStack(moonlightBow),
+										ItemStack(gleipnir),
 										ItemStack(mjolnir),
+										ItemStack(daolos),
 										ItemStack(gungnir),
+										ItemStack(gjallarhorn),
 										ItemStack(priestRingHeimdall),
 										ItemStack(priestRingNjord),
 										ItemStack(priestRingSif),
@@ -362,7 +365,7 @@ object AlfheimItems {
 		OreDictionary.registerOre(LibOreDict.TWIG_NETHERWOOD, NetherwoodTwig.stack)
 		OreDictionary.registerOre(LibOreDict.SPLINTERS_NETHERWOOD, NetherwoodSplinters.stack)
 		OreDictionary.registerOre(LibOreDict.COAL_NETHERWOOD, NetherwoodCoal.stack)
-		OreDictionary.registerOre(LibOreDict.DYES[16], RainbowDust.stack)
+		OreDictionary.registerOre(LibOreDict.DYES(LibOreDict.Color.Rainbow), RainbowDust.stack)
 		OreDictionary.registerOre(LibOreDict.FLORAL_POWDER, RainbowDust.stack)
 		OreDictionary.registerOre(LibOreDict.RAINBOW_PETAL, RainbowPetal.stack)
 		OreDictionary.registerOre(LibOreDict.RAINBOW_QUARTZ, RainbowQuartz.stack)
@@ -370,7 +373,7 @@ object AlfheimItems {
 		
 		OreDictionary.registerOre(LibOreDict.HOLY_PENDANT, ItemStack(attributionBauble, 1, OreDictionary.WILDCARD_VALUE))
 		
-		OreDictionary.registerOre(LibOreDict.DYES[16], ItemStack(ModBlocks.bifrostPerm))
+		OreDictionary.registerOre(LibOreDict.DYES(LibOreDict.Color.Rainbow), ItemStack(ModBlocks.bifrostPerm))
 		OreDictionary.registerOre(LibOreDict.FLORAL_POWDER, ItemStack(ModItems.dye, 1, OreDictionary.WILDCARD_VALUE))
 		OreDictionary.registerOre(LibOreDict.PETAL_ANY, ItemStack(ModItems.petal, 1, OreDictionary.WILDCARD_VALUE))
 		

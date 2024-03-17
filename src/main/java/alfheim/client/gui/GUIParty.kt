@@ -225,7 +225,7 @@ object GUIParty: Gui() {
 				if (l == null) {
 					color = 0xCCCCCC
 					col = when (val it = pt.getType(i)) {
-						in EnumRace.entries.indices -> EnumRace.getRGBColor(it)
+						in EnumRace.entries.indices -> EnumRace.entries[it].rgbColor
 						LibResourceLocations.BOSS   -> 0xA2018C
 						LibResourceLocations.NPC    -> -0xFF5501
 						LibResourceLocations.MOB    -> col

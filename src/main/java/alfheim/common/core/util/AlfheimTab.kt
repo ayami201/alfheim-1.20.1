@@ -120,6 +120,7 @@ import alfheim.common.block.AlfheimBlocks.sealingWood
 import alfheim.common.block.AlfheimBlocks.shimmerQuartz
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzSlab
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
+import alfheim.common.block.AlfheimBlocks.snakeObject
 import alfheim.common.block.AlfheimBlocks.snowGrass
 import alfheim.common.block.AlfheimBlocks.snowLayer
 import alfheim.common.block.AlfheimBlocks.spire
@@ -591,6 +592,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(fireGrenade)
 		
 		addBlock(airyVirus)
+		addBlock(snakeObject)
 		
 		addBlock(powerStone)
 		list.removeAt(list.size - 5)

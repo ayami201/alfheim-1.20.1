@@ -1,14 +1,15 @@
 package alfheim.common.item.block
 
-import alexsocol.asjlib.ASJUtilities
+import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.common.block.*
 import alfheim.common.block.tile.TileAnomaly
+import alfheim.common.block.tile.TileAnomaly.Companion.TAG_STABLE
 import alfheim.common.block.tile.TileAnomaly.Companion.TAG_SUBTILE_NAME
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
-import net.minecraft.util.IIcon
+import net.minecraft.util.*
 import net.minecraft.world.World
 import vazkii.botania.api.lexicon.IRecipeKeyProvider
 import vazkii.botania.common.core.helper.ItemNBTHelper.*
@@ -26,6 +27,11 @@ class ItemBlockAnomaly(block: Block): ItemBlock(block), IRecipeKeyProvider {
 	
 	override fun getUnlocalizedName(stack: ItemStack?): String {
 		return "tile.Anomaly." + getString(stack, TAG_SUBTILE_NAME, TYPE_UNDEFINED)
+	}
+	
+	override fun getItemStackDisplayName(stack: ItemStack?): String {
+		val s = if (ItemNBTHelper.getBoolean(stack, TAG_STABLE, false)) StatCollector.translateToLocal("alfheimmisc.stable") else ""
+		return super.getItemStackDisplayName(stack) + s
 	}
 	
 	override fun getMetadata(meta: Int): Int {

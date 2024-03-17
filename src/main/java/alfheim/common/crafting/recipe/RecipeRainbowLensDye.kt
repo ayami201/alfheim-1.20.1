@@ -17,7 +17,7 @@ import vazkii.botania.common.item.lens.ItemLens
 object RecipeRainbowLensDye: IRecipe {
 	
 	override fun matches(inv: InventoryCrafting, world: World?): Boolean {
-		ores = OreDictionary.getOres(LibOreDict.DYES[16])
+		ores = OreDictionary.getOres(LibOreDict.DYES(LibOreDict.Color.Rainbow))
 		
 		var foundLens = false
 		var foundDye = false

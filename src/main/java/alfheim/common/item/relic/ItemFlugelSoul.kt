@@ -466,7 +466,7 @@ class ItemFlugelSoul: ItemRelic("FlugelSoul"), ILensEffect, IImmortalHandledItem
 		
 		internal fun mana(player: EntityPlayer): Int {
 			val mod = if (player.dimension != dim) player.worldObj.provider.movementFactor / MinecraftServer.getServer().worldServerForDimension(dim).provider.movementFactor * 4.0 else 1.0
-			return (Vector3.pointDistanceSpace(x, y, z, player.posX, player.posY - 1.6, player.posZ) * mod).mfloor() * 10
+			return (Vector3.vecEntityDistance(Vector3(x, y, z), player) * mod).mfloor() * 10
 		}
 	}
 }

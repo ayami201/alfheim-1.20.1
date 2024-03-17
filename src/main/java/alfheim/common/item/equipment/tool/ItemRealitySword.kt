@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.*
 import net.minecraft.entity.boss.*
-import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
 import net.minecraft.potion.*
@@ -82,26 +81,15 @@ class ItemRealitySword: ItemSword(AlfheimAPI.mauftriumToolmaterial), IManaUsingI
 	override fun onUpdate(stack: ItemStack, world: World, entity: Entity, slotID: Int, inHand: Boolean) {
 		if (world.isRemote) return
 		
-		val safe = stack.element != 5
-		
 		if (entity is EntityPlayer && stack.element in 1..4 && !ManaItemHandler.requestManaExact(stack, entity, 10, !world.isRemote))
 			stack.element = 0
 		
-		if (safe) return
+		if (stack.element != 5) return
 		
-		if (entity is EntityLivingBase) {
-			if (entity is EntityPlayer)
-				if(ContributorsPrivacyHelper.isCorrect(entity.commandSenderName, "AlexSocol"))
-					return
-				else
-					ASJUtilities.sayToAllOnline("item.RealitySword.DIE", entity.getCommandSenderName())
-			
-			entity.health = 0f
-			entity.onDeath(DamageSource.outOfWorld)
-		}
-		
-		EntityItem(world, entity.posX, entity.posY, entity.posZ, stack.copy()).spawn()
-		stack.stackSize = 0
+		if (entity is EntityPlayer && ContributorsPrivacyHelper.isCorrect(entity.commandSenderName, "AlexSocol"))
+			return
+		else
+			stack.element = 0
 	}
 	
 	override fun onLeftClickEntity(stack: ItemStack, player: EntityPlayer, entity: Entity): Boolean {

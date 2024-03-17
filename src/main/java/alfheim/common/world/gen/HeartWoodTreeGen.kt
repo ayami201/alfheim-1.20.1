@@ -56,6 +56,9 @@ class HeartWoodTreeGen(val minTreeHeight: Int, val regWood: Block, val regMeta: 
 			}
 		}
 		
+		var hasBerry = false
+		
+		// gen leaves cycles
 		for (j in y - 3 + height..(y + height)) {
 			val i3 = j - (y + height)
 			val l1 = 1 - i3 / 2
@@ -75,10 +78,12 @@ class HeartWoodTreeGen(val minTreeHeight: Int, val regWood: Block, val regMeta: 
 					if (!block.isAir(world, i, j, k) && !block.isLeaves(world, i, j, k)) continue
 					setBlockAndNotifyAdequately(world, i, j, k, leaves, leavesMeta)
 					
+					if (hasBerry) continue
+					
 					if (!world.isAirBlock(i, j - 1, k) || random.nextInt(50) != 0 || !berry.canBlockStay(world, i, j - 1, k)) continue
 					setBlockAndNotifyAdequately(world, i, j - 1, k, berry, 0)
 					
-					return true
+					hasBerry = true
 				}
 			}
 		}

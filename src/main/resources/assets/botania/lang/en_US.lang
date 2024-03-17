@@ -35,7 +35,7 @@ alfheim.page.anomalyHarvester2=Lastly, by (sneak)-rightclicking with bare hand, 
 alfheim.page.anomalyHarvester3=Taz-powered
 alfheim.page.anomalyHarvester4=Anomaly stabilization
 alfheim.page.anomalyHarvester5=Anomaly displacement
-alfheim.page.anomalyHarvester6=The behavior of contained anomalies will remain pretty much the same, but there are some exceptions. &1Manavortex&0 will increase internal mana buffer. &1Warp&0 will teleport every entity to the block next to the harvester. &1Clot of Dark Energy&0 will hurt only monsters. &1Eye of Death&0 won't oneshot and will target every living entity except children.
+alfheim.page.anomalyHarvester6=The behavior of contained anomalies will remain pretty much the same, but there are some exceptions. &1Manavortex&0 will increase internal mana buffer. &1Warp&0 will teleport every entity to the block next to the harvester. &1Clot of Dark Energy&0 will hurt only monsters. &1Eye of Death&0 won't oneshot and will target every living entity.
 alfheim.page.anomalyHarvester7=One single harvester can combine anomalies. Combination of &1Antigravity&0 and &1Gravity Vortex&0 will form new effect that will move every entity within work zone in the direction where small pyramid is facing. Work zones of two different harvesters can safely overlap.
 
 alfheim.entry.elves=Elves
@@ -120,6 +120,16 @@ alfheim.tagline.flowerRain=Produces mana from rain
 alfheim.page.flowerRain0=&1Rainaria&0 produces &4Mana&0 while it's raining. Note: This flower doesn't produce anything in snow environment.
 alfheim.page.flowerRain1=Don't get it too wet!
 
+alfheim.entry.flowerRattlerose=Rattlerose
+alfheim.tagline.flowerRattlerose=Snake game inside
+alfheim.page.flowerRattlerose0=&1Rattlerose&0 is a generating flower with an interesting behavior. For it to start working one must place a &1Snake Egg&0 block (read on) somewhere withing 15x15 square centered around the flower and one block higher. You will notice new block appear somewhere else within this square if you did everything correctly.
+alfheim.page.flowerRattlerose1=This new one is a &1Food&0 block. The main goal now is to lead the snake to the food. To do this one must power the flower with a &4redstone signal&0 from one of horizontal sides (single &4pulse&0 is enough). A snake will appear from the egg. From that point the flower is set to an active state and the game begins.
+alfheim.page.flowerRattlerose2=While in this state it will move the &1Snake Head&0 in the last received direction, one block per second. When the head touches the food, it will consume it and grow one block of &1Body&0, and a new food block will appear somewhere else. That is, the more food is consumed, the longer the snake will become. The body will follow the head.
+alfheim.page.flowerRattlerose3=Be aware that flower update frequency will be increased each 10 consumed food blocks. Also, the snake can not move through itself or leave the 15x15 square, otherwise it will die and disappear. It will also disappear if stepped over the flower itself, but in this case it will produce &4mana&0 (read on). Lastly, keep the square empty from other blocks.
+alfheim.page.flowerRattlerose4=The longer the snake is at the moment of touching the top of the flower, the more mana will be generated progressively. That means, finishing the process 10 times with length of 5 is &lmuch less&0 efficient than 1 time with length of 50. The flower max mana capacity is based on the maximal available output so don't worry about the overflow.
+alfheim.page.flowerRattlerose5=Slither and conquer
+alfheim.page.flowerRattlerose6=Serpent mastery unleashed
+
 alfheim.entry.flowerSnow=Scurrocallis
 alfheim.tagline.flowerSnow=Produces mana from snow
 alfheim.page.flowerSnow0=&1Scurrocallis&0 is an alternative to &4Rainaria&0 but for snow biomes. You know why this is a thing....
@@ -127,7 +137,7 @@ alfheim.page.flowerSnow1=Cold to the touch!
 
 alfheim.entry.flowerStorm=Thunderbloom
 alfheim.tagline.flowerStorm=Produces mana from lightning
-alfheim.page.flowerStorm0=&1Thunderbloom&0 is another weather-dependent flower except this one isn't a passive one. It generates mana when a lightning strickes it. Afterwards generates a lot of mana. This process heats the flower and it needs &4roughly a minute&0 to cool down.
+alfheim.page.flowerStorm0=&1Thunderbloom&0 is another weather-dependent flower except this one isn't a passive one. It generates mana when a lightning strickes it. Afterwards generates a lot of mana. This process heats the flower and it needs some time to cool down.
 alfheim.page.flowerStorm1=Essentially an energy converter!
 
 alfheim.entry.flowerTradescantia=Tradescantia
