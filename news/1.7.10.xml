@@ -1,6 +1,6 @@
 <news>
 	<version id="LATEST">
-		<val>52</val>
+		<val>54</val>
 	</version>
 	<version id="UNIVERSAL">
 		<val>$json["Official Alfheim Discord server is here! *",{"text":"click","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Join discord server","color":"gold"}},"clickEvent":{"action":"open_url","value":"https://discord.gg/dqQXZHq"}},"*"]</val>
@@ -145,5 +145,11 @@
 	</version>
 	<version id="51">
 		<val>Finished Akashic Records and added some more stuff</val>
+	</version>
+	<version id="52">
+		<val>New fun content, go get it!</val>
+	</version>
+	<version id="53">
+		<val>Snake game flower and fixes</val>
 	</version>
 </news>
