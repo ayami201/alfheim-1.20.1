@@ -19,8 +19,12 @@ object AlfheimAchievements {
 	val achievements: MutableList<Achievement> = ArrayList()
 	
 	val alfheim: Achievement // go to alfheim
+	val breadBoom: Achievement // they are overfed
+	val firework: Achievement // rocketride
 	val grass: Achievement // grass
 	val infuser: Achievement // build up infuser
+	val midgardsormr: Achievement // maximize
+	val slime: Achievement // anime girls' worst nightmare
 	val wingedHussar: Achievement // become winged hussar
 	
 	// relics
@@ -39,30 +43,27 @@ object AlfheimAchievements {
 	val ringSif: Achievement
 	val subspace: Achievement
 	
-	val breadBoom: Achievement // they are overfed
 	val divineMarksman: Achievement // show your marksman skill
-	val rosaBomb: Achievement // bomb 'em all
-	
 	val flugelKill: Achievement
 	val flugelHardKill: Achievement
-	val outstander: Achievement
-	
-	val firework: Achievement
-	val slime: Achievement
+	val outstander: Achievement // survive
+	val rosaBomb: Achievement // bomb 'em all
 	
 	init {
 		alfheim = AlfheimAchievement("alfheim", 0, 0, ItemStack(AlfheimBlocks.alfheimPortal, 1, 1), null)
-		grass = AlfheimAchievement("grass", -2, -1, ItemStack(Blocks.grass), alfheim).setSpecial()
-		infuser = AlfheimAchievement("infuser", 1, -2, AlfheimBlocks.manaInfuser, alfheim)
-		
-		wingedHussar = AlfheimAchievement("wingedHussaurs", -1, -3, AlfheimItems.elvoriumHelmet, infuser).setSpecial()
-		
+		breadBoom = AlfheimAchievement("breadBoom", 32, 32, Items.bread, null).setSpecial()
+		firework = AlfheimAchievement("firework", -3, 3, Items.fireworks, null).setSpecial()
 		flugelKill = AlfheimAchievement("flugelKill", 2, 0, ModItems.flightTiara, null)
-		flugelSoul = AlfheimAchievement("flugelSoul", 4, 0, AlfheimItems.flugelSoul, flugelKill)
+		grass = AlfheimAchievement("grass", -2, -1, ItemStack(Blocks.grass), alfheim)
+		infuser = AlfheimAchievement("infuser", 1, -2, AlfheimBlocks.manaInfuser, alfheim)
+		midgardsormr = AlfheimAchievement("midgardsormr", -2, 2, ItemStack(AlfheimBlocks.snakeBody, 1, 1), null).setSpecial()
+		slime = AlfheimAchievement("slime", -1, 3, Items.slime_ball, null).setSpecial()
+		wingedHussar = AlfheimAchievement("wingedHussars", -1, -3, AlfheimItems.elvoriumHelmet, infuser).setSpecial()
 		
+		flugelSoul = AlfheimAchievement("flugelSoul", 4, 0, AlfheimItems.flugelSoul, flugelKill)
 		flugelHardKill = AlfheimAchievement("flugelHardKill", 5, 1, ElvenResourcesMetas.MuspelheimEssence.stack, flugelSoul)
+		
 		mask = AlfheimAchievement("mask", 6, 0, AlfheimItems.mask, flugelSoul)
-		outstander = AlfheimAchievement("outstander", 5, -1, Items.diamond_chestplate, mask).setSpecial()
 		
 		akashic = AlfheimAchievement("akashic", 8, -5, AlfheimItems.akashicRecords, mask)
 		daolos = AlfheimAchievement("daolos", 8, 6, AlfheimItems.daolos, null)
@@ -77,12 +78,9 @@ object AlfheimAchievements {
 		ringSif = AlfheimAchievement("ringSif", 8, -2, AlfheimItems.priestRingSif, mask)
 		subspace = AlfheimAchievement("subspace", 8, 1, AlfheimItems.subspaceSpear, null)
 		
-		breadBoom = AlfheimAchievement("breadBoom", 32, 32, Items.bread, null).setSpecial()
 		divineMarksman = AlfheimAchievement("divineMarksman", 10, -1, ItemStack(Blocks.red_flower, 1, 2), moonlightBow).setSpecial()
+		outstander = AlfheimAchievement("outstander", 5, -1, Items.diamond_chestplate, mask).setSpecial()
 		rosaBomb = AlfheimAchievement("rosaBomb", 10, 1, Blocks.red_flower, subspace).setSpecial()
-		
-		firework = AlfheimAchievement("firework", -3, 3, Items.fireworks, null).setSpecial()
-		slime = AlfheimAchievement("slime", -1, 3, Items.slime_ball, null).setSpecial()
 		
 		AchievementPage.registerAchievementPage(AchievementPage(ModInfo.MODID.capitalized(), *achievements.toTypedArray()))
 		

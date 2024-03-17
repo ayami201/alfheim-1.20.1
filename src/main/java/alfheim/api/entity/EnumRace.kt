@@ -1,86 +1,35 @@
 package alfheim.api.entity
 
 import alexsocol.asjlib.*
+import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.event.PlayerChangedRaceEvent
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.common.core.handler.CardinalSystem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.*
+import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.common.MinecraftForge
 
-enum class EnumRace {
+enum class EnumRace(val rgbColor: Int, val enumColor: EnumChatFormatting) {
 	
-	HUMAN, SALAMANDER, SYLPH, CAITSITH, POOKA, GNOME, LEPRECHAUN, SPRIGGAN, UNDINE, IMP, ALV;
+	HUMAN(0xFFFFFF, EnumChatFormatting.WHITE),
+	SALAMANDER(0xb61f24, EnumChatFormatting.DARK_RED),
+	SYLPH(0x5ee52e, EnumChatFormatting.GREEN),
+	CAITSITH(0xcdb878, EnumChatFormatting.YELLOW),
+	POOKA(0x99cb3b, EnumChatFormatting.GOLD),
+	GNOME(0x816b57, EnumChatFormatting.DARK_GREEN),
+	LEPRECHAUN(0x6d6b7b, EnumChatFormatting.GRAY),
+	SPRIGGAN(0x282739, EnumChatFormatting.WHITE),
+	UNDINE(0x40c0a4, EnumChatFormatting.AQUA),
+	IMP(0x786a89, EnumChatFormatting.LIGHT_PURPLE),
+	ALV(0xFFEE99, EnumChatFormatting.WHITE);
 	
-	val rgbColor: Int
-		get() = getRGBColor(ordinal)
-	
-	val enumColor: EnumChatFormatting
-		get() = getEnumColor(ordinal)
-	
-	fun glColor() {
-		glColor(ordinal)
+	fun glColor(alpha: Double) {
+		ASJRenderHelper.glColor1u(ASJRenderHelper.addAlpha(rgbColor, (alpha * 255).I))
 	}
-	
-	fun glColorA(alpha: Double) {
-		glColorA(ordinal, alpha)
-	}
-	
-	fun localize() =
-		StatCollector.translateToLocal("race." + toString() + ".name")!!
 	
 	companion object {
 		
-		fun getRGBColor(id: Int): Int {
-			return when (getByID(id)) {
-				SALAMANDER -> 0xb61f24
-				SYLPH      -> 0x5ee52e
-				CAITSITH   -> 0xcdb878
-				POOKA      -> 0x99cb3b
-				GNOME      -> 0x816b57
-				LEPRECHAUN -> 0x6d6b7b
-				SPRIGGAN   -> 0x282739
-				UNDINE     -> 0x40c0a4
-				IMP        -> 0x786a89
-				ALV        -> 0xFFEE99
-				else       -> 0xffffff
-			}
-		}
-		
-		fun getEnumColor(id: Int): EnumChatFormatting {
-			return when (getByID(id)) {
-				SALAMANDER -> EnumChatFormatting.DARK_RED
-				SYLPH      -> EnumChatFormatting.GREEN
-				CAITSITH   -> EnumChatFormatting.YELLOW
-				POOKA      -> EnumChatFormatting.GOLD
-				GNOME      -> EnumChatFormatting.DARK_GREEN
-				LEPRECHAUN -> EnumChatFormatting.GRAY
-				SPRIGGAN   -> EnumChatFormatting.WHITE
-				UNDINE     -> EnumChatFormatting.AQUA
-				IMP        -> EnumChatFormatting.LIGHT_PURPLE
-				ALV        -> EnumChatFormatting.WHITE
-				else       -> EnumChatFormatting.WHITE
-			}
-		}
-		
-		fun glColor(id: Int) {
-			glColor1u(addAlpha(getRGBColor(id), 255))
-		}
-		
-		fun glColorA(id: Int, alpha: Double) {
-			glColor1u(addAlpha(getRGBColor(id), (alpha * 255).I))
-		}
-		
-		private fun addAlpha(color: Int, alpha: Int) =
-			alpha and 0xFF shl 24 or (color and 0x00FFFFFF)
-		
-		private fun glColor1u(color: Int) {
-			org.lwjgl.opengl.GL11.glColor4ub((color shr 16 and 0xFF).toByte(), (color shr 8 and 0xFF).toByte(), (color and 0xFF).toByte(), (color shr 24 and 0xFF).toByte())
-		}
-		
-		private fun getByID(id: Int) = if (0 > id || id > entries.size) HUMAN else entries[id]
-		
-		operator fun get(id: Int) = getByID(id)
+		operator fun get(id: Int) = EnumRace.entries.getOrNull(id) ?: HUMAN
 		
 		operator fun get(player: EntityPlayer): EnumRace {
 			val id = if (ASJUtilities.isServer)
@@ -88,7 +37,7 @@ enum class EnumRace {
 			else
 				CardinalSystemClient.playerRaceIDs[player.commandSenderName] ?: 0
 			
-			return getByID(id)
+			return get(id)
 		}
 		
 		fun getRaceID(player: EntityPlayer): Int {

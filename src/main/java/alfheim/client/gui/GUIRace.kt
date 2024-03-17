@@ -33,7 +33,7 @@ object GUIRace: Gui() {
 		//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 		//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		
-		mc.thePlayer.race.glColorA(0.5)
+		mc.thePlayer.race.glColor(0.5)
 		
 		Tessellator.instance.startDrawingQuads()
 		Tessellator.instance.addVertexWithUV(0.0, 0.0, 0.0, 0.0, 0.0)
@@ -46,7 +46,7 @@ object GUIRace: Gui() {
 		
 		val mod = min(1.0, mc.thePlayer.flight / ElvenFlightHelper.max)
 		val time = sin((mc.theWorld.totalWorldTime / 2).D) * 0.5
-		mc.thePlayer.race.glColorA(if (mc.thePlayer.capabilities.isFlying) if (mod > 0.1) time + 0.5 else time else 1.0)
+		mc.thePlayer.race.glColor(if (mc.thePlayer.capabilities.isFlying) if (mod > 0.1) time + 0.5 else time else 1.0)
 		
 		Tessellator.instance.startDrawingQuads()
 		Tessellator.instance.addVertexWithUV(0.0, 32 - mod * 32, 0.0, 0.0, 1 - mod)

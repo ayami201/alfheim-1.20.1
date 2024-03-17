@@ -11,9 +11,9 @@ class TileCorporeaInjector: ASJTile(), IInventory {
 	
 	val spark: ICorporeaSpark? get() = CorporeaHelper.getSparkForBlock(worldObj, xCoord, yCoord, zCoord)
 	
-	override fun getSizeInventory() = if (spark == null) 0 else 1
-	override fun getInventoryStackLimit() = Int.MAX_VALUE
-	override fun isItemValidForSlot(slot: Int, stack: ItemStack?) = true
+	override fun getSizeInventory() = if (spark == null) 0 else 1024
+	override fun getInventoryStackLimit() = if (spark == null) 0 else 1024
+	override fun isItemValidForSlot(slot: Int, stack: ItemStack?) = spark != null
 	override fun setInventorySlotContents(slot: Int, stack: ItemStack?) = CorporeaAdvancedHelper.putOrDrop(this, spark, stack, -1)
 	
 	// UNUSED

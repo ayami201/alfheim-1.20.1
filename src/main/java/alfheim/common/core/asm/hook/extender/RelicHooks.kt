@@ -166,7 +166,7 @@ object RelicNBTSyncHandler {
 		if (ASJUtilities.isClient) return
 		val player = e.entityLiving as? EntityPlayerMP ?: return
 		
-		run sync@ {
+		if (player.ticksExisted % 20 == 0) run sync@ {
 			val nbtData = MinecraftServer.getServer().worldServerForDimension(0).customData.nbtData
 			val relicNBT = nbtData.tagMap.computeIfAbsent(RelicHooks.TAG_RELIC_NBT) { NBTTagCompound() } as NBTTagCompound
 			val userData = relicNBT.tagMap.computeIfAbsent(player.commandSenderName) { NBTTagCompound() } as NBTTagCompound
@@ -185,11 +185,10 @@ object RelicNBTSyncHandler {
 					val ach = (stack.item as? IRelic)?.bindAchievement
 					if (ach == null || player.hasAchievement(ach)) continue
 					
-					inv[i] = null
-					
 					val owner = stack.tagCompound?.getString("soulbind")
 					
-					if (owner == player.commandSenderName) {
+					if (owner.isNullOrEmpty() || owner == player.commandSenderName) {
+						inv[i] = null
 						stack.tagCompound?.removeTag("soulbind")
 						
 						EntityItemImmortalRelic(EntityItem(player.worldObj, player.posX, player.posY, player.posZ, stack)).spawn()

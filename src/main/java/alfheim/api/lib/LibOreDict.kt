@@ -30,14 +30,17 @@ object LibOreDict {
 	const val SPLINTERS_NETHERWOOD = "splinterNetherwood"
 	const val COAL_NETHERWOOD = "coalFlame"
 	const val HOLY_PENDANT = "holyPendant"
-	val COLORS = arrayOf("White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Black", "Rainbow", "Aurora")
 	const val IRIS_WOOD = "irisWood"
 	const val IRIS_LEAVES = "irisLeaves"
 	const val IRIS_DIRT = "irisDirt"
-	val WOOD = Array(COLORS.size) { i -> "$IRIS_WOOD${COLORS[i]}" }
-	val LEAVES = Array(COLORS.size) { i -> "$IRIS_LEAVES${COLORS[i]}" }
-	val DIRT = Array(COLORS.size) { i -> "$IRIS_DIRT${COLORS[i]}" }
-	val DYES = Array(COLORS.size - 1) { i -> "dye${COLORS[i]}" }
+	val WOOD = Color.entries.map { "$IRIS_WOOD${it}" }.toTypedArray()
+	fun WOOD(color: Color) = WOOD[color.ordinal]
+	val LEAVES = Color.entries.map { "$IRIS_LEAVES${it}" }.toTypedArray()
+	fun LEAVES(color: Color) = LEAVES[color.ordinal]
+	val DIRT = Color.entries.map { "$IRIS_DIRT${it}" }.toTypedArray()
+	fun DIRT(color: Color) = DIRT[color.ordinal]
+	val DYES = Color.entries.mapTo(ArrayList(Color.entries.size)) { "dye${it}" }.apply { removeLast() }.toTypedArray()
+	fun DYES(color: Color) = DYES[color.ordinal]
 	const val FLORAL_POWDER = "dyeFloralPowder"
 	const val PETAL_ANY = "petalMystic"
 	const val MUSHROOM = "mushroomShimmer"
@@ -52,4 +55,10 @@ object LibOreDict {
 	const val EMERALD = "gemEmerald"
 	const val GLOWSTONE_DUST = "dustGlowstone"
 	const val REDSTONE_DUST = "dustRedstone"
+	
+	enum class Color {
+		White, Orange, Magenta, LightBlue, Yellow, Lime, Pink, Gray, LightGray, Cyan, Purple, Blue, Brown, Green, Red, Black, Rainbow, Aurora;
+		
+		val I get() = ordinal
+	}
 }

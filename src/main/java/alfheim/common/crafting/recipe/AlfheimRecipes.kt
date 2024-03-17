@@ -7,9 +7,11 @@ import alfheim.AlfheimCore
 import alfheim.api.*
 import alfheim.api.AlfheimAPI.addInfuserRecipe
 import alfheim.api.crafting.recipe.*
+import alfheim.api.lib.LibOreDict
 import alfheim.api.lib.LibOreDict.ALT_TYPES
 import alfheim.api.lib.LibOreDict.ARUNE
 import alfheim.api.lib.LibOreDict.COAL_NETHERWOOD
+import alfheim.api.lib.LibOreDict.Color.*
 import alfheim.api.lib.LibOreDict.DREAM_WOOD_LOG
 import alfheim.api.lib.LibOreDict.DYES
 import alfheim.api.lib.LibOreDict.ELVORIUM_INGOT
@@ -134,6 +136,7 @@ import alfheim.common.block.AlfheimBlocks.sealingWood
 import alfheim.common.block.AlfheimBlocks.shimmerQuartz
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzSlab
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
+import alfheim.common.block.AlfheimBlocks.snakeObject
 import alfheim.common.block.AlfheimBlocks.spire
 import alfheim.common.block.AlfheimBlocks.subspacian
 import alfheim.common.block.AlfheimBlocks.tradePortal
@@ -528,7 +531,6 @@ object AlfheimRecipes {
 	lateinit var recipeSealingStairs: IRecipe
 	lateinit var recipeSerenade: IRecipe
 	lateinit var recipeShimmerQuartz: IRecipe
-	lateinit var recipeSixTorches: IRecipe
 	lateinit var recipeSoulHorn: IRecipe
 	lateinit var recipeSoulSword: IRecipe
 	lateinit var recipeSparkBase: IRecipe
@@ -566,6 +568,7 @@ object AlfheimRecipes {
 	lateinit var recipeOrechidEndium: RecipePetals
 	lateinit var recipePetronia: RecipePetals
 	lateinit var recipeRainFlower: RecipePetals
+	lateinit var recipeRattlerose: RecipePetals
 	lateinit var recipeSnowFlower: RecipePetals
 	lateinit var recipeStormFlower: RecipePetals
 	lateinit var recipeTradescantia: RecipePetals
@@ -581,6 +584,7 @@ object AlfheimRecipes {
 	lateinit var recipeMuspelheimRune: RecipeRuneAltar
 	lateinit var recipeNiflheimRune: RecipeRuneAltar
 	lateinit var recipeRealityRune: RecipeRuneAltar
+	lateinit var recipeSnakeEgg: RecipeRuneAltar
 	
 	lateinit var recipeLightningTree: RecipeTreeCrafting
 	lateinit var recipeInfernalTree: RecipeTreeCrafting
@@ -1326,10 +1330,10 @@ object AlfheimRecipes {
 						 'E', RUNE[2])
 		ModCraftingRecipes.recipesLaputaShard?.add(BotaniaAPI.getLatestAddedRecipe())
 		
-		addOreDictRecipe(ItemStack(lens, 1, MESSANGER.meta),
-						 " P ", "PLP", " P ",
-						 'P', paper,
-						 'L', ItemStack(lens))
+		addOreDictRecipe(ItemStack(lens, 1, MESSENGER.meta),
+		                 " P ", "PLP", " P ",
+		                 'P', paper,
+		                 'L', ItemStack(lens))
 		recipeLensMessenger = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(lens, 1, SUPERCONDUCTOR.meta),
@@ -1912,7 +1916,6 @@ object AlfheimRecipes {
 				  "C", "S",
 				  'C', NetherwoodCoal.stack,
 				  'S', ItemStack(stick))
-		recipeSixTorches = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(tradePortal),
 						 "LEL", "LEL", "LEL",
@@ -1956,7 +1959,7 @@ object AlfheimRecipes {
 		
 		addOreDictRecipe(ItemStack(worldTree),
 		                 "LLL", "AYA", "WDW",
-		                 'L', LEAVES[16],
+		                 'L', LEAVES(Aurora),
 		                 'A', apple,
 		                 'Y', ItemStack(altWood1, 1, 2),
 		                 'W', DREAM_WOOD,
@@ -2290,9 +2293,9 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(ItemStack(corporeaInjector), hopper, corporeaSpark)
 		recipeInjector = BotaniaAPI.getLatestAddedRecipe()
 		
-		for (i in 0..15)
-			addShapelessOreDictRecipe(ItemStack(dye, 1, i), LEAVES[i], PESTLE_AND_MORTAR)
-		addShapelessOreDictRecipe(RainbowDust.stack, LEAVES[16], PESTLE_AND_MORTAR)
+		for (i in LibOreDict.Color.entries)
+			addShapelessOreDictRecipe(ItemStack(dye, 1, i.ordinal), LEAVES(i), PESTLE_AND_MORTAR)
+		addShapelessOreDictRecipe(RainbowDust.stack, LEAVES(Rainbow), PESTLE_AND_MORTAR)
 		recipesLeafDyes = BotaniaAPI.getLatestAddedRecipes(17)
 		
 		if (Botania.thaumcraftLoaded) {
@@ -2543,7 +2546,7 @@ object AlfheimRecipes {
 													   350,
 													   MANA_STEEL, MANA_STEEL, MANA_STEEL,
 													   RUNE[13], // Wrath
-													   LEAVES[10], LEAVES[10], LEAVES[10], // Purple
+													   LEAVES(Purple), LEAVES(Purple), LEAVES(Purple),
 													   ItemStack(teruTeruBozu))
 		
 		recipeInfernalTree = AlfheimAPI.addTreeRecipe(10000,
@@ -2553,7 +2556,7 @@ object AlfheimRecipes {
 													  70,
 													  "ingotBrickNether", "ingotBrickNether", "ingotBrickNether",
 													  RUNE[1], // Fire
-													  LEAVES[1], LEAVES[1], LEAVES[1], // orange
+													  LEAVES(Orange), LEAVES(Orange), LEAVES(Orange),
 													  BLAZE_BLOCK)
 		
 		recipeCalicoTree = AlfheimAPI.addTreeRecipe(50000,
@@ -2563,7 +2566,7 @@ object AlfheimRecipes {
 													70,
 													ItemStack(soul_sand), ItemStack(soul_sand), ItemStack(soul_sand),
 													RUNE[11], // Greed
-													LEAVES[1], LEAVES[0], LEAVES[12], // Orange White Brown
+													LEAVES(Orange), LEAVES(White), LEAVES(Brown),
 													ItemStack(obsidian))
 		
 		recipeCircuitTree = AlfheimAPI.addTreeRecipe(10000,
@@ -2573,7 +2576,7 @@ object AlfheimRecipes {
 													 70,
 													 ItemStack(repeater), ItemStack(comparator), ItemStack(repeater),
 													 RUNE[9], // Lust
-													 LEAVES[14], LEAVES[14], LEAVES[14], // Red
+													 LEAVES(Red), LEAVES(Red), LEAVES(Red),
 													 "blockRedstone")
 		
 		recipeSealingTree = AlfheimAPI.addTreeRecipe(50000,
@@ -2583,7 +2586,7 @@ object AlfheimRecipes {
 													 350,
 													 ELEMENTIUM, ELEMENTIUM, ELEMENTIUM,
 													 RUNE[7], // Winter
-													 LEAVES[0], LEAVES[0], LEAVES[0], // White
+													 LEAVES(White), LEAVES(White), LEAVES(White),
 													 ItemStack(wool, 1, WILDCARD_VALUE))
 		
 		recipeBarrierTree = AlfheimAPI.addTreeRecipe(30000,
@@ -2593,9 +2596,9 @@ object AlfheimRecipes {
 													 70,
 													 ItemStack(piston), ItemStack(pistonRelay), ItemStack(piston),
 													 RUNE[3], // AIR
-													 LEAVES[9], // CYAN
-													 LEAVES[13], // GREEN
-													 LEAVES[3], // LIGHT BLUE
+													 LEAVES(Cyan),
+													 LEAVES(Green),
+													 LEAVES(LightBlue),
 													 RUNE[15] // PRIDE
 		)
 		
@@ -2667,6 +2670,18 @@ object AlfheimRecipes {
 														  PETAL[3], PETAL[3], // Light Blue
 														  PETAL[4]) // Yellow
 		
+		recipeRattlerose = BotaniaAPI.registerPetalRecipe(BotaniaAPI.internalHandler.getSubTileAsStack("rattlerose"),
+		                                                  LIFE_ESSENCE,
+														  RUNE[0], // Water
+														  RUNE[2], // Earth
+														  RUNE[7], // Winter
+														  RUNE[13], // Wrath
+														  PETAL[Lime.I],
+														  PETAL[Green.I],
+														  PETAL[Cyan.I],
+														  PETAL[Red.I],
+														  PETAL[Yellow.I])
+		
 		recipeSnowFlower = BotaniaAPI.registerPetalRecipe(BotaniaAPI.internalHandler.getSubTileAsStack("snowFlower"),
 														  *Array(4) { PETAL[3] }, // Light Blue
 														  *Array(3) { PETAL[0] }) // White
@@ -2704,6 +2719,8 @@ object AlfheimRecipes {
 																  RUNE[1], RUNE[2], MuspelheimEssence.stack, MuspelheimEssence.stack, IFFESAL_DUST)
 		recipeNiflheimRune = BotaniaAPI.registerRuneAltarRecipe(NiflheimRune.stack, costTier3,
 																RUNE[0], RUNE[3], NiflheimEssence.stack, NiflheimEssence.stack, IFFESAL_DUST)
+		recipeSnakeEgg = BotaniaAPI.registerRuneAltarRecipe(ItemStack(snakeObject), costTier3,
+		                                                    DRAGONSTONE, PRISMARINE_SHARD, ItemStack(apple), *Array(4) { ItemStack(cellBlock) })
 		
 		ModRuneRecipes.recipeSummerRune?.let { BotaniaAPI.runeAltarRecipes.remove(it) }
 		ModRuneRecipes.recipeSummerRune = BotaniaAPI.registerRuneAltarRecipe(ItemStack(rune, 1, 5), costTier2, RUNE[2], RUNE[3], "sand", "sand", ItemStack(slime_ball), ItemStack(melon))

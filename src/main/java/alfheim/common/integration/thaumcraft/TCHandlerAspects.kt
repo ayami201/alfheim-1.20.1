@@ -1014,7 +1014,7 @@ object TCHandlerShadowFoxAspects {
 		ThaumcraftApi.registerObjectTag(ElvenResourcesMetas.RainbowQuartz.stack, list)
 		
 		list = AspectList().add(this.COLOR, 1)
-		ThaumcraftApi.registerObjectTag(LibOreDict.DYES[16], list)
+		ThaumcraftApi.registerObjectTag(LibOreDict.DYES(LibOreDict.Color.Rainbow), list)
 		
 		list = AspectList().add(Aspect.TAINT, 2).add(Aspect.ENTROPY, 2).add(Aspect.PLANT, 2)
 		if (forbidden) list.add(WRATH, 2)

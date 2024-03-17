@@ -366,7 +366,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		numericalMana = loadProp(CATEGORY_GENERAL, "numericalMana", numericalMana, false, "Set this to false to disable numerical mana representation")
 		overcoldBlacklist = loadProp(CATEGORY_GENERAL, "overcoldBlacklist", overcoldBlacklist, false, "List of entity names with no cold gauge filling ", false)
 		overheatBlacklist = loadProp(CATEGORY_GENERAL, "overheatBlacklist", overheatBlacklist, false, "List of entity names with no heat gauge filling ", false)
-		rattleroseSpeed = loadProp(CATEGORY_GENERAL, "rattleroseSpeed", rattleroseSpeed, false, "Rattlerose game update speed. Set to 0 to switch to manual control")
+		rattleroseSpeed = loadProp(CATEGORY_GENERAL, "rattleroseSpeed", rattleroseSpeed, false, "Rattlerose game update speed (one time per N ticks). Set to 0 to switch to manual control")
 		realLightning = loadProp(CATEGORY_GENERAL, "realLightning", realLightning, false, "Set this to true to make Rod of the Thundering Peaks summon real (weather) lightning")
 		renderBooba = loadProp(CATEGORY_GENERAL, "renderBooba", renderBooba, false, "Set this to false to disable ESM booba render")
 		repairBlackList = loadProp(CATEGORY_GENERAL, "repairBlackList", repairBlackList, false, "Blacklist of repairable items (ex: for anyavil) [modid:name]", false)

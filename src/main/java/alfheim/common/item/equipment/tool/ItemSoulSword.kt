@@ -167,12 +167,12 @@ class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem, IElementalItem 
 			}
 			
 			val player = e.source.entity as? EntityPlayer ?: return true
-//			if (!EntityFlugel.isTruePlayer(player)) return true
+			if (!EntityFlugel.isTruePlayer(player)) return true
 			
 			val stack = player.heldItem ?: return true
 			if (stack.item !== AlfheimItems.soulSword) return true
 			
-			e.ammount = getDamageFromLevel(stack).F + 1
+			e.ammount = min(e.ammount, getDamageFromLevel(stack).F + 1)
 			
 			return false
 		}

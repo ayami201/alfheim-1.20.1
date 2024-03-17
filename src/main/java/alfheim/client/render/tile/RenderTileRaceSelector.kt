@@ -99,7 +99,7 @@ object RenderTileRaceSelector: TileEntitySpecialRenderer() {
 				
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f)
 				val spd = 0.5
-				EnumRace[tile.rotation + 1].glColorA(1.0)
+				EnumRace[tile.rotation + 1].glColor(1.0)
 				
 				glTranslated(0.0, -0.15, 0.0)
 				

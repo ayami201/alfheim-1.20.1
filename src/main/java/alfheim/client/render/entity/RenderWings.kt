@@ -70,7 +70,7 @@ object RenderWings {
 			else
 				glColor4f(1f, 1f, 1f, 1f)
 		} else
-			player.race.glColorA(if (player.flight / ElvenFlightHelper.max < 0.05) min(0.75 + cos((player.ticksExisted + mc.timer.renderPartialTicks).D * spd * 0.3).F * 0.2, 1.0) else 1.0)
+			player.race.glColor(if (player.flight / ElvenFlightHelper.max < 0.05) min(0.75 + cos((player.ticksExisted + mc.timer.renderPartialTicks).D * spd * 0.3).F * 0.2, 1.0) else 1.0)
 		
 		Helper.rotateIfSneaking(player)
 		glTranslated(0.0, -0.15, 0.0)

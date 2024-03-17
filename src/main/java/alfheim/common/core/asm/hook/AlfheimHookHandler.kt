@@ -64,6 +64,7 @@ import net.minecraft.client.gui.*
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.particle.EntityFX
 import net.minecraft.client.renderer.*
+import net.minecraft.client.renderer.entity.RenderItem
 import net.minecraft.client.renderer.texture.*
 import net.minecraft.command.ICommandSender
 import net.minecraft.creativetab.CreativeTabs
@@ -95,6 +96,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fluids.IFluidBlock
 import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL12
 import ru.vamig.worldengine.*
 import thaumcraft.api.aspects.AspectList
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager
@@ -414,10 +416,63 @@ object AlfheimHookHandler {
 	fun tickRate(block: BlockHourglass, world: World?) = 2
 	
 	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun onBurstCollision(block: BlockHourglass, burst: IManaBurst, world: World, x: Int, y: Int, z: Int) {
+		if (world.isRemote || burst.isFake) return
+		val tile = world.getTileEntity(x, y, z) as TileHourglass
+		if (tile.isDust())
+			tile.time++
+		else
+			tile.move = !tile.move
+		VanillaPacketDispatcher.dispatchTEToNearbyPlayers(tile)
+	}
+	
+	// Added the ability to use Mana Powder in the Hovering Hourglass to make it a counter
+	fun TileHourglass.isDust() = getStackItemTime(null, get(0), 0) == 1
+	
+	@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun TileHourglass.updateEntity() {
+		val dust = isDust()
+		val totalTime = getTotalTime()
+		if (totalTime > 0 || dust) {
+			if (move && !dust) time++
+			
+			if (time >= totalTime) {
+				time = 0
+				flip = !flip
+				flipTicks = 4
+				
+				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 3)
+				worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord, getBlockType(), getBlockType().tickRate(worldObj))
+				
+				for (dir in ForgeDirection.VALID_DIRECTIONS) {
+					val block = worldObj.getBlock(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ)
+					if (block is IHourglassTrigger)
+						block.onTriggeredByHourglass(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, this)
+				}
+			}
+			
+			timeFraction = time.F / totalTime.F
+		} else {
+			time = 0
+			timeFraction = 0f
+		}
+		
+		if (flipTicks > 0) flipTicks--
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun isItemValidForSlot(tile: TileHourglass, slot: Int, stack: ItemStack?) = getStackItemTime(null, stack, 0) != 0
+	
+	@JvmStatic
 	@Hook(injectOnExit = true, returnCondition = ALWAYS)
-	fun getStackItemTime(tile: TileHourglass?, stack: ItemStack?, @ReturnValue time: Int) =
+	fun getStackItemTime(static: TileHourglass?, stack: ItemStack?, @ReturnValue time: Int) =
 		if (stack != null && time == 0) {
-			if (stack.item === AlfheimBlocks.elvenSand.toItem()) 600 else 0
+			if (stack.item === AlfheimBlocks.elvenSand.toItem()) 600 else
+			if (stack.item === ModItems.manaResource && stack.meta == 23) 1 else 0
 		} else time
 	
 	@JvmStatic
@@ -425,8 +480,51 @@ object AlfheimHookHandler {
 	fun getColor(tile: TileHourglass, @ReturnValue color: Int): Int {
 		val stack = tile[0]
 		return if (stack != null && color == 0) {
-			if (stack.item === AlfheimBlocks.elvenSand.toItem()) 0xf7f5d9 else 0
+			if (stack.item === AlfheimBlocks.elvenSand.toItem()) 0xF7F5D9 else
+			if (tile.isDust()) 0x03ABFF else 0
 		} else color
+	}
+	
+	// Add: Hovering Hourglass HUD now shows the exact current time within the cycle
+	// Added the ability to use Mana Powder in the Hovering Hourglass to make it a counter
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun renderHUD(hourglass: TileHourglass, res: ScaledResolution) {
+		val stack = hourglass[0] ?: return
+		
+		val x = res.scaledWidth / 2 + 8
+		val y = res.scaledHeight / 2 - 10
+		
+		val dust = hourglass.isDust()
+		val first: String
+		val second: String
+		if (dust) {
+			first = hourglass.time.toString()
+			second = hourglass.totalTime.toString()
+		} else {
+			first = StringUtils.ticksToElapsedTime(hourglass.time)
+			second = StringUtils.ticksToElapsedTime(hourglass.totalTime)
+		}
+		
+		val timer = "$first / $second"
+		
+		var status = if (hourglass . lock) "locked" else ""
+		if (!hourglass.move && !dust)
+			status = if (status.isEmpty()) "stopped" else "lockedStopped"
+		
+		if (status.isNotEmpty())
+			status = StatCollector.translateToLocal("botaniamisc.$status")
+		
+		RenderHelper.enableGUIStandardItemLighting()
+		glEnable(GL12.GL_RESCALE_NORMAL)
+		RenderItem.getInstance().renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, stack, x, y)
+		RenderItem.getInstance().renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, stack, x, y)
+		glDisable(GL12.GL_RESCALE_NORMAL)
+		RenderHelper.disableStandardItemLighting()
+		
+		mc.fontRenderer.drawString(timer, x + 22, y + 2, hourglass.color)
+		if (status.isNotEmpty())
+			mc.fontRenderer.drawString(status, x + 22, y + 12, hourglass.color)
 	}
 	
 	@JvmStatic
@@ -965,18 +1063,6 @@ object AlfheimHookHandler {
 		if (!ItemRodClicker.isFakeNotAvatar(player))
 			(world.getTileEntity(x, y, z) as TileBellows).interact()
 		return true
-	}
-	
-	@JvmStatic
-	@Hook(injectOnExit = true, targetMethod = "updateEntity")
-	fun `TileHourglass$updateEntity`(tile: TileHourglass) {
-		if (tile.blockMetadata != 1 || tile.flipTicks != 3) return
-		var block: Block
-		for (dir in ForgeDirection.VALID_DIRECTIONS) {
-			block = tile.worldObj.getBlock(tile.xCoord + dir.offsetX, tile.yCoord + dir.offsetY, tile.zCoord + dir.offsetZ)
-			if (block is IHourglassTrigger)
-				block.onTriggeredByHourglass(tile.worldObj, tile.xCoord + dir.offsetX, tile.yCoord + dir.offsetY, tile.zCoord + dir.offsetZ, tile)
-		}
 	}
 	
 	@JvmStatic

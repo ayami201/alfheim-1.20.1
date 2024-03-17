@@ -2,17 +2,27 @@ package alfheim.common.block.tile.sub.flower
 
 import alexsocol.asjlib.*
 import alfheim.client.render.world.VisualEffectHandlerClient
+import alfheim.common.achievement.AlfheimAchievements
+import alfheim.common.block.AlfheimBlocks.snakeObject
 import alfheim.common.core.handler.*
+import alfheim.common.lexicon.AlfheimLexiconData
 import net.minecraft.block.Block
+import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.server.MinecraftServer
+import net.minecraft.util.IIcon
+import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection.*
+import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.subtile.RadiusDescriptor.Square
 import vazkii.botania.api.subtile.SubTileGenerating
-import vazkii.botania.common.block.ModBlocks
-import vazkii.botania.common.lexicon.LexiconData
 import java.util.*
 import kotlin.math.max
+import alfheim.common.block.AlfheimBlocks.snakeBody as snakeBlock
 
 class SubTileRattlerose: SubTileGenerating() {
 	
@@ -21,9 +31,11 @@ class SubTileRattlerose: SubTileGenerating() {
 	var fail: Boolean? = null
 		set(value) {
 			field = value
-			if (field != null) lastMove = ForgeDirection.UNKNOWN
+			if (field != null) lastMove = UNKNOWN
 		}
-	var lastMove = ForgeDirection.UNKNOWN
+	var lastMove = UNKNOWN
+	var prevDir = UNKNOWN
+	var owner = ""
 	
 	val _x get() = supertile.xCoord - RADIUS
 	val _y get() = supertile.yCoord + 1
@@ -31,10 +43,10 @@ class SubTileRattlerose: SubTileGenerating() {
 	val world get() = supertile.worldObj!!
 	val speed: Int
 		get() {
-			val s = AlfheimConfigHandler.rattleroseSpeed
-			if (s <= 5) return s
+			val cfg = AlfheimConfigHandler.rattleroseSpeed
+			if (cfg <= 5) return cfg
 			
-			return max(5, s - snake.size / 10)
+			return max(5, cfg - snake.size / 10)
 		}
 	
 	override fun onUpdate() {
@@ -44,6 +56,10 @@ class SubTileRattlerose: SubTileGenerating() {
 		
 		if (fail != null) {
 			if (ticksExisted % 5 != 0) return
+			
+			if (ASJUtilities.isServer && snake.size >= MAX_SIZE && owner.isNotEmpty()) {
+				MinecraftServer.getServer().configurationManager.func_152612_a(owner)?.triggerAchievement(AlfheimAchievements.midgardsormr)
+			}
 			
 			val last = snake.removeLastOrNull() ?: run {
 				fail = null
@@ -63,7 +79,8 @@ class SubTileRattlerose: SubTileGenerating() {
 		if (snake.isEmpty()) {
 			out@ for (z in 0 until RANGE)
 				for (x in 0 until RANGE) {
-					if (world.getBlock(_x + x, _y, _z + z) !== headBlock) continue
+					if (world.getBlock(_x + x, _y, _z + z) !== snakeObject) continue
+					if (world.getBlockMetadata(_x + x, _y, _z + z) != 0) continue
 					
 					snake.addFirst(x to z)
 					break@out
@@ -79,31 +96,43 @@ class SubTileRattlerose: SubTileGenerating() {
 		move(getMoveDir())
 	}
 	
-	private fun move(direction: ForgeDirection) {
-		if (direction == ForgeDirection.UNKNOWN) return
+	private fun move(dir: ForgeDirection) {
+		if (dir == UNKNOWN) return
 		
 		val curHead = snake.first
-		val newHead = curHead.first + direction.offsetX to curHead.second + direction.offsetZ
+		val newHead = curHead.first + dir.offsetX to curHead.second + dir.offsetZ
 		snake.addFirst(newHead)
 		
+		val last = if (newHead != food) snake.removeLast() else null
+		
 		if (isCollision()) {
+			snake.addLast(last)
 			snake.removeFirst()
 			fail = true
 			return
 		}
 		
-		tryToReplaceBlock(_x + curHead.first, _y, _z + curHead.second, tailBlock)
-		tryToReplaceBlock(_x + newHead.first, _y, _z + newHead.second, headBlock, when (direction) {
-			ForgeDirection.NORTH -> 2
-			ForgeDirection.SOUTH -> 0
-			ForgeDirection.WEST -> 1
-			ForgeDirection.EAST -> 3
-			else -> 0
-		})
+		val tailMeta =
+						if (dir == NORTH && prevDir == NORTH) 4 else
+						if (dir == SOUTH && prevDir == SOUTH) 5 else
+						if (dir == WEST && prevDir == WEST) 6 else
+						if (dir == EAST && prevDir == EAST) 7 else
+						
+						if (dir == WEST && prevDir == SOUTH) 8 else
+						if (dir == WEST && prevDir == NORTH) 9 else
+						if (dir == SOUTH && prevDir == EAST) 12 else
+						if (dir == SOUTH && prevDir == WEST) 10 else
+						if (dir == EAST && prevDir == NORTH) 13 else
+						if (dir == EAST && prevDir == SOUTH) 11 else
+						if (dir == NORTH && prevDir == WEST) 14 else
+						if (dir == NORTH && prevDir == EAST) 15 else
+						
+						4
+		tryToReplaceBlock(_x + curHead.first, _y, _z + curHead.second, snakeBlock, tailMeta)
+		tryToReplaceBlock(_x + newHead.first, _y, _z + newHead.second, snakeBlock, dir.ordinal - 2)
 		
 		if (newHead != food) {
-			val last = snake.removeLast()
-			tryToReplaceBlock(_x + last.first, _y, _z + last.second, Blocks.air)
+			if (last != newHead) tryToReplaceBlock(_x + last!!.first, _y, _z + last.second, Blocks.air)
 			
 			if (newHead == WIN_POS) {
 				fail = false
@@ -112,10 +141,12 @@ class SubTileRattlerose: SubTileGenerating() {
 		} else {
 			generateFood()
 		}
+		
+		prevDir = dir
 	}
 	
 	private fun generateFood() {
-		if (snake.size >= 223) {
+		if (snake.size >= MAX_SIZE) {
 			food = -1 to -1
 			return
 		}
@@ -128,7 +159,7 @@ class SubTileRattlerose: SubTileGenerating() {
 		} while (pos in snake || pos == WIN_POS)
 		
 		food = pos
-		tryToReplaceBlock(_x + pos.first, _y, _z + pos.second, foodBlock)
+		tryToReplaceBlock(_x + pos.first, _y, _z + pos.second, snakeObject, 1)
 	}
 	
 	private fun isCollision(): Boolean {
@@ -138,10 +169,10 @@ class SubTileRattlerose: SubTileGenerating() {
 		return body.contains(head)
 	}
 	
-	val dirs = arrayOf(ForgeDirection.DOWN to true, ForgeDirection.UP to true, ForgeDirection.NORTH to false, ForgeDirection.SOUTH to false, ForgeDirection.WEST to false, ForgeDirection.EAST to false)
+	private val dirs = arrayOf(DOWN to true, UP to true, NORTH to false, SOUTH to false, WEST to false, EAST to false)
 	
 	private fun getMoveDir(): ForgeDirection {
-		var d = ForgeDirection.UNKNOWN
+		var d = UNKNOWN
 		
 		redstoneSignal = 0
 		for ((dir, repeat) in dirs) {
@@ -152,19 +183,35 @@ class SubTileRattlerose: SubTileGenerating() {
 			}
 		}
 		
-		if (snake.size > 1 && lastMove.opposite == d) d = if (speed > 0) lastMove else ForgeDirection.UNKNOWN
+		if (snake.size > 1 && lastMove.opposite == d) d = if (speed > 0) lastMove else UNKNOWN
 		
-		if (d != ForgeDirection.UNKNOWN) lastMove = d
+		if (d != UNKNOWN) lastMove = d
 		
-		return if (speed > 0) if (ticksExisted % speed == 0) lastMove else ForgeDirection.UNKNOWN else d
+		return if (speed > 0) if (ticksExisted % speed == 0) lastMove else UNKNOWN else d
+	}
+	
+	private fun tryToReplaceBlock(x: Int, y: Int, z: Int, block: Block, meta: Int = 0) {
+		if (world.getBlock(x, y, z) inln gameBlocks) {
+			if (fail == null) fail = true
+			return
+		}
+		
+		world.setBlock(x, y, z, block, meta, 3)
+	}
+	
+	override fun onBlockPlacedBy(world: World?, x: Int, y: Int, z: Int, entity: EntityLivingBase?, stack: ItemStack?) {
+		super.onBlockPlacedBy(world, x, y, z, entity, stack)
+		if (entity is EntityPlayer) owner = entity.commandSenderName
 	}
 	
 	override fun writeToPacketNBT(nbt: NBTTagCompound) {
 		super.writeToPacketNBT(nbt)
 		
+		nbt.setString(TAG_OWNER, owner)
 		nbt.setString(TAG_FAIL, fail.toString())
 		nbt.setString(TAG_FOOD, "${food.first} ${food.second}")
 		nbt.setInteger(TAG_LAST, lastMove.ordinal)
+		nbt.setInteger(TAG_PREV, prevDir.ordinal)
 		nbt.setInteger(TAG_SIZE, snake.size)
 		for ((id, s) in snake.withIndex()) {
 			nbt.setString(TAG_SNAKE + id, "${s.first} ${s.second}")
@@ -173,6 +220,8 @@ class SubTileRattlerose: SubTileGenerating() {
 	
 	override fun readFromPacketNBT(nbt: NBTTagCompound) {
 		super.readFromPacketNBT(nbt)
+		
+		owner = nbt.getString(TAG_OWNER)
 		
 		fail = nbt.getString(TAG_FAIL).toBooleanStrictOrNull()
 		
@@ -184,6 +233,7 @@ class SubTileRattlerose: SubTileGenerating() {
 		}
 		
 		lastMove = ForgeDirection.entries[nbt.getInteger(TAG_LAST)]
+		prevDir = ForgeDirection.entries[nbt.getInteger(TAG_PREV)]
 		
 		val size = nbt.getInteger(TAG_SIZE)
 		if (size == 0) return
@@ -196,21 +246,15 @@ class SubTileRattlerose: SubTileGenerating() {
 		}
 	}
 	
-	fun tryToReplaceBlock(x: Int, y: Int, z: Int, block: Block, meta: Int = 0) {
-		if (world.getBlock(x, y, z) inln gameBlocks) {
-			if (fail == null) fail = true
-			return
-		}
-		
-		world.setBlock(x, y, z, block, meta, 3)
-	}
-	
+	override fun getComparatorInputOverride(side: Int) = if (snake.size >= MAX_SIZE) 15 else 0
 	override fun getRadius() = Square(toChunkCoordinates(), RADIUS)
-	override fun getMaxMana() = 27261 * COST_PER_BLOCK
-	override fun getColor() = 0xFFD400
-	override fun getEntry() = LexiconData.dandelifeon // TODO
+	override fun getMaxMana() = 24976 * COST_PER_BLOCK
+	override fun getColor() = 0x4DB799
+	override fun getEntry() = AlfheimLexiconData.flowerRattlerose
+	override fun getIcon(): IIcon? = BotaniaAPI.getSignatureForName("rattlerose").getIconForStack(null)
 	
 	companion object {
+		const val MAX_SIZE = 224
 		const val COST_PER_BLOCK = 1000
 		const val RANGE = 15
 		const val RADIUS = 7
@@ -218,15 +262,13 @@ class SubTileRattlerose: SubTileGenerating() {
 		const val TAG_FAIL = "fail"
 		const val TAG_FOOD = "food"
 		const val TAG_LAST = "last"
+		const val TAG_OWNER = "owner"
+		const val TAG_PREV = "prev"
 		const val TAG_SIZE = "size"
 		const val TAG_SNAKE = "snake_"
 		
 		val WIN_POS = RADIUS to RADIUS
 		
-		val headBlock get() = Blocks.lit_pumpkin!!
-		val tailBlock get() = ModBlocks.blazeBlock!!
-		val foodBlock get() = ModBlocks.cellBlock!!
-		
-		val gameBlocks get() = arrayOf(headBlock, tailBlock, foodBlock, Blocks.air)
+		val gameBlocks get() = arrayOf(snakeBlock, snakeObject, Blocks.air)
 	}
 }
