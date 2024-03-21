@@ -1,14 +1,5 @@
 Innovations:
- New generating flower - Rattlerose, with snake game inside!
- [B] Hovering Hourglass HUD now shows the exact current time within the cycle
- [B] Mana Powder in the Hovering Hourglass makes it a counter 
- [MT3/CT] Added support for Mana Tuner item tuning recipes
+ Cocoons can now be forced to spawn rare mobs using Gaia Spirits
 
 Fixes:
- Relics from some other addons being unpickupable w/o achievement
- Other's relic pickup issues
- Weather flowers cd and mana balance
- Tree fruits breaking leaves gen
- Crash on filling rift shards
- Max health dupe with Odin/Aesir ring
- Soul Sword mob resistance ignore
+ Mini tree multibound to same pos

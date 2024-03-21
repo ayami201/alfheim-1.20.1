@@ -67,21 +67,20 @@ class TileWorldTree: ASJTile(), IManaReceiver, IWandBindable {
 	override fun canSelect(player: EntityPlayer?, wand: ItemStack?, x: Int, y: Int, z: Int, side: Int) = true
 	
 	override fun bindTo(player: EntityPlayer, wand: ItemStack?, x: Int, y: Int, z: Int, side: Int): Boolean {
+		val pos = ChunkCoordinates(x, y, z)
+		val dupIndex = boundList.indexOfFirst { it == pos }
+		if (dupIndex != -1) {
+			boundList[dupIndex] = null
+			return true
+		}
+		
 		val freeIndex = boundList.indexOfFirst { it == null }
 		if (freeIndex == -1) {
 			ASJUtilities.say(player, "alfheimmisc.treefull")
 			return false
 		}
 		
-//		val other = player.worldObj.getTileEntity(x, y, z) as? TileWorldTree ?: return false
-//		val freeIndexOther = other.boundList.indexOfFirst { it == null }
-//		if (freeIndexOther == -1) {
-//			ASJUtilities.say(player, "alfheimmisc.treefull.other")
-//			return false
-//		}
-		
-		boundList[freeIndex] = ChunkCoordinates(x, y, z)
-//		other.boundList[freeIndexOther] = ChunkCoordinates(xCoord, yCoord, zCoord)
+		boundList[freeIndex] = pos
 		
 		return true
 	}

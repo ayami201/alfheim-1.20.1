@@ -11,4 +11,7 @@ class AlfheimFieldHookHandler {
 	
 	@HookField(targetClassName = "net.minecraft.util.DamageSource")
 	public int alfheim_synthetic_elementalFlag;
+	
+	@HookField(targetClassName = "vazkii.botania.common.block.tile.TileCocoon")
+	public int alfheim_synthetic_essenceGiven;
 }

@@ -4,7 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.block.tile.SubTileAnomalyBase
-import alfheim.common.core.asm.AlfheimClassTransformer
+import alfheim.common.core.asm.transformer.AlfheimClassTransformer
 import net.minecraft.item.ItemStack
 import vazkii.botania.common.Botania
 import vazkii.botania.common.entity.EntityManaBurst

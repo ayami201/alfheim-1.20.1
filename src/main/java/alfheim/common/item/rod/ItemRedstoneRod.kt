@@ -11,7 +11,6 @@ import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.TickEvent
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent
-import gloomyfolken.hooklib.asm.*
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.entity.RenderManager
@@ -23,11 +22,10 @@ import net.minecraft.util.*
 import net.minecraft.world.*
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.common.DimensionManager
-import net.minecraftforge.common.util.*
+import net.minecraftforge.common.util.Constants
 import org.lwjgl.opengl.GL11.*
 import vazkii.botania.common.item.equipment.bauble.ItemMonocle
 import java.awt.Color
-import kotlin.math.max
 
 // improved version of redstone activator from RandomThings mod
 // a lot of shit is going here don't ask me
@@ -363,24 +361,5 @@ data class RedstoneSignal(var dimension: Int, var x: Int, var y: Int, var z: Int
 			
 			return RedstoneSignal(dimension, x, y, z, duration, strength, type, age)
 		}
-	}
-}
-
-object RedstoneRodHookHandler {
-	
-	@JvmStatic
-	@Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-	fun isBlockProvidingPowerTo(world: World, x: Int, y: Int, z: Int, direction: Int, @Hook.ReturnValue result: Int): Int {
-		val d = ForgeDirection.entries[direction].opposite
-		val power = RedstoneSignalHandler.get().getPower(world, x + d.offsetX, y + d.offsetY, z + d.offsetZ)
-		return if (power.second == EnumRedstoneType.STRONG) max(power.first, result) else result
-	}
-	
-	@JvmStatic
-	@Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-	fun getIndirectPowerLevelTo(world: World, x: Int, y: Int, z: Int, direction: Int, @Hook.ReturnValue result: Int): Int {
-		val d = ForgeDirection.entries[direction].opposite
-		val power = RedstoneSignalHandler.get().getPower(world, x + d.offsetX, y + d.offsetY, z + d.offsetZ).first
-		return max(power, result)
 	}
 }

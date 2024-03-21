@@ -546,6 +546,34 @@ object AlfheimHookHandler {
 			stack.tagCompound.removeTag("cosmeticItem")
 	}
 	
+	@JvmStatic
+	@Hook(injectOnExit = true, booleanReturnConstant = false)
+	fun onBlockActivated(block: BlockCocoon, world: World, x: Int, y: Int, z: Int, player: EntityPlayer, s: Int, xs: Float, ys: Float, zs: Float): Boolean {
+		val cocoon = world.getTileEntity(x, y, z) as TileCocoon
+		val item = player.heldItem
+		if (cocoon.alfheim_synthetic_essenceGiven >= TileCocoon.MAX_EMERALDS || item?.item !== ModItems.manaResource || item.meta != 5) return false
+		
+		if (!player.capabilities.isCreativeMode) item.stackSize--
+		cocoon.alfheim_synthetic_essenceGiven++
+		world.playAuxSFX(2005, x, y, z, 6 + world.rand.nextInt(4))
+		
+		return true
+	}
+	
+	const val TAG_ESSENCE_GIVEN = "alfheim-essenceGiven"
+	
+	@JvmStatic
+	@Hook(injectOnExit = true)
+	fun writeCustomNBT(tile: TileCocoon, cmp: NBTTagCompound) {
+		cmp.setInteger(TAG_ESSENCE_GIVEN, tile.alfheim_synthetic_essenceGiven)
+	}
+	
+	@JvmStatic
+	@Hook(injectOnExit = true)
+	fun readCustomNBT(tile: TileCocoon, cmp: NBTTagCompound) {
+		tile.alfheim_synthetic_essenceGiven = cmp.getInteger(TAG_ESSENCE_GIVEN)
+	}
+	
 	const val TAG_COCOONED = "Botania-CocoonSpawned"
 	var cocooned = false
 	
@@ -626,7 +654,7 @@ object AlfheimHookHandler {
 	}
 	
 	@JvmStatic
-	@Hook(returnCondition = ON_TRUE, booleanReturnConstant = false, targetMethod = "attackEntityFrom")
+	@Hook(targetMethod = "attackEntityFrom", returnCondition = ON_TRUE, booleanReturnConstant = false)
 	fun disableGod(gaia: EntityDoppleganger, src: DamageSource, dmg: Float): Boolean {
 		val player = src.entity as? EntityPlayer ?: return false
 		return !player.capabilities.isCreativeMode && player.capabilities.disableDamage

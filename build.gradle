@@ -32,7 +32,7 @@ repositories {
 }
 
 group = "main"
-version = "54"
+version = "55-dev"
 archivesBaseName = "Alfheim"
 
 minecraft {
@@ -87,6 +87,7 @@ idea {
 	module {
 		inheritOutputDirs = false
 		outputDir = file('build/classes/main/')
+		excludeDirs += file('minecraft')
 	}
 }
 

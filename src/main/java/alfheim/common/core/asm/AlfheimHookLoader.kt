@@ -3,7 +3,9 @@ package alfheim.common.core.asm
 import alexsocol.asjlib.asm.ASJASM
 import alexsocol.patcher.asm.ASJHookLoader
 import alfheim.api.ModInfo
+import alfheim.common.core.asm.transformer.*
 import alfheim.common.core.handler.AlfheimConfigHandler
+import com.KAIIIAK.classManipulators.HookReplacerWorker.registerHookReplacerContainer
 import com.KAIIIAK.superwrapper.SuperWrapperTransformer
 import cpw.mods.fml.relauncher.FMLRelaunchLog
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.*
@@ -13,14 +15,17 @@ import java.io.File
 // -Dfml.coreMods.load=alfheim.common.core.asm.AlfheimHookLoader
 // -username=AlexSocol
 @MCVersion(value = "1.7.10")
-@TransformerExclusions("alfheim.common.core.asm")
+@TransformerExclusions(
+	"alfheim.common.core.asm.hook",
+	"alfheim.common.core.asm.transformer",
+)
 class AlfheimHookLoader: HookLoader() {
 	
 	init {
 		AlfheimConfigHandler.loadConfig(File("config/Alfheim/Alfheim.cfg"))
 	}
 	
-	override fun getASMTransformerClass() = arrayOf(AlfheimClassTransformer::class.java.name, BotaniaVisDiscountHooks::class.java.name)
+	override fun getASMTransformerClass() = arrayOf(AlfheimClassTransformer::class.java.name, BotaniaVisDiscountTransformer::class.java.name)
 	
 	override fun registerHooks() {
 		FMLRelaunchLog.info("[${ModInfo.MODID.uppercase()}] Loaded coremod. Registering hooks...")
@@ -29,6 +34,7 @@ class AlfheimHookLoader: HookLoader() {
 		if (AlfheimConfigHandler.hpHooks) registerHookContainer("alfheim.common.core.asm.hook.AlfheimHPHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.Botania18AndUpBackport")
 		registerHookContainer("alfheim.common.core.asm.hook.ElementalDamageAdapter")
+		
 		registerHookContainer("alfheim.common.core.asm.hook.extender.FlowerBagExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.FurnaceExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.ItemAuraRingExtender")
@@ -41,19 +47,22 @@ class AlfheimHookLoader: HookLoader() {
 		registerHookContainer("alfheim.common.core.asm.hook.extender.QuartzExtender")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.RelicHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.extender.SparkExtender")
+		
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.BotaniaGlowingRenderFixes")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.CorporeaInputFix")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.FlightTiaraFix")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.GodAttributesHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.fixes.RecipeAncientWillsFix")
-		registerHookContainer("alfheim.common.integration.travellersgear.TGHandlerBotaniaAdapterHooks")
-		registerHookContainer("alfheim.common.integration.tinkersconstruct.TraitFairySpawner")
-		registerHookContainer("alfheim.common.item.rod.RedstoneRodHookHandler")
+		
+		registerHookContainer("alfheim.common.core.asm.hook.integration.BotaniaVisDiscountHooks")
+		registerHookContainer("alfheim.common.core.asm.hook.integration.RedstoneRodHookHandler")
+		registerHookContainer("alfheim.common.core.asm.hook.integration.TGHandlerBotaniaAdapterHooks")
+		registerHookContainer("alfheim.common.core.asm.hook.integration.TraitFairySpawner")
 		
 		if (ASJHookLoader.OBF) ASJASM.registerFieldHookContainer("alfheim.common.core.asm.hook.AlfheimFieldHookHandler")
 		
-		registerHookContainer("alfheim.common.core.asm.BotaniaVisDiscountHooks")
+		SuperWrapperTransformer.registerSuperWrapperContainer("alfheim.common.core.asm.superwrapper.SuperWrapperHandler")
 		
-		SuperWrapperTransformer.registerSuperWrapperContainer("alfheim.common.core.superwrapper.SuperWrapperHandler")
+		registerHookReplacerContainer("alfheim.common.core.asm.hook.replacer.HookReplacerHandler")
 	}
 }

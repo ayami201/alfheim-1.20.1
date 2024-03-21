@@ -20,7 +20,7 @@ import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimBlocks.starBlock
 import alfheim.common.block.AlfheimBlocks.starBlock2
 import alfheim.common.block.tile.*
-import alfheim.common.core.superwrapper.SuperWrapperHandler
+import alfheim.common.core.asm.superwrapper.SuperWrapperHandler
 import alfheim.common.item.ItemIridescent
 import cpw.mods.fml.relauncher.*
 import gloomyfolken.hooklib.asm.*

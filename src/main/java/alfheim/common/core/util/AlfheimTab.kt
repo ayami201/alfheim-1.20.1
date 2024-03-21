@@ -179,7 +179,7 @@ import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteSlab
 import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
 import alfheim.common.block.AlfheimFluffBlocks.table
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
-import alfheim.common.core.asm.AlfheimClassTransformer
+import alfheim.common.core.asm.transformer.AlfheimClassTransformer
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
 import alfheim.common.item.AlfheimItems
