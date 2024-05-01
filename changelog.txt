@@ -2,4 +2,12 @@ Innovations:
  Cocoons can now be forced to spawn rare mobs using Gaia Spirits
 
 Fixes:
- Mini tree multibound to same pos
+ World tree multibound to same pos
+ Bosses regenerates when already dead
+ Flugel summon was blocked by nama flames and [TT] nitor gas from hypernitor/ichor pants
+ Crash with Witchery when hovering over compositions
+ Ultra Gourmaryllis giving negative mana on overfeeding
+ Ultra Gourmaryllis eating 2 items from stack
+ Astrolabe consumed items might be > than placed
+ Astrolabe were placing broken Botania flowers
+ Aesir ring was decomposing with Indissoluble Ivy on drop

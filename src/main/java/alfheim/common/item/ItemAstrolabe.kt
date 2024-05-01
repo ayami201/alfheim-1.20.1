@@ -25,6 +25,8 @@ class ItemAstrolabe: ItemMod("Astrolabe") {
 	}
 	
 	override fun onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+		if (world.isRemote) return false
+		
 		val block = world.getBlock(x, y, z)
 		val meta = world.getBlockMetadata(x, y, z)
 		
@@ -34,7 +36,7 @@ class ItemAstrolabe: ItemMod("Astrolabe") {
 				return true
 			}
 		} else {
-			val did = placeAllBlocks(stack, player)
+			val did = placeAllBlocks(stack, player, side, hitX, hitY, hitZ)
 			
 			if (did) {
 				displayRemainderCounter(player, stack)
@@ -45,7 +47,7 @@ class ItemAstrolabe: ItemMod("Astrolabe") {
 			return did
 		}
 		
-		return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ)
+		return false
 	}
 	
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
@@ -63,58 +65,70 @@ class ItemAstrolabe: ItemMod("Astrolabe") {
 		return stack
 	}
 	
-	fun placeAllBlocks(stack: ItemStack, player: EntityPlayer): Boolean {
+	fun placeAllBlocks(stack: ItemStack, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
 		val blocksToPlace = getBlocksToPlace(stack, player)
 		
 		if (!hasBlocks(stack, player, blocksToPlace))
 			return false
 		
 		val stackToPlace = ItemStack(getBlock(stack), 1, getBlockMeta(stack))
-		for (v in blocksToPlace) placeBlockAndConsume(player, stack, stackToPlace, v.x.I, v.y.I, v.z.I)
+		for (v in blocksToPlace) placeBlockAndConsume(player, stack, stackToPlace, v.x.I, v.y.I, v.z.I, side, hitX, hitY, hitZ)
 		
 		return true
 	}
 	
-	private fun placeBlockAndConsume(player: EntityPlayer, requestor: ItemStack, blockToPlace: ItemStack, x: Int, y: Int, z: Int) {
+	private fun placeBlockAndConsume(player: EntityPlayer, requestor: ItemStack, blockToPlace: ItemStack, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float) {
 		if (blockToPlace.item == null) return
 		
 		if (!ManaItemHandler.requestManaExact(requestor, player, 320, true)) return
 		
 		val world = player.worldObj
-		val block = blockToPlace.block
-		val meta = blockToPlace.meta
 		
-		world.setBlock(x, y, z, block, meta, 3) // FIXME fire block place event and call all corresponding methods from block like onBlockPlacedBy etc.
+		var (stackToPlace, slot) = findStack(player, blockToPlace, requestor)
+		if (stackToPlace == null) {
+			if (!player.capabilities.isCreativeMode) return
+			if (blockToPlace.block.hasTileEntity(blockToPlace.meta)) return
+		}
+		
+		stackToPlace = stackToPlace ?: blockToPlace.copy()!!
+		
+		val oldSize = stackToPlace.stackSize
+		if (!stackToPlace.tryPlaceItemIntoWorld(player, world, x, y, z, side, hitX, hitY, hitZ)) return
+		
+		if (!player.capabilities.isCreativeMode) {
+			if (stackToPlace.stackSize <= 0 && slot != -1)
+				player.inventory[slot] = null
+			
+			player.inventoryContainer.detectAndSendChanges()
+		} else if (oldSize != stackToPlace.stackSize)
+			stackToPlace.stackSize = oldSize
 		
 		if (!world.isRemote && ConfigHandler.blockBreakParticles && ConfigHandler.blockBreakParticlesTool)
-			world.playAuxSFX(2001, x, y, z, block.id + (meta shl 12))
+			world.playAuxSFX(2001, x, y, z, stackToPlace.block.id + (stackToPlace.meta shl 12))
+	}
+	
+	fun findStack(player: EntityPlayer, blockToPlace: ItemStack, requestor: ItemStack): Pair<ItemStack?, Int> {
+		val blockProviders = ArrayList<ItemStack>()
 		
-		if (player.capabilities.isCreativeMode) return
-		
-		val stacksToCheck = ArrayList<ItemStack>()
 		for (i in 0 until player.inventory.sizeInventory) {
 			val stackInSlot = player.inventory[i]
-			if (stackInSlot != null && stackInSlot.stackSize > 0 && stackInSlot.item === blockToPlace.item && stackInSlot.meta == blockToPlace.meta) {
-				stackInSlot.stackSize--
-				
-				if (stackInSlot.stackSize <= 0)
-					player.inventory[i] = null
-				
-				return
-			}
+			if (stackInSlot != null && stackInSlot.stackSize > 0 && stackInSlot.item === blockToPlace.item && stackInSlot.meta == blockToPlace.meta)
+				return stackInSlot to i
 			
 			if (stackInSlot != null && stackInSlot.stackSize > 0 && stackInSlot.item is IBlockProvider)
-				stacksToCheck.add(stackInSlot)
+				blockProviders.add(stackInSlot)
 		}
 		
-		for (providerStack in stacksToCheck) {
+		for (providerStack in blockProviders) {
 			val prov = providerStack.item as IBlockProvider
 			
-			if (prov.provideBlock(player, requestor, providerStack, block, meta, false)) {
-				prov.provideBlock(player, requestor, providerStack, block, meta, true)
-				return
+			if (prov.provideBlock(player, requestor, providerStack, blockToPlace.block, blockToPlace.meta, false)) {
+				prov.provideBlock(player, requestor, providerStack, blockToPlace.block, blockToPlace.meta, true)
+				return blockToPlace.copy() to -1
 			}
 		}
+		
+		return null to -1
 	}
 	
 	fun displayRemainderCounter(player: EntityPlayer, stack: ItemStack) {

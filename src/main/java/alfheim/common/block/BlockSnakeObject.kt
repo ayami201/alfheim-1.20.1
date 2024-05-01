@@ -8,13 +8,19 @@ import net.minecraft.block.material.Material
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
-import net.minecraft.world.World
+import net.minecraft.world.*
 import vazkii.botania.api.lexicon.ILexiconable
 
 class BlockSnakeObject: BlockModMeta(Material.gourd, 2, ModInfo.MODID, "SnakeObject", AlfheimTab, 0f, "", 0, 0f, "snake/"), ILexiconable {
 	
 	init {
 		stepSound = soundTypeCloth
+	}
+	
+	override fun canProvidePower() = true
+	
+	override fun isProvidingWeakPower(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Int {
+		return if (world.getBlockMetadata(x, y, z) == 0) 15 else 0
 	}
 	
 	override fun getSubBlocks(item: Item, tab: CreativeTabs?, list: MutableList<Any?>) {

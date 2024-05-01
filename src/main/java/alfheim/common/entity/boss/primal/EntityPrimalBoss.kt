@@ -217,7 +217,7 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 		
 		if (stage > 1 && getEntitiesWithinAABB(worldObj, protectorEntityClass(), arenaBB).isNotEmpty()) {
 			if (shield < maxShield) shield++
-			else health += 0.25f
+			else if (health > 0) health += 0.25f
 		}
 	}
 	
@@ -336,7 +336,7 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 	}
 	
 	open fun tickWhirl(players: MutableList<EntityPlayer>) {
-		if (--whirlTicks <= 0) releaseWhirledEnergy(players)
+		if (--whirlTicks <= 0 || health <= 0) releaseWhirledEnergy(players)
 		else {
 			shootingCD = 0
 			navigator.clearPathEntity()

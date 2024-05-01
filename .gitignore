@@ -4,10 +4,7 @@
 /*/
 !/gradle/
 !/libs/
-!/modular/
-!/release/
 !/src/
-!/.gitattributes
 !/.gitignore
 !/build.gradle
 !/gradlew
