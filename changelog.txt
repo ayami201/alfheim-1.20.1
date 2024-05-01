@@ -4,7 +4,7 @@ Innovations:
 Fixes:
  World tree multibound to same pos
  Bosses regenerates when already dead
- Flugel summon was blocked by nama flames and [TT] nitor gas from hypernitor/ichor pants
+ Flugel summon was blocked by mana flames and [TT] nitor gas from hypernitor/ichor pants
  Crash with Witchery when hovering over compositions
  Ultra Gourmaryllis giving negative mana on overfeeding
  Ultra Gourmaryllis eating 2 items from stack
