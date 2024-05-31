@@ -2,7 +2,7 @@ Greetings to all players and those who just passed by in the Alfheim repository!
 
 Alfheim is an addon to the [Botania](http://botaniamod.net/) mod written for [Minecraft](https://minecraft.net/) **1.7.10**. It adds one of the worlds of the [Scandinavian mythology](https://en.wikipedia.org/wiki/Álfheimr), the prerequisites for which were in the Botania mod.
 
-Alfheim is licensed under the [Botania License](http://botaniamod.net/license.php) 
+Alfheim is licensed under [NCCPL](LICENSE.txt) 
 
 Join official [Discord server](https://discord.gg/dqQXZHq).
 
