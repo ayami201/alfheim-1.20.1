@@ -4,13 +4,14 @@ import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.api.world.domain.Domain
 import alfheim.client.render.world.SkyRendererDomains
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.entity.boss.primal.EntityThrym
 import alfheim.common.item.equipment.bauble.faith.ItemRagnarokEmblem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.world.World
 
-object ThrymDomain: Domain(ModInfo.MODID, "Thrym", 2, getBoundingBox(-45, -5, -75, 45, 50, 10)) {
+object ThrymDomain: Domain(ModInfo.MODID, "Thrym", AlfheimConfigHandler.domainPlayersRequired, getBoundingBox(-45, -5, -75, 45, 50, 10)) {
 	
 	override val skyRenderer = object: SkyRendererDomains(0xFF7F7FFFU, 0xFFFFFBF2U) {}
 	

@@ -36,6 +36,7 @@ object KeyBindingHandlerClient {
 	var toggleFlight = false
 	var toggleJump = false
 	var toggleCast = false
+	var toggleFastCast = false
 	var toggleUnCast = false
 	var toggleSelMob = false
 	var toggleSelTeam = false
@@ -145,32 +146,34 @@ object KeyBindingHandlerClient {
 			
 			run {
 				if (safeKeyDown(Keyboard.KEY_LCONTROL)) {
-					for (i in PlayerSegmentClient.hotSpells.indices) {
-						if (safeKeyDown(i + 2)) {
-							GUISpells.fadeOut = 5f
-							if (safeKeyDown(Keyboard.KEY_LSHIFT)) {
-								PlayerSegmentClient.hotSpells[i] = raceID and 0xF shl 28 or (spellID and 0xFFFFFFF)
-								NetworkService.sendToServer(MessageHotSpellS(i, PlayerSegmentClient.hotSpells[i]))
-							} else {
-								if (PlayerSegmentClient.hotSpells[i] == 0) {
+					if (!toggleFastCast) {
+						for (i in PlayerSegmentClient.hotSpells.indices) {
+							if (safeKeyDown(i + 2)) {
+								toggleFastCast = true
+								
+								GUISpells.fadeOut = 5f
+								if (safeKeyDown(Keyboard.KEY_LSHIFT)) {
 									PlayerSegmentClient.hotSpells[i] = raceID and 0xF shl 28 or (spellID and 0xFFFFFFF)
 									NetworkService.sendToServer(MessageHotSpellS(i, PlayerSegmentClient.hotSpells[i]))
+								} else {
+									if (PlayerSegmentClient.hotSpells[i] == 0) return@run
+									val spell = AlfheimAPI.getSpellByIDs(raceID, spellID)
+									if (spell == null)
+										Message2d(M2d.COOLDOWN, 0.0, (-DESYNC.ordinal).D).apply { handleClient() }
+									else if (!player.capabilities.isCreativeMode && !SpellBase.consumeMana(player, spell.getManaCost(), false) && !player.isPotionActive(AlfheimConfigHandler.potionIDLeftFlame)) {
+										Message2d(M2d.COOLDOWN, 0.0, (-NOMANA.ordinal).D).apply { handleClient() }
+										return@run
+									}
+									
+									NetworkService.sendToServer(MessageKeyBindS(CAST.ordinal, true, i))
+									PlayerSegmentClient.initM = if (player.capabilities.isCreativeMode) 1 else AlfheimAPI.getSpellByIDs(PlayerSegmentClient.hotSpells[i] shr 28 and 0xF, PlayerSegmentClient.hotSpells[i] and 0xFFFFFFF)!!.getCastTime()
+									PlayerSegmentClient.init = PlayerSegmentClient.initM
 								}
-								
-								val spell = AlfheimAPI.getSpellByIDs(raceID, spellID)
-								if (spell == null)
-									Message2d(M2d.COOLDOWN, 0.0, (-DESYNC.ordinal).D).apply { handleClient() }
-								else if (!player.capabilities.isCreativeMode && !SpellBase.consumeMana(player, spell.getManaCost(), false) && !player.isPotionActive(AlfheimConfigHandler.potionIDLeftFlame)) {
-									Message2d(M2d.COOLDOWN, 0.0, (-NOMANA.ordinal).D).apply { handleClient() }
-									return@run
-								}
-
-								NetworkService.sendToServer(MessageKeyBindS(CAST.ordinal, true, i))
-								PlayerSegmentClient.initM = if (player.capabilities.isCreativeMode) 1 else AlfheimAPI.getSpellByIDs(PlayerSegmentClient.hotSpells[i] shr 28 and 0xF, PlayerSegmentClient.hotSpells[i] and 0xFFFFFFF)!!.getCastTime()
-								PlayerSegmentClient.init = PlayerSegmentClient.initM
 							}
 						}
 					}
+				} else {
+					toggleFastCast = false
 				}
 			}
 			
@@ -226,7 +229,6 @@ object KeyBindingHandlerClient {
 					if (!toggleCast) {
 						toggleCast = true
 						if (PlayerSegmentClient.init <= 0) {
-							
 							val spell = AlfheimAPI.getSpellByIDs(raceID, spellID)
 							if (spell == null)
 								Message2d(M2d.COOLDOWN, 0.0, (-DESYNC.ordinal).D).apply { handleClient() }
@@ -237,7 +239,7 @@ object KeyBindingHandlerClient {
 							
 							val i = raceID and 0xF shl 28 or (spellID and 0xFFFFFFF)
 							NetworkService.sendToServer(MessageKeyBindS(CAST.ordinal, false, i))
-							PlayerSegmentClient.initM = if (player.capabilities.isCreativeMode) 1 else AlfheimAPI.getSpellByIDs(raceID, spellID)!!.getCastTime()
+							PlayerSegmentClient.initM = if (player.capabilities.isCreativeMode) 1 else spell!!.getCastTime()
 							PlayerSegmentClient.init = PlayerSegmentClient.initM
 						}
 					}

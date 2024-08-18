@@ -1,6 +1,7 @@
-package alfheim.common.integration.travellersgear
+package alfheim.common.core.asm.hook.integration
 
 import alfheim.AlfheimCore
+import alfheim.common.integration.travellersgear.TravellerBaubleTooltipHandler
 import alfheim.common.item.equipment.bauble.ItemBalanceCloak
 import baubles.api.BaubleType
 import cpw.mods.fml.relauncher.*

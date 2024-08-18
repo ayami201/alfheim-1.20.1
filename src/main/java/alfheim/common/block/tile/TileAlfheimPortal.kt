@@ -206,7 +206,9 @@ class TileAlfheimPortal: ASJTile() {
 		if (wrong2DArray(POOL_POSITIONS, ModBlocks.pool, -1, converters) && worldObj.provider.dimensionId != AlfheimConfigHandler.dimensionIDAlfheim)
 			return false
 		
-		lightPylons(converters)
+		if (worldObj.provider.dimensionId != AlfheimConfigHandler.dimensionIDAlfheim)
+			lightPylons(converters)
+		
 		return true
 	}
 	
@@ -222,7 +224,6 @@ class TileAlfheimPortal: ASJTile() {
 			
 			var tile = worldObj.getTileEntity(xCoord + pos[0], yCoord + pos[1], zCoord + pos[2])
 			if (tile is TileAlfheimPylon) {
-				
 				if (ConfigHandler.elfPortalParticlesEnabled) {
 					var worldTime = worldObj.totalWorldTime.D
 					rand.setSeed((xCoord + pos[0] xor yCoord + pos[1] xor zCoord + pos[2]).toLong())

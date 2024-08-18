@@ -208,7 +208,7 @@ object ElementalDamageHandler {
 		glScalef(-f1, -f1, f1)
 		glDisable(GL_LIGHTING)
 		glEnable(GL_BLEND)
-		OpenGlHelper.glBlendFunc(770, 771, 1, 0)
+		OpenGlHelper.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO)
 		
 		glTranslatef(all.size * size.F / -2, 0f, 0f)
 		

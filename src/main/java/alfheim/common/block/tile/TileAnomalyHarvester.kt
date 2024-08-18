@@ -10,6 +10,7 @@ import alfheim.common.core.asm.hook.AlfheimHookHandler
 import alfheim.common.core.asm.hook.extender.SparkExtender.attachTile
 import alfheim.common.core.handler.VisualEffectHandler
 import alfheim.common.core.util.DamageSourceSpell
+import net.minecraft.block.BlockFire
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.entity.*
 import net.minecraft.entity.monster.*
@@ -83,7 +84,7 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 			did = true
 		}
 		
-		if (mana > 0) {
+		if (mana > 0 || creative) {
 			val aoe = getAoE()
 			val volume = ceil((aoe.maxX - aoe.minX) * (aoe.maxY - aoe.minY) * (aoe.maxZ - aoe.minZ)).I
 			val tunnel = subTiles.containsAll(tunnels)
@@ -94,13 +95,13 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 				cost += effect.effect(this) * effect.costPerApplication
 				cost += effect.costPerBlock * volume
 				
-				mana -= cost
+				if (!creative) mana -= cost
 				
 				did = true
 			}
 			
 			for (st in subTiles) {
-				if (mana <= 0) return
+				if (mana <= 0 && !creative) return
 				
 				if (tunnel && st in tunnels) continue
 				val effect = AlfheimAPI.anomalyBehaviors[st] ?: continue
@@ -109,7 +110,7 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 				cost += effect.effect(this) * effect.costPerApplication
 				cost += effect.costPerBlock * volume
 				
-				mana -= cost
+				if (!creative) mana -= cost
 				
 				did = true
 			}
@@ -421,7 +422,6 @@ object AnomalyHarvesterBehaviors {
 		if (tile.worldObj.isRemote) {
 			val (x, y, z) = Vector3.fromTileEntityCenter(tile).add(tile.radius.copy().mul(Vector3().rand().sub(0.5))).add(tile.offset)
 			Botania.proxy.sparkleFX(tile.worldObj, x, y, z, 0.5f, 1f, 0.5f, 1f, 1, true)
-			return 0
 		}
 		
 		var applications = 0
@@ -447,7 +447,10 @@ object AnomalyHarvesterBehaviors {
 			for (y in aabb.minY.I..aabb.maxY.I.minus(1))
 				for (z in aabb.minZ.I..aabb.maxZ.I.minus(1)) {
 					val block = tile.worldObj.getBlock(x, y, z)
-					if (block === Blocks.air) continue
+					
+					if (block === Blocks.air ||
+					    block is BlockFire && !tile.worldObj.gameRules.getGameRuleBooleanValue("doFireTick"))
+						continue
 					
 					block.updateTick(tile.worldObj, x, y, z, tile.worldObj.rand)
 				}

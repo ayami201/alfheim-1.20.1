@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.api.world.domain.Domain
 import alfheim.client.render.world.SkyRendererDomains
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.entity.boss.EntityFenrir
 import alfheim.common.world.dim.domains.WorldProviderDomains
@@ -11,7 +12,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ChunkCoordinates
 import net.minecraft.world.World
 
-object FenrirDomain: Domain(ModInfo.MODID, "Fenrir", 1, getBoundingBox(-63, -1, -32, 63, 31, 94), ChunkCoordinates(0, 0, 31)) {
+object FenrirDomain: Domain(ModInfo.MODID, "Fenrir", AlfheimConfigHandler.domainPlayersRequired, getBoundingBox(-63, -1, -32, 63, 31, 94), ChunkCoordinates(0, 0, 31)) {
 	
 	override val skyRenderer = object: SkyRendererDomains({
 		val stage2 = WorldProviderDomains.getDomainAtPlayer(mc.thePlayer)

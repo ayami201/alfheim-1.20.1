@@ -353,7 +353,11 @@ object ElvenFlightHandler {
 		if (player is EntityPlayerMP)
 			CardinalSystem.forPlayer(player).flightEnableCooldown--
 		
-		if (!AlfheimConfigHandler.enableElvenStory || player.race == HUMAN || ESMHandler.isAbilityDisabled(player)) return
+		if (!AlfheimConfigHandler.enableElvenStory ||
+		    player.race == HUMAN ||
+		    ESMHandler.isAbilityDisabled(player) ||
+		    player.worldObj.provider.dimensionId in AlfheimConfigHandler.wingsBlackList) return
+		
 		if ((ModItems.flightTiara as ItemFlightTiara).shouldPlayerHaveFlight(player))
 			return ElvenFlightHelper.regen(player, if (player.moveForward == 0f && player.moveStrafing == 0f && player.onGround && player.isSneaking) 2 else 1)
 			

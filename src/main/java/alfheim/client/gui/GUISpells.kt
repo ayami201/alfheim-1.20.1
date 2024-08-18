@@ -123,14 +123,34 @@ object GUISpells: Gui() {
 			
 			drawRect(LibResourceLocations.spell(spell.name), 16)
 			
-			if (SpellCastingSystemClient.getCoolDown(spell) > 0) {
+			val coolDown = SpellCastingSystemClient.getCoolDown(spell)
+			if (coolDown > 0) {
 				glDisable(GL_TEXTURE_2D)
 				glColor4d(0.0, 0.0, 0.0, 0.5 * fadeOut)
-				drawRect(16)
+				
+				val maxCooldown = spell.getCooldown().D
+				val centerX = 8
+				val centerY = 8
+				val r = 8
+				val degs = (360 * (coolDown / maxCooldown)).I
+				
+				glBegin(GL_TRIANGLE_FAN)
+				glVertex2i(centerX, centerY)
+				for (d in degs downTo 0) {
+					val rad = (d - 90) / 180f * Math.PI
+					
+					val xOff = MathHelper.clamp_double(cos(rad) * sqrt(2.0), -1.0, 1.0)
+					val yOff = MathHelper.clamp_double(sin(rad) * sqrt(2.0), -1.0, 1.0)
+					
+					glVertex2d(centerX + xOff * r, centerY + yOff * r)
+				}
+				glVertex2i(centerX, centerY)
+				glEnd()
+				
 				glColor4d(1.0, 1.0, 1.0, 1.0 * fadeOut)
 				glEnable(GL_TEXTURE_2D)
 				if (fadeOut > 0) {
-					val ttt = ticksToTime(SpellCastingSystemClient.getCoolDown(spell))
+					val ttt = ticksToTime(coolDown)
 					font.drawString(ttt, 2 + (12 - font.getStringWidth(ttt)) / 2, 4, 0xFFFFFF)
 				}
 			}

@@ -171,10 +171,10 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 			}
 	}
 	
-	override fun isMovementBlocked() = rider != null && !rider!!.isJumping
+	override fun isMovementBlocked() = rider?.isJumping == false
 	
 	override fun playLivingSound() {
-		if (rng.nextInt(8) == 1) super.playLivingSound()
+		if (rng.nextInt(8) == 0) super.playLivingSound()
 	}
 	
 	override fun getLivingSound() = type.livingSound

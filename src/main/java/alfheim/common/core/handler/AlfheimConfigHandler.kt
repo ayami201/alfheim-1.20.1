@@ -87,6 +87,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var domainDistance = 1000
 	var domainImmediate = false
 	var domainMaxCount = 5
+	var domainPlayersRequired = 2
 	var domainStartX = -5000
 	var domainStartZ = -5000
 	
@@ -305,6 +306,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		domainDistance = loadProp(CATEGORY_WORLDGEN_D, "domainDistance", domainDistance, true, "Distance between domains")
 		domainImmediate = loadProp(CATEGORY_WORLDGEN_D, "domainImmediate", domainImmediate, true, "Set this to true to immediately generate max domains instead of generating new one in same type line if and only if all previously generated ones are occupied")
 		domainMaxCount = loadProp(CATEGORY_WORLDGEN_D, "domainMaxCount", domainMaxCount, true, "Count of domains of the same type")
+		domainPlayersRequired = loadProp(CATEGORY_WORLDGEN_D, "domainPlayersRequired", domainPlayersRequired, true, "Min number of players required to enter any domain in MP")
 		domainStartX = loadProp(CATEGORY_WORLDGEN_D, "domainStartX", domainStartX, true, "X-position of first domain in different type line")
 		domainStartZ = loadProp(CATEGORY_WORLDGEN_D, "domainStartZ", domainStartZ, true, "Z-position of first domain in same type line")
 		

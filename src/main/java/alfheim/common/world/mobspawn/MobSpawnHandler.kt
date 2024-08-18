@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.AlfheimCore
 import alfheim.api.ModInfo.MODID
+import alfheim.common.core.asm.superwrapper.SuperWrapperHandler
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.AlfheimConfigHandler.butterflySpawn
 import alfheim.common.core.handler.AlfheimConfigHandler.chickSpawn
@@ -18,7 +19,6 @@ import alfheim.common.core.handler.AlfheimConfigHandler.pigSpawn
 import alfheim.common.core.handler.AlfheimConfigHandler.pixieSpawn
 import alfheim.common.core.handler.AlfheimConfigHandler.playerGroupDistance
 import alfheim.common.core.handler.AlfheimConfigHandler.sheepSpawn
-import alfheim.common.core.superwrapper.SuperWrapperHandler
 import alfheim.common.world.dim.alfheim.WorldProviderAlfheim
 import alfheim.common.world.dim.alfheim.biome.*
 import alfheim.common.world.dim.alfheim.customgens.NiflheimLocationGenerator

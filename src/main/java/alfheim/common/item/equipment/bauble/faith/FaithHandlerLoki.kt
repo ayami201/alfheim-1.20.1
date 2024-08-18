@@ -105,9 +105,7 @@ object FaithHandlerLoki: IFaithHandler {
 		
 		val player = e.entityLiving as? EntityPlayer ?: return
 		
-		val emblem = ItemPriestEmblem.getEmblem(3, player) ?: ItemRagnarokEmblem.getEmblem(player, 3)
-		
-		if (emblem != null && (e.source.isExplosion || (Math.random() <= 0.1 && e.source.damageType in avoidableDamage))) {
+		if (ItemPriestCloak.getCloak(3, player) != null && (e.source.isExplosion || (Math.random() <= 0.1 && e.source.damageType in avoidableDamage))) {
 			e.isCanceled = true
 			
 			return

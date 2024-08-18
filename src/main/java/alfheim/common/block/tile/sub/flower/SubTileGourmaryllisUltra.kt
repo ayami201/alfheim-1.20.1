@@ -75,7 +75,7 @@ class SubTileGourmaryllisUltra: SubTileGenerating() {
 			}
 			
 			val heal = (stack.item as ItemFood).func_150905_g(stack)
-			storedMana = (heal * heal * 64 * (1 - lastFoodCount / 8f + 0.125)).I
+			storedMana = max(0, (heal * heal * 64 * (1 - lastFoodCount / 8f + 0.125)).I)
 			cooldown = heal * 10
 			item.playSound("random.eat", 0.2f, 0.6f)
 			sync()
@@ -85,7 +85,6 @@ class SubTileGourmaryllisUltra: SubTileGenerating() {
 			
 			VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.ICONCRACK, worldObj.provider.dimensionId, x, y, z, id.D, meta.D)
 			
-			--stack.stackSize
 			if (--stack.stackSize <= 0) item.setDead()
 			
 			break

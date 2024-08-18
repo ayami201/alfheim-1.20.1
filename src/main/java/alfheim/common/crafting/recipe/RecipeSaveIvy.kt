@@ -2,10 +2,10 @@ package alfheim.common.crafting.recipe
 
 import alexsocol.asjlib.*
 import alfheim.api.ModInfo
-import alfheim.common.entity.item.*
+import alfheim.common.entity.item.EntityItemImmortal
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenResourcesMetas
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.eventhandler.*
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.inventory.InventoryCrafting
 import net.minecraft.item.ItemStack
@@ -73,12 +73,15 @@ object RecipeSaveIvy: IRecipe {
 		entity.setDead()
 	}
 	
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	fun onSaveItemToss(e: ItemTossEvent) {
 		if (!checkEntity(e.entityItem)) return
 		
 		e.isCanceled = true
-		e.player.inventory.addItemStackToInventory(e.entityItem.entityItem)
+		
+		val stack = e.entityItem.entityItem
+		val added = e.player.inventory.addItemStackToInventory(stack)
+		if (!added && !e.player.worldObj.isRemote) e.player.entityDropItem(stack, 0f)
 	}
 	
 	fun checkEntity(entity: EntityItem): Boolean {

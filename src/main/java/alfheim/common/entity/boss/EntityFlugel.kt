@@ -983,7 +983,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 		/*	================================	UTILITY STUFF	================================	*/
 		
 		val airBlocks by lazy {
-			val set = mutableSetOf(Blocks.air)
+			val set = mutableSetOf(Blocks.air, ModBlocks.manaFlame, AlfheimBlocks.rainbowFlame)
 			
 			if (Loader.isModLoaded("GalacticraftCore")) {
 				set.add(GameRegistry.findBlock("GalacticraftCore", "tile.breatheableAir"))
@@ -993,6 +993,10 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 			
 			if (Loader.isModLoaded("Railcraft")) {
 				set.add(GameRegistry.findBlock("Railcraft", "residual.heat"))
+			}
+			
+			if (Loader.isModLoaded("ThaumicTinkerer")) {
+				set.add(GameRegistry.findBlock("ThaumicTinkerer", "nitorGas"))
 			}
 			
 			if (Loader.isModLoaded("WarpDrive")) {
@@ -1024,7 +1028,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 						if (block inln airBlocks) {
 							proper = false
 							
-							if (destroy) {
+							if (destroy && block.getBlockHardness(world, x, y, z) >= 0) {
 								val items = block.getDrops(world, x, y, z, world.getBlockMetadata(x, y, z), 0)
 								for (stack in items) EntityItem(world, x + 0.5, y + 0.5, z + 0.5, stack).spawn()
 								if (ConfigHandler.blockBreakParticles) world.playAuxSFX(2001, x, y, z, block.id + (world.getBlockMetadata(x, y, z) shl 12))

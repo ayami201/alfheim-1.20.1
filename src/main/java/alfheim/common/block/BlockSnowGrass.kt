@@ -3,8 +3,8 @@ package alfheim.common.block
 import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 import alfheim.common.block.base.BlockMod
+import alfheim.common.core.asm.superwrapper.SuperWrapperHandler
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
-import alfheim.common.core.superwrapper.SuperWrapperHandler
 import alfheim.common.core.util.AlfheimTab
 import net.minecraft.block.*
 import net.minecraft.block.material.Material

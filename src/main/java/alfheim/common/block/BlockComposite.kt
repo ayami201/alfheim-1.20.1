@@ -280,7 +280,7 @@ class BlockComposite: BlockDoubleCamo(info = false) {
 	override fun getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB? {
 		val mop = mc.objectMouseOver
 		val hit = Vector3(mop.hitVec).sub(x, y, z).toVec3()
-		val tile = world.getTileEntity(x, y, z) as? TileComposite ?: return null
+		val tile = world.getTileEntity(x, y, z) as? TileComposite ?: return getBoundingBox(x, y, z, x + 1, y + 1, z + 1)
 		
 		val step = 1.0 / tile.size
 
@@ -293,7 +293,7 @@ class BlockComposite: BlockDoubleCamo(info = false) {
 					return bb.getOffsetBoundingBox(x.D, y.D, z.D)
 				}
 		
-		return null
+		return getBoundingBox(x, y, z, x + 1, y + 1, z + 1)
 	}
 	
 	override fun addCollisionBoxesToList(world: World, x: Int, y: Int, z: Int, mask: AxisAlignedBB?, list: MutableList<Any?>, entity: Entity?) {

@@ -1,7 +1,6 @@
 package alfheim.common.integration.tinkersconstruct
 
 import alexsocol.asjlib.*
-import alfheim.AlfheimCore
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig.ELEMENTIUM
@@ -12,7 +11,6 @@ import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
 import alfheim.common.integration.tinkersconstruct.modifier.*
 import alfheim.common.item.compat.tinkersconstruct.*
 import cpw.mods.fml.common.registry.GameRegistry
-import gloomyfolken.hooklib.asm.*
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.init.Blocks
@@ -23,14 +21,11 @@ import net.minecraftforge.oredict.OreDictionary
 import tconstruct.library.TConstructRegistry
 import tconstruct.library.client.TConstructClientRegistry
 import tconstruct.library.crafting.*
-import tconstruct.library.modifier.IModifyable
 import tconstruct.library.weaponry.IAmmo
 import tconstruct.modifiers.tools.ModInteger
 import tconstruct.smeltery.TinkerSmeltery
 import tconstruct.tools.TinkerTools
 import vazkii.botania.common.block.ModBlocks
-import vazkii.botania.common.core.handler.PixieHandler
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.lib.LibOreDict
 
@@ -148,20 +143,5 @@ object ModifiersExtender {
 		
 		sharpnessOreBlocks.forEach { ore -> OreDictionary.getOres(ore).forEach { stack -> TinkerTools.modAttack.addStackToMatchList(stack, 8) } }
 		sharpnessOres.forEach { ore -> OreDictionary.getOres(ore).forEach { stack -> TinkerTools.modAttack.addStackToMatchList(stack, 2) } }
-	}
-}
-
-object TraitFairySpawner {
-	
-	@JvmStatic
-	@Hook(returnCondition = ReturnCondition.ON_TRUE, floatReturnConstant = 0.1f)
-	fun getChance(handler: PixieHandler, stack: ItemStack?): Boolean {
-		if (!AlfheimCore.TiCLoaded) return false
-		
-		if (stack == null) return false
-		val tool = stack.item as? IModifyable ?: return false
-		val tag = ItemNBTHelper.getCompound(stack, tool.baseTagName, true) ?: return false
-		val headMaterial = tag.getInteger("Head")
-		return headMaterial == AlfheimConfigHandler.materialIDs[ELEMENTIUM]
 	}
 }

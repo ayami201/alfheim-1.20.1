@@ -1,4 +1,4 @@
-package alfheim.common.core.asm
+package alfheim.common.core.asm.transformer
 
 import alexsocol.patcher.asm.ASJHookLoader.Companion.OBF
 import alfheim.common.core.asm.hook.extender.ItemLensExtender
@@ -56,6 +56,7 @@ class AlfheimClassTransformer: IClassTransformer {
 			"vazkii.botania.client.core.handler.BaubleRenderHandler"           -> core { `BaubleRenderHandler$ClassVisitor`(it) }
 			"vazkii.botania.client.core.handler.LightningHandler"              -> core { `LightningHandler$ClassVisitor`(it) }
 			"vazkii.botania.client.core.handler.TooltipAdditionDisplayHandler" -> core { `TooltipAdditionDisplayHandler$ClassVisitor`(it) }
+			"vazkii.botania.client.core.helper.RenderHelper"                   -> core { `RenderHelper$ClassVisitor`(it) }
 			"vazkii.botania.client.render.tile.RenderTileFloatingFlower"       -> core { `RenderTileFloatingFlower$ClassVisitor`(it) }
 			
 			"vazkii.botania.common.block.decor.IFloatingFlower\$IslandType"    -> tree {
@@ -328,6 +329,28 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
+	// Fix for progress pie integrity on full progress
+	internal class `RenderHelper$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+		
+		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
+			if (name == "renderProgressPie") {
+				println("Visiting RenderHelper#renderProgressPie: $name$desc")
+				return `RenderHelper$renderProgressPie$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
+			}
+			return super.visitMethod(access, name, desc, signature, exceptions)
+		}
+		
+		internal class `RenderHelper$renderProgressPie$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+			
+			override fun visitJumpInsn(opcode: Int, label: Label?) {
+				if (opcode != IFLE) return super.visitJumpInsn(opcode, label)
+				
+				super.visitInsn(ICONST_M1)
+				super.visitJumpInsn(IF_ICMPLE, label)
+			}
+		}
+	}
+	
 	internal class `BaubleRenderHandler$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
@@ -452,188 +475,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
-			
-			// ################################################################################################################
-			// # NO IT CAN'T BE SO EASILY DONE OTHERWISE !!! STOP DELETING THIS BEFORE YOU ACTUALLY MADE A BETTER VERSION !!! #
-			// ################################################################################################################
-			
-			if (name == "attackEntityFrom" || name == "a" && desc == "(Lro;F)Z") {
-				println("Visiting EntityDoppleganger#attackEntityFrom: $name$desc")
-				val mv = cv.visitMethod(ACC_PUBLIC, if (OBF) "a" else "attackEntityFrom", if (OBF) "(Lro;F)Z" else "(Lnet/minecraft/util/DamageSource;F)Z", null, null)
-				mv.visitCode()
-				val l0 = Label()
-				mv.visitLabel(l0)
-				mv.visitLineNumber(371, l0)
-				mv.visitVarInsn(ALOAD, 1)
-				mv.visitMethodInsn(INVOKEVIRTUAL, if (OBF) "ro" else "net/minecraft/util/DamageSource", if (OBF) "j" else "getEntity", if (OBF) "()Lsa;" else "()Lnet/minecraft/entity/Entity;", false)
-				mv.visitVarInsn(ASTORE, 3)
-				val l1 = Label()
-				mv.visitLabel(l1)
-				mv.visitLineNumber(372, l1)
-				mv.visitVarInsn(ALOAD, 1)
-				mv.visitFieldInsn(GETFIELD, if (OBF) "ro" else "net/minecraft/util/DamageSource", if (OBF) "o" else "damageType", "Ljava/lang/String;")
-				mv.visitLdcInsn("player")
-				mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String", "equals", "(Ljava/lang/Object;)Z", false)
-				val l2 = Label()
-				mv.visitJumpInsn(IFNE, l2)
-				mv.visitVarInsn(ALOAD, 1)
-				mv.visitTypeInsn(INSTANCEOF, "alfheim/common/core/util/DamageSourceSpell")
-				mv.visitJumpInsn(IFNE, l2)
-				mv.visitVarInsn(ALOAD, 3)
-				mv.visitTypeInsn(INSTANCEOF, "vazkii/botania/common/entity/EntityPixie")
-				val l3 = Label()
-				mv.visitJumpInsn(IFEQ, l3)
-				mv.visitLabel(l2)
-				mv.visitFrame(F_APPEND, 1, arrayOf<Any>(if (OBF) "sa" else "net/minecraft/entity/Entity"), 0, null)
-				mv.visitVarInsn(ALOAD, 3)
-				mv.visitJumpInsn(IFNULL, l3)
-				mv.visitVarInsn(ALOAD, 3)
-				mv.visitMethodInsn(INVOKESTATIC, "vazkii/botania/common/entity/EntityDoppleganger", "isTruePlayer", if (OBF) "(Lsa;)Z" else "(Lnet/minecraft/entity/Entity;)Z", false)
-				mv.visitJumpInsn(IFEQ, l3)
-				mv.visitVarInsn(ALOAD, 0)
-				mv.visitMethodInsn(INVOKEVIRTUAL, "vazkii/botania/common/entity/EntityDoppleganger", "getInvulTime", "()I", false)
-				mv.visitJumpInsn(IFNE, l3)
-				val l4 = Label()
-				mv.visitLabel(l4)
-				mv.visitLineNumber(373, l4)
-				mv.visitVarInsn(ALOAD, 3)
-				mv.visitTypeInsn(CHECKCAST, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer")
-				mv.visitVarInsn(ASTORE, 4)
-				val l5 = Label()
-				mv.visitLabel(l5)
-				mv.visitLineNumber(374, l5)
-				mv.visitVarInsn(ALOAD, 0)
-				mv.visitFieldInsn(GETFIELD, "vazkii/botania/common/entity/EntityDoppleganger", "playersWhoAttacked", "Ljava/util/List;")
-				mv.visitVarInsn(ALOAD, 4)
-				mv.visitMethodInsn(INVOKEVIRTUAL, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer", if (OBF) "b_" else "getCommandSenderName", "()Ljava/lang/String;", false)
-				mv.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "contains", "(Ljava/lang/Object;)Z", true)
-				val l6 = Label()
-				mv.visitJumpInsn(IFNE, l6)
-				val l7 = Label()
-				mv.visitLabel(l7)
-				mv.visitLineNumber(375, l7)
-				mv.visitVarInsn(ALOAD, 0)
-				mv.visitFieldInsn(GETFIELD, "vazkii/botania/common/entity/EntityDoppleganger", "playersWhoAttacked", "Ljava/util/List;")
-				mv.visitVarInsn(ALOAD, 4)
-				mv.visitMethodInsn(INVOKEVIRTUAL, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer", if (OBF) "b_" else "getCommandSenderName", "()Ljava/lang/String;", false)
-				mv.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "add", "(Ljava/lang/Object;)Z", true)
-				mv.visitInsn(POP)
-				mv.visitLabel(l6)
-				mv.visitLineNumber(377, l6)
-				mv.visitFrame(F_APPEND, 1, arrayOf<Any>(if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer"), 0, null)
-				mv.visitVarInsn(FLOAD, 2)
-				mv.visitVarInsn(FSTORE, 5)
-				val l8 = Label()
-				mv.visitLabel(l8)
-				mv.visitLineNumber(378, l8)
-				mv.visitInsn(ICONST_0)
-				mv.visitVarInsn(ISTORE, 6)
-				val l9 = Label()
-				mv.visitLabel(l9)
-				mv.visitLineNumber(379, l9)
-				mv.visitVarInsn(ALOAD, 3)
-				mv.visitTypeInsn(INSTANCEOF, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer")
-				val l10 = Label()
-				mv.visitJumpInsn(IFEQ, l10)
-				val l11 = Label()
-				mv.visitLabel(l11)
-				mv.visitLineNumber(380, l11)
-				mv.visitVarInsn(ALOAD, 3)
-				mv.visitTypeInsn(CHECKCAST, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer")
-				mv.visitVarInsn(ASTORE, 7)
-				val l12 = Label()
-				mv.visitLabel(l12)
-				mv.visitLineNumber(381, l12)
-				mv.visitVarInsn(ALOAD, 7)
-				mv.visitFieldInsn(GETFIELD, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer", if (OBF) "R" else "fallDistance", "F")
-				mv.visitInsn(FCONST_0)
-				mv.visitInsn(FCMPL)
-				val l13 = Label()
-				mv.visitJumpInsn(IFLE, l13)
-				mv.visitVarInsn(ALOAD, 7)
-				mv.visitFieldInsn(GETFIELD, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer", if (OBF) "D" else "onGround", "Z")
-				mv.visitJumpInsn(IFNE, l13)
-				mv.visitVarInsn(ALOAD, 7)
-				mv.visitMethodInsn(INVOKEVIRTUAL, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer", if (OBF) "h_" else "isOnLadder", "()Z", false)
-				mv.visitJumpInsn(IFNE, l13)
-				mv.visitVarInsn(ALOAD, 7)
-				mv.visitMethodInsn(INVOKEVIRTUAL, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer", if (OBF) "M" else "isInWater", "()Z", false)
-				mv.visitJumpInsn(IFNE, l13)
-				mv.visitVarInsn(ALOAD, 7)
-				mv.visitFieldInsn(GETSTATIC, if (OBF) "rv" else "net/minecraft/potion/Potion", if (OBF) "q" else "blindness", if (OBF) "Lrv;" else "Lnet/minecraft/potion/Potion;")
-				mv.visitMethodInsn(INVOKEVIRTUAL, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer", if (OBF) "a" else "isPotionActive", if (OBF) "(Lrv;)Z" else "(Lnet/minecraft/potion/Potion;)Z", false)
-				mv.visitJumpInsn(IFNE, l13)
-				mv.visitVarInsn(ALOAD, 7)
-				mv.visitFieldInsn(GETFIELD, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer", if (OBF) "m" else "ridingEntity", if (OBF) "Lsa;" else "Lnet/minecraft/entity/Entity;")
-				mv.visitJumpInsn(IFNONNULL, l13)
-				mv.visitInsn(ICONST_1)
-				val l14 = Label()
-				mv.visitJumpInsn(GOTO, l14)
-				mv.visitLabel(l13)
-				mv.visitFrame(F_APPEND, 3, arrayOf<Any>(FLOAT, INTEGER, if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer"), 0, null)
-				mv.visitInsn(ICONST_0)
-				mv.visitLabel(l14)
-				mv.visitFrame(F_SAME1, 0, null, 1, arrayOf<Any>(INTEGER))
-				mv.visitVarInsn(ISTORE, 6)
-				mv.visitLabel(l10)
-				mv.visitLineNumber(384, l10)
-				mv.visitFrame(F_CHOP, 1, null, 0, null)
-				mv.visitVarInsn(ILOAD, 6)
-				val l15 = Label()
-				mv.visitJumpInsn(IFEQ, l15)
-				mv.visitIntInsn(BIPUSH, 60)
-				val l16 = Label()
-				mv.visitJumpInsn(GOTO, l16)
-				mv.visitLabel(l15)
-				mv.visitFrame(F_SAME, 0, null, 0, null)
-				mv.visitIntInsn(BIPUSH, 40)
-				mv.visitLabel(l16)
-				mv.visitFrame(F_SAME1, 0, null, 1, arrayOf<Any>(INTEGER))
-				mv.visitVarInsn(ISTORE, 7)
-				val l17 = Label()
-				mv.visitLabel(l17)
-				mv.visitLineNumber(385, l17)
-				mv.visitVarInsn(ALOAD, 0)
-				mv.visitVarInsn(ALOAD, 1)
-				mv.visitVarInsn(ILOAD, 7)
-				mv.visitInsn(I2F)
-				mv.visitVarInsn(FLOAD, 5)
-				mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "min", "(FF)F", false)
-				mv.visitVarInsn(ALOAD, 0)
-				mv.visitMethodInsn(INVOKEVIRTUAL, "vazkii/botania/common/entity/EntityDoppleganger", "isHardMode", "()Z", false)
-				val l18 = Label()
-				mv.visitJumpInsn(IFEQ, l18)
-				mv.visitLdcInsn(0.6f)
-				val l19 = Label()
-				mv.visitJumpInsn(GOTO, l19)
-				mv.visitLabel(l18)
-				mv.visitFrame(F_FULL, 8, arrayOf<Any>("vazkii/botania/common/entity/EntityDoppleganger", if (OBF) "ro" else "net/minecraft/util/DamageSource", FLOAT, if (OBF) "sa" else "net/minecraft/entity/Entity", if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer", FLOAT, INTEGER, INTEGER), 3, arrayOf<Any>("vazkii/botania/common/entity/EntityDoppleganger", if (OBF) "ro" else "net/minecraft/util/DamageSource", FLOAT))
-				mv.visitInsn(FCONST_1)
-				mv.visitLabel(l19)
-				mv.visitFrame(F_FULL, 8, arrayOf<Any>("vazkii/botania/common/entity/EntityDoppleganger", if (OBF) "ro" else "net/minecraft/util/DamageSource", FLOAT, if (OBF) "sa" else "net/minecraft/entity/Entity", if (OBF) "yz" else "net/minecraft/entity/player/EntityPlayer", FLOAT, INTEGER, INTEGER), 4, arrayOf<Any>("vazkii/botania/common/entity/EntityDoppleganger", if (OBF) "ro" else "net/minecraft/util/DamageSource", FLOAT, FLOAT))
-				mv.visitInsn(FMUL)
-				mv.visitMethodInsn(INVOKESPECIAL, if (OBF) "td" else "net/minecraft/entity/EntityCreature", if (OBF) "a" else "attackEntityFrom", if (OBF) "(Lro;F)Z" else "(Lnet/minecraft/util/DamageSource;F)Z", false)
-				mv.visitInsn(IRETURN)
-				mv.visitLabel(l3)
-				mv.visitLineNumber(387, l3)
-				mv.visitFrame(F_FULL, 4, arrayOf<Any>("vazkii/botania/common/entity/EntityDoppleganger", if (OBF) "ro" else "net/minecraft/util/DamageSource", FLOAT, if (OBF) "sa" else "net/minecraft/entity/Entity"), 0, arrayOf())
-				mv.visitInsn(ICONST_0)
-				mv.visitInsn(IRETURN)
-				val l20 = Label()
-				mv.visitLabel(l20)
-				mv.visitLocalVariable("this", "Lvazkii/botania/common/entity/EntityDoppleganger;", null, l0, l20, 0)
-				mv.visitLocalVariable("par1DamageSource", if (OBF) "Lro;" else "Lnet/minecraft/util/DamageSource;", null, l0, l20, 1)
-				mv.visitLocalVariable("par2", "F", null, l0, l20, 2)
-				mv.visitLocalVariable("e", if (OBF) "Lsa;" else "Lnet/minecraft/entity/Entity;", null, l1, l20, 3)
-				mv.visitLocalVariable("player", if (OBF) "yz" else "Lnet/minecraft/entity/player/EntityPlayer;", null, l5, l3, 4)
-				mv.visitLocalVariable("dmg", "F", null, l8, l3, 5)
-				mv.visitLocalVariable("crit", "Z", null, l9, l3, 6)
-				mv.visitLocalVariable("p", if (OBF) "yz" else "Lnet/minecraft/entity/player/EntityPlayer;", null, l12, l10, 7)
-				mv.visitLocalVariable("cap", "I", null, l17, l3, 7)
-				mv.visitMaxs(4, 8)
-				mv.visitEnd()
-				return mv
-			} else if (name == "getBossBarTextureRect") {
+			if (name == "getBossBarTextureRect") {
 				println("Visiting EntityDoppleganger#getBossBarTextureRect: $name$desc")
 				return `EntityDoppleganger$getBossBarTextureRect$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}

@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.entity.RenderItem
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.StatCollector
+import net.minecraft.util.*
 import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.GL11.glEnable
 import org.lwjgl.opengl.GL12.GL_RESCALE_NORMAL
@@ -69,7 +69,7 @@ class TileAnimatedTorch: ASJTile() {
 			nextRandomRotation = worldObj.rand.nextInt(4)
 		
 		if (entity != null)
-			side = ((entity.rotationYaw * 4f / 360f) + 0.5).mfloor() and 3
+			side = (((MathHelper.wrapAngleTo180_float(entity.rotationYaw) + 180f) * 4f / 360f) + 0.5).mfloor() and 3
 		
 		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType())
 	}

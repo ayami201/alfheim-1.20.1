@@ -4,12 +4,10 @@
 /*/
 !/gradle/
 !/libs/
-!/modular/
-!/release/
 !/src/
-!/.gitattributes
 !/.gitignore
 !/build.gradle
+!/changelog.txt
 !/gradlew
 !/gradlew.bat
 !/setup.bat

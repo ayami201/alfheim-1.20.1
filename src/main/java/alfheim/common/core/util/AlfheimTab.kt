@@ -179,7 +179,7 @@ import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteSlab
 import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
 import alfheim.common.block.AlfheimFluffBlocks.table
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
-import alfheim.common.core.asm.AlfheimClassTransformer
+import alfheim.common.core.asm.transformer.AlfheimClassTransformer
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
 import alfheim.common.item.AlfheimItems
@@ -240,6 +240,7 @@ import alfheim.common.item.AlfheimItems.flugelSoul
 import alfheim.common.item.AlfheimItems.gaiaSlayer
 import alfheim.common.item.AlfheimItems.gjallarhorn
 import alfheim.common.item.AlfheimItems.gleipnir
+import alfheim.common.item.AlfheimItems.goddesCharm
 import alfheim.common.item.AlfheimItems.gungnir
 import alfheim.common.item.AlfheimItems.hyperBucket
 import alfheim.common.item.AlfheimItems.invisibilityCloak
@@ -438,6 +439,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(cloudPendantSuper)
 		addItem(pixieAttractor)
 		addItem(serenade)
+		addItem(goddesCharm)
 		addItem(rationBelt)
 		
 		addItem(astrolabe)

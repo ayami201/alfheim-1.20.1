@@ -22,11 +22,9 @@ import ru.vamig.worldengine.WE_PerlinNoise.PerlinNoise2D
 import java.util.*
 import kotlin.math.*
 
-class ChunkProviderNiflheim(world: World, val seed: Long, structures: Boolean): IChunkProvider {
+class ChunkProviderNiflheim(val world: World, val seed: Long, val useStructures: Boolean): IChunkProvider {
 	
-	val world: World
 	val random: Random
-	val useStructures: Boolean
 	var noiseField = DoubleArray(0)
 	var gravelNoise: DoubleArray
 	
@@ -45,9 +43,7 @@ class ChunkProviderNiflheim(world: World, val seed: Long, structures: Boolean): 
 	init {
 		ravineGenerator = MapGenCustomRavine
 		caveGenerator = MapGenCustomCaves
-		this.world = world
 		random = Random(seed)
-		useStructures = structures
 		gravelNoise = DoubleArray(256)
 		noiseGen1 = NoiseGeneratorOctaves(random, 16)
 		noiseGen2 = NoiseGeneratorOctaves(random, 16)
@@ -131,7 +127,7 @@ class ChunkProviderNiflheim(world: World, val seed: Long, structures: Boolean): 
 								}
 								
 								val scale = 10.0
-								if (y > PerlinNoise2D(world.seed, (cX * 16 + x) / scale, (cZ * 16 + z + var50) / scale, 5.0, 1) + 106) {
+								if (y > PerlinNoise2D(seed, (cX * 16 + x) / scale, (cZ * 16 + z + var50) / scale, 5.0, 1) + 106) {
 									var51 = AlfheimBlocks.niflheimBlock
 								}
 								
@@ -162,10 +158,10 @@ class ChunkProviderNiflheim(world: World, val seed: Long, structures: Boolean): 
 			val x = cX * 16 + i
 			val z = cZ * 16 + k
 			
-			var minHeight = PerlinNoise2D(world.seed, x / scaleXZMin, z / scaleXZMin, 8.0, 1)
+			var minHeight = PerlinNoise2D(seed, x / scaleXZMin, z / scaleXZMin, 8.0, 1)
 			minHeight = max(0.0, min(minHeight, 127.0))
 			
-			var maxHeight = PerlinNoise2D(world.seed, x / scaleXZMax, z / scaleXZMax, amplitude, 1) * scaleY
+			var maxHeight = PerlinNoise2D(seed, x / scaleXZMax, z / scaleXZMax, amplitude, 1) * scaleY
 			maxHeight = max(minHeight, min(maxHeight, 127.0))
 			
 			for (y in 0 until maxHeight.I) chunk[index(i, y, k)] = AlfheimBlocks.niflheimBlock
@@ -381,7 +377,7 @@ class ChunkProviderNiflheim(world: World, val seed: Long, structures: Boolean): 
 	override fun populate(provider: IChunkProvider, cX: Int, cZ: Int) {
 		BlockSand.fallInstantly = true
 		
-		random.setSeed(world.seed * cX + cZ * cZ * 107L + 2394720L)
+		random.setSeed(seed * cX + cZ * cZ * 107L + 2394720L)
 		MinecraftForge.EVENT_BUS.post(PopulateChunkEvent.Pre(provider, world, random, cX, cZ, false))
 		
 		val i = cX * 16

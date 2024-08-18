@@ -5,6 +5,7 @@ import alfheim.api.ModInfo
 import alfheim.api.world.domain.Domain
 import alfheim.client.render.world.SkyRendererDomains
 import alfheim.common.block.tile.TileDomainLobby
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.entity.boss.primal.EntitySurtr
 import alfheim.common.item.AlfheimItems
@@ -16,7 +17,7 @@ import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.world.World
 
-object SurtrDomain: Domain(ModInfo.MODID, "Surtr", 2, getBoundingBox(-45, -5, -75, 45, 50, 10)) {
+object SurtrDomain: Domain(ModInfo.MODID, "Surtr", AlfheimConfigHandler.domainPlayersRequired, getBoundingBox(-45, -5, -75, 45, 50, 10)) {
 	
 	override val skyRenderer = object: SkyRendererDomains(0xFFFF4D00U, 0xFF220000U) {}
 	

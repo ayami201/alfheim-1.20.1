@@ -1,14 +1,15 @@
 Innovations:
- New generating flower - Rattlerose, with snake game inside!
- [B] Hovering Hourglass HUD now shows the exact current time within the cycle
- [B] Mana Powder in the Hovering Hourglass makes it a counter 
- [MT3/CT] Added support for Mana Tuner item tuning recipes
+ Config for min number of players required to enter any domain in MP
+ Interdimensional Gateway Core recipe is back
+ Spells cooldown visual pie
+ 
+ Terra Reaper integration:
+ [ExU] Can grow Ender-Lily
+ [IC2] Can grow crops
+ [TC] Can grow sapplings and beans
 
 Fixes:
- Relics from some other addons being unpickupable w/o achievement
- Other's relic pickup issues
- Weather flowers cd and mana balance
- Tree fruits breaking leaves gen
- Crash on filling rift shards
- Max health dupe with Odin/Aesir ring
- Soul Sword mob resistance ignore
+ Das Rheingold recipe supports any meta
+ Some tuning recipes
+ Time stop spell not affecting bosses with enabled config
+ ...other small fixes
