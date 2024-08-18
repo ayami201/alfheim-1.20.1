@@ -56,6 +56,7 @@ class AlfheimClassTransformer: IClassTransformer {
 			"vazkii.botania.client.core.handler.BaubleRenderHandler"           -> core { `BaubleRenderHandler$ClassVisitor`(it) }
 			"vazkii.botania.client.core.handler.LightningHandler"              -> core { `LightningHandler$ClassVisitor`(it) }
 			"vazkii.botania.client.core.handler.TooltipAdditionDisplayHandler" -> core { `TooltipAdditionDisplayHandler$ClassVisitor`(it) }
+			"vazkii.botania.client.core.helper.RenderHelper"                   -> core { `RenderHelper$ClassVisitor`(it) }
 			"vazkii.botania.client.render.tile.RenderTileFloatingFlower"       -> core { `RenderTileFloatingFlower$ClassVisitor`(it) }
 			
 			"vazkii.botania.common.block.decor.IFloatingFlower\$IslandType"    -> tree {
@@ -324,6 +325,28 @@ class AlfheimClassTransformer: IClassTransformer {
 				}
 				
 				super.visitMethodInsn(opcode, owner, newName, newDesc, itf)
+			}
+		}
+	}
+	
+	// Fix for progress pie integrity on full progress
+	internal class `RenderHelper$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+		
+		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
+			if (name == "renderProgressPie") {
+				println("Visiting RenderHelper#renderProgressPie: $name$desc")
+				return `RenderHelper$renderProgressPie$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
+			}
+			return super.visitMethod(access, name, desc, signature, exceptions)
+		}
+		
+		internal class `RenderHelper$renderProgressPie$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+			
+			override fun visitJumpInsn(opcode: Int, label: Label?) {
+				if (opcode != IFLE) return super.visitJumpInsn(opcode, label)
+				
+				super.visitInsn(ICONST_M1)
+				super.visitJumpInsn(IF_ICMPLE, label)
 			}
 		}
 	}

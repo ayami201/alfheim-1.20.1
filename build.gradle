@@ -1,5 +1,5 @@
 buildscript {
-	ext.kotlinVersion = '1.9.23'
+	ext.kotlinVersion = '1.9.24'
 	
 	repositories {
 		mavenCentral()
@@ -32,7 +32,7 @@ repositories {
 }
 
 group = "main"
-version = "55-dev"
+version = "55"
 archivesBaseName = "Alfheim"
 
 minecraft {
@@ -57,8 +57,8 @@ jar {
 		
 	manifest {
 		attributes 'FMLAT': 'alfheim_at.cfg'
+
 		attributes 'FMLCorePlugin': 'alfheim.common.core.asm.AlfheimHookLoader'
-		
 		attributes 'FMLCorePluginContainsFMLMod': 'true'
 	}
 	

@@ -7,6 +7,7 @@
 !/src/
 !/.gitignore
 !/build.gradle
+!/changelog.txt
 !/gradlew
 !/gradlew.bat
 !/setup.bat

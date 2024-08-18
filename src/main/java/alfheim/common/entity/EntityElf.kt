@@ -183,7 +183,7 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 		super.onLivingUpdate()
 //		if (dialog != null) { navigator.clearPathEntity() }
 		
-		if (ticksExisted % 20 == 0) heal(0.5f)
+		if (ticksExisted % 20 == 0 && health < maxHealth) heal(0.5f)
 		
 		if (attackTarget?.isEntityAlive == false)
 			attackTarget = null
@@ -429,7 +429,7 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 	
 	override fun getExtraReach() = if (job == EnumElfJob.PRIEST) 3.0 else 0.0
 	
-	override fun applyArmorCalculations(src: DamageSource, dmg: Float) = ArmorProperties.ApplyArmor(this, getHackyEquip(), src, dmg.D)
+	override fun applyArmorCalculations(src: DamageSource, dmg: Float) = ArmorProperties.ApplyArmor(this, getHackyEquip().toMutableList().apply { removeFirst() }.toTypedArray(), src, dmg.D)
 	
 	override fun getTotalArmorValue() = getHackyEquip().sumOf { if (it?.item is ItemArmor) (it.item as ItemArmor).damageReduceAmount else 0 }
 	

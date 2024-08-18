@@ -961,7 +961,7 @@ object CardinalSystem {
 			val ev = TimeStopEntityCheckEvent(e)
 			if (MinecraftForge.EVENT_BUS.post(ev)) return ev.result
 			
-			if (e is IBossDisplayData) return false
+			if (e is IBossDisplayData && !AlfheimConfigHandler.superSpellBosses) return false
 			
 			if (e is ITimeStopSpecific && (e as ITimeStopSpecific).isImmune) return false
 			

@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack
 object KeyBindingHandler {
 	
 	fun enableFlight(player: EntityPlayerMP, boost: Boolean) {
-		if (AlfheimConfigHandler.wingsBlackList.contains(player.worldObj.provider.dimensionId)) {
+		if (player.worldObj.provider.dimensionId in AlfheimConfigHandler.wingsBlackList) {
 			ASJUtilities.say(player, "mes.flight.unavailable")
 		} else {
 			if (!AlfheimConfigHandler.enableElvenStory || (player.race == EnumRace.HUMAN && !player.capabilities.isCreativeMode) || (player.capabilities.isCreativeMode && boost)) return

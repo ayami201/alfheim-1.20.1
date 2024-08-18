@@ -51,7 +51,7 @@ object HookReplacerHandler {
 		
 		return false
 	}
-
+	
 	@JvmStatic
 	fun checkDamage(src: DamageSource): Boolean {
 		return src.damageType == "player" || src is DamageSourceSpell

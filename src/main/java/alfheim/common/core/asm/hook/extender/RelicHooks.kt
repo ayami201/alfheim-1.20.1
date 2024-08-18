@@ -2,6 +2,7 @@ package alfheim.common.core.asm.hook.extender
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.common.core.asm.hook.extender.RelicHooks.aesirRingComponents
 import alfheim.common.entity.item.EntityItemImmortalRelic
 import alfheim.common.item.AlfheimItems.akashicRecords
 import alfheim.common.item.AlfheimItems.daolos
@@ -178,6 +179,8 @@ object RelicNBTSyncHandler {
 		
 		if (player.capabilities.isCreativeMode) return
 		
+		val baubles = PlayerHandler.getPlayerBaubles(player)
+		
 		run removeNotGot@ {
 			fun iterateInventory(inv: IInventory) {
 				for (i in 0 until inv.sizeInventory) {
@@ -198,7 +201,26 @@ object RelicNBTSyncHandler {
 			}
 			
 			iterateInventory(player.inventory)
-			iterateInventory(PlayerHandler.getPlayerBaubles(player))
+			iterateInventory(baubles)
+		}
+		
+		run removeDupes@ {
+			val ring1 = baubles[1]?.copy() ?: return@removeDupes
+			val ring2 = baubles[2]?.copy() ?: return@removeDupes
+
+			val flag = run {
+				if (ring1.item is IRelic && ring1.isItemEqual(ring2)) return@run true
+				if (ring1.item is ItemAesirRing && ring2.item inl aesirRingComponents) return@run true
+				if (ring1.item inl aesirRingComponents && ring2.item is ItemAesirRing) return@run true
+				false
+			}
+			
+			if (flag) {
+				if (!player.inventory.addItemStackToInventory(ring2))
+					player.dropPlayerItemWithRandomChoice(ring2, false)
+
+				baubles[2] = null
+			}
 		}
 	}
 }

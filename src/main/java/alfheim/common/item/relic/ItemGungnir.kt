@@ -77,7 +77,6 @@ class ItemGungnir: ItemRelic("Gungnir") {
 		else
 			target.attackEntityFrom(src, 100f)
 		
-		
 		if (!player.capabilities.isCreativeMode) stack.cooldown = 1000
 		
 		VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.GUNGNIR, player.dimension, player.entityId.D, target.entityId.D)

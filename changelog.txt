@@ -1,13 +1,15 @@
 Innovations:
- Cocoons can now be forced to spawn rare mobs using Gaia Spirits
+ Config for min number of players required to enter any domain in MP
+ Interdimensional Gateway Core recipe is back
+ Spells cooldown visual pie
+ 
+ Terra Reaper integration:
+ [ExU] Can grow Ender-Lily
+ [IC2] Can grow crops
+ [TC] Can grow sapplings and beans
 
 Fixes:
- World tree multibound to same pos
- Bosses regenerates when already dead
- Flugel summon was blocked by mana flames and [TT] nitor gas from hypernitor/ichor pants
- Crash with Witchery when hovering over compositions
- Ultra Gourmaryllis giving negative mana on overfeeding
- Ultra Gourmaryllis eating 2 items from stack
- Astrolabe consumed items might be > than placed
- Astrolabe were placing broken Botania flowers
- Aesir ring was decomposing with Indissoluble Ivy on drop
+ Das Rheingold recipe supports any meta
+ Some tuning recipes
+ Time stop spell not affecting bosses with enabled config
+ ...other small fixes

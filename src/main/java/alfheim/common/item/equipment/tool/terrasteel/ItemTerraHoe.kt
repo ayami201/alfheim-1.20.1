@@ -5,20 +5,24 @@ import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.item.equipment.tool.manasteel.ItemManasteelHoe
 import alfheim.common.item.relic.*
 import com.google.common.collect.*
+import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.eventhandler.Event
 import cpw.mods.fml.common.registry.GameRegistry
+import ic2.core.crop.TileEntityCrop
 import net.minecraft.block.*
 import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.ai.attributes.AttributeModifier
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Items
+import net.minecraft.init.*
 import net.minecraft.item.ItemStack
 import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import net.minecraftforge.common.*
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.event.entity.player.BonemealEvent
+import thaumcraft.common.blocks.BlockCustomPlant
+import thaumcraft.common.tiles.TileManaPod
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.mana.ManaItemHandler
 import vazkii.botania.common.Botania
@@ -32,21 +36,28 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 		var did = super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ)
 		if (did) return true
 		
-		val target = world.getBlock(x, y, z)
+		if (tryIC2Crop(stack, player, world, x, y, z) || tryThaumTree(stack, player, world, x, y, z)) {
+			for (i in 0..2)
+				Botania.proxy.sparkleFX(world, x - 0.1 + Math.random() * 1.2, y - 0.1 + Math.random() * 1.2, z - 0.1 + Math.random() * 1.2, 0.1f, 1f, 0.1f, 1f, 1)
+			
+			return true
+		}
+		
 		val extraRange = if (player.isSneaking) 0 else getExtraRange(stack, player) / 2
 		
 		outer@ for (xOffset in 0.bidiRange(extraRange))
 			for (zOffset in 0.bidiRange(extraRange)) {
+				if (world.isAirBlock(x + xOffset, y, z + zOffset)) continue
 				if (!ManaItemHandler.requestManaExactForTool(stack, player, MANA_PER_ACTION, false) && stack.getItemDamage() >= stack.maxDamage) break@outer
 				
 				var sparkle = false
 				
-				if (target is IGrowable && applyBonemeal(stack, world, x + xOffset, y, z + zOffset, player)) {
+				if (applyBonemeal(stack, world, x + xOffset, y, z + zOffset, player)) {
 					if (!world.isRemote)
 						world.playAuxSFX(2005, x + xOffset, y, z + zOffset, 0)
 					
 					did = true
-				} else if (target is BlockCrops && replant(stack, world, x + xOffset, y, z + zOffset, player)) {
+				} else if (replant(stack, world, x + xOffset, y, z + zOffset, player)) {
 					did = true
 					sparkle = true
 				} else if (plantAvailableSeeds(stack, world, x + xOffset, y, z + zOffset, player)) {
@@ -63,11 +74,9 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 	}
 	
 	fun applyBonemeal(stack: ItemStack, world: World, x: Int, y: Int, z: Int, player: EntityPlayer): Boolean {
-		val block = world.getBlock(x, y, z) as? IGrowable ?: return false
+		val block = world.getBlock(x, y, z)
 		
-		if (GameRegistry.findUniqueIdentifierFor(block as Block).toString() == "ExtraUtilities:plant/ender_lilly") return false
-		
-		val event = BonemealEvent(player, world, block as Block, x, y, z)
+		val event = BonemealEvent(player, world, block, x, y, z)
 		if (MinecraftForge.EVENT_BUS.post(event))
 			return false
 		
@@ -76,13 +85,26 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 			return true
 		}
 		
-		if (!block.func_149851_a(world, x, y, z, world.isRemote)) {
-			block.updateTick(world, x, y, z, world.rand)
+		if (block === Blocks.nether_wart) {
+			val meta = world.getBlockMetadata(x, y, z)
+			if (meta >= 3) return false
+			
+			world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2)
+		} else if (GameRegistry.findUniqueIdentifierFor(block).toString() == "ExtraUtilities:plant/ender_lilly") {
+			val meta = world.getBlockMetadata(x, y, z)
+			if (meta >= 7) return false 
+			
+			world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2)
+		} else if (block is IGrowable) {
+			if (!block.func_149851_a(world, x, y, z, world.isRemote)) {
+				block.updateTick(world, x, y, z, world.rand)
+				return false
+			}
+			
+			if (!world.isRemote && block.func_149852_a(world, world.rand, x, y, z))
+				block.func_149853_b(world, world.rand, x, y, z)
+		} else // unsupported type?
 			return false
-		}
-		
-		if (!world.isRemote && block.func_149852_a(world, world.rand, x, y, z))
-			block.func_149853_b(world, world.rand, x, y, z)
 		
 		ToolCommons.damageItem(stack, 1, player, MANA_PER_ACTION)
 		
@@ -90,12 +112,18 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 	}
 	
 	fun replant(stack: ItemStack, world: World, x: Int, y: Int, z: Int, player: EntityPlayer): Boolean {
-		val block = world.getBlock(x, y, z) as? BlockCrops ?: return false
+		val block = world.getBlock(x, y, z)
 		val meta = world.getBlockMetadata(x, y, z)
 		
-//		if (meta < 7) // There are crops that have different max growth stage
-		if (block.func_149851_a(world, x, y, z, world.isRemote))
-			return false // not mature
+		// check if mature
+		if (block is BlockCrops) {
+			if (block.func_149851_a(world, x, y, z, world.isRemote))
+				return false
+		} else if (block === Blocks.nether_wart) {
+			if (meta < 3)
+				return false
+		} else // unsupported type?
+			return false
 		
 		val drops = block.getDrops(world, x, y, z, meta, if (ItemSifRing.getSifRing(player) != null) 3 else 0) ?: return false // wtf?
 		if (drops.isEmpty()) return false // ok... nothing to replant with so skip
@@ -144,6 +172,73 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 		}
 		
 		return true
+	}
+	
+	fun tryIC2Crop(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Boolean {
+		if (!IC2Loaded) return false
+		
+		val crop = world.getTileEntity(x, y, z) as? TileEntityCrop ?: return false
+		if (!ManaItemHandler.requestManaExactForTool(stack, player, MANA_PER_ACTION * 8, false) && stack.getItemDamage() + 8 >= stack.maxDamage) return false
+		
+		val prevEx = crop.exStorage
+		val prevNut = crop.nutrientStorage
+		val prevWater = crop.waterStorage
+		
+		repeat (64) {
+			crop.tick()
+			
+			if (world.isRemote)
+				Botania.proxy.sparkleFX(world, x - 0.1 + Math.random() * 1.2, y - 0.1 + Math.random() * 1.2, z - 0.1 + Math.random() * 1.2, 0.1f, 1f, 0.1f, 1f, 1)
+		}
+		
+		crop.exStorage = prevEx
+		crop.nutrientStorage = prevNut
+		crop.waterStorage = prevWater
+		
+		ToolCommons.damageItem(stack, 8, player, MANA_PER_ACTION)
+		
+		return true
+	}
+	
+	private fun tryThaumTree(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Boolean {
+		if (!Botania.thaumcraftLoaded) return false
+		
+		run tree@ {
+			val tree = world.getBlock(x, y, z) as? BlockCustomPlant ?: return@tree
+			val meta = world.getBlockMetadata(x, y, z)
+			
+			if (meta == 0) {
+				if (!ManaItemHandler.requestManaExactForTool(stack, player, MANA_PER_ACTION * 5, false) && stack.getItemDamage() + 5 >= stack.maxDamage) return false
+				
+				tree.growGreatTree(world, x, y, z, world.rand)
+				ToolCommons.damageItem(stack, 5, player, MANA_PER_ACTION)
+				
+				return true
+			} else if (meta == 1) {
+				if (!ManaItemHandler.requestManaExactForTool(stack, player, MANA_PER_ACTION * 25, false) && stack.getItemDamage() + 25 >= stack.maxDamage) return false
+				
+				tree.growSilverTree(world, x, y, z, world.rand)
+				ToolCommons.damageItem(stack, 25, player, MANA_PER_ACTION)
+				
+				return true
+			}
+			
+			return false
+		}
+		
+		run pod@ {
+			val pod = world.getTileEntity(x, y, z) as? TileManaPod ?: return@pod
+			val meta = world.getBlockMetadata(x, y, z)
+			
+			if (!ManaItemHandler.requestManaExactForTool(stack, player, MANA_PER_ACTION, false) && stack.getItemDamage() >= stack.maxDamage) return false
+			if (meta >= 7) return false
+			
+			pod.checkGrowth()
+			ToolCommons.damageItem(stack, 1, player, MANA_PER_ACTION)
+			return true
+		}
+		
+		return false
 	}
 	
 	override fun onBlockStartBreak(stack: ItemStack, x: Int, y: Int, z: Int, player: EntityPlayer): Boolean {
@@ -208,5 +303,6 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 	
 	companion object {
 		const val MANA_PER_ACTION = 300
+		val IC2Loaded = Loader.isModLoaded("IC2")
 	}
 }
