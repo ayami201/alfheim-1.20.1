@@ -31,8 +31,8 @@ open class ItemElementalWaterHelm: ElementalArmor, IManaDiscountArmor, IElementa
 		if (player.inventory.armorInventory[3] !== stack) return
 		
 		if (world.getBlock(player, y = 1).material == Material.water && ManaItemHandler.requestManaExact(stack, player, 1, !world.isRemote)) {
-			player.addPotionEffect(PotionEffectU(Potion.waterBreathing.id, 5, -1))
-			player.addPotionEffect(PotionEffectU(Potion.nightVision.id, 5, -1))
+			player.addPotionEffect(PotionEffectU(Potion.waterBreathing.id, 20, -1))
+			player.addPotionEffect(PotionEffectU(Potion.nightVision.id, 20, -1))
 		}
 	}
 	

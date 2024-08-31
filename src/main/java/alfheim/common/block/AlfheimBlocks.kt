@@ -562,6 +562,13 @@ object AlfheimBlocks {
 		registerOre("slabWood", ItemStack(sealingSlabs))
 		registerOre("stairWood", ItemStack(sealingStairs))
 		
+		registerOre("treeLeaves", ItemStack(barrierLeaves))
+		registerOre("plankWood", ItemStack(barrierPlanks))
+		registerOre("treeSapling", ItemStack(barrierSapling))
+		
+		registerOre("slabWood", ItemStack(barrierSlabs))
+		registerOre("stairWood", ItemStack(barrierStairs))
+		
 		for (i in 0..3) {
 			registerOre(LibOreDict.WOOD[i], ItemStack(irisWood0, 1, i))
 			
@@ -608,7 +615,7 @@ object AlfheimBlocks {
 		
 		var t: ItemStack
 		
-		arrayOf(lightningWood, netherWood, sealingWood, calicoWood, circuitWood, altWood0).forEach {
+		arrayOf(lightningWood, netherWood, sealingWood, calicoWood, circuitWood, barrierWood, altWood0).forEach {
 			registerOre("logWood", ItemStack(it, 1, WILDCARD_VALUE))
 		}
 		

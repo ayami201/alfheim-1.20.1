@@ -405,7 +405,7 @@ class EntityFenrir(world: World): EntityCreature(world), IBotaniaBossWithName {
 			return
 		}
 		
-		if (ASJUtilities.chance(5 + looting * 0.01)) entityDropItem(lightRelics.random().copy(), 0f)
+		if (ASJUtilities.chance(5 + looting)) entityDropItem(lightRelics.random().copy(), 0f)
 	}
 	
 	override fun isAIEnabled() = true

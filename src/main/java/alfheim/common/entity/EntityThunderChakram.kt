@@ -10,6 +10,7 @@ import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.EntityThrowable
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.*
 import net.minecraft.potion.*
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.World
@@ -20,32 +21,63 @@ import vazkii.botania.common.core.helper.Vector3 as Bector3
 
 class EntityThunderChakram: EntityThrowable {
 	
-	private val MAX_BOUNCES = 16
+	var tracer: ItemStack?
+		get() = dataWatcher.getWatchableObjectItemStack(30)
+		set(tracer) = dataWatcher.updateObject(30, tracer)
 	
 	var timesBounced
-		get() = dataWatcher.getWatchableObjectInt(30)
-		set(times) {
-			dataWatcher.updateObject(30, times)
-		}
+		get() = dataWatcher.getWatchableObjectInt(31)
+		set(times) = dataWatcher.updateObject(31, times)
 	
-	val itemStack get() = ItemStack(AlfheimItems.thunderChakram)
+	val itemStack get() = tracer ?: ItemStack(AlfheimItems.thunderChakram)
 	
+	@Suppress("unused")
 	constructor(world: World): super(world)
-	constructor(world: World, player: EntityPlayer): super(world, player)
+	
+	constructor(world: World, player: EntityPlayer, tracer: ItemStack?): super(world, player) {
+		if (tracer != null) {
+			val t = tracer.copy()
+			t.stackSize = 1
+			
+			val tracing = player.isSneaking
+			t.tracing = tracing
+			
+			if (tracing) t.start = Vector3.fromEntity(this) to rotationYaw with rotationPitch
+			
+			this.tracer = t
+		}
+	}
 	
 	override fun entityInit() {
-		dataWatcher.addObject(30, 0)
-		dataWatcher.setObjectWatched(30)
+		dataWatcher.addObjectByDataType(30, 5)
+		dataWatcher.addObject(31, 0)
 	}
 	
 	override fun onUpdate() {
+		val tracer = tracer
+		
+		tracer?.apply {
+			if (tracing) return@apply
+			
+			val t = trace
+			if (t.size <= 0) return@apply
+			
+			val (mx, my, mz) = t.removeAt(0)
+			trace = t
+			
+			// TODO rotate
+			motionX = mx
+			motionY = my
+			motionZ = mz
+		}
+		
 		val mx = motionX
 		val my = motionY
 		val mz = motionZ
 		
 		super.onUpdate()
 		
-		if (worldObj.isRemote && rand.nextInt(5) == 0) {
+		if (tracer == null && worldObj.isRemote && rand.nextInt(5) == 0) {
 			val (i, j, k) = Vector3().rand().sub(0.5).normalize().mul(Math.random() * 0.5 + 0.5)
 			Botania.proxy.lightningFX(worldObj, Bector3.fromEntity(this), Bector3.fromEntity(this).add(i, j, k), 0.5f, 0xFFDDFF, 0xAA44AA)
 		}
@@ -59,6 +91,14 @@ class EntityThunderChakram: EntityThrowable {
 				motionZ = mz
 			}
 			
+			tracer?.apply { 
+				if (!tracing || worldObj.isRemote) return@apply
+				
+				val t = trace
+				t.add(Vector3(motionX, motionY, motionZ))
+				trace = t
+			}
+			?:
 			getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox(2)).forEach {
 				if (it === thrower) return@forEach
 				
@@ -73,6 +113,9 @@ class EntityThunderChakram: EntityThrowable {
 			}
 			
 			return
+		} else {
+			riddenByEntity?.ridingEntity = null
+			riddenByEntity = null
 		}
 		
 		noClip = true
@@ -119,4 +162,75 @@ class EntityThunderChakram: EntityThrowable {
 	}
 	
 	override fun getGravityVelocity() = 0f
+	
+	override fun writeEntityToNBT(nbt: NBTTagCompound) {
+		super.writeEntityToNBT(nbt)
+		
+		tracer?.apply { nbt.setTag("tracer", NBTTagCompound().also { writeToNBT(it) }) }
+	}
+	
+	override fun readEntityFromNBT(nbt: NBTTagCompound) {
+		super.readEntityFromNBT(nbt)
+		
+		if (!nbt.hasKey("tracer")) return
+		tracer = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("tracer"))
+	}
 }
+
+private const val MAX_BOUNCES = 16
+
+private var ItemStack.tracing
+	get() = ItemNBTHelper.getBoolean(this, "tracing", false)
+	set(tracing) = ItemNBTHelper.setBoolean(this, "tracing", tracing)
+
+private var ItemStack.start
+	get() = Vector3(
+		ItemNBTHelper.getDouble(this, "startX", 0.0),
+		ItemNBTHelper.getDouble(this, "startY", -1.0),
+		ItemNBTHelper.getDouble(this, "startZ", 0.0)
+	) to
+		ItemNBTHelper.getFloat(this, "startYaw", 0f) with
+        ItemNBTHelper.getFloat(this, "startPitch", 0f)
+
+	set(start) {
+		val (pos, yaw, pitch) = start
+		ItemNBTHelper.setDouble(this, "startX", pos.x)
+		ItemNBTHelper.setDouble(this, "startY", pos.y)
+		ItemNBTHelper.setDouble(this, "startZ", pos.z)
+		ItemNBTHelper.setFloat(this, "startYaw", yaw)
+		ItemNBTHelper.setFloat(this, "startPitch", pitch)
+	}
+
+private var ItemStack.trace: ArrayList<Vector3>
+	get() {
+		val list = ArrayList<Vector3>()
+		
+		val traceList = ItemNBTHelper.getList(this, "trace", 9)
+		for (traceEntry in traceList.tagList) {
+			traceEntry as NBTTagList
+			
+			val mx = traceEntry.func_150309_d(0)
+			val my = traceEntry.func_150309_d(1)
+			val mz = traceEntry.func_150309_d(2)
+			
+			list += Vector3(mx, my, mz)
+		}
+		
+		return list
+	}
+	set(list) {
+		val traceList = NBTTagList()
+		
+		for (vec in list) {
+			val (mx, my, mz) = vec
+			
+			val traceEntry = NBTTagList()
+			traceEntry.appendTag(NBTTagDouble(mx))
+			traceEntry.appendTag(NBTTagDouble(my))
+			traceEntry.appendTag(NBTTagDouble(mz))
+			
+			traceList.appendTag(traceEntry)
+		}
+		
+		ItemNBTHelper.setList(this, "trace", traceList)
+	}

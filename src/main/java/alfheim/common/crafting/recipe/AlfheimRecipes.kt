@@ -2463,10 +2463,10 @@ object AlfheimRecipes {
 	}
 	
 	private fun registerSmeltingRecipes() {
-		for (i in 0..3) {
+		for (i in 0..15) {
 			addSmelting(ItemStack(altWood0, 1, i), ItemStack(coal, 1, 1), 0.15f)
 			
-			if (i != 2)
+			if (i % 4 != 2)
 				addSmelting(ItemStack(altWood1, 1, i), ItemStack(coal, 1, 1), 0.15f)
 		}
 		
@@ -2481,6 +2481,7 @@ object AlfheimRecipes {
 		addSmelting(netherWood, NetherwoodCoal.stack, 0.15f)
 		addSmelting(calicoWood, ItemStack(coal, 1, 1), 0.15f)
 		addSmelting(circuitWood, ItemStack(coal, 1, 1), 0.15f)
+		addSmelting(barrierWood, ItemStack(coal, 1, 1), 0.15f)
 		addSmelting(lightningPlanks, ThunderwoodSplinters.stack(2), 0.1f)
 		addSmelting(netherPlanks, NetherwoodSplinters.stack(2), 0.1f)
 		

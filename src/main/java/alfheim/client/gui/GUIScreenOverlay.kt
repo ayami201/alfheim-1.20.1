@@ -69,7 +69,7 @@ object GUIScreenOverlay: Gui() {
 //		glEnable(GL_ALPHA_TEST)
 		glDepthMask(true)
 		glEnable(GL_DEPTH_TEST)
-		glDisable(GL_BLEND)
+//		glDisable(GL_BLEND)
 		glPopMatrix()
 	}
 }
