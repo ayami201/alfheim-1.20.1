@@ -229,6 +229,7 @@ object CardinalSystem {
 		fun know(player: EntityPlayerMP, kn: Knowledge) = forPlayer(player).knowledge.contains("$kn")
 		
 		fun transfer(player: EntityPlayerMP) {
+			NetworkService.sendTo(Message1d(M1d.KNOWLEDGE, -1.0), player)
 			for (kn in Knowledge.entries) if (know(player, kn)) NetworkService.sendTo(Message1d(M1d.KNOWLEDGE, kn.ordinal.D), player)
 		}
 		

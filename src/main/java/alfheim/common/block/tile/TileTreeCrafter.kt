@@ -414,6 +414,6 @@ class TileTreeCrafter: ASJTile(), ISparkAttachable {
 	}
 	
 	override fun getAttachedSpark(): ISparkEntity? {
-		return getEntitiesWithinAABB(worldObj, ISparkEntity::class.java, boundingBox().offset(0.0, 1.0, 0.0)).safeZeroGet(0)
+		return getEntitiesWithinAABB(worldObj, ISparkEntity::class.java, boundingBox().offset(0.0, 1.0, 0.0)).firstOrNull()
 	}
 }

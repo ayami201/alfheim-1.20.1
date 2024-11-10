@@ -68,6 +68,8 @@ object AlfheimLexiconData {
 	lateinit var beltRation: LexiconEntry
 	lateinit var calicoSapling: LexiconEntry
 	lateinit var carver: LexiconEntry
+	lateinit var chakramEnder: LexiconEntry
+	lateinit var chakramThunder: LexiconEntry
 	lateinit var chalk: LexiconEntry
 	lateinit var circuitSapling: LexiconEntry
 	lateinit var cloakInvis: LexiconEntry
@@ -126,6 +128,7 @@ object AlfheimLexiconData {
 	lateinit var livingwoodFunnel: LexiconEntry
 	lateinit var lootInt: LexiconEntry
 	lateinit var manaAccelerator: LexiconEntry
+	lateinit var manaReflector: LexiconEntry
 	lateinit var manaImba: LexiconEntry
 	lateinit var manaLamp: LexiconEntry
 	lateinit var manaTuner: LexiconEntry
@@ -176,7 +179,6 @@ object AlfheimLexiconData {
 	lateinit var temperature: LexiconEntry
 	lateinit var terraHarvester: LexiconEntry
 	lateinit var throwablePotions: LexiconEntry
-	lateinit var thunderChakram: LexiconEntry
 	lateinit var trade: LexiconEntry
 	lateinit var treeBerry: LexiconEntry
 	lateinit var treeCrafting: LexiconEntry
@@ -252,6 +254,8 @@ object AlfheimLexiconData {
 		beltRation = AlfheimLexiconEntry("ration", categoryAlfheim)
 		calicoSapling = AlfheimLexiconEntry("calicoSapling", categoryDendrology)
 		carver = AlfheimLexiconEntry("carver", categoryAlfheim)
+		chakramEnder = AlfheimLexiconEntry("chakramEnder", categoryAlfheim)
+		chakramThunder = AlfheimLexiconEntry("chakramThunder", categoryAlfheim)
 		chalk = AlfheimLexiconEntry("chalk", categoryAlfheim)
 		circuitSapling = AlfheimLexiconEntry("circuitSapling", categoryDendrology)
 		cloakInvis = AlfheimLexiconEntry("cloakInv", categoryAlfheim)
@@ -307,6 +311,7 @@ object AlfheimLexiconData {
 		livingwoodFunnel = AlfheimLexiconEntry("livingwoodFunnel", categoryAlfheim)
 		lootInt = AlfheimLexiconEntry("lootInt", categoryAlfheim)
 		manaAccelerator = AlfheimLexiconEntry("itemHold", categoryAlfheim)
+		manaReflector = AlfheimLexiconEntry("manaReflector", categoryAlfheim)
 		manaImba = AlfheimLexiconEntry("manaImba", categoryAlfheim)
 		manaLamp = AlfheimLexiconEntry("manaLamp", categoryAlfheim)
 		manaTuner = AlfheimLexiconEntry("manaTuner", categoryAlfheim)
@@ -348,7 +353,6 @@ object AlfheimLexiconData {
 		temperature = AlfheimLexiconEntry("temperature", categoryAlfheim)
 		terraHarvester = AlfheimLexiconEntry("terraHarvester", categoryAlfheim)
 		throwablePotions = AlfheimLexiconEntry("throwablePotions", categoryAlfheim)
-		thunderChakram = AlfheimLexiconEntry("thunderChakram", categoryAlfheim)
 		trade = AlfheimLexiconEntry("trade", categoryAlfheim)
 		treeBerry = AlfheimLexiconEntry("treeBerry", categoryDendrology)
 		treeCrafting = AlfheimLexiconEntry("treeCrafting", categoryDendrology)
@@ -479,6 +483,10 @@ object AlfheimLexiconData {
 		beltRation.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeRationBelt))
 		
 		carver.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeCarver))
+		
+		chakramEnder.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeChakramEnder))
+		
+		chakramThunder.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeChakramThunder))
 		
 		chalk.setLexiconPages(PageText("0"), PageText("1"), PageCraftingRecipe("2", AlfheimRecipes.recipeRunicChalk))
 		
@@ -700,7 +708,9 @@ object AlfheimLexiconData {
 		
 		lootInt.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeLootInterceptor))
 		
-		manaAccelerator.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeItemHolder))
+		manaAccelerator.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeManaAccelerator))
+		
+		manaReflector.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeManaReflector))
 		
 		manaImba.setLexiconPages(*Array(3) { PageText("$it") }, PageCraftingRecipe("3", AlfheimRecipes.recipeManaMirrorImba))
 		
@@ -858,8 +868,6 @@ object AlfheimLexiconData {
 		
 		throwablePotions.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeSplashPotions),
 		                                 PageText("2"), PageCraftingRecipe("3", AlfheimRecipes.recipeGrenade)).icon = (AlfheimItems.splashPotion as ItemSplashPotion).getItemForBrew(ModBrews.absorption, null)
-		
-		thunderChakram.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeThunderChakram))
 		
 		trade.setLexiconPages(PageText("0"), PageText("1"),
 							  PageCraftingRecipe("2", AlfheimRecipes.recipeElvoriumPylon),
@@ -1386,7 +1394,7 @@ object AlfheimLexiconData {
 		silencer.knowledgeType = BotaniaAPI.elvenKnowledge
 		soulSword.knowledgeType = BotaniaAPI.elvenKnowledge
 		subshroom.knowledgeType = BotaniaAPI.elvenKnowledge
-		thunderChakram.knowledgeType = BotaniaAPI.elvenKnowledge
+		chakramThunder.knowledgeType = BotaniaAPI.elvenKnowledge
 		trade.knowledgeType = BotaniaAPI.elvenKnowledge
 		uberSpreader.knowledgeType = BotaniaAPI.elvenKnowledge
 		winery.knowledgeType = BotaniaAPI.elvenKnowledge

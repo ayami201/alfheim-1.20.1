@@ -205,6 +205,11 @@ alfheim.tagline.manaLamp=Will illuminate your dark adventures
 alfheim.page.manaLamp0=The &1Mana Lamp&0 is a great alternative to hundreds of torches in your pockets. For a small amount of &4mana&0, the lamp is able to independently illuminate the dark areas around the owner, leaving bright memories of adventures in the dungeons.
 alfheim.page.manaLamp1=No dynamic lights!
 
+alfheim.entry.manaReflector=Mana Reflector
+alfheim.tagline.manaReflector=True mirror for mana
+alfheim.page.manaReflector0=&1Mana Reflector&0 is a simple yet clever contraption for any complex system. It allows &4mana burst&0 to be reflected from a 45 degrees mirror. For axis-aligned bursts that means to turn 90 degrees, and for any other direction it will follow basic optics rules.
+alfheim.page.manaReflector1=I'm on the edge
+
 alfheim.entry.manaTuner=Mana Tuner
 alfheim.tagline.manaTuner=Attuning objects with mana bursts
 alfheim.page.manaTuner0=Mana bursts have a huge potential, which is perfectly revealed by &1Mana Lenses&0. And these lenses can affect many characteristics of the beam, whether it be its velocity, capacity, or even color. However, it is the color of the burst that has no practical effect, only aesthetic... Or not?
@@ -502,10 +507,15 @@ alfheim.page.rodRedstone0=The &1Rod of the Red Control&0 is a handy tool to ever
 alfheim.page.rodRedstone1=If the wielder of the rod is equipped with the &1Manaseer Monocle&0, all powered blocks nearby will become visible through walls while the wearer is sneaking. Bright frames will indicate &4strong&0 powering and darker frames - &4weak&0. The &4power level&0 of the signal will also be displayed on the block you are currently looking on.
 alfheim.page.rodRedstone2=Show yourself!
 
-alfheim.entry.thunderChakram=Thunder Chakram
-alfheim.tagline.thunderChakram=An electrified Thorn Chakram
-alfheim.page.thunderChakram0=This is another variant of common &1Thorn Chakram&0. By adding some of &1Thunderous Splinters&0 and a &1Pixie Dust&0 to the said weapon one can infuse it with the power of lightning, transforming it into &1Thunder Chakram&0, that deals less damage, but in a bigger range, and even can pierce through armor.
-alfheim.page.thunderChakram1=Mjölnir for kids
+alfheim.entry.chakramEnder=Ender Chakram
+alfheim.tagline.chakramEnder=Path tracing Chakram
+alfheim.page.chakramEnder0=&1Ender Chakram&0 is a special one. When this chakram is thrown while sneaking, it remembers every detail of its flight path, including every bounce. This allows one to create a unique path along which one can move on the next launch, even when old obstacles are no longer in place, following exactly the same path, which opens up interesting tactical possibilities for movement in space.
+alfheim.page.chakramEnder1=Merry-go-zigzag
+
+alfheim.entry.chakramThunder=Thunder Chakram
+alfheim.tagline.chakramThunder=An electrified Thorn Chakram
+alfheim.page.chakramThunder0=This is another variant of common &1Thorn Chakram&0. By adding some of &1Thunderous Splinters&0 and a &1Pixie Dust&0 to the said weapon one can infuse it with the power of lightning, transforming it into &1Thunder Chakram&0, that deals less damage, but in a bigger range, and even can pierce through armor.
+alfheim.page.chakramThunder1=Mjölnir for kids
 
 alfheim.entry.bud=Bud of Yggdrasil
 alfheim.tagline.bud=Where we aren't

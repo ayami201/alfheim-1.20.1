@@ -26,6 +26,8 @@ class BlockManaInfuser: BlockContainerMod(Material.rock), ILexiconable, IWandHUD
 		setStepSound(soundTypeStone)
 	}
 	
+	override fun isOpaqueCube() = false
+	
 	override fun registerBlockIcons(reg: IIconRegister) {
 		val def = arrayOf(IconHelper.forBlock(reg, this, "Bottom"),
 						  IconHelper.forBlock(reg, this, "Top"),

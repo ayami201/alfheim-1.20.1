@@ -104,7 +104,7 @@ class ItemRagnarokEmblem: ItemBauble("aesirEmblemWeak"), IBaubleRender, IManaDis
 		
 		if (stack.hasSoul(4) && !player.worldObj.isRemote && ManaItemHandler.requestManaExact(stack, player, 1, !player.worldObj.isRemote)) {
 			if (player.dimension != AlfheimConfigHandler.dimensionIDHelheim)
-				player.addPotionEffect(PotionEffectU(Potion.nightVision.id, 10))
+				player.addPotionEffect(PotionEffectU(Potion.nightVision.id, 20))
 			player.removePotionEffect(Potion.blindness.id)
 		}
 		

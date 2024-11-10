@@ -7,7 +7,7 @@ import alfheim.common.core.handler.SheerColdHandler.cold
 import alfheim.common.item.equipment.bauble.ItemPendant
 import alfheim.common.item.relic.ItemTankMask.Companion.MAX_CORRUPTION
 import alfheim.common.item.relic.ItemTankMask.Companion.limboCounter
-import cpw.mods.fml.common.eventhandler.*
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.client.gui.*
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.util.ResourceLocation
@@ -16,8 +16,10 @@ import org.lwjgl.opengl.GL11.*
 
 object GUIScreenOverlay: Gui() {
 	
-	@SubscribeEvent(priority = EventPriority.NORMAL)
+	@SubscribeEvent
 	fun onOverlayRendering(event: RenderGameOverlayEvent.Post) {
+		if (!AlfheimConfigHandler.effectScreenOverlay) return
+		
 		if (event.type != RenderGameOverlayEvent.ElementType.HELMET) return
 		val player = mc.thePlayer
 		
@@ -69,7 +71,7 @@ object GUIScreenOverlay: Gui() {
 //		glEnable(GL_ALPHA_TEST)
 		glDepthMask(true)
 		glEnable(GL_DEPTH_TEST)
-		glDisable(GL_BLEND)
+//		glDisable(GL_BLEND)
 		glPopMatrix()
 	}
 }

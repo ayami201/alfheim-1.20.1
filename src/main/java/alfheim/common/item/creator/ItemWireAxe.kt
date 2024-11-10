@@ -2,12 +2,14 @@ package alfheim.common.item.creator
 
 import alexsocol.asjlib.*
 import alfheim.api.*
+import alfheim.api.event.AttackEntityEventPost
 import alfheim.client.core.helper.IconHelper
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
 import alfheim.common.core.handler.*
 import alfheim.common.core.helper.*
 import alfheim.common.core.util.*
 import com.google.common.collect.*
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.Block
@@ -29,16 +31,12 @@ import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.mana.*
 import vazkii.botania.common.item.equipment.tool.ToolCommons
 import java.util.*
-import kotlin.math.min
+import kotlin.math.*
 
 /**
  * seeeeeecrets
  */
 class ItemWireAxe(val name: String = "axeRevelation", val toolMaterial: ToolMaterial = AlfheimAPI.RUNEAXE, val slayerDamage: Double = 6.0): ItemSword(toolMaterial), IManaUsingItem {
-	
-	companion object {
-		val godSlayingDamage = RangedAttribute("${ModInfo.MODID}.godSlayingAttackDamage", 0.0, 0.0, Double.MAX_VALUE)
-	}
 	
 	init {
 		creativeTab = AlfheimTab
@@ -141,16 +139,26 @@ class ItemWireAxe(val name: String = "axeRevelation", val toolMaterial: ToolMate
 		return multimap
 	}
 	
-	override fun onLeftClickEntity(stack: ItemStack, player: EntityPlayer, entity: Entity): Boolean {
+	override fun onLeftClickEntity(stack: ItemStack, player: EntityPlayer, target: Entity): Boolean {
 		val damage = ModifiableAttributeInstance(ServersideAttributeMap(), godSlayingDamage).apply { stack.attributeModifiers[godSlayingDamage.attributeUnlocalizedName].forEach { applyModifier(it as AttributeModifier) } }.attributeValue
-		if (damage <= 0 || !entity.canAttackWithItem() || entity.hitByEntity(player)) return false
+		if (damage <= 0 || !target.canAttackWithItem() || target.hitByEntity(player)) return false
 		
-		attackEntity(player, entity, damage, DamageSourceSpell.godslayer(player, AlfheimConfigHandler.wireoverpowered))
+		prevHealth = if (target is EntityLivingBase) target.health else 0f
+		
+		val prevHrt = target.hurtResistantTime
+		val maxHrt = if (target is EntityLivingBase) target.maxHurtResistantTime else 20
+		
+		val attacked = attackEntity(player, target, damage, DamageSourceSpell.godslayer(player, AlfheimConfigHandler.wireoverpowered))
+		
+		if (attacked && prevHrt <= maxHrt / 2f) {
+			target.hurtResistantTime = 0
+			setPostHitHRT = true
+		}
 		
 		return false
 	}
 	
-	fun attackEntity(attacker: EntityLivingBase, target: Entity, amount: Double, damageSource: DamageSource) {
+	fun attackEntity(attacker: EntityLivingBase, target: Entity, amount: Double, damageSource: DamageSource): Boolean {
 		var damage = amount
 		
 		val crit = attacker.fallDistance > 0f &&
@@ -166,7 +174,7 @@ class ItemWireAxe(val name: String = "axeRevelation", val toolMaterial: ToolMate
 		
 		val success = target.attackEntityFrom(damageSource, damage.F)
 		
-		if (!success) return
+		if (!success) return false
 		
 		if (crit && attacker is EntityPlayer)
 			attacker.onCriticalHit(target)
@@ -176,6 +184,7 @@ class ItemWireAxe(val name: String = "axeRevelation", val toolMaterial: ToolMate
 			EnchantmentHelper.func_151384_a(target, attacker)
 		
 		EnchantmentHelper.func_151385_b(attacker, target)
+		return true
 	}
 	
 	override fun onBlockDestroyed(stack: ItemStack, world: World?, block: Block, x: Int, y: Int, z: Int, player: EntityLivingBase?): Boolean {
@@ -216,4 +225,24 @@ class ItemWireAxe(val name: String = "axeRevelation", val toolMaterial: ToolMate
 		else
 			1f
 	
+	companion object {
+		
+		val godSlayingDamage = RangedAttribute("${ModInfo.MODID}.godSlayingAttackDamage", 0.0, 0.0, Double.MAX_VALUE)
+		var setPostHitHRT = false
+		var prevHealth = 0f
+		
+		init {
+			eventForge()
+		}
+		
+		@SubscribeEvent
+		fun setPostHitHRT(e: AttackEntityEventPost) {
+			val target = e.target
+			if (!setPostHitHRT || target == null) return
+			
+			setPostHitHRT = false
+			target.hurtResistantTime = if (target is EntityLivingBase) target.maxHurtResistantTime else 20
+			if (target is EntityLivingBase) target.lastDamage = max(0f, prevHealth - target.health)
+		}
+	}
 }

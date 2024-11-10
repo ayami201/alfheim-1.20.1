@@ -24,6 +24,8 @@ import alfheim.common.world.data.CustomWorldData.Companion.customData
 import baubles.api.*
 import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.gameevent.TickEvent
+import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent
 import cpw.mods.fml.common.network.NetworkRegistry
 import cpw.mods.fml.common.registry.GameRegistry
 import gloomyfolken.hooklib.asm.*
@@ -161,6 +163,22 @@ object RelicHooks {
 }
 
 object RelicNBTSyncHandler {
+	
+	@Suppress("UNCHECKED_CAST")
+	@SubscribeEvent
+	fun onServerTick(e: ServerTickEvent) {
+		val world = MinecraftServer.getServer().worldServerForDimension(0)
+		if (e.phase != TickEvent.Phase.START || world.totalWorldTime % 100 != 0L) return
+		
+		val relicNBT = (world.customData.nbtData.tagMap.computeIfAbsent(RelicHooks.TAG_RELIC_NBT) { NBTTagCompound() } as NBTTagCompound).tagMap as Map<String, NBTTagCompound>
+		val syncMap = HashMap<String, NBTTagCompound>()
+		
+		for ((username, relics) in relicNBT.entries) {
+			relics.tagMap.forEach { (statId, nbt) -> syncMap["$username>>>$statId"] = nbt as NBTTagCompound }
+		}
+		
+		NetworkService.sendToAll(MessageRelicNBTSync(syncMap))
+	}
 	
 	@SubscribeEvent
 	fun onPlayerUpdate(e: LivingUpdateEvent) {

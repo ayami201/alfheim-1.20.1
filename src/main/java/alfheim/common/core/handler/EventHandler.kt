@@ -26,6 +26,7 @@ import cpw.mods.fml.common.IFuelHandler
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
 import cpw.mods.fml.common.gameevent.TickEvent.*
+import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.enchantment.*
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
@@ -360,13 +361,17 @@ object EventHandler {
 		val stack = entity.dataWatcher.getWatchableObjectItemStack(10) ?: return
 		if (stack.stackSize < 1) return
 		
-		if (entity.entityItem.item is IRelic) {
-			e.isCanceled = true
-			entity.setDead()
-			EntityItemImmortalRelic(entity).apply {
-				delayBeforeCanPickup = 40
-			}.spawn()
-		}
+		val item = entity.entityItem.item
+		if (item !is IRelic) return
+		
+		val uname = GameRegistry.findUniqueIdentifierFor(item).toString()
+		if (uname in AlfheimConfigHandler.relicsProtectionBlackList) return
+		
+		e.isCanceled = true
+		entity.setDead()
+		EntityItemImmortalRelic(entity).apply {
+			delayBeforeCanPickup = 40
+		}.spawn()
 	}
 	
 	@SubscribeEvent

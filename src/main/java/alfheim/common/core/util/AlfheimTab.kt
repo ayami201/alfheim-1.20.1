@@ -81,6 +81,7 @@ import alfheim.common.block.AlfheimBlocks.livingcobble
 import alfheim.common.block.AlfheimBlocks.livingwoodFunnel
 import alfheim.common.block.AlfheimBlocks.manaAccelerator
 import alfheim.common.block.AlfheimBlocks.manaInfuser
+import alfheim.common.block.AlfheimBlocks.manaReflector
 import alfheim.common.block.AlfheimBlocks.manaTuner
 import alfheim.common.block.AlfheimBlocks.netherLeaves
 import alfheim.common.block.AlfheimBlocks.netherPlanks
@@ -217,6 +218,7 @@ import alfheim.common.item.AlfheimItems.elementalHelmet
 import alfheim.common.item.AlfheimItems.elementalLeggings
 import alfheim.common.item.AlfheimItems.elfFirePendant
 import alfheim.common.item.AlfheimItems.elfIcePendant
+import alfheim.common.item.AlfheimItems.elvenChakram
 import alfheim.common.item.AlfheimItems.elvenFood
 import alfheim.common.item.AlfheimItems.elvenResource
 import alfheim.common.item.AlfheimItems.elvoriumBoots
@@ -304,7 +306,6 @@ import alfheim.common.item.AlfheimItems.subspaceSpear
 import alfheim.common.item.AlfheimItems.surtrSword
 import alfheim.common.item.AlfheimItems.terraHoe
 import alfheim.common.item.AlfheimItems.thrymAxe
-import alfheim.common.item.AlfheimItems.thunderChakram
 import alfheim.common.item.AlfheimItems.triquetrum
 import alfheim.common.item.AlfheimItems.trisDagger
 import alfheim.common.item.AlfheimItems.volcanoBoots
@@ -360,6 +361,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(rpc)
 		addBlock(Blocks.furnace, 8)
 		addBlock(ModBlocks.spreader, 4)
+		addBlock(manaReflector)
 		addBlock(anyavil)
 		addBlock(worldTree)
 		addBlock(spire)
@@ -477,7 +479,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(corporeaRat)
 		addItem(livingrockPickaxe)
 		addItem(terraHoe)
-		addItem(thunderChakram)
+		addItem(elvenChakram)
 		
 		addItem(elementalHelmet)
 		addItem(elementalChestplate)

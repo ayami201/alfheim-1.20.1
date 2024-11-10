@@ -4,7 +4,6 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ASJRenderHelper.discard
 import alexsocol.asjlib.render.ASJRenderHelper.setTwoside
 import alfheim.api.ModInfo
-import alfheim.common.block.BlockTreeBerry
 import alfheim.common.block.tile.TileTreeBerry
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
@@ -16,12 +15,14 @@ object RenderTileTreeBerry: TileEntitySpecialRenderer() {
 	
 	val textures = HashMap<Int, Array<ResourceLocation>>()
 	val models = HashMap<Int, Array<IModelCustom?>>()
+	val hasModels = arrayOf(2, 3, 4)
+	val hasModelErrors = hashMapOf(0 to true, 1 to true, 5 to true)
 	
 	override fun renderTileEntityAt(tile: TileEntity, x: Double, y: Double, z: Double, ticks: Float) {
 		if (tile !is TileTreeBerry) return
 		
 		val type = tile.type
-		if (BlockTreeBerry.hasModelErrors[type] == true) return
+		if (type !in hasModels || hasModelErrors[type] == true) return
 		
 		val meta = tile.worldObj.getBlockMetadata(tile.xCoord, tile.yCoord, tile.zCoord)
 		
@@ -38,10 +39,10 @@ object RenderTileTreeBerry: TileEntitySpecialRenderer() {
 				Array (3) { AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/TreeBerry$type$it.obj")) }
 			} catch (e: Throwable) {
 				ASJUtilities.error("Error loading berry model for $type'th set. It will be flat. Reason:", e)
-				BlockTreeBerry.hasModelErrors[type] = true
-				emptyArray()
+				hasModelErrors[type] = true
+				arrayOfNulls(3)
 			}
-		}.safeZeroGet(meta)?.renderAll()
+		}.safeGet(meta)?.renderAll()
 		
 		discard()
 		glPopMatrix()

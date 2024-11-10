@@ -4,7 +4,7 @@ import alexsocol.asjlib.network.ASJPacket
 import cpw.mods.fml.common.network.simpleimpl.*
 import net.minecraft.entity.player.EntityPlayerMP
 
-abstract class AlfheimPacket<T : AlfheimPacket<T>>: ASJPacket(), IMessage, IMessageHandler<T, T> {
+abstract class AlfheimPacket<T : AlfheimPacket<T>>: ASJPacket(), IMessageHandler<T, T> {
 	
 	override fun onMessage(packet: T, ctx: MessageContext): T? {
 		if (ctx.side.isClient)

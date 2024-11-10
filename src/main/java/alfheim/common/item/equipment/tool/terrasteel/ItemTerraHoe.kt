@@ -43,7 +43,7 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 			return true
 		}
 		
-		val extraRange = if (player.isSneaking) 0 else getExtraRange(stack, player) / 2
+		val extraRange = if (player.isSneaking) 0 else getExtraRange(stack, player)
 		
 		outer@ for (xOffset in 0.bidiRange(extraRange))
 			for (zOffset in 0.bidiRange(extraRange)) {

@@ -252,7 +252,7 @@ class TileAnomalyHarvester: ASJTile(), ISparkAttachable {
 	
 	override fun attachSpark(entity: ISparkEntity?) = entity.attachTile(this)
 	
-	override fun getAttachedSpark() = getEntitiesWithinAABB(worldObj, ISparkEntity::class.java, boundingBox().offset(0, 1, 0)).safeZeroGet(0)
+	override fun getAttachedSpark() = getEntitiesWithinAABB(worldObj, ISparkEntity::class.java, boundingBox().offset(0, 1, 0)).firstOrNull()
 	
 	override fun getAvailableSpaceForMana() = max(0, maxMana - mana)
 	

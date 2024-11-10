@@ -1,15 +1,18 @@
 Innovations:
- Config for min number of players required to enter any domain in MP
- Interdimensional Gateway Core recipe is back
- Spells cooldown visual pie
- 
- Terra Reaper integration:
- [ExU] Can grow Ender-Lily
- [IC2] Can grow crops
- [TC] Can grow sapplings and beans
+ Mana Reflector
+ Ender chakram
+ Blacklist for relics protection
+ Config to hide screen overlays
+ [WIP] Item Frame as block
 
 Fixes:
- Das Rheingold recipe supports any meta
- Some tuning recipes
- Time stop spell not affecting bosses with enabled config
- ...other small fixes
+ Missing oredict
+ Fenrir looting calculation
+ Rod of the High Will crashes
+ Holy Blade Revelation regular+cognitive damage
+ Knowledge cross-world desync
+ Relics NBT sync
+ Tree berry models console spam
+ Animated torch double activation on rotation
+ [MMO] Titan Hit spell crash
+ [EtFR]/[Chisel] support for custom beacons in structures

@@ -11,7 +11,7 @@ import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.core.helper.*
 import alfheim.common.core.registry.AlfheimRegistry
 import alfheim.common.crafting.recipe.AlfheimRecipes
-import alfheim.common.entity.*
+import alfheim.common.entity.SpriteKillHandler
 import alfheim.common.floatingisland.FloatingIslandGenerator
 import alfheim.common.integration.etfuturum.EtFuturumAlfheimConfig
 import alfheim.common.integration.multipart.MultipartAlfheimConfig
@@ -19,19 +19,13 @@ import alfheim.common.integration.thaumcraft.TCHandlerShadowFoxAspects
 import alfheim.common.item.AlfheimItems
 import alfheim.common.lexicon.*
 import alfheim.common.world.dim.alfheim.WorldProviderAlfheim
-import alfheim.common.world.dim.alfheim.biome.*
-import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim.Companion.addEntry
 import alfheim.common.world.dim.domains.WorldProviderDomains
 import alfheim.common.world.dim.helheim.WorldProviderHelheim
 import alfheim.common.world.dim.niflheim.WorldProviderNiflheim
 import alfheim.common.world.mobspawn.MobSpawnHandler
-import cpw.mods.fml.client.event.ConfigChangedEvent
-import cpw.mods.fml.common.*
-import cpw.mods.fml.common.eventhandler.*
-import net.minecraft.entity.EnumCreatureType
+import cpw.mods.fml.common.Loader
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
-import net.minecraft.world.biome.BiomeGenBase
 import vazkii.botania.common.Botania
 import vazkii.botania.common.core.handler.ConfigHandler
 import vazkii.botania.common.item.ModItems
@@ -59,8 +53,12 @@ open class CommonProxy {
 	open fun registerKeyBinds() = Unit
 	
 	fun init() {
+		AlfheimBlocks.regOreDict()
+		AlfheimItems.regOreDict()
+		
 		AlfheimRecipes
 		AlfheimRegistry.init()
+		
 		ASJUtilities.registerDimension(AlfheimConfigHandler.dimensionIDAlfheim, WorldProviderAlfheim::class.java, true)
 		ASJUtilities.registerDimension(AlfheimConfigHandler.dimensionIDNiflheim, WorldProviderNiflheim::class.java, false)
 		ASJUtilities.registerDimension(AlfheimConfigHandler.dimensionIDDomains, WorldProviderDomains::class.java, true)
@@ -71,8 +69,6 @@ open class CommonProxy {
 	}
 	
 	open fun postInit() {
-		AlfheimBlocks.regOreDict()
-		AlfheimItems.regOreDict()
 		AlfheimLexiconData.init()
 		if (ConfigHandler.relicsEnabled) AlfheimLexiconData.initRelics()
 		//AlfheimLexiconData.postInit()
@@ -98,7 +94,7 @@ open class CommonProxy {
 		FloatingIslandGenerator.eventFML().eventForge()
 		ISpeedUpItem.eventForge()
 		IStepupItem.eventForge()
-		RelicNBTSyncHandler.eventForge()
+		RelicNBTSyncHandler.eventForge().eventFML()
 		ContributorsPrivacyHelper
 		AlfheimConfigHandler.registerChangeHandler(ModInfo.MODID)
 	}

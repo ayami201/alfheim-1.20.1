@@ -2,6 +2,7 @@ package alfheim.common.core.asm
 
 import alexsocol.asjlib.asm.ASJASM
 import alexsocol.patcher.asm.ASJHookLoader
+import alexsocol.patcher.asm.worker.InterfaceAppenderWorker.registerAdditionalInterface
 import alfheim.api.ModInfo
 import alfheim.common.core.asm.transformer.*
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -64,5 +65,16 @@ class AlfheimHookLoader: HookLoader() {
 		SuperWrapperTransformer.registerSuperWrapperContainer("alfheim.common.core.asm.superwrapper.SuperWrapperHandler")
 		
 		registerHookReplacerContainer("alfheim.common.core.asm.hook.replacer.HookReplacerHandler")
+		
+		registerAdditionalInterfaces()
+	}
+	
+	fun registerAdditionalInterfaces() {
+		registerAdditionalInterface("net/minecraft/entity/monster/EntityCreeper", "alfheim/common/core/helper/IElementalEntity")
+		registerAdditionalInterface("net/minecraft/entity/monster/EntitySkeleton", "alfheim/common/core/helper/IElementalEntity")
+		registerAdditionalInterface("thaumcraft/common/entities/golems/EntityGolemBase", "alfheim/common/core/helper/IElementalEntity")
+		registerAdditionalInterface("thaumcraft/common/entities/monster/EntityWisp", "alfheim/common/core/helper/IElementalEntity")
+		registerAdditionalInterface("vazkii/botania/common/item/equipment/bauble/ItemAuraRing", "vazkii/botania/api/mana/IManaItem")
+		registerAdditionalInterface("vazkii/botania/common/item/relic/ItemAesirRing", "alfheim/api/item/IStepupItem")
 	}
 }

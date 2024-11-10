@@ -63,10 +63,15 @@ class ItemFlugelSoul: ItemRelic("FlugelSoul"), ILensEffect, IImmortalHandledItem
 		if (tile is TileBrewery) {
 			if (tile[0] == null)
 				tile[0] = stack.splitStack(1)
-		} else if (player.isSneaking && getBlocked(stack) < SEGMENTS) { // Stupid Et Futurum
-			val success = EntityFlugel.spawn(player, stack, world, x, y, z, true, false)
-			if (success) setDisabled(stack, getBlocked(stack), true)
-			return success
+		} else if (player.isSneaking) { // Stupid Et Futurum ???
+			if (getBlocked(stack) < SEGMENTS) {
+				val success = EntityFlugel.spawn(player, stack, world, x, y, z, true, false)
+				if (success) setDisabled(stack, getBlocked(stack), true)
+				return success
+			} else {
+				if (!world.isRemote) ASJUtilities.say(player, "alfheimmisc.flugel.used")
+				return false
+			}
 		}
 		return false
 	}

@@ -20,12 +20,6 @@ import vazkii.botania.common.item.equipment.bauble.ItemBauble
 @Optional.Interface(modid = "TravellersGear", iface = "alfheim.common.integration.travellersgear.ITravellersGearSynced", striprefs = true)
 abstract class ItemBaubleCloak(name: String): ItemBauble(name), ITravellersGearSynced, IBaubleRender {
 	
-	companion object {
-		
-		@SideOnly(Side.CLIENT)
-		var model: ModelBiped? = null
-	}
-	
 	init {
 		creativeTab = AlfheimTab
 	}
@@ -82,5 +76,11 @@ abstract class ItemBaubleCloak(name: String): ItemBauble(name), ITravellersGearS
 				GL11.glEnable(GL11.GL_LIGHTING)
 			}
 		}
+	}
+	
+	companion object {
+		
+		@SideOnly(Side.CLIENT)
+		var model: ModelBiped? = null
 	}
 }

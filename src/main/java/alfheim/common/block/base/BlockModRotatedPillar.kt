@@ -56,16 +56,16 @@ abstract class BlockModRotatedPillar(mat: Material): BlockMod(mat), ILexiconable
 	override fun createStackedBlock(meta: Int) = ItemStack(this, 1, meta and 3)
 	
 	override fun onBlockPlaced(world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float, meta: Int): Int {
-		val j1 = meta and 3
-		var b0 = 0
+		if (meta and 0b1100 == 0b1100) return meta
 		
-		when (side) {
-			0, 1 -> b0 = 0
-			2, 3 -> b0 = 8
-			4, 5 -> b0 = 4
+		val base = meta and 3
+		val rotation = when (side) {
+			2, 3 -> 8
+			4, 5 -> 4
+			else -> 0
 		}
 		
-		return j1 or b0
+		return base or rotation
 	}
 	
 	@SideOnly(Side.CLIENT)

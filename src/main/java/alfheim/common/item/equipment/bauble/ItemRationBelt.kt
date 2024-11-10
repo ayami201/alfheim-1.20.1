@@ -3,6 +3,7 @@ package alfheim.common.item.equipment.bauble
 import alexsocol.asjlib.*
 import alfheim.api.lib.LibResourceLocations
 import baubles.api.BaubleType
+import cpw.mods.fml.relauncher.*
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.ModelBiped
 import net.minecraft.entity.EntityLivingBase
@@ -16,8 +17,6 @@ import vazkii.botania.common.item.equipment.bauble.ItemBauble
 import vazkii.botania.common.item.relic.ItemInfiniteFruit
 
 class ItemRationBelt: ItemBauble("RationBelt"), IBaubleRender {
-	
-	val model by lazy { ModelBiped() }
 	
 	override fun getBaubleType(stack: ItemStack) = BaubleType.BELT
 	
@@ -43,6 +42,7 @@ class ItemRationBelt: ItemBauble("RationBelt"), IBaubleRender {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	override fun onPlayerBaubleRender(stack: ItemStack, event: RenderPlayerEvent, type: IBaubleRender.RenderType) {
 		if (type == IBaubleRender.RenderType.BODY) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(LibResourceLocations.rationBelt)
@@ -54,7 +54,15 @@ class ItemRationBelt: ItemBauble("RationBelt"), IBaubleRender {
 			val s = 1.05F / 16F
 			glScalef(s)
 			
-			model.bipedBody.render(1F)
+			if (model == null)
+				model = ModelBiped()
+			
+			model!!.bipedBody.render(1F)
 		}
+	}
+	
+	companion object {
+		@SideOnly(Side.CLIENT)
+		var model: ModelBiped? = null
 	}
 }

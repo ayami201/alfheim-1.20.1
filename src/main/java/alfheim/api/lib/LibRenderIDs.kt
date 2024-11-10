@@ -4,7 +4,6 @@ import cpw.mods.fml.client.registry.RenderingRegistry
 
 object LibRenderIDs {
 	
-	// Alfheim
 	val idAnyavil = RenderingRegistry.getNextAvailableRenderId()
 	val idBarrel = RenderingRegistry.getNextAvailableRenderId()
 	val idChair = RenderingRegistry.getNextAvailableRenderId()
@@ -18,6 +17,7 @@ object LibRenderIDs {
 	val idHarvester = RenderingRegistry.getNextAvailableRenderId()
 	val idHopper = RenderingRegistry.getNextAvailableRenderId()
 	val idManaAccelerator = RenderingRegistry.getNextAvailableRenderId()
+	val idManaReflector = RenderingRegistry.getNextAvailableRenderId()
 	val idManaTuner = RenderingRegistry.getNextAvailableRenderId()
 	val idMultipass = RenderingRegistry.getNextAvailableRenderId()
 	val idNiflheim = RenderingRegistry.getNextAvailableRenderId()
