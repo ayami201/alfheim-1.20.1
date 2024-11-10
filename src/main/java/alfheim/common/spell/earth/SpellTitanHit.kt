@@ -12,7 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import vazkii.botania.common.Botania
 import vazkii.botania.common.core.handler.ConfigHandler
 import vazkii.botania.common.item.equipment.tool.ToolCommons
-import kotlin.math.max
+import kotlin.math.*
 
 object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 1, 1, 1) {
 	
@@ -121,7 +121,7 @@ object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 1, 1, 1) {
 	
 	override fun getCooldown(): Int {
 		try {
-			return tcd * cldn
+			return min(1, tcd * cldn)
 		} finally {
 			tcd = 0
 		}

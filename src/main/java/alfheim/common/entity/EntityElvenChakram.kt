@@ -19,7 +19,7 @@ import vazkii.botania.common.Botania
 import vazkii.botania.common.core.helper.MathHelper
 import vazkii.botania.common.core.helper.Vector3 as Bector3
 
-class EntityThunderChakram: EntityThrowable {
+class EntityElvenChakram: EntityThrowable {
 	
 	var tracer: ItemStack?
 		get() = dataWatcher.getWatchableObjectItemStack(30)
@@ -29,12 +29,16 @@ class EntityThunderChakram: EntityThrowable {
 		get() = dataWatcher.getWatchableObjectInt(31)
 		set(times) = dataWatcher.updateObject(31, times)
 	
-	val itemStack get() = tracer ?: ItemStack(AlfheimItems.thunderChakram)
+	val itemStack get() = tracer ?: ItemStack(AlfheimItems.elvenChakram)
 	
 	@Suppress("unused")
 	constructor(world: World): super(world)
 	
 	constructor(world: World, player: EntityPlayer, tracer: ItemStack?): super(world, player) {
+		motionX /= 2.0
+		motionY /= 2.0
+		motionZ /= 2.0
+		
 		if (tracer != null) {
 			val t = tracer.copy()
 			t.stackSize = 1
@@ -42,7 +46,19 @@ class EntityThunderChakram: EntityThrowable {
 			val tracing = player.isSneaking
 			t.tracing = tracing
 			
-			if (tracing) t.start = Vector3.fromEntity(this) to rotationYaw with rotationPitch
+			if (!tracing) {
+				val trace = t.trace
+				val angle = rotationYaw - t.startYaw
+				
+				trace.forEach {
+					it.rotateOY(angle)
+				}
+				
+				t.trace = trace
+				t.index = 0
+			}
+			
+			t.startYaw = rotationYaw
 			
 			this.tracer = t
 		}
@@ -60,12 +76,11 @@ class EntityThunderChakram: EntityThrowable {
 			if (tracing) return@apply
 			
 			val t = trace
-			if (t.size <= 0) return@apply
+			if (t.size <= 0 || index !in t.indices) return@apply
 			
-			val (mx, my, mz) = t.removeAt(0)
+			val (mx, my, mz) = t[index++]
 			trace = t
 			
-			// TODO rotate
 			motionX = mx
 			motionY = my
 			motionZ = mz
@@ -79,7 +94,7 @@ class EntityThunderChakram: EntityThrowable {
 		
 		if (tracer == null && worldObj.isRemote && rand.nextInt(5) == 0) {
 			val (i, j, k) = Vector3().rand().sub(0.5).normalize().mul(Math.random() * 0.5 + 0.5)
-			Botania.proxy.lightningFX(worldObj, Bector3.fromEntity(this), Bector3.fromEntity(this).add(i, j, k), 0.5f, 0xFFDDFF, 0xAA44AA)
+			Botania.proxy.lightningFX(worldObj, Bector3.fromEntity(this), Bector3.fromEntity(this).add(i, j, k), 0.5f, 0x302248, 0x8B7698)
 		}
 		
 		val thrower = getThrower()
@@ -109,7 +124,7 @@ class EntityThunderChakram: EntityThrowable {
 				}
 				
 				if (worldObj.isRemote)
-					Botania.proxy.lightningFX(worldObj, Bector3.fromEntity(this), Bector3.fromEntity(it), 0.5f, 0xFFDDFF, 0xAA44AA)
+					Botania.proxy.lightningFX(worldObj, Bector3.fromEntity(this), Bector3.fromEntity(it), 0.5f, 0x302248, 0x8B7698)
 			}
 			
 			return
@@ -120,7 +135,7 @@ class EntityThunderChakram: EntityThrowable {
 		
 		noClip = true
 		
-		if (thrower == null) return dropAndKill()
+		if (thrower == null || !thrower.isEntityAlive || thrower !is EntityPlayer) return dropAndKill()
 		
 		val motion = Vector3.fromEntityCenter(thrower).sub(Vector3.fromEntityCenter(this)).normalize()
 		motionX = motion.x
@@ -129,10 +144,12 @@ class EntityThunderChakram: EntityThrowable {
 		
 		if (MathHelper.pointDistanceSpace(posX, posY, posZ, thrower.posX, thrower.posY, thrower.posZ) >= 1) return
 		
-		if (thrower !is EntityPlayer || !thrower.capabilities.isCreativeMode && !thrower.inventory.addItemStackToInventory(itemStack))
-			dropAndKill()
-		else if (!worldObj.isRemote)
+		if (tracer == null && thrower.capabilities.isCreativeMode)
 			setDead()
+		else if (thrower.inventory.addItemStackToInventory(itemStack))
+			setDead()
+		else
+			dropAndKill()
 	}
 	
 	private fun dropAndKill() {
@@ -179,27 +196,17 @@ class EntityThunderChakram: EntityThrowable {
 
 private const val MAX_BOUNCES = 16
 
+private var ItemStack.index
+	get() = ItemNBTHelper.getInt(this, "index", -1)
+	set(index) = ItemNBTHelper.setInt(this, "index", index)
+
+private var ItemStack.startYaw
+	get() = ItemNBTHelper.getFloat(this, "startYaw", 0f)
+	set(start) = ItemNBTHelper.setFloat(this, "startYaw", start)
+
 private var ItemStack.tracing
 	get() = ItemNBTHelper.getBoolean(this, "tracing", false)
 	set(tracing) = ItemNBTHelper.setBoolean(this, "tracing", tracing)
-
-private var ItemStack.start
-	get() = Vector3(
-		ItemNBTHelper.getDouble(this, "startX", 0.0),
-		ItemNBTHelper.getDouble(this, "startY", -1.0),
-		ItemNBTHelper.getDouble(this, "startZ", 0.0)
-	) to
-		ItemNBTHelper.getFloat(this, "startYaw", 0f) with
-        ItemNBTHelper.getFloat(this, "startPitch", 0f)
-
-	set(start) {
-		val (pos, yaw, pitch) = start
-		ItemNBTHelper.setDouble(this, "startX", pos.x)
-		ItemNBTHelper.setDouble(this, "startY", pos.y)
-		ItemNBTHelper.setDouble(this, "startZ", pos.z)
-		ItemNBTHelper.setFloat(this, "startYaw", yaw)
-		ItemNBTHelper.setFloat(this, "startPitch", pitch)
-	}
 
 private var ItemStack.trace: ArrayList<Vector3>
 	get() {

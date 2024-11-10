@@ -2,7 +2,7 @@ package alfheim.common.block
 
 import alexsocol.asjlib.ASJUtilities.setBurnable
 import alexsocol.asjlib.capitalized
-import alexsocol.asjlib.extendables.block.*
+import alexsocol.asjlib.extendables.block.BlockPattern
 import alfheim.api.*
 import alfheim.api.lib.LibOreDict
 import alfheim.api.lib.LibOreDict.IRIS_WOOD
@@ -23,18 +23,12 @@ import alfheim.common.block.schema.*
 import alfheim.common.block.tile.sub.flower.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.AlfheimTab
-import alfheim.common.lexicon.AlfheimLexiconData
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
-import net.minecraft.world.*
-import net.minecraftforge.common.*
-import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.oredict.OreDictionary.*
 import vazkii.botania.api.BotaniaAPI
-import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.api.subtile.SubTileEntity
 import vazkii.botania.common.block.*
 import vazkii.botania.common.lib.LibBlockNames
@@ -98,6 +92,7 @@ object AlfheimBlocks {
 	val irisWood1: Block
 	val irisWood2: Block
 	val irisWood3: Block
+	val itemFrame: Block
 	val helheimBlock: Block
 	val kindling: Block
 	val livingcobble: Block
@@ -106,6 +101,7 @@ object AlfheimBlocks {
 	val manaAccelerator: Block
 	val manaFluidBlock: Block
 	val manaInfuser: Block
+	val manaReflector: Block
 	val manaTuner: Block
 	val nidhoggTooth: Block
 	val niflheimBlock: Block
@@ -227,16 +223,7 @@ object AlfheimBlocks {
 		airyVirus = BlockAiryVirus()
 		alfheimPortal = BlockAlfheimPortal()
 		alfheimPylon = BlockAlfheimPylon()
-		alfStorage = object: BlockModMeta(Material.iron, 4, ModInfo.MODID, "alfStorage", AlfheimTab, 5f, resist = 60f), ILexiconable {
-			override fun isBeaconBase(worldObj: IBlockAccess?, x: Int, y: Int, z: Int, beaconX: Int, beaconY: Int, beaconZ: Int) = true
-			
-			override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) =
-				when (world.getBlockMetadata(x, y, z)) {
-					0       -> AlfheimLexiconData.elvorium
-					in 1..3 -> AlfheimLexiconData.essences
-					else    -> null
-				}
-		}
+		alfStorage = BlockAlfStorage()
 		amplifier = BlockAmplifier()
 		animatedTorch = BlockAnimatedTorch()
 		anomaly = BlockAnomaly()
@@ -262,13 +249,7 @@ object AlfheimBlocks {
 		domainDoor = BlockDomainDoor()
 		dreamSapling = BlockDreamSapling()
 		elvenOre = BlockElvenOre()
-		elvenSand = object: BlockPatternLexicon(ModInfo.MODID, Material.sand, "ElvenSand", AlfheimTab, harvTool = "shovel", harvLvl = 0, isFalling = true, entry = AlfheimLexiconData.worldgen) {
-			override fun canSustainPlant(world: IBlockAccess, x: Int, y: Int, z: Int, direction: ForgeDirection?, plantable: IPlantable) = when (plantable.getPlantType(world, x, y, z)) {
-				EnumPlantType.Desert -> true
-				EnumPlantType.Beach  -> world.getBlock(x - 1, y, z).material === Material.water || world.getBlock(x + 1, y, z).material === Material.water || world.getBlock(x, y, z - 1).material === Material.water || world.getBlock(x, y, z + 1).material === Material.water
-				else                 -> super.canSustainPlant(world, x, y, z, direction, plantable)
-			}
-		}
+		elvenSand = BlockElvenSand()
 		enderActuator = BlockEnderActuator()
 		flugelHeadBlock = BlockHeadFlugel()
 		flugelHead2Block = BlockHeadMiku()
@@ -297,6 +278,7 @@ object AlfheimBlocks {
 		irisWood1 = BlockColoredWood(1)
 		irisWood2 = BlockColoredWood(2)
 		irisWood3 = BlockColoredWood(3)
+		itemFrame = BlockItemFrame()
 		helheimBlock = BlockPattern(ModInfo.MODID, Material.rock, "HelheimBlock", AlfheimTab, hardness = -1f, harvLvl = Int.MAX_VALUE, resistance = Float.MAX_VALUE)
 		kindling = BlockKindling()
 		livingcobble = BlockLivingCobble()
@@ -305,6 +287,7 @@ object AlfheimBlocks {
 		manaAccelerator = BlockManaAccelerator()
 		manaFluidBlock = BlockManaFluid()
 		manaInfuser = BlockManaInfuser()
+		manaReflector = BlockManaReflector()
 		manaTuner = BlockManaTuner()
 		nidhoggTooth = BlockNidhoggTooth()
 		niflheimBlock = BlockNiflheim()

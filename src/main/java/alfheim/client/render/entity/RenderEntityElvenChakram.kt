@@ -1,7 +1,7 @@
 package alfheim.client.render.entity
 
 import alexsocol.asjlib.*
-import alfheim.common.entity.EntityThunderChakram
+import alfheim.common.entity.EntityElvenChakram
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.client.renderer.texture.TextureMap
@@ -10,11 +10,12 @@ import net.minecraft.util.IIcon
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL12
 
-object RenderEntityThunderChakram: Render() {
+object RenderEntityElvenChakram: Render() {
 	
 	override fun doRender(entity: Entity, x: Double, y: Double, z: Double, yaw: Float, ticks: Float) {
-		val c = entity as EntityThunderChakram
-		val icon = c.itemStack.item.getIconFromDamage(0)
+		val c = entity as EntityElvenChakram
+		val stack = c.itemStack
+		val icon = stack.item.getIconFromDamage(stack.meta)
 		
 		glPushMatrix()
 		glTranslated(x, y, z)

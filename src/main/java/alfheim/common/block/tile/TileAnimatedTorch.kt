@@ -69,7 +69,7 @@ class TileAnimatedTorch: ASJTile() {
 			nextRandomRotation = worldObj.rand.nextInt(4)
 		
 		if (entity != null)
-			side = (((MathHelper.wrapAngleTo180_float(entity.rotationYaw) + 180f) * 4f / 360f) + 0.5).mfloor() and 3
+			side = (MathHelper.wrapAngleTo180_float(entity.rotationYaw) * 4f / 360f + 0.5).mfloor() and 3
 		
 		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType())
 	}
@@ -110,9 +110,6 @@ class TileAnimatedTorch: ASJTile() {
 		anglePerTick = diff / rotationTicks
 		this.side = side
 		rotating = true
-		
-		// tell neighbors that signal is off because we are rotating
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType())
 	}
 	
 	@SideOnly(Side.CLIENT)

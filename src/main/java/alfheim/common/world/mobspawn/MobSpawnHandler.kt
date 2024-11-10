@@ -144,7 +144,7 @@ object MobSpawnHandler {
 			shuffle()
 			firstOrNull { data ->
 				val mob = EntityList.createEntityByName(data.name, world) as? EntityLiving ?: return@firstOrNull false
-				val (x, _, z) = Vector3().rand().mul(16).add(chunk.chunkXPos * 16, 0, chunk.chunkZPos * 16)
+				val (x, _, z) = Vector3().rand().mul(6).add(5, 0, 5).add(chunk.chunkXPos * 16, 0, chunk.chunkZPos * 16)
 				val y = world.getTopSolidOrLiquidBlock(x.mfloor(), z.mfloor()).D
 				
 				mob.setPosition(x, y, z)

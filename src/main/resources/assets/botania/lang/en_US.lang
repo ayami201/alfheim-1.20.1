@@ -205,6 +205,11 @@ alfheim.tagline.manaLamp=Will illuminate your dark adventures
 alfheim.page.manaLamp0=The &1Mana Lamp&0 is a great alternative to hundreds of torches in your pockets. For a small amount of &4mana&0, the lamp is able to independently illuminate the dark areas around the owner, leaving bright memories of adventures in the dungeons.
 alfheim.page.manaLamp1=No dynamic lights!
 
+alfheim.entry.manaReflector=Mana Reflector
+alfheim.tagline.manaReflector=True mirror for mana
+alfheim.page.manaReflector0=&1Mana Reflector&0 is a simple yet clever contraption for any complex system. It allows &4mana burst&0 to be reflected from a 45 degrees mirror. For axis-aligned bursts that means to turn 90 degrees, and for any other direction it will follow basic optics rules.
+alfheim.page.manaReflector1=I'm on the edge
+
 alfheim.entry.manaTuner=Mana Tuner
 alfheim.tagline.manaTuner=Attuning objects with mana bursts
 alfheim.page.manaTuner0=Mana bursts have a huge potential, which is perfectly revealed by &1Mana Lenses&0. And these lenses can affect many characteristics of the beam, whether it be its velocity, capacity, or even color. However, it is the color of the burst that has no practical effect, only aesthetic... Or not?

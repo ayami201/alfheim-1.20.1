@@ -97,6 +97,11 @@ object AlfheimCore {
 	}
 	
 	@EventHandler
+	fun postPostInit(e: FMLLoadCompleteEvent) {
+		if (Botania.thaumcraftLoaded) ThaumcraftAlfheimModule.postPostInit()
+	}
+	
+	@EventHandler
 	fun starting(e: FMLServerStartingEvent) {
 		save = e.server.entityWorld.saveHandler.worldDirectory.absolutePath
 		

@@ -36,21 +36,26 @@ class EntitySpellGravityTrap @JvmOverloads constructor(world: World, var caster:
 			setDead()
 			return
 		}
+		
 		if (isDead || ticksExisted < 20 || ASJUtilities.isClient || caster == null) return
 		
-		getEntitiesWithinAABB(worldObj, Entity::class.java, getBoundingBox(posX, posY + 8, posZ, posX, posY + 8, posZ).expand(SpellGravityTrap.radius, 9.0, SpellGravityTrap.radius)).forEach {
-			if (it === this || it === caster || it is EntityLivingBase && PartySystem.mobsSameParty(caster, it) && !AlfheimConfigHandler.frienldyFire || it is EntityPlayer && it.capabilities.isCreativeMode) return@forEach
-			
-			if (Vector3.entityDistancePlane(it, this) <= SpellGravityTrap.radius) {
-				it.attackEntityFrom(DamageSourceSpell.gravity(this, caster), SpellBase.over(caster, SpellGravityTrap.damage.D))
+		if (ticksExisted % 10 == 0)
+			getEntitiesWithinAABB(worldObj, Entity::class.java, getBoundingBox(posX, posY + 8, posZ, posX, posY + 8, posZ).expand(SpellGravityTrap.radius, 9.0, SpellGravityTrap.radius)).forEach {
+				if (it === this || it === caster || it is EntityLivingBase && PartySystem.mobsSameParty(caster, it) && !AlfheimConfigHandler.frienldyFire || it is EntityPlayer && it.capabilities.isCreativeMode) return@forEach
 				
-				val dist = Vector3.fromEntity(it).sub(this)
-				
-				it.motionY -= 1.0
-				it.motionX -= dist.x / 5
-				it.motionZ -= dist.z / 5
+				if (Vector3.entityDistancePlane(it, this) <= SpellGravityTrap.radius) run {
+					val prevHrt = it.hurtResistantTime
+					it.hurtResistantTime = 0
+					it.attackEntityFrom(DamageSourceSpell.gravity(this, caster), SpellBase.over(caster, SpellGravityTrap.damage.D))
+					it.hurtResistantTime = prevHrt
+					
+					val dist = Vector3.fromEntity(it).sub(this)
+					
+					it.motionY -= 1.0
+					it.motionX -= dist.x / 5
+					it.motionZ -= dist.z / 5
+				}
 			}
-		}
 		
 		if (worldObj.rand.nextBoolean()) {
 			val p = Vector3().rand().sub(0.5).normalize().mul(Math.random() * 4).add(this)

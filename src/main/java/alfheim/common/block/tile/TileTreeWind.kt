@@ -26,7 +26,7 @@ class TileTreeWind: ASJTile() {
 		}
 		
 		getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox(RANGE)).forEach {
-			if (it is EntityPlayer && (AlfheimConfigHandler.berrierTreeAllowAnyPlayer || it.commandSenderName in friends || it.capabilities.isCreativeMode)) return@forEach
+			if (it is EntityPlayer && (AlfheimConfigHandler.barrierTreeAllowAnyPlayer || it.commandSenderName in friends || it.capabilities.isCreativeMode)) return@forEach
 			
 			val (x, y, z) = Vector3.fromEntity(it).sub(Vector3.fromTileEntityCenter(this)).normalize()
 			

@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.ASJTile
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.AlfheimAPI
+import alfheim.api.lib.LibOreDict
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.asm.hook.extender.SparkExtender.attachTile
@@ -39,7 +40,7 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 		get() = getEntitiesWithinAABB(worldObj, EntityItem::class.java, boundingBox().offset(0.0, 1.0, 0.0)).filter { !it.isDead && it.entityItem != null }
 	
 	val isReadyToKillGaia: Boolean
-		get() = checkPlatform(0, -2, 0, Blocks.beacon, 0) && checkPlatform(0, 3, 0, ModBlocks.brewery, 0) && checkAll(PYLONS, AlfheimBlocks.alfheimPylon, 2)
+		get() = checkPlatform(0, -2, 0, 0, *LibOreDict.beacons) && checkPlatform(0, 3, 0, 0, ModBlocks.brewery) && checkAll(PYLONS, AlfheimBlocks.alfheimPylon, 2)
 	
 	var deGaiaingTime = 0
 	var soulParticlesTime = 0
@@ -259,10 +260,10 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 		return checkAll(QUARTZ_BLOCK, ModFluffBlocks.elfQuartz, 0) && checkAll(ELEMENTIUM_BLOCKS, ModBlocks.storage, 2)
 	}
 	
-	fun checkAll(positions: Array<IntArray>, block: Block, meta: Int) = positions.all { checkPlatform(it[0], it[1], it[2], block, meta) }
+	fun checkAll(positions: Array<IntArray>, block: Block, meta: Int) = positions.all { checkPlatform(it[0], it[1], it[2], meta, block) }
 	
-	fun checkPlatform(xOff: Int, yOff: Int, zOff: Int, block: Block, meta: Int): Boolean {
-		return worldObj.getBlock(xCoord + xOff, yCoord + yOff, zCoord + zOff) === block && worldObj.getBlockMetadata(xCoord + xOff, yCoord + yOff, zCoord + zOff) == meta
+	fun checkPlatform(xOff: Int, yOff: Int, zOff: Int, meta: Int, vararg blocks: Block?): Boolean {
+		return worldObj.getBlock(xCoord + xOff, yCoord + yOff, zCoord + zOff) inl blocks && worldObj.getBlockMetadata(xCoord + xOff, yCoord + yOff, zCoord + zOff) == meta
 	}
 	
 	override fun writeCustomNBT(nbt: NBTTagCompound) {
@@ -296,7 +297,7 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 	
 	override fun attachSpark(entity: ISparkEntity?) = entity.attachTile(this)
 	
-	override fun getAttachedSpark() = getEntitiesWithinAABB(worldObj, ISparkEntity::class.java, boundingBox().offset(0, 1, 0)).safeZeroGet(0)
+	override fun getAttachedSpark() = getEntitiesWithinAABB(worldObj, ISparkEntity::class.java, boundingBox().offset(0, 1, 0)).firstOrNull()
 	
 	override fun areIncomingTranfersDone() = !hasValidPlatform() || !areItemsValid(items)
 	

@@ -84,6 +84,8 @@ object LibResourceLocations {
 	val livingrock = ResourceLocationIL("botania", "textures/blocks/livingrock0.png")
 	val lolicorn = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Lolicorn.png")
 	var manaInfuserOverlay = ResourceLocationIL("botania", "textures/gui/manaInfusionOverlay.png")
+	var manaReflector = ResourceLocationIL(ModInfo.MODID, "textures/model/block/ManaReflector.png")
+	var manaReflectorMirror = ResourceLocationIL(ModInfo.MODID, "textures/model/block/ManaReflectorMirror.png")
 	var manaTuner = ResourceLocationIL(ModInfo.MODID, "textures/model/block/ManaTuner.png")
 	val markFire = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/MarkFire.png")
 	val markIce = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/MarkIce.png")

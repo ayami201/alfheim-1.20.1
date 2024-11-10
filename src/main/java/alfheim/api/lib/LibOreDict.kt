@@ -1,5 +1,9 @@
 package alfheim.api.lib
 
+import cpw.mods.fml.common.registry.GameRegistry
+import net.minecraft.block.Block
+import net.minecraft.init.Blocks
+
 object LibOreDict {
 	
 	const val DRAGON_ORE = "oreDragonstone"
@@ -61,4 +65,7 @@ object LibOreDict {
 		
 		val I get() = ordinal
 	}
+	
+	val beacons: Array<Block?>
+		get() = arrayOf(Blocks.beacon, GameRegistry.findBlock("etfuturum", "beacon"), GameRegistry.findBlock("chisel", "beacon"))
 }

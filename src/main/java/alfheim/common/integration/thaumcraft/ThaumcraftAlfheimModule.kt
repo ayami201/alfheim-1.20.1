@@ -16,6 +16,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.compat.thaumcraft.*
 import alfheim.common.lexicon.AlfheimLexiconData
 import cpw.mods.fml.client.registry.RenderingRegistry.*
+import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.registry.GameRegistry.*
 import net.minecraft.block.Block
@@ -39,6 +40,7 @@ import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.lexicon.page.PageText
 import vazkii.botania.common.lib.LibOreDict.*
 
+@Suppress("ConstPropertyName")
 object ThaumcraftAlfheimModule {
 	
 	lateinit var alfheimThaumOre: Block
@@ -146,7 +148,7 @@ object ThaumcraftAlfheimModule {
 	
 	fun postInit() {
 		registerRecipes()
-		reigsterResearches()
+		registerResearches()
 		registerOreDict()
 		
 		if (Botania.thaumcraftLoaded) {
@@ -168,35 +170,37 @@ object ThaumcraftAlfheimModule {
 	}
 	
 	fun registerRecipes() {
-		ConfigResearch.recipes[capManasteelRecipe] = addArcaneCraftingRecipe(capManasteelResearch,
-																			 ItemStack(naturalWandCap, 1, 0),
-																			 AspectList()
-																				 .add(Aspect.AIR, WandCap.caps[capManasteelName]!!.craftCost)
-																				 .add(Aspect.FIRE, WandCap.caps[capManasteelName]!!.craftCost)
-																				 .add(Aspect.ORDER, WandCap.caps[capManasteelName]!!.craftCost),
-																			 "NNN", "N N",
-																			 'N', MANASTEEL_NUGGET
-		)
-		
-		ConfigResearch.recipes[capTerrasteelRecipe] = addArcaneCraftingRecipe(capTerrasteelResearch,
-																			  ItemStack(naturalWandCap, 1, 1),
-																			  AspectList()
-																				  .add(Aspect.AIR, WandCap.caps[capTerrasteelName]!!.craftCost)
-																				  .add(Aspect.FIRE, WandCap.caps[capTerrasteelName]!!.craftCost)
-																				  .add(Aspect.ORDER, WandCap.caps[capTerrasteelName]!!.craftCost),
-																			  "NNN", "N N",
-																			  'N', TERRASTEEL_NUGGET
-		)
-		
-		ConfigResearch.recipes[capElementiumRecipe] = addArcaneCraftingRecipe(capElementiumResearch,
-																			  ItemStack(naturalWandCap, 1, 2),
-																			  AspectList()
-																				  .add(Aspect.AIR, WandCap.caps[capElementiumName]!!.craftCost)
-																				  .add(Aspect.FIRE, WandCap.caps[capElementiumName]!!.craftCost)
-																				  .add(Aspect.ORDER, WandCap.caps[capElementiumName]!!.craftCost),
-																			  "NNN", "N N",
-																			  'N', ELEMENTIUM_NUGGET
-		)
+		if (AlfheimConfigHandler.overrideFMCaps) {
+			ConfigResearch.recipes[capManasteelRecipe] = addArcaneCraftingRecipe(capManasteelResearch,
+																				 ItemStack(naturalWandCap, 1, 0),
+																				 AspectList()
+																					 .add(Aspect.AIR, WandCap.caps[capManasteelName]!!.craftCost)
+																					 .add(Aspect.FIRE, WandCap.caps[capManasteelName]!!.craftCost)
+																					 .add(Aspect.ORDER, WandCap.caps[capManasteelName]!!.craftCost),
+																				 "NNN", "N N",
+																				 'N', MANASTEEL_NUGGET
+			)
+			
+			ConfigResearch.recipes[capTerrasteelRecipe] = addArcaneCraftingRecipe(capTerrasteelResearch,
+																				  ItemStack(naturalWandCap, 1, 1),
+																				  AspectList()
+																					  .add(Aspect.AIR, WandCap.caps[capTerrasteelName]!!.craftCost)
+																					  .add(Aspect.FIRE, WandCap.caps[capTerrasteelName]!!.craftCost)
+																					  .add(Aspect.ORDER, WandCap.caps[capTerrasteelName]!!.craftCost),
+																				  "NNN", "N N",
+																				  'N', TERRASTEEL_NUGGET
+			)
+			
+			ConfigResearch.recipes[capElementiumRecipe] = addArcaneCraftingRecipe(capElementiumResearch,
+																				  ItemStack(naturalWandCap, 1, 2),
+																				  AspectList()
+																					  .add(Aspect.AIR, WandCap.caps[capElementiumName]!!.craftCost)
+																					  .add(Aspect.FIRE, WandCap.caps[capElementiumName]!!.craftCost)
+																					  .add(Aspect.ORDER, WandCap.caps[capElementiumName]!!.craftCost),
+																				  "NNN", "N N",
+																				  'N', ELEMENTIUM_NUGGET
+			)
+		}
 		
 		ConfigResearch.recipes[capElvoriumRecipe] = addArcaneCraftingRecipe(capElvoriumResearch,
 																			ItemStack(naturalWandCap, 1, 3),
@@ -333,40 +337,42 @@ object ThaumcraftAlfheimModule {
 		cap.craftCost = 9
 	}
 	
-	fun reigsterResearches() {
-		ResearchItem(capManasteelResearch, "THAUMATURGY",
-					 AspectList().add(Aspect.METAL, 3).add(Aspect.EXCHANGE, 3).add(Aspect.TOOL, 3),
-					 4, 0, 1,
-					 ItemStack(naturalWandCap, 1, 0))
+	fun registerResearches() {
+		if (AlfheimConfigHandler.overrideFMCaps) {
+			ResearchItem(capManasteelResearch, "THAUMATURGY",
+						 AspectList().add(Aspect.METAL, 3).add(Aspect.EXCHANGE, 3).add(Aspect.TOOL, 3),
+						 4, 0, 1,
+						 ItemStack(naturalWandCap, 1, 0))
+				
+				.setPages(ResearchPage("tc.research_page.$capManasteelResearch.1"),
+						  ResearchPage(ConfigResearch.recipes[capManasteelRecipe] as IArcaneRecipe))
+				
+				.setParents("CAP_gold").registerResearchItem()
 			
-			.setPages(ResearchPage("tc.research_page.$capManasteelResearch.1"),
-					  ResearchPage(ConfigResearch.recipes[capManasteelRecipe] as IArcaneRecipe))
 			
-			.setParents("CAP_gold").registerResearchItem()
-		
-		
-		
-		ResearchItem(capTerrasteelResearch, "THAUMATURGY",
-					 AspectList().add(Aspect.METAL, 6).add(Aspect.MAGIC, 6).add(Aspect.TOOL, 3).add(Aspect.AURA, 3),
-					 7, 4, 2,
-					 ItemStack(naturalWandCap, 1, 1))
 			
-			.setPages(ResearchPage("tc.research_page.$capTerrasteelResearch.1"),
-					  ResearchPage(ConfigResearch.recipes[capTerrasteelRecipe] as IArcaneRecipe))
+			ResearchItem(capTerrasteelResearch, "THAUMATURGY",
+						 AspectList().add(Aspect.METAL, 6).add(Aspect.MAGIC, 6).add(Aspect.TOOL, 3).add(Aspect.AURA, 3),
+						 7, 4, 2,
+						 ItemStack(naturalWandCap, 1, 1))
+				
+				.setPages(ResearchPage("tc.research_page.$capTerrasteelResearch.1"),
+						  ResearchPage(ConfigResearch.recipes[capTerrasteelRecipe] as IArcaneRecipe))
+				
+				.setParents("CAP_thaumium").registerResearchItem()
 			
-			.setParents("CAP_thaumium").registerResearchItem()
-		
-		
-		
-		ResearchItem(capElementiumResearch, "THAUMATURGY",
-					 AspectList().add(Aspect.METAL, 3).add(Aspect.EXCHANGE, 3).add(Aspect.TOOL, 3),
-					 6, 2, 1,
-					 ItemStack(naturalWandCap, 1, 2))
 			
-			.setPages(ResearchPage("tc.research_page.$capElementiumResearch.1"),
-					  ResearchPage(ConfigResearch.recipes[capElementiumRecipe] as IArcaneRecipe))
 			
-			.setParents("CAP_gold").registerResearchItem()
+			ResearchItem(capElementiumResearch, "THAUMATURGY",
+						 AspectList().add(Aspect.METAL, 3).add(Aspect.EXCHANGE, 3).add(Aspect.TOOL, 3),
+						 6, 2, 1,
+						 ItemStack(naturalWandCap, 1, 2))
+				
+				.setPages(ResearchPage("tc.research_page.$capElementiumResearch.1"),
+						  ResearchPage(ConfigResearch.recipes[capElementiumRecipe] as IArcaneRecipe))
+				
+				.setParents("CAP_gold").registerResearchItem()
+		}	
 		
 		
 		
@@ -391,6 +397,8 @@ object ThaumcraftAlfheimModule {
 					  ResearchPage(ConfigResearch.recipes[capMauftriumRecipe] as IArcaneRecipe))
 			
 			.setParents("CAP_void").registerResearchItem()
+		
+		
 		
 		ResearchItem(rodLivingwoodResearch, "THAUMATURGY",
 					 AspectList().add(Aspect.TOOL, 3).add(Aspect.TREE, 6).add(Aspect.MAGIC, 3),
@@ -474,5 +482,17 @@ object ThaumcraftAlfheimModule {
 		registerOre("oreInfusedOrder$postfix", ItemStack(alfheimThaumOre, 1, 5))
 		registerOre("oreInfusedEntropy$postfix", ItemStack(alfheimThaumOre, 1, 6))
 		registerOre("oreAmber$postfix", ItemStack(alfheimThaumOre, 1, 7))
+	}
+	
+	fun postPostInit() {
+		if (!Loader.isModLoaded("ForbiddenMagic") || !AlfheimConfigHandler.overrideFMCaps) return
+		
+		getCraftingRecipes().removeAll { (it as? ShapedArcaneRecipe ?: return@removeAll false).research in arrayOf("CAP_manasteel", "CAP_elementium") }
+		
+		val fmCapItem = findItem("ForbiddenMagic", "WandCaps")
+		CraftingManager.getInstance().recipeList.removeAll {
+			val result = (it as? IRecipe)?.recipeOutput ?: return@removeAll false
+			result.item === fmCapItem && result.meta == 2
+		}
 	}
 }

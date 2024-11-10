@@ -120,9 +120,10 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	// OHTER
 	var alfheimSleepExtraCheck = true
 	var authTimeout = 200
-	var berrierTreeAllowAnyPlayer = false
+	var barrierTreeAllowAnyPlayer = false
 	var blackLotusDropRate = 0.05
 	var cataclysmCooldown = 600
+	var effectScreenOverlay = true
 	var enderOreWeights = arrayOf("oreEndCoal:9000", "oreEndDiamond:500", "oreEndEmerald:500", "oreEndGold:3635", "oreEndIron:5790", "oreEndLapis:3250", "oreEndRedstone:5600", "oreDraconium:200")
 	var eventBanner = true
 	var fancies = true
@@ -150,12 +151,14 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var mountLife = 600
 	var multibaubleBlacklist = emptyArray<String>()
 	var multibaubleCount = 6
+	var newStorageTexture = true
 	var notifications = true
 	var numericalMana = true
 	var overcoldBlacklist = arrayOf("alfheim.DedMoroz", "alfheim.SnowSprite", "Skeleton", "SnowMan")
 	var overheatBlacklist = arrayOf("alfheim.Muspelson", "alfheim.FireSpirit", "Blaze", "Ghast", "LavaSlime", "PigZombie", "Skeleton", "WitherBoss")
 	var rattleroseSpeed = 20
 	var realLightning = false
+	var relicsProtectionBlackList = emptyArray<String>()
 	var renderBooba = true
 	var repairBlackList = emptyArray<String>()
 	var rocketRide = 2
@@ -184,6 +187,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	// TC INTEGRATION
 	var addAspectsToBotania = true
 	var addTincturemAspect = true
+	var overrideFMCaps = true
 	var thaumTreeSuffusion = true
 	
 	// TiC INTEGRATION
@@ -334,9 +338,10 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		
 		alfheimSleepExtraCheck = loadProp(CATEGORY_GENERAL, "alfheimSleepExtraCheck", alfheimSleepExtraCheck, false, "Set this to false if you are skipping whole day while sleeping")
 		authTimeout = loadProp(CATEGORY_GENERAL, "authTimeout", authTimeout, false, "Time limit for client to send authentication credentials", 100, 600)
-		berrierTreeAllowAnyPlayer = loadProp(CATEGORY_GENERAL, "berrierTreeAllowAnyPlayer", berrierTreeAllowAnyPlayer, false, "Set this to true to allow any player to bypass barrier trees")
+		barrierTreeAllowAnyPlayer = loadProp(CATEGORY_GENERAL, "barrierTreeAllowAnyPlayer", barrierTreeAllowAnyPlayer, false, "Set this to true to allow any player to bypass barrier trees")
 		blackLotusDropRate = loadProp(CATEGORY_GENERAL, "blackLotusDropRate", blackLotusDropRate, false, "Rate of black loti dropping from Manaseal Creepers")
 		cataclysmCooldown = loadProp(CATEGORY_GENERAL, "cataclysmCooldown", cataclysmCooldown, false, "Average ticks between cataclysms", 100, 6000)
+		effectScreenOverlay = loadProp(CATEGORY_GENERAL, "effectScreenOverlay", effectScreenOverlay, false, "Set this to false to disable screen overlay for effects like heat/cold")
 		enderOreWeights = loadProp(CATEGORY_GENERAL, "enderOreWeights", enderOreWeights, false, "Map of OreDict name to ore weight (more weight - more chace to spawn) for Orechid Endium")
 		eventBanner = loadProp(CATEGORY_GENERAL, "eventBanner", eventBanner, false, "Set this to false to disable event banner popup")
 		fancies = loadProp(CATEGORY_GENERAL, "fancies", fancies, false, "Set this to false to locally disable fancies rendering on you (for contributors only)")
@@ -364,12 +369,14 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		mountLife = loadProp(CATEGORY_GENERAL, "mountLife", mountLife, false, "How many ticks mount can stay unmounted")
 		multibaubleBlacklist = loadProp(CATEGORY_GENERAL, "multibaubleBlacklist", multibaubleBlacklist, false, "Blacklist for Ring of Elven King [modid:name]", false)
 		multibaubleCount = loadProp(CATEGORY_GENERAL, "multibaubleCount", multibaubleCount, false, "How many bauble box slots will be activated by Ring of Elven King")
+		newStorageTexture = loadProp(CATEGORY_GENERAL, "newStorageTexture", newStorageTexture, true, "Set this to false to disable new storage blocks textures")
 		notifications = loadProp(CATEGORY_GENERAL, "notifications", notifications, false, "Set this to false to disable custom notifications and version check")
 		numericalMana = loadProp(CATEGORY_GENERAL, "numericalMana", numericalMana, false, "Set this to false to disable numerical mana representation")
 		overcoldBlacklist = loadProp(CATEGORY_GENERAL, "overcoldBlacklist", overcoldBlacklist, false, "List of entity names with no cold gauge filling ", false)
 		overheatBlacklist = loadProp(CATEGORY_GENERAL, "overheatBlacklist", overheatBlacklist, false, "List of entity names with no heat gauge filling ", false)
 		rattleroseSpeed = loadProp(CATEGORY_GENERAL, "rattleroseSpeed", rattleroseSpeed, false, "Rattlerose game update speed (one time per N ticks). Set to 0 to switch to manual control")
 		realLightning = loadProp(CATEGORY_GENERAL, "realLightning", realLightning, false, "Set this to true to make Rod of the Thundering Peaks summon real (weather) lightning")
+		relicsProtectionBlackList = loadProp(CATEGORY_GENERAL, "relicsProtectionBlackList", relicsProtectionBlackList, false, "Blacklist for relics protection [modid:name]", false)
 		renderBooba = loadProp(CATEGORY_GENERAL, "renderBooba", renderBooba, false, "Set this to false to disable ESM booba render")
 		repairBlackList = loadProp(CATEGORY_GENERAL, "repairBlackList", repairBlackList, false, "Blacklist of repairable items (ex: for anyavil) [modid:name]", false)
 		rocketRide = loadProp(CATEGORY_GENERAL, "rocketRide", rocketRide, false, "Rocket ride [-1 - not players, 0 - none, 1 - players, 2 - anyone]")
@@ -399,7 +406,8 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		
 		addAspectsToBotania = loadProp(CATEGORY_INT_TC, "TC.botaniaAspects", addAspectsToBotania, true, "Set this to false to disable adding aspects to Botania")
 		addTincturemAspect = loadProp(CATEGORY_INT_TC, "TC.tincturem", addTincturemAspect, true, "Set this to false to use Sensus instead of Color aspect")
-		thaumTreeSuffusion = loadProp(CATEGORY_INT_TC, "TC.treeCrafting", thaumTreeSuffusion, true, "[GoG] Set this to false to remove Thaumcraft plants Dendric Suffusion")
+		overrideFMCaps = loadProp(CATEGORY_INT_TC, "TC.overrideFMCaps", overrideFMCaps, true, "[FM] Set this to false to keep Botania metals wand caps from Forbidden Magic recipe")
+		thaumTreeSuffusion = loadProp(CATEGORY_INT_TC, "TC.treeCrafting", thaumTreeSuffusion, true, "Set this to false to remove Thaumcraft plants Dendric Suffusion")
 		
 		materialIDs = loadProp(CATEGORY_INT_TiC, "TiC.materialIDs", materialIDs, true, "IDs for Elementium, Elvorium, Manasteel, Mauftrium, Terrasteel, Livingwood, Dreamwood, Livingrock, Redstring, Manastring materials respectively")
 		modifierIDs = loadProp(CATEGORY_INT_TiC, "TiC.modifierIDs", modifierIDs, true, "IDs for ManaCore modifiers respectively")

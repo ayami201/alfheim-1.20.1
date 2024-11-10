@@ -3,6 +3,7 @@ package alfheim.common.item.material
 import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 import alfheim.api.*
+import alfheim.api.lib.LibOreDict
 import alfheim.client.core.helper.*
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.colored.rainbow.BlockRainbowGrass
@@ -322,7 +323,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 			return true
 		} else
 		// summon Gaia in Alfheim
-		if (block === Blocks.beacon && stack.meta == ElvoriumIngot.I) {
+		if (block inl LibOreDict.beacons && stack.meta == ElvoriumIngot.I) {
 			return if (world.provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim) {
 				EntityDoppleganger.spawn(player, stack, world, x, y, z, false)
 			} else {

@@ -8,6 +8,7 @@ import alfheim.api.*
 import alfheim.api.block.IHourglassTrigger
 import alfheim.api.boss.*
 import alfheim.api.entity.*
+import alfheim.api.event.AttackEntityEventPost
 import alfheim.api.item.equipment.bauble.IManaDiscountBauble
 import alfheim.api.lib.LibResourceLocations
 import alfheim.api.spell.SpellBase
@@ -53,6 +54,8 @@ import alfheim.common.world.mobspawn.MobSpawnHandler
 import baubles.common.lib.PlayerHandler
 import cofh.asmhooks.HooksCore
 import com.google.common.collect.Multimap
+import com.meteor.extrabotany.api.hugetools.HugeItemRenderer
+import com.meteor.extrabotany.client.render.item.GunRenderer
 import cpw.mods.fml.relauncher.Side.CLIENT
 import cpw.mods.fml.relauncher.SideOnly
 import gloomyfolken.hooklib.asm.*
@@ -92,6 +95,8 @@ import net.minecraft.world.*
 import net.minecraft.world.biome.*
 import net.minecraft.world.chunk.Chunk
 import net.minecraft.world.gen.structure.*
+import net.minecraftforge.client.IItemRenderer.ItemRenderType
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fluids.IFluidBlock
@@ -1088,7 +1093,7 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ALWAYS)
 	fun onBlockActivated(block: BlockBellows, world: World, x: Int, y: Int, z: Int, player: EntityPlayer, s: Int, xs: Float, ys: Float, zs: Float): Boolean {
-		if (!ItemRodClicker.isFakeNotAvatar(player))
+		if (!ItemRodClicker.isTruePlayerOrAvatar(player))
 			(world.getTileEntity(x, y, z) as TileBellows).interact()
 		return true
 	}
@@ -2129,5 +2134,25 @@ object AlfheimHookHandler {
 		if (ASJUtilities.isClient) return
 		
 		attributes.put(SharedMonsterAttributes.maxHealth.attributeUnlocalizedName, AttributeModifier(UUID.fromString("c4fba2b2-503a-4210-97b3-dc900ee2409c"), "Bauble modifier", 20.0, 0))
+	}
+	
+	@JvmStatic
+	@Hook(injectOnExit = true)
+	fun attackTargetEntityWithCurrentItem(player: EntityPlayer, target: Entity?) {
+		MinecraftForge.EVENT_BUS.post(AttackEntityEventPost(player, target))
+	}
+	
+	@JvmStatic
+	@Hook
+	fun renderItem(render: HugeItemRenderer, type: ItemRenderType, item: ItemStack, data: Array<Any?>) {
+		if (type == ItemRenderType.ENTITY)
+			data[1] = null
+	}
+	
+	@JvmStatic
+	@Hook
+	fun renderItem(render: GunRenderer, type: ItemRenderType, item: ItemStack, data: Array<Any?>) {
+		if (type == ItemRenderType.ENTITY)
+			data[1] = null
 	}
 }

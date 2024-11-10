@@ -67,6 +67,7 @@ object AlfheimItems {
 	val elementalLeggings: Item
 	val elfFirePendant: Item
 	val elfIcePendant: Item
+	val elvenChakram: Item
 	val elvenFood: Item
 	val elvenResource: Item
 	val elvoriumBoots: Item
@@ -161,7 +162,6 @@ object AlfheimItems {
 	val terraHoe: Item
 	val thinkingHand: Item
 	val thrymAxe: Item
-	val thunderChakram: Item
 	//val toolbelt: Item
 	val trisDagger: Item
 	val triquetrum: Item
@@ -307,7 +307,7 @@ object AlfheimItems {
 		terraHoe = ItemTerraHoe()
 		thinkingHand = ItemThinkingHand()
 		thrymAxe = ItemThrymAxe()
-		thunderChakram = ItemThunderChakram()
+		elvenChakram = ItemElvenChakram()
 		trisDagger = ItemTrisDagger()
 		triquetrum = ItemTriquetrum()
 		//toolbelt = ItemToolbelt()

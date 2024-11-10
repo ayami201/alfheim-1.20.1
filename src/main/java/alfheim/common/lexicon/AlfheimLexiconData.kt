@@ -126,6 +126,7 @@ object AlfheimLexiconData {
 	lateinit var livingwoodFunnel: LexiconEntry
 	lateinit var lootInt: LexiconEntry
 	lateinit var manaAccelerator: LexiconEntry
+	lateinit var manaReflector: LexiconEntry
 	lateinit var manaImba: LexiconEntry
 	lateinit var manaLamp: LexiconEntry
 	lateinit var manaTuner: LexiconEntry
@@ -307,6 +308,7 @@ object AlfheimLexiconData {
 		livingwoodFunnel = AlfheimLexiconEntry("livingwoodFunnel", categoryAlfheim)
 		lootInt = AlfheimLexiconEntry("lootInt", categoryAlfheim)
 		manaAccelerator = AlfheimLexiconEntry("itemHold", categoryAlfheim)
+		manaReflector = AlfheimLexiconEntry("manaReflector", categoryAlfheim)
 		manaImba = AlfheimLexiconEntry("manaImba", categoryAlfheim)
 		manaLamp = AlfheimLexiconEntry("manaLamp", categoryAlfheim)
 		manaTuner = AlfheimLexiconEntry("manaTuner", categoryAlfheim)
@@ -702,6 +704,8 @@ object AlfheimLexiconData {
 		
 		manaAccelerator.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeItemHolder))
 		
+		manaReflector.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeManaReflector))
+		
 		manaImba.setLexiconPages(*Array(3) { PageText("$it") }, PageCraftingRecipe("3", AlfheimRecipes.recipeManaMirrorImba))
 		
 		manaLamp.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeEnlighter))
@@ -859,7 +863,7 @@ object AlfheimLexiconData {
 		throwablePotions.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeSplashPotions),
 		                                 PageText("2"), PageCraftingRecipe("3", AlfheimRecipes.recipeGrenade)).icon = (AlfheimItems.splashPotion as ItemSplashPotion).getItemForBrew(ModBrews.absorption, null)
 		
-		thunderChakram.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeThunderChakram))
+		thunderChakram.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeChakramThunder))
 		
 		trade.setLexiconPages(PageText("0"), PageText("1"),
 							  PageCraftingRecipe("2", AlfheimRecipes.recipeElvoriumPylon),

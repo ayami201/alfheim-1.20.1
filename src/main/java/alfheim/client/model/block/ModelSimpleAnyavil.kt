@@ -2,7 +2,7 @@ package alfheim.client.model.block
 
 import net.minecraft.client.model.*
 
-class ModelSimpleAnyavil: ModelBase() {
+object ModelSimpleAnyavil: ModelBase() {
 	
 	val shape1: ModelRenderer
 	val shape2: ModelRenderer

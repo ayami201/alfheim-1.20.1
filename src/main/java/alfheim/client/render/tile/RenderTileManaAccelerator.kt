@@ -22,7 +22,7 @@ object RenderTileManaAccelerator: TileEntitySpecialRenderer() {
 	
 	val rand = Random()
 	val model = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/holder.obj"))!!
-	val modelSimple = ModelSimpleItemHolder()
+	val modelSimple = ModelSimpleItemHolder
 	
 	override fun renderTileEntityAt(tile: TileEntity, x: Double, y: Double, z: Double, partialTicks: Float) {
 		if (tile !is TileManaAccelerator) return

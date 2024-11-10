@@ -94,7 +94,7 @@ open class CommonProxy {
 		FloatingIslandGenerator.eventFML().eventForge()
 		ISpeedUpItem.eventForge()
 		IStepupItem.eventForge()
-		RelicNBTSyncHandler.eventForge()
+		RelicNBTSyncHandler.eventForge().eventFML()
 		ContributorsPrivacyHelper
 		AlfheimConfigHandler.registerChangeHandler(ModInfo.MODID)
 	}

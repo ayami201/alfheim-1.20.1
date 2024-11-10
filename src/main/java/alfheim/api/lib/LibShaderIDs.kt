@@ -4,6 +4,7 @@ package alfheim.api.lib
 object LibShaderIDs {
 	
 	var idColor3d = 0
+	var idCORE = 0
 	var idGravity = 0
 	var idNoise = 0
 	var idShadow = 0

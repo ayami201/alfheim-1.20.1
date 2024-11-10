@@ -1,6 +1,17 @@
 Innovations:
- [WIP] Ender chakram
+ Mana Reflector
+ Ender chakram
+ Blacklist for relics protection
+ Config to hide screen overlays
 
 Fixes:
  Missing oredict
  Fenrir looting calculation
+ Rod of the High Will crashes
+ Holy Blade Revelation regular+cognitive damage
+ Knowledge cross-world desync
+ Relics NBT sync
+ Tree berry models console spam
+ Animated torch double activation on rotation
+ [MMO] Titan Hit spell crash
+ [EtFR]/[Chisel] support for custom beacons in structures

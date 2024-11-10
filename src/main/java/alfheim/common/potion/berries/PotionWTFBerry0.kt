@@ -21,7 +21,7 @@ object PotionWTFBerry0: PotionAlfheim(AlfheimConfigHandler.potionIDWtfBerry0, "W
 			if (abs(it.motionX) < 0.0001 && abs(it.motionZ) < 0.0001) return@forEach
 			if (it is EntityItem || it is EntityXPOrb) return@forEach
 			
-			if (it is EntityPlayer && (AlfheimConfigHandler.berrierTreeAllowAnyPlayer || it.capabilities.isCreativeMode)) return@forEach
+			if (it is EntityPlayer && (AlfheimConfigHandler.barrierTreeAllowAnyPlayer || it.capabilities.isCreativeMode)) return@forEach
 			
 			val (x, y, z) = Vector3.fromEntity(it).sub(Vector3.fromEntity(target)).normalize()
 			

@@ -128,11 +128,11 @@ object GUISpells: Gui() {
 				glDisable(GL_TEXTURE_2D)
 				glColor4d(0.0, 0.0, 0.0, 0.5 * fadeOut)
 				
-				val maxCooldown = spell.getCooldown().D
+				val maxCooldown = max(coolDown, spell.getCooldown())
 				val centerX = 8
 				val centerY = 8
 				val r = 8
-				val degs = (360 * (coolDown / maxCooldown)).I
+				val degs = (360 * (coolDown / maxCooldown.F)).I
 				
 				glBegin(GL_TRIANGLE_FAN)
 				glVertex2i(centerX, centerY)

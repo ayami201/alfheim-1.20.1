@@ -24,7 +24,12 @@ class Message1d(ty: M1d, var data1: Double, var type: Int = ty.ordinal) : Alfhei
 				AlfheimConfigHandler.flightTime = data1.I
 				ElvenFlightHelper.max = data1
 			}
-			M1d.KNOWLEDGE        -> CardinalSystemClient.PlayerSegmentClient.knowledge.add("${CardinalSystem.KnowledgeSystem.Knowledge.entries[data1.I]}")
+			M1d.KNOWLEDGE        -> {
+				if (data1 == -1.0)
+					CardinalSystemClient.PlayerSegmentClient.knowledge.clear()
+				else
+					CardinalSystemClient.PlayerSegmentClient.knowledge.add("${CardinalSystem.KnowledgeSystem.Knowledge.entries[data1.I]}")
+			}
 			M1d.LIMBO            -> CardinalSystemClient.PlayerSegmentClient.limbo = data1.I
 			M1d.TIME_STOP_REMOVE -> CardinalSystemClient.TimeStopSystemClient.remove(data1.I)
 			M1d.RLCM    -> {

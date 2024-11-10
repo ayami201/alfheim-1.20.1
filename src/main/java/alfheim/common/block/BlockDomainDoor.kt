@@ -21,12 +21,16 @@ class BlockDomainDoor: BlockModContainerMeta(Material.rock, 5, ModInfo.MODID, "D
 	lateinit var iconPillar: IIcon
 	lateinit var iconPillarTop: IIcon
 	
-	override fun setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int) {
-		when (world.getBlockMetadata(x, y, z)) {
+	fun setBlockBoundsBasedOnMeta(meta: Int) {
+		when (meta) {
 			2    -> setBlockBounds(0f, 0f, 0.25f, 1f, 1f, 0.75f)
 			4    -> setBlockBounds(0f, 0f, 0f, 1f, 0.5f, 1f)
 			else -> setBlockBounds(0f, 0f, 0f, 1f, 1f, 1f)
 		}
+	}
+	
+	override fun setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int) {
+		setBlockBoundsBasedOnMeta(world.getBlockMetadata(x, y, z))
 	}
 	
 	override fun addCollisionBoxesToList(world: World, x: Int, y: Int, z: Int, aabb: AxisAlignedBB?, list: MutableList<Any?>?, collider: Entity?) {

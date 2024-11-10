@@ -2,7 +2,7 @@ package alfheim.common.item
 
 import alexsocol.asjlib.*
 import alfheim.client.core.helper.IconHelper
-import alfheim.common.entity.EntityThunderChakram
+import alfheim.common.entity.EntityElvenChakram
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
@@ -12,7 +12,7 @@ import net.minecraft.util.IIcon
 import net.minecraft.world.World
 import vazkii.botania.common.achievement.*
 
-class ItemThunderChakram: ItemMod("ThunderChakram"), ICraftAchievement {
+class ItemElvenChakram: ItemMod("ElvenChakram"), ICraftAchievement {
 	
 	lateinit var iconEnder: IIcon
 	
@@ -41,7 +41,7 @@ class ItemThunderChakram: ItemMod("ThunderChakram"), ICraftAchievement {
 		--stack.stackSize
 		player.playSoundAtEntity("random.bow", 0.5f, 0.4f / (itemRand.nextFloat() * 0.4f + 0.8f))
 		
-		val c = EntityThunderChakram(world, player, if (stack.meta != 0) stack else null)
+		val c = EntityElvenChakram(world, player, if (stack.meta != 0) stack else null)
 		c.spawn(world)
 		
 		if (stack.meta != 0 && !player.isSneaking && ASJUtilities.isServer)
