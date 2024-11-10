@@ -469,10 +469,10 @@ alfheim.page.rodRedstone0=§1红石调试杖§0是红石工程师们 无法拒�
 alfheim.page.rodRedstone1=如果持有者同时还佩戴了§1窥 §1魔之镜§0,则可以在潜行的时候 看到周围所有带有红石信号 的方块,包括被遮挡的方块.明 亮的边框意味着§4强红石信号§0, 较暗的边框表示§4弱红石信号§0, 红石信号的§4强度§0也将显示在 您目前所视的方块上.<br>译者注:本章节的的强/弱红石 信号意思是是否能够影响到 周围方块,而非实际信号强度.
 alfheim.page.rodRedstone2=展现自己!
 
-alfheim.entry.thunderChakram=雷霆飞轮
-alfheim.tagline.thunderChakram=充了电的荆棘飞轮
-alfheim.page.thunderChakram0=这把武器是§1荆棘飞轮§0的变种. 通过添加一些§1雷霆碎片§0和§1精 §1灵尘§0来为其注入雷霆的力量. §1雷霆飞轮§0虽然造成的伤害较 少,但是射程很远,甚至拥有 穿透护甲的能力.
-alfheim.page.thunderChakram1=雷神之锤青春mini版
+alfheim.entry.chakramThunder=雷霆飞轮
+alfheim.tagline.chakramThunder=充了电的荆棘飞轮
+alfheim.page.chakramThunder0=这把武器是§1荆棘飞轮§0的变种. 通过添加一些§1雷霆碎片§0和§1精 §1灵尘§0来为其注入雷霆的力量. §1雷霆飞轮§0虽然造成的伤害较 少,但是射程很远,甚至拥有 穿透护甲的能力.
+alfheim.page.chakramThunder1=雷神之锤青春mini版
 
 alfheim.entry.bud=世界树的幼芽
 alfheim.tagline.bud=那些我们不存在的地方

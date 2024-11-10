@@ -3,6 +3,7 @@ Innovations:
  Ender chakram
  Blacklist for relics protection
  Config to hide screen overlays
+ [WIP] Item Frame as block
 
 Fixes:
  Missing oredict

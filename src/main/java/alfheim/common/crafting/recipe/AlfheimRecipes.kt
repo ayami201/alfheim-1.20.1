@@ -99,6 +99,7 @@ import alfheim.common.block.AlfheimBlocks.irisWood1
 import alfheim.common.block.AlfheimBlocks.irisWood2
 import alfheim.common.block.AlfheimBlocks.irisWood3
 import alfheim.common.block.AlfheimBlocks.itemDisplay
+import alfheim.common.block.AlfheimBlocks.itemFrame
 import alfheim.common.block.AlfheimBlocks.kindling
 import alfheim.common.block.AlfheimBlocks.lightningPlanks
 import alfheim.common.block.AlfheimBlocks.lightningSapling
@@ -451,7 +452,7 @@ object AlfheimRecipes {
 	lateinit var recipeInvisibleLens: IRecipe
 	lateinit var recipeInvisibleLensUndo: IRecipe
 	lateinit var recipesItemDisplay: List<IRecipe>
-	lateinit var recipeItemHolder: IRecipe
+	lateinit var recipeItemFrame: IRecipe
 	lateinit var recipeJellybread: IRecipe
 	lateinit var recipeJellyfish: IRecipe
 	lateinit var recipeJug: IRecipe
@@ -476,6 +477,7 @@ object AlfheimRecipes {
 	lateinit var recipeLootInterceptor: IRecipe
 	lateinit var recipeLuminizer2: IRecipe
 	lateinit var recipeLuminizer3: IRecipe
+	lateinit var recipeManaAccelerator: IRecipe
 	lateinit var recipeManaInfuser: IRecipe
 	lateinit var recipeManaInfusionCore: IRecipe
 	lateinit var recipeManaMirrorImba: IRecipe
@@ -1419,7 +1421,7 @@ object AlfheimRecipes {
 						 'D', MANA_DIAMOND,
 						 'L', LIVING_ROCK,
 						 'M', MANA_PEARL)
-		recipeItemHolder = BotaniaAPI.getLatestAddedRecipe()
+		recipeManaAccelerator = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(manaInfuser),
 						 "DCD", "IRI", "SSS",
@@ -1438,9 +1440,10 @@ object AlfheimRecipes {
 						 'W', ItemStack(lens, 1, 18))
 		recipeManaMirrorImba = BotaniaAPI.getLatestAddedRecipe()
 		
-		addOreDictRecipe(ItemStack(manaReflector),
-		                 "MG ", "TMG", "DTM",
+		addOreDictRecipe(ItemStack(manaReflector, 2),
+		                 "MG ", "TDG", "DTM",
 		                 'M', MANA_STEEL,
+		                 'D', MANA_DIAMOND,
 		                 'G', manaGlass,
 		                 'T', DREAMWOOD_TWIG,
 		                 'D', DREAM_WOOD)
@@ -2358,6 +2361,9 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(ItemStack(invisibleFlameLens),
 								  ItemStack(lens, 1, 17), phantomInk)
 		recipeInvisibleLens = BotaniaAPI.getLatestAddedRecipe()
+		
+		addShapelessRecipe(ItemStack(itemFrame), item_frame, sign)
+		recipeItemFrame = BotaniaAPI.getLatestAddedRecipe()
 		
 		addShapelessRecipe(JellyBread.stack, bread, JellyBottle.stack)
 		recipeJellybread = BotaniaAPI.getLatestAddedRecipe()

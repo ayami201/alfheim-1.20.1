@@ -56,6 +56,8 @@ class EntityElvenChakram: EntityThrowable {
 				
 				t.trace = trace
 				t.index = 0
+			} else {
+				t.trace = ArrayList()
 			}
 			
 			t.startYaw = rotationYaw
