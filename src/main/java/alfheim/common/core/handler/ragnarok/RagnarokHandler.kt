@@ -158,8 +158,7 @@ object RagnarokHandler {
 				blockedPowers = oin.readObject() as BooleanArray
 			}
 		} catch (e: Throwable) {
-			ASJUtilities.error("Unable to read whole Ragnarok data. Using default values...")
-			e.printStackTrace()
+			ASJUtilities.error("Unable to read whole Ragnarok data. Using default values.", e)
 			defaultData()
 		}
 	}
@@ -293,8 +292,7 @@ object RagnarokHandler {
 				oos.writeObject(blockedPowers)
 			}
 		} catch (e: Throwable) {
-			ASJUtilities.error("Unable to save whole Ragnarok data. Discarding. Sorry :(")
-			e.printStackTrace()
+			ASJUtilities.error("Unable to save whole Ragnarok data. Discarding. Sorry :(", e)
 		}
 	}
 	

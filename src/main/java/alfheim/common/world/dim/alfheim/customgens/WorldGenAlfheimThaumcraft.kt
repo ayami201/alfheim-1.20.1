@@ -115,8 +115,7 @@ object WorldGenAlfheimThaumcraft: IWorldGenerator {
 				try {
 					WorldGenMinable(ThaumcraftAlfheimModule.alfheimThaumOre, meta, 6, ModBlocks.livingrock).generate(world, random, randPosX, randPosY, randPosZ)
 				} catch (e: Exception) {
-					ASJUtilities.error("Something went wrong while generating Thaumcraft ores in Alfheim:")
-					e.printStackTrace()
+					ASJUtilities.error("Something went wrong while generating Thaumcraft ores in Alfheim:", e)
 				}
 				
 				++i

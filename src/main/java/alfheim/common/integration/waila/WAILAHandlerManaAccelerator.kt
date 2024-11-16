@@ -11,7 +11,10 @@ import net.minecraft.util.*
 import net.minecraft.world.World
 import vazkii.botania.api.mana.IManaItem
 
-class WAILAHandlerItemHolder: IWailaDataProvider {
+object WAILAHandlerManaAccelerator: IWailaDataProvider {
+	
+	val TAG_MANA = "mana"
+	val TAG_MAX_MANA = "maxmana"
 	
 	override fun getNBTData(player: EntityPlayerMP, tile: TileEntity, result: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound {
 		if (tile is TileManaAccelerator) {
@@ -45,11 +48,5 @@ class WAILAHandlerItemHolder: IWailaDataProvider {
 	
 	override fun getWailaTail(itemStack: ItemStack, currenttip: List<String>, accessor: IWailaDataAccessor, config: IWailaConfigHandler): List<String> {
 		return currenttip
-	}
-	
-	companion object {
-		
-		val TAG_MANA = "mana"
-		val TAG_MAX_MANA = "maxmana"
 	}
 }

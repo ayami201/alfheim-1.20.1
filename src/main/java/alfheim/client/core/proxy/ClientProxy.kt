@@ -170,6 +170,7 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMuspelheimSun::class.java, RenderEntityMuspelheimSun)
 		RenderingRegistry.registerEntityRenderingHandler(EntityMuspelheimSunSlash::class.java, RenderEntityMuspelheimSunSlash)
 		RenderingRegistry.registerEntityRenderingHandler(EntityMuspelson::class.java, RenderEntityMuspelson)
+		RenderingRegistry.registerEntityRenderingHandler(EntityResonance::class.java, RenderEntityResonance)
 		RenderingRegistry.registerEntityRenderingHandler(EntityRollingMelon::class.java, RenderEntityRollingMelon)
 		RenderingRegistry.registerEntityRenderingHandler(EntityRook::class.java, RenderEntityRook)
 		RenderingRegistry.registerEntityRenderingHandler(EntitySniceBall::class.java, RenderEntitySniceBall)

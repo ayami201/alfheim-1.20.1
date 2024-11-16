@@ -313,8 +313,13 @@ class NoNetItemInWorldManager(var theWorld: World, var thisPlayerMP: NoNetFakePl
 	fun onBlockClicked(x: Int, y: Int, z: Int, side: Int): Boolean {
 		if (gameType.isAdventure && !thisPlayerMP.isCurrentToolAdventureModeExempt(x, y, z)) return false
 		
-		val event = ForgeEventFactory.onPlayerInteract(thisPlayerMP, PlayerInteractEvent.Action.LEFT_CLICK_BLOCK, x, y, z, side, theWorld)
-		if (event.isCanceled)
+		var event: PlayerInteractEvent? = null
+		
+		try_ {  // fukkit x3
+			event = ForgeEventFactory.onPlayerInteract(thisPlayerMP, PlayerInteractEvent.Action.LEFT_CLICK_BLOCK, x, y, z, side, theWorld)
+		}
+		
+		if (event?.isCanceled == true)
 			return false
 		
 		var hardness = 1f
@@ -323,7 +328,7 @@ class NoNetItemInWorldManager(var theWorld: World, var thisPlayerMP: NoNetFakePl
 		var clicked = false
 		
 		if (!block.isAir(theWorld, x, y, z)) {
-			if (event.useBlock != Event.Result.DENY) {
+			if (event?.useBlock != Event.Result.DENY) {
 				block.onBlockClicked(theWorld, x, y, z, thisPlayerMP)
 				theWorld.extinguishFire(thisPlayerMP, x, y, z, side)
 				clicked = true
@@ -332,7 +337,7 @@ class NoNetItemInWorldManager(var theWorld: World, var thisPlayerMP: NoNetFakePl
 			hardness = block.getPlayerRelativeBlockHardness(thisPlayerMP, thisPlayerMP.worldObj, x, y, z)
 		}
 		
-		if (event.useItem == Event.Result.DENY) {
+		if (event?.useItem == Event.Result.DENY) {
 			return clicked
 		}
 		

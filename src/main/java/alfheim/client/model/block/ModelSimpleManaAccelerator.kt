@@ -2,7 +2,7 @@ package alfheim.client.model.block
 
 import net.minecraft.client.model.*
 
-object ModelSimpleItemHolder: ModelBase() {
+object ModelSimpleManaAccelerator: ModelBase() {
 	
 	val shape2: ModelRenderer
 	val shape3: ModelRenderer

@@ -2,7 +2,6 @@ package alfheim.common.block
 
 import alexsocol.asjlib.safeGet
 import alfheim.client.core.helper.IconHelper
-import alfheim.client.render.tile.RenderTileTreeBerry
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileTreeBerry
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -77,7 +76,7 @@ class BlockTreeBerry(val leaves: Block, val type: Int): BlockContainerMod(Materi
 	
 	override fun renderAsNormalBlock() = false
 	
-	override fun getRenderType() = if (AlfheimConfigHandler.minimalGraphics || RenderTileTreeBerry.hasModelErrors[type] == true) 1 else -1
+	override fun getRenderType() = if (AlfheimConfigHandler.minimalGraphics || hasModelErrors[type] == true) 1 else -1
 	
 	override fun registerBlockIcons(reg: IIconRegister) {
 		icons = Array(3) { IconHelper.forBlock(reg, this, it) }
@@ -105,5 +104,10 @@ class BlockTreeBerry(val leaves: Block, val type: Int): BlockContainerMod(Materi
 	
 	override fun getDrops(world: World, x: Int, y: Int, z: Int, metadata: Int, fortune: Int): ArrayList<ItemStack> {
 		return arrayListOf(ItemStack(getItemDropped(metadata, world.rand, fortune) ?: return arrayListOf(), quantityDropped(metadata, fortune, world.rand), damageDropped(metadata)))
+	}
+	
+	companion object {
+		// this is here and not in render class for it to be safely got in `getRenderType`
+		val hasModelErrors = hashMapOf(0 to true, 1 to true, 5 to true)
 	}
 }

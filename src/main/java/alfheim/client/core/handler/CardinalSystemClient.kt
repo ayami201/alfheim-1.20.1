@@ -30,8 +30,7 @@ object CardinalSystemClient {
 			return try {
 				PlayerSegmentClient.coolDown[spell.name] ?: 0
 			} catch (e: Throwable) {
-				ASJUtilities.error("Something went wrong getting cooldown for $spell. Returning 0.")
-				e.printStackTrace()
+				ASJUtilities.error("Something went wrong getting cooldown for $spell. Returning 0.", e)
 				0
 			}
 		}
@@ -44,8 +43,7 @@ object CardinalSystemClient {
 				}
 				if (PlayerSegmentClient.init > 0) --PlayerSegmentClient.init
 			} catch (e: Throwable) {
-				System.err.println("Something went wrong ticking spells. Skipping this tick.")
-				e.printStackTrace()
+				ASJUtilities.error("Something went wrong ticking spells. Skipping this tick.", e)
 			}
 		}
 	}

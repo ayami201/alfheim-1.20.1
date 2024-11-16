@@ -1,7 +1,7 @@
 package alfheim.common.block.magtrees.lightning
 
 import alfheim.common.block.base.BlockModRotatedPillar
-import alfheim.common.block.tile.TileLightningRod
+import alfheim.common.block.tile.TileLightningTreeTop
 import alfheim.common.item.block.ItemBlockLeavesMod
 import alfheim.common.lexicon.AlfheimLexiconData
 import cpw.mods.fml.common.registry.GameRegistry
@@ -49,7 +49,7 @@ class BlockLightningWood: BlockModRotatedPillar(Material.wood), ITileEntityProvi
 		return tileentity?.receiveClientEvent(event, eventArg) ?: false
 	}
 	
-	override fun createNewTileEntity(world: World?, meta: Int) = TileLightningRod()
+	override fun createNewTileEntity(world: World?, meta: Int) = TileLightningTreeTop()
 	
 	fun isHeartWood(meta: Int) = meta and 3 == 1
 	

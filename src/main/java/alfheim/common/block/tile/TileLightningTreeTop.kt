@@ -10,7 +10,7 @@ import net.minecraft.entity.effect.EntityLightningBolt
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 
-class TileLightningRod: TileEntity() {
+class TileLightningTreeTop: TileEntity() {
 	
 	companion object {
 		
@@ -31,7 +31,7 @@ class TileLightningRod: TileEntity() {
 		fun removeLightnings(e: TickEvent, world: World) {
 			if (e.phase != Phase.START || world.weatherEffects.isEmpty()) return
 			
-			val rods = world.loadedTileEntityList.filterIsInstance<TileLightningRod>()
+			val rods = world.loadedTileEntityList.filterIsInstance<TileLightningTreeTop>()
 			if (rods.isEmpty()) return
 			
 			val newLightnings = ArrayList<FakeLightning>()

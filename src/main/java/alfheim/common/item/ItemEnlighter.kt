@@ -70,7 +70,10 @@ class ItemEnlighter: ItemMod("Enlighter"), IManaUsingItem {
 		ManaItemHandler.requestManaExactForTool(stack, entity, ItemRodPrismatic.COST, true)
 		
 		val tile = world.getTileEntity(x, y, z)
-		if (tile is TileRainbowManaFlame) tile.invisible = true
+		if (tile is TileRainbowManaFlame) {
+			tile.invisible = true
+			tile.timer = 6000
+		}
 	}
 	
 	override fun usesMana(stack: ItemStack) = stack.meta == 1

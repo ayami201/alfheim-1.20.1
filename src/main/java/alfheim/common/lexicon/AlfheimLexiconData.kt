@@ -151,6 +151,7 @@ object AlfheimLexiconData {
 	lateinit var flowerRattlerose: LexiconEntry
 	lateinit var reality: LexiconEntry
 	lateinit var redstoneRelay: LexiconEntry
+	lateinit var resonator: LexiconEntry
 	lateinit var ringsAura: LexiconEntry
 	lateinit var ringAnomaly: LexiconEntry
 	lateinit var ringDodge: LexiconEntry
@@ -329,6 +330,7 @@ object AlfheimLexiconData {
 		rainbowFlora = AlfheimLexiconEntry("rainbowFlora", categoryAlfheim)
 		reality = AlfheimLexiconEntry("reality", categoryAlfheim)
 		redstoneRelay = AlfheimLexiconEntry("redstoneRelay", categoryAlfheim)
+		resonator = AlfheimLexiconEntry("resonator", categoryAlfheim)
 		ringsAura = AlfheimLexiconEntry("auraAlf", categoryAlfheim)
 		ringAnomaly = AlfheimLexiconEntry("anomaRing", categoryAlfheim)
 		ringDodge = AlfheimLexiconEntry("dodgRing", categoryAlfheim)
@@ -791,6 +793,8 @@ object AlfheimLexiconData {
 		reality.setLexiconPages(PageText("0"), PageText("1"), PageCraftingRecipe("2", AlfheimRecipes.recipeSword))
 		
 		redstoneRelay.setLexiconPages(PageText("0"), PageText("1"), PageManaInfusionRecipe("2", AlfheimRecipes.recipeRedstoneRelay))
+		
+		resonator.setLexiconPages(*Array(5) { PageText("$it") }, PageCraftingRecipe("5", AlfheimRecipes.recipeResonator))
 		
 		ringsAura.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeAuraRingPink), PageCraftingRecipe("2", AlfheimRecipes.recipeAuraRingElven), PageCraftingRecipe("3", AlfheimRecipes.recipeAuraRingGod)).icon = ItemStack(AlfheimItems.auraRingElven)
 		

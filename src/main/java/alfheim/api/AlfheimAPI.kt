@@ -26,7 +26,7 @@ object AlfheimAPI {
 	val fenrirArmor = EnumHelper.addArmorMaterial("ALFHEIM_FENRIR", 32, intArrayOf(3, 7, 6, 2), 15)!!
 	
 	val elvoriumToolMaterial = EnumHelper.addToolMaterial("ALFHEIM_ELVORIUM", 4, 2400, 9.5f, 3f, 30)!!
-	val mauftriumToolmaterial = EnumHelper.addToolMaterial("ALFHEIM_MAUFTRIUM", 10, 3000, 3f, 8f, 40)!!
+	val mauftriumToolMaterial = EnumHelper.addToolMaterial("ALFHEIM_MAUFTRIUM", 10, 3000, 3f, 8f, 40)!!
 	
 	// relic
 	val EXCALIBER = EnumHelper.addToolMaterial("ALFHEIM_EXCALIBER", 3, -1, 6.2f, 6f, 40)!!

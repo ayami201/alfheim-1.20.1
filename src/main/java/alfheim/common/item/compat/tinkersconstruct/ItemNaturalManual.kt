@@ -99,7 +99,7 @@ class ItemNaturalManual: ItemMod("NaturalManual") {
 				doc.documentElement.normalize()
 				doc
 			} catch (e: Exception) {
-				e.printStackTrace()
+				ASJUtilities.error("Error reading manual data:", e)
 				null
 			}
 		}

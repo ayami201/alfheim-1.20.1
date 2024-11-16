@@ -6,7 +6,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.*
+import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.item.*
@@ -85,7 +85,6 @@ class ItemArmilla: ItemMod("Armilla") {
 		MultiblockRenderHandler.setMultiblock(mb.makeSet())
 		MultiblockRenderHandler.anchor = ChunkCoordinates(x, y, z)
 	}
-	
 	
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
 		Botania.proxy.removeSextantMultiblock()

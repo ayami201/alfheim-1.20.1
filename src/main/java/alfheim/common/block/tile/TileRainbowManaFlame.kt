@@ -19,12 +19,17 @@ open class TileRainbowManaFlame: TileManaFlame() {
 	var invisible = false
 	var soul = false
 	var exit = false
+	var timer = -1
 	
 	init {
 		color = -1
 	}
 	
 	override fun updateEntity() {
+		if (timer != -1) {
+			if (--timer <= 0) worldObj.setBlockToAir(xCoord, yCoord, zCoord)
+		}
+		
 		if (!shouldRender()) return
 		
 		if (soul) {
@@ -49,16 +54,18 @@ open class TileRainbowManaFlame: TileManaFlame() {
 	
 	override fun writeCustomNBT(nbt: NBTTagCompound) {
 		super.writeCustomNBT(nbt)
-		nbt.setBoolean(TAG_SOUL, soul)
 		if (exit) nbt.setBoolean(TAG_EXIT, true)
 		nbt.setBoolean(TAG_INVISIBLE, invisible)
+		nbt.setBoolean(TAG_SOUL, soul)
+		nbt.setInteger(TAG_TIMER, timer)
 	}
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
 		super.readCustomNBT(nbt)
-		soul = nbt.getBoolean(TAG_SOUL)
 		exit = nbt.getBoolean(TAG_EXIT)
 		invisible = nbt.getBoolean(TAG_INVISIBLE)
+		soul = nbt.getBoolean(TAG_SOUL)
+		timer = nbt.getInteger(TAG_TIMER)
 	}
 	
 	override fun getColor(): Int {
@@ -78,8 +85,9 @@ open class TileRainbowManaFlame: TileManaFlame() {
 	fun shouldRender() = ASJUtilities.isClient && (Botania.proxy.isClientPlayerWearingMonocle || !invisible)
 	
 	companion object {
-		private val TAG_SOUL = "soul"
-		private val TAG_EXIT = "exit"
-		private val TAG_INVISIBLE = "invisible"
+		private const val TAG_EXIT = "exit"
+		private const val TAG_INVISIBLE = "invisible"
+		private const val TAG_SOUL = "soul"
+		private const val TAG_TIMER = "timer"
 	}
 }

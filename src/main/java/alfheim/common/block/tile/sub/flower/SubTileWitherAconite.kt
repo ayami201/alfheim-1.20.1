@@ -40,11 +40,10 @@ class SubTileWitherAconite: SubTileGenerating() {
 			val stack = item.entityItem ?: continue
 			if (stack.item !== Items.nether_star || stack.stackSize <= 0) continue
 			
-			burnTime = 5000
-			
 			if (supertile.worldObj.isRemote) {
 				supertile.worldObj.spawnParticle("iconcrack_399_0", supertile.xCoord + 0.4 + Math.random() * 0.2, supertile.yCoord + 0.65, supertile.zCoord + 0.4 + Math.random() * 0.2, 0.0, 0.0, 0.0)
 			} else {
+				burnTime = 5000
 				stack.stackSize--
 				supertile.worldObj.playSoundEffect(supertile.xCoord.toDouble(), supertile.yCoord.toDouble(), supertile.zCoord.toDouble(), "botania:endoflame", 0.2f, 1f)
 				if (stack.stackSize == 0) item.setDead()

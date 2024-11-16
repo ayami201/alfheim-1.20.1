@@ -4,7 +4,7 @@ import alexsocol.asjlib.asm.ASJASM
 import alexsocol.patcher.asm.ASJHookLoader
 import alexsocol.patcher.asm.worker.InterfaceAppenderWorker.registerAdditionalInterface
 import alfheim.api.ModInfo
-import alfheim.common.core.asm.transformer.*
+import alfheim.common.core.asm.transformer.AlfheimClassTransformer
 import alfheim.common.core.handler.AlfheimConfigHandler
 import com.KAIIIAK.classManipulators.HookReplacerWorker.registerHookReplacerContainer
 import com.KAIIIAK.superwrapper.SuperWrapperTransformer
@@ -26,7 +26,7 @@ class AlfheimHookLoader: HookLoader() {
 		AlfheimConfigHandler.loadConfig(File("config/Alfheim/Alfheim.cfg"))
 	}
 	
-	override fun getASMTransformerClass() = arrayOf(AlfheimClassTransformer::class.java.name, BotaniaVisDiscountTransformer::class.java.name)
+	override fun getASMTransformerClass() = arrayOf(AlfheimClassTransformer::class.java.name)
 	
 	override fun registerHooks() {
 		FMLRelaunchLog.info("[${ModInfo.MODID.uppercase()}] Loaded coremod. Registering hooks...")
@@ -76,5 +76,9 @@ class AlfheimHookLoader: HookLoader() {
 		registerAdditionalInterface("thaumcraft/common/entities/monster/EntityWisp", "alfheim/common/core/helper/IElementalEntity")
 		registerAdditionalInterface("vazkii/botania/common/item/equipment/bauble/ItemAuraRing", "vazkii/botania/api/mana/IManaItem")
 		registerAdditionalInterface("vazkii/botania/common/item/relic/ItemAesirRing", "alfheim/api/item/IStepupItem")
+		
+		registerAdditionalInterface("vazkii.botania.common.item.interaction.thaumcraft.ItemElementiumHelmRevealing", "thaumcraft/api/IVisDiscountGear")
+		registerAdditionalInterface("vazkii.botania.common.item.interaction.thaumcraft.ItemManasteelHelmRevealing", "thaumcraft/api/IVisDiscountGear")
+		registerAdditionalInterface("vazkii.botania.common.item.interaction.thaumcraft.ItemTerrasteelHelmRevealing", "thaumcraft/api/IVisDiscountGear")
 	}
 }

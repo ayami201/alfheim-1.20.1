@@ -322,10 +322,9 @@ open class TileSchemaController: TileEntity() {
 			dumpTo(e)
 			
 			ASJUtilities.say(player, "Schema dumped to: ${e.path}")
-		} catch (var2: Exception) {
+		} catch (e: Exception) {
 			ASJUtilities.say(player, "Error dumping schema")
-			ASJUtilities.error("Error dumping schema: ${var2.message}")
-			var2.printStackTrace()
+			ASJUtilities.error("Error dumping schema:", e)
 		}
 	}
 	

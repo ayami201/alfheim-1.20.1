@@ -121,8 +121,7 @@ class ItemRodPortal: ItemMod("rodPortal") {
 				try {
 					CommandDimTP.processCommand(player, arrayOf(pair.second.toString()))
 				} catch (e: Throwable) {
-					ASJUtilities.error("Error trying to send ${player.commandSenderName} to ${pair.second}: ${e.message}")
-					e.printStackTrace()
+					ASJUtilities.error("Error trying to send ${player.commandSenderName} to ${pair.second}:", e)
 				}
 				
 				break

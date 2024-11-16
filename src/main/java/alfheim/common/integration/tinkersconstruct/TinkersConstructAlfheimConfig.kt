@@ -37,7 +37,7 @@ object TinkersConstructAlfheimConfig {
 		addMaterial(materialIDs[ELEMENTIUM], "Elementium", BotaniaAPI.elementiumToolMaterial, 1.4f, Color(0xDC6DF2).rgb, EnumChatFormatting.LIGHT_PURPLE.toString(), 52, 5.3f, 3.1f, 0.9f, 1)
 		addMaterial(materialIDs[ELVORIUM], "Elvorium", AlfheimAPI.elvoriumToolMaterial, 2.4f, Color(0xE58A2E).rgb, EnumChatFormatting.GOLD.toString(), 58, 5.5f, 3.5f, 2.8f, 2)
 		addMaterial(materialIDs[MANASTEEL], "Manasteel", BotaniaAPI.manasteelToolMaterial, 1.2f, Color(0x4C9ED9).rgb, EnumChatFormatting.AQUA.toString(), 56, 5.1f, 3.0f, 0.7f, 1)
-		addMaterial(materialIDs[MAUFTRIUM], "Mauftrium", AlfheimAPI.mauftriumToolmaterial, 4.5f, Color(0xFFC713).rgb, EnumChatFormatting.YELLOW.toString(), 64, 5.6f, 4.0f, 3.6f, 3)
+		addMaterial(materialIDs[MAUFTRIUM], "Mauftrium", AlfheimAPI.mauftriumToolMaterial, 4.5f, Color(0xFFC713).rgb, EnumChatFormatting.YELLOW.toString(), 64, 5.6f, 4.0f, 3.6f, 3)
 		addMaterial(materialIDs[TERRASTEEL], "Terrasteel", BotaniaAPI.terrasteelToolMaterial, 2.2f, Color(0x52CC29).rgb, EnumChatFormatting.GREEN.toString(), 60, 5.4f, 3.8f, 2.5f, 1)
 		
 		addSmelteryMeltCastGroup(materialIDs[ELEMENTIUM], TinkersConstructAlfheimModule.liquidElementium, ModBlocks.storage, 2, ModItems.manaResource, 7, ModItems.manaResource, 19)

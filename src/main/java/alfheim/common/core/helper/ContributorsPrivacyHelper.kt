@@ -123,7 +123,7 @@ object HashHelper {
 				val md = MessageDigest.getInstance("SHA-256")
 				return HexBinaryAdapter().marshal(md.digest(salt(str, salt).toByteArray(Charset.forName("UTF-8"))))
 			} catch (e: NoSuchAlgorithmException) {
-				e.printStackTrace()
+				ASJUtilities.error("Hashing error:", e)
 			}
 		
 		return ""

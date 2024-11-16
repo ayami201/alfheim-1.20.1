@@ -51,6 +51,8 @@ class EntityGleipnir: Entity {
 		targets.forEach { it.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDEternity, 5, PotionEternity.STUN or PotionEternity.IRREMOVABLE)) }
 	}
 	
+	override fun setFire(time: Int) = Unit
+	
 	override fun entityInit() = Unit
 	
 	override fun writeEntityToNBT(nbt: NBTTagCompound) {

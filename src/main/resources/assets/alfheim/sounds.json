@@ -92,6 +92,24 @@
 			}
 		]
 	},
+	"resonator.blast": {
+		"category": "player",
+		"sounds": [
+			{
+				"name": "resonatorBlast", 
+				"stream": false
+			}
+		]
+	},
+	"resonator.fire": {
+		"category": "player",
+		"sounds": [
+			{
+				"name": "resonatorFire", 
+				"stream": false
+			}
+		]
+	},
 	"quad": {
 		"category": "player",
 		"sounds": [

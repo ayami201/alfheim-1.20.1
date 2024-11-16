@@ -485,16 +485,13 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 					fr.close()
 					throw e
 				}
-				
 			}
 			br.close()
 			fr.close()
 		} catch (e: IOException) {
-			System.err.println("Unable to read Alfheim Coords data. Creating default...")
-			e.printStackTrace()
+			ASJUtilities.error("Unable to read Alfheim Coords data. Creating default.", e)
 			makeDefaultWorldCoords(file)
 		}
-		
 	}
 	
 	private fun makeDefaultWorldCoords(file: File) {
@@ -524,8 +521,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 			fw.write("$s")
 			fw.close()
 		} catch (e: IOException) {
-			ASJUtilities.error("Unable to generate default Alfheim Coords data. Setting all to [0, 300, 0]...")
-			e.printStackTrace()
+			ASJUtilities.error("Unable to generate default Alfheim Coords data. Setting all to [0, 300, 0]...", e)
 			
 			for (i in zones.indices) {
 				zones[i] = Vector3(0, 300, 0)

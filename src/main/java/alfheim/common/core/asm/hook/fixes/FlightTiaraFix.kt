@@ -48,7 +48,7 @@ object FlightTiaraFix {
 				}
 				return ret.toString()
 			} catch (e: NoSuchAlgorithmException) {
-				e.printStackTrace()
+				ASJUtilities.error("Hashing error:", e)
 			}
 		}
 		return ""

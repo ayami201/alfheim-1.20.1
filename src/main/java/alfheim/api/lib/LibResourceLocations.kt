@@ -111,6 +111,8 @@ object LibResourceLocations {
 	val poolBlue = ResourceLocationIL(ModInfo.MODID, "textures/blocks/PoolBlue.png")
 	val poolPink = ResourceLocationIL(ModInfo.MODID, "textures/blocks/PoolPink.png")
 	val rationBelt = ResourceLocationIL(ModInfo.MODID, "textures/model/armor/rationBelt.png")
+	val resonance1 = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/Resonance1.png")
+	val resonance2 = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/Resonance2.png")
 	val rollingMelon = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/WaterMelon.png")
 	val rollingMelonLava = if (ASJUtilities.isServer) ResourceLocation("textures/entity/steve.png") else ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/LavaMelon.png")
 	val rook = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Rook.png")

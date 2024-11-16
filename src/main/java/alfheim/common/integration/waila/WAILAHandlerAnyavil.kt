@@ -9,7 +9,9 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 
-class WAILAHandlerAnyavil: IWailaDataProvider {
+object WAILAHandlerAnyavil: IWailaDataProvider {
+	
+	private val TAG_ITEM = "waila:item"
 	
 	override fun getNBTData(player: EntityPlayerMP, tile: TileEntity, result: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound {
 		if (tile is TileAnyavil) {
@@ -41,10 +43,5 @@ class WAILAHandlerAnyavil: IWailaDataProvider {
 	
 	override fun getWailaTail(itemStack: ItemStack, currenttip: List<String>, accessor: IWailaDataAccessor, config: IWailaConfigHandler): List<String> {
 		return currenttip
-	}
-	
-	companion object {
-		
-		private val TAG_ITEM = "waila:item"
 	}
 }

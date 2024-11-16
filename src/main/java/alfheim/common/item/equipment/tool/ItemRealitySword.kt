@@ -24,7 +24,7 @@ import vazkii.botania.api.mana.*
 import vazkii.botania.common.core.helper.ItemNBTHelper.*
 import kotlin.math.*
 
-class ItemRealitySword: ItemSword(AlfheimAPI.mauftriumToolmaterial), IManaUsingItem, IElementalItem {
+class ItemRealitySword: ItemSword(AlfheimAPI.mauftriumToolMaterial), IManaUsingItem, IElementalItem {
 	
 	lateinit var textures: Array<IIcon>
 	

@@ -21,6 +21,8 @@ class BlockCorporeaSparkBase: BlockContainerMod(Material.iron) {
 	
 	override fun isOpaqueCube() = false
 	
+	override fun renderAsNormalBlock() = false
+	
 	override fun registerBlockIcons(reg: IIconRegister) {
 		blockIcon = IconHelper.forBlock(reg, this)
 		sideIcon = IconHelper.forBlock(reg, this, "Side")

@@ -49,8 +49,7 @@ class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 //				for (s in ASJUtilities.toString(nbt).split("\n")) ASJUtilities.chatLog(s, world)
 //			}
 		} catch (e: Throwable) {
-			ASJUtilities.log("Oops!")
-			e.printStackTrace()
+			ASJUtilities.error("Oops!", e)
 		}
 		
 		return false

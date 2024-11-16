@@ -4,7 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.TileItemContainer
 import alfheim.api.ModInfo
 import alfheim.api.lib.LibResourceLocations
-import alfheim.client.model.block.ModelSimpleItemHolder
+import alfheim.client.model.block.ModelSimpleManaAccelerator
 import alfheim.common.block.tile.TileManaAccelerator
 import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
@@ -22,7 +22,7 @@ object RenderTileManaAccelerator: TileEntitySpecialRenderer() {
 	
 	val rand = Random()
 	val model = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/holder.obj"))!!
-	val modelSimple = ModelSimpleItemHolder
+	val modelSimple = ModelSimpleManaAccelerator
 	
 	override fun renderTileEntityAt(tile: TileEntity, x: Double, y: Double, z: Double, partialTicks: Float) {
 		if (tile !is TileManaAccelerator) return

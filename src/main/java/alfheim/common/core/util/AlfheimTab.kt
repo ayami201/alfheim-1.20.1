@@ -273,6 +273,7 @@ import alfheim.common.item.AlfheimItems.priestRingSif
 import alfheim.common.item.AlfheimItems.ragnarokEmblem
 import alfheim.common.item.AlfheimItems.rationBelt
 import alfheim.common.item.AlfheimItems.realitySword
+import alfheim.common.item.AlfheimItems.resonator
 import alfheim.common.item.AlfheimItems.ringFeedFlower
 import alfheim.common.item.AlfheimItems.ringSpider
 import alfheim.common.item.AlfheimItems.rodBlackHole
@@ -479,6 +480,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(corporeaRat)
 		addItem(livingrockPickaxe)
 		addItem(terraHoe)
+		addItem(resonator)
 		addItem(elvenChakram)
 		
 		addItem(elementalHelmet)

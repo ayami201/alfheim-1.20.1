@@ -127,6 +127,7 @@ object AlfheimItems {
 	val ragnarokEmblemF: Item
 	val rationBelt: Item
 	val realitySword: Item
+	val resonator: Item
 	val ringFeedFlower: Item
 	val ringSpider: Item
 	val rodBlackHole: Item
@@ -272,6 +273,7 @@ object AlfheimItems {
 		ragnarokEmblemF = ItemRagnarokEmblemF()
 		rationBelt = ItemRationBelt()
 		realitySword = ItemRealitySword()
+		resonator = ItemResonator()
 		ringFeedFlower = ItemFeedFlowerRing()
 		ringSpider = ItemSpiderRing()
 		rodBlackHole = ItemRodBlackHole()

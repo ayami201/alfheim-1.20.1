@@ -280,6 +280,7 @@ import alfheim.common.item.AlfheimItems.priestRingNjord
 import alfheim.common.item.AlfheimItems.priestRingSif
 import alfheim.common.item.AlfheimItems.rationBelt
 import alfheim.common.item.AlfheimItems.realitySword
+import alfheim.common.item.AlfheimItems.resonator
 import alfheim.common.item.AlfheimItems.ringFeedFlower
 import alfheim.common.item.AlfheimItems.ringSpider
 import alfheim.common.item.AlfheimItems.rodBlackHole
@@ -342,6 +343,7 @@ import vazkii.botania.common.block.ModFluffBlocks.*
 import vazkii.botania.common.block.tile.mana.TilePool
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.crafting.*
+import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.item.ModItems.*
 import vazkii.botania.common.lib.LibOreDict.*
 import net.minecraft.init.Items.dye as justDye
@@ -514,6 +516,7 @@ object AlfheimRecipes {
 	lateinit var recipesRealmFrame: List<IRecipe>
 	lateinit var recipesRedstoneRoot: List<IRecipe>
 	lateinit var recipeRelicCleaner: IRecipe
+	lateinit var recipeResonator: IRecipe
 	lateinit var recipeRingFeedFlower: IRecipe
 	lateinit var recipeRingSpider: IRecipe
 	lateinit var recipeRodBlackhole: IRecipe
@@ -1076,6 +1079,17 @@ object AlfheimRecipes {
 						 'C', ItemStack(spellCloth, 1, WILDCARD_VALUE))
 		recipeRelicCleaner = BotaniaAPI.getLatestAddedRecipe()
 		
+		addOreDictRecipe(ItemStack(resonator),
+		                 "MEC", "VDE", "LB ",
+		                 'M', MAUFTRIUM_INGOT,
+		                 'E', ELVORIUM_INGOT,
+		                 'C', ModItems.cacophonium,
+		                 'V', lever,
+		                 'D', DREAMWOOD_TWIG,
+		                 'L', LIVINGWOOD_TWIG,
+		                 'B', wooden_button)
+		recipeResonator = BotaniaAPI.getLatestAddedRecipe()
+		
 		addOreDictRecipe(ManaInfusionCore.stack,
 						 "PGP", "GDG", "PGP",
 						 'D', PIXIE_DUST,
@@ -1197,7 +1211,7 @@ object AlfheimRecipes {
 						 "GGG", "GSG", "EEE",
 						 'G', managlassPane,
 						 'S', starPlacer2,
-						 'E', ELVORIUM_NUGGET)
+						 'E', ELVORIUM_INGOT)
 		recipeEnlighter = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(flowerBag),
@@ -1441,12 +1455,12 @@ object AlfheimRecipes {
 		recipeManaMirrorImba = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(manaReflector, 2),
-		                 "MG ", "TDG", "DTM",
+		                 "MG ", "TDG", "WTM",
 		                 'M', MANA_STEEL,
 		                 'D', MANA_DIAMOND,
 		                 'G', manaGlass,
 		                 'T', DREAMWOOD_TWIG,
-		                 'D', DREAM_WOOD)
+		                 'W', DREAM_WOOD)
 		recipeManaReflector = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(manaRingElven),

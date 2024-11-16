@@ -423,7 +423,7 @@ object VisualEffectHandlerClient {
 	fun spawnSmoke(x: Double, y: Double, z: Double) {
 		for (i in 0..255) {
 			v.rand().sub(0.5).normalize().mul(Math.random() * SpellSmokeScreen.radius)
-			Botania.proxy.wispFX(mc.theWorld, x + v.x, y + v.y, z + v.z, 0.1f, 0.1f, 0.1f, (Math.random() * 4 + 4).F, (Math.random() * -0.075).F)
+			Botania.proxy.wispFX(mc.theWorld, x + v.x, y + v.y, z + v.z, 0.1f, 0.1f, 0.1f, (Math.random() * 4 + 4).F, (Math.random() * -0.075).F, 10f)
 		}
 	}
 	

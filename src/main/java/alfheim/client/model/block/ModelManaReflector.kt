@@ -69,7 +69,10 @@ object ModelManaReflector: ModelBase() {
 		shape7.render(f5)
 		shape8.render(f5)
 		shape12.render(f5)
+		
+		glDisable(GL_CULL_FACE)
 		shape21.render(f5)
+		glEnable(GL_CULL_FACE)
 		
 		glPushMatrix()
 		mc.renderEngine.bindTexture(LibResourceLocations.manaReflectorMirror)

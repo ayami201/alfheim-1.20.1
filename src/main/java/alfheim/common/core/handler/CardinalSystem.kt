@@ -62,8 +62,7 @@ object CardinalSystem {
 				TimeStopSystem.tsAreas = ois.readObject() as HashMap<Int, LinkedList<TimeStopSystem.TimeStopArea>>
 			}
 		} catch (e: Throwable) {
-			ASJUtilities.error("Unable to read whole Cardinal System data. Generating default values...")
-			e.printStackTrace()
+			ASJUtilities.error("Unable to read whole Cardinal System data. Generating default values.", e)
 			playerSegments = HashMap()
 			TimeStopSystem.tsAreas = HashMap()
 		}
@@ -94,8 +93,7 @@ object CardinalSystem {
 				oos.writeObject(TimeStopSystem.tsAreas)
 			}
 		} catch (e: Throwable) {
-			ASJUtilities.error("Unable to save whole Cardinal System data. Discarding. Sorry :(")
-			e.printStackTrace()
+			ASJUtilities.error("Unable to save whole Cardinal System data. Discarding. Sorry :(", e)
 		}
 	}
 	
@@ -265,8 +263,7 @@ object CardinalSystem {
 			return try {
 				forPlayer(caster).coolDown[spell.name] ?: 0
 			} catch (e: Throwable) {
-				ASJUtilities.error(String.format("Something went wrong getting cooldown for %s. Returning 0.", spell))
-				e.printStackTrace()
+				ASJUtilities.error("Something went wrong getting cooldown for $spell. Returning 0.", e)
 				0
 			}
 		}
@@ -301,8 +298,7 @@ object CardinalSystem {
 					}
 				}
 			} catch (e: Throwable) {
-				ASJUtilities.error("Something went wrong ticking spells. Skipping this tick. Caused by: ${e.message}")
-				e.printStackTrace()
+				ASJUtilities.error("Something went wrong ticking spells. Skipping this tick.", e)
 			}
 		}
 		

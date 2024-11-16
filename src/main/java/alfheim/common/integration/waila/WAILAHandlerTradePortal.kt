@@ -12,7 +12,7 @@ import net.minecraft.world.World
 import net.minecraftforge.oredict.OreDictionary
 import vazkii.botania.api.BotaniaAPI
 
-class WAILAHandlerTradePortal: IWailaDataProvider {
+object WAILAHandlerTradePortal: IWailaDataProvider {
 	
 	override fun getNBTData(player: EntityPlayerMP, tile: TileEntity, result: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound {
 		if (tile is TileTradePortal) {

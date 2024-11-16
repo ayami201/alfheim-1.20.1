@@ -356,6 +356,15 @@ alfheim.page.redstoneRelay0=As seen with &1Force Relay&0, infusing redstone-powe
 alfheim.page.redstoneRelay1=As long as this block receives a redstone signal, it will send it to the block it's bound to, on any distance, and saving the input signal level and type.<br>To bind it to a block, sneak-rightclick it with a &1Wand of the Forest&0, and sneak-rightclick on the block you want to bind it to.
 alfheim.page.redstoneRelay2=But where is a receiver?
 
+alfheim.entry.resonator=Resonator
+alfheim.tagline.resonator=Creates a field that destroys blocks or deals damage.
+alfheim.page.resonator0=The tenth broken pickaxe in a row was the last straw. To overcome the endless layers of &1livingrock&0 in search of rare earth treasures, something on a different level of technological development is required. The tool, called the &1Resonator&0, was the result of long research and many expended resources.
+alfheim.page.resonator1=This portable device creates fields of some energy that resonates in space and explodes after some time. The resonance field causes significant damage to everything that was inside it during the explosion, be it rock or a living being. If there were any blocks nearby at the time of the explosion, the field can "jump" to them.
+alfheim.page.resonator2=The origin and principle of operation of these fields are still not entirely clear, but they somehow strangely... fluctuate. Well, even such a limited understanding of the Resonator's structure did not prevent it from being endowed with several operating (switched with rightclick) and targeting (switched with sneak-rightclick) modes:
+alfheim.page.resonator3=Automatic detonation - the resonance field explodes 2 seconds after creation.<br>Manual detonation - the resonance field lasts longer.<br>Resonance matrix - the resonance field explodes when it collides with someone (or something).
+alfheim.page.resonator4=Free targeting - the resonance field can spread to any near blocks.<br>Semi-targeting - the resonance field will spread to similar blocks, ignoring the meta.<br>Full lock-on - the resonance field will only spread to identical blocks.
+alfheim.page.resonator5=It's definitely magic
+
 alfheim.entry.ruling=Power of other worlds
 alfheim.tagline.ruling=I'm Bruce Almighty
 alfheim.page.ruling0=Muspelheim and Niflheim... Two primordial worlds. What can we squeeze out of them? Power! More power! It all started with some essences and runes, but what can we get now? Rods! Amulets! Power!

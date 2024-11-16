@@ -1,9 +1,11 @@
 package alfheim.common.core.asm.transformer
 
 import alexsocol.patcher.asm.ASJHookLoader.Companion.OBF
+import alexsocol.patcher.asm.transformer.ASJAbstractClassTransformer
+import alfheim.api.ModInfo
 import alfheim.common.core.asm.hook.extender.ItemLensExtender
 import alfheim.common.core.handler.AlfheimConfigHandler
-import net.minecraft.launchwrapper.IClassTransformer
+import gloomyfolken.hooklib.asm.HookLogger.SystemOutLogger
 import org.lwjgl.opengl.GL11
 import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.*
@@ -12,41 +14,11 @@ import vazkii.botania.api.subtile.SubTileEntity
 import vazkii.botania.common.block.tile.TileSpecialFlower
 
 @Suppress("NAME_SHADOWING", "ClassName", "unused", "LocalVariableName", "PrivatePropertyName")
-class AlfheimClassTransformer: IClassTransformer {
+class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 	
-	val additionalInterfaces = mapOf(
-		"net.minecraft.entity.monster.EntityCreeper" to setOf("alfheim/common/core/helper/IElementalEntity"),
-		"net.minecraft.entity.monster.EntitySkeleton" to setOf("alfheim/common/core/helper/IElementalEntity"),
-		"thaumcraft.common.entities.golems.EntityGolemBase" to setOf("alfheim/common/core/helper/IElementalEntity"),
-		"thaumcraft.common.entities.monster.EntityWisp" to setOf("alfheim/common/core/helper/IElementalEntity"),
-		"vazkii.botania.common.item.equipment.bauble.ItemAuraRing" to setOf("vazkii/botania/api/mana/IManaItem"),
-		"vazkii.botania.common.item.relic.ItemAesirRing" to setOf("alfheim/api/item/IStepupItem"),
-									)
+	override val logger = SystemOutLogger(ModInfo.MODID)
 	
-	/** name for logging */
-	var transformedName = ""
-	var basicClass = byteArrayOf()
-	
-	override fun transform(name: String, transformedName: String, basicClass: ByteArray?): ByteArray? {
-		if (basicClass == null || basicClass.isEmpty()) return basicClass
-		
-		this.transformedName = transformedName
-		this.basicClass = basicClass
-		
-		additionalInterfaces[transformedName]?.let { iface ->
-			println("Appending interface(s) $iface to $transformedName")
-			val cr = ClassReader(basicClass)
-			val cw = ClassWriter(ClassWriter.COMPUTE_MAXS)
-			
-			val cn = ClassNode()
-			cr.accept(cn, ClassReader.EXPAND_FRAMES)
-			
-			cn.interfaces.addAll(iface)
-			
-			cn.accept(cw)
-			this.basicClass = cw.toByteArray()
-		}
-		
+	override fun transform(transformedName: String, basicClass: ByteArray): ByteArray {
 		return when (transformedName) {
 			"net.minecraft.client.renderer.RenderGlobal"                       -> core { `RenderGlobal$ClassVisitor`(it) }
 			"net.minecraft.entity.EntityLivingBase"                            -> core { `EntityLivingBase$ClassVisitor`(it) }
@@ -61,7 +33,6 @@ class AlfheimClassTransformer: IClassTransformer {
 			
 			"vazkii.botania.common.block.decor.IFloatingFlower\$IslandType"    -> tree {
 				if (OBF || it.methods.any { m -> m.name == "getColor" && m.desc == "()I"}) return@tree
-				println("Transforming $transformedName")
 				
 				val mn = MethodNode(ACC_PUBLIC, "getColor", "()I", null, null)
 				mn.instructions.add(LdcInsnNode(Integer(16777215)))
@@ -86,40 +57,18 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	private inline fun core(frames: Int = ClassReader.EXPAND_FRAMES, lambda: (ClassVisitor) -> ClassVisitor): ByteArray {
-		println("Transforming $transformedName")
-		val cr = ClassReader(basicClass)
-		val cw = ClassWriter(ClassWriter.COMPUTE_MAXS)
-		val transformer = lambda(cw)
-		cr.accept(transformer, frames)
-		return cw.toByteArray()
-	}
-	
-	private inline fun tree(lambda: (ClassNode) -> Unit): ByteArray {
-		println("Transforming $transformedName")
-		val cr = ClassReader(basicClass)
-		val it = ClassWriter(ClassWriter.COMPUTE_MAXS)
-		val cn = ClassNode()
-		cr.accept(cn, ClassReader.EXPAND_FRAMES)
-		
-		lambda(cn)
-		
-		cn.accept(it)
-		return it.toByteArray()
-	}
-	
 	// Gleipnir hook
-	internal class `RenderGlobal$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `RenderGlobal$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "renderEntities" || name == "a" && desc == "(Lsv;Lbmv;F)V") {
-				println("Visiting RenderGlobal#renderEntities: $name$desc")
+				logger.debug("Visiting RenderGlobal#renderEntities: $name$desc")
 				return `RenderGlobal$addEffect$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `RenderGlobal$addEffect$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `RenderGlobal$addEffect$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			var inject = true
 			
@@ -140,17 +89,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `EntityLivingBase$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `EntityLivingBase$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == (if (OBF) "e" else "moveEntityWithHeading") && desc == "(FF)V") {
-				println("Visiting EntityLivingBase#moveEntityWithHeading: $name$desc")
+				logger.debug("Visiting EntityLivingBase#moveEntityWithHeading: $name$desc")
 				return `EntityLivingBase$moveEntityWithHeading$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `EntityLivingBase$moveEntityWithHeading$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `EntityLivingBase$moveEntityWithHeading$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitFieldInsn(opcode: Int, owner: String?, name: String?, desc: String?) {
 				if (opcode == GETFIELD && owner == (if (OBF) "aji" else "net/minecraft/block/Block") && name == (if (OBF) "K" else "slipperiness") && desc == "F") {
@@ -163,17 +112,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `EntityTrackerEntry$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `EntityTrackerEntry$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "tryStartWachingThis" || name == "b" && desc == "(Lmw;)V") {
-				println("Visiting EntityTrackerEntry#tryStartWachingThis: $name$desc")
+				logger.debug("Visiting EntityTrackerEntry#tryStartWachingThis: $name$desc")
 				return `EntityTrackerEntry$tryStartWachingThis$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `EntityTrackerEntry$tryStartWachingThis$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `EntityTrackerEntry$tryStartWachingThis$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			private var sended = false
 			
@@ -189,17 +138,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `Potion$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `Potion$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "performEffect" || name == "a" && desc == "(Lsv;I)V") {
-				println("Visiting Potion#performEffect: $name$desc")
+				logger.debug("Visiting Potion#performEffect: $name$desc")
 				return `Potion$performEffect$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `Potion$performEffect$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `Potion$performEffect$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			var flag = false
 			
@@ -216,21 +165,21 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `ItemNugget$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `ItemNugget$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "registerIcons" || (name == "func_94581_a")) {
-				println("Visiting ItemNugget#registerIcons: $name$desc")
+				logger.debug("Visiting ItemNugget#registerIcons: $name$desc")
 				return `ItemNugget$registerIcons$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			if (name == "getSubItems" || (name == "func_150895_a")) {
-				println("Visiting ItemNugget#getSubItems: $name$desc")
+				logger.debug("Visiting ItemNugget#getSubItems: $name$desc")
 				return `ItemNugget$getSubItems$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `ItemNugget$registerIcons$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `ItemNugget$registerIcons$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitInsn(opcode: Int) {
 				if (opcode == RETURN) {
@@ -249,7 +198,7 @@ class AlfheimClassTransformer: IClassTransformer {
 			}
 		}
 		
-		internal class `ItemNugget$getSubItems$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `ItemNugget$getSubItems$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitInsn(opcode: Int) {
 				if (opcode == RETURN) {
@@ -268,17 +217,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `LightningHandler$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `LightningHandler$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "onRenderWorldLast") {
-				println("Visiting LightningHandler#onRenderWorldLast: $name$desc")
+				logger.debug("Visiting LightningHandler#onRenderWorldLast: $name$desc")
 				return `LightningHandler$onRenderWorldLast$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `LightningHandler$onRenderWorldLast$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `LightningHandler$onRenderWorldLast$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitMethodInsn(opcode: Int, owner: String, name: String, desc: String, itf: Boolean) {
 				super.visitMethodInsn(opcode, owner, name, desc, itf)
@@ -296,17 +245,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `TooltipAdditionDisplayHandler$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `TooltipAdditionDisplayHandler$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "render") {
-				println("Visiting TooltipAdditionDisplayHandler#render: $name$desc")
+				logger.debug("Visiting TooltipAdditionDisplayHandler#render: $name$desc")
 				return `TooltipAdditionDisplayHandler$render$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `TooltipAdditionDisplayHandler$render$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `TooltipAdditionDisplayHandler$render$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			var gets = 0
 			
@@ -330,17 +279,17 @@ class AlfheimClassTransformer: IClassTransformer {
 	}
 	
 	// Fix for progress pie integrity on full progress
-	internal class `RenderHelper$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `RenderHelper$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "renderProgressPie") {
-				println("Visiting RenderHelper#renderProgressPie: $name$desc")
+				logger.debug("Visiting RenderHelper#renderProgressPie: $name$desc")
 				return `RenderHelper$renderProgressPie$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `RenderHelper$renderProgressPie$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `RenderHelper$renderProgressPie$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitJumpInsn(opcode: Int, label: Label?) {
 				if (opcode != IFLE) return super.visitJumpInsn(opcode, label)
@@ -351,17 +300,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `BaubleRenderHandler$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `BaubleRenderHandler$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "renderManaTablet") {
-				println("Visiting BaubleRenderHandler#renderManaTablet: $name$desc")
+				logger.debug("Visiting BaubleRenderHandler#renderManaTablet: $name$desc")
 				return `BaubleRenderHandler$renderManaTablet$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `BaubleRenderHandler$renderManaTablet$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `BaubleRenderHandler$renderManaTablet$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitLdcInsn(cst: Any) {
 				var cst = cst
@@ -371,17 +320,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `RenderTileFloatingFlower$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `RenderTileFloatingFlower$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "renderTileEntityAt") {
-				println("Visiting RenderTileFloatingFlower#renderTileEntityAt: $name$desc")
+				logger.debug("Visiting RenderTileFloatingFlower#renderTileEntityAt: $name$desc")
 				return `RenderTileFloatingFlower$renderTileEntityAt$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `RenderTileFloatingFlower$renderTileEntityAt$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `RenderTileFloatingFlower$renderTileEntityAt$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			var before = false
 			var after = true
@@ -428,7 +377,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `TileManaFlame$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `TileManaFlame$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String?, desc: String?, signature: String?, exceptions: Array<out String>?): MethodVisitor {
 			val mv = super.visitMethod(access, name, desc, signature, exceptions)
@@ -436,7 +385,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 		
 		// Вазки ты еблан :з
-		internal class `TileManaFlame$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `TileManaFlame$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitFieldInsn(opcode: Int, owner: String?, name: String?, desc: String?) {
 				if (opcode == GETFIELD && name == "color")
@@ -447,7 +396,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `TileSpecialFlower$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `TileSpecialFlower$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 
 		override fun visitField(access: Int, name: String?, desc: String?, signature: String?, value: Any?): FieldVisitor {
 			val newVal = if (value == TileSpecialFlower.TAG_SUBTILE_NAME) SubTileEntity.TAG_TYPE else value
@@ -458,7 +407,7 @@ class AlfheimClassTransformer: IClassTransformer {
 			return `TileSpecialFlower$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 		}
 
-		internal class `TileSpecialFlower$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `TileSpecialFlower$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 
 			override fun visitLdcInsn(cst: Any?) {
 				val newCst = if (cst == TileSpecialFlower.TAG_SUBTILE_NAME) SubTileEntity.TAG_TYPE else cst
@@ -468,7 +417,7 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `EntityDoppleganger$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `EntityDoppleganger$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visit(version: Int, access: Int, name: String?, signature: String?, superName: String?, interfaces: Array<out String>?) {
 			super.visit(version, access, name, signature, superName, arrayOf("alfheim/api/boss/IBotaniaBossWithShaderAndName"))
@@ -476,13 +425,13 @@ class AlfheimClassTransformer: IClassTransformer {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "getBossBarTextureRect") {
-				println("Visiting EntityDoppleganger#getBossBarTextureRect: $name$desc")
+				logger.debug("Visiting EntityDoppleganger#getBossBarTextureRect: $name$desc")
 				return `EntityDoppleganger$getBossBarTextureRect$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `EntityDoppleganger$getBossBarTextureRect$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `EntityDoppleganger$getBossBarTextureRect$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			var inject = 2
 			
@@ -495,17 +444,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `ItemFlowerBag$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `ItemFlowerBag$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "loadStacks") {
-				println("Visiting ItemFlowerBag#loadStacks: $name$desc")
+				logger.debug("Visiting ItemFlowerBag#loadStacks: $name$desc")
 				return `ItemFlowerBag$loadStacks$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `ItemFlowerBag$loadStacks$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `ItemFlowerBag$loadStacks$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitIntInsn(opcode: Int, operand: Int) {
 				val oper = if (opcode == BIPUSH && operand == 16) 34 else operand
@@ -514,17 +463,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `ItemInfiniEffect$ClassVisitor`(val className: String, cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `ItemInfiniEffect$ClassVisitor`(val className: String, cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "onWornTick") {
-				println("Visiting $className#onWornTick: $name$desc")
+				logger.debug("Visiting $className#onWornTick: $name$desc")
 				return `ItemInfiniEffect$onWornTick$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `ItemInfiniEffect$onWornTick$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `ItemInfiniEffect$onWornTick$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitLdcInsn(cst: Any?) {
 				if (cst == Integer.MAX_VALUE)
@@ -535,7 +484,9 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `ItemLens$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `ItemLens$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+		
+		var left = 2
 		
 		override fun visitField(access: Int, name: String, desc: String, signature: String?, value: Any?): FieldVisitor {
 			var value = value
@@ -548,16 +499,11 @@ class AlfheimClassTransformer: IClassTransformer {
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			val mv = super.visitMethod(access, name, desc, signature, exceptions)
 			
-			println("Visiting ItemLens#$name: $name$desc")
+			logger.debug("Visiting ItemLens#$name: $name$desc")
 			return `ItemLens$MethodVisitor`(mv)
 		}
 		
-		internal class `ItemLens$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
-			
-			companion object {
-				
-				var left = 2
-			}
+		private inner class `ItemLens$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitIntInsn(opcode: Int, operand: Int) {
 				var operand = operand
@@ -576,17 +522,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `ItemAesirRing$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `ItemAesirRing$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "onDropped") {
-				println("Visiting ItemAesirRing#onDropped: $name$desc")
+				logger.debug("Visiting ItemAesirRing#onDropped: $name$desc")
 				return `ItemAesirRing$onDropped$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `ItemAesirRing$onDropped$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `ItemAesirRing$onDropped$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitInsn(opcode: Int) {
 				if (opcode == ICONST_3)
@@ -619,18 +565,18 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `ItemTerraformRod$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `ItemTerraformRod$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "terraform") {
-				println("Visiting ItemTerraformRod#terraform: $name$desc")
+				logger.debug("Visiting ItemTerraformRod#terraform: $name$desc")
 				return `ItemTerraformRod$terraform$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `ItemTerraformRod$terraform$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `ItemTerraformRod$terraform$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			var put = true
 			
@@ -650,17 +596,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `LibItemNames$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `LibItemNames$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "<clinit>") {
-				println("Visiting LibItemNames#<clinit>: $name$desc")
+				logger.debug("Visiting LibItemNames#<clinit>: $name$desc")
 				return `LibItemNames$clinit$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `LibItemNames$clinit$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `LibItemNames$clinit$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			private var twotwo_twofour = true
 			private var add = false
@@ -706,17 +652,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `TFFluids$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `TFFluids$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "registerFluid") {
-				println("Visiting ThermalFoundation's TFFluids#registerFluid: $name$desc")
+				logger.debug("Visiting ThermalFoundation's TFFluids#registerFluid: $name$desc")
 				return `TFFluids$registerFluid$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `TFFluids$registerFluid$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `TFFluids$registerFluid$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			override fun visitVarInsn(opcode: Int, i: Int) {
 				if (opcode == ASTORE && i == 0) {
@@ -732,17 +678,17 @@ class AlfheimClassTransformer: IClassTransformer {
 		}
 	}
 	
-	internal class `ClientEvents$GUIOverlay$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private inner class `ClientEvents$GUIOverlay$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "renderHotbar") {
-				println("Visiting witchery's ClientEvents\$GUIOverlay#renderHotbar: $name$desc")
+				logger.debug("Visiting witchery's ClientEvents\$GUIOverlay#renderHotbar: $name$desc")
 				return `ClientEvents$GUIOverlay$renderHotbar$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)
 		}
 		
-		internal class `ClientEvents$GUIOverlay$renderHotbar$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private inner class `ClientEvents$GUIOverlay$renderHotbar$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 			
 			var aload1 = false
 			
@@ -761,7 +707,6 @@ class AlfheimClassTransformer: IClassTransformer {
 	}
 	
 	companion object {
-		
 		val moreLenses get() = ItemLensExtender.EnumAlfheimLens.entries.size
 	}
 }

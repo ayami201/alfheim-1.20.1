@@ -24,13 +24,11 @@ object EFHandlerBanners {
 				try {
 					addPattern(clazz, coatNames[i], "c${if (i < 10) "0$i" else "$i"}", ItemStack(coatOfArms, 1, i))
 				} catch (e: Exception) {
-					ASJUtilities.error("Error trying to add ${coatNames[i]} banner: ${e.message}")
-					e.printStackTrace()
+					ASJUtilities.error("Error trying to add ${coatNames[i]} banner:", e)
 				}
 			}
 		} catch (e: Exception) {
-			ASJUtilities.error("Error trying to add Et Futurum banners: ${e.message}")
-			e.printStackTrace()
+			ASJUtilities.error("Error trying to add Et Futurum banners:", e)
 		}
 	}
 	

@@ -63,8 +63,7 @@ object InfoLoader {
 				}
 				ASJUtilities.log("Successfully loaded news & version")
 			} catch (e: Exception) {
-				ASJUtilities.error("Unable to load news & version from official repo. Check your internet connection.")
-				e.printStackTrace(System.err)
+				ASJUtilities.error("Unable to load news & version from official repo. Check your internet connection.", e)
 			}
 			
 			doneChecking = true
