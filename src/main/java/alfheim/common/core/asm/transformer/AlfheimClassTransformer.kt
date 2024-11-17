@@ -5,7 +5,7 @@ import alexsocol.patcher.asm.transformer.ASJAbstractClassTransformer
 import alfheim.api.ModInfo
 import alfheim.common.core.asm.hook.extender.ItemLensExtender
 import alfheim.common.core.handler.AlfheimConfigHandler
-import gloomyfolken.hooklib.asm.HookLogger.SystemOutLogger
+import gloomyfolken.hooklib.asm.HookLogger.Log4JLogger
 import org.lwjgl.opengl.GL11
 import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.*
@@ -16,7 +16,7 @@ import vazkii.botania.common.block.tile.TileSpecialFlower
 @Suppress("NAME_SHADOWING", "ClassName", "unused", "LocalVariableName", "PrivatePropertyName")
 class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 	
-	override val logger = SystemOutLogger(ModInfo.MODID)
+	override val logger = Log4JLogger(ModInfo.MODID)
 	
 	override fun transform(transformedName: String, basicClass: ByteArray): ByteArray {
 		return when (transformedName) {
