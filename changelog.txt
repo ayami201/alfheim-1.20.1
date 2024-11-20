@@ -5,4 +5,5 @@ Fixes:
  Elemental armor tuning now protects similar to enchantments
  Rod of the Shaded Mesa player interaction
  Gleipnir chains AoE 
+ [ESM] Fixed hurt booba color
  [TC] Thaumcraft dependency crash
