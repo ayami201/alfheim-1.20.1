@@ -8,7 +8,7 @@ import alfheim.common.core.handler.CardinalSystem
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 
-object SpellJoin: SpellBase("join", EnumRace.IMP, 10000, 1800, 30) {
+object SpellJoin: SpellBase("join", EnumRace.IMP, 10000, 1200, 30) {
 	
 	override val usableParams
 		get() = emptyArray<Any>()

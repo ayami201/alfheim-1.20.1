@@ -1,6 +1,7 @@
 package alfheim
 
 import alexsocol.patcher.*
+import alexsocol.patcher.asm.worker.InterfaceAppenderWorker.registerAdditionalInterface
 import alfheim.api.ModInfo.MODID
 import alfheim.common.core.command.*
 import alfheim.common.core.handler.*
@@ -55,6 +56,15 @@ object AlfheimCore {
 		
 		jingleTheBells = (TimeHandler.month == 12 && TimeHandler.day >= 16 || TimeHandler.month == 1 && TimeHandler.day <= 8)
 		winter = TimeHandler.month in arrayOf(1, 2, 12, 13)
+	}
+	
+	@EventHandler
+	fun construct(e: FMLConstructionEvent) {
+		if (!Loader.isModLoaded("Thaumcraft")) return
+		// oh no! ... anyway
+		registerAdditionalInterface("vazkii/botania/common/item/interaction/thaumcraft/ItemElementiumHelmRevealing", "thaumcraft/api/IVisDiscountGear")
+		registerAdditionalInterface("vazkii/botania/common/item/interaction/thaumcraft/ItemManasteelHelmRevealing", "thaumcraft/api/IVisDiscountGear")
+		registerAdditionalInterface("vazkii/botania/common/item/interaction/thaumcraft/ItemTerrasteelHelmRevealing", "thaumcraft/api/IVisDiscountGear")
 	}
 	
 	@EventHandler

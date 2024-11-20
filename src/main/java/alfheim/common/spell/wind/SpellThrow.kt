@@ -8,7 +8,7 @@ import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
 import alfheim.common.core.handler.*
 import net.minecraft.entity.EntityLivingBase
 
-object SpellThrow: SpellBase("throw", EnumRace.SYLPH, 8000, 600, 10) {
+object SpellThrow: SpellBase("throw", EnumRace.SYLPH, 8000, 200, 10) {
 	
 	override var damage = 5f
 	override var duration = 10

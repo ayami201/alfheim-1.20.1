@@ -64,7 +64,7 @@ class AlfheimHookLoader: HookLoader() {
 		
 		SuperWrapperTransformer.registerSuperWrapperContainer("alfheim.common.core.asm.superwrapper.SuperWrapperHandler")
 		
-		registerHookReplacerContainer("alfheim.common.core.asm.hook.replacer.HookReplacerHandler")
+		registerHookReplacerContainer("alfheim.common.core.asm.hook.replacer.HookReplacerHandlerKt")
 		
 		registerAdditionalInterfaces()
 	}
@@ -76,9 +76,5 @@ class AlfheimHookLoader: HookLoader() {
 		registerAdditionalInterface("thaumcraft/common/entities/monster/EntityWisp", "alfheim/common/core/helper/IElementalEntity")
 		registerAdditionalInterface("vazkii/botania/common/item/equipment/bauble/ItemAuraRing", "vazkii/botania/api/mana/IManaItem")
 		registerAdditionalInterface("vazkii/botania/common/item/relic/ItemAesirRing", "alfheim/api/item/IStepupItem")
-		
-		registerAdditionalInterface("vazkii.botania.common.item.interaction.thaumcraft.ItemElementiumHelmRevealing", "thaumcraft/api/IVisDiscountGear")
-		registerAdditionalInterface("vazkii.botania.common.item.interaction.thaumcraft.ItemManasteelHelmRevealing", "thaumcraft/api/IVisDiscountGear")
-		registerAdditionalInterface("vazkii.botania.common.item.interaction.thaumcraft.ItemTerrasteelHelmRevealing", "thaumcraft/api/IVisDiscountGear")
 	}
 }

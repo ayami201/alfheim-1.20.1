@@ -2,6 +2,7 @@ package alfheim.common.block.tile
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.ASJTile
+import alfheim.common.block.AlfheimBlocks
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
@@ -45,11 +46,31 @@ class TileWorldTree: ASJTile(), IManaReceiver, IWandBindable {
 		val other = worldObj.getTileEntity(x, y, z) as? TileWorldTree ?: return false
 		
 		if (player.isSneaking)
-			ASJUtilities.say(player, other.name)
+			ASJUtilities.say(player, other.getDisplayName())
 		else
-			player.setPositionAndUpdate(x + 0.5, y + 0.5, z + 0.5)
+			teleportTo(player, x, y, z)
 		
 		return true
+	}
+	
+	fun teleportTo(player: EntityPlayer, x: Int, y: Int, z: Int) {
+		fun check(offsetX: Int, offsetZ: Int): Boolean {
+			player.setPosition(x + offsetX + 0.5, y.D, z + offsetZ + 0.5)
+			val can = worldObj.checkNoEntityCollision(player.boundingBox) && worldObj.getCollidingBoundingBoxes(player, player.boundingBox).isEmpty() && !worldObj.isAnyLiquid(player.boundingBox)
+			if (can) player.setPositionAndUpdate(player.posX, player.posY, player.posZ)
+			return can
+		}
+		
+		if (check(0, 1)) return
+		if (check(1, 0)) return
+		if (check(0, -1)) return
+		if (check(-1, 0)) return
+		if (check(1, 1)) return
+		if (check(1, -1)) return
+		if (check(-1, -1)) return
+		if (check(-1, 1)) return
+		
+		player.setPositionAndUpdate(x + 0.5, y.D, z + 0.5)
 	}
 	
 	override fun getCurrentMana() = mana
@@ -84,6 +105,8 @@ class TileWorldTree: ASJTile(), IManaReceiver, IWandBindable {
 		
 		return true
 	}
+	
+	fun getDisplayName() = "'${name.takeIf { it.isNotBlank() } ?: ItemStack(AlfheimBlocks.worldTree).displayName}' ($xCoord $yCoord $zCoord)"
 	
 	override fun writeCustomNBT(nbt: NBTTagCompound) {
 		nbt.setInteger(TAG_MANA, mana)

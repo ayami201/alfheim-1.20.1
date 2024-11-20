@@ -1,11 +1,8 @@
 Innovations:
- New tool - Resonator
- Mana lamp light is now temporal
- Changed Mana lamp and Reflector recipes
+ [MMO] spells small rebalance
 
 Fixes:
- Tree berries crashing with Extra Utilities
- Portal to Niflheim structure error
- Ignored event exceptions in Rod of High Will
- [MMO] Gravity trap spell pulling
- ...Other small fixes not worth mentioning here
+ Elemental armor tuning now protects similar to enchantments
+ Rod of the Shaded Mesa player interaction
+ Gleipnir chains AoE 
+ [TC] Thaumcraft dependency crash

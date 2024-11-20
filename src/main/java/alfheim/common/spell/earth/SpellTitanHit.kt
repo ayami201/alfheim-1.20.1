@@ -135,5 +135,21 @@ object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 1, 1, 1) {
 		removeBlocksInIteration(caster.worldObj, caster as EntityPlayer, mop.blockX, mop.blockY, mop.blockZ, mop.sideHit, false, true)
 	}
 	
-	val MATERIALS = arrayOf(Material.rock, Material.iron, Material.ice, Material.glass, Material.piston, Material.anvil, Material.grass, Material.ground, Material.sand, Material.snow, Material.craftedSnow, Material.clay)
+	val MATERIALS = arrayOf(
+		Material.anvil,
+		Material.circuits,
+		Material.clay,
+		Material.craftedSnow,
+		Material.glass,
+		Material.grass,
+		Material.ground,
+		Material.ice,
+		Material.iron,
+		Material.packedIce,
+		Material.piston,
+		Material.redstoneLight,
+		Material.rock,
+		Material.sand,
+		Material.snow,
+	)
 }

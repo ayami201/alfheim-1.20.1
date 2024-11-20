@@ -78,9 +78,14 @@ class EntitySpellWindBlade(world: World): Entity(world), ITimeStopSpecific {
 		val l = getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, body.toAABB())
 		l.remove(caster)
 		
-		for (e in l)
-			if (body.intersectsWith(e.boundingBox))
-				e.attackEntityFrom(DamageSourceSpell.windblade(this, caster), if (isFenrir) 10f else SpellBase.over(caster, SpellWindBlades.damage.D))
+		for (e in l) {
+			if (!body.intersectsWith(e.boundingBox)) continue
+			
+			val prev = e.hurtResistantTime
+			e.hurtResistantTime = 0
+			e.attackEntityFrom(DamageSourceSpell.windblade(this, caster), if (isFenrir) 1f else SpellBase.over(caster, SpellWindBlades.damage.D))
+			e.hurtResistantTime = prev
+		}
 	}
 	
 	override fun affectedBy(uuid: UUID) = caster!!.uniqueID != uuid

@@ -66,7 +66,7 @@ class BlockWorldTree: BlockContainerMod(Material.wood), IWandable {
 			val u = e.resolution.scaledWidth / 2 + 10
 			val v = e.resolution.scaledHeight / 2 - mc.fontRenderer.FONT_HEIGHT / 2
 			
-			mc.fontRenderer.drawStringWithShadow("'${other.name.takeIf { it.isNotBlank() } ?: ItemStack(AlfheimBlocks.worldTree).displayName}' ($i $j $k)", u, v, Color.HSBtoRGB(idHover * (360 / 16f) / 360f, 1f, 1f))
+			mc.fontRenderer.drawStringWithShadow(other.getDisplayName(), u, v, Color.HSBtoRGB(idHover * (360 / 16f) / 360f, 1f, 1f))
 		}
 	}
 }

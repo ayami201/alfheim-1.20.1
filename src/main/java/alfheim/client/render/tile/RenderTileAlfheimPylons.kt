@@ -63,12 +63,12 @@ object RenderTileAlfheimPylons: TileEntitySpecialRenderer() {
 		
 		if (ConfigHandler.oldPylonModel) {
 			if (creation)
-				(LibResourceLocations.creationPylonOld as ResourceLocationAnimated).bind()
+				LibResourceLocations.creationPylonOld.bind()
 			else
 				mc.renderEngine.bindTexture(if (red) LibResourceLocations.antiPylonOld else if (orange) LibResourceLocations.yordinPylonOld else LibResourceLocations.elvenPylonOld)
 		} else {
 			if (creation)
-				(LibResourceLocations.creationPylon as ResourceLocationAnimated).bind()
+				LibResourceLocations.creationPylon.bind()
 			else
 				mc.renderEngine.bindTexture(if (red) LibResourceLocations.antiPylon else if (orange) LibResourceLocations.yordinPylon else LibResourceLocations.elvenPylon)
 		}

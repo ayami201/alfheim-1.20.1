@@ -51,13 +51,18 @@ object RenderBooba {
 		glRotatef(180f, 0f, 0f, 1f)
 		glRotatef(-Math.toDegrees(sin(sqrt(player.getSwingProgress(mc.timer.renderPartialTicks)) * Math.PI * 2) * 0.2).F, 0f, 1f, 0f)
 		
+		var gb = 1f
+		var a = 1f
+		
 		if (transparent) {
-			glColor4f(1f, 1f, 1f, 0.15f)
+			a = 0.15f
 			glDepthMask(false)
 			glAlphaFunc(GL_GREATER, 0.003921569f)
 			ASJRenderHelper.setBlend()
-		} else {
-			glColor4f(1f, 1f, 1f, 1f)
+		}
+		
+		if (player.hurtTime > 0 || player.deathTime > 0) {
+			gb = 0.5f
 		}
 		
 		if (player.isSneaking) {
@@ -67,6 +72,7 @@ object RenderBooba {
 		
 		val id = player.raceID - 1
 		mc.renderEngine.bindTexture(if (skinData.second && id in LibResourceLocations.oldFemale.indices) LibResourceLocations.oldFemale[id] else player.locationSkin)
+		glColor4f(1f, gb, gb, a)
 		booba.renderAll()
 		
 		player.inventory.armorInventory[2]?.let {
@@ -79,8 +85,9 @@ object RenderBooba {
 			ASJRenderHelper.discard()
 			glAlphaFunc(GL_GREATER, 0.1f)
 			glDepthMask(true)
-			glColor4f(1f, 1f, 1f, 1f)
 		}
+		
+		glColor4f(1f, 1f, 1f, 1f)
 		
 		glPopMatrix()
 	}

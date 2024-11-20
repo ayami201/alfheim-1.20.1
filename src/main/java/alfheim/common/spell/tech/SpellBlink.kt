@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import vazkii.botania.common.Botania
 
-object SpellBlink: SpellBase("blink", EnumRace.LEPRECHAUN, 10000, 1200, 5) {
+object SpellBlink: SpellBase("blink", EnumRace.LEPRECHAUN, 10000, 200, 5) {
 	
 	override var radius = 8.0
 	

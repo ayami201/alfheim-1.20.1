@@ -480,7 +480,7 @@ object AnomalyHarvesterBehaviors {
 		else
 			target.setPosition(x, y, z)
 		
-		target.setMotion(0.0, 0.0, 0.0)
+		target.setMotion(0.0)
 		
 		return cost
 	}
