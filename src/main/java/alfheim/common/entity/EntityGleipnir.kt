@@ -1,6 +1,7 @@
 package alfheim.common.entity
 
 import alexsocol.asjlib.*
+import alexsocol.asjlib.math.Vector3
 import alfheim.common.core.handler.*
 import alfheim.common.potion.PotionEternity
 import cpw.mods.fml.relauncher.*
@@ -40,8 +41,9 @@ class EntityGleipnir: Entity {
 		thrower ?: return
 		if (worldObj.isRemote) return
 		
-		val targets = getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox)
+		val targets = getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox.expand(3, 0, 3))
 		targets.remove(thrower)
+		targets.removeAll { Vector3.entityDistancePlane(this, it) > 7.5 }
 		
 		if (AlfheimConfigHandler.enableMMO) {
 			val pt = CardinalSystem.PartySystem.getParty(thrower)

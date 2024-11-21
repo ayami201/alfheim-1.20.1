@@ -345,7 +345,11 @@ object ElementalDamageAdapter {
 	
 	@JvmStatic
 	@Hook(createMethod = true, returnCondition = ReturnCondition.ALWAYS)
-	fun getElements(creeper: EntityCreeper) = EnumSet.of(if (creeper.powered) ELECTRIC else NATURE)!!
+	fun getElements(creeper: EntityCreeper): EnumSet<ElementalDamage> {
+		val set = EnumSet.of(NATURE)!!
+		if (creeper.powered) set.add(ELECTRIC)
+		return set
+	}
 	
 	
 	@JvmStatic

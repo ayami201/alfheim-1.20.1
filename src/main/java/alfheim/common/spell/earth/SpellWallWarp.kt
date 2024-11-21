@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.init.Blocks
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 
-object SpellWallWarp: SpellBase("wallwarp", EnumRace.GNOME, 4000, 600, 5) {
+object SpellWallWarp: SpellBase("wallwarp", EnumRace.GNOME, 4000, 300, 5) {
 	
 	override var radius = 2.0
 	

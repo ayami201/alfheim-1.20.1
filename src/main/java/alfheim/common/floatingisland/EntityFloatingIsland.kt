@@ -117,7 +117,7 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 		prevPosY = posY
 		prevPosZ = posZ
 		
-		setMotion(0.0, 0.0, 0.0)
+		setMotion(0.0)
 		rotationYaw = 0f
 		rotationPitch = 0f
 		

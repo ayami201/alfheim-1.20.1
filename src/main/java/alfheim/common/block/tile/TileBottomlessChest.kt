@@ -25,7 +25,7 @@ class TileBottomlessChest: ASJTile(), IInventory {
 	
 	fun eject(stack: ItemStack) {
 		EntityItem(worldObj, xCoord + 0.5, yCoord - 0.5, zCoord + 0.5, stack).apply {
-			setMotion(0.0,0.0,0.0)
+			setMotion(0.0)
 			if (redstone) age = -200
 			if (!worldObj.isRemote) spawn()
 		}

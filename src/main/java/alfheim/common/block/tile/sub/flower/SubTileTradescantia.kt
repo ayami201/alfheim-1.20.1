@@ -130,7 +130,7 @@ class SubTileTradescantia: SubTileFunctional() {
 				if (bought.stackSize < 1) continue
 				
 				EntityItem(supertile.worldObj, x + dir.offsetX * 2 + 0.5, y + dir.offsetY * 2 + 0.5, z + dir.offsetZ * 2 + 0.5, bought).apply {
-					setMotion(0.0, 0.0, 0.0)
+					setMotion(0.0)
 					spawn()
 				}
 			}
@@ -141,7 +141,7 @@ class SubTileTradescantia: SubTileFunctional() {
 			if (cash.stackSize < 1) continue
 			
 			EntityItemImmortal(supertile.worldObj, x + 0.5, y + if (floating) 1.115 else 0.125, z + 0.5, cash).apply {
-				setMotion(0.0, 0.0, 0.0)
+				setMotion(0.0)
 				spawn()
 			}
 		}

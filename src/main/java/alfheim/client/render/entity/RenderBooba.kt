@@ -22,6 +22,7 @@ import kotlin.math.*
 object RenderBooba {
 	
 	val model = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/booba.obj"))
+	// flugel boobas
 	val model1 = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/booba_1.obj"))
 	val model2 = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/booba_2.obj"))
 	
@@ -65,14 +66,37 @@ object RenderBooba {
 			glTranslatef(0f, -1f, -0.5f)
 		}
 		
+		val hurt = player.hurtTime > 0 || player.deathTime > 0
+		
+		fun hurt() {
+			if (!hurt) return
+			
+			glDisable(GL_TEXTURE_2D)
+			glDisable(GL_ALPHA_TEST)
+			glEnable(GL_BLEND)
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+			glDepthFunc(GL_EQUAL)
+			glColor4f(player.getBrightness(mc.timer.renderPartialTicks), 0.0f, 0.0f, 0.4f)
+			
+			booba.renderAll()
+			
+			glColor4f(1f, 1f, 1f, 1f)
+			glDepthFunc(GL_LEQUAL)
+			glDisable(GL_BLEND)
+			glEnable(GL_ALPHA_TEST)
+			glEnable(GL_TEXTURE_2D)
+		}
+		
 		val id = player.raceID - 1
 		mc.renderEngine.bindTexture(if (skinData.second && id in LibResourceLocations.oldFemale.indices) LibResourceLocations.oldFemale[id] else player.locationSkin)
 		booba.renderAll()
+		hurt()
 		
 		player.inventory.armorInventory[2]?.let {
 			mc.renderEngine.bindTexture(RenderBiped.getArmorResource(player, it, 1, null))
 			glScaled(1.1)
 			booba.renderAll()
+			hurt()
 		}
 		
 		if (transparent) {

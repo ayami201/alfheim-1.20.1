@@ -67,7 +67,7 @@ import net.minecraft.client.gui.*
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.particle.EntityFX
 import net.minecraft.client.renderer.*
-import net.minecraft.client.renderer.entity.RenderItem
+import net.minecraft.client.renderer.entity.*
 import net.minecraft.client.renderer.texture.*
 import net.minecraft.command.ICommandSender
 import net.minecraft.creativetab.CreativeTabs
@@ -85,6 +85,7 @@ import net.minecraft.init.*
 import net.minecraft.inventory.*
 import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.pathfinding.PathEntity
 import net.minecraft.potion.*
 import net.minecraft.server.MinecraftServer
@@ -149,6 +150,7 @@ import java.awt.Color
 import java.util.*
 import java.util.regex.*
 import kotlin.math.*
+import vazkii.botania.common.core.helper.Vector3 as Bector3
 
 @Suppress("UNUSED_PARAMETER", "NAME_SHADOWING", "unused", "FunctionName")
 object AlfheimHookHandler {
@@ -2154,5 +2156,21 @@ object AlfheimHookHandler {
 	fun renderItem(render: GunRenderer, type: ItemRenderType, item: ItemStack, data: Array<Any?>) {
 		if (type == ItemRenderType.ENTITY)
 			data[1] = null
+	}
+	
+	@JvmStatic
+	@Hook(injectOnExit = true)
+	fun setEntityMotionFromVector(static: ItemGravityRod?, entity: Entity, originalPosVector: Bector3, modifier: Float) {
+		if (entity is EntityPlayerMP) entity.playerNetServerHandler.sendPacket(S12PacketEntityVelocity(entity))
+	}
+	
+	@JvmStatic
+	@Hook(createMethod = true, returnCondition = ALWAYS)
+	fun getColorMultiplier(render: RenderPlayer, entity: EntityLivingBase, brightness: Float, ticks: Float): Int {
+		if ((entity as? EntityPlayer)?.commandSenderName !== "AlexCatze") return 0
+		
+		val color = Color(Color.HSBtoRGB((entity.ticksExisted + ticks) % 360 / 360f * 10f, 1f, 1f))
+		val (r, g, b) = color.getRGBColorComponents(null)
+		return Color(r, g, b, 0.5f).rgb
 	}
 }

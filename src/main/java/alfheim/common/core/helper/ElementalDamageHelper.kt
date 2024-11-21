@@ -100,7 +100,7 @@ object ElementalDamageHandler {
 			}
 		}
 		
-		if (!source.isUnblockable)
+		if (!source.isDamageAbsolute)
 			for (i in 1..4) {
 				val armor = target.getEquipmentInSlot(i) ?: continue
 				val item = armor.item
