@@ -3,7 +3,6 @@ package alfheim.common.lexicon.page
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.ModInfo
-import alfheim.api.entity.race
 import alfheim.api.lib.LibResourceLocations
 import alfheim.api.spell.SpellBase
 import alfheim.client.gui.GUISpells
@@ -70,7 +69,7 @@ class PageSpell(internal val spell: SpellBase): LexiconPage("${ModInfo.MODID}.pa
 			val y = yn + 115
 			if (mx > x + 1 && mx <= x + 101 && my > y - 52 && my <= y - 38) ratio = 1
 			
-			val cost = spell.getManaCost() * (if (spell.race == mc.thePlayer.race || spell.hard) 1.toByte() else AlfheimConfigHandler.raceManaMult).I
+			val cost = SpellBase.getCostForRace(mc.thePlayer, spell.race, spell.getManaCost(), spell.hard)
 			
 			if (AlfheimConfigHandler.numericalMana) {
 				font.drawString(StatCollector.translateToLocal("lexicon.mana"), xn + 16, y - 8, 0)

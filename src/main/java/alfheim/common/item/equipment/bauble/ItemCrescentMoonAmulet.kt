@@ -7,7 +7,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.MathHelper
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import vazkii.botania.api.mana.*
 import kotlin.math.max
@@ -48,7 +47,7 @@ class ItemCrescentMoonAmulet: ItemPendant("CrescentMoonAmulet"), IManaUsingItem 
 					e.ammount = max(0f, e.ammount - 10)
 				}
 			} else
-				e.ammount -= ManaItemHandler.requestMana(amulet, player, MathHelper.ceiling_float_int(e.ammount * MANA_PER_DAMAGE), true) / (MANA_PER_DAMAGE * 10f)
+				e.ammount -= ManaItemHandler.requestMana(amulet, player, (e.ammount * MANA_PER_DAMAGE).mceil(), true) / (MANA_PER_DAMAGE * 10f)
 		}
 	}
 }

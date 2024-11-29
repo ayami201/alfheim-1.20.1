@@ -12,9 +12,9 @@ import net.minecraftforge.common.util.ForgeDirection
 import vazkii.botania.common.Botania
 import vazkii.botania.common.core.handler.ConfigHandler
 import vazkii.botania.common.item.equipment.tool.ToolCommons
-import kotlin.math.*
+import kotlin.math.max
 
-object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 1, 1, 1) {
+object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 30, 18, 5) {
 	
 	/** temp value for counting total on block breaking  */
 	var tcd = 0
@@ -22,7 +22,7 @@ object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 1, 1, 1) {
 	
 	override var radius = 1.0
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
@@ -113,7 +113,7 @@ object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 1, 1, 1) {
 	
 	override fun getManaCost(): Int {
 		try {
-			return max(1, tmana * mana)
+			return max(mana, tmana * mana)
 		} finally {
 			tmana = 0
 		}
@@ -121,7 +121,7 @@ object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 1, 1, 1) {
 	
 	override fun getCooldown(): Int {
 		try {
-			return min(1, tcd * cldn)
+			return max(cldn, tcd * cldn)
 		} finally {
 			tcd = 0
 		}

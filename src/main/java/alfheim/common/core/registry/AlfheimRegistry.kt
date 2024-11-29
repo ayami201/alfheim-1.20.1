@@ -5,7 +5,6 @@ import alexsocol.asjlib.eventForge
 import alfheim.api.*
 import alfheim.api.AlfheimAPI.addPink
 import alfheim.api.AlfheimAPI.registerAnomaly
-import alfheim.api.AlfheimAPI.registerSpell
 import alfheim.api.block.tile.SubTileAnomalyBase.EnumAnomalyRarity.*
 import alfheim.api.entity.IAlfheimMob
 import alfheim.common.block.*
@@ -98,13 +97,15 @@ object AlfheimRegistry {
 		PotionChampagne
 		PotionDeathMark
 		PotionAlfheim(AlfheimConfigHandler.potionIDDecay, "decay", true, 0x553355)
-		PotionEternity
+		PotionEdgeLife.eventForge()
+		PotionEternity.eventForge()
 		PotionGoldRush
+		PotionHystrix.eventForge()
 		PotionAlfheim(AlfheimConfigHandler.potionIDIceLens, "icelens", false, 0xDDFFFF)
 		PotionLeftFlame
 		PotionLightningShield.eventForge()
 		PotionManaVoid
-		PotionAlfheim(AlfheimConfigHandler.potionIDNineLifes, "nineLifes", false, 0xDD2222)
+		PotionAlfheim(AlfheimConfigHandler.potionIDNineLives, "nineLives", false, 0xDD2222)
 		PotionNinja
 		PotionNoclip
 		if (AlfheimConfigHandler.potionIDOvercold != -1) PotionAlfheim(AlfheimConfigHandler.potionIDOvercold, "overcold", false, 0xBFF4FF)
@@ -118,6 +119,11 @@ object AlfheimRegistry {
 		PotionAlfheim(AlfheimConfigHandler.potionIDStoneSkin, "stoneSkin", false, 0x593C1F)
 		PotionTank
 		PotionThrow
+		PotionTimeAnchor
+		PotionTimeConquest.eventForge()
+		PotionVoodooDoll.eventForge()
+		PotionVoodooTarget
+		PotionPriorityTarget.eventForge()
 		PotionWellOLife
 		PotionWhiteWine.eventForge()
 		PotionAlfheim(AlfheimConfigHandler.potionIDWisdom, "wisdom", false, 0xFFC880)
@@ -295,71 +301,79 @@ object AlfheimRegistry {
 	}
 	
 	private fun registerSpells() {
-		registerSpell(SpellAcidMyst)
-		registerSpell(SpellAquaBind)
-		registerSpell(SpellAquaStream)
-		registerSpell(SpellBattleHorn)
-		registerSpell(SpellBeastWithin)
-		registerSpell(SpellBlink)
-		registerSpell(SpellBunnyHop)
-		registerSpell(SpellButterflyShield)
-		registerSpell(SpellCall)
-		registerSpell(SpellConfusion)
-		registerSpell(SpellDay)
-		registerSpell(SpellDarkness)
-		registerSpell(SpellDeathMark)
-		registerSpell(SpellDecay)
-		registerSpell(SpellDispel)
-		registerSpell(SpellDriftingMine)
-		registerSpell(SpellDragonGrowl)
-		registerSpell(SpellEcho)
-		registerSpell(SpellFenrirStorm)
-		registerSpell(SpellFireball)
-		registerSpell(SpellFirestar)
-		registerSpell(SpellFirewall)
-		registerSpell(SpellGravityTrap)
-		registerSpell(SpellGoldRush)
-		registerSpell(SpellHammerfall)
-		registerSpell(SpellHarp)
-		registerSpell(SpellHealing)
-		registerSpell(SpellHollowBody)
-		registerSpell(SpellIceLens)
-		registerSpell(SpellIgnition)
-		registerSpell(SpellIsaacStorm)
-		registerSpell(SpellJoin)
-		registerSpell(SpellLeafStorm)
-		registerSpell(SpellLiquification)
-		registerSpell(SpellMortar)
-		registerSpell(SpellNight)
-		registerSpell(SpellNightVision)
-		registerSpell(SpellNineLifes)
-		registerSpell(SpellNoclip)
-		registerSpell(SpellNoteshot)
-		registerSpell(SpellOutdare)
-		registerSpell(SpellPoisonRoots)
-		registerSpell(SpellPurifyingSurface)
-		registerSpell(SpellRain)
-		registerSpell(SpellRefresh)
-		registerSpell(SpellRepair)
-		registerSpell(SpellResurrect)
-		registerSpell(SpellSacrifice)
-		registerSpell(SpellShadowVortex)
-		registerSpell(SpellSmokeScreen)
-		registerSpell(SpellStoneSkin)
-		registerSpell(SpellSun)
-		registerSpell(SpellSwap)
-		registerSpell(SpellThor)
-		registerSpell(SpellThrow)
-		registerSpell(SpellThunder)
-		registerSpell(SpellTimeStop)
-		registerSpell(SpellTitanHit)
-		registerSpell(SpellTrueSight)
-		registerSpell(SpellUphealth)
-		registerSpell(SpellWallWarp)
-		registerSpell(SpellWarhood)
-		registerSpell(SpellWaterBreathing)
-		registerSpell(SpellWellOLife)
-		registerSpell(SpellWindBlades)
+		SpellAcidMyst
+		SpellAport
+		SpellAquaBind
+		SpellAquaStream
+		SpellBattleHorn
+		SpellBeastWithin
+		SpellBlink
+		SpellBunnyHop
+		SpellButterflyShield
+		SpellCall
+		SpellConfusion
+		SpellDay
+		SpellDarkness
+		SpellDeathMark
+		SpellDecay
+		SpellDispel
+		SpellDriftingMine
+		SpellDragonGrowl
+		SpellEcho
+		SpellEdgeLife
+		SpellFenrirStorm
+		SpellFireball
+		SpellFirestar
+		SpellFirewall
+		SpellGravityTrap
+		SpellGoldRush
+		SpellHammerfall
+		SpellHarp
+		SpellHealing
+		SpellHollowBody
+		SpellHystrix
+		SpellIceLens
+		SpellIgnition
+		SpellIsaacStorm
+		SpellJoin
+		SpellLeafStorm
+		SpellLiquification
+		SpellMortar
+		SpellNight
+		SpellNightVision
+		SpellNineLives
+		SpellNoclip
+		SpellNoteshot
+		SpellOutdare
+		SpellPoisonRoots
+		SpellPurifyingSurface
+		SpellRain
+		SpellRepair
+		SpellResurrect
+		SpellSacrifice
+		SpellShadowVortex
+		SpellSmokeScreen
+		SpellStoneSkin
+		SpellSun
+		SpellSwap
+		SpellThor
+		SpellThrow
+		SpellThunder
+		SpellTimeAnchor
+		SpellTimeConquest
+		SpellTimeStop
+		SpellTitanHit
+		SpellTrueSight
+		SpellUphealth
+		SpellVoodooDoll
+		SpellVoodooTarget
+		SpellPriorityTarget
+		SpellWallWarp
+		SpellWarhood
+		SpellWaterBreathing
+		SpellWellOLife
+		SpellWhisper
+		SpellWindBlades
 	}
 	
 	private fun loadAllPinkStuff() {

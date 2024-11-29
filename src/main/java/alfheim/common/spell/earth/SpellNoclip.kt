@@ -13,20 +13,20 @@ object SpellNoclip: SpellBase("noclip", EnumRace.GNOME, 24000, 2400, 20) {
 	
 	override var duration = 200
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val tg = TargetingSystem.getTarget(caster)
 		val tgt = tg.target ?: return SpellCastResult.NOTARGET
 		if (tgt is EntityPlayer && !tgt.capabilities.allowFlying) return SpellCastResult.WRONGTGT
-		if (tgt !== caster && ASJUtilities.isNotInFieldOfVision(tg.target, caster)) return SpellCastResult.NOTSEEING
+		if (tgt !== caster && ASJUtilities.isNotInFieldOfVision(tgt, caster)) return SpellCastResult.NOTSEEING
 		
 		val result = checkCast(caster)
 		if (result != SpellCastResult.OK) return result
 		
-		tg.target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDNoclip, duration))
-		VisualEffectHandler.sendPacket(VisualEffects.UPHEAL, tg.target)
+		tgt.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDNoclip, duration))
+		VisualEffectHandler.sendPacket(VisualEffects.UPHEAL, tgt)
 		
 		return result
 	}

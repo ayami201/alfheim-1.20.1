@@ -13,7 +13,7 @@ object SpellSwap: SpellBase("swap", EnumRace.LEPRECHAUN, 12000, 1200, 20) {
 	
 	override var damage = 10f
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(damage)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

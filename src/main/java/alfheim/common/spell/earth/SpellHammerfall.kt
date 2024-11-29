@@ -44,7 +44,7 @@ object SpellHammerfall: SpellBase("hammerfall", EnumRace.GNOME, 10000, 200, 20) 
 				!PartySystem.mobsSameParty(caster, it) &&
 				Vector3.entityDistancePlane(it, caster) < radius)) return@forEach
 				
-			it.attackEntityFrom(DamageSourceSpell.hammerfall(caster), over(caster, damage.D))
+			it.attackEntityFrom(DamageSourceSpell.hammerfall(caster), over(caster, damage))
 		}
 		
 		return result

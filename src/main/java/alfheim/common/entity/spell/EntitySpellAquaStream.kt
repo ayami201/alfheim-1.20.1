@@ -42,7 +42,7 @@ class EntitySpellAquaStream(world: World): Entity(world), ITimeStopSpecific {
 		val look = Vector3(caster.lookVec)
 		val d = 0.75
 		VisualEffectHandler.sendPacket(VisualEffects.WISP, dimension, look.x + caster.posX, look.y + caster.posY + caster.eyeHeight.D, look.z + caster.posZ, 0.5, 0.5, 1.0, 1.0, look.x / d, look.y / d, look.z / d, 0.5)
-		mop?.entityHit?.attackEntityFrom(DamageSourceSpell.water(caster), SpellBase.over(caster, SpellAquaStream.damage.D))
+		mop?.entityHit?.attackEntityFrom(DamageSourceSpell.water(caster), SpellBase.over(caster, SpellAquaStream.damage))
 		val hp = if (mop?.hitVec != null) Vector3(mop.hitVec) else look.copy().extend(SpellAquaStream.radius).add(Vector3.fromEntity(caster)).add(0.0, caster.eyeHeight.D, 0.0)
 		VisualEffectHandler.sendPacket(VisualEffects.AQUASTREAM_HIT, dimension, hp.x, hp.y, hp.z)
 	}

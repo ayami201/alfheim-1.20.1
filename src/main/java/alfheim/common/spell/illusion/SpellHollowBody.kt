@@ -13,7 +13,7 @@ object SpellHollowBody: SpellBase("hollowbody", EnumRace.SPRIGGAN, 10000, 1200, 
 	
 	override var duration = 3600
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

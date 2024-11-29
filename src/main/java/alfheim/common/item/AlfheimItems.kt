@@ -163,7 +163,7 @@ object AlfheimItems {
 	val terraHoe: Item
 	val thinkingHand: Item
 	val thrymAxe: Item
-	//val toolbelt: Item
+	val toolbelt: Item
 	val trisDagger: Item
 	val triquetrum: Item
 	val volcanoMace: Item
@@ -312,7 +312,7 @@ object AlfheimItems {
 		elvenChakram = ItemElvenChakram()
 		trisDagger = ItemTrisDagger()
 		triquetrum = ItemTriquetrum()
-		//toolbelt = ItemToolbelt()
+		toolbelt = ItemToolbelt()
 		volcanoMace = ItemVolcanoMace()
 		volcanoHelmet = ItemVolcanoArmor(0, "VolcanoHelmet")
 		volcanoHelmetRevealing = if (Botania.thaumcraftLoaded) ItemVolcanoHelmetRevealing() else null

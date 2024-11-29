@@ -12,7 +12,7 @@ object SpellThor: SpellBase("thor", EnumRace.SYLPH, 6000, 1200, 30) {
 	
 	override var radius = 32.0
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

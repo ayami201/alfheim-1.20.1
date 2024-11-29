@@ -11,7 +11,7 @@ import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.mana.IManaItem
 import vazkii.botania.common.item.ModItems
 
-object PotionManaVoid: PotionAlfheim(AlfheimConfigHandler.potionIDManaVoid, "manaVoid", true, 192) {
+object PotionManaVoid: PotionAlfheim(AlfheimConfigHandler.potionIDManaVoid, "manaVoid", true, 0x0000C0) {
 	
 	init {
 		eventForge()

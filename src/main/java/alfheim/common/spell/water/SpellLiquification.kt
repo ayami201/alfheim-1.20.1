@@ -1,10 +1,9 @@
 package alfheim.common.spell.water
 
 import alexsocol.asjlib.*
-import alfheim.api.entity.*
+import alfheim.api.entity.EnumRace
 import alfheim.api.event.SpellCastEvent
 import alfheim.api.spell.SpellBase
-import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
@@ -15,7 +14,7 @@ import vazkii.botania.common.block.tile.TileAltar
 
 object SpellLiquification: SpellBase("liquification", EnumRace.UNDINE, 2000, 100, 5) {
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
@@ -36,7 +35,7 @@ object SpellLiquification: SpellBase("liquification", EnumRace.UNDINE, 2000, 100
 		
 		if (MinecraftForge.EVENT_BUS.post(SpellCastEvent.Pre(this, caster))) return SpellCastResult.NOTALLOW
 		
-		val cost = getManaCost() * if (race == caster.race) 1 else AlfheimConfigHandler.raceManaMult.I
+		val cost = getCostForRace(caster, race, getManaCost(), hard)
 		if (!consumeMana(caster, cost, false, this)) return SpellCastResult.NOMANA
 		
 		if (te != null) {

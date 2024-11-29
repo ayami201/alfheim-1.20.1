@@ -104,15 +104,12 @@ class BlockAnyavil: BlockContainerMod(Material.iron), IManaTrigger, IWandable, I
 	override fun hasComparatorInputOverride() = true
 	
 	override fun getComparatorInputOverride(world: World, x: Int, y: Int, z: Int, side: Int): Int {
-		val te = world.getTileEntity(x, y, z) as TileItemContainer
-		if (te.item != null) {
-			if (te.item!!.meta == te.item!!.maxDamage) return 1
-			if (te.item!!.meta == 0) return 15
-			val pow = MathHelper.ceiling_double_int((te.item!!.maxDamage - te.item!!.meta) * 15.0 / te.item!!.maxDamage)
-			return min(pow, 14)
-		}
-		
-		return 0
+		val te = world.getTileEntity(x, y, z) as? TileItemContainer ?: return 0
+		val item = te.item ?: return 0
+		if (item.meta == item.maxDamage) return 1
+		if (item.meta == 0) return 15
+		val pow = ((item.maxDamage - item.meta) * 15.0 / item.maxDamage).mceil()
+		return min(pow, 14)
 	}
 	
 	override fun createNewTileEntity(world: World, meta: Int) = TileAnyavil()

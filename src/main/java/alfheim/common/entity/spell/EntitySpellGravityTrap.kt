@@ -40,13 +40,13 @@ class EntitySpellGravityTrap @JvmOverloads constructor(world: World, var caster:
 		if (isDead || ticksExisted < 20 || ASJUtilities.isClient || caster == null) return
 		
 		getEntitiesWithinAABB(worldObj, Entity::class.java, getBoundingBox(posX, posY + 8, posZ, posX, posY + 8, posZ).expand(SpellGravityTrap.radius, 9.0, SpellGravityTrap.radius)).forEach {
-			if (it === this || it === caster || it is EntityLivingBase && PartySystem.mobsSameParty(caster, it) && !AlfheimConfigHandler.frienldyFire || it is EntityPlayer && it.capabilities.isCreativeMode) return@forEach
+			if (it === this || it === caster || it is EntityLivingBase && PartySystem.mobsSameParty(caster, it) && !AlfheimConfigHandler.friendlyFire || it is EntityPlayer && it.capabilities.isCreativeMode) return@forEach
 			
 			if (Vector3.entityDistancePlane(it, this) <= SpellGravityTrap.radius) run {
 				if (ticksExisted % 10 == 0) {
 					val prevHrt = it.hurtResistantTime
 					it.hurtResistantTime = 0
-					it.attackEntityFrom(DamageSourceSpell.gravity(this, caster), SpellBase.over(caster, SpellGravityTrap.damage.D))
+					it.attackEntityFrom(DamageSourceSpell.gravity(this, caster), SpellBase.over(caster, SpellGravityTrap.damage))
 					it.hurtResistantTime = prevHrt
 				}
 				

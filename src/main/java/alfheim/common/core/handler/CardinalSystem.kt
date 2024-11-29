@@ -547,8 +547,7 @@ object CardinalSystem {
 						}
 					}
 				} else {
-					val e = mc.theWorld.getEntityByID(members[i]?.uuid?.mostSignificantBits?.I
-													  ?: 0)
+					val e = mc.theWorld.getEntityByID(members[i]?.uuid?.mostSignificantBits?.I ?: 0)
 					return if (e is EntityLivingBase) e else null
 				}
 				return null

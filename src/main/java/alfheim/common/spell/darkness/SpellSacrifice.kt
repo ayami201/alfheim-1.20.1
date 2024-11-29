@@ -12,7 +12,7 @@ object SpellSacrifice: SpellBase("sacrifice", EnumRace.IMP, 256000, 75000, 100, 
 	override var damage = Float.MAX_VALUE
 	override var radius = 32.0
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(damage, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

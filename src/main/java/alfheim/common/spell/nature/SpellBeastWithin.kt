@@ -11,7 +11,8 @@ object SpellBeastWithin: SpellBase("beastwithin", EnumRace.CAITSITH, 10000, 1200
 	override var damage = 100f
 	override var duration = 200
 	
-	override val usableParams = arrayOf(damage, duration, efficiency)
+	override val usableParams 
+		get() = arrayOf(damage, duration, efficiency)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val tg = CardinalSystem.TargetingSystem.getTarget(caster)

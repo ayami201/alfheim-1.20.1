@@ -13,7 +13,7 @@ object SpellDispel: SpellBase("dispel", EnumRace.SALAMANDER, 1000, 600, 25) {
 	
 	override var duration = 300
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

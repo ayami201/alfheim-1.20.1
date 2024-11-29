@@ -13,10 +13,9 @@ import net.minecraft.world.World
 import java.io.File
 import java.util.*
 
-class BlockSchemaGenerator: BlockColoredSapling(name = "schematicOak") {
+class BlockSchemaGenerator: BlockColoredSapling("schematicOak") {
 	
-	override fun growTree(world: World?, x: Int, y: Int, z: Int, random: Random?) {
-		if (world == null) return
+	override fun growTree(world: World, x: Int, y: Int, z: Int, random: Random) {
 		val plantedOn: Block = world.getBlock(x, y - 1, z)
 		
 		if (!canGrowHere(plantedOn)) return

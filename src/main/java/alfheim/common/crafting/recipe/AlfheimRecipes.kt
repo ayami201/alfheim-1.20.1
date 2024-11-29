@@ -142,6 +142,7 @@ import alfheim.common.block.AlfheimBlocks.snakeObject
 import alfheim.common.block.AlfheimBlocks.spire
 import alfheim.common.block.AlfheimBlocks.subspacian
 import alfheim.common.block.AlfheimBlocks.tradePortal
+import alfheim.common.block.AlfheimBlocks.tunedSapling
 import alfheim.common.block.AlfheimBlocks.worldTree
 import alfheim.common.block.AlfheimFluffBlocks.chair
 import alfheim.common.block.AlfheimFluffBlocks.curtainPlacer
@@ -601,9 +602,10 @@ object AlfheimRecipes {
 	lateinit var recipeCircuitTree: RecipeTreeCrafting
 	lateinit var recipeBarrierTree: RecipeTreeCrafting
 	
-	lateinit var tuningElementalSeer: TunerIncantation<ItemStack>
 	lateinit var tuningAnomalyStabilization: TunerIncantation<TileAnomaly>
 	lateinit var tuningAnomalyPackaging: TunerIncantation<TileAnomaly>
+	lateinit var tuningElementalSeer: TunerIncantation<ItemStack>
+	lateinit var tuningSaplings: Array<TunerIncantationIO>
 	lateinit var tuningSlimeSize: TunerIncantation<EntityLivingBase>
 	lateinit var tuningMagmaSize: TunerIncantation<EntityLivingBase>
 	lateinit var tuningElementalSlimeSize: ElementalSlimeGrowthTune
@@ -1037,7 +1039,7 @@ object AlfheimRecipes {
 		CraftingManager.getInstance().recipeList.add(recipeRealityAnchor)
 		
 		recipesRealmCore = listOf(
-		ShapedOreRecipeLearnable(ABYSS_TRUTH, ItemStack(rpc, 1, 0),
+		ShapedOreRecipeLearnable(ABYSS_TRUTH, ItemStack(rpc),
 		                         "IBI", "SFS", "IRI",
 		                         'I', IFFESAL_DUST,
 		                         'B', rainbowRod,
@@ -2876,6 +2878,17 @@ object AlfheimRecipes {
 			true
 		}
 		
+		tuningSaplings = arrayOf(
+			registerItemCraftTuning("kasi kiwen pi kili loje o kama suli", ItemStack(tunedSapling), ItemStack(sapling)),
+			registerItemCraftTuning("kasi kiwen pi kili loje o kama sike", ItemStack(tunedSapling, 1, 1), ItemStack(sapling)),
+			registerItemCraftTuning("kasi kiwen walo o kama suli", ItemStack(tunedSapling, 1, 2), ItemStack(sapling, 1, 2)),
+			registerItemCraftTuning("kasi kiwen seli o kama lili", ItemStack(tunedSapling, 1, 3), ItemStack(sapling, 1, 3)),
+			registerItemCraftTuning("kasi kiwen pi kili loje o kama jo e kasi linja", ItemStack(tunedSapling, 1, 4), ItemStack(sapling)),
+			registerItemCraftTuning("kasi kiwen pi linja mute laso o kama suli", ItemStack(tunedSapling, 1, 5), ItemStack(sapling, 1, 1)),
+			registerItemCraftTuning("kasi kiwen pimeja pi kili loje o kama lili", ItemStack(tunedSapling, 1, 6), ItemStack(sapling, 1, 5)),
+			registerItemCraftTuning("kasi kiwen pi kili loje o kama linja mute", ItemStack(tunedSapling, 1, 7), ItemStack(sapling)),
+		)
+		
 		tuningSlimeSize = registerSlimeGrowthTune<EntitySlime>(ItemStack(slime_ball))
 		tuningMagmaSize = registerSlimeGrowthTune<EntityMagmaCube>(ItemStack(magma_cream))
 		tuningElementalSlimeSize = ElementalSlimeGrowthTune(slimeGrowthApplication<EntityElementalSlime>())
@@ -2929,7 +2942,10 @@ object AlfheimRecipes {
 		true
 	}
 	
-	fun registerItemCraftTuning(incantation: String, result: Item, _core: Any, vararg inputs: Any): TunerIncantationIO {
+	fun registerItemCraftTuning(incantation: String, result: Item, _core: Any, vararg inputs: Any) =
+		registerItemCraftTuning(incantation, ItemStack(result), _core, *inputs)
+	
+	fun registerItemCraftTuning(incantation: String, result: ItemStack, _core: Any, vararg inputs: Any): TunerIncantationIO {
 		val core = when (_core) {
 			is Block -> ItemStack(_core)
 			is Item -> ItemStack(_core)
@@ -2948,14 +2964,14 @@ object AlfheimRecipes {
 		}.toTypedArray()) {
 			if (!core.isItemEqual(it)) return@registerIncantation false
 			
-			it.func_150996_a(result)
-			it.stackSize = 1
-			it.meta = 0
-			it.tagCompound = NBTTagCompound()
+			it.func_150996_a(result.item)
+			it.stackSize = result.stackSize
+			it.meta = result.meta
+			it.tagCompound = result.tagCompound ?: NBTTagCompound()
 			true
 		}
 		
-		return TunerIncantationIO(tuning, core, ItemStack(result))
+		return TunerIncantationIO(tuning, core, result)
 	}
 	
 	private fun banRetrades() {

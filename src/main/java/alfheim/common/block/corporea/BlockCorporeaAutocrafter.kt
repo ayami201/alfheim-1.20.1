@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.entity.RenderItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.*
+import net.minecraft.util.StatCollector
 import net.minecraft.world.*
 import net.minecraftforge.event.world.BlockEvent
 import org.lwjgl.opengl.*
@@ -94,7 +94,7 @@ class BlockCorporeaAutocrafter: BlockContainerMod(Material.iron), ILexiconable, 
 				else                  -> 9
 			}
 			
-			val h = MathHelper.ceiling_float_int(tile.buffer.size / size.F)
+			val h = (tile.buffer.size / size.F).mceil()
 			
 			val width = size * 18 - 2
 			val height = h * 18 - 2

@@ -12,6 +12,7 @@ import alfheim.common.block.colored.*
 import alfheim.common.block.colored.rainbow.*
 import alfheim.common.block.corporea.*
 import alfheim.common.block.fluid.BlockManaFluid
+import alfheim.common.block.magtrees.BlockTunedSapling
 import alfheim.common.block.magtrees.barrier.*
 import alfheim.common.block.magtrees.calico.*
 import alfheim.common.block.magtrees.circuit.*
@@ -219,6 +220,8 @@ object AlfheimBlocks {
 	val sealingStairs: Block
 	val sealingWood: Block
 	
+	val tunedSapling: Block
+	
 	init {
 		airyVirus = BlockAiryVirus()
 		alfheimPortal = BlockAlfheimPortal()
@@ -422,6 +425,8 @@ object AlfheimBlocks {
 		sealingSlabsFull.register()
 		sealingStairs = BlockSealingWoodStairs()
 		sealingWood = BlockSealingWood()
+		
+		tunedSapling = BlockTunedSapling()
 		
 		AlfheimAPI.coldBlocks.addAll(arrayOf(snowLayer, poisonIce))
 		AlfheimAPI.warmBlocks.addAll(arrayOf(redFlame, ModBlocks.blazeBlock, netherLeaves, netherBerry, netherSapling, netherPlanks, netherSlabs, netherSlabsFull, netherStairs, netherWood))

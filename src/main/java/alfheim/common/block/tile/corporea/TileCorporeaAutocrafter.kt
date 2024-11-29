@@ -11,7 +11,6 @@ import net.minecraft.inventory.*
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.MathHelper
 import net.minecraftforge.common.util.ForgeDirection
 import vazkii.botania.api.corporea.*
 import vazkii.botania.common.block.tile.corporea.TileCorporeaFunnel
@@ -71,7 +70,7 @@ class TileCorporeaAutocrafter: ASJTile(), ICorporeaInterceptor, IInventory {
 		request = req
 		requestMissing = missing
 		prevCount = -1
-		leftToCraft = MathHelper.ceiling_float_int(missing / craftResult.F)
+		leftToCraft = (missing / craftResult.F).mceil()
 		
 		requestX = x
 		requestY = y

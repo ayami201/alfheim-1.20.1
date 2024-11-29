@@ -12,7 +12,7 @@ object SpellWallWarp: SpellBase("wallwarp", EnumRace.GNOME, 4000, 300, 5) {
 	
 	override var radius = 2.0
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(radius)
 	
 	// This spell is slightly changed version of item from thKaguya's mod

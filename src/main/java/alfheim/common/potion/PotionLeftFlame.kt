@@ -14,7 +14,7 @@ import net.minecraftforge.event.entity.living.LivingHealEvent
 import net.minecraftforge.event.entity.player.PlayerEvent.*
 import net.minecraftforge.event.world.BlockEvent.*
 
-object PotionLeftFlame: PotionAlfheim(AlfheimConfigHandler.potionIDLeftFlame, "leftFlame", false, 0x0) {
+object PotionLeftFlame: PotionAlfheim(AlfheimConfigHandler.potionIDLeftFlame, "leftFlame", false, 0) {
 	
 	init {
 		eventForge()

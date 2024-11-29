@@ -43,7 +43,7 @@ class EntitySpellFirestar(world: World, val caster: EntityLivingBase?): Entity(w
 				it.addPotionEffect(PotionEffectU(Potion.fireResistance.id, 100))
 				it.heal(SpellFirestar.efficiency.F)
 			} else {
-				it.attackEntityFrom(DamageSource.inFire, SpellBase.over(caster, SpellDarkness.damage.D))
+				it.attackEntityFrom(DamageSource.inFire, SpellBase.over(caster, SpellDarkness.damage))
 			}
 		}
 	}

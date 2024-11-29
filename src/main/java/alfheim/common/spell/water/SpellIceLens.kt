@@ -14,7 +14,7 @@ object SpellIceLens: SpellBase("icelens", EnumRace.UNDINE, 6000, 1200, 30) {
 	
 	override var duration = 200
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

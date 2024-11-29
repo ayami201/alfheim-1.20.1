@@ -38,13 +38,13 @@ class EntitySpellMortar(world: World): Entity(world), ITimeStopSpecific {
 	
 	fun onImpact(mop: MovingObjectPosition?) {
 		if (!worldObj.isRemote) {
-			if (mop?.entityHit?.attackEntityFrom(DamageSourceSpell.mortar(this, caster), SpellBase.over(caster, SpellMortar.damage.D)) == true)
+			if (mop?.entityHit?.attackEntityFrom(DamageSourceSpell.mortar(this, caster), SpellBase.over(caster, SpellMortar.damage)) == true)
 				if (mop.entityHit is EntityPlayer)
-					(mop.entityHit as EntityPlayer).inventory.damageArmor(MathHelper.ceiling_float_int(SpellBase.over(caster, SpellMortar.damage * 2.5)).F)
+					(mop.entityHit as EntityPlayer).inventory.damageArmor(SpellBase.over(caster, SpellMortar.damage * 2.5f))
 			
 			val l = getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox(SpellMortar.radius))
 			l.forEach {
-				it.attackEntityFrom(DamageSourceSpell.mortar(this, caster), SpellBase.over(caster, SpellMortar.damage * 0.625))
+				it.attackEntityFrom(DamageSourceSpell.mortar(this, caster), SpellBase.over(caster, SpellMortar.damage * 0.625f))
 			}
 			setDead()
 		}

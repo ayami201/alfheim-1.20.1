@@ -15,7 +15,7 @@ import net.minecraft.entity.player.*
 
 object SpellEcho: SpellBase("echo", EnumRace.POOKA, 4000, 1500, 5) {
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

@@ -20,11 +20,12 @@ import net.minecraft.world.*
 import net.minecraft.world.gen.feature.WorldGenerator
 import net.minecraftforge.common.EnumPlantType
 import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.event.terraingen.TerrainGen
 import vazkii.botania.api.lexicon.*
 import java.util.*
 
 @Suppress("LeakingThis")
-open class BlockColoredSapling(val name: String = "irisSapling"): BlockSapling(), ILexiconable, IFuelHandler {
+open class BlockColoredSapling(name: String = "irisSapling"): BlockSapling(), ILexiconable, IFuelHandler {
 	
 	init {
 		setBlockName(name)
@@ -35,10 +36,12 @@ open class BlockColoredSapling(val name: String = "irisSapling"): BlockSapling()
 		GameRegistry.registerFuelHandler(this)
 	}
 	
-	override fun setBlockName(par1Str: String): Block {
-		GameRegistry.registerBlock(this, ItemBlockLeavesMod::class.java, par1Str)
-		return super.setBlockName(par1Str)
+	override fun setBlockName(name: String): Block {
+		if (shouldRegisterInNameSet()) GameRegistry.registerBlock(this, ItemBlockLeavesMod::class.java, name)
+		return super.setBlockName(name)
 	}
+	
+	open fun shouldRegisterInNameSet() = true
 	
 	override fun getCollisionBoundingBoxFromPool(world: World?, x: Int, y: Int, z: Int) = null
 	
@@ -80,12 +83,11 @@ open class BlockColoredSapling(val name: String = "irisSapling"): BlockSapling()
 	override fun canBlockStay(world: World, x: Int, y: Int, z: Int) =
 		world.getBlock(x, y - 1, z).canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this) || canGrowHere(world.getBlock(x, y - 1, z))
 	
-	override fun getSubBlocks(item: Item?, tab: CreativeTabs?, list: MutableList<Any?>?) {
-		if (list != null && item != null)
-			list.add(ItemStack(this))
+	override fun getSubBlocks(item: Item?, tab: CreativeTabs?, list: MutableList<Any?>) {
+		list.add(ItemStack(item))
 	}
 	
-	fun markOrGrowMarked(world: World?, x: Int, y: Int, z: Int, random: Random?) {
+	fun markOrGrowMarked(world: World?, x: Int, y: Int, z: Int, random: Random) {
 		if (world != null) {
 			val l = world.getBlockMetadata(x, y, z)
 			
@@ -97,43 +99,43 @@ open class BlockColoredSapling(val name: String = "irisSapling"): BlockSapling()
 		}
 	}
 	
-	open fun growTree(world: World?, x: Int, y: Int, z: Int, random: Random?) {
-		if (world != null) {
-			if (!net.minecraftforge.event.terraingen.TerrainGen.saplingGrowTree(world, random, x, y, z)) return
-			
-			val plantedOn: Block = world.getBlock(x, y - 1, z)
-			
-			if (canGrowHere(plantedOn)) {
-				val l = world.getBlockMetadata(x, y, z)
-				
-				val obj: WorldGenerator = SimpleTreeGen(5)
-				
-				world.setBlock(x, y, z, Blocks.air, 0, 4)
-				
-				if (!obj.generate(world, random, x, y, z)) {
-					world.setBlock(x, y, z, this, l, 4)
-				}
-			}
-		}
+	open fun growTree(world: World, x: Int, y: Int, z: Int, random: Random) {
+		if (!TerrainGen.saplingGrowTree(world, random, x, y, z)) return
+		
+		val plantedOn: Block = world.getBlock(x, y - 1, z)
+		
+		if (!canGrowHere(plantedOn)) return
+		
+		val l = world.getBlockMetadata(x, y, z)
+		val obj: WorldGenerator = getGenerator(l)
+		
+		world.setBlock(x, y, z, Blocks.air, 0, 4)
+		
+		if (obj.generate(world, getRandomForGenerating(l, random), x, y, z)) return
+		world.setBlock(x, y, z, this, l, 4)
 	}
+	
+	open fun getGenerator(meta: Int): WorldGenerator = SimpleTreeGen(5)
+	
+	open fun getRandomForGenerating(meta: Int, default: Random) = default
 	
 	/**
 	 * canFertilize
 	 */
-	override fun func_149851_a(world: World?, x: Int, y: Int, z: Int, isRemote: Boolean) = canGrowHere(world!!.getBlock(x, y - 1, z))
+	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, isRemote: Boolean) = canGrowHere(world.getBlock(x, y - 1, z))
 	
 	/**
 	 * shouldCallFertilize
 	 * If false #fertilize won't be called, but bonemeal stack size will be decremented
 	 */
-	override fun func_149852_a(world: World?, random: Random, x: Int, y: Int, z: Int): Boolean {
+	override fun func_149852_a(world: World, random: Random, x: Int, y: Int, z: Int): Boolean {
 		return random.nextDouble() < 0.45
 	}
 	
 	/**
 	 * fertilize
 	 */
-	override fun func_149853_b(world: World?, random: Random?, x: Int, y: Int, z: Int) {
+	override fun func_149853_b(world: World, random: Random, x: Int, y: Int, z: Int) {
 		markOrGrowMarked(world, x, y, z, random)
 	}
 	
@@ -144,8 +146,8 @@ open class BlockColoredSapling(val name: String = "irisSapling"): BlockSapling()
 	override fun getBurnTime(fuel: ItemStack) = if (fuel.item === this.toItem()) 100 else 0
 	
 	@SideOnly(Side.CLIENT)
-	override fun registerBlockIcons(par1IconRegister: IIconRegister) {
-		blockIcon = IconHelper.forBlock(par1IconRegister, this)
+	override fun registerBlockIcons(reg: IIconRegister) {
+		blockIcon = IconHelper.forBlock(reg, this)
 	}
 	
 	@SideOnly(Side.CLIENT)

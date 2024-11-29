@@ -13,7 +13,8 @@ object SpellFirestar: SpellBase("firestar", EnumRace.SALAMANDER, 6000, 2400, 40)
 	override var efficiency = 0.025
 	override var radius = 8.0
 	
-	override val usableParams = arrayOf(damage, duration, efficiency, radius)
+	override val usableParams
+		get() = arrayOf(damage, duration, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCastOver(caster)

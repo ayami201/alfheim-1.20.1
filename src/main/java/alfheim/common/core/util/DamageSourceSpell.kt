@@ -18,15 +18,21 @@ open class DamageSourceSpell(type: String): DamageSource(type) {
 		/** Decay Spell */
 		val bleeding = DamageSourceSpell("bleeding").setDamageBypassesArmor().setDamageIsAbsolute()!!
 		
+		/** Voodoo Spell */
+		val curse = DamageSourceSpell("curse").setMagicDamage().setTo(DARKNESS)
+		
 		/** Priest emblem damage */
 		val faith = DamageSource("lackOfFaith").setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage().setTo(LIGHTNESS)
 		
 		val lightning = DamageSource("lightning").setDamageBypassesArmor().setTo(ELECTRIC)
 		
 		/** Death Mark Spell */
-		val mark = DamageSourceSpell("mark").setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage().setTo(DARKNESS)
+		val mark = DamageSourceSpell("curse").setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage().setTo(DARKNESS)
 		
 		val nifleice = DamageSource("nifleice").setDamageBypassesArmor().setDamageIsAbsolute().setTo(ICE)
+		
+		/** Priority Target spell */
+		val notPriorityTarget = DamageSourceSpell("lackOfFaith").setDamageBypassesArmor().setTo(PSYCHIC)
 		
 		/** Regular poison */
 		val poison = DamageSource("poison").setDamageBypassesArmor().setTo(NATURE)

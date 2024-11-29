@@ -1,5 +1,6 @@
 package alfheim.common.world.dim.niflheim.customgens
 
+import alexsocol.asjlib.*
 import alfheim.common.block.AlfheimBlocks
 import net.minecraft.block.material.Material
 import net.minecraft.init.Blocks
@@ -29,13 +30,13 @@ object WorldGenIcePikes {
 		j1 = 0
 		
 		while (j1 < l) {
-			val f = (1.0f - j1.toFloat() / l.toFloat()) * i1.toFloat()
-			k1 = MathHelper.ceiling_float_int(f)
+			val f = (1.0f - j1.F / l.F) * i1.F
+			k1 = f.mceil()
 			l1 = -k1
 			while (l1 <= k1) {
-				val f1 = MathHelper.abs_int(l1).toFloat() - 0.25f
+				val f1 = MathHelper.abs_int(l1).F - 0.25f
 				for (i2 in -k1..k1) {
-					val f2 = MathHelper.abs_int(i2).toFloat() - 0.25f
+					val f2 = MathHelper.abs_int(i2).F - 0.25f
 					if ((l1 == 0 && i2 == 0 || f1 * f1 + f2 * f2 <= f * f) && (l1 != -k1 && l1 != k1 && i2 != -k1 && i2 != k1 || rand.nextFloat() <= 0.75f)) {
 						var block = world.getBlock(x + l1, y + j1, z + i2)
 						if (block.material === Material.air || block === Blocks.snow_layer) world.setBlock(x + l1, y + j1, z + i2, AlfheimBlocks.poisonIce, 0, 2)
