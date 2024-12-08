@@ -1,6 +1,6 @@
 <news>
 	<version id="LATEST">
-		<val>57</val>
+		<val>59</val>
 	</version>
 	<version id="UNIVERSAL">
 		<val>$json["Official Alfheim Discord server is here! *",{"text":"click","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Join discord server","color":"gold"}},"clickEvent":{"action":"open_url","value":"https://discord.gg/dqQXZHq"}},"*"]</val>
@@ -160,5 +160,11 @@
 	</version>
 	<version id="56">
 		<val>New super-duper really cool mining tool called Resonator!</val>
+	</version>
+	<version id="57">
+		<val>Fix and tweaks</val>
+	</version>
+	<version id="58">
+		<val>New spells! New saplings!</val>
 	</version>
 </news>
