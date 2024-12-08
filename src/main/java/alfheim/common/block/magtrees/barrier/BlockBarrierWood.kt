@@ -1,7 +1,7 @@
 package alfheim.common.block.magtrees.barrier
 
 import alfheim.common.block.base.BlockModRotatedPillar
-import alfheim.common.block.tile.*
+import alfheim.common.block.tile.TileTreeWind
 import alfheim.common.item.block.ItemBlockLeavesMod
 import alfheim.common.lexicon.AlfheimLexiconData
 import cpw.mods.fml.common.registry.GameRegistry

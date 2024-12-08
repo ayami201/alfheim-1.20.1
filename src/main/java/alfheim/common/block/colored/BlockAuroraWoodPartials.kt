@@ -1,6 +1,6 @@
 package alfheim.common.block.colored
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.block
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.base.*
 import alfheim.common.item.block.ItemColoredSlabMod

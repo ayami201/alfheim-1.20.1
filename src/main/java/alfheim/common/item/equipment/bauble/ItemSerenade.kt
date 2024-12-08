@@ -18,7 +18,6 @@ import net.minecraft.world.World
 import net.minecraftforge.client.event.RenderPlayerEvent
 import org.lwjgl.opengl.GL11
 import vazkii.botania.api.item.IBaubleRender
-import vazkii.botania.api.item.ICosmeticBauble
 import vazkii.botania.client.core.handler.ClientTickHandler
 import vazkii.botania.common.item.equipment.bauble.ItemBauble
 import kotlin.math.sin

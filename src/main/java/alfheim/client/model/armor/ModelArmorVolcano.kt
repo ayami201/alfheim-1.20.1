@@ -4,13 +4,11 @@ import alexsocol.asjlib.F
 import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.common.item.equipment.armor.ItemVolcanoArmor
 import net.minecraft.client.model.*
-import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.entity.*
 import net.minecraft.entity.monster.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.EnumAction
 import net.minecraft.util.MathHelper
-import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 

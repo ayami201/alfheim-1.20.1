@@ -13,7 +13,7 @@ object SpellConfusion: SpellBase("confusion", EnumRace.SPRIGGAN, 4000, 1200, 15)
 	
 	override var duration = 600
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

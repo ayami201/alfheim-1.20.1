@@ -74,7 +74,7 @@ class EntitySpellFenrirStorm(world: World): Entity(world), ITimeStopSpecific {
 		
 		if (ticksExisted != 4 && !mjolnir) return
 		getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, area.toAABB()).forEach { e ->
-			if (e !== caster && area.intersectsWith(OrientedBB(e.boundingBox()))) e.attackEntityFrom(DamageSourceSpell.lightningIndirect(this, caster), SpellBase.over(caster, SpellFenrirStorm.damage.D))
+			if (e !== caster && area.intersectsWith(OrientedBB(e.boundingBox()))) e.attackEntityFrom(DamageSourceSpell.lightningIndirect(this, caster), SpellBase.over(caster, SpellFenrirStorm.damage))
 		}
 	}
 	

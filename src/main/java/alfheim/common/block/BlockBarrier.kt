@@ -11,7 +11,7 @@ import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 import net.minecraftforge.client.event.DrawBlockHighlightEvent
-import vazkii.botania.api.lexicon.*
+import vazkii.botania.api.lexicon.ILexiconable
 
 class BlockBarrier: BlockMod(Material.cake), ILexiconable {
 	

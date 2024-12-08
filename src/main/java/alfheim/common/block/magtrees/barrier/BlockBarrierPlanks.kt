@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.MovingObjectPosition
-import net.minecraft.world.*
+import net.minecraft.world.World
 import vazkii.botania.api.lexicon.ILexiconable
 
 class BlockBarrierPlanks: BlockMod(Material.wood), ILexiconable {

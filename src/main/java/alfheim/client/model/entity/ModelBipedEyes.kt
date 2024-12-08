@@ -3,7 +3,6 @@ package alfheim.client.model.entity
 import alexsocol.asjlib.mc
 import alexsocol.asjlib.render.ASJRenderHelper
 import net.minecraft.client.model.*
-import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11.*

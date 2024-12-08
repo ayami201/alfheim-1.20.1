@@ -13,7 +13,7 @@ object SpellBlink: SpellBase("blink", EnumRace.LEPRECHAUN, 10000, 200, 5) {
 	
 	override var radius = 8.0
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

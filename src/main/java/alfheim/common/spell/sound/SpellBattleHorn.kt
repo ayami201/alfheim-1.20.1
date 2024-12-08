@@ -15,7 +15,7 @@ object SpellBattleHorn: SpellBase("battlehorn", EnumRace.POOKA, 5000, 600, 15) {
 	
 	override var duration = 36000
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(duration, efficiency)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

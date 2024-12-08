@@ -222,12 +222,12 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 				if (rand.nextInt(200) == 0 && target is EntityPlayer) target.capabilities.isFlying = false
 				
 				val (x, y, z) = Vector3.fromEntity(target).mf()
-				val oxzs = MathHelper.ceiling_float_int(target.width) / 2
-				val oye = MathHelper.ceiling_float_int(target.height)
+				val oxz = target.width.mceil() / 2
+				val oy = target.height.mceil()
 				
-				for (i in x.bidiRange(oxzs + 2))
-					for (j in (y - 2)..(y + oye + 2))
-						for (k in z.bidiRange(oxzs + 2)) {
+				for (i in x.bidiRange(oxz + 2))
+					for (j in (y - 2)..(y + oy + 2))
+						for (k in z.bidiRange(oxz + 2)) {
 							if (!worldObj.isAirBlock(i, j, k)) continue
 							worldObj.setBlock(i, j, k, AlfheimBlocks.dirtDissolvable)
 							worldObj.scheduleBlockUpdate(i, j, k, AlfheimBlocks.dirtDissolvable, AlfheimBlocks.dirtDissolvable.tickRate(worldObj))
@@ -265,7 +265,7 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 						if (target.teleportRandomly(8.0)) {
 							val (x, y, z) = Vector3.fromEntity(target)
 							target.setPositionAndUpdate(x, y + ASJUtilities.randInBounds(8, 16, rand), z)
-							target.attackEntityFrom(DamageSourceSpell.shadowSpell(this), SpellBase.over(this, SpellShadowVortex.damage.D))
+							target.attackEntityFrom(DamageSourceSpell.shadowSpell(this), SpellBase.over(this, SpellShadowVortex.damage))
 							break
 						}
 				

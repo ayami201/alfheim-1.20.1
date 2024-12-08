@@ -52,7 +52,7 @@ class EntitySpellNoteshot: Entity, ITimeStopSpecific {
 			
 			val damage = (if (caster is EntityPlayer) DamageSource.causePlayerDamage(caster) else DamageSource.causeMobDamage(caster)).setTo(ElementalDamage.PSYCHIC).setTo(ElementalDamage.AIR)
 			if (e.attackEntityFrom(damage, SpellNoteshot.damage)) {
-				e.addPotionEffect(PotionEffect(AlfheimConfigHandler.potionIDEternity, 50, PotionEternity.STUN or PotionEternity.IRREMOVABLE))
+				e.addPotionEffect(PotionEffect(AlfheimConfigHandler.potionIDEternity, SpellNoteshot.duration, PotionEternity.STUN or PotionEternity.IRREMOVABLE))
 				setDead()
 			}
 		}

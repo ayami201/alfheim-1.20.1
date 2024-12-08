@@ -12,7 +12,8 @@ object SpellRepair: SpellBase("repair", EnumRace.LEPRECHAUN, 25000, 100, 50) {
 	
 	override var efficiency = 100.0
 	
-	override val usableParams = arrayOf(efficiency)
+	override val usableParams
+		get() = arrayOf(efficiency)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val stack = caster.heldItem ?: return SpellCastResult.NOTARGET

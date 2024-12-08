@@ -16,7 +16,6 @@ import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.*
 import net.minecraftforge.common.IPlantable
 import net.minecraftforge.common.util.ForgeDirection
-import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.lexicon.ILexiconable
 import java.awt.Color
 import java.util.*

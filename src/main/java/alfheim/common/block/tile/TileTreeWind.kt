@@ -6,9 +6,7 @@ import alexsocol.asjlib.math.Vector3
 import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.*
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.nbt.NBTTagList
-import net.minecraft.nbt.NBTTagString
+import net.minecraft.nbt.*
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraftforge.common.util.Constants
 

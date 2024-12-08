@@ -29,8 +29,6 @@ object RenderWings {
 	
 	@SideOnly(Side.CLIENT)
 	fun render(player: EntityPlayer) {
-		// player.sendPlayerAbilities()
-		
 		val match = ContributorsPrivacyHelper.wings.keys.firstOrNull { ContributorsPrivacyHelper.isCorrect(player, it) }
 		
 		if (match == null) {
@@ -47,19 +45,10 @@ object RenderWings {
 		
 		glPushMatrix()
 		glDisable(GL_CULL_FACE)
-		
-		//if (match == -1) {
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 		glDepthMask(false)
 		glAlphaFunc(GL_GREATER, 1 / 255f)
-		//}
-
-//		glDisable(GL_LIGHTING)
-//		val lastX = OpenGlHelper.lastBrightnessX
-//		val lastY = OpenGlHelper.lastBrightnessY
-//		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f)
-		
 		ASJRenderHelper.setGlow()
 		
 		val spd = 0.5
@@ -95,7 +84,6 @@ object RenderWings {
 		glTranslated(0.15, 0.1, 0.15)
 		val swr = 1.5
 		glScaled(swr)
-		//glRotated(10, 0, 0, 1);
 		glRotated((-ry).D, 0.0, 1.0, 0.0)
 		getPlayerWingTexture(player)?.let { drawRect(it, -1) }
 		glPopMatrix()
@@ -105,28 +93,23 @@ object RenderWings {
 		glTranslated(-0.15, 0.1, 0.15)
 		val swl = 1.5
 		glScaled(-swl, swl, swl)
-		//glRotated(10, 0, 0, 1);
 		glRotated((-ry).D, 0.0, 1.0, 0.0)
 		getPlayerWingTexture(player)?.let { drawRect(it, -1) }
 		glPopMatrix()
 		
-		//glColor4d(1, 1, 1, 1); for some reason it cleans color
-//		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastX, lastY)
-//		glEnable(GL_LIGHTING)
 		ASJRenderHelper.discard()
-		//if (match == -1) {
 		glAlphaFunc(GL_GREATER, 0.1f)
 		glDepthMask(true)
 		glDisable(GL_BLEND)
-		//}
 		glEnable(GL_CULL_FACE)
 		glPopMatrix()
 		
 		if (mc.thePlayer === player && mc.gameSettings.thirdPersonView == 0) return
 		
-		if (mc.theWorld.totalWorldTime % 10 == 0L && !mc.isGamePaused) {
+		if (mc.theWorld.totalWorldTime % 2 == 0L && !mc.isGamePaused && !player.onGround) {
 			val v = Vector3(Math.random() - 0.5, 0.0, Math.random() - 0.5).normalize().add(0.0, Math.random(), 0.0).mul(Math.random(), 1.0, Math.random()).mul(player.width.D, player.height.D, player.width.D)
-			Botania.proxy.sparkleFX(player.worldObj, player.posX + v.x, player.posY + v.y - if (mc.thePlayer === player) 1.62 else 0.0, player.posZ + v.z, 1f, 1f, 1f, 2f * Math.random().F, 20)
+			val (r, g, b) = Color(player.race.rgbColor).getRGBColorComponents(null)
+			particleQueue[player.commandSenderName] = QueuedParticle(player.posX + v.x, player.posY + v.y - if (mc.thePlayer === player) 1.62 else 0.0, player.posZ + v.z, r, g, b, 2f * Math.random().F)
 		}
 	}
 	
@@ -143,4 +126,17 @@ object RenderWings {
 	fun getPlayerWingTexture(player: EntityPlayer) = textures[ContributorsPrivacyHelper.wings.keys.firstOrNull { ContributorsPrivacyHelper.isCorrect(player, it) } ?: ""] ?: LibResourceLocations.wings[player.raceID]
 	
 	fun getPlayerIconTexture(player: EntityPlayer) = LibResourceLocations.icons[player.raceID]
+	
+	val particleQueue = HashMap<String, QueuedParticle>()
+	
+	data class QueuedParticle(val x: Double, val y: Double, val z: Double, val r: Float, val g: Float, val b: Float, val size: Float)
+	
+	fun spawnQueuedParticles() {
+		if (mc.theWorld != null)
+			particleQueue.values.forEach { (x, y, z, r, g, b, size) ->
+				Botania.proxy.sparkleFX(mc.theWorld, x, y, z, r, g, b, size, 20)
+			}
+		
+		particleQueue.clear()
+	}
 }

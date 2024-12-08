@@ -8,7 +8,7 @@ import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.*
-import net.minecraft.item.*
+import net.minecraft.item.ItemStack
 import net.minecraft.world.*
 import java.util.*
 

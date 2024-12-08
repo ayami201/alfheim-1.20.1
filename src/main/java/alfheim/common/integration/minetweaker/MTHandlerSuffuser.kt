@@ -10,7 +10,6 @@ import minetweaker.api.item.*
 import net.minecraft.item.ItemStack
 import stanhebben.zenscript.annotations.*
 import vazkii.botania.api.BotaniaAPI
-import java.util.*
 
 @ZenClass("mods." + ModInfo.MODID + ".Suffuser")
 object MTHandlerSuffuser {

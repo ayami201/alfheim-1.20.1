@@ -64,7 +64,7 @@ class EntitySpellFireball(world: World): Entity(world), ITimeStopSpecific {
 		if (caster is EntitySurtr && rand.nextInt(10) == 0) dmg.setDamageBypassesArmor().setDamageIsAbsolute()
 		
 		l.forEach {
-			it.attackEntityFrom(dmg, if (caster is EntitySurtr) 10f else SpellBase.over(caster, SpellFireball.damage.D))
+			it.attackEntityFrom(dmg, if (caster is EntitySurtr) 10f else SpellBase.over(caster, SpellFireball.damage))
 		}
 
 		playSoundAtEntity("${ModInfo.MODID}:surtr.fireball.hit", 1f, 1f)

@@ -6,8 +6,11 @@ import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.network.NetworkManager
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity
 import vazkii.botania.common.Botania
 import vazkii.botania.common.item.ItemTwigWand
+import kotlin.math.max
 
 open class TileDoubleCamo: ASJTile() {
 	
@@ -22,6 +25,9 @@ open class TileDoubleCamo: ASJTile() {
 	var blockTopMeta = 0
 	
 	var locked = false
+	
+	var light = 0
+	var lightCheckAntiStackOverflow = false
 	
 	override fun updateEntity() {
 		if (locked || ASJUtilities.isServer || mc.thePlayer.heldItem?.item !is ItemTwigWand) return
@@ -47,6 +53,53 @@ open class TileDoubleCamo: ASJTile() {
 		if (nbt.hasKey(TAG_BLOCK_TOP_META)) blockTopMeta = nbt.getInteger(TAG_BLOCK_TOP_META)
 		if (nbt.hasKey(TAG_LOCKED)) locked = nbt.getBoolean(TAG_LOCKED)
 		if (nbt.hasKey(TAG_NO_DROP)) noDrop = nbt.getBoolean(TAG_NO_DROP)
+		
+		recalculateLight()
+	}
+	
+	override fun onDataPacket(net: NetworkManager?, packet: S35PacketUpdateTileEntity) {
+		super.onDataPacket(net, packet)
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord)
+	}
+	
+	fun getLightValue(): Int {
+		if (light == -1 && !lightCheckAntiStackOverflow) {
+			light = calculateLight()
+			worldObj?.func_147451_t(xCoord, yCoord, zCoord)
+		}
+		
+		return light
+	}
+	
+	private fun calculateLight(): Int {
+		var max: Int
+		
+		lightCheckAntiStackOverflow = true
+		
+		val oldMeta = getBlockMetadata()
+		
+		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, blockTopMeta, 4)
+		val topLight = blockTop.getLightValue(worldObj, xCoord, yCoord, zCoord)
+		max = if (topLight > 0) topLight else blockTop.lightValue
+		
+		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, blockBottomMeta, 4)
+		val botLight = blockBottom.getLightValue(worldObj, xCoord, yCoord, zCoord)
+		max = max(max, if (botLight > 0) botLight else blockBottom.lightValue)
+		
+		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, oldMeta, 4)
+		
+		lightCheckAntiStackOverflow = false
+		
+		return max
+	}
+	
+	fun recalculateLight() {
+		if (worldObj != null) {
+			light = -1
+			light = calculateLight()
+			worldObj.func_147451_t(xCoord, yCoord, zCoord)
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord)
+		}
 	}
 	
 	companion object {

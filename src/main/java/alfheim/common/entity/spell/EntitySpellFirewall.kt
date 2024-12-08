@@ -3,7 +3,7 @@ package alfheim.common.entity.spell
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.*
 import alfheim.api.spell.*
-import alfheim.common.core.handler.*
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.PartySystem
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.spell.fire.SpellFirewall
@@ -58,8 +58,8 @@ class EntitySpellFirewall(world: World): Entity(world), ITimeStopSpecific {
 		
 		getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, obb.toAABB()).forEach {
 			if (it === caster || !obb.intersectsWith(it.boundingBox())) return@forEach
-			if (!it.attackEntityFrom(DamageSourceSpell.firewall(this, caster), SpellBase.over(caster, SpellFirewall.damage.D))) return@forEach
-			if (!PartySystem.mobsSameParty(caster, it) || AlfheimConfigHandler.frienldyFire) it.setFire(3)
+			if (!it.attackEntityFrom(DamageSourceSpell.firewall(this, caster), SpellBase.over(caster, SpellFirewall.damage))) return@forEach
+			if (!PartySystem.mobsSameParty(caster, it) || AlfheimConfigHandler.friendlyFire) it.setFire(3)
 		}
 		
 		// no ideas why twice to Rad (here and in #rotateOY), but it works -_-

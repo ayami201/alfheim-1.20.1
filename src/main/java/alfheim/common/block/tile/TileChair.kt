@@ -12,14 +12,17 @@ import net.minecraft.world.World
 class TileChair: TileDoubleCamo() {
 	
 	fun mount(player: EntityPlayer, offset: Double): Boolean {
-		if (worldObj.getEntitiesWithinAABB(EntitySit::class.java, boundingBox().offset(0, 0.5, 0)).isNotEmpty()) return false
-		
-		if (!worldObj.isRemote)
-			EntitySit(worldObj).apply {
-				setPosition(xCoord + 0.5, yCoord + offset, zCoord + 0.5)
-				spawn()
-				player.mountEntity(this)
-			}
+		if (!worldObj.isRemote) {
+			if (worldObj.getEntitiesWithinAABB(EntitySit::class.java, boundingBox().offset(0, 0.5, 0)).isNotEmpty()) return false
+			
+			player.mountEntity(null)
+			
+			val sit = EntitySit(worldObj)
+			sit.setPosition(xCoord + 0.5, yCoord + offset, zCoord + 0.5)
+			player.mountEntity(sit)
+			sit.spawn(worldObj)
+			player.mountEntity(sit)
+		}
 		
 		return true
 	}
@@ -29,7 +32,8 @@ class TileChair: TileDoubleCamo() {
 		class EntitySit(world: World): Entity(world) {
 			
 			override fun onEntityUpdate() {
-				if (riddenByEntity == null || worldObj.getBlock(this) !== AlfheimFluffBlocks.chair) setDead()
+				if (!worldObj.isRemote)
+					if (riddenByEntity == null || worldObj.getBlock(this) !== AlfheimFluffBlocks.chair) setDead()
 			}
 			
 			@SideOnly(Side.CLIENT)

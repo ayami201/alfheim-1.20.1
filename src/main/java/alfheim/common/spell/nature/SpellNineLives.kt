@@ -8,11 +8,11 @@ import alfheim.common.core.handler.*
 import alfheim.common.core.handler.CardinalSystem.TargetingSystem
 import net.minecraft.entity.EntityLivingBase
 
-object SpellNineLifes: SpellBase("ninelifes", EnumRace.CAITSITH, 16000, 3000, 30) {
+object SpellNineLives: SpellBase("ninelives", EnumRace.CAITSITH, 16000, 3000, 30) {
 	
 	override var duration = 36000
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
@@ -26,7 +26,7 @@ object SpellNineLifes: SpellBase("ninelifes", EnumRace.CAITSITH, 16000, 3000, 30
 		val result = checkCast(caster)
 		if (result != SpellCastResult.OK) return result
 		
-		tg.target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDNineLifes, duration, 4))
+		tg.target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDNineLives, duration, 4))
 		VisualEffectHandler.sendPacket(VisualEffects.UPHEAL, tg.target)
 		
 		return result

@@ -7,7 +7,7 @@ import alfheim.api.lib.LibResourceLocations
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.item.ItemIridescent
-import alfheim.common.item.equipment.bauble.ItemPriestEmblem
+import alfheim.common.item.equipment.bauble.*
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.block.Block
 import net.minecraft.entity.EntityLivingBase
@@ -86,9 +86,9 @@ class ItemRodIridescent(name: String = "rodColorfulSkyDirt"): ItemIridescent(nam
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
 		var blockstack = dirtStack(stack.meta)
 		
-		/*val beltStack = ItemToolbelt.getEquippedBelt(player)
+		val beltStack = ItemToolbelt.getEquippedBelt(player)
 		if (beltStack != null && ItemToolbelt.isEquipped(beltStack))
-			return stack*/
+			return stack
 		
 		if (player.isSneaking) {
 			var damage = stack.meta

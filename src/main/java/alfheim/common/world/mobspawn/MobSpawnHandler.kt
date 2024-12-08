@@ -26,7 +26,7 @@ import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.gameevent.TickEvent
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent
 import net.minecraft.entity.*
-import net.minecraft.entity.player.*
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.WeightedRandom
 import net.minecraft.world.*
 import net.minecraftforge.event.ForgeEventFactory
@@ -258,7 +258,7 @@ object MobSpawnHandler {
 				}
 			}
 			
-			val minDistance = world.playerEntities.minOfOrNull { player -> player as EntityPlayerMP
+			val minDistance = world.playerEntities.minOfOrNull { player -> player as EntityPlayer
 				min(abs(entity.posX - player.posX), abs(entity.posZ - player.posZ))
 			} ?: Double.MAX_VALUE
 			

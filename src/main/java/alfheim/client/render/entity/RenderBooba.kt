@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.AdvancedModelLoader
 import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL12
 import vazkii.botania.api.item.IBaubleRender
 import java.util.*
 import kotlin.math.*
@@ -45,6 +46,7 @@ object RenderBooba {
 		glEnable(GL_LIGHT0)
 		glEnable(GL_LIGHT1)
 		glEnable(GL_COLOR_MATERIAL)
+		glEnable(GL12.GL_RESCALE_NORMAL)
 		glScaled(0.0625)
 		glRotatef(180f, 0f, 1f, 0f)
 		val offset = (Random(player.commandSenderName.hashCode().toLong()).nextFloat() * 0.5f - 0.5f) * 2f

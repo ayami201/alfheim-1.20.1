@@ -15,7 +15,7 @@ object SpellNightVision: SpellBase("nightvision", EnumRace.SPRIGGAN, 6000, 1200,
 	
 	override var duration = 36000
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

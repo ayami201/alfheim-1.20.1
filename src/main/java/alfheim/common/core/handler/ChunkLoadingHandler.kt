@@ -4,17 +4,15 @@ import alexsocol.asjlib.*
 import alexsocol.patcher.event.ServerStoppedEvent
 import alfheim.AlfheimCore
 import alfheim.api.ModInfo
-import com.google.common.collect.ImmutableSetMultimap
 import cpw.mods.fml.common.FMLLog
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.TickEvent
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent
 import net.minecraft.world.*
 import net.minecraftforge.common.ForgeChunkManager
-import net.minecraftforge.common.ForgeChunkManager.Ticket
-import net.minecraftforge.common.ForgeChunkManager.Type
+import net.minecraftforge.common.ForgeChunkManager.*
 
-object ChunkLoadingHandler: ForgeChunkManager.LoadingCallback {
+object ChunkLoadingHandler: LoadingCallback {
 	
 	val ticketsStore = HashMap<Int, LinkedHashSet<AlfheimTicket>>()
 	

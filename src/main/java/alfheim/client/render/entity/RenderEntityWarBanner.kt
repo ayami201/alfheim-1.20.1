@@ -1,9 +1,6 @@
 package alfheim.client.render.entity
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.render.ASJRenderHelper.discard
-import alexsocol.asjlib.render.ASJRenderHelper.setBlend
-import alexsocol.asjlib.render.ASJRenderHelper.setTwoside
 import alfheim.api.ModInfo
 import alfheim.api.lib.LibResourceLocations
 import alfheim.common.entity.EntityWarBanner

@@ -69,7 +69,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	// - NIFLHEIM
 	var dimensionIDNiflheim = -106
 	var enableNiflheimRespawn = true
-	var niflheimBiomeIDs = intArrayOf(152, 153, 154)
+	var niflheimBiomeIDs = intArrayOf(41, 42, 43)
 	
 	// - OTHER
 	var dimensionIDDomains = -104
@@ -205,19 +205,22 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var potionIDChampagne = potionID___COUNTER
 	var potionIDDeathMark = potionID___COUNTER
 	var potionIDDecay = potionID___COUNTER
+	var potionIDEdgeLife = potionID___COUNTER
 	var potionIDEternity = potionID___COUNTER
 	var potionIDGoldRush = potionID___COUNTER
+	var potionIDHystrix = potionID___COUNTER
 	var potionIDIceLens = potionID___COUNTER
 	var potionIDLeftFlame = potionID___COUNTER
 	var potionIDLightningShield = potionID___COUNTER
 	var potionIDManaVoid = potionID___COUNTER
-	var potionIDNineLifes = potionID___COUNTER
+	var potionIDNineLives = potionID___COUNTER
 	var potionIDNinja = potionID___COUNTER
 	var potionIDNoclip = potionID___COUNTER
 	var potionIDOvercold = potionID___COUNTER
 	var potionIDOverheat = potionID___COUNTER
 	var potionIDOvermage = potionID___COUNTER
 	var potionIDPossession = potionID___COUNTER
+	var potionIDPriorityTarget = potionID___COUNTER
 	var potionIDQuadDamage = potionID___COUNTER
 	var potionIDSacrifice = potionID___COUNTER
 	var potionIDShowMana = potionID___COUNTER
@@ -225,6 +228,10 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var potionIDStoneSkin = potionID___COUNTER
 	var potionIDTank = potionID___COUNTER
 	var potionIDThrow = potionID___COUNTER
+	var potionIDTimeAnchor = potionID___COUNTER
+	var potionIDTimeConquest = potionID___COUNTER
+	var potionIDVoodooDoll = potionID___COUNTER
+	var potionIDVoodooTarget = potionID___COUNTER
 	var potionIDWellOLife = potionID___COUNTER
 	var potionIDWhiteWine = potionID___COUNTER
 	var potionIDWisdom = potionID___COUNTER
@@ -246,7 +253,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var deathScreenAddTime = 1200
 	var disabledSpells = emptyArray<String>()
 	var disableWireframe = false
-	var frienldyFire = false
+	var friendlyFire = false
 	var legendarySpells = arrayOf("sacrifice", "isaacstorm", "resurrect", "timestop", "warhood")
 	var maxPartyMembers = 5
 	var raceManaMult = 2.toByte()
@@ -421,17 +428,19 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDDecay = loadProp(CATEGORY_MMOP, "potionIDDecay", potionIDDecay, true, "Potion id for Decay")
 		potionIDEternity = loadProp(CATEGORY_POTIONS, "potionIDEternity", potionIDEternity, true, "Potion id for Eternity")
 		potionIDGoldRush = loadProp(CATEGORY_MMOP, "potionIDGoldRush", potionIDGoldRush, true, "Potion id for Gold Rush")
-		potionIDIceLens = loadProp(CATEGORY_POTIONS, "potionIDIceLens", potionIDIceLens, true, "Potion id for Ice Lense")
+		potionIDHystrix = loadProp(CATEGORY_MMOP, "potionIDHystrix", potionIDHystrix, true, "Potion id for Hystrix")
+		potionIDIceLens = loadProp(CATEGORY_POTIONS, "potionIDIceLens", potionIDIceLens, true, "Potion id for Ice Lens")
 		potionIDLeftFlame = loadProp(CATEGORY_MMOP, "potionIDLeftFlame", potionIDLeftFlame, true, "Potion id for Leftover Flame")
 		potionIDLightningShield = loadProp(CATEGORY_POTIONS, "potionIDLightningShield", potionIDLightningShield, true, "Potion id for Lightning Shield")
 		potionIDManaVoid = loadProp(CATEGORY_POTIONS, "potionIDManaVoid", potionIDManaVoid, true, "Potion id for Mana Void")
-		potionIDNineLifes = loadProp(CATEGORY_MMOP, "potionIDNineLifes", potionIDNineLifes, true, "Potion id for Nine Lifes")
+		potionIDNineLives = loadProp(CATEGORY_MMOP, "potionIDNineLives", potionIDNineLives, true, "Potion id for Nine Lives")
 		potionIDNinja = loadProp(CATEGORY_POTIONS, "potionIDNinja", potionIDNinja, true, "Potion id for Ninja")
 		potionIDNoclip = loadProp(CATEGORY_MMOP, "potionIDNoclip", potionIDNoclip, true, "Potion id for Noclip")
 		potionIDOvercold = loadProp(CATEGORY_POTIONS, "potionIDOvercold", potionIDOvercold, true, "Potion id for Overcold (only for visual information, set to -1 to disable)")
 		potionIDOverheat = loadProp(CATEGORY_POTIONS, "potionIDOverheat", potionIDOverheat, true, "Potion id for Overheat (only for visual information, set to -1 to disable)")
 		potionIDOvermage = loadProp(CATEGORY_POTIONS, "potionIDOvermage", potionIDOvermage, true, "Potion id for Overmage")
 		potionIDPossession = loadProp(CATEGORY_POTIONS, "potionIDPossession", potionIDPossession, true, "Potion id for Possession")
+		potionIDPriorityTarget = loadProp(CATEGORY_MMOP, "potionIDPriorityTarget", potionIDPriorityTarget, true, "Potion id for Priority Target")
 		potionIDQuadDamage = loadProp(CATEGORY_MMOP, "potionIDQuadDamage", potionIDQuadDamage, true, "Potion id for Quad Damage")
 		potionIDSacrifice = loadProp(CATEGORY_MMOP, "potionIDSacrifice", potionIDSacrifice, true, "Potion id for Sacrifice")
 		potionIDShowMana = loadProp(CATEGORY_MMOP, "potionIDShowMana", potionIDShowMana, true, "Potion id for Mana Showing Effect")
@@ -439,6 +448,10 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDStoneSkin = loadProp(CATEGORY_MMOP, "potionIDStoneSkin", potionIDStoneSkin, true, "Potion id for Stone Skin")
 		potionIDTank = loadProp(CATEGORY_POTIONS, "potionIDTank", potionIDTank, true, "Potion id for Tank")
 		potionIDThrow = loadProp(CATEGORY_MMOP, "potionIDThrow", potionIDThrow, true, "Potion id for Throw")
+		potionIDTimeAnchor = loadProp(CATEGORY_MMOP, "potionIDTimeAnchor", potionIDTimeAnchor, true, "Potion id for Time Anchor")
+		potionIDTimeConquest = loadProp(CATEGORY_MMOP, "potionIDTimeConquest", potionIDTimeConquest, true, "Potion id for Time Conquest")
+		potionIDVoodooDoll = loadProp(CATEGORY_MMOP, "potionIDVoodooDoll", potionIDVoodooDoll, true, "Potion id for Voodoo Doll")
+		potionIDVoodooTarget = loadProp(CATEGORY_MMOP, "potionIDVoodooTarget", potionIDVoodooTarget, true, "Potion id for Voodoo Target")
 		potionIDWellOLife = loadProp(CATEGORY_MMOP, "potionIDWellOLife", potionIDWellOLife, true, "Potion id for Well'o'Life")
 		potionIDWhiteWine = loadProp(CATEGORY_POTIONS, "potionIDWhiteWine", potionIDWhiteWine, true, "Potion id for White Wine")
 		potionIDWisdom = loadProp(CATEGORY_POTIONS, "potionIDWisdom", potionIDWisdom, true, "Potion id for Wisdom")
@@ -457,7 +470,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		deathScreenAddTime = loadProp(CATEGORY_MMO, "deathScreenAdditionalTime", deathScreenAddTime, false, "Duration of death screen timer (in ticks)")
 		disabledSpells = loadProp(CATEGORY_MMO, "disabledSpells", disabledSpells, true, "List of spell name IDs that won't be registered", false)
 		disableWireframe = loadProp(CATEGORY_MMO, "disableWireframe", disableWireframe, false, "Set this to true to disable rendering block wireframe in noclip mode")
-		frienldyFire = loadProp(CATEGORY_MMO, "frienldyFire", frienldyFire, false, "Set this to true to enable damage to party members")
+		friendlyFire = loadProp(CATEGORY_MMO, "friendlyFire", friendlyFire, false, "Set this to true to enable damage to party members")
 		legendarySpells = loadProp(CATEGORY_MMO, "legendarySpells", legendarySpells, false, "Spells that are considered 'epic' thus costing same for all races", false)
 		maxPartyMembers = loadProp(CATEGORY_MMO, "maxPartyMembers", maxPartyMembers, false, "How many people can be in single party at the same time")
 		raceManaMult = loadProp(CATEGORY_MMO, "raceManaMult", raceManaMult.I, false, "Mana cost multiplier for spells with not your affinity").toByte()

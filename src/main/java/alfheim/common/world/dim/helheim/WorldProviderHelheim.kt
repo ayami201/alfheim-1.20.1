@@ -5,13 +5,13 @@ import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.render.ASJRenderHelper.toVec3
 import alexsocol.patcher.event.PlayerEatingEvent
 import alfheim.api.event.SpellCastEvent
-import alfheim.client.render.world.*
+import alfheim.client.render.world.DummyRenderHandler
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.tile.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDHelheim
 import alfheim.common.item.AlfheimItems
-import alfheim.common.item.material.*
+import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.world.dim.domains.WorldProviderDomains
 import alfheim.common.world.dim.helheim.gen.WorldGenHelheim
 import cpw.mods.fml.common.eventhandler.*
@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.*
 import net.minecraft.entity.*
 import net.minecraft.entity.player.*
 import net.minecraft.potion.PotionEffect
-import net.minecraft.util.*
+import net.minecraft.util.ChunkCoordinates
 import net.minecraftforge.client.IRenderHandler
 import net.minecraftforge.client.event.EntityViewRenderEvent
 import net.minecraftforge.event.entity.living.*

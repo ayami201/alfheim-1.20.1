@@ -10,7 +10,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.init.Items
 import net.minecraft.item.*
-import net.minecraft.util.*
+import net.minecraft.util.IIcon
 import net.minecraft.world.World
 import net.minecraftforge.fluids.*
 import vazkii.botania.common.Botania

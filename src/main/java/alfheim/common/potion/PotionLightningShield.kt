@@ -1,6 +1,6 @@
 package alfheim.common.potion
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.mc
 import alfheim.api.item.ColorOverrideHelper
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.DamageSourceSpell

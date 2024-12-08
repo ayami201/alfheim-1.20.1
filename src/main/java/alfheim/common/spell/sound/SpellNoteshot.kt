@@ -9,8 +9,10 @@ import net.minecraft.entity.EntityLivingBase
 object SpellNoteshot: SpellBase("noteshot", EnumRace.POOKA, 1000, 50, 10) {
 	
 	override var damage = 2f
+	override var duration = 50
 	
-	override val usableParams = arrayOf<Any>(damage)
+	override val usableParams
+		get() = arrayOf(damage)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCastOver(caster)

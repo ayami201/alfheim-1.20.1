@@ -1,6 +1,6 @@
 package alfheim.common.world.dim.niflheim.customgens
 
-import alfheim.common.block.*
+import alfheim.common.block.AlfheimBlocks
 import net.minecraft.init.Blocks
 import net.minecraft.world.World
 

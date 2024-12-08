@@ -13,8 +13,8 @@ import net.minecraft.item.*
 import net.minecraft.util.*
 import net.minecraftforge.client.IItemRenderer.*
 import net.minecraftforge.client.MinecraftForgeClient
-import org.lwjgl.opengl.*
 import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL12
 import java.util.*
 
 @SideOnly(Side.CLIENT)

@@ -63,7 +63,7 @@ object VisualEffectHandlerClient {
 			FENRIR_AREA        -> FenrirVisualEffectsRenderer.addArea(d[0], d[1], d[2], d.getOrNull(3)?.I ?: 50)
 			FENRIR_AREA_END    -> spawnFenrirAreaEnd(d[0], d[1], d[2])
 			FENRIR_DASH        -> spawnFenrirDash(d[0].I, d[1], d[2])
-			FLAMESTAR          -> spawnFlameStar(d[0], d[1], d[2], d[3], d[4], d[5], d[6].F)
+			FIRESTAR           -> spawnFirestar(d[0], d[1], d[2], d[3], d[4] == 1.0)
 			FIREWORK           -> spawnFirework(d[0], d[1], d[2], d[3].I)
 			GAIA_SOUL          -> spawnGaiaSoul(d[0], d[1], d[2])
 			GRAVITY            -> spawnGravity(d[0], d[1], d[2], d[3], d[4], d[5])
@@ -90,6 +90,7 @@ object VisualEffectHandlerClient {
 			SHADOW             -> spawnBurst(d[0], d[1], d[2], 0.75f, 0.75f, 0.75f)
 			SMOKE              -> spawnSmoke(d[0], d[1], d[2])
 			SNICE_MARK         -> spawnSniceMark(d[0], d[1], d[2])
+			SPARKLE            -> spawnSparkle(d[0], d[1], d[2], d[3], d[4], d[5], d[6].F)
 			SPLASH             -> spawnSplash(d[0], d[1], d[2])
 			SURTRWALL          -> spawnSurtrWall(d[0], d[1], d[2], d[3])
 			THROW              -> spawnThrow(d[0], d[1], d[2], d[3], d[4], d[5])
@@ -283,8 +284,24 @@ object VisualEffectHandlerClient {
 			}
 	}
 	
-	fun spawnFlameStar(x: Double, y: Double, z: Double, r: Double, g: Double, b: Double, size: Float) {
-		Botania.proxy.sparkleFX(mc.theWorld, x, y, z, r.F, g.F, b.F, size, 5)
+	fun spawnFirestar(x: Double, y: Double, z: Double, radius: Double, powered: Boolean) {
+		if (powered)
+			Botania.proxy.sparkleFX(mc.theWorld, x, y, z, 1f, 1f, 1f, 3f, 5)
+		
+		Botania.proxy.sparkleFX(mc.theWorld, x, y, z, 1f, 52 / 255f, 0f, if (powered) 15f else 5f, 5)
+		Botania.proxy.sparkleFX(mc.theWorld, x, y, z, 1f, 208 / 255f, 0f, if (powered) 9f else 3f, 5)
+		
+		Botania.proxy.setSparkleFXNoClip(true)
+		var a = 0.0
+		while (a < 360) {
+			a += Math.random() * 30
+			
+			val i = x + cos(a) * radius
+			val k = z + sin(a) * radius
+			
+			Botania.proxy.sparkleFX(mc.theWorld, i, y, k, 1f, 208 / 255f, 0f, 1f, 5)
+		}
+		Botania.proxy.setSparkleFXNoClip(false)
 	}
 	
 	fun spawnFirework(x: Double, y: Double, z: Double, color: Int) {
@@ -432,6 +449,10 @@ object VisualEffectHandlerClient {
 			Botania.proxy.sparkleFX(mc.theWorld, x + cos(Math.toRadians(i.D)), y - 16, z + sin(Math.toRadians(i.D)), 0.25f, 1f, 1f, 1f, 10)
 	}
 	
+	fun spawnSparkle(x: Double, y: Double, z: Double, r: Double, g: Double, b: Double, size: Float) {
+		Botania.proxy.sparkleFX(mc.theWorld, x, y, z, r.F, g.F, b.F, size, 5)
+	}
+	
 	fun spawnSplash(x: Double, y: Double, z: Double) {
 		for (j in 0..31) {
 			v.rand().sub(0.5, 0, 0.5).normalize().mul(Math.random() * 0.5 + 0.5).mul(0.5).mul(0.5, 2.0, 0.5)
@@ -497,7 +518,7 @@ object VisualEffectHandlerClient {
 	}
 	
 	enum class VisualEffects {
-		ACID, AQUABIND, AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CHALK, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, ENDER, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FLAMESTAR, FIREWORK, GAIA_SOUL, GRAVITY, GUNGNIR, HEAL, HORN, ICELENS, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SNICE_MARK, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
+		ACID, AQUABIND, AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CHALK, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, ENDER, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FIRESTAR, FIREWORK, GAIA_SOUL, GRAVITY, GUNGNIR, HEAL, HORN, ICELENS, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SNICE_MARK, SPARKLE, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
 	}
 	
 	fun onDeath(target: EntityLivingBase) {

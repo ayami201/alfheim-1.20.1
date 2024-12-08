@@ -45,7 +45,9 @@ class RenderItemDoubleCamo(val renderId: Int, val getTile: () -> TileDoubleCamo)
 		for (i in 0..1) {
 			ForgeHooksClient.worldRenderPass = i
 			Tessellator.instance.startDrawingQuads()
-			render.renderBlock(mc.theWorld, rb, x, y, z, stack.meta, tile)
+			try_ {
+				render.renderBlock(mc.theWorld, rb, x, y, z, stack.meta, tile)
+			}
 			Tessellator.instance.draw()
 		}
 		

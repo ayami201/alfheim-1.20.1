@@ -2,11 +2,9 @@ package alfheim.common.block.magtrees.barrier
 
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.colored.rainbow.*
-import alfheim.common.block.magtrees.calico.IExplosionDampener
 import alfheim.common.item.block.*
 import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.block.*
-import net.minecraft.world.*
 
 class BlockBarrierWoodSlab(full: Boolean, source: Block = AlfheimBlocks.barrierPlanks): BlockRainbowWoodSlab(full, source) {
 	

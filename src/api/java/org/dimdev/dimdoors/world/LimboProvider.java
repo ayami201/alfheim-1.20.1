@@ -1,7 +1,7 @@
-package StevenDimDoors.mod_pocketDim.world;
+package org.dimdev.dimdoors.world;
 
-import StevenDimDoors.mod_pocketDim.config.DDProperties;
-import StevenDimDoors.mod_pocketDim.util.Point4D;
+import org.dimdev.dimdoors.config.DDProperties;
+import org.dimdev.dimdoors.util.Point4D;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class LimboProvider {

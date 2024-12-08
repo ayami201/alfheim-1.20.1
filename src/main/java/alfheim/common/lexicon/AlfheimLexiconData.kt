@@ -184,6 +184,7 @@ object AlfheimLexiconData {
 	lateinit var treeBerry: LexiconEntry
 	lateinit var treeCrafting: LexiconEntry
 	lateinit var triquetrum: LexiconEntry
+	lateinit var tunedSaplings: LexiconEntry
 	lateinit var uberSpreader: LexiconEntry
 	lateinit var warBanner: LexiconEntry
 	lateinit var winery: LexiconEntry
@@ -359,6 +360,7 @@ object AlfheimLexiconData {
 		treeBerry = AlfheimLexiconEntry("treeBerry", categoryDendrology)
 		treeCrafting = AlfheimLexiconEntry("treeCrafting", categoryDendrology)
 		triquetrum = AlfheimLexiconEntry("triquetrum", categoryAlfheim)
+		tunedSaplings = AlfheimLexiconEntry("tunedSaplings", categoryDendrology)
 		uberSpreader = AlfheimLexiconEntry("uberSpreader", categoryAlfheim)
 		warBanner = AlfheimLexiconEntry("warBanner", categoryAlfheim)
 		winery = AlfheimLexiconEntry("winery", categoryAlfheim)
@@ -879,6 +881,13 @@ object AlfheimLexiconData {
 							  PageMultiblock("4", AlfheimMultiblocks.yordin)).icon = ItemStack(AlfheimBlocks.tradePortal)
 		
 		triquetrum.setLexiconPages(PageText("0"), PageText("1"), PageCraftingRecipe("2", AlfheimRecipes.recipeTriquetrum))
+		
+		tunedSaplings.setLexiconPages(PageText("0"), *Array(8) { PageTuningIORecipe("${it+1}", AlfheimRecipes.tuningSaplings[it]) })
+		repeat(8) {
+			val stack = ItemStack(AlfheimBlocks.tunedSapling, 1, it)
+			winery.addExtraDisplayedRecipe(stack)
+			LexiconRecipeMappings.map(stack, tunedSaplings, it + 1)
+		}
 		
 		uberSpreader.setLexiconPages(PageText("0"), PageText("1"),
 									 if (AlfheimCore.TiCLoaded && !AlfheimCore.stupidMode && AlfheimConfigHandler.materialIDs[TinkersConstructAlfheimConfig.MAUFTRIUM] != -1) PageText("2t")

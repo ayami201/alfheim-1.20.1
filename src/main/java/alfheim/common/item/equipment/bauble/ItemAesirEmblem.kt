@@ -11,7 +11,7 @@ import alfheim.common.core.handler.VisualEffectHandler
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.timesDied
 import alfheim.common.core.util.AlfheimTab
-import alfheim.common.item.equipment.bauble.faith.*
+import alfheim.common.item.equipment.bauble.faith.IFaithHandler
 import baubles.api.BaubleType
 import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.relauncher.*

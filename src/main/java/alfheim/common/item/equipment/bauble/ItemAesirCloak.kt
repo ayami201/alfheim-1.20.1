@@ -3,12 +3,10 @@ package alfheim.common.item.equipment.bauble
 import alfheim.api.ModInfo
 import alfheim.api.lib.LibResourceLocations
 import alfheim.common.item.equipment.bauble.faith.IFaithHandler
-import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import vazkii.botania.api.mana.IManaUsingItem
-import vazkii.botania.client.core.helper.IconHelper
 
 class ItemAesirCloak: ItemBaubleCloak("AesirCloak"), IManaUsingItem {
 	

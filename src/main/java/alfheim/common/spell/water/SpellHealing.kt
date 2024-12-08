@@ -13,7 +13,7 @@ object SpellHealing: SpellBase("healing", EnumRace.UNDINE, 2000, 200, 10) {
 	
 	override var damage = 5f
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(damage)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

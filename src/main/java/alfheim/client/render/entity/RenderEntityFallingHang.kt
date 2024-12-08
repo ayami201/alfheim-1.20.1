@@ -1,11 +1,8 @@
 package alfheim.client.render.entity
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.render.ASJRenderHelper.discard
-import alexsocol.asjlib.render.ASJRenderHelper.setTwoside
 import alfheim.common.entity.EntityFallingHang
-import net.minecraft.client.renderer.RenderBlocks
-import net.minecraft.client.renderer.Tessellator
+import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.entity.Entity

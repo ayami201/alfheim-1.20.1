@@ -14,7 +14,7 @@ object SpellStoneSkin: SpellBase("stoneskin", EnumRace.GNOME, 3000, 600, 20) {
 	
 	override var duration = 6000
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

@@ -1,7 +1,7 @@
 package alfheim.common.block.tile.sub.flower
 
 import alfheim.api.AlfheimAPI
-import alfheim.common.core.handler.*
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.lexicon.AlfheimLexiconData
 import net.minecraft.util.IIcon
 import vazkii.botania.api.BotaniaAPI

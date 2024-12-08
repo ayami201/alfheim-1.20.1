@@ -2,7 +2,6 @@ package alfheim.client.render.item
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ASJRenderHelper.discard
-import alexsocol.asjlib.render.ASJRenderHelper.drawGuideArrows
 import alexsocol.asjlib.render.ASJRenderHelper.setBlend
 import alexsocol.asjlib.render.ASJRenderHelper.setGlow
 import alexsocol.asjlib.render.ASJRenderHelper.setTwoside

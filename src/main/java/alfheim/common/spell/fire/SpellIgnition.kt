@@ -1,10 +1,10 @@
 package alfheim.common.spell.fire
 
 import alexsocol.asjlib.*
-import alfheim.api.entity.*
+import alfheim.api.entity.EnumRace
 import alfheim.api.event.SpellCastEvent
 import alfheim.api.spell.SpellBase
-import alfheim.common.core.handler.*
+import alfheim.common.core.handler.CardinalSystem
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
@@ -16,7 +16,7 @@ object SpellIgnition: SpellBase("ignition", EnumRace.SALAMANDER, 2000, 100, 5) {
 	
 	override var efficiency = 5.0
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
@@ -32,12 +32,12 @@ object SpellIgnition: SpellBase("ignition", EnumRace.SALAMANDER, 2000, 100, 5) {
 			val result = SpellDispel.checkCastOver(caster)
 			
 			if (result == SpellCastResult.OK)
-				tgt.setFire(over(caster, efficiency).I)
+				tgt.setFire(over(caster, efficiency.F).I)
 			
 			return result
 		}
 		
-		val cost = getManaCost() * if (race == caster.race) 1 else AlfheimConfigHandler.raceManaMult
+		val cost = getCostForRace(caster, race, getManaCost(), hard)
 		if (!consumeMana(caster, cost, false, this)) return SpellCastResult.NOMANA
 		
 		val mop = ASJUtilities.getSelectedBlock(caster, radius, false)

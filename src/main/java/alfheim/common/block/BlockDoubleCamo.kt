@@ -4,7 +4,7 @@ import alexsocol.asjlib.*
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileDoubleCamo
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import net.minecraft.block.Block
+import net.minecraft.block.*
 import net.minecraft.block.material.Material
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.particle.*
@@ -28,6 +28,11 @@ abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boo
 		setStepSound(soundTypeWood)
 	}
 	
+	override fun getLightValue(world: IBlockAccess, x: Int, y: Int, z: Int): Int {
+		val tile = world.getTileEntity(x, y, z) as? TileDoubleCamo ?: return 0
+		return tile.getLightValue()
+	}
+	
 	override fun getBlockHardness(world: World, x: Int, y: Int, z: Int): Float {
 		val tile = world.getTileEntity(x, y, z) as? TileDoubleCamo ?: return 1f
 		return max(tile.blockTop.getBlockHardness(world, x, y, z), tile.blockBottom.getBlockHardness(world, x, y, z))
@@ -46,7 +51,6 @@ abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boo
 		}
 		
 		ASJUtilities.dispatchTEToNearbyPlayers(tile)
-		world.markBlockForUpdate(x, y, z)
 		
 		return true
 	}
@@ -58,8 +62,7 @@ abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boo
 		if (tile.locked) return false
 		
 		val block = stack.block
-		if (block === Blocks.air) return false
-		if (block is BlockDoubleCamo) return false
+		if (block === Blocks.air || block is ITileEntityProvider || block.hasTileEntity(stack.meta)) return false
 		
 		val meta = stack.meta
 		
@@ -71,8 +74,10 @@ abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boo
 			tile.blockBottomMeta = meta
 		}
 		
+		tile.recalculateLight()
+		tile.markDirty()
+		
 		ASJUtilities.dispatchTEToNearbyPlayers(tile)
-		world.markBlockForUpdate(x, y, z)
 		
 		return true
 	}
@@ -130,7 +135,11 @@ abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boo
 		}
 		
 		world.setBlockMetadataWithNotify(x, y, z, meta, 4)
-		mc.effectRenderer.addEffect(EntityDiggingFX(world, i, j, k, 0.0, 0.0, 0.0, block, meta, side).applyColourMultiplier(x, y, z).multiplyVelocity(0.2f).multipleParticleScaleBy(0.6f))
+		
+		try {
+			mc.effectRenderer.addEffect(EntityDiggingFX(world, i, j, k, 0.0, 0.0, 0.0, block, meta, side).applyColourMultiplier(x, y, z).multiplyVelocity(0.2f).multipleParticleScaleBy(0.6f))
+		} catch (ignore: Throwable) {}
+		
 		world.setBlockMetadataWithNotify(x, y, z, ourMeta, 4)
 		
 		return true
@@ -146,16 +155,18 @@ abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boo
 		
 		world.setBlockMetadataWithNotify(x, y, z, meta, 4)
 		
-		for (i1 in 0 until 4) {
-			for (j1 in 0 until 4) {
-				for (k1 in 0 until 4) {
-					val i = x + (i1 + 0.5) / 4
-					val j = y + (j1 + 0.5) / 4
-					val k = z + (k1 + 0.5) / 4
-					mc.effectRenderer.addEffect(EntityDiggingFX(world, i, j, k, i - x - 0.5, j - y - 0.5, k - z - 0.5, block, meta, side).applyColourMultiplier(x, y, z))
+		try {
+			for (i1 in 0 until 4) {
+				for (j1 in 0 until 4) {
+					for (k1 in 0 until 4) {
+						val i = x + (i1 + 0.5) / 4
+						val j = y + (j1 + 0.5) / 4
+						val k = z + (k1 + 0.5) / 4
+						mc.effectRenderer.addEffect(EntityDiggingFX(world, i, j, k, i - x - 0.5, j - y - 0.5, k - z - 0.5, block, meta, side).applyColourMultiplier(x, y, z))
+					}
 				}
 			}
-		}
+		} catch (ignore: Throwable) {}
 		
 		world.setBlockMetadataWithNotify(x, y, z, ourMeta, 4)
 		

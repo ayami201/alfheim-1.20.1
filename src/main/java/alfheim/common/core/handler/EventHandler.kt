@@ -156,7 +156,7 @@ object EventHandler {
 	// ################################### POTIONS & STUFF ####################################
 	// not decentralized because of importance of the order
 	
-	val nineLifesBlockable = arrayOf(DamageSource.fall.damageType, DamageSource.drown.damageType, DamageSource.inFire.damageType, DamageSource.onFire.damageType, DamageSourceSpell.poison.damageType, DamageSourceSpell.poisonMagic.damageType, DamageSource.wither.damageType)
+	val nineLivesBlockable = arrayOf(DamageSource.fall.damageType, DamageSource.drown.damageType, DamageSource.inFire.damageType, DamageSource.onFire.damageType, DamageSourceSpell.poison.damageType, DamageSourceSpell.poisonMagic.damageType, DamageSource.wither.damageType)
 	
 	val DamageSource.isMagical: Boolean
 		get() = isMagicDamage || this is DamageSourceSpell
@@ -222,12 +222,12 @@ object EventHandler {
 				VisualEffectHandler.sendPacket(VisualEffects.QUADH, attacker)
 			}
 			
-			var pe: PotionEffect? = target.getActivePotionEffect(AlfheimConfigHandler.potionIDNineLifes)
+			var pe: PotionEffect? = target.getActivePotionEffect(AlfheimConfigHandler.potionIDNineLives)
 			run nl@{
 				@Suppress("NAME_SHADOWING")
 				val pe = pe ?: return@nl
 				
-				val blockable = e.source.damageType in nineLifesBlockable
+				val blockable = e.source.damageType in nineLivesBlockable
 				
 				if (blockable) {
 					if (pe.amplifier == 4) {

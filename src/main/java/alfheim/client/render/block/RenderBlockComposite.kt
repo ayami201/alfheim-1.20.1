@@ -1,6 +1,6 @@
 package alfheim.client.render.block
 
-import alexsocol.asjlib.D
+import alexsocol.asjlib.*
 import alfheim.api.lib.LibRenderIDs
 import alfheim.common.block.tile.*
 import net.minecraft.block.*
@@ -21,18 +21,20 @@ object RenderBlockComposite: RenderBlockDoubleCamo(LibRenderIDs.idComposite) {
 		val oldWorld = rb.blockAccess
 		val compositeWorld = CompositionWorld(oldWorld, tile.composition)
 		rb.blockAccess = compositeWorld
-		
 		var did = false
-		for ((i, sub) in tile.composition.withIndex())
-			for ((j, subber) in sub.withIndex())
-				for ((k, data) in subber.withIndex()) {
-					val block = data?.first ?: continue
-					
-					if (!block.canRenderInPass(ForgeHooksClient.getWorldRenderPass())) continue
-					
-					rb.setRenderBounds(i * step, j * step, k * step, (i + 1) * step, (j + 1) * step, (k + 1) * step)
-					did = did or renderStandardBlock(rb, block, x, y, z, i, j, k)
-				}
+		
+		try_ {
+			for ((i, sub) in tile.composition.withIndex())
+				for ((j, subber) in sub.withIndex())
+					for ((k, data) in subber.withIndex()) {
+						val block = data?.first ?: continue
+						
+						if (!block.canRenderInPass(ForgeHooksClient.getWorldRenderPass())) continue
+						
+						rb.setRenderBounds(i * step, j * step, k * step, (i + 1) * step, (j + 1) * step, (k + 1) * step)
+						did = did or renderStandardBlock(rb, block, x, y, z, i, j, k)
+					}
+		}
 		
 		rb.blockAccess = oldWorld
 		

@@ -15,7 +15,7 @@ import net.minecraft.world.*
 import net.minecraftforge.common.util.ForgeDirection
 import thaumcraft.client.lib.UtilsFX
 import thaumcraft.common.config.ConfigItems
-import vazkii.botania.api.lexicon.*
+import vazkii.botania.api.lexicon.ILexiconable
 import java.util.*
 
 class BlockAlfheimThaumOre: Block(Material.rock), ILexiconable {

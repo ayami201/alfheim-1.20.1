@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
-import net.minecraft.util.*
+import net.minecraft.util.DamageSource
 import net.minecraft.world.World
 import net.minecraftforge.client.event.TextureStitchEvent
 import net.minecraftforge.common.MinecraftForge
@@ -94,7 +94,7 @@ class ItemRodFlameStar(name: String = "rodFlameStar"): ItemMod(name), IManaUsing
 		val color = Color(ColorOverrideHelper.getColor(player, 0xF94407))
 		val (r, g, b) = color.getRGBColorComponents(null)
 		
-		VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.FLAMESTAR, world.provider.dimensionId, x, y, z, r.D, g.D, b.D, 1.0)
+		VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.SPARKLE, world.provider.dimensionId, x, y, z, r.D, g.D, b.D, 1.0)
 		
 		val power = getDamage(prowess, priest)
 //		if (count % 20 != 0) return

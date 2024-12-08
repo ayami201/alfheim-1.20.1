@@ -15,7 +15,7 @@ object SpellWaterBreathing: SpellBase("waterbreathing", EnumRace.SYLPH, 2000, 60
 	
 	override var duration = 2400
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

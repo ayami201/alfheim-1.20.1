@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.potion.*
 import net.minecraft.util.IIcon
 import net.minecraftforge.event.entity.living.LivingAttackEvent
 import travellersgear.api.TravellersGearAPI

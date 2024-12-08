@@ -1,6 +1,7 @@
 package alfheim.api.spell
 
 import alexsocol.asjlib.*
+import alfheim.api.AlfheimAPI
 import alfheim.api.entity.*
 import alfheim.api.event.SpellCastEvent
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -9,11 +10,15 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
-import net.minecraft.util.MathHelper
 import net.minecraftforge.common.MinecraftForge
 import vazkii.botania.api.mana.ManaItemHandler
 
 abstract class SpellBase @JvmOverloads constructor(val name: String, val race: EnumRace, protected var mana: Int, protected var cldn: Int, protected var cast: Int, var hard: Boolean = false) {
+	
+	init {
+		@Suppress("LeakingThis")
+		AlfheimAPI.registerSpell(this)
+	}
 	
 	/**
 	 * Mana checking and consumption call here
@@ -55,7 +60,7 @@ abstract class SpellBase @JvmOverloads constructor(val name: String, val race: E
 	
 	fun checkCast(caster: EntityLivingBase): SpellCastResult {
 		if (MinecraftForge.EVENT_BUS.post(SpellCastEvent.Pre(this, caster))) return SpellCastResult.NOTALLOW
-		val cost = MathHelper.ceiling_double_int((getManaCost() * if ((caster as? EntityPlayer)?.race === race || hard) 1.toByte() else AlfheimConfigHandler.raceManaMult).D)
+		val cost = getCostForRace(caster, race, getManaCost(), hard)
 		require(cost >= 0) { "Manacost for $name spell was $cost. This is not allowed." }
 		val mana = caster !is EntityPlayer || caster.capabilities.isCreativeMode || consumeMana(caster, cost, true)
 		return if (mana) SpellCastResult.OK else SpellCastResult.NOMANA
@@ -63,7 +68,7 @@ abstract class SpellBase @JvmOverloads constructor(val name: String, val race: E
 	
 	fun checkCastOver(caster: EntityLivingBase): SpellCastResult {
 		if (MinecraftForge.EVENT_BUS.post(SpellCastEvent.Pre(this, caster))) return SpellCastResult.NOTALLOW
-		val cost = MathHelper.ceiling_float_int(over(caster, (getManaCost() * if ((caster as? EntityPlayer)?.race === race || hard) 1.toByte() else AlfheimConfigHandler.raceManaMult).D))
+		val cost = over(caster, getCostForRace(caster, race, getManaCost(), hard).F).mceil()
 		require(cost >= 0) { "Manacost for $name spell was $cost (with overmage). This is not allowed." }
 		val mana = caster !is EntityPlayer || caster.capabilities.isCreativeMode || consumeMana(caster, cost, true)
 		return if (mana) SpellCastResult.OK else SpellCastResult.NOMANA
@@ -87,11 +92,14 @@ abstract class SpellBase @JvmOverloads constructor(val name: String, val race: E
 	
 	companion object {
 		
-		fun over(caster: EntityLivingBase?, was: Double) =
-			(if (caster?.isPotionActive(AlfheimConfigHandler.potionIDOvermage) == true) was * 1.2 else was).F
+		fun over(caster: EntityLivingBase?, was: Float) =
+			if (caster?.isPotionActive(AlfheimConfigHandler.potionIDOvermage) == true) was * 1.2f else was
 		
 		fun consumeMana(player: EntityPlayer, mana: Int, req: Boolean, forSpell: SpellBase? = null) =
 			(if (forSpell?.hard == true) ManaItemHandler::requestManaExact else ManaItemHandler::requestManaExactForTool)(ItemStack(Blocks.stone), player, mana, req)
+		
+		fun getCostForRace(caster: EntityLivingBase, race: EnumRace, default: Int, hard: Boolean) =
+			default * if ((caster as? EntityPlayer)?.race in arrayOf(race, EnumRace.ALV) || hard) 1.toByte() else AlfheimConfigHandler.raceManaMult
 		
 //		fun say(caster: EntityPlayerMP, spell: SpellBase) {
 //			val l = caster.worldObj.getEntitiesWithinAABB(EntityPlayerMP::class.java, AxisAlignedBB.getBoundingBox(caster.posX, caster.posY, caster.posZ, caster.posX, caster.posY, caster.posZ).expand(40.0, 40.0, 40.0)) as List<EntityPlayerMP>

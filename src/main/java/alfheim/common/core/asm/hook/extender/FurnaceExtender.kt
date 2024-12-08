@@ -1,6 +1,6 @@
 package alfheim.common.core.asm.hook.extender
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.meta
 import cpw.mods.fml.relauncher.*
 import gloomyfolken.hooklib.asm.*
 import gloomyfolken.hooklib.asm.Hook.ReturnValue
@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
-import net.minecraft.util.*
+import net.minecraft.util.IIcon
 import net.minecraft.world.World
 import java.util.*
 
-@Suppress("UNUSED_PARAMETER")
+@Suppress("unused", "UNUSED_PARAMETER")
 object FurnaceExtender {
 	
 	lateinit var iconFrontLit: IIcon

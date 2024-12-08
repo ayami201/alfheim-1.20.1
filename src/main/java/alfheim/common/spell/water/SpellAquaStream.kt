@@ -10,7 +10,7 @@ object SpellAquaStream: SpellBase("aquastream", EnumRace.UNDINE, 2000, 100, 5) {
 	
 	override var duration = 50
 	
-	override val usableParams: Array<Any>
+	override val usableParams
 		get() = arrayOf(damage, duration, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {

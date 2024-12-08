@@ -83,12 +83,12 @@ class EntitySpellWindBlade(world: World): Entity(world), ITimeStopSpecific {
 			
 			val prev = e.hurtResistantTime
 			e.hurtResistantTime = 0
-			e.attackEntityFrom(DamageSourceSpell.windblade(this, caster), if (isFenrir) 1f else SpellBase.over(caster, SpellWindBlades.damage.D))
+			e.attackEntityFrom(DamageSourceSpell.windblade(this, caster), if (isFenrir) 1f else SpellBase.over(caster, SpellWindBlades.damage))
 			e.hurtResistantTime = prev
 		}
 	}
 	
-	override fun affectedBy(uuid: UUID) = caster!!.uniqueID != uuid
+	override fun affectedBy(uuid: UUID) = caster?.uniqueID != uuid
 	
 	override fun entityInit() = Unit
 	

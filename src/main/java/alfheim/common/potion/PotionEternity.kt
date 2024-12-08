@@ -1,10 +1,11 @@
 package alfheim.common.potion
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.getActivePotionEffect
+import alfheim.api.event.SpellCastEvent
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.item.equipment.bauble.ItemPendant
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.eventhandler.*
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.attributes.*
 import net.minecraft.entity.player.EntityPlayer
@@ -18,13 +19,10 @@ object PotionEternity: PotionAlfheim(AlfheimConfigHandler.potionIDEternity, "ete
 	
 	val uuid = UUID.fromString("0B02BC22-17AE-484C-8FD8-BA9BF3472D5C")!!
 	
-	const val STUN        = 0b001
-	const val ATTACK      = 0b010
-	const val IRREMOVABLE = 0b100
-	
-	init {
-		eventForge()
-	}
+	const val STUN        = 0b0001
+	const val ATTACK      = 0b0010
+	const val IRREMOVABLE = 0b0100
+	const val DISABLE     = 0b1000
 	
 	override fun applyAttributesModifiersToEntity(target: EntityLivingBase, map: BaseAttributeMap, amp: Int) {
 		super.applyAttributesModifiersToEntity(target, map, amp)
@@ -83,15 +81,28 @@ object PotionEternity: PotionAlfheim(AlfheimConfigHandler.potionIDEternity, "ete
 	}
 	
 	@SubscribeEvent
-	fun onDamageTaken(event: LivingHurtEvent) {
+	fun cancelDamageForSubspace(event: LivingHurtEvent) {
 		val player = event.entityLiving as? EntityPlayer ?: return
 		val eff = player.getActivePotionEffect(this.id) ?: return
 		if (eff.amplifier == 0) event.ammount = 0f
 	}
 	
 	@SubscribeEvent
-	fun onHealing(e: LivingHealEvent) {
+	fun cancelHealingInStun(e: LivingHealEvent) {
 		val pe = e.entityLiving.getActivePotionEffect(this) ?: return
-		if (pe.amplifier and STUN == 0) e.isCanceled
+		if (pe.amplifier and STUN != 0) e.isCanceled = true
+	}
+	
+	@SubscribeEvent
+	fun disableCast(e: SpellCastEvent.Pre) {
+		val pe = e.caster.getActivePotionEffect(this) ?: return
+		if (pe.amplifier and DISABLE != 0) e.isCanceled = true
+	}
+	
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	fun disableAttacks(e: LivingAttackEvent) {
+		val attacker = e.source.entity as? EntityLivingBase ?: return
+		val pe = attacker.getActivePotionEffect(this) ?: return
+		if (pe.amplifier and DISABLE != 0) e.isCanceled = true
 	}
 }

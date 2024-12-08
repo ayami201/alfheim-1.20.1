@@ -129,6 +129,7 @@ import alfheim.common.block.AlfheimBlocks.stalactite
 import alfheim.common.block.AlfheimBlocks.stalagmite
 import alfheim.common.block.AlfheimBlocks.subspacian
 import alfheim.common.block.AlfheimBlocks.tradePortal
+import alfheim.common.block.AlfheimBlocks.tunedSapling
 import alfheim.common.block.AlfheimBlocks.worldTree
 import alfheim.common.block.AlfheimFluffBlocks.chair
 import alfheim.common.block.AlfheimFluffBlocks.composite
@@ -307,6 +308,7 @@ import alfheim.common.item.AlfheimItems.subspaceSpear
 import alfheim.common.item.AlfheimItems.surtrSword
 import alfheim.common.item.AlfheimItems.terraHoe
 import alfheim.common.item.AlfheimItems.thrymAxe
+import alfheim.common.item.AlfheimItems.toolbelt
 import alfheim.common.item.AlfheimItems.triquetrum
 import alfheim.common.item.AlfheimItems.trisDagger
 import alfheim.common.item.AlfheimItems.volcanoBoots
@@ -405,7 +407,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(balanceCloak)
 		addItem(invisibilityCloak)
 		addItem(fenrirCloak)
-		//addItem (toolbelt)
+		addItem(toolbelt)
 		addItem(manaStone)
 		addItem(manaStoneGreater)
 		addItem(manaRingPink)
@@ -580,6 +582,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(sealingSapling)
 		addBlock(barrierSapling)
 		addBlock(dreamSapling)
+		addBlock(tunedSapling)
 		
 		addBlock(grapesRed[0])
 		addBlock(grapesWhite)

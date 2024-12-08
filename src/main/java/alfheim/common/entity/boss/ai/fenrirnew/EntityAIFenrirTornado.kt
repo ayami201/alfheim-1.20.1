@@ -3,7 +3,7 @@ package alfheim.common.entity.boss.ai.fenrirnew
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.common.entity.EntityTornado
-import alfheim.common.entity.boss.*
+import alfheim.common.entity.boss.EntityFenrirNew
 
 class EntityAIFenrirTornado(host: EntityFenrirNew): EntityAIFenrirSkillBase(host, EnumFenrirSkill.TORNADO, EnumActionComponents.ATTACK) {
 	

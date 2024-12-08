@@ -90,7 +90,7 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 			playSound("mob.horse.land", 0.4f, 1f)
 		}
 		
-		val i = MathHelper.ceiling_float_int(f * 0.5f - 3f)
+		val i = f * 0.5f - 3f
 		
 		if (i > 0) {
 			val block = worldObj.getBlock(posX.mfloor(), (posY - 0.2 - prevRotationYaw).mfloor(), posZ.mfloor())
