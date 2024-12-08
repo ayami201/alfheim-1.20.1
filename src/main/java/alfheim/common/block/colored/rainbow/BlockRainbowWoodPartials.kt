@@ -1,6 +1,6 @@
 package alfheim.common.block.colored.rainbow
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.block
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.base.*
 import cpw.mods.fml.common.IFuelHandler

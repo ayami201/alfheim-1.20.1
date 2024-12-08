@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.passive.EntitySheep
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.item.*
+import net.minecraft.item.ItemStack
 import net.minecraft.util.*
 import vazkii.botania.common.Botania
 import java.awt.Color

@@ -5,9 +5,9 @@ import alexsocol.patcher.event.EntityUpdateEvent
 import alfheim.api.ModInfo
 import alfheim.client.core.helper.IconHelper
 import alfheim.client.render.world.VisualEffectHandlerClient
-import alfheim.common.core.handler.*
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDAlfheim
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDNiflheim
+import alfheim.common.core.handler.VisualEffectHandler
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.EventResourcesMetas

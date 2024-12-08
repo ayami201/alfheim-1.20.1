@@ -3,11 +3,9 @@ package alfheim.common.integration.minetweaker
 import alexsocol.asjlib.mfloor
 import alfheim.api.ModInfo
 import alfheim.common.world.mobspawn.MobSpawnHandler
-import minetweaker.IUndoableAction
-import minetweaker.MineTweakerAPI
+import minetweaker.*
 import net.minecraft.entity.Entity
-import ru.vamig.worldengine.WE_Biome
-import ru.vamig.worldengine.WE_WorldProvider
+import ru.vamig.worldengine.*
 import stanhebben.zenscript.annotations.*
 
 @ZenClass("mods." + ModInfo.MODID + ".MobSpawn")

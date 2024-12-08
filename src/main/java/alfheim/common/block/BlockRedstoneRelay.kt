@@ -7,7 +7,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
-import vazkii.botania.api.lexicon.*
+import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.api.wand.IWandable
 
 class BlockRedstoneRelay: BlockContainerMod(Material.iron), ILexiconable, IWandable {

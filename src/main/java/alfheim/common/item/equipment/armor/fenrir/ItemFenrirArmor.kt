@@ -13,11 +13,9 @@ import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.tool.ItemFenrirClaws
 import alfheim.common.item.material.ElvenResourcesMetas
-import baubles.common.lib.PlayerHandler
 import com.google.common.collect.*
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.relauncher.*
-import net.minecraft.block.material.Material
 import net.minecraft.client.model.ModelBiped
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.*
@@ -27,11 +25,10 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.*
 import net.minecraft.world.World
 import net.minecraftforge.event.entity.living.*
-import net.minecraftforge.event.entity.living.LivingEvent.*
-import vazkii.botania.api.mana.*
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent
+import vazkii.botania.api.mana.IManaDiscountArmor
 import vazkii.botania.client.lib.LibResources
 import vazkii.botania.common.item.equipment.armor.manasteel.ItemManasteelArmor
-import vazkii.botania.common.item.equipment.bauble.ItemTravelBelt
 import java.util.*
 import kotlin.math.min
 

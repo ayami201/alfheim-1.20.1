@@ -29,10 +29,15 @@ object SpellPriorityTarget: SpellBase("priorityTarget", EnumRace.POOKA, 10000, 9
 		else
 			CardinalSystem.PartySystem.getMobParty(caster) ?: return SpellCastResult.WRONGTGT
 		
+		if (party.count < 2) return SpellCastResult.NOTARGET
+		
 		val result = checkCast(caster)
 		if (result != SpellCastResult.OK) return result
 		
-		repeat(party.count) { PotionPriorityTarget.applyTo(tgt, party[it] ?: return@repeat, duration) }
+		repeat(party.count) {
+			val pm = party[it] ?: return@repeat
+			if (pm === caster) return@repeat
+			PotionPriorityTarget.applyTo(tgt, pm, duration) }
 		
 		return result
 	}

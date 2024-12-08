@@ -5,4 +5,5 @@ Innovations:
  [MMO] Removed Refresh spell
 
 Fixes:
- 
+ [DD] Crash with Dimensional Doors
+ [OF] Domain sky render with OptiFine bug

@@ -57,10 +57,13 @@ class BlockDoubleBlock: BlockDoubleCamo(Material.iron), IFenceConnectable, IFenc
 	override fun setBlockBoundsBasedOnState(world: IBlockAccess?, x: Int, y: Int, z: Int) {
 		val bb = if (world is World) getBB(world, x, y, z) else getBoundingBox(x, y, z, x + 1, y + 1, z + 1)
 		bb.offset(-x, -y, -z)
-		setBlockBounds(bb.minX.F, bb.minY.F, bb.minZ.F, bb.maxX.F, bb.maxY.F, bb.maxZ.F)
+		setBlockBounds(bb.minX.clamp(0.0, 1.0).F, bb.minY.clamp(0.0, 1.0).F, bb.minZ.clamp(0.0, 1.0).F, bb.maxX.clamp(0.0, 1.0).F, bb.maxY.clamp(0.0, 1.0).F, bb.maxZ.clamp(0.0, 1.0).F)
 	}
 	
-	override fun getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int) = getBB(world, x, y, z)
+	override fun getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB {
+		setBlockBoundsBasedOnState(world, x, y, z)
+		return super.getSelectedBoundingBoxFromPool(world, x, y, z)
+	}
 	
 	@Suppress("UNCHECKED_CAST")
 	fun getBB(world: World, x: Int, y: Int, z: Int): AxisAlignedBB {

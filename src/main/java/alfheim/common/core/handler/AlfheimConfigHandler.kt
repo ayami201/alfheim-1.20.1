@@ -69,7 +69,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	// - NIFLHEIM
 	var dimensionIDNiflheim = -106
 	var enableNiflheimRespawn = true
-	var niflheimBiomeIDs = intArrayOf(152, 153, 154)
+	var niflheimBiomeIDs = intArrayOf(41, 42, 43)
 	
 	// - OTHER
 	var dimensionIDDomains = -104

@@ -64,7 +64,7 @@ class BlockColoredLamp: BlockMod(Material.redstoneLight), ILexiconable {
 	
 	override fun createStackedBlock(meta: Int) = ItemStack(this)
 	
-	override fun getLightValue() = 15
+	override fun getLightValue() = 0
 	
 	override fun getLightValue(world: IBlockAccess, x: Int, y: Int, z: Int): Int {
 		val lvl = world.getBlockMetadata(x, y, z)

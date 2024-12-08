@@ -11,6 +11,7 @@ import net.minecraft.entity.*
 import net.minecraft.entity.ai.attributes.BaseAttributeMap
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraftforge.event.entity.living.LivingHurtEvent
+import org.lwjgl.opengl.GL11
 
 object PotionVoodooDoll: PotionAlfheim(AlfheimConfigHandler.potionIDVoodooDoll, "voodooDoll", false, 0xD2B10F) {
 	
@@ -28,6 +29,8 @@ object PotionVoodooDoll: PotionAlfheim(AlfheimConfigHandler.potionIDVoodooDoll, 
 	override fun removeAttributesModifiersFromEntity(target: EntityLivingBase, map: BaseAttributeMap?, mod: Int) {
 		super.removeAttributesModifiersFromEntity(target, map, mod)
 		target.entityData.removeTag(TAG_VOODOO_DOLL)
+		
+		GL11.GL_GEQUAL
 	}
 	
 	@Suppress("UNCHECKED_CAST")
@@ -39,7 +42,7 @@ object PotionVoodooDoll: PotionAlfheim(AlfheimConfigHandler.potionIDVoodooDoll, 
 		if (src.isMagicDamage || !src.isOf(ElementalDamage.COMMON) || !isDoll(doll)) return
 		
 		val mage = getMage(doll)
-		if (mage == "" || src.entity?.commandSenderName != mage)
+		if (mage == "" || src.entity?.commandSenderName != mage) return
 		
 		(e.entity.worldObj.loadedEntityList as List<Entity>).filter { target ->
 			target is EntityLivingBase && PotionVoodooTarget.getMage(target) === mage

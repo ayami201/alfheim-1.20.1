@@ -605,6 +605,8 @@ object AlfheimRecipes {
 	lateinit var tuningAnomalyStabilization: TunerIncantation<TileAnomaly>
 	lateinit var tuningAnomalyPackaging: TunerIncantation<TileAnomaly>
 	lateinit var tuningElementalSeer: TunerIncantation<ItemStack>
+//	lateinit var tuningCats: List<TunerIncantation<EntityOcelot>>
+//	lateinit var tuningCow: TunerIncantation<EntityCow>
 	lateinit var tuningSaplings: Array<TunerIncantationIO>
 	lateinit var tuningSlimeSize: TunerIncantation<EntityLivingBase>
 	lateinit var tuningMagmaSize: TunerIncantation<EntityLivingBase>
@@ -2888,6 +2890,31 @@ object AlfheimRecipes {
 			registerItemCraftTuning("kasi kiwen pimeja pi kili loje o kama lili", ItemStack(tunedSapling, 1, 6), ItemStack(sapling, 1, 5)),
 			registerItemCraftTuning("kasi kiwen pi kili loje o kama linja mute", ItemStack(tunedSapling, 1, 7), ItemStack(sapling)),
 		)
+		
+//		tuningCats = mapOf(
+//			"soweli pi linja uta o kama kule ike" to arrayOf(3, 11, 14, 15).map { ItemStack(dye, 1, it) },
+//			"soweli pi linja uta o kama loje jelo" to arrayOf(0, 0, 4, 15).map { ItemStack(dye, 1, it) },
+//			"soweli pi linja uta o kama pimeja" to arrayOf(14, 14, 14, 15).map { ItemStack(dye, 1, it) },
+//			"soweli pi linja uta o kama walo" to arrayOf(3, 7, 8, 15).map { ItemStack(dye, 1, it) },
+//		).entries.withIndex().map { (id, parts) ->
+//			AlfheimAPI.registerIncantation<EntityOcelot>(parts.key, *parts.value.toTypedArray()) { cat ->
+//				if (!cat.isTamed || cat.tameSkin == id) return@registerIncantation false
+//				
+//				cat.tameSkin = id
+//				true
+//			}
+//		}
+//		
+//		tuningCow = AlfheimAPI.registerIncantation<EntityCow>("kasi kili o kama lon selo pi soweli ni", *Array(5) { ItemStack(red_mushroom) }) {
+//			if (EntityList.getEntityString(it) != "Cow") return@registerIncantation false
+//			
+//			it.setDead()
+//			val moo = EntityMooshroom(it.worldObj)
+//			moo.setLocationAndAngles(it.posX, it.posY, it.posZ, it.rotationYaw, it.rotationPitch)
+//			moo.health = it.health
+//			moo.renderYawOffset = it.renderYawOffset
+//			moo.spawn()
+//		}
 		
 		tuningSlimeSize = registerSlimeGrowthTune<EntitySlime>(ItemStack(slime_ball))
 		tuningMagmaSize = registerSlimeGrowthTune<EntityMagmaCube>(ItemStack(magma_cream))

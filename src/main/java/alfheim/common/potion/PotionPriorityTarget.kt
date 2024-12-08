@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.ai.attributes.BaseAttributeMap
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 
-object PotionPriorityTarget: PotionAlfheim(AlfheimConfigHandler.potionIDPriorityTarget, "priorityTarget", true, 0x004DFF) {
+object PotionPriorityTarget: PotionAlfheim(AlfheimConfigHandler.potionIDPriorityTarget, "priorityTarget", false, 0x004DFF) {
 	
 	const val TAG_PT = "${ModInfo.MODID}.PriorityTarget"
 	

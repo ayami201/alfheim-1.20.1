@@ -1,6 +1,7 @@
 package alfheim.common.world.dim.domains.gen
 
 import alexsocol.asjlib.*
+import alexsocol.asjlib.math.Vector3
 import alfheim.api.ModInfo
 import alfheim.api.world.domain.Domain
 import alfheim.client.render.world.SkyRendererDomains
@@ -17,8 +18,11 @@ object FenrirDomain: Domain(ModInfo.MODID, "Fenrir", AlfheimConfigHandler.domain
 	override val skyRenderer = object: SkyRendererDomains({
 		val stage2 = WorldProviderDomains.getDomainAtPlayer(mc.thePlayer)
 			?.takeIf { it is FenrirDomain }
-			?.let { getEntitiesWithinAABB(mc.theWorld, EntityFenrir::class.java, it.boundBox).firstOrNull() }
-			?.let { it.stage > 1 } ?: false
+			?.let {
+				val (x, _, z) = Vector3.fromEntity(mc.thePlayer)
+				getEntitiesWithinAABB(mc.theWorld, EntityFenrir::class.java, it.boundBox.copy().offset(x, 64, z)).firstOrNull()
+			}
+			?.let { it.stage > 0 } ?: false
 		
 		if (stage2) 0XFF00407FU to 0xFF000000U else 0xFFFFEECCU to 0xFFFFFBF2U
 	}) {}

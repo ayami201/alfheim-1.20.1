@@ -2,7 +2,7 @@ package alfheim.common.entity.boss.ai.fenrirnew
 
 import alexsocol.asjlib.knockback
 import alexsocol.asjlib.math.Vector3
-import alfheim.common.entity.boss.*
+import alfheim.common.entity.boss.EntityFenrirNew
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.util.DamageSource

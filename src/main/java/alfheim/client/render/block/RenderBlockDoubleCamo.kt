@@ -18,7 +18,11 @@ abstract class RenderBlockDoubleCamo(val id: Int): ISimpleBlockRenderingHandler 
 		if (rb.blockAccess == null) rb.blockAccess = mc.theWorld
 		if (tile.worldObj == null) tile.worldObj = mc.theWorld
 		
-		return renderBlock(tile.worldObj, rb, x, y, z, world.getBlockMetadata(x, y, z), tile)
+		return try {
+			renderBlock(tile.worldObj, rb, x, y, z, world.getBlockMetadata(x, y, z), tile)
+		} catch (ignore: Throwable) {
+			return false
+		}
 	}
 	
 	override fun renderInventoryBlock(block: Block, meta: Int, modelID: Int, rb: RenderBlocks) {

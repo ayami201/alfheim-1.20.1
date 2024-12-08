@@ -31,6 +31,9 @@ object SpellAport: SpellBase("aport", EnumRace.CAITSITH, 1500, 500, 20) {
 		
 		timesApplied = pets.size
 		
+		if (pets.isEmpty())
+			return SpellCastResult.NOTARGET
+		
 		val result = checkCast(caster)
 		if (result != SpellCastResult.OK) return result
 		

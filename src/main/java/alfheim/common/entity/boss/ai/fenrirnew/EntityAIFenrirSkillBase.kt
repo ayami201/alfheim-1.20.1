@@ -1,7 +1,7 @@
 package alfheim.common.entity.boss.ai.fenrirnew
 
 import alexsocol.asjlib.ASJBitwiseHelper
-import alfheim.common.entity.boss.*
+import alfheim.common.entity.boss.EntityFenrirNew
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.EntityAIBase
 

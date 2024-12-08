@@ -16,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.*
-import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.api.wand.IWandable
 import java.awt.Color

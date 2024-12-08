@@ -10,14 +10,21 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent
 
 object PotionHystrix: PotionAlfheim(AlfheimConfigHandler.potionIDHystrix, "hystrix", false, 0xE5E2DA) {
 	
+	var antiStackOverflow = false
+	
 	@SubscribeEvent
 	fun onTakenDamage(e: LivingHurtEvent) {
 		val target = e.entityLiving
 		if (!target.isPotionActive(this)) return
+		if (antiStackOverflow) return
+		
+		antiStackOverflow = true
 		
 		getEntitiesWithinAABB(target.worldObj, EntityLivingBase::class.java, target.boundingBox(SpellHystrix.radius)).forEach { 
-			if (it === target) return@forEach
-			it.attackEntityFrom(DamageSource.causeThornsDamage(target), SpellHystrix.damage)
+			if (it !== target && it.isEntityAlive)
+				it.attackEntityFrom(DamageSource.causeThornsDamage(target), SpellHystrix.damage)
 		}
+		
+		antiStackOverflow = false
 	}
 }

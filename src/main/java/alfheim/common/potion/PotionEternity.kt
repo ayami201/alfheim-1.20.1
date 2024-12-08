@@ -90,19 +90,19 @@ object PotionEternity: PotionAlfheim(AlfheimConfigHandler.potionIDEternity, "ete
 	@SubscribeEvent
 	fun cancelHealingInStun(e: LivingHealEvent) {
 		val pe = e.entityLiving.getActivePotionEffect(this) ?: return
-		if (pe.amplifier and STUN != 0) e.isCanceled
+		if (pe.amplifier and STUN != 0) e.isCanceled = true
 	}
 	
 	@SubscribeEvent
 	fun disableCast(e: SpellCastEvent.Pre) {
 		val pe = e.caster.getActivePotionEffect(this) ?: return
-		if (pe.amplifier and DISABLE != 0) e.isCanceled
+		if (pe.amplifier and DISABLE != 0) e.isCanceled = true
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	fun disableAttacks(e: LivingAttackEvent) {
 		val attacker = e.source.entity as? EntityLivingBase ?: return
 		val pe = attacker.getActivePotionEffect(this) ?: return
-		if (pe.amplifier and DISABLE != 0) e.isCanceled
+		if (pe.amplifier and DISABLE != 0) e.isCanceled = true
 	}
 }

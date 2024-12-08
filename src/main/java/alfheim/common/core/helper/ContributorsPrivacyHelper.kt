@@ -84,7 +84,7 @@ object ContributorsPrivacyHelper {
 	fun onPlayerTick(e: TickEvent.PlayerTickEvent) {
 		if (ASJUtilities.isClient || e.phase != TickEvent.Phase.START) return
 		
-		val player = e.player as EntityPlayerMP
+		val player = e.player as? EntityPlayerMP ?: return
 		authTimeout[player]?.let {
 			val time = it - 1
 			

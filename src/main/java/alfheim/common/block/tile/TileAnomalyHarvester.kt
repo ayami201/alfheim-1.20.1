@@ -14,10 +14,11 @@ import net.minecraft.block.BlockFire
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.entity.*
 import net.minecraft.entity.monster.*
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.*
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.AxisAlignedBB
 import net.minecraftforge.common.util.ForgeDirection
@@ -327,6 +328,8 @@ object AnomalyHarvesterBehaviors {
 			it.motionZ += mz
 			it.fallDistance = 0f
 			
+			if (it is EntityPlayerMP) it.playerNetServerHandler.sendPacket(S12PacketEntityVelocity(it))
+			
 			applications++
 		}
 		
@@ -363,6 +366,8 @@ object AnomalyHarvesterBehaviors {
 			it.fallDistance = 0f
 			
 			applications++
+			
+			if (it is EntityPlayerMP) it.playerNetServerHandler.sendPacket(S12PacketEntityVelocity(it))
 
 //			if (it !is EntityPlayer) return@forEach
 //

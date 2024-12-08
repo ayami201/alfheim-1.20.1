@@ -3,7 +3,7 @@ package alfheim.common.entity.spell
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.*
 import alfheim.api.spell.*
-import alfheim.common.core.handler.*
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.PartySystem
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.spell.fire.SpellFirewall

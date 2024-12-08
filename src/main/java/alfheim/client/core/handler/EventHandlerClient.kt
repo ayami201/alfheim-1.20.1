@@ -82,13 +82,14 @@ object EventHandlerClient {
 		for (i in 0..when { entity.isSneaking -> 0; entity.isSprinting -> 2; else -> 1 }) {
 			val (x, y, z) = Vector3().rand().mul(entity.width, 0.1, entity.width).add(Vector3.fromEntity(entity)).sub(entity.width / 2, 0, entity.width / 2)
 			Botania.proxy.sparkleFX(world, x, y, z, Math.random().F * 0.1f, Math.random().F + 0.5f, Math.random().F * 0.25f, Math.random().F * 0.25F + 0.5F, 3)
-//			Botania.proxy.wispFX(world, x, y, z, Math.random().F * 0.1f, Math.random().F + 0.5f, Math.random().F * 0.1f, (Math.random().F * 0.25F + 0.5F)/2, -0.001f)
 		}
 	}
 	
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onClientTick(e: ClientTickEvent) {
+		if (e.phase != Phase.END) return
+		
 		if (mc.thePlayer == null) PlayerSegmentClient.target = null
 		
 		if (mc.isGamePaused) return
@@ -97,6 +98,8 @@ object EventHandlerClient {
 			PlayerSegmentClient.target = null
 			NetworkService.sendToServer(MessageKeyBindS(KeyBindingHandlerClient.KeyBindingIDs.SEL.ordinal, false, -1))
 		}
+		
+		RenderWings.spawnQueuedParticles()
 	}
 	
 	@SubscribeEvent

@@ -4,7 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.entity.IAncientWolf
 import alfheim.common.entity.EntityFenrirDome
-import alfheim.common.entity.boss.*
+import alfheim.common.entity.boss.EntityFenrirNew
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.DamageSource

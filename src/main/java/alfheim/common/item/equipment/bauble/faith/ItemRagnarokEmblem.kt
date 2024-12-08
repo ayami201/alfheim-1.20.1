@@ -18,7 +18,7 @@ import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.core.handler.*
-import alfheim.common.core.handler.ragnarok.*
+import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.timesDied
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.AlfheimItems

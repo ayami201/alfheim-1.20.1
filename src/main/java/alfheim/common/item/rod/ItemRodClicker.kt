@@ -20,7 +20,7 @@ import net.minecraft.block.Block
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.*
 import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.player.*
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.*
 import net.minecraft.item.*
 import net.minecraft.server.MinecraftServer
@@ -434,10 +434,6 @@ class NoNetItemInWorldManager(var theWorld: World, var thisPlayerMP: NoNetFakePl
 			if (result.stackSize == 0) {
 				player.inventory.mainInventory[player.inventory.currentItem] = null
 				MinecraftForge.EVENT_BUS.post(PlayerDestroyItemEvent(thisPlayerMP, result))
-			}
-			
-			if (!player.isUsingItem) {
-				(player as EntityPlayerMP).sendContainerToPlayer(player.inventoryContainer)
 			}
 			
 			return true

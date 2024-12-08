@@ -45,5 +45,7 @@ object PotionTimeAnchor: PotionAlfheim(AlfheimConfigHandler.potionIDTimeAnchor, 
 		val hp = anchor.getFloat(TAG_HP)
 		target.health = if (amp == 0) min(target.health, hp) else max(target.health, hp)
 		ASJUtilities.sendToDimensionWithoutPortal(target, anchor.getInteger(TAG_D), anchor.getDouble(TAG_X), anchor.getDouble(TAG_Y), anchor.getDouble(TAG_Z))
+		
+		target.entityData.removeTag(TAG_TIME_ANCHOR)
 	}
 }

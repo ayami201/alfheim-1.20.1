@@ -283,8 +283,8 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 						}
 					}
 					
-					(worldObj.getPlayerEntityByName(name) as? EntityPlayerMP)?.hasAchievement(AlfheimAchievements.mask) == false -> {
-						worldObj.getPlayerEntityByName(name)?.triggerAchievement(AlfheimAchievements.mask)
+					!player.hasAchievement(AlfheimAchievements.mask) -> {
+						player.triggerAchievement(AlfheimAchievements.mask)
 						ItemStack(AlfheimItems.mask)
 					}
 					

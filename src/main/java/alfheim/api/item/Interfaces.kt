@@ -6,11 +6,10 @@ import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.*
+import net.minecraft.item.ItemStack
 import net.minecraftforge.event.entity.living.LivingEvent
 import travellersgear.api.TravellersGearAPI
 import vazkii.botania.common.item.equipment.bauble.ItemTravelBelt
-import java.util.HashSet
 
 private inline fun <reified T> scanEquipmentForItems(entity: EntityLivingBase, apply: (T, ItemStack) -> Unit) {
 	for (i in 0..4) {

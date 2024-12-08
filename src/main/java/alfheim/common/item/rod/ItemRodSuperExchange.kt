@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.*
-import net.minecraft.util.*
+import net.minecraft.util.ChunkCoordinates
 import net.minecraft.world.World
 import net.minecraftforge.common.util.*
 import net.minecraftforge.event.entity.player.PlayerInteractEvent

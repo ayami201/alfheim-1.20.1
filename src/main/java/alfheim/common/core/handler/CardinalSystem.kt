@@ -959,11 +959,11 @@ object CardinalSystem {
 			
 			if (e is IBossDisplayData && !AlfheimConfigHandler.superSpellBosses) return false
 			
-			if (e is ITimeStopSpecific && (e as ITimeStopSpecific).isImmune) return false
+			if (e is ITimeStopSpecific && e.isImmune) return false
 			
 			for (tsa in tsAreas[e.dimension] ?: return false) {
 				if (Vector3.vecEntityDistance(tsa.pos, e) < SpellTimeStop.radius) {
-					if (e is ITimeStopSpecific && (e as ITimeStopSpecific).affectedBy(tsa.uuid)) return true
+					if (e is ITimeStopSpecific && e.affectedBy(tsa.uuid)) return true
 					
 					if (e is EntityLivingBase) {
 						if (!PartySystem.sameParty(tsa.uuid, e)) return true

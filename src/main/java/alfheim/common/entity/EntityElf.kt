@@ -222,12 +222,12 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 				if (rand.nextInt(200) == 0 && target is EntityPlayer) target.capabilities.isFlying = false
 				
 				val (x, y, z) = Vector3.fromEntity(target).mf()
-				val oxzs = target.width.mceil() / 2
-				val oye = target.height.mceil()
+				val oxz = target.width.mceil() / 2
+				val oy = target.height.mceil()
 				
-				for (i in x.bidiRange(oxzs + 2))
-					for (j in (y - 2)..(y + oye + 2))
-						for (k in z.bidiRange(oxzs + 2)) {
+				for (i in x.bidiRange(oxz + 2))
+					for (j in (y - 2)..(y + oy + 2))
+						for (k in z.bidiRange(oxz + 2)) {
 							if (!worldObj.isAirBlock(i, j, k)) continue
 							worldObj.setBlock(i, j, k, AlfheimBlocks.dirtDissolvable)
 							worldObj.scheduleBlockUpdate(i, j, k, AlfheimBlocks.dirtDissolvable, AlfheimBlocks.dirtDissolvable.tickRate(worldObj))

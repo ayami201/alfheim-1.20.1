@@ -10,11 +10,11 @@ import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.*
+import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
-import net.minecraft.world.*
-import vazkii.botania.api.lexicon.*
-import vazkii.botania.common.block.tile.*
+import net.minecraft.world.World
+import vazkii.botania.api.lexicon.ILexiconable
+import vazkii.botania.common.block.tile.TileSimpleInventory
 import java.util.*
 
 class BlockBottomlessChest: BlockContainerMod(Material.wood), ILexiconable {

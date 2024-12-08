@@ -2,6 +2,7 @@ package alfheim.client.render.world
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.*
+import alexsocol.patcher.helper.OFHelper
 import alfheim.api.lib.LibShaderIDs
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.WorldClient
@@ -15,7 +16,28 @@ open class SkyRendererDomains(val colorsProvider: () -> Pair<UInt, UInt>): IRend
 	constructor(color: UInt, secondaryColor: UInt): this({ color to secondaryColor })
 	
 	override fun render(partialTicks: Float, world: WorldClient?, mc: Minecraft) {
-		val size = mc.gameSettings.renderDistanceChunks - 1
+		val dist = mc.gameSettings.renderDistanceChunks
+		var size = dist - 1
+		
+		if (OFHelper.optifine) {
+			if (dist > 5)
+				size -= 1
+
+			if (dist > 11)
+				size -= 1
+
+			if (dist > 17)
+				size -= 1
+
+			if (dist > 22)
+				size -= 1
+
+			if (dist > 28)
+				size -= 1
+			
+			if (dist > 32)
+				size -= 1
+		}
 		
 		glPushMatrix()
 		glScalef(-size.F)

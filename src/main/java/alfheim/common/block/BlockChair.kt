@@ -9,6 +9,7 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
+import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.*
 
 class BlockChair: BlockDoubleCamo() {
@@ -38,6 +39,11 @@ class BlockChair: BlockDoubleCamo() {
 		}
 	}
 	
+	override fun getCollisionBoundingBoxFromPool(world: World?, x: Int, y: Int, z: Int): AxisAlignedBB {
+		setBlockBoundsBasedOnState(world, x, y, z)
+		return super.getCollisionBoundingBoxFromPool(world, x, y, z)
+	}
+	
 	override fun onBlockPlacedBy(world: World, x: Int, y: Int, z: Int, placer: EntityLivingBase, stack: ItemStack) {
 		super.onBlockPlacedBy(world, x, y, z, placer, stack)
 		if (stack.meta !in 2..5) return
@@ -61,7 +67,7 @@ class BlockChair: BlockDoubleCamo() {
 	}
 	
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		if (player.heldItem == null) run sit@ {
+		if (!world.isRemote && player.heldItem == null) run sit@ {
 			val tile = world.getTileEntity(x, y, z) as? TileChair ?: return@sit
 			setBlockBoundsBasedOnMeta(world.getBlockMetadata(x, y, z))
 			return tile.mount(player, maxY - 0.1)

@@ -1,8 +1,8 @@
 package alfheim.common.block.magtrees
 
-import alexsocol.asjlib.extendables.ItemBlockMetaName
 import alfheim.client.core.helper.IconHelper
 import alfheim.common.block.colored.BlockColoredSapling
+import alfheim.common.item.block.ItemBlockMetaSapling
 import alfheim.common.lexicon.AlfheimLexiconData
 import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim
 import cpw.mods.fml.common.registry.GameRegistry
@@ -24,7 +24,7 @@ class BlockTunedSapling: BlockColoredSapling("TunedSapling") {
 	lateinit var icons: List<IIcon>
 	
 	override fun setBlockName(name: String): Block {
-		GameRegistry.registerBlock(this, ItemBlockMetaName::class.java, name)
+		GameRegistry.registerBlock(this, ItemBlockMetaSapling::class.java, name)
 		return super.setBlockName(name)
 	}
 	
@@ -43,11 +43,12 @@ class BlockTunedSapling: BlockColoredSapling("TunedSapling") {
 			3    -> WorldGenShrub(3, 3)
 			4    -> WorldGenSwamp()
 			5    -> WorldGenTaiga1()
-			6    -> WE_TreeGen(false).apply { bWood = Blocks.log2; metaWood = 1; bLeaves = Blocks.leaves2; metaLeaves = 1 }
+			6    -> WE_TreeGen(false).apply { bWood = Blocks.log2; metaWood = 1; bLeaves = Blocks.leaves2; metaLeaves = 1; minTreeHeight = 5 }
 			7    -> object: WorldGenerator() {
 				override fun generate(world: World, random: Random, x: Int, y: Int, z: Int) = BiomeAlfheim.sadOak.generate(world, random, x, y, z, null)
 			}
-			else -> throw IllegalArgumentException("`meta % 8` not in 0..7 range - WTF is wrong with your JVM?")
+			// stupid kotlin -_-
+			else -> throw IllegalArgumentException("`meta & 7` not in 0..7 range - WTF is wrong with your JVM?")
 		}
 	}
 	
@@ -60,17 +61,7 @@ class BlockTunedSapling: BlockColoredSapling("TunedSapling") {
 		icons = (0..7).map { IconHelper.forBlock(reg, this, it) }
 	}
 	
-	override fun getIcon(side: Int, meta: Int): IIcon {
-//		return icons[meta and 7]
-		return when (meta and 7) {
-			0, 1, 4, 7 -> Blocks.sapling.getIcon(side, 0)
-			2          -> Blocks.sapling.getIcon(side, 2)
-			3          -> Blocks.sapling.getIcon(side, 3)
-			5          -> Blocks.sapling.getIcon(side, 1)
-			6          -> Blocks.sapling.getIcon(side, 5)
-			else       -> throw IllegalArgumentException("`meta and 7` not in 0..7 range - WTF is wrong with your JVM?")
-		}
-	}
+	override fun getIcon(side: Int, meta: Int) = icons[meta and 7]
 	
 	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.tunedSaplings
 }

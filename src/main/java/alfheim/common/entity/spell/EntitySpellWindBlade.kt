@@ -88,7 +88,7 @@ class EntitySpellWindBlade(world: World): Entity(world), ITimeStopSpecific {
 		}
 	}
 	
-	override fun affectedBy(uuid: UUID) = caster!!.uniqueID != uuid
+	override fun affectedBy(uuid: UUID) = caster?.uniqueID != uuid
 	
 	override fun entityInit() = Unit
 	

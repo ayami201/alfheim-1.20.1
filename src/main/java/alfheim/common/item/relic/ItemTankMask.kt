@@ -1,8 +1,5 @@
 package alfheim.common.item.relic
 
-import StevenDimDoors.mod_pocketDim.core.DDTeleporter
-import StevenDimDoors.mod_pocketDim.mod_pocketDim
-import StevenDimDoors.mod_pocketDim.world.LimboProvider
 import alexsocol.asjlib.*
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.client.core.helper.IconHelper
@@ -27,6 +24,9 @@ import net.minecraft.util.*
 import net.minecraft.world.World
 import net.minecraftforge.client.event.RenderPlayerEvent
 import net.minecraftforge.event.entity.living.*
+import org.dimdev.dimdoors.config.DDProperties
+import org.dimdev.dimdoors.core.DDTeleporter
+import org.dimdev.dimdoors.world.LimboProvider
 import org.lwjgl.opengl.GL11.*
 import vazkii.botania.api.item.IBaubleRender
 import vazkii.botania.api.mana.*
@@ -169,7 +169,7 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 		val limboIDs
 			get() =
 				if (dimdoors)
-					arrayOf(mod_pocketDim.properties.LimboDimensionID, AlfheimConfigHandler.dimensionIDHelheim)
+					arrayOf(DDProperties.instance().LimboDimensionID, AlfheimConfigHandler.dimensionIDHelheim)
 				else
 					arrayOf(AlfheimConfigHandler.dimensionIDHelheim)
 		
@@ -235,7 +235,7 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 			
 			if (!player.capabilities.isCreativeMode && player.isEntityAlive && player.ticksExisted % 20 == 0 && player.limboCounter >= MAX_CORRUPTION && player.dimension !in limboIDs) {
 				if (dimdoors && player.rng.nextBoolean()) {
-					DDTeleporter.teleportEntity(player, LimboProvider.getLimboSkySpawn(player, mod_pocketDim.properties), false)
+					DDTeleporter.teleportEntity(player, LimboProvider.getLimboSkySpawn(player, DDProperties.instance()), false)
 				} else {
 					sendToHelheim(player)
 					CardinalSystem.CommonSystem.loseHearts(player, 1)

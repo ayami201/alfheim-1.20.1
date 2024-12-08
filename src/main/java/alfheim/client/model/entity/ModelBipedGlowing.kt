@@ -3,7 +3,6 @@ package alfheim.client.model.entity
 import alexsocol.asjlib.glScaled
 import alexsocol.asjlib.render.ASJRenderHelper
 import net.minecraft.client.model.ModelBiped
-import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.entity.Entity
 import org.lwjgl.opengl.GL11.*
 
