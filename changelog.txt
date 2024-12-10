@@ -4,5 +4,6 @@ Innovations:
  [MMO] Indicator on an entity for Priority Target spell
 
 Fixes:
+ Magma and elemental slimes shedding slimeballs
  [MMO] Target indicator sometimes being gray and not rotating smoothly
  [MMO] QuadDamage sequence 

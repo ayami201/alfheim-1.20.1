@@ -8,6 +8,8 @@ import net.minecraft.entity.player.*
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.util.DamageSource
 import vazkii.botania.common.block.tile.TileCocoon
+import vazkii.botania.common.core.handler.SheddingHandler
+import vazkii.botania.common.core.handler.SheddingHandler.ShedPattern
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.entity.EntityDoppleganger
 import vazkii.botania.common.item.rod.ItemGravityRod
@@ -65,4 +67,15 @@ fun leftClick(static: ItemGravityRod, player: EntityPlayer) {
 
 fun sendVelocityPacket(item: Entity?) {
 	if (item is EntityPlayerMP) item.playerNetServerHandler.sendPacket(S12PacketEntityVelocity(item))
+}
+
+@HookReplacer
+fun getShedPattern(static: SheddingHandler, entity: Entity): ShedPattern? {
+	startFROM()
+	POPLine();POP(ALOAD<ShedPattern>("3").EntityClass.isInstance(entity))
+	POPLine();startTO()
+	POPLine();POP(ALOAD<ShedPattern>("3").EntityClass == entity::class.java)
+	POPLine();stop()
+	
+	return null
 }
