@@ -45,16 +45,19 @@ object FaithHandlerOdin: IFaithHandler {
 	
 	// no potions
 	override fun onWornTick(stack: ItemStack, player: EntityPlayer, type: IFaithHandler.FaithBauble) {
-		if (RagnarokHandler.blockedPowers[5]) return
+		if (RagnarokHandler.blockedPowers[5] || !ASJUtilities.isServer) return
 		
 		if (type != IFaithHandler.FaithBauble.CLOAK) return
 		
 		val potions = ArrayList<EntityThrowable>()
 		potions += getEntitiesWithinAABB(player.worldObj, EntityPotion::class.java, player.boundingBox(6))
 		potions += getEntitiesWithinAABB(player.worldObj, EntityThrownPotion::class.java, player.boundingBox(6))
+		
+		if (potions.isEmpty()) return
+		
 		potions.removeAll { it.thrower === player }
 		
-		if (AlfheimConfigHandler.enableMMO && ASJUtilities.isServer) {
+		if (AlfheimConfigHandler.enableMMO) {
 			val pt = CardinalSystem.PartySystem.getParty(player)
 			potions.removeAll { pt.isMember(it.thrower) }
 		}
@@ -66,14 +69,21 @@ object FaithHandlerOdin: IFaithHandler {
 	
 	@SubscribeEvent
 	fun noPotions(e: EntityJoinWorldEvent) {
-		if (RagnarokHandler.blockedPowers[5]) return
+		if (RagnarokHandler.blockedPowers[5] || !ASJUtilities.isServer) return
 		
-		if (e.entity !is EntityPotion && e.entity !is EntityThrownPotion) return
+		val entity = e.entity
+		if (entity !is EntityPotion && entity !is EntityThrownPotion) return
+		entity as EntityThrowable
 		
 		if (e.world.playerEntities.any {
 				it as EntityPlayer
-				Vector3.entityDistance(e.entity, it) < 6 &&
-				ItemPriestCloak.getCloak(5, it) != null
+				Vector3.entityDistance(entity, it) < 6 &&
+				ItemPriestCloak.getCloak(5, it) != null &&
+				entity.thrower != it &&
+				if (AlfheimConfigHandler.enableMMO) {
+					val pt = CardinalSystem.PartySystem.getParty(it)
+					!pt.isMember(entity.thrower)
+				} else true
 			})
 			e.isCanceled = true
 	}

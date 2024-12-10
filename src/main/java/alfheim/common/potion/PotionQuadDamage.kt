@@ -29,14 +29,10 @@ object PotionQuadDamage: PotionAlfheim(AlfheimConfigHandler.potionIDQuadDamage, 
 		val seg = CardinalSystem.forPlayer(player)
 		
 		when (seg.quadStage) {
-			0    -> {
-				if (e.spell.name == "stoneskin") {
-					++seg.quadStage
-				} else if (e.spell.name == "uphealth" && player.isPotionActive(AlfheimConfigHandler.potionIDStoneSkin)) {
-					seg.quadStage += 2
-				} else {
-					seg.quadStage = 0
-				}
+			0    -> if (e.spell.name == "stoneskin") {
+				++seg.quadStage
+			} else {
+				seg.quadStage = 0
 			}
 			
 			1    -> if (e.spell.name == "uphealth" && player.isPotionActive(AlfheimConfigHandler.potionIDStoneSkin)) {

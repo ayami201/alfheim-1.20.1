@@ -130,7 +130,7 @@ open class ItemVolcanoArmor(type: Int, name: String): ItemManasteelArmor(type, n
 			if (!hasSet(player)) return
 			
 			if (e.source.damageType.contains("frost", true) || e.source.damageType.contains("ice", true)) {
-				e.ammount /= 2
+				e.ammount *= 0.5f
 				return
 			}
 			

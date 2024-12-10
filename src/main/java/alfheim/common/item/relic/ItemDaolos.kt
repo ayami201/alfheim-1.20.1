@@ -33,7 +33,7 @@ import vazkii.botania.api.mana.ManaItemHandler
 import vazkii.botania.common.item.relic.ItemRelic
 import kotlin.math.*
 
-class ItemDaolos: ItemAxe(AlfheimAPI.RUNEAXE), IRelic {
+class ItemDaolos: ItemAxe(AlfheimAPI.DAOLOS), IRelic {
 	
 	init {
 		creativeTab = AlfheimTab

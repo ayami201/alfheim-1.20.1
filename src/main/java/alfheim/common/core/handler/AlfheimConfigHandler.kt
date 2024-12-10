@@ -45,8 +45,8 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 			config.save()
 		}
 	
-	private var _enableElvenStory = true
-	private var _enableMMO = true
+	private var _enableElvenStory = false
+	private var _enableMMO = false
 	
 	// PRELOAD
 	var elementiumClusterMeta = 22
@@ -426,6 +426,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDChampagne = loadProp(CATEGORY_POTIONS, "potionIDChampagne", potionIDChampagne, true, "Potion id for Champagne")
 		potionIDDeathMark = loadProp(CATEGORY_MMOP, "potionIDDeathMark", potionIDDeathMark, true, "Potion id for Death Mark")
 		potionIDDecay = loadProp(CATEGORY_MMOP, "potionIDDecay", potionIDDecay, true, "Potion id for Decay")
+		potionIDEdgeLife = loadProp(CATEGORY_MMOP, "potionIDEdgeLife", potionIDEdgeLife, true, "Potion id for Edge Life")
 		potionIDEternity = loadProp(CATEGORY_POTIONS, "potionIDEternity", potionIDEternity, true, "Potion id for Eternity")
 		potionIDGoldRush = loadProp(CATEGORY_MMOP, "potionIDGoldRush", potionIDGoldRush, true, "Potion id for Gold Rush")
 		potionIDHystrix = loadProp(CATEGORY_MMOP, "potionIDHystrix", potionIDHystrix, true, "Potion id for Hystrix")

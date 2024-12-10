@@ -180,6 +180,7 @@ object AlfheimLexiconData {
 	lateinit var temperature: LexiconEntry
 	lateinit var terraHarvester: LexiconEntry
 	lateinit var throwablePotions: LexiconEntry
+	lateinit var toolbelt: LexiconEntry
 	lateinit var trade: LexiconEntry
 	lateinit var treeBerry: LexiconEntry
 	lateinit var treeCrafting: LexiconEntry
@@ -356,6 +357,7 @@ object AlfheimLexiconData {
 		temperature = AlfheimLexiconEntry("temperature", categoryAlfheim)
 		terraHarvester = AlfheimLexiconEntry("terraHarvester", categoryAlfheim)
 		throwablePotions = AlfheimLexiconEntry("throwablePotions", categoryAlfheim)
+		toolbelt = AlfheimLexiconEntry("toolbelt", categoryAlfheim)
 		trade = AlfheimLexiconEntry("trade", categoryAlfheim)
 		treeBerry = AlfheimLexiconEntry("treeBerry", categoryDendrology)
 		treeCrafting = AlfheimLexiconEntry("treeCrafting", categoryDendrology)
@@ -874,6 +876,8 @@ object AlfheimLexiconData {
 		
 		throwablePotions.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeSplashPotions),
 		                                 PageText("2"), PageCraftingRecipe("3", AlfheimRecipes.recipeGrenade)).icon = (AlfheimItems.splashPotion as ItemSplashPotion).getItemForBrew(ModBrews.absorption, null)
+		
+		toolbelt.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeToolbelt))
 		
 		trade.setLexiconPages(PageText("0"), PageText("1"),
 							  PageCraftingRecipe("2", AlfheimRecipes.recipeElvoriumPylon),

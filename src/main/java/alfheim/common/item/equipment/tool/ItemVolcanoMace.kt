@@ -31,6 +31,6 @@ class ItemVolcanoMace: ItemManasteelSword(volcano, "VolcanoMace") {
 	
 	companion object {
 		
-		val volcano = EnumHelper.addToolMaterial("Volcano", 0, 1200, 6f, 6f, 6)!!
+		val volcano = EnumHelper.addToolMaterial("Volcano", 0, 1200, 6f, 4f, 6)!!
 	}
 }

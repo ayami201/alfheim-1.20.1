@@ -49,8 +49,6 @@ import java.awt.Rectangle
 import java.util.regex.*
 import kotlin.math.*
 
-private const val s = "warpdrive.asphyxia"
-
 class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 	
 	val playersDamage: HashMap<String, Float> = HashMap()

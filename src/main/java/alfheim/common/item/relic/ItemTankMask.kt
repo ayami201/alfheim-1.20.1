@@ -75,7 +75,7 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 		player.addPotionEffect(PotionEffectU(Potion.resistance.id, 20, 4))
 		val time = getInt(stack, TAG_POSSESSION, 1)
 		player.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDPossession, time))
-		if (time >= 1200 && time % 20 == 0) player.attackEntityFrom(DamageSourceSpell.possession, (player.getActivePotionEffect(AlfheimConfigHandler.potionIDPossession)!!.getDuration() - 1200) / 400f)
+		if (time >= 1200 && time % 20 == 0) player.attackEntityFrom(DamageSourceSpell.possession, (time - 1200) / 400f)
 		
 		if (time >= 3600) {
 			(inSlot.item as IBauble).onUnequipped(inSlot, player)

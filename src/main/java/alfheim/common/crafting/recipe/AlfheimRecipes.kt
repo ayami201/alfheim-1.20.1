@@ -308,6 +308,7 @@ import alfheim.common.item.AlfheimItems.starPlacer2
 import alfheim.common.item.AlfheimItems.subspaceSpear
 import alfheim.common.item.AlfheimItems.terraHoe
 import alfheim.common.item.AlfheimItems.thinkingHand
+import alfheim.common.item.AlfheimItems.toolbelt
 import alfheim.common.item.AlfheimItems.triquetrum
 import alfheim.common.item.AlfheimItems.volcanoHelmet
 import alfheim.common.item.AlfheimItems.volcanoHelmetRevealing
@@ -323,6 +324,7 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.monster.*
+import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks.*
 import net.minecraft.init.Items.*
@@ -556,6 +558,7 @@ object AlfheimRecipes {
 	lateinit var recipeThunderousSlabs: IRecipe
 	lateinit var recipeThunderousStairs: IRecipe
 	lateinit var recipeThunderousTwig: IRecipe
+	lateinit var recipeToolbelt: IRecipe
 	lateinit var recipeTradePortal: IRecipe
 	lateinit var recipeTriquetrum: IRecipe
 	lateinit var recipeUberSpreader: IRecipe
@@ -1964,6 +1967,14 @@ object AlfheimRecipes {
 				  'C', NetherwoodCoal.stack,
 				  'S', ItemStack(stick))
 		
+		addOreDictRecipe(ItemStack(toolbelt),
+		                 "CL ", "L L", "PLR",
+		                 'C', chest,
+		                 'L', leather,
+		                 'P', PIXIE_DUST,
+		                 'R', RUNE[12])
+		recipeToolbelt = BotaniaAPI.getLatestAddedRecipe()
+		
 		addOreDictRecipe(ItemStack(tradePortal),
 						 "LEL", "LEL", "LEL",
 						 'L', LIVING_ROCK,
@@ -2906,7 +2917,7 @@ object AlfheimRecipes {
 //		}
 //		
 //		tuningCow = AlfheimAPI.registerIncantation<EntityCow>("kasi kili o kama lon selo pi soweli ni", *Array(5) { ItemStack(red_mushroom) }) {
-//			if (EntityList.getEntityString(it) != "Cow") return@registerIncantation false
+//			if (it is EntityMooshroom) return@registerIncantation false
 //			
 //			it.setDead()
 //			val moo = EntityMooshroom(it.worldObj)

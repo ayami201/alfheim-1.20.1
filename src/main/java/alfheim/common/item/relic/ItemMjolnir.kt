@@ -99,7 +99,7 @@ class ItemMjolnir: ItemRelic("Mjolnir") {
 	}
 	
 	override fun getAttributeModifiers(stack: ItemStack?) = super.getAttributeModifiers(stack).apply {
-		put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(Item.field_111210_e, "Weapon modifier", 8.0, 0))
+		put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(Item.field_111210_e, "Weapon modifier", 10.0, 0))
 	}
 	
 	// ################ Right-click ################

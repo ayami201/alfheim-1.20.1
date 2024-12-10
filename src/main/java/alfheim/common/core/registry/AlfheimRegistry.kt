@@ -112,7 +112,7 @@ object AlfheimRegistry {
 		if (AlfheimConfigHandler.potionIDOverheat != -1) PotionAlfheim(AlfheimConfigHandler.potionIDOverheat, "overheat", false, 0xFF4D00)
 		PotionAlfheim(AlfheimConfigHandler.potionIDOvermage, "overmage", false, 0x88FFFF)
 		PotionAlfheim(AlfheimConfigHandler.potionIDPossession, "possession", true, 0xCC0000)
-		PotionQuadDamage
+		PotionQuadDamage.eventForge()
 		PotionSacrifice
 		PotionShowMana
 		PotionSoulburn

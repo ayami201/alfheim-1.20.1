@@ -33,7 +33,7 @@ class ItemBalanceCloak: ItemHolyCloak("BalanceCloak") {
 		
 		if (event.source.entity === player) return false
 		
-		event.ammount /= 2f
+		event.ammount *= 0.5f
 		
 		event.source.entity?.attackEntityFrom(DamageSource.causeIndirectMagicDamage(player, player), event.ammount)
 		
