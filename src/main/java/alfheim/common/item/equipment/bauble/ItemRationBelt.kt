@@ -2,10 +2,10 @@ package alfheim.common.item.equipment.bauble
 
 import alexsocol.asjlib.*
 import alfheim.api.lib.LibResourceLocations
+import alfheim.client.model.armor.ModelBelt
 import baubles.api.BaubleType
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.Minecraft
-import net.minecraft.client.model.ModelBiped
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
@@ -44,25 +44,16 @@ class ItemRationBelt: ItemBauble("RationBelt"), IBaubleRender {
 	
 	@SideOnly(Side.CLIENT)
 	override fun onPlayerBaubleRender(stack: ItemStack, event: RenderPlayerEvent, type: IBaubleRender.RenderType) {
-		if (type == IBaubleRender.RenderType.BODY) {
-			Minecraft.getMinecraft().renderEngine.bindTexture(LibResourceLocations.rationBelt)
-			IBaubleRender.Helper.rotateIfSneaking(event.entityPlayer)
-			
-			if (!event.entityPlayer.isSneaking)
-				GL11.glTranslatef(0F, 0.2F, 0F)
-			
-			val s = 1.05F / 16F
-			glScalef(s)
-			
-			if (model == null)
-				model = ModelBiped()
-			
-			model!!.bipedBody.render(1F)
-		}
-	}
-	
-	companion object {
-		@SideOnly(Side.CLIENT)
-		var model: ModelBiped? = null
+		if (type != IBaubleRender.RenderType.BODY) return
+		
+		Minecraft.getMinecraft().renderEngine.bindTexture(LibResourceLocations.rationBelt)
+		IBaubleRender.Helper.rotateIfSneaking(event.entityPlayer)
+		
+		if (!event.entityPlayer.isSneaking)
+			GL11.glTranslatef(0F, 0.2F, 0F)
+		val s = 1.05F / 16F
+		glScalef(s)
+		
+		ModelBelt.bipedBody.render(1F)
 	}
 }

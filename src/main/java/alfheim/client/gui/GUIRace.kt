@@ -3,7 +3,7 @@ package alfheim.client.gui
 import alexsocol.asjlib.*
 import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.entity.*
-import alfheim.client.render.entity.RenderWings
+import alfheim.api.lib.LibResourceLocations
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.*
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
@@ -29,7 +29,7 @@ object GUIRace: Gui() {
 		
 		glTranslated(e.resolution.scaledWidth_double / 2 + 91, e.resolution.scaledHeight_double - 32, 0.0)
 		
-		mc.textureManager.bindTexture(RenderWings.getPlayerIconTexture(mc.thePlayer))
+		mc.textureManager.bindTexture(LibResourceLocations.icons[mc.thePlayer.raceID])
 		//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 		//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		
@@ -44,7 +44,7 @@ object GUIRace: Gui() {
 		
 		//		ASJShaderHelper.useShader(LibShaderIDs.idShadow);
 		
-		val mod = min(1.0, mc.thePlayer.flight / ElvenFlightHelper.max)
+		val mod = if (ElvenFlightHelper.max == 0.0) 1.0 else min(1.0, mc.thePlayer.flight / ElvenFlightHelper.max)
 		val time = sin((mc.theWorld.totalWorldTime / 2).D) * 0.5
 		mc.thePlayer.race.glColor(if (mc.thePlayer.capabilities.isFlying) if (mod > 0.1) time + 0.5 else time else 1.0)
 		

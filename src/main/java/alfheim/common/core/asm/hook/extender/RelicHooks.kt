@@ -3,7 +3,6 @@ package alfheim.common.core.asm.hook.extender
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.common.core.asm.hook.extender.RelicHooks.aesirRingComponents
-import alfheim.common.entity.item.EntityItemImmortalRelic
 import alfheim.common.item.AlfheimItems.akashicRecords
 import alfheim.common.item.AlfheimItems.daolos
 import alfheim.common.item.AlfheimItems.excaliber
@@ -65,7 +64,7 @@ object RelicHooks {
 	@Hook(returnCondition = ReturnCondition.ON_TRUE)
 	fun isRightPlayer(static: ItemRelic?, player: String, stack: ItemStack?) = stack?.item !is ItemDice
 	
-	private val underControl by lazy { arrayOf(infiniteFruit, kingKey, flugelEye, thorRing, odinRing, lokiRing, flugelSoul, mask, excaliber, subspaceSpear, moonlightBow, gleipnir, mjolnir, daolos, gungnir, gjallarhorn, priestRingHeimdall, priestRingNjord, priestRingSif, akashicRecords) }
+	val underControl by lazy { arrayOf(infiniteFruit, kingKey, flugelEye, thorRing, odinRing, lokiRing, flugelSoul, mask, excaliber, subspaceSpear, moonlightBow, gleipnir, mjolnir, daolos, gungnir, gjallarhorn, priestRingHeimdall, priestRingNjord, priestRingSif, akashicRecords) }
 	
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
@@ -203,8 +202,11 @@ object RelicNBTSyncHandler {
 			fun iterateInventory(inv: IInventory) {
 				for (i in 0 until inv.sizeInventory) {
 					val stack = inv[i] ?: continue
-					val ach = (stack.item as? IRelic)?.bindAchievement
-					if (ach == null || player.hasAchievement(ach)) continue
+					val item = stack.item
+					if (item !is IRelic || item !in RelicHooks.underControl) return
+					
+					val ach = (item as IRelic).bindAchievement ?: continue
+					if (player.hasAchievement(ach)) continue
 					
 					val owner = stack.tagCompound?.getString("soulbind")
 					
@@ -212,7 +214,7 @@ object RelicNBTSyncHandler {
 						inv[i] = null
 						stack.tagCompound?.removeTag("soulbind")
 						
-						EntityItemImmortalRelic(EntityItem(player.worldObj, player.posX, player.posY, player.posZ, stack)).spawn()
+						EntityItem(player.worldObj, player.posX, player.posY, player.posZ, stack).spawn()
 						ASJUtilities.say(player, "alfheimmisc.relic.fail", stack.displayName)
 					}
 				}

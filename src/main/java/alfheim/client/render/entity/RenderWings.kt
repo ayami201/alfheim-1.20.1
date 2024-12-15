@@ -9,6 +9,7 @@ import alfheim.api.lib.LibResourceLocations
 import alfheim.api.lib.LibResourceLocations.ResourceLocationIL
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.*
+import alfheim.common.item.equipment.bauble.ItemElvenDisguise
 import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.Tessellator
@@ -31,10 +32,13 @@ object RenderWings {
 	fun render(player: EntityPlayer) {
 		val match = ContributorsPrivacyHelper.wings.keys.firstOrNull { ContributorsPrivacyHelper.isCorrect(player, it) }
 		
+		val forced = ItemElvenDisguise.getDisguise(player)
+		val race = forced ?: player.race
+		
 		if (match == null) {
-			if (!AlfheimConfigHandler.enableElvenStory) return
+			if (!AlfheimConfigHandler.enableElvenStory && forced == null) return
 			if (AlfheimConfigHandler.wingsBlackList.contains(mc.theWorld?.provider?.dimensionId ?: Int.MAX_VALUE)) return
-			if (player.race == EnumRace.HUMAN) return
+			if (race == EnumRace.HUMAN) return
 			if (ContributorsPrivacyHelper.isCorrect(player.commandSenderName, "AlexSocol")) return
 		}
 		
@@ -59,13 +63,13 @@ object RenderWings {
 			else
 				glColor4f(1f, 1f, 1f, 1f)
 		} else
-			player.race.glColor(if (player.flight / ElvenFlightHelper.max < 0.05) min(0.75 + cos((player.ticksExisted + mc.timer.renderPartialTicks).D * spd * 0.3).F * 0.2, 1.0) else 1.0)
+			race.glColor(if (player.flight / ElvenFlightHelper.max < 0.05) min(0.75 + cos((player.ticksExisted + mc.timer.renderPartialTicks).D * spd * 0.3).F * 0.2, 1.0) else 1.0)
 		
 		Helper.rotateIfSneaking(player)
 		glTranslated(0.0, -0.15, 0.0)
 		
 		// Icon
-		if (match == null && player.race != EnumRace.HUMAN) {
+		if (match == null) {
 			glPushMatrix()
 			glTranslated(-0.25, 0.25, 0.15)
 			val si = 0.5
@@ -108,7 +112,7 @@ object RenderWings {
 		
 		if (mc.theWorld.totalWorldTime % 2 == 0L && !mc.isGamePaused && !player.onGround) {
 			val v = Vector3(Math.random() - 0.5, 0.0, Math.random() - 0.5).normalize().add(0.0, Math.random(), 0.0).mul(Math.random(), 1.0, Math.random()).mul(player.width.D, player.height.D, player.width.D)
-			val (r, g, b) = Color(player.race.rgbColor).getRGBColorComponents(null)
+			val (r, g, b) = Color(race.rgbColor).getRGBColorComponents(null)
 			particleQueue[player.commandSenderName] = QueuedParticle(player.posX + v.x, player.posY + v.y - if (mc.thePlayer === player) 1.62 else 0.0, player.posZ + v.z, r, g, b, 2f * Math.random().F)
 		}
 	}
@@ -123,9 +127,15 @@ object RenderWings {
 		Tessellator.instance.draw()
 	}
 	
-	fun getPlayerWingTexture(player: EntityPlayer) = textures[ContributorsPrivacyHelper.wings.keys.firstOrNull { ContributorsPrivacyHelper.isCorrect(player, it) } ?: ""] ?: LibResourceLocations.wings[player.raceID]
+	fun getPlayerWingTexture(player: EntityPlayer): ResourceLocation? {
+		val raceID = ItemElvenDisguise.getDisguise(player)?.ordinal ?: player.raceID
+		return textures[ContributorsPrivacyHelper.wings.keys.firstOrNull { ContributorsPrivacyHelper.isCorrect(player, it) } ?: ""] ?: LibResourceLocations.wings[raceID]
+	}
 	
-	fun getPlayerIconTexture(player: EntityPlayer) = LibResourceLocations.icons[player.raceID]
+	fun getPlayerIconTexture(player: EntityPlayer): ResourceLocationIL {
+		val raceID = ItemElvenDisguise.getDisguise(player)?.ordinal ?: player.raceID
+		return LibResourceLocations.icons[raceID]
+	}
 	
 	val particleQueue = HashMap<String, QueuedParticle>()
 	

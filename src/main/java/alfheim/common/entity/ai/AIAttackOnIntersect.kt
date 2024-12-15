@@ -1,13 +1,14 @@
 package alfheim.common.entity.ai
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.expand
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.entity.IIntersectAttackEntity
+import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.EntityAIBase
 import net.minecraft.entity.player.EntityPlayer
 
-class AIAttackOnIntersect<T>(val host: T): EntityAIBase()
+class AIAttackOnIntersect<T>(val host: T, val selector: IEntitySelector = IEntitySelector { it is EntityLivingBase }): EntityAIBase()
 		where T: EntityLiving, T: IIntersectAttackEntity // generic magic! >:D
 {
 	
@@ -26,8 +27,7 @@ class AIAttackOnIntersect<T>(val host: T): EntityAIBase()
 		val bb = host.boundingBox.expand(host.getExtraReach())
 		
 		if (target == null || !bb.intersectsWith(target.boundingBox)) {
-			val list = getEntitiesWithinAABB(host.worldObj, EntityLivingBase::class.java, bb)
-			list.remove(host)
+			val list = host.worldObj.getEntitiesWithinAABBExcludingEntity(host, bb, selector).filterIsInstanceTo<EntityLivingBase, ArrayList<EntityLivingBase>>(ArrayList())
 			list.removeAll { !it.isEntityAlive || (it as? EntityPlayer)?.capabilities?.disableDamage == true }
 			list.sortBy { Vector3.entityDistance(host, it) }
 			

@@ -40,6 +40,8 @@ object LibResourceLocations {
 	val deathTimerBG = ResourceLocationIL(ModInfo.MODID, "textures/gui/DeathTimerBack.png")
 	val dedMoroz = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/DedMoroz.png")
 	val dedMorozEyes = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/DedMorozEyes.png")
+	val disguiseBelt = ResourceLocationIL(ModInfo.MODID, "textures/model/armor/disguiseBelt.png")
+	val disguiseBeltGem = ResourceLocationIL(ModInfo.MODID, "textures/model/armor/disguiseBeltGem.png")
 	val domainDoor = ResourceLocationIL(ModInfo.MODID, "textures/blocks/DomainLobbyCoreFull.png")
 	val elementiumBlock = ResourceLocationIL("botania", "textures/blocks/storage2.png")
 	val elementalSlime = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/ElementalSlime.png")

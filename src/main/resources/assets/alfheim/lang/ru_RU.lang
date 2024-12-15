@@ -409,6 +409,7 @@ item.botania:CrescentMoonAmulet.name=Амулет багрового полум�
 item.alfheim:Daolos.name=Даолос
 item.alfheim:DasRheingold.name=Золото Рейна
 item.alfheim:DeathSeed.name=Семя смерти
+item.botania:DisguiseBelt.name=Пояс перевоплощения
 item.botania:DodgeRing.name=Кольцо ловких движений
 item.alfheim:DomainKey.name=Ключ домена
 item.botania:ElementalAirBoots.name=Элементальные ботинки воздуха
@@ -927,9 +928,15 @@ alfheimmisc.quandex=Материальный квандекс в руках!
 alfheimmisc.resonator.mode0=Поля резонатора автоматически взорвутся через 2 секунды.
 alfheimmisc.resonator.mode1=Поля резонатора взорвутся только после того, как вы ударите по одному из них.
 alfheimmisc.resonator.mode2=Поля резонатора будут работать как ловушки матрицы.
+alfheimmisc.resonator.mode0.short=Автоматический
+alfheimmisc.resonator.mode1.short=Ручной
+alfheimmisc.resonator.mode2.short=Матрица
 alfheimmisc.resonator.target0=Поля резонатора распространятся на любые блоки.
 alfheimmisc.resonator.target1=Поля резонатора распространятся на похожие блоки (игнорируя мету).
 alfheimmisc.resonator.target2=Поля резонатора распространятся на те же блоки (с учётом меты).
+alfheimmisc.resonator.target0.short=Любые блоки
+alfheimmisc.resonator.target1.short=Похожие блоки
+alfheimmisc.resonator.target2.short=Те же блоки
 alfheimmisc.relic=&6Реликвия&7
 alfheimmisc.relic.fail=Вы не можете удержать %s в руках
 alfheimmisc.saveIvy=С нерушимым плющом
@@ -1283,6 +1290,7 @@ race.SPRIGGAN.name=СПРИГГАН
 race.UNDINE.name=УНДИНА
 race.IMP.name=ИМП
 race.ALV.name=АЛЬВ
+race.booba=Бубы
 
 ########################################################___ЗАКЛИНАНИЯ___########################################################
 

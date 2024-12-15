@@ -232,6 +232,7 @@ import alfheim.common.item.AlfheimItems.elementalLeggings
 import alfheim.common.item.AlfheimItems.elfFirePendant
 import alfheim.common.item.AlfheimItems.elfIcePendant
 import alfheim.common.item.AlfheimItems.elvenChakram
+import alfheim.common.item.AlfheimItems.elvenDisguise
 import alfheim.common.item.AlfheimItems.elvenResource
 import alfheim.common.item.AlfheimItems.elvoriumBoots
 import alfheim.common.item.AlfheimItems.elvoriumChestplate
@@ -324,7 +325,6 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.monster.*
-import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks.*
 import net.minecraft.init.Items.*
@@ -423,6 +423,7 @@ object AlfheimRecipes {
 	lateinit var recipesDecorDouble: IRecipe
 	lateinit var recipesDecorGlass: IRecipe
 	lateinit var recipesDecorLight: IRecipe
+	lateinit var recipeDisguiseBelt: IRecipe
 	lateinit var recipeDodgeRing: IRecipe
 	lateinit var recipeElementalBoots: IRecipe
 	lateinit var recipeElementalChestplate: IRecipe
@@ -967,6 +968,14 @@ object AlfheimRecipes {
 						 'M', MANA_STEEL,
 						 'R', RUNE[3]) // air
 		recipeDodgeRing = BotaniaAPI.getLatestAddedRecipe()
+		
+		addOreDictRecipe(ItemStack(elvenDisguise),
+		                 "RL ", "L L", "QLM",
+		                 'R', RUNE[9], // lust
+		                 'L', leather,
+		                 'Q', RAINBOW_QUARTZ,
+		                 'M', RUNE[8]) // mana
+		recipeDisguiseBelt = BotaniaAPI.getLatestAddedRecipe()
 		
 		addOreDictRecipe(ItemStack(elementalHelmet),
 						 "RTR", "DPD", " M ",

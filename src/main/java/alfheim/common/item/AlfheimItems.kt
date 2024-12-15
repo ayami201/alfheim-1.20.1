@@ -68,6 +68,7 @@ object AlfheimItems {
 	val elfFirePendant: Item
 	val elfIcePendant: Item
 	val elvenChakram: Item
+	val elvenDisguise: Item
 	val elvenFood: Item
 	val elvenResource: Item
 	val elvoriumBoots: Item
@@ -215,6 +216,8 @@ object AlfheimItems {
 		elementalBoots = ItemElementalAirBoots()
 		elfFirePendant = ItemPendant("FirePendant")
 		elfIcePendant = ItemPendant("IcePendant")
+		elvenChakram = ItemElvenChakram()
+		elvenDisguise = ItemElvenDisguise()
 		elvenFood = ItemElvenFood()
 		elvenResource = ItemElvenResource()
 		elvoriumHelmet = ItemElvoriumHelmet()
@@ -309,10 +312,9 @@ object AlfheimItems {
 		terraHoe = ItemTerraHoe()
 		thinkingHand = ItemThinkingHand()
 		thrymAxe = ItemThrymAxe()
-		elvenChakram = ItemElvenChakram()
 		trisDagger = ItemTrisDagger()
 		triquetrum = ItemTriquetrum()
-		toolbelt = ItemToolbelt()
+		toolbelt = ItemToolBelt()
 		volcanoMace = ItemVolcanoMace()
 		volcanoHelmet = ItemVolcanoArmor(0, "VolcanoHelmet")
 		volcanoHelmetRevealing = if (Botania.thaumcraftLoaded) ItemVolcanoHelmetRevealing() else null

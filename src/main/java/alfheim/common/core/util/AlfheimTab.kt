@@ -220,6 +220,7 @@ import alfheim.common.item.AlfheimItems.elementalLeggings
 import alfheim.common.item.AlfheimItems.elfFirePendant
 import alfheim.common.item.AlfheimItems.elfIcePendant
 import alfheim.common.item.AlfheimItems.elvenChakram
+import alfheim.common.item.AlfheimItems.elvenDisguise
 import alfheim.common.item.AlfheimItems.elvenFood
 import alfheim.common.item.AlfheimItems.elvenResource
 import alfheim.common.item.AlfheimItems.elvoriumBoots
@@ -407,6 +408,8 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(balanceCloak)
 		addItem(invisibilityCloak)
 		addItem(fenrirCloak)
+		addItem(elvenDisguise)
+		addItem(rationBelt)
 		addItem(toolbelt)
 		addItem(manaStone)
 		addItem(manaStoneGreater)
@@ -445,7 +448,6 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(pixieAttractor)
 		addItem(serenade)
 		addItem(goddesCharm)
-		addItem(rationBelt)
 		
 		addItem(astrolabe)
 		addItem(triquetrum)

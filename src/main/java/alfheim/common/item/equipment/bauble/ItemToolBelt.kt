@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.api.event.PlayerInteractAdequateEvent
 import alfheim.client.core.helper.IconHelper
+import alfheim.client.model.armor.ModelBelt
 import alfheim.common.core.util.AlfheimTab
 import baubles.api.BaubleType
 import baubles.common.lib.PlayerHandler
@@ -11,7 +12,6 @@ import baubles.common.network.*
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.Block
-import net.minecraft.client.model.ModelBiped
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.texture.*
@@ -33,16 +33,14 @@ import vazkii.botania.common.item.equipment.bauble.ItemBauble
 import java.awt.Color
 import kotlin.math.*
 
-// ItemToolbelt will not become an IManaItem. That's... a bit excessively OP, imo. Store those in your Bauble Case, or keep them in your inventory.
-class ItemToolbelt: ItemBauble("toolbelt"), IBaubleRender, IBlockProvider {
+// ItemToolBelt will not become an IManaItem. That's... a bit excessively OP, imo. Store those in your Bauble Case, or keep them in your inventory.
+class ItemToolBelt: ItemBauble("toolbelt"), IBaubleRender, IBlockProvider {
 	
 	companion object {
 		
 		val glowTexture = ResourceLocation("${ModInfo.MODID}:textures/misc/glow.png")
-		val beltTexture = ResourceLocation("${ModInfo.MODID}:textures/model/entity/toolbelt.png")
+		val beltTexture = ResourceLocation("${ModInfo.MODID}:textures/model/armor/toolbelt.png")
 		
-		@SideOnly(Side.CLIENT)
-		var model: ModelBiped? = null
 		const val SEGMENTS = 12
 		const val TAG_ITEM_PREFIX = "item"
 		const val TAG_EQUIPPED = "equipped"
@@ -116,7 +114,7 @@ class ItemToolbelt: ItemBauble("toolbelt"), IBaubleRender, IBlockProvider {
 		fun getEquippedBelt(player: EntityPlayer): ItemStack? {
 			val inv = PlayerHandler.getPlayerBaubles(player)
 			val belt = inv[3]
-			return if (belt?.item is ItemToolbelt) belt else null
+			return if (belt?.item is ItemToolBelt) belt else null
 		}
 	}
 	
@@ -224,10 +222,7 @@ class ItemToolbelt: ItemBauble("toolbelt"), IBaubleRender, IBlockProvider {
 		glTranslatef(0F, 0.2F, 0F)
 		val s = 1.05F / 16F
 		glScalef(s, s, s)
-		if (model == null)
-			model = ModelBiped()
-		else
-			model!!.bipedBody.render(1F)
+		ModelBelt.bipedBody.render(1F)
 	}
 }
 
@@ -242,13 +237,13 @@ object ToolbeltEventHandler {
 		if (event.action !== PlayerInteractEvent.Action.RIGHT_CLICK_AIR) return
 		
 		val player = event.entityPlayer
-		val beltStack = ItemToolbelt.getEquippedBelt(player)
-		if (beltStack == null || !ItemToolbelt.isEquipped(beltStack)) return
+		val beltStack = ItemToolBelt.getEquippedBelt(player)
+		if (beltStack == null || !ItemToolBelt.isEquipped(beltStack)) return
 		
-		val toolStack = ItemToolbelt.getItemForSlot(beltStack, ItemToolbelt.getSegmentLookedAt(beltStack, player))
+		val toolStack = ItemToolBelt.getItemForSlot(beltStack, ItemToolBelt.getSegmentLookedAt(beltStack, player))
 		val heldItem = player.heldItem
 		
-		if (toolStack != null || (heldItem != null && heldItem.item !is ItemToolbelt && heldItem.item !is ItemBaubleBox))
+		if (toolStack != null || (heldItem != null && heldItem.item !is ItemToolBelt && heldItem.item !is ItemBaubleBox))
 			event.isCanceled = true
 	}
 	
@@ -258,24 +253,24 @@ object ToolbeltEventHandler {
 		if (ASJUtilities.isClient) return
 		
 		val player = event.player
-		val beltStack = ItemToolbelt.getEquippedBelt(player)
-		if (beltStack == null || !ItemToolbelt.isEquipped(beltStack)) return
+		val beltStack = ItemToolBelt.getEquippedBelt(player)
+		if (beltStack == null || !ItemToolBelt.isEquipped(beltStack)) return
 		
-		val segment = ItemToolbelt.getSegmentLookedAt(beltStack, player)
-		val toolStack = ItemToolbelt.getItemForSlot(beltStack, segment)
+		val segment = ItemToolBelt.getSegmentLookedAt(beltStack, player)
+		val toolStack = ItemToolBelt.getItemForSlot(beltStack, segment)
 		val heldItem = player.heldItem
 		
 		if (toolStack == null) {
-			if (heldItem != null && heldItem.item !is ItemToolbelt && heldItem.item !is ItemBaubleBox) {
+			if (heldItem != null && heldItem.item !is ItemToolBelt && heldItem.item !is ItemBaubleBox) {
 				val item = heldItem.copy()
 				
 				player.inventory[player.inventory.currentItem] = null
 				player.inventory.markDirty()
 				
-				ItemToolbelt.setItem(player, beltStack, item, segment)
+				ItemToolBelt.setItem(player, beltStack, item, segment)
 			}
 		} else {
-			ItemToolbelt.setItem(player, beltStack, null, segment)
+			ItemToolBelt.setItem(player, beltStack, null, segment)
 			
 			if (heldItem == null)
 				player.setCurrentItemOrArmor(0, toolStack)
@@ -290,9 +285,9 @@ object ToolbeltEventHandler {
 	@SubscribeEvent
 	fun onRenderWorldLast(event: RenderWorldLastEvent) {
 		val player = mc.thePlayer
-		val beltStack = ItemToolbelt.getEquippedBelt(player) ?: return
+		val beltStack = ItemToolBelt.getEquippedBelt(player) ?: return
 		
-		if (ItemToolbelt.isEquipped(beltStack))
+		if (ItemToolBelt.isEquipped(beltStack))
 			render(beltStack, player, event.partialTicks)
 	}
 	
@@ -311,9 +306,9 @@ object ToolbeltEventHandler {
 		val posZ = player.prevPosZ + (player.posZ - player.prevPosZ) * partialTicks
 		
 		glTranslated(posX - RenderManager.renderPosX, posY - RenderManager.renderPosY, posZ - RenderManager.renderPosZ)
-		val base = ItemToolbelt.getRotationBase(stack)
+		val base = ItemToolBelt.getRotationBase(stack)
 		val angles = 360
-		val segAngles = angles / ItemToolbelt.SEGMENTS
+		val segAngles = angles / ItemToolBelt.SEGMENTS
 		val shift = base - segAngles / 2
 		val u = 1F
 		val v = 0.25F
@@ -321,9 +316,9 @@ object ToolbeltEventHandler {
 		val m = 0.8F
 		val y = v * s * 2
 		var y0 = 0.0
-		val segmentLookedAt = ItemToolbelt.getSegmentLookedAt(stack, player)
+		val segmentLookedAt = ItemToolBelt.getSegmentLookedAt(stack, player)
 		
-		for (seg in 0 until ItemToolbelt.SEGMENTS) {
+		for (seg in 0 until ItemToolBelt.SEGMENTS) {
 			var inside = false
 			val rotationAngle = (seg + 0.5F) * segAngles + shift
 			glPushMatrix()
@@ -332,7 +327,7 @@ object ToolbeltEventHandler {
 			
 			if (segmentLookedAt == seg)
 				inside = true
-			val slotStack = ItemToolbelt.getItemForSlot(stack, seg)
+			val slotStack = ItemToolBelt.getItemForSlot(stack, seg)
 			if (slotStack != null) {
 				mc.renderEngine.bindTexture(if (slotStack.item is ItemBlock) TextureMap.locationBlocksTexture else TextureMap.locationItemsTexture)
 				
@@ -406,7 +401,7 @@ object ToolbeltEventHandler {
 			}
 			
 			glDisable(GL_CULL_FACE)
-			val item = stack.item as ItemToolbelt
+			val item = stack.item as ItemToolBelt
 			glDisable(GL_LIGHTING)
 			glEnable(GL_BLEND)
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)

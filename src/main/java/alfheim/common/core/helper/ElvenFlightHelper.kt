@@ -15,7 +15,7 @@ object ElvenFlightHelper {
 		FMLCommonHandler.instance().bus().register(this)
 	}
 	
-	private val FLIGHT = RangedAttribute("${ModInfo.MODID}.flight", max, 0.0, max).setShouldWatch(true)
+	private val FLIGHT = RangedAttribute("${ModInfo.MODID}.flight", max, 0.0, max).apply { setShouldWatch(true) }
 	
 	fun register(player: EntityPlayer) {
 		player.getAttributeMap().registerAttribute(FLIGHT)
@@ -29,6 +29,7 @@ object ElvenFlightHelper {
 		get() = AlfheimConfigHandler.flightTime.D
 		internal set(value) {
 			FLIGHT.defaultValue = value
+			FLIGHT.maximumValue = value
 		}
 	
 	operator fun get(player: EntityPlayer): Double {

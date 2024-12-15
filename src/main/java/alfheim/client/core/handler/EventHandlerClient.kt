@@ -18,10 +18,11 @@ import alfheim.client.render.world.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
 import alfheim.common.crafting.recipe.RecipeSaveIvy
+import alfheim.common.item.equipment.bauble.ItemElvenDisguise
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageKeyBindS
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.gameevent.TickEvent.*
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
 import cpw.mods.fml.relauncher.*
@@ -114,7 +115,7 @@ object EventHandlerClient {
 		RenderItemFlugelHead.render(e, e.entityPlayer)
 	}
 	
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	@SideOnly(Side.CLIENT)
 	fun onPlayerSpecialPreRender(e: RenderPlayerEvent.Specials.Pre) {
 		val player = e.entityPlayer as AbstractClientPlayer
@@ -122,29 +123,37 @@ object EventHandlerClient {
 		RenderEntityLeftHand.render(e)
 	}
 	
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	@SideOnly(Side.CLIENT)
 	fun onHandRender(e: RenderHandEvent) {
 		bindCustomSkin(mc.thePlayer)
 	}
 	
 	fun bindCustomSkin(player: AbstractClientPlayer) {
-		if (ContributorsPrivacyHelper.isCorrect(player, "AlexSocol"))
+		val disguise = ItemElvenDisguise.getDisguise(player)
+		
+		if (disguise == null && ContributorsPrivacyHelper.isCorrect(player, "AlexSocol"))
 			player.func_152121_a(Type.SKIN, LibResourceLocations.skin)
 		
-		if (AlfheimConfigHandler.enableElvenStory) run skin@{
-			val data = CardinalSystemClient.playerSkinsData[player.commandSenderName] ?: return@skin
-			
-			if (player.raceID == 0 || player.raceID > 9) return@skin
-			
-			if (data.second) {
-				player.func_152121_a(Type.SKIN,
-									 if (data.first)
-										 LibResourceLocations.oldFemale[player.raceID - 1]
-									 else
-										 LibResourceLocations.oldMale[player.raceID - 1]
-				)
-			}
+		if (!AlfheimConfigHandler.enableElvenStory && disguise == null) return
+		
+		val data = if (disguise != null)
+			(ItemElvenDisguise.getGurl(player) ?: false) to true
+		else
+			CardinalSystemClient.playerSkinsData[player.commandSenderName]
+			?: return
+		
+		val raceID = disguise?.ordinal ?: player.raceID
+		if (raceID == 0 || raceID > 9) return
+		
+		if (data.second) {
+			player.func_152121_a(Type.SKIN,
+			                     (if (data.first)
+									 LibResourceLocations.oldFemale
+								 else
+									 LibResourceLocations.oldMale)
+				                 [raceID - 1]
+			)
 		}
 	}
 	
@@ -160,11 +169,11 @@ object EventHandlerClient {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onPlayerTick(e: PlayerTickEvent) {
-		val player = mc.thePlayer
-		if (e.player !== player) return
+		val player = e.player
+		if (player !== mc.thePlayer) return
 		
 		if (e.phase == Phase.START && e.side == Side.CLIENT && !mc.isGamePaused) {
-			KeyBindingHandlerClient.parseKeybindings(e.player)
+			KeyBindingHandlerClient.parseKeybindings(player)
 			SpellCastingSystemClient.tick()
 			
 			if (player != null) {

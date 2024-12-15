@@ -75,7 +75,7 @@ class EntityElf(world: World): EntityCreature(world), INpc, IIntersectAttackEnti
 		setSize(0.6f, 2f)
 		tasks.addTask(0, EntityAISwimming(this))
 		tasks.addTask(1, EntityAIAttackOnCollide(this, 1.0, true))
-		tasks.addTask(1, AIAttackOnIntersect(this))
+		tasks.addTask(1, AIAttackOnIntersect(this, IMob.mobSelector))
 		tasks.addTask(2, EntityAIMoveTowardsTarget(this, 0.9, 32f))
 		tasks.addTask(3, EntityAIMoveThroughVillage(this, 0.6, true))
 		tasks.addTask(4, EntityAIOpenDoor(this, true))

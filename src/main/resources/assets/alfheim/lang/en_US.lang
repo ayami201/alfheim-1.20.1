@@ -409,6 +409,7 @@ item.botania:CrescentMoonAmulet.name=Amulet of Crescent Moon
 item.alfheim:Daolos.name=Daolos
 item.alfheim:DasRheingold.name=Das Rheingold
 item.alfheim:DeathSeed.name=Death Seed
+item.botania:DisguiseBelt.name=Shapeshifting Belt
 item.botania:DodgeRing.name=Ring of Dexterous Motion
 item.alfheim:DomainKey.name=Domain Key
 item.botania:ElementalAirBoots.name=Elemental Boots of Air
@@ -929,9 +930,15 @@ alfheimmisc.quandex=Corporea Quandex equiped!
 alfheimmisc.resonator.mode0=Resonator's fields will automatically detonate after 2 seconds.
 alfheimmisc.resonator.mode1=Resonator's fields will detonate only after you hit one with it.
 alfheimmisc.resonator.mode2=Resonator's fields will work as matrix traps.
+alfheimmisc.resonator.mode0.short=Automatic
+alfheimmisc.resonator.mode1.short=Manual
+alfheimmisc.resonator.mode2.short=Matrix
 alfheimmisc.resonator.target0=Resonator's fields will spread to any blocks.
 alfheimmisc.resonator.target1=Resonator's fields will spread to similar blocks (ignoring meta).
 alfheimmisc.resonator.target2=Resonator's fields will spread to same blocks (considering meta).
+alfheimmisc.resonator.target0.short=Any blocks
+alfheimmisc.resonator.target1.short=Similar blocks
+alfheimmisc.resonator.target2.short=Same blocks
 alfheimmisc.relic=&6Relic&7
 alfheimmisc.relic.fail=You cannot hold %s in your hands
 alfheimmisc.saveIvy=Has Indissoluble Ivy
@@ -1285,6 +1292,9 @@ race.SPRIGGAN.name=SPRIGGAN
 race.UNDINE.name=UNDINE
 race.IMP.name=IMP
 race.ALV.name=ALV
+
+gender.false=Female
+gender.true=Male
 
 #########################################################___SPELLS___###########################################################
 
@@ -1692,7 +1702,7 @@ tile.alfheim:altPlanksStairs4.name=Infused Planks Stairs
 tile.alfheim:altPlanksStairs5.name=Mutated Planks Stairs
 tile.alfheim:altPlanksStairs6.name=Yggdrasil Planks Stairs
 
-tile.alfheim:irisLamp.name=Iridescent Lantern
+tile.alfheim:irisLamp.name=Iridescent Lamp
 
 tile.alfheim:quartzStairsShimmer.name=Shimmerquartz Stairs
 tile.alfheim:quartzSlabShimmerHalf.name=Shimmerquartz Slab
