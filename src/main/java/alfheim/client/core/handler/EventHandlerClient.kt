@@ -18,10 +18,11 @@ import alfheim.client.render.world.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
 import alfheim.common.crafting.recipe.RecipeSaveIvy
+import alfheim.common.item.equipment.bauble.ItemElvenDisguise
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageKeyBindS
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.gameevent.TickEvent.*
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
 import cpw.mods.fml.relauncher.*
@@ -36,6 +37,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
 import net.minecraftforge.event.entity.player.*
 import org.lwjgl.opengl.GL11.*
+import vazkii.botania.client.core.handler.ClientTickHandler
 import vazkii.botania.common.Botania
 import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.item.equipment.bauble.ItemMonocle
@@ -113,7 +115,7 @@ object EventHandlerClient {
 		RenderItemFlugelHead.render(e, e.entityPlayer)
 	}
 	
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	@SideOnly(Side.CLIENT)
 	fun onPlayerSpecialPreRender(e: RenderPlayerEvent.Specials.Pre) {
 		val player = e.entityPlayer as AbstractClientPlayer
@@ -121,29 +123,37 @@ object EventHandlerClient {
 		RenderEntityLeftHand.render(e)
 	}
 	
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	@SideOnly(Side.CLIENT)
 	fun onHandRender(e: RenderHandEvent) {
 		bindCustomSkin(mc.thePlayer)
 	}
 	
 	fun bindCustomSkin(player: AbstractClientPlayer) {
-		if (ContributorsPrivacyHelper.isCorrect(player, "AlexSocol"))
+		val disguise = ItemElvenDisguise.getDisguise(player)
+		
+		if (disguise == null && ContributorsPrivacyHelper.isCorrect(player, "AlexSocol"))
 			player.func_152121_a(Type.SKIN, LibResourceLocations.skin)
 		
-		if (AlfheimConfigHandler.enableElvenStory) run skin@{
-			val data = CardinalSystemClient.playerSkinsData[player.commandSenderName] ?: return@skin
-			
-			if (player.raceID == 0 || player.raceID > 9) return@skin
-			
-			if (data.second) {
-				player.func_152121_a(Type.SKIN,
-									 if (data.first)
-										 LibResourceLocations.oldFemale[player.raceID - 1]
-									 else
-										 LibResourceLocations.oldMale[player.raceID - 1]
-				)
-			}
+		if (!AlfheimConfigHandler.enableElvenStory && disguise == null) return
+		
+		val data = if (disguise != null)
+			(ItemElvenDisguise.getGurl(player) ?: false) to true
+		else
+			CardinalSystemClient.playerSkinsData[player.commandSenderName]
+			?: return
+		
+		val raceID = disguise?.ordinal ?: player.raceID
+		if (raceID == 0 || raceID > 9) return
+		
+		if (data.second) {
+			player.func_152121_a(Type.SKIN,
+			                     (if (data.first)
+									 LibResourceLocations.oldFemale
+								 else
+									 LibResourceLocations.oldMale)
+				                 [raceID - 1]
+			)
 		}
 	}
 	
@@ -159,11 +169,11 @@ object EventHandlerClient {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onPlayerTick(e: PlayerTickEvent) {
-		val player = mc.thePlayer
-		if (e.player !== player) return
+		val player = e.player
+		if (player !== mc.thePlayer) return
 		
 		if (e.phase == Phase.START && e.side == Side.CLIENT && !mc.isGamePaused) {
-			KeyBindingHandlerClient.parseKeybindings(e.player)
+			KeyBindingHandlerClient.parseKeybindings(player)
 			SpellCastingSystemClient.tick()
 			
 			if (player != null) {
@@ -196,38 +206,39 @@ object EventHandlerClient {
 		}
 		
 		run {
-			val target = PlayerSegmentClient.target
-			if (target != null) {
-				if (target == mc.thePlayer && mc.gameSettings.thirdPersonView == 0) return@run
-				glPushMatrix()
-				glDisable(GL_CULL_FACE)
-				//glDisable(GL_ALPHA_TEST);
-				glAlphaFunc(GL_GREATER, 1 / 255f)
-				glEnable(GL_BLEND)
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-				if (target != mc.thePlayer) {
-					ASJRenderHelper.interpolatedTranslationReverse(mc.thePlayer)
-					ASJRenderHelper.interpolatedTranslation(target)
-				} else {
-					glTranslated(0.0, -(1.5 + mc.thePlayer.eyeHeight), 0.0)
-				}
-				glRotated((mc.theWorld.totalWorldTime + mc.timer.renderPartialTicks).D, 0.0, 1.0, 0.0)
-				glScalef(target.width)
-				ASJRenderHelper.glColor1u(if (PlayerSegmentClient.isParty) -0xff0100 else -0x10000)
-				mc.renderEngine.bindTexture(LibResourceLocations.cross)
-				Tessellator.instance.startDrawingQuads()
-				Tessellator.instance.addVertexWithUV(-1.0, 0.1, -1.0, 0.0, 0.0)
-				Tessellator.instance.addVertexWithUV(-1.0, 0.1, 1.0, 0.0, 1.0)
-				Tessellator.instance.addVertexWithUV(1.0, 0.1, 1.0, 1.0, 1.0)
-				Tessellator.instance.addVertexWithUV(1.0, 0.1, -1.0, 1.0, 0.0)
-				Tessellator.instance.draw()
-				glDisable(GL_BLEND)
-				glAlphaFunc(GL_GREATER, 0.1f)
-				//glEnable(GL_ALPHA_TEST);
-				glEnable(GL_CULL_FACE)
-				glColor4d(1.0, 1.0, 1.0, 1.0)
-				glPopMatrix()
+			val target = PlayerSegmentClient.target ?: return@run
+			if (target == mc.thePlayer && mc.gameSettings.thirdPersonView == 0) return@run
+			
+			glPushMatrix()
+			
+			glAlphaFunc(GL_GREATER, 1 / 255f)
+			ASJRenderHelper.setBlend()
+			ASJRenderHelper.setGlow()
+			ASJRenderHelper.setTwoside()
+			
+			if (target != mc.thePlayer) {
+				ASJRenderHelper.interpolatedTranslationReverse(mc.thePlayer)
+				ASJRenderHelper.interpolatedTranslation(target)
+			} else {
+				glTranslated(0.0, -(1.5 + mc.thePlayer.eyeHeight), 0.0)
 			}
+			
+			glRotatef(ClientTickHandler.total, 0f, 1f, 0f)
+			glScalef(target.width)
+			
+			ASJRenderHelper.glColor1u(if (PlayerSegmentClient.isParty) 0xFF00FF00U else 0xFFFF0000U)
+			mc.renderEngine.bindTexture(LibResourceLocations.cross)
+			Tessellator.instance.startDrawingQuads()
+			Tessellator.instance.addVertexWithUV(-1.0, 0.1, -1.0, 0.0, 0.0)
+			Tessellator.instance.addVertexWithUV(-1.0, 0.1, 1.0, 0.0, 1.0)
+			Tessellator.instance.addVertexWithUV(1.0, 0.1, 1.0, 1.0, 1.0)
+			Tessellator.instance.addVertexWithUV(1.0, 0.1, -1.0, 1.0, 0.0)
+			Tessellator.instance.draw()
+			
+			glColor4f(1f, 1f, 1f, 1f)
+			ASJRenderHelper.discard()
+			glAlphaFunc(GL_GREATER, 0.1f)
+			glPopMatrix()
 		}
 		
 		TimeStopSystemClient.render()

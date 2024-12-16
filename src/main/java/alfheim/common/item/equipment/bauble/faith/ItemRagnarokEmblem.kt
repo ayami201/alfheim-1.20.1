@@ -538,8 +538,7 @@ class ItemRagnarokEmblem: ItemBauble("aesirEmblemWeak"), IBaubleRender, IManaDis
 				if (block !== Blocks.lava) return false
 				
 				if (y > 32) return false
-				if (player.isPotionActive(Potion.fireResistance)) return false
-				return true
+				return !player.isPotionActive(Potion.fireResistance)
 			}
 			
 			if (!check())
@@ -565,9 +564,7 @@ class ItemRagnarokEmblem: ItemBauble("aesirEmblemWeak"), IBaubleRender, IManaDis
 				val z = player.posZ.mfloor()
 				val block = player.worldObj.getBlock(x, y, z)
 				
-				if (block !== ModBlocks.enchantedSoil) return false
-				
-				return true
+				return block === ModBlocks.enchantedSoil
 			}
 			
 			if (!check())
@@ -598,8 +595,7 @@ class ItemRagnarokEmblem: ItemBauble("aesirEmblemWeak"), IBaubleRender, IManaDis
 				val block = world.getBlock(player, y = -1)
 				val meta = world.getBlockMeta(player, y = -1) % 8
 				
-				if (block !== AlfheimBlocks.altLeaves || meta != BlockAltLeaves.yggMeta) return false
-				return true
+				return block === AlfheimBlocks.altLeaves && meta == BlockAltLeaves.yggMeta
 			}
 			
 			if (!check())

@@ -238,7 +238,7 @@ object SnowArmorAbilityHandler {
 		}
 		
 		if (e.source.isFireDamage)
-			e.ammount /= 2
+			e.ammount *= 0.5f
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOW)

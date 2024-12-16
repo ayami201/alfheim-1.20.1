@@ -123,8 +123,6 @@ class EntityDedMoroz(world: World): EntityMob(world), IBotaniaBossWithName, INif
 	}
 	
 	override fun onLivingUpdate() {
-//		if (!WRATH_OF_THE_WINTER) setDead().also { return }
-		
 		super.onLivingUpdate()
 		
 		val iter = activePotionEffects.iterator()
@@ -133,7 +131,6 @@ class EntityDedMoroz(world: World): EntityMob(world), IBotaniaBossWithName, INif
 		
 		worldObj.worldInfo.isRaining = true
 		worldObj.worldInfo.rainTime = max(worldObj.worldInfo.rainTime, 3600)
-		worldObj.prevRainingStrength = 1f
 		worldObj.rainingStrength = 1f
 		
 		if (AlfheimCore.winter)

@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.*
 import alfheim.api.event.PlayerInteractAdequateEvent
+import alfheim.client.gui.ItemsRemainingRenderHandler
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.entity.EntityResonance
 import alfheim.common.item.AlfheimItems
@@ -14,6 +15,7 @@ import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
+import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import vazkii.botania.api.mana.*
@@ -34,10 +36,13 @@ class ItemResonator: ItemPickaxe(AlfheimAPI.elvoriumToolMaterial), IManaUsingIte
 	}
 	
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
-		if (player.isSneaking)
+		if (player.isSneaking) {
 			stack.target = (stack.target + 1) % 3
-		else
+			ItemsRemainingRenderHandler.set(stack, StatCollector.translateToLocal("alfheimmisc.resonator.target${stack.target}.short"))
+		} else {
 			stack.mode = (stack.mode + 1) % 3
+			ItemsRemainingRenderHandler.set(stack, StatCollector.translateToLocal("alfheimmisc.resonator.mode${stack.mode}.short"))
+		}
 		
 		player.playSoundAtEntity("random.click", 0.6f, (1f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2f) * 0.7f)
 		

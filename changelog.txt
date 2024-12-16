@@ -1,9 +1,12 @@
 Innovations:
- Botanist's Toolbelt bauble is back
- New saplings for worldgen-exclusive trees
- [MMO] 9 new spells
- [MMO] Removed Refresh spell
+ Recipe and lexicon for Botanist's Toolbelt
+ ESM and MMO disabled by default
+ Config to move Alfheim entries to Botania categories
+ [MMO] Indicator on an entity for Priority Target spell
 
 Fixes:
- [DD] Crash with Dimensional Doors
- [OF] Domain sky render with OptiFine bug
+ Elves aggroing on players for no reason
+ Magma and elemental slimes shedding slimeballs
+ [ESM] Race icon issues when max flight time is set to 0
+ [MMO] Target indicator sometimes being gray and not rotating smoothly
+ [MMO] QuadDamage sequence 

@@ -52,7 +52,6 @@ object GUIScreenOverlay: Gui() {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 		glDisable(GL_DEPTH_TEST)
 		glDepthMask(false)
-//		glDisable(GL_ALPHA_TEST)
 		glAlphaFunc(GL_GREATER, 0f)
 		
 		mc.renderEngine.bindTexture(texture)
@@ -68,10 +67,8 @@ object GUIScreenOverlay: Gui() {
 		tes.draw()
 		
 		glAlphaFunc(GL_GREATER, 0.1f)
-//		glEnable(GL_ALPHA_TEST)
 		glDepthMask(true)
 		glEnable(GL_DEPTH_TEST)
-//		glDisable(GL_BLEND)
 		glPopMatrix()
 	}
 }

@@ -26,7 +26,7 @@ class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 				
 				}
 			} else {
-				player.raceID = (player.race.ordinal + 1) % 11
+				player.raceID = (player.race.ordinal + 1) % EnumRace.entries.size
 				ASJUtilities.chatLog("${player.race.ordinal} - ${player.race}", player)
 			}
 		} catch (e: Throwable) {

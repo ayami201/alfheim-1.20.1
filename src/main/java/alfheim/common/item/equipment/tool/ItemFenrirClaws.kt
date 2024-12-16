@@ -115,7 +115,7 @@ class ItemFenrirClaws: ItemManasteelSword(AlfheimAPI.FENRIR, "FenrirClaws") {
 			val epsilon = lookVec.dotProduct(targetVec) / (lookVec.mag() * targetVec.mag())
 			if (epsilon <= 0.75) return
 			
-			e.ammount /= 2f
+			e.ammount *= 0.5f
 		}
 	}
 }

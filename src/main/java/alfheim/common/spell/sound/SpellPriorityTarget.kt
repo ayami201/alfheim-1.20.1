@@ -29,7 +29,7 @@ object SpellPriorityTarget: SpellBase("priorityTarget", EnumRace.POOKA, 10000, 9
 		else
 			CardinalSystem.PartySystem.getMobParty(caster) ?: return SpellCastResult.WRONGTGT
 		
-		if (party.count < 2) return SpellCastResult.NOTARGET
+		if (party.count < 2) return SpellCastResult.WRONGTGT
 		
 		val result = checkCast(caster)
 		if (result != SpellCastResult.OK) return result

@@ -640,8 +640,7 @@ object RagnarokHandler {
 		var info = e.world.worldInfo
 		if (info is DerivedWorldInfo) info = info.theWorldInfo
 		
-		e.world.prevRainingStrength = (if (time == 0) 1f else 0f)
-		e.world.rainingStrength = e.world.prevRainingStrength
+		e.world.rainingStrength = (if (time == 0) 1f else 0f)
 		info.rainTime = time
 		info.isRaining = time == 0
 		

@@ -29,6 +29,7 @@ object AlfheimAPI {
 	val mauftriumToolMaterial = EnumHelper.addToolMaterial("ALFHEIM_MAUFTRIUM", 10, 3000, 3f, 8f, 40)!!
 	
 	// relic
+	var DAOLOS = EnumHelper.addToolMaterial("ALFHEIM_DAOLOS", 7, 1561, 16f, 7f, 50)!!
 	val EXCALIBER = EnumHelper.addToolMaterial("ALFHEIM_EXCALIBER", 3, -1, 6.2f, 6f, 40)!!
 	val FENRIR = EnumHelper.addToolMaterial("ALFHEIM_FENRIR", 0, 2000, 0f, 3.0f, 14)!!
 	var RUNEAXE = EnumHelper.addToolMaterial("ALFHEIM_RUNEAXE", 7, 1561, 16f, 2f, 50)!!

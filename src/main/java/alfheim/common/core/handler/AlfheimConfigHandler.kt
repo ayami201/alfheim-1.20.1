@@ -33,7 +33,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		get() = _enableElvenStory
 		set(value) {
 			_enableElvenStory = value
-			config.get(CATEGORY_PRELOAD, "enableElvenStory", value, "Set this to false to disable ESM and MMO").set(value)
+			config.get(CATEGORY_PRELOAD, "enableElvenStory", value, "Set this to true to enable ESM").set(value)
 			config.save()
 		}
 	
@@ -41,12 +41,12 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		get() = _enableMMO
 		set(value) {
 			_enableMMO = value
-			config.get(CATEGORY_PRELOAD, "enableMMO", value, "Set this to false to disable MMO").set(value)
+			config.get(CATEGORY_PRELOAD, "enableMMO", value, "Set this to true to enable MMO mode (requires ESM)").set(value)
 			config.save()
 		}
 	
-	private var _enableElvenStory = true
-	private var _enableMMO = true
+	private var _enableElvenStory = false
+	private var _enableMMO = false
 	
 	// PRELOAD
 	var elementiumClusterMeta = 22
@@ -137,6 +137,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var hotHell = true
 	var imPatheticWeakAndScaredDontTouchMyWorlds = false
 	var interactEventChecks = false
+	var lexiconSort = false
 	var lightningsSpeed = 20
 	var longSeasons = true
 	var looniumOverseed = false
@@ -362,6 +363,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		hotHell = loadProp(CATEGORY_GENERAL, "hotHell", hotHell, false, "Set this to false to remove overheating in Muspleheim (Hell/Nether)")
 		imPatheticWeakAndScaredDontTouchMyWorlds = loadProp(CATEGORY_GENERAL, "imPatheticWeakAndScaredDontTouchMyWorlds", imPatheticWeakAndScaredDontTouchMyWorlds, false, "Set this to true to disable hardcoded world destruction during Ragnarok and affect ONLY Alfheim")
 		interactEventChecks = loadProp(CATEGORY_GENERAL, "interactEventChecks", interactEventChecks, false, "Distance checks when firing interaction events, results may be unclear")
+		lexiconSort = loadProp(CATEGORY_GENERAL, "lexiconSort", lexiconSort, true, "Set this to true to sort Alfheim lexicon entries to vanilla categories")
 		lightningsSpeed = loadProp(CATEGORY_GENERAL, "lightningsSpeed", lightningsSpeed, false, "How many ticks it takes between two lightings are spawned in Lightning Anomaly render")
 		longSeasons = loadProp(CATEGORY_GENERAL, "longSeasons", longSeasons, true, "Set this to false to make seasons last 1 real day instead of 3")
 		looniumOverseed = loadProp(CATEGORY_GENERAL, "looniumOverseed", looniumOverseed, true, "Set this to true to make loonium spawn overgrowth seeds (for servers with limited dungeons so all players can craft Gaia pylons)")
@@ -426,6 +428,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDChampagne = loadProp(CATEGORY_POTIONS, "potionIDChampagne", potionIDChampagne, true, "Potion id for Champagne")
 		potionIDDeathMark = loadProp(CATEGORY_MMOP, "potionIDDeathMark", potionIDDeathMark, true, "Potion id for Death Mark")
 		potionIDDecay = loadProp(CATEGORY_MMOP, "potionIDDecay", potionIDDecay, true, "Potion id for Decay")
+		potionIDEdgeLife = loadProp(CATEGORY_MMOP, "potionIDEdgeLife", potionIDEdgeLife, true, "Potion id for Edge Life")
 		potionIDEternity = loadProp(CATEGORY_POTIONS, "potionIDEternity", potionIDEternity, true, "Potion id for Eternity")
 		potionIDGoldRush = loadProp(CATEGORY_MMOP, "potionIDGoldRush", potionIDGoldRush, true, "Potion id for Gold Rush")
 		potionIDHystrix = loadProp(CATEGORY_MMOP, "potionIDHystrix", potionIDHystrix, true, "Potion id for Hystrix")

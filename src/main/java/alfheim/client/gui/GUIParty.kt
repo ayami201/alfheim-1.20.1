@@ -549,7 +549,7 @@ object GUIParty: Gui() {
 			glMatrixMode(GL_MODELVIEW)
 			
 			if (AlfheimConfigHandler.selfHealthUI) {
-				mc.textureManager.bindTexture(RenderWings.getPlayerIconTexture(player))
+				mc.textureManager.bindTexture(LibResourceLocations.icons[player.raceID])
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER)
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER)
 				glColor4d(1.0, 1.0, 1.0, 0.5)
@@ -562,7 +562,7 @@ object GUIParty: Gui() {
 				
 				if (ShaderHelper.useShaders()) ASJShaderHelper.useShader(LibShaderIDs.idShadow)
 				
-				val mod = if (mc.thePlayer.race == EnumRace.HUMAN) 1.0 else mc.thePlayer.flight.mfloor() / ElvenFlightHelper.max
+				val mod = if (mc.thePlayer.race == EnumRace.HUMAN || ElvenFlightHelper.max == 0.0) 1.0 else mc.thePlayer.flight.mfloor() / ElvenFlightHelper.max
 				val time = sin((mc.theWorld.totalWorldTime / 2).D) * 0.5
 				glColor4d(1.0, 1.0, 1.0, if (mc.thePlayer.capabilities.isFlying) if (mod > 0.1) time + 0.5 else time else 1.0)
 				

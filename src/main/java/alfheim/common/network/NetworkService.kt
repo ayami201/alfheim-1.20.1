@@ -29,6 +29,7 @@ object NetworkService {
 		registerPacket(MessageNI::class, Side.CLIENT)
 		
 		registerPacket(MessageContributor::class, Side.CLIENT)
+		registerPacket(MessageDisguise::class, Side.CLIENT)
 		registerPacket(MessageEffect::class, Side.CLIENT)
 		registerPacket(MessageFIBlock::class, Side.CLIENT)
 		registerPacket(MessageGleipnirLeash::class, Side.CLIENT)
@@ -48,6 +49,7 @@ object NetworkService {
 		registerPacket(MessageCorporeaRequest::class, Side.SERVER)
 		registerPacket(MessageHotSpellS::class, Side.SERVER)
 		registerPacket(MessageFuckedUpServerPrecision::class, Side.SERVER)
+		registerPacket(MessageDisguise::class, Side.SERVER)
 		registerPacket(MessageKeyBindS::class, Side.SERVER)
 		registerPacket(MessageNI::class, Side.SERVER)
 		registerPacket(MessageRaceSelection::class, Side.SERVER)

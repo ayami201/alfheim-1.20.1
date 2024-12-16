@@ -8,6 +8,7 @@ import alfheim.common.world.dim.alfheim.biome.*
 import cpw.mods.fml.relauncher.*
 import net.minecraft.entity.*
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
 import net.minecraft.world.World
 import ru.vamig.worldengine.*
@@ -23,11 +24,11 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 	/** Coordinates of where the pixie spawned.  */
 	private var spawnPosition: ChunkCoordinates? = null
 	
-	var sizeSet
+	var isGiant
 		get() = getFlag(6)
 		set(value) = setFlag(6, value)
 	
-	var isGiant
+	var resized
 		get() = getFlag(7)
 		set(value) = setFlag(7, value)
 	
@@ -82,7 +83,7 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 				val color = Color(Color.HSBtoRGB((ClientTickHandler.ticksInGame * entityId) % 360 / 360f, 1f, 1f))
 				Botania.proxy.sparkleFX(worldObj, posX + Math.random() * width - width / 2, posY + Math.random() * height - height / 2, posZ + Math.random() * width - width / 2, color.red.F, color.green.F, color.blue.F, 0.1f + Math.random().F * 0.25f * if (isGiant) 10 else 1, 12)
 			}
-		} else if (!sizeSet)  {
+		} else if (!resized)  {
 			(worldObj.provider as? WE_WorldProvider)?.chunkProvider?.let {
 				if (WE_Biome.getBiomeAt(it, posX.mfloor(), posZ.mfloor()).isEqualTo(BiomeIslandGiantFlowers)) {
 					isGiant = true
@@ -91,7 +92,7 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 				}
 			}
 			
-			sizeSet = true
+			resized = true
 		}
 		
 		if (isGiant)
@@ -154,4 +155,23 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 	}
 	
 	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
+	
+	override fun writeEntityToNBT(nbt: NBTTagCompound) {
+		super.writeEntityToNBT(nbt)
+		
+		nbt.setBoolean(TAG_GIANT, isGiant)
+		nbt.setBoolean(TAG_RESIZED, resized)
+	}
+	
+	override fun readEntityFromNBT(nbt: NBTTagCompound) {
+		super.readEntityFromNBT(nbt)
+		
+		isGiant = nbt.getBoolean(TAG_GIANT)
+		resized = nbt.getBoolean(TAG_RESIZED)
+	}
+	
+	companion object {
+		const val TAG_GIANT = "giant"
+		const val TAG_RESIZED = "resized"
+	}
 }

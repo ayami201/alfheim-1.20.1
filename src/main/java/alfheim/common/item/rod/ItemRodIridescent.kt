@@ -86,8 +86,8 @@ class ItemRodIridescent(name: String = "rodColorfulSkyDirt"): ItemIridescent(nam
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
 		var blockstack = dirtStack(stack.meta)
 		
-		val beltStack = ItemToolbelt.getEquippedBelt(player)
-		if (beltStack != null && ItemToolbelt.isEquipped(beltStack))
+		val beltStack = ItemToolBelt.getEquippedBelt(player)
+		if (beltStack != null && ItemToolBelt.isEquipped(beltStack))
 			return stack
 		
 		if (player.isSneaking) {

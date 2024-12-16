@@ -1,6 +1,7 @@
 package alfheim.common.entity.item
 
 import alexsocol.asjlib.*
+import alfheim.common.core.asm.hook.extender.RelicHooks
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.world.World
@@ -31,7 +32,7 @@ class EntityItemImmortalRelic: EntityItemImmortal {
 	}
 	
 	override fun canBePickedByPlayer(player: EntityPlayer) =
-		if (player.capabilities.isCreativeMode)
+		if (player.capabilities.isCreativeMode || stack?.item !in RelicHooks.underControl)
 			true
 		else if (owner.let { it.isNullOrEmpty() || it == player.commandSenderName })
 			bindAhievement.let { it == null || player.hasAchievement(it) }

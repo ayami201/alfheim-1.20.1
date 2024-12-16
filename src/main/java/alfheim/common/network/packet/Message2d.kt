@@ -10,7 +10,9 @@ import alfheim.client.core.proxy.ClientProxy
 import alfheim.common.core.helper.flight
 import alfheim.common.entity.spell.EntitySpellFireball
 import alfheim.common.network.M2d
+import alfheim.common.potion.PotionPriorityTarget.TAG_PT
 import net.minecraft.entity.EntityLivingBase
+import java.util.*
 
 class Message2d(ty: M2d, var data1: Double, var data2: Double, var type: Int = ty.ordinal): AlfheimPacket<Message2d>() {
 	
@@ -43,7 +45,7 @@ class Message2d(ty: M2d, var data1: Double, var data2: Double, var type: Int = t
 				}
 			}
 
-			M2d.UUID -> CardinalSystemClient.PlayerSegmentClient.party?.setUUID(data2.I, data1.I)
+			M2d.PARTYID -> CardinalSystemClient.PlayerSegmentClient.party?.setUUID(data2.I, data1.I)
 
 			M2d.MODES -> {
 				if (data1 > 0) ClientProxy.enableESM() else ClientProxy.disableESM()
@@ -53,6 +55,15 @@ class Message2d(ty: M2d, var data1: Double, var data2: Double, var type: Int = t
 			M2d.FIREBALLSYNC -> {
 				(mc.theWorld.getEntityByID(data1.I) as? EntitySpellFireball)?.target =
 					mc.theWorld.getEntityByID(data2.I) as? EntityLivingBase
+			}
+			
+			M2d.PRIOTGT -> {
+				val nbt = mc.thePlayer.entityData
+				if (data1 == 0.0 && data2 == 0.0)
+					return nbt.removeTag(TAG_PT)
+				
+				val uuid = UUID(data1.toRawBits(), data2.toRawBits())
+				nbt.setString(TAG_PT, uuid.toString())
 			}
 		}
 	}

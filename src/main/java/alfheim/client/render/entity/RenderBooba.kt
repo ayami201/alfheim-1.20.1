@@ -7,6 +7,7 @@ import alfheim.api.entity.raceID
 import alfheim.api.lib.LibResourceLocations
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.item.equipment.bauble.ItemElvenDisguise
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.renderer.RenderHelper
@@ -31,9 +32,11 @@ object RenderBooba {
 	fun render(player: EntityPlayer) {
 		if (!AlfheimConfigHandler.renderBooba) return
 		if (player !is AbstractClientPlayer) return
-		if (!AlfheimConfigHandler.enableElvenStory) return
 		val booba = model ?: return
-		val skinData = CardinalSystemClient.playerSkinsData[player.commandSenderName]
+		
+		val gurl = ItemElvenDisguise.getGurl(player)
+
+		val skinData = if (gurl != null) gurl to true else if (AlfheimConfigHandler.enableElvenStory) CardinalSystemClient.playerSkinsData[player.commandSenderName] else return
 		if (skinData?.first != true) return
 		
 		val invisible = player.isInvisible
@@ -89,7 +92,7 @@ object RenderBooba {
 			glEnable(GL_TEXTURE_2D)
 		}
 		
-		val id = player.raceID - 1
+		val id = (ItemElvenDisguise.getDisguise(player)?.ordinal ?: player.raceID) - 1
 		mc.renderEngine.bindTexture(if (skinData.second && id in LibResourceLocations.oldFemale.indices) LibResourceLocations.oldFemale[id] else player.locationSkin)
 		booba.renderAll()
 		hurt()

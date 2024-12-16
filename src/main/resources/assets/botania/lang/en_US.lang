@@ -151,13 +151,13 @@ alfheim.tagline.flowerWind=Produces mana from wind
 alfheim.page.flowerWind0=When placed in the open, the &1Windifolia&0 creates &4Mana&0 from wind. The higher it is, the more mana it produces. More mana can be get under rain. Since it is a passive flower, it will decay.
 alfheim.page.flowerWind1=Only the storms can knock down the trees.
 
-alfheim.entry.ores=Ores
+alfheim.entry.ores=Ores of Alfheim
 alfheim.tagline.ores=Make even more filters...
 alfheim.page.ores0=Everyone knows that the midges of Midgard are filled with ores and minerals. This is clearly seen when miners extract new pieces of iron, gold or diamonds. However, what about Alfheim? They have their own ores that they traded with the people of Midgard.<br>Elementium ore is a magical metal ore that is pure and beautiful... Stunning metal!
 alfheim.page.ores1=Dragonstone ore - precious pink elven jewel. It is a pity that you can not make the tools out of it.<br>Gold ore - looks like the elves had the metal of the gods too...<br>Elven quartz ore - it's like the quartz from the nether, a beautiful green color, like Alfheim itself!
 alfheim.page.ores2=Iffesal ore - only a few people have heard about it. It is believed that its dust has a great power, and greatest elven inventions are based on it. Elves themselves are aware of human's greed and profit thirst, so they don't want to bargain with it.<br>Lapis lazuli ore - not so beautiful as Dragonstone, but still charming.
 
-alfheim.entry.mobs=Mobs
+alfheim.entry.mobs=Fauna of Alfheim
 alfheim.tagline.mobs=Finally, life!
 alfheim.page.mobs0=Alfheim, unlike Midgard, is not such a forgotten world. After all, there still live indigenous people - elves! It's good that they haven't lost their mind, otherwise we know the former natives of Midgard - zombies. Elves are the greatest sorcerers, and they are revered by everyone. They were, it until they got infected with that terrible virus... But somehow they are not inclined to talk with you...
 alfheim.page.mobs1=Also in the world can fly special little purple creatures, which are called pixies, otherwise - fairies. Kind - yes. Valuable - yes, because their dust is used in various crafting recipes. Elves used this ingredient to trade it for manapearls...
@@ -332,7 +332,7 @@ alfheim.page.elementalTuning11=Lightness tuning
 alfheim.page.elementalTuning12=Darkness tuning
 alfheim.page.elementalTuning13=Psychic tuning
 
-alfheim.entry.advMana=Mana-stones
+alfheim.entry.advMana=Elven Mana Storage
 alfheim.tagline.advMana=New word in storing mana
 alfheim.page.advMana0=As we know, the core of a simple mana store included either mana-diamond or mana-pearl. But elves had none of them. But they had their own ways of pocket mana storage.
 alfheim.page.advMana1=As it turned out, the dragonstone can absorb mana, but it quickly loses it. The elves strengthened this stone with the valuable Iffesal dust, and created a mana-stone that allows you to store mana six times more than that stone tablet. And with the discovery of the essences of the primal worlds, the elven magicians strengthened it even more. The result is an improved storage of mana.
@@ -486,6 +486,12 @@ alfheim.entry.deathSeed=Death Seed
 alfheim.tagline.deathSeed=Get back your drops in no time
 alfheim.page.deathSeed0=The Seed of Death is an unusual artifact that aspires to the player's last place of death, even through dimensions. The reason for this phenomenon is simple: the seed absorbs a piece of the player's soul at the moment of death.<br>To return to the place of death, simply right-click with the seed in your hand. The move will be instantaneous and, fortunately, safe, but only for a few seconds.
 alfheim.page.deathSeed1=Second chance?
+
+alfheim.entry.disguiseBelt=Shapeshifting Belt
+alfheim.tagline.disguiseBelt=Allows you to pretend to be someone you are not
+alfheim.page.disguiseBelt0=Probably, many of us have thought at least once in our lives that we could have been born with a different gender or race. But we are who we are from the moment we come into this world. Our nature cannot be changed, no matter what we do. However, a person's appearance is quite subject to magical devices like the &1Shapeshifting Belt&0.
+alfheim.page.disguiseBelt1=It changes the owner's appearance at will, manipulating light reflectance. The following appearances are available: human, each of the 9 elf races, alves, and their female variations. To switch race, rightclick with the belt in hand, to switch gender, sneak-rightclick. A small amount of mana is spent to maintain the changed appearances.
+alfheim.page.disguiseBelt2=Don't judge a person by their clothes
 
 alfheim.entry.dumbDecor=Functional decor
 alfheim.tagline.dumbDecor=Beauty inside and outside
@@ -1195,7 +1201,7 @@ alfheim.page.treeBerry6=The &1Barrier Fruit&0, a rare gem among the harvest, gra
 alfheim.page.toolbelt0=The &1Botanist's Toolbelt&0 is an easy-access extra inventory. By sneaking, you gain access to 12 extra stacks of storage, which can be used by interacting with the air around where they appear. Any items or blocks in it will provide for the &1Rod of the Shifting Crust&0.
 alfheim.page.toolbelt1=Not quite hammerspace
 
-alfheim.page.lamp0=The &1Iridescent Lantern&0 glows with all the colors of the rainbow. While black in appearance when first set down, giving it a redstone signal will change its color. The higher the signal, the farther down the rainbow the color becomes.<br>If given a full signal, the &1Iridescent Lantern&0 will glow like the &4Bifrost&0 itself.
+alfheim.page.lamp0=The &1Iridescent Lamp&0 glows with all the colors of the rainbow. While black in appearance when first set down, giving it a redstone signal will change its color. The higher the signal, the farther down the rainbow the color becomes.<br>If given a full signal, the Iridescent Lamp will glow like the &4Bifrost&0 itself.
 alfheim.page.lamp1=Left by a Piggah
 
 alfheim.page.tctrees0=The &2Garden of Glass&0 is truly empty. It's so devoid of life you can't find even a remnant of the trees considered necessary for the &5Thaumic&0 arts. However, it appears that the shards of magic occasionally produced by the &1Orechid&0 might be of use in recreating these trees. By applying these shards of power via &4Dendric Suffusion&0, you can make what you cannot find.

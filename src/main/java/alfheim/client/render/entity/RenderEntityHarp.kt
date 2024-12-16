@@ -1,6 +1,6 @@
 package alfheim.client.render.entity
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.mc
 import alfheim.api.ModInfo
 import alfheim.api.lib.LibResourceLocations
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.AdvancedModelLoader
 import org.lwjgl.opengl.GL11.*
+import vazkii.botania.client.core.handler.ClientTickHandler
 import kotlin.math.sin
 
 object RenderEntityHarp: Render() {
@@ -26,8 +27,8 @@ object RenderEntityHarp: Render() {
 	
 	override fun doRender(entity: Entity, x: Double, y: Double, z: Double, yaw: Float, partialTick: Float) {
 		glPushMatrix()
-		glTranslated(x, y + 0.2 + sin((mc.theWorld.totalWorldTime.F + entity.ticksExisted.F + mc.timer.renderPartialTicks) / 50.0) / 10.0, z)
-		glRotated((mc.theWorld.totalWorldTime + entity.ticksExisted + mc.timer.renderPartialTicks) * 0.5, 0.0, 1.0, 0.0)
+		glTranslated(x, y + 0.2 + sin(ClientTickHandler.total / 50.0 + entity.entityId % 100) / 10.0, z)
+		glRotatef(ClientTickHandler.total % 360f + entity.entityId % 100, 0f, 1f, 0f)
 		
 		if (model == null) {
 			glTranslated(-0.5, 0.0, 0.0)

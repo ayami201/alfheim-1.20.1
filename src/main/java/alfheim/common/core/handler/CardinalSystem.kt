@@ -505,7 +505,7 @@ object CardinalSystem {
 					if (!segment.party.isPlayer(i)) continue
 					val mr = segment.party[i]
 					if (mr !is EntityPlayerMP) continue
-					NetworkService.sendTo(Message2d(M2d.UUID, e.getEntityId().D, segment.party.indexOf(e).D), mr)
+					NetworkService.sendTo(Message2d(M2d.PARTYID, e.getEntityId().D, segment.party.indexOf(e).D), mr)
 				}
 			}
 		}

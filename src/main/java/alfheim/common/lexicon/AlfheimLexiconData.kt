@@ -30,7 +30,7 @@ import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import tconstruct.tools.TinkerTools
 import thaumcraft.common.config.ConfigItems
-import vazkii.botania.api.BotaniaAPI
+import vazkii.botania.api.BotaniaAPI.*
 import vazkii.botania.api.lexicon.*
 import vazkii.botania.common.block.ModBlocks
 import vazkii.botania.common.brew.ModBrews
@@ -82,6 +82,7 @@ object AlfheimLexiconData {
 	lateinit var dasGold: LexiconEntry
 	lateinit var daolos: LexiconEntry
 	lateinit var deathSeed: LexiconEntry
+	lateinit var disguiseBelt: LexiconEntry
 	lateinit var dumbDecor: LexiconEntry
 	lateinit var elementalSet: LexiconEntry
 	lateinit var elementalTuning: LexiconEntry
@@ -128,9 +129,9 @@ object AlfheimLexiconData {
 	lateinit var livingwoodFunnel: LexiconEntry
 	lateinit var lootInt: LexiconEntry
 	lateinit var manaAccelerator: LexiconEntry
-	lateinit var manaReflector: LexiconEntry
 	lateinit var manaImba: LexiconEntry
 	lateinit var manaLamp: LexiconEntry
+	lateinit var manaReflector: LexiconEntry
 	lateinit var manaTuner: LexiconEntry
 	lateinit var mask: LexiconEntry
 	lateinit var mitten: LexiconEntry
@@ -180,6 +181,7 @@ object AlfheimLexiconData {
 	lateinit var temperature: LexiconEntry
 	lateinit var terraHarvester: LexiconEntry
 	lateinit var throwablePotions: LexiconEntry
+	lateinit var toolbelt: LexiconEntry
 	lateinit var trade: LexiconEntry
 	lateinit var treeBerry: LexiconEntry
 	lateinit var treeCrafting: LexiconEntry
@@ -238,134 +240,146 @@ object AlfheimLexiconData {
 		categoryDendrology = AlfheimLexiconCategory("dendrology", 1)
 		categoryEvents = AlfheimLexiconCategory("events", 4)
 		
-		advancedMana = AlfheimLexiconEntry("advMana", categoryAlfheim)
+		val alfomancy = categoryAlfhomancy
+		val baubles = categoryBaubles
+		val enderArtefacts = categoryEnder
+		val functionalFlora = categoryFunctionalFlowers
+		val generatingFlora = categoryGenerationFlowers
+		val manaManipulation = categoryMana
+		val miscellaneous = categoryMisc
+		val mysticalItems = categoryTools
+		val naturalApparatus = categoryDevices
+		
+		advancedMana = AlfheimLexiconEntry("advMana", pickCategory(manaManipulation))
 		alfheim = AlfheimLexiconEntry("alfheim", categoryAlfheim)
-		amplifier = AlfheimLexiconEntry("amplifier", categoryAlfheim)
-		amuletCirus = AlfheimLexiconEntry("amulCirs", categoryAlfheim)
-		amulterCrescent = AlfheimLexiconEntry("crescent", categoryAlfheim)
-		amuletIceberg = AlfheimLexiconEntry("iceberg", categoryAlfheim)
-		amuletNimbus = AlfheimLexiconEntry("amulNimb", categoryAlfheim)
-		animatedTorch = AlfheimLexiconEntry("aniTorch", categoryAlfheim)
+		amplifier = AlfheimLexiconEntry("amplifier", pickCategory(miscellaneous))
+		amuletCirus = AlfheimLexiconEntry("amulCirs", pickCategory(baubles))
+		amulterCrescent = AlfheimLexiconEntry("crescent", pickCategory(baubles))
+		amuletIceberg = AlfheimLexiconEntry("iceberg", pickCategory(baubles))
+		amuletNimbus = AlfheimLexiconEntry("amulNimb", pickCategory(baubles))
+		animatedTorch = AlfheimLexiconEntry("aniTorch", pickCategory(naturalApparatus))
 		anomaly = AlfheimLexiconEntry("anomaly", categoryAlfheim)
-		anomalyHarvester = AlfheimLexiconEntry("anomalyHarvester", categoryAlfheim)
-		anyavil = AlfheimLexiconEntry("anyavil", categoryAlfheim)
-		astrolabe = AlfheimLexiconEntry("astrolab", categoryAlfheim)
-		armilla = AlfheimLexiconEntry("armilla", categoryAlfheim)
-		aurora = AlfheimLexiconEntry("aurora", categoryAlfheim)
+		anomalyHarvester = AlfheimLexiconEntry("anomalyHarvester", pickCategory(naturalApparatus))
+		anyavil = AlfheimLexiconEntry("anyavil", pickCategory(naturalApparatus))
+		astrolabe = AlfheimLexiconEntry("astrolab", pickCategory(mysticalItems))
+		armilla = AlfheimLexiconEntry("armilla", pickCategory(mysticalItems))
+		aurora = AlfheimLexiconEntry("aurora", pickCategory(miscellaneous))
 		barrierSapling = AlfheimLexiconEntry("barrierSapling", categoryDendrology)
-		beltRation = AlfheimLexiconEntry("ration", categoryAlfheim)
+		beltRation = AlfheimLexiconEntry("ration", pickCategory(baubles))
 		calicoSapling = AlfheimLexiconEntry("calicoSapling", categoryDendrology)
-		carver = AlfheimLexiconEntry("carver", categoryAlfheim)
-		chakramEnder = AlfheimLexiconEntry("chakramEnder", categoryAlfheim)
-		chakramThunder = AlfheimLexiconEntry("chakramThunder", categoryAlfheim)
-		chalk = AlfheimLexiconEntry("chalk", categoryAlfheim)
+		carver = AlfheimLexiconEntry("carver", pickCategory(mysticalItems))
+		chakramEnder = AlfheimLexiconEntry("chakramEnder", pickCategory(enderArtefacts))
+		chakramThunder = AlfheimLexiconEntry("chakramThunder", pickCategory(mysticalItems))
+		chalk = AlfheimLexiconEntry("chalk", pickCategory(mysticalItems))
 		circuitSapling = AlfheimLexiconEntry("circuitSapling", categoryDendrology)
-		cloakInvis = AlfheimLexiconEntry("cloakInv", categoryAlfheim)
-		coatOfArms = AlfheimLexiconEntry("coatOfArms", categoryAlfheim)
-		coloredDirt = AlfheimLexiconEntry("coloredDirt", categoryAlfheim)
-		colorOverride = AlfheimLexiconEntry("colorOverride", categoryAlfheim)
-		corpInj = AlfheimLexiconEntry("corpInj", categoryAlfheim)
-		corpQuandex = AlfheimLexiconEntry("corpQuandex", categoryAlfheim)
-		corpSeq = AlfheimLexiconEntry("corpSeq", categoryAlfheim)
-		dagger = AlfheimRelicLexiconEntry("dagger", categoryAlfheim)
-		dasGold = AlfheimLexiconEntry("dasGold", categoryAlfheim)
-		deathSeed = AlfheimLexiconEntry("deathSeed", categoryAlfheim)
-		dumbDecor = AlfheimLexiconEntry("dumbDecor", categoryAlfheim)
-		elementalSet = AlfheimLexiconEntry("elemSet", categoryAlfheim)
-		elementalTuning = AlfheimLexiconEntry("elementalTuning", categoryAlfheim)
-		elvenSet = AlfheimLexiconEntry("elvenSet", categoryAlfheim)
+		cloakInvis = AlfheimLexiconEntry("cloakInv", pickCategory(baubles))
+		coatOfArms = AlfheimLexiconEntry("coatOfArms", pickCategory(baubles))
+		coloredDirt = AlfheimLexiconEntry("coloredDirt", pickCategory(miscellaneous))
+		colorOverride = AlfheimLexiconEntry("colorOverride", pickCategory(baubles))
+		corpInj = AlfheimLexiconEntry("corpInj", pickCategory(enderArtefacts))
+		corpQuandex = AlfheimLexiconEntry("corpQuandex", pickCategory(enderArtefacts))
+		corpSeq = AlfheimLexiconEntry("corpSeq", pickCategory(enderArtefacts))
+		dagger = AlfheimRelicLexiconEntry("dagger", pickCategory(alfomancy))
+		dasGold = AlfheimLexiconEntry("dasGold", pickCategory(alfomancy))
+		deathSeed = AlfheimLexiconEntry("deathSeed", pickCategory(enderArtefacts))
+		disguiseBelt = AlfheimLexiconEntry("disguiseBelt", pickCategory(baubles))
+		dumbDecor = AlfheimLexiconEntry("dumbDecor", pickCategory(miscellaneous))
+		elementalSet = AlfheimLexiconEntry("elemSet", pickCategory(mysticalItems))
+		elementalTuning = AlfheimLexiconEntry("elementalTuning", pickCategory(miscellaneous))
+		elvenSet = AlfheimLexiconEntry("elvenSet", pickCategory(mysticalItems))
 		elves = AlfheimLexiconEntry("elves", categoryAlfheim)
-		enderAct = AlfheimLexiconEntry("endAct", categoryAlfheim)
-		essences = AlfheimLexiconEntry("essences", categoryAlfheim)
-		elvorium = AlfheimLexiconEntry("elvorium", categoryAlfheim)
-		fenrir = AlfheimLexiconEntry("fenrir", categoryAlfheim)
-		fenrirCloak = AlfheimLexiconEntry("fenrirCloak", categoryAlfheim)
-		fenrirDrop = AlfheimLexiconEntry("fenrirDrop", categoryAlfheim)
-		fenrirGlove = AlfheimLexiconEntry("fenrirGlove", categoryAlfheim)
-		flowerAconite = AlfheimLexiconEntry("aconite", categoryAlfheim)
-		flowerAlfchid = AlfheimLexiconEntry("flowerAlfchid", categoryAlfheim)
-		flowerAquapanthus = AlfheimLexiconEntry("aquapanthus", categoryAlfheim)
-		flowerBud = AlfheimLexiconEntry("bud", categoryAlfheim)
-		flowerCrysanthermum = AlfheimLexiconEntry("crysanthermum", categoryAlfheim)
-		flowerEnderchid = AlfheimLexiconEntry("flowerEnderchid", categoryAlfheim)
-		flowerPetronia = AlfheimLexiconEntry("flowerPetronia", categoryAlfheim)
-		flowerRain = AlfheimLexiconEntry("flowerRain", categoryAlfheim)
-		flowerRattlerose = AlfheimLexiconEntry("flowerRattlerose", categoryAlfheim)
-		flowerSnow = AlfheimLexiconEntry("flowerSnow", categoryAlfheim)
-		flowerStorm = AlfheimLexiconEntry("flowerStorm", categoryAlfheim)
-		flowerTradescantia = AlfheimLexiconEntry("flowerTradescantia", categoryAlfheim)
-		flowerWind = AlfheimLexiconEntry("flowerWind", categoryAlfheim)
-		flugel = AlfheimLexiconEntry("flugel", categoryAlfheim)
-		fracturedSpace = AlfheimLexiconEntry("fracturedSpace", categoryAlfheim)
-		frozenStar = AlfheimLexiconEntry("starBlock", categoryAlfheim)
-		gaiaButton = AlfheimLexiconEntry("gaiaButton", categoryAlfheim)
-		goddessCharm = AlfheimLexiconEntry("goddessCharm", categoryAlfheim)
-		hyperBucket = AlfheimLexiconEntry("hyperBuk", categoryAlfheim)
-		infuser = AlfheimLexiconEntry("infuser", categoryAlfheim)
+		enderAct = AlfheimLexiconEntry("endAct", pickCategory(enderArtefacts))
+		essences = AlfheimLexiconEntry("essences", pickCategory(alfomancy))
+		elvorium = AlfheimLexiconEntry("elvorium", pickCategory(categoryBasics))
+		fenrir = AlfheimLexiconEntry("fenrir", mysticalItems)
+		fenrirCloak = AlfheimLexiconEntry("fenrirCloak", pickCategory(baubles))
+		fenrirDrop = AlfheimLexiconEntry("fenrirDrop", mysticalItems)
+		fenrirGlove = AlfheimLexiconEntry("fenrirGlove", pickCategory(baubles))
+		flowerAconite = AlfheimLexiconEntry("aconite", pickCategory(generatingFlora))
+		flowerAlfchid = AlfheimLexiconEntry("flowerAlfchid", pickCategory(functionalFlora))
+		flowerAquapanthus = AlfheimLexiconEntry("aquapanthus", pickCategory(functionalFlora))
+		flowerBud = AlfheimLexiconEntry("bud", pickCategory(functionalFlora))
+		flowerCrysanthermum = AlfheimLexiconEntry("crysanthermum", pickCategory(generatingFlora))
+		flowerEnderchid = AlfheimLexiconEntry("flowerEnderchid", pickCategory(functionalFlora))
+		flowerPetronia = AlfheimLexiconEntry("flowerPetronia", pickCategory(generatingFlora))
+		flowerRain = AlfheimLexiconEntry("flowerRain", pickCategory(generatingFlora))
+		flowerRattlerose = AlfheimLexiconEntry("flowerRattlerose", pickCategory(generatingFlora))
+		flowerSnow = AlfheimLexiconEntry("flowerSnow", pickCategory(generatingFlora))
+		flowerStorm = AlfheimLexiconEntry("flowerStorm", pickCategory(generatingFlora))
+		flowerTradescantia = AlfheimLexiconEntry("flowerTradescantia", pickCategory(functionalFlora))
+		flowerWind = AlfheimLexiconEntry("flowerWind", pickCategory(generatingFlora))
+		flugel = AlfheimLexiconEntry("flugel", pickCategory(alfomancy))
+		fracturedSpace = AlfheimLexiconEntry("fracturedSpace", pickCategory(enderArtefacts))
+		frozenStar = AlfheimLexiconEntry("starBlock", pickCategory(miscellaneous))
+		gaiaButton = AlfheimLexiconEntry("gaiaButton", pickCategory(naturalApparatus))
+		goddessCharm = AlfheimLexiconEntry("goddessCharm", pickCategory(baubles))
+		hyperBucket = AlfheimLexiconEntry("hyperBuk", pickCategory(mysticalItems))
+		infuser = AlfheimLexiconEntry("infuser", pickCategory(categoryBasics))
 		irisSapling = AlfheimLexiconEntry("irisSapling", categoryDendrology)
-		itemDisplay = AlfheimLexiconEntry("itemDisplay", categoryAlfheim)
-		ivySave = AlfheimLexiconEntry("ivySave", categoryAlfheim)
-		kindling = AlfheimLexiconEntry("kindling", categoryAlfheim)
-		lamp = AlfheimLexiconEntry("lamp", categoryAlfheim)
+		itemDisplay = AlfheimLexiconEntry("itemDisplay", pickCategory(miscellaneous))
+		ivySave = AlfheimLexiconEntry("ivySave", pickCategory(miscellaneous))
+		kindling = AlfheimLexiconEntry("kindling", pickCategory(naturalApparatus))
+		lamp = AlfheimLexiconEntry("lamp", pickCategory(miscellaneous))
 		legends = AlfheimLexiconEntry("legends", categoryAlfheim)
 		lembas = AlfheimLexiconEntry("lembas", categoryAlfheim)
 		lightningSapling = AlfheimLexiconEntry("lightningSapling", categoryDendrology)
-		livingwoodFunnel = AlfheimLexiconEntry("livingwoodFunnel", categoryAlfheim)
-		lootInt = AlfheimLexiconEntry("lootInt", categoryAlfheim)
-		manaAccelerator = AlfheimLexiconEntry("itemHold", categoryAlfheim)
-		manaReflector = AlfheimLexiconEntry("manaReflector", categoryAlfheim)
-		manaImba = AlfheimLexiconEntry("manaImba", categoryAlfheim)
-		manaLamp = AlfheimLexiconEntry("manaLamp", categoryAlfheim)
-		manaTuner = AlfheimLexiconEntry("manaTuner", categoryAlfheim)
-		mitten = AlfheimLexiconEntry("mitten", categoryAlfheim)
+		livingwoodFunnel = AlfheimLexiconEntry("livingwoodFunnel", pickCategory(naturalApparatus))
+		lootInt = AlfheimLexiconEntry("lootInt", pickCategory(enderArtefacts))
+		manaAccelerator = AlfheimLexiconEntry("itemHold", pickCategory(manaManipulation))
+		manaImba = AlfheimLexiconEntry("manaImba", pickCategory(manaManipulation))
+		manaLamp = AlfheimLexiconEntry("manaLamp", pickCategory(mysticalItems))
+		manaReflector = AlfheimLexiconEntry("manaReflector", pickCategory(manaManipulation))
+		manaTuner = AlfheimLexiconEntry("manaTuner", pickCategory(naturalApparatus))
+		mitten = AlfheimLexiconEntry("mitten", pickCategory(baubles))
 		mobs = AlfheimLexiconEntry("mobs", categoryAlfheim)
-		multbauble = AlfheimLexiconEntry("multbaub", categoryAlfheim)
+		multbauble = AlfheimLexiconEntry("multbaub", pickCategory(baubles))
 		netherSapling = AlfheimLexiconEntry("infernalSapling", categoryDendrology)
 		nidhoggTooth = AlfheimLexiconEntry("nidhoggTooth", categoryAlfheim)
-		openChest = AlfheimLexiconEntry("openChest", categoryAlfheim)
+		openChest = AlfheimLexiconEntry("openChest", pickCategory(naturalApparatus))
 		ores = AlfheimLexiconEntry("ores", categoryAlfheim)
-		pastoralSeeds = AlfheimLexiconEntry("irisSeeds", categoryAlfheim)
-		pixie = AlfheimLexiconEntry("pixie", categoryAlfheim)
-		portal = AlfheimLexiconEntry("portal", categoryAlfheim)
-		pylons = AlfheimLexiconEntry("pylons", categoryAlfheim)
-		rainbowFlora = AlfheimLexiconEntry("rainbowFlora", categoryAlfheim)
-		reality = AlfheimLexiconEntry("reality", categoryAlfheim)
-		redstoneRelay = AlfheimLexiconEntry("redstoneRelay", categoryAlfheim)
-		resonator = AlfheimLexiconEntry("resonator", categoryAlfheim)
-		ringsAura = AlfheimLexiconEntry("auraAlf", categoryAlfheim)
-		ringAnomaly = AlfheimLexiconEntry("anomaRing", categoryAlfheim)
-		ringDodge = AlfheimLexiconEntry("dodgRing", categoryAlfheim)
-		ringManaDrive = AlfheimLexiconEntry("manaDrive", categoryAlfheim)
-		ringSpider = AlfheimLexiconEntry("spider", categoryAlfheim)
-		rodClick = AlfheimLexiconEntry("rodClick", categoryAlfheim)
-		rodGreen = AlfheimLexiconEntry("greenRod", categoryAlfheim)
-		rodPrismatic = AlfheimLexiconEntry("rodPrismatic", categoryAlfheim)
-		rodRedstone = AlfheimLexiconEntry("rodRedstone", categoryAlfheim)
-		rodSuperExchange = AlfheimLexiconEntry("rodSuperExchange", categoryAlfheim)
+		pastoralSeeds = AlfheimLexiconEntry("irisSeeds", pickCategory(miscellaneous))
+		pixie = AlfheimLexiconEntry("pixie", pickCategory(baubles))
+		portal = AlfheimLexiconEntry("portal", pickCategory(alfomancy))
+		pylons = AlfheimLexiconEntry("pylons", pickCategory(naturalApparatus))
+		rainbowFlora = AlfheimLexiconEntry("rainbowFlora", pickCategory(miscellaneous))
+		reality = AlfheimLexiconEntry("reality", pickCategory(mysticalItems))
+		redstoneRelay = AlfheimLexiconEntry("redstoneRelay", pickCategory(enderArtefacts))
+		resonator = AlfheimLexiconEntry("resonator", pickCategory(mysticalItems))
+		ringsAura = AlfheimLexiconEntry("auraAlf", pickCategory(baubles))
+		ringAnomaly = AlfheimLexiconEntry("anomaRing", pickCategory(baubles))
+		ringDodge = AlfheimLexiconEntry("dodgRing", pickCategory(baubles))
+		ringManaDrive = AlfheimLexiconEntry("manaDrive", pickCategory(baubles))
+		ringSpider = AlfheimLexiconEntry("spider", pickCategory(baubles))
+		rodClick = AlfheimLexiconEntry("rodClick", pickCategory(mysticalItems))
+		rodGreen = AlfheimLexiconEntry("greenRod", pickCategory(mysticalItems))
+		rodPrismatic = AlfheimLexiconEntry("rodPrismatic", pickCategory(mysticalItems))
+		rodRedstone = AlfheimLexiconEntry("rodRedstone", pickCategory(mysticalItems))
+		rodSuperExchange = AlfheimLexiconEntry("rodSuperExchange", pickCategory(mysticalItems))
 		ruling = AlfheimLexiconEntry("ruling", categoryAlfheim)
-		runes = AlfheimLexiconEntry("runes", categoryAlfheim)
-		sealCreepers = AlfheimLexiconEntry("sealCreepers", categoryAlfheim)
-		serenade = AlfheimLexiconEntry("serenade", categoryAlfheim)
-		shimmer = AlfheimLexiconEntry("shimmer", categoryAlfheim)
+		runes = AlfheimLexiconEntry("runes", pickCategory(categoryBasics))
+		sealCreepers = AlfheimLexiconEntry("sealCreepers", pickCategory(miscellaneous))
+		serenade = AlfheimLexiconEntry("serenade", pickCategory(baubles))
+		shimmer = AlfheimLexiconEntry("shimmer", pickCategory(miscellaneous))
 		shrines = AlfheimLexiconEntry("shrines", categoryAlfheim)
 		silencer = AlfheimLexiconEntry("silencer", categoryDendrology)
-		slimes = AlfheimLexiconEntry("slimes", categoryAlfheim)
-		soulSword = AlfheimLexiconEntry("soulSword", categoryAlfheim)
-		specialAxe = AlfheimRelicLexiconEntry("andmyaxe", categoryAlfheim)
+		slimes = AlfheimLexiconEntry("slimes", pickCategory(miscellaneous))
+		soulSword = AlfheimLexiconEntry("soulSword", pickCategory(mysticalItems))
+		specialAxe = AlfheimRelicLexiconEntry("andmyaxe", pickCategory(alfomancy))
 		subshroom = AlfheimLexiconEntry("subshroom", categoryAlfheim)
-		temperature = AlfheimLexiconEntry("temperature", categoryAlfheim)
-		terraHarvester = AlfheimLexiconEntry("terraHarvester", categoryAlfheim)
-		throwablePotions = AlfheimLexiconEntry("throwablePotions", categoryAlfheim)
+		temperature = AlfheimLexiconEntry("temperature", pickCategory(categoryBasics))
+		terraHarvester = AlfheimLexiconEntry("terraHarvester", pickCategory(mysticalItems))
+		throwablePotions = AlfheimLexiconEntry("throwablePotions", pickCategory(naturalApparatus))
+		toolbelt = AlfheimLexiconEntry("toolbelt", pickCategory(baubles))
 		trade = AlfheimLexiconEntry("trade", categoryAlfheim)
 		treeBerry = AlfheimLexiconEntry("treeBerry", categoryDendrology)
 		treeCrafting = AlfheimLexiconEntry("treeCrafting", categoryDendrology)
-		triquetrum = AlfheimLexiconEntry("triquetrum", categoryAlfheim)
+		triquetrum = AlfheimLexiconEntry("triquetrum", pickCategory(mysticalItems))
 		tunedSaplings = AlfheimLexiconEntry("tunedSaplings", categoryDendrology)
-		uberSpreader = AlfheimLexiconEntry("uberSpreader", categoryAlfheim)
-		warBanner = AlfheimLexiconEntry("warBanner", categoryAlfheim)
+		uberSpreader = AlfheimLexiconEntry("uberSpreader", pickCategory(manaManipulation))
+		warBanner = AlfheimLexiconEntry("warBanner", pickCategory(baubles))
 		winery = AlfheimLexiconEntry("winery", categoryAlfheim)
 		worldgen = AlfheimLexiconEntry("worldgen", categoryAlfheim)
-		worldTree = AlfheimLexiconEntry("worldTree", categoryAlfheim)
+		worldTree = AlfheimLexiconEntry("worldTree", pickCategory(naturalApparatus))
 		
 		
 		
@@ -524,6 +538,8 @@ object AlfheimLexiconData {
 		
 		deathSeed.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeDeathSeed))
 		
+		disguiseBelt.setLexiconPages(PageText("0"), PageText("1"), PageCraftingRecipe("2", AlfheimRecipes.recipeDisguiseBelt))
+		
 		dumbDecor.setLexiconPages(*Array(2) { PageText("$it") },
 		                          PageCraftingRecipe("2", AlfheimRecipes.recipesDecor),
 		                          PageText("3"),
@@ -610,14 +626,14 @@ object AlfheimLexiconData {
 		flowerAquapanthus.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeAquapanthus))
 		flowerBud.setLexiconPages(PageText("0"), PageText("1"), PagePetalRecipe("2", AlfheimRecipes.recipeBud))
 		flowerCrysanthermum.setLexiconPages(PageText("0"), PageText("1"), PageText("2"), PagePetalRecipe("3", AlfheimRecipes.recipeCrysanthermum))
-		flowerEnderchid.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeOrechidEndium)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("orechidEndium")
-		flowerPetronia.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipePetronia)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("petronia")
-		flowerRain.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeRainFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("rainFlower")
-		flowerRattlerose.setLexiconPages(*Array(5) { PageText("$it") }, PagePetalRecipe("5", AlfheimRecipes.recipeRattlerose), PageRuneRecipe("6", AlfheimRecipes.recipeSnakeEgg)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("rattlerose")
-		flowerSnow.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeSnowFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("snowFlower")
-		flowerStorm.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeStormFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("stormFlower")
-		flowerTradescantia.setLexiconPages(PageText("0"), PageText("1"), PagePetalRecipe("2", AlfheimRecipes.recipeTradescantia)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("tradescantia")
-		flowerWind.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeWindFlower)).icon = BotaniaAPI.internalHandler.getSubTileAsStack("windFlower")
+		flowerEnderchid.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeOrechidEndium)).icon = internalHandler.getSubTileAsStack("orechidEndium")
+		flowerPetronia.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipePetronia)).icon = internalHandler.getSubTileAsStack("petronia")
+		flowerRain.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeRainFlower)).icon = internalHandler.getSubTileAsStack("rainFlower")
+		flowerRattlerose.setLexiconPages(*Array(5) { PageText("$it") }, PagePetalRecipe("5", AlfheimRecipes.recipeRattlerose), PageRuneRecipe("6", AlfheimRecipes.recipeSnakeEgg)).icon = internalHandler.getSubTileAsStack("rattlerose")
+		flowerSnow.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeSnowFlower)).icon = internalHandler.getSubTileAsStack("snowFlower")
+		flowerStorm.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeStormFlower)).icon = internalHandler.getSubTileAsStack("stormFlower")
+		flowerTradescantia.setLexiconPages(PageText("0"), PageText("1"), PagePetalRecipe("2", AlfheimRecipes.recipeTradescantia)).icon = internalHandler.getSubTileAsStack("tradescantia")
+		flowerWind.setLexiconPages(PageText("0"), PagePetalRecipe("1", AlfheimRecipes.recipeWindFlower)).icon = internalHandler.getSubTileAsStack("windFlower")
 		
 		for (i in 0..15)
 			LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.snakeBody, 1, i), flowerRattlerose, 0)
@@ -875,6 +891,8 @@ object AlfheimLexiconData {
 		throwablePotions.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeSplashPotions),
 		                                 PageText("2"), PageCraftingRecipe("3", AlfheimRecipes.recipeGrenade)).icon = (AlfheimItems.splashPotion as ItemSplashPotion).getItemForBrew(ModBrews.absorption, null)
 		
+		toolbelt.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeToolbelt))
+		
 		trade.setLexiconPages(PageText("0"), PageText("1"),
 							  PageCraftingRecipe("2", AlfheimRecipes.recipeElvoriumPylon),
 							  PageCraftingRecipe("3", AlfheimRecipes.recipeTradePortal),
@@ -1060,11 +1078,11 @@ object AlfheimLexiconData {
 		LexiconRecipeMappings.map(TreeBerryBarrier.stack, treeBerry, 6)
 		
 		HV.setLexiconPages(*Array(5) { PageText("$it") })
-			.setKnowledgeType(BotaniaAPI.elvenKnowledge)
+			.setKnowledgeType(elvenKnowledge)
 			.icon = ItemStack(AlfheimItems.eventResource, 1, EventResourcesMetas.VolcanoRelic)
 		
 		WOTW.setLexiconPages(*Array(3) { PageText("$it") })
-			.setKnowledgeType(BotaniaAPI.elvenKnowledge)
+			.setKnowledgeType(elvenKnowledge)
 			.icon = ItemStack(AlfheimItems.eventResource, 1, EventResourcesMetas.SnowRelic)
 		
 		if (ThaumcraftSuffusionRecipes.recipesLoaded) {
@@ -1183,6 +1201,12 @@ object AlfheimLexiconData {
 			categoryDivinity.entries.add(this)
 		}
 		
+		LexiconData.rainbowRod.apply {
+			category.entries.remove(this)
+			category = categoryDivinity
+			categoryDivinity.entries.add(this)
+		}
+		
 		// ################################################################
 		// ################################################################
 		// ################################################################
@@ -1217,7 +1241,7 @@ object AlfheimLexiconData {
 	}
 	
 	fun initRelics() {
-		akashic = AlfheimRelicLexiconEntry("akashic", categoryAlfheim)
+		akashic = AlfheimRelicLexiconEntry("akashic", pickCategory(categoryAlfhomancy))
 		akashic.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningAkashicRecords))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.akashicRecords), akashic, 0)
 		
@@ -1225,7 +1249,7 @@ object AlfheimLexiconData {
 		daolos.setLexiconPages(*Array(6) { PageText("$it") }, PageTuningIORecipe("6", AlfheimRecipes.tuningDaolos))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.daolos), daolos, 0)
 		
-		excaliber = AlfheimRelicLexiconEntry("excaliber", categoryAlfheim, AlfheimItems.excaliber)
+		excaliber = AlfheimRelicLexiconEntry("excaliber", pickCategory(categoryAlfhomancy), AlfheimItems.excaliber)
 		excaliber.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningExcaliber))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.excaliber), excaliber, 0)
 		
@@ -1241,7 +1265,7 @@ object AlfheimLexiconData {
 		gungnir.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningGungnir))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.gungnir), gungnir, 0)
 		
-		mask = AlfheimRelicLexiconEntry("mask", categoryAlfheim, AlfheimItems.mask)
+		mask = AlfheimRelicLexiconEntry("mask", pickCategory(categoryAlfhomancy), AlfheimItems.mask)
 		mask.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningTankMask))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.mask), mask, 0)
 		
@@ -1249,7 +1273,7 @@ object AlfheimLexiconData {
 		mjolnir.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningMjolnir))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.mjolnir), mjolnir, 0)
 		
-		moonbow = AlfheimRelicLexiconEntry("moonbow", categoryAlfheim, AlfheimItems.moonlightBow)
+		moonbow = AlfheimRelicLexiconEntry("moonbow", pickCategory(categoryAlfhomancy), AlfheimItems.moonlightBow)
 		moonbow.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningMoonlightBow))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.moonlightBow), moonbow, 0)
 		
@@ -1265,7 +1289,7 @@ object AlfheimLexiconData {
 		ringSif.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningSifRing))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.priestRingSif), ringSif, 0)
 		
-		soul = AlfheimRelicLexiconEntry("soul", categoryAlfheim, AlfheimItems.flugelSoul)
+		soul = AlfheimRelicLexiconEntry("soul", pickCategory(categoryAlfhomancy), AlfheimItems.flugelSoul)
 		soul.setLexiconPages(*Array(9) { PageText("$it") },
 							 PageMultiblock("9", AlfheimMultiblocks.soul),
 							 PageText("10"), PageCraftingRecipe("11", AlfheimRecipes.recipeCleanPylon),
@@ -1273,11 +1297,11 @@ object AlfheimLexiconData {
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.flugelSoul), soul, 0)
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.alfheimPylon, 1, 2), soul, 7)
 		
-		soulHorn = AlfheimRelicLexiconEntry("soulHorn", categoryAlfheim, AlfheimAchievements.flugelHardKill)
+		soulHorn = AlfheimRelicLexiconEntry("soulHorn", pickCategory(categoryAlfhomancy), AlfheimAchievements.flugelHardKill)
 		soulHorn.setLexiconPages(PageText("0"), PageText("1"), PageCraftingRecipe("2", AlfheimRecipes.recipeSoulHorn), PageText("3")).icon = ItemStack(AlfheimItems.soulHorn)
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.soulHorn, 1, 1), soulHorn, 2)
 		
-		subspear = AlfheimRelicLexiconEntry("subspear", categoryAlfheim, AlfheimItems.subspaceSpear)
+		subspear = AlfheimRelicLexiconEntry("subspear", pickCategory(categoryAlfhomancy), AlfheimItems.subspaceSpear)
 		subspear.setLexiconPages(PageText("0"), PageTuningIORecipe("1", AlfheimRecipes.tuningSpearSubspace))
 		LexiconRecipeMappings.map(ItemStack(AlfheimItems.subspaceSpear), subspear, 0)
 		
@@ -1341,104 +1365,104 @@ object AlfheimLexiconData {
 	}
 	
 	private fun setKnowledgeTypes() {
-		advancedMana.knowledgeType = BotaniaAPI.elvenKnowledge
-		alfheim.knowledgeType = BotaniaAPI.elvenKnowledge
-		amplifier.knowledgeType = BotaniaAPI.elvenKnowledge
-		amuletIceberg.knowledgeType = BotaniaAPI.elvenKnowledge
-		amuletNimbus.knowledgeType = BotaniaAPI.elvenKnowledge
-		amulterCrescent.knowledgeType = BotaniaAPI.elvenKnowledge
-		anomaly.knowledgeType = BotaniaAPI.elvenKnowledge
-		anyavil.knowledgeType = BotaniaAPI.elvenKnowledge
-		armilla.knowledgeType = BotaniaAPI.elvenKnowledge
-		astrolabe.knowledgeType = BotaniaAPI.elvenKnowledge
-		beltRation.knowledgeType = BotaniaAPI.elvenKnowledge
-		chalk.knowledgeType = BotaniaAPI.elvenKnowledge
-		corpInj.knowledgeType = BotaniaAPI.elvenKnowledge
-		corpQuandex.knowledgeType = BotaniaAPI.elvenKnowledge
-		corpSeq.knowledgeType = BotaniaAPI.elvenKnowledge
-		colorOverride.knowledgeType = BotaniaAPI.elvenKnowledge
-		dasGold.knowledgeType = BotaniaAPI.elvenKnowledge
-		deathSeed.knowledgeType = BotaniaAPI.elvenKnowledge
-		elementalSet.knowledgeType = BotaniaAPI.elvenKnowledge
-		elvenSet.knowledgeType = BotaniaAPI.elvenKnowledge
-		elves.knowledgeType = BotaniaAPI.elvenKnowledge
-		elvorium.knowledgeType = BotaniaAPI.elvenKnowledge
-		essences.knowledgeType = BotaniaAPI.elvenKnowledge
-		fenrir.knowledgeType = BotaniaAPI.elvenKnowledge
-		fenrirCloak.knowledgeType = BotaniaAPI.elvenKnowledge
-		fenrirDrop.knowledgeType = BotaniaAPI.elvenKnowledge
-		fenrirGlove.knowledgeType = BotaniaAPI.elvenKnowledge
-		flowerAlfchid.knowledgeType = BotaniaAPI.elvenKnowledge
-		flowerBud.knowledgeType = BotaniaAPI.elvenKnowledge
-		flowerEnderchid.knowledgeType = BotaniaAPI.elvenKnowledge
-		flowerPetronia.knowledgeType = BotaniaAPI.elvenKnowledge
-		flugel.knowledgeType = BotaniaAPI.elvenKnowledge
-		fracturedSpace.knowledgeType = BotaniaAPI.elvenKnowledge
-		gaiaButton.knowledgeType = BotaniaAPI.elvenKnowledge
-		hyperBucket.knowledgeType = BotaniaAPI.elvenKnowledge
-		infuser.knowledgeType = BotaniaAPI.elvenKnowledge
-		ivySave.knowledgeType = BotaniaAPI.elvenKnowledge
-		lamp.knowledgeType = BotaniaAPI.elvenKnowledge
-		legends.knowledgeType = BotaniaAPI.elvenKnowledge
-		lembas.knowledgeType = BotaniaAPI.elvenKnowledge
-		lootInt.knowledgeType = BotaniaAPI.elvenKnowledge
-		manaImba.knowledgeType = BotaniaAPI.elvenKnowledge
-		manaLamp.knowledgeType = BotaniaAPI.elvenKnowledge
-		mobs.knowledgeType = BotaniaAPI.elvenKnowledge
-		multbauble.knowledgeType = BotaniaAPI.elvenKnowledge
-		ores.knowledgeType = BotaniaAPI.elvenKnowledge
-		openChest.knowledgeType = BotaniaAPI.elvenKnowledge
-		pixie.knowledgeType = BotaniaAPI.elvenKnowledge
-		portal.knowledgeType = BotaniaAPI.elvenKnowledge
-		pylons.knowledgeType = BotaniaAPI.elvenKnowledge
-		rainbowFlora.knowledgeType = BotaniaAPI.elvenKnowledge
-		reality.knowledgeType = BotaniaAPI.elvenKnowledge
-		ringAnomaly.knowledgeType = BotaniaAPI.elvenKnowledge
-		ringsAura.knowledgeType = BotaniaAPI.elvenKnowledge
-		rodClick.knowledgeType = BotaniaAPI.elvenKnowledge
-		rodPrismatic.knowledgeType = BotaniaAPI.elvenKnowledge
-		rodRedstone.knowledgeType = BotaniaAPI.elvenKnowledge
-		rodSuperExchange.knowledgeType = BotaniaAPI.elvenKnowledge
-		ruling.knowledgeType = BotaniaAPI.elvenKnowledge
-		runes.knowledgeType = BotaniaAPI.elvenKnowledge
-		serenade.knowledgeType = BotaniaAPI.elvenKnowledge
-		shimmer.knowledgeType = BotaniaAPI.elvenKnowledge
-		shrines.knowledgeType = BotaniaAPI.elvenKnowledge
-		silencer.knowledgeType = BotaniaAPI.elvenKnowledge
-		soulSword.knowledgeType = BotaniaAPI.elvenKnowledge
-		subshroom.knowledgeType = BotaniaAPI.elvenKnowledge
-		chakramThunder.knowledgeType = BotaniaAPI.elvenKnowledge
-		trade.knowledgeType = BotaniaAPI.elvenKnowledge
-		uberSpreader.knowledgeType = BotaniaAPI.elvenKnowledge
-		winery.knowledgeType = BotaniaAPI.elvenKnowledge
-		worldgen.knowledgeType = BotaniaAPI.elvenKnowledge
-		worldTree.knowledgeType = BotaniaAPI.elvenKnowledge
+		advancedMana.knowledgeType = elvenKnowledge
+		alfheim.knowledgeType = elvenKnowledge
+		amplifier.knowledgeType = elvenKnowledge
+		amuletIceberg.knowledgeType = elvenKnowledge
+		amuletNimbus.knowledgeType = elvenKnowledge
+		amulterCrescent.knowledgeType = elvenKnowledge
+		anomaly.knowledgeType = elvenKnowledge
+		anyavil.knowledgeType = elvenKnowledge
+		armilla.knowledgeType = elvenKnowledge
+		astrolabe.knowledgeType = elvenKnowledge
+		beltRation.knowledgeType = elvenKnowledge
+		chalk.knowledgeType = elvenKnowledge
+		corpInj.knowledgeType = elvenKnowledge
+		corpQuandex.knowledgeType = elvenKnowledge
+		corpSeq.knowledgeType = elvenKnowledge
+		colorOverride.knowledgeType = elvenKnowledge
+		dasGold.knowledgeType = elvenKnowledge
+		deathSeed.knowledgeType = elvenKnowledge
+		elementalSet.knowledgeType = elvenKnowledge
+		elvenSet.knowledgeType = elvenKnowledge
+		elves.knowledgeType = elvenKnowledge
+		elvorium.knowledgeType = elvenKnowledge
+		essences.knowledgeType = elvenKnowledge
+		fenrir.knowledgeType = elvenKnowledge
+		fenrirCloak.knowledgeType = elvenKnowledge
+		fenrirDrop.knowledgeType = elvenKnowledge
+		fenrirGlove.knowledgeType = elvenKnowledge
+		flowerAlfchid.knowledgeType = elvenKnowledge
+		flowerBud.knowledgeType = elvenKnowledge
+		flowerEnderchid.knowledgeType = elvenKnowledge
+		flowerPetronia.knowledgeType = elvenKnowledge
+		flugel.knowledgeType = elvenKnowledge
+		fracturedSpace.knowledgeType = elvenKnowledge
+		gaiaButton.knowledgeType = elvenKnowledge
+		hyperBucket.knowledgeType = elvenKnowledge
+		infuser.knowledgeType = elvenKnowledge
+		ivySave.knowledgeType = elvenKnowledge
+		lamp.knowledgeType = elvenKnowledge
+		legends.knowledgeType = elvenKnowledge
+		lembas.knowledgeType = elvenKnowledge
+		lootInt.knowledgeType = elvenKnowledge
+		manaImba.knowledgeType = elvenKnowledge
+		manaLamp.knowledgeType = elvenKnowledge
+		mobs.knowledgeType = elvenKnowledge
+		multbauble.knowledgeType = elvenKnowledge
+		ores.knowledgeType = elvenKnowledge
+		openChest.knowledgeType = elvenKnowledge
+		pixie.knowledgeType = elvenKnowledge
+		portal.knowledgeType = elvenKnowledge
+		pylons.knowledgeType = elvenKnowledge
+		rainbowFlora.knowledgeType = elvenKnowledge
+		reality.knowledgeType = elvenKnowledge
+		ringAnomaly.knowledgeType = elvenKnowledge
+		ringsAura.knowledgeType = elvenKnowledge
+		rodClick.knowledgeType = elvenKnowledge
+		rodPrismatic.knowledgeType = elvenKnowledge
+		rodRedstone.knowledgeType = elvenKnowledge
+		rodSuperExchange.knowledgeType = elvenKnowledge
+		ruling.knowledgeType = elvenKnowledge
+		runes.knowledgeType = elvenKnowledge
+		serenade.knowledgeType = elvenKnowledge
+		shimmer.knowledgeType = elvenKnowledge
+		shrines.knowledgeType = elvenKnowledge
+		silencer.knowledgeType = elvenKnowledge
+		soulSword.knowledgeType = elvenKnowledge
+		subshroom.knowledgeType = elvenKnowledge
+		chakramThunder.knowledgeType = elvenKnowledge
+		trade.knowledgeType = elvenKnowledge
+		uberSpreader.knowledgeType = elvenKnowledge
+		winery.knowledgeType = elvenKnowledge
+		worldgen.knowledgeType = elvenKnowledge
+		worldTree.knowledgeType = elvenKnowledge
 		
-		abyss.knowledgeType = BotaniaAPI.elvenKnowledge
-		vafthrudnir.knowledgeType = BotaniaAPI.elvenKnowledge
+		abyss.knowledgeType = elvenKnowledge
+		vafthrudnir.knowledgeType = elvenKnowledge
 		
-		emblemThor.knowledgeType = BotaniaAPI.elvenKnowledge
-		emblemSif.knowledgeType = BotaniaAPI.elvenKnowledge
-		emblemNjord.knowledgeType = BotaniaAPI.elvenKnowledge
-		emblemLoki.knowledgeType = BotaniaAPI.elvenKnowledge
-		emblemHeimdall.knowledgeType = BotaniaAPI.elvenKnowledge
-		emblemOdin.knowledgeType = BotaniaAPI.elvenKnowledge
+		emblemThor.knowledgeType = elvenKnowledge
+		emblemSif.knowledgeType = elvenKnowledge
+		emblemNjord.knowledgeType = elvenKnowledge
+		emblemLoki.knowledgeType = elvenKnowledge
+		emblemHeimdall.knowledgeType = elvenKnowledge
+		emblemOdin.knowledgeType = elvenKnowledge
 		
-		cloakThor.knowledgeType = BotaniaAPI.elvenKnowledge
-		cloakSif.knowledgeType = BotaniaAPI.elvenKnowledge
-		cloakNjord.knowledgeType = BotaniaAPI.elvenKnowledge
-		cloakLoki.knowledgeType = BotaniaAPI.elvenKnowledge
-		cloakHeimdall.knowledgeType = BotaniaAPI.elvenKnowledge
-		cloakOdin.knowledgeType = BotaniaAPI.elvenKnowledge
+		cloakThor.knowledgeType = elvenKnowledge
+		cloakSif.knowledgeType = elvenKnowledge
+		cloakNjord.knowledgeType = elvenKnowledge
+		cloakLoki.knowledgeType = elvenKnowledge
+		cloakHeimdall.knowledgeType = elvenKnowledge
+		cloakOdin.knowledgeType = elvenKnowledge
 		
-		rodThor.knowledgeType = BotaniaAPI.elvenKnowledge
-		rodSif.knowledgeType = BotaniaAPI.elvenKnowledge
-		rodNjord.knowledgeType = BotaniaAPI.elvenKnowledge
-		rodLoki.knowledgeType = BotaniaAPI.elvenKnowledge
-		rodOdin.knowledgeType = BotaniaAPI.elvenKnowledge
+		rodThor.knowledgeType = elvenKnowledge
+		rodSif.knowledgeType = elvenKnowledge
+		rodNjord.knowledgeType = elvenKnowledge
+		rodLoki.knowledgeType = elvenKnowledge
+		rodOdin.knowledgeType = elvenKnowledge
 		
 		if (ThaumcraftSuffusionRecipes.recipesLoaded) {
-			tctrees.knowledgeType = BotaniaAPI.elvenKnowledge
+			tctrees.knowledgeType = elvenKnowledge
 		}
 	}
 	
@@ -1459,8 +1483,8 @@ object AlfheimLexiconData {
 			initMMO()
 		}
 		
-		if (!categoryAlfheim.entries.contains(esm)) BotaniaAPI.addEntry(esm, categoryAlfheim)
-		if (!categoryAlfheim.entries.contains(races)) BotaniaAPI.addEntry(races, categoryAlfheim)
+		if (!categoryAlfheim.entries.contains(esm)) addEntry(esm, categoryAlfheim)
+		if (!categoryAlfheim.entries.contains(races)) addEntry(races, categoryAlfheim)
 		
 		setKnowledgeTypes()
 	}
@@ -1483,17 +1507,19 @@ object AlfheimLexiconData {
 			initMMO()
 		}
 		
-		if (!categoryAlfheim.entries.contains(parties)) BotaniaAPI.addEntry(parties, categoryAlfheim)
-		if (!categoryAlfheim.entries.contains(spells)) BotaniaAPI.addEntry(spells, categoryAlfheim)
-		if (!categoryAlfheim.entries.contains(targets)) BotaniaAPI.addEntry(targets, categoryAlfheim)
+		if (!categoryAlfheim.entries.contains(parties)) addEntry(parties, categoryAlfheim)
+		if (!categoryAlfheim.entries.contains(spells)) addEntry(spells, categoryAlfheim)
+		if (!categoryAlfheim.entries.contains(targets)) addEntry(targets, categoryAlfheim)
 		
 		setKnowledgeTypes()
 	}
 	
 	private fun removeEntry(entry: LexiconEntry?, category: LexiconCategory) {
-		BotaniaAPI.getAllEntries().remove(entry)
+		getAllEntries().remove(entry)
 		category.entries.remove(entry)
 	}
+	
+	private fun pickCategory(alt: LexiconCategory) = if (AlfheimConfigHandler.lexiconSort) alt else categoryAlfheim
 }
 
 object AlfheimMultiblocks {
