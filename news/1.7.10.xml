@@ -1,6 +1,6 @@
 <news>
 	<version id="LATEST">
-		<val>59</val>
+		<val>60</val>
 	</version>
 	<version id="UNIVERSAL">
 		<val>$json["Official Alfheim Discord server is here! *",{"text":"click","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Join discord server","color":"gold"}},"clickEvent":{"action":"open_url","value":"https://discord.gg/dqQXZHq"}},"*"]</val>
@@ -166,5 +166,8 @@
 	</version>
 	<version id="58">
 		<val>New spells! New saplings!</val>
+	</version>
+	<version id="59">
+		<val>A way to change race and gender \o/</val>
 	</version>
 </news>

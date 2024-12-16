@@ -1,4 +1,5 @@
 Innovations:
+ Shapeshifting Belt to change race and gender
  Recipe and lexicon for Botanist's Toolbelt
  ESM and MMO disabled by default
  Config to move Alfheim entries to Botania categories
