@@ -24,7 +24,7 @@ import kotlin.math.*
 object RenderBooba {
 	
 	val model = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/booba.obj"))
-	// flugel boobas
+	// flugel boobas - different UV
 	val model1 = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/booba_1.obj"))
 	val model2 = if (AlfheimConfigHandler.minimalGraphics) null else AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/booba_2.obj"))
 	
@@ -52,7 +52,7 @@ object RenderBooba {
 		glEnable(GL12.GL_RESCALE_NORMAL)
 		glScaled(0.0625)
 		glRotatef(180f, 0f, 1f, 0f)
-		val offset = (Random(player.commandSenderName.hashCode().toLong()).nextFloat() * 0.5f - 0.5f) * 2f
+		val offset = (Random(player.uniqueID.mostSignificantBits).nextFloat() * 0.5f - 0.5f) * 2f
 		glTranslatef(0f, 4.1f, 1.9f + offset)
 		glRotatef(180f, 0f, 0f, 1f)
 		glRotatef(-Math.toDegrees(sin(sqrt(player.getSwingProgress(mc.timer.renderPartialTicks)) * Math.PI * 2) * 0.2).F, 0f, 1f, 0f)
@@ -100,7 +100,10 @@ object RenderBooba {
 		player.inventory.armorInventory[2]?.let {
 			mc.renderEngine.bindTexture(RenderBiped.getArmorResource(player, it, 1, null))
 			glScaled(1.1)
-			booba.renderAll()
+			glTranslatef(0.1f, 0f, 0f)
+			booba.renderPart("right")
+			glTranslatef(-0.2f, 0f, 0f)
+			booba.renderPart("left")
 			hurt()
 		}
 		

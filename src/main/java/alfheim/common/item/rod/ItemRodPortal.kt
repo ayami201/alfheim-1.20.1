@@ -110,22 +110,22 @@ class ItemRodPortal: ItemMod("rodPortal") {
 	override fun onEaten(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
 		val block = world.getBlock(player, y = -1)
 		
-		for (pair in pairs)
-			if (pair.check(player, block)) {
-				
-				val (x, y, z) = Vector3.fromEntityCenter(player)
-				VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.BIFROST_DONE, player.dimension, x, y, z, player.entityId.D)
-				
-				player.removePotionEffect(AlfheimConfigHandler.potionIDEternity)
-				
-				try {
-					CommandDimTP.processCommand(player, arrayOf(pair.second.toString()))
-				} catch (e: Throwable) {
-					ASJUtilities.error("Error trying to send ${player.commandSenderName} to ${pair.second}:", e)
-				}
-				
-				break
+		for (pair in pairs) {
+			if (!pair.check(player, block)) continue
+			
+			val (x, y, z) = Vector3.fromEntityCenter(player)
+			VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.BIFROST_DONE, player.dimension, x, y, z, player.entityId.D)
+			
+			player.removePotionEffect(AlfheimConfigHandler.potionIDEternity)
+			
+			try {
+				CommandDimTP.processCommand(player, arrayOf(pair.second.toString()))
+			} catch (e: Throwable) {
+				ASJUtilities.error("Error trying to send ${player.commandSenderName} to ${pair.second}:", e)
 			}
+			
+			break
+		}
 		
 		return stack
 	}

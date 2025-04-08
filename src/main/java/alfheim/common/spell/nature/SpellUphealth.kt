@@ -29,6 +29,7 @@ object SpellUphealth: SpellBase("uphealth", EnumRace.CAITSITH, 10000, 1200, 30) 
 		if (result != SpellCastResult.OK) return result
 		
 		tg.target.addPotionEffect(PotionEffectU(Potion.field_76434_w.id, duration, efficiency.I))
+		tg.target.heal((efficiency.I + 1) * 4f)
 		VisualEffectHandler.sendPacket(VisualEffects.UPHEAL, tg.target)
 		
 		return result

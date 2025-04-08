@@ -19,7 +19,7 @@ object SpellPoisonRoots: SpellBase("poisonroots", EnumRace.IMP, 60000, 6000, 30)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val pt = (if (caster is EntityPlayer) PartySystem.getParty(caster) else PartySystem.getMobParty(caster)) ?: return SpellCastResult.NOTARGET
-		var flagBadEffs = false
+		var partyHasDebuffs = false
 		var member: EntityLivingBase?
 		
 		scanpt@ for (i in 0 until pt.count) {
@@ -28,51 +28,46 @@ object SpellPoisonRoots: SpellBase("poisonroots", EnumRace.IMP, 60000, 6000, 30)
 			
 			for (o in member.activePotionEffects) {
 				if (Potion.potionTypes[(o as PotionEffect).potionID].isBadEffect) {
-					flagBadEffs = true
+					partyHasDebuffs = true
 					break@scanpt
 				}
 			}
 		}
 		
-		if (!flagBadEffs) return SpellCastResult.WRONGTGT
+		if (!partyHasDebuffs) return SpellCastResult.WRONGTGT
 		
-		val l = getEntitiesWithinAABB(caster.worldObj, EntityLivingBase::class.java, caster.boundingBox.expand(radius))
-		val flagNotParty = l.any { !pt.isMember(it) }
+		val targets = getEntitiesWithinAABB(caster.worldObj, EntityLivingBase::class.java, caster.boundingBox.expand(radius))
+		targets.removeAll { pt.isMember(it) }
 		
-		if (!flagNotParty) return SpellCastResult.NOTARGET
+		if (targets.isEmpty()) return SpellCastResult.NOTARGET
 		
 		val result = checkCast(caster)
 		if (result != SpellCastResult.OK) return result
 		
-		val remove = ArrayList<PotionEffect>()
-		var mobs = l.iterator()
-		var target = mobs.next()
-		var pe: PotionEffect
+		val removed = ArrayList<PotionEffect>()
 		
 		for (i in 0 until pt.count) {
 			member = pt[i] ?: continue
+			val toRemove = ArrayList<PotionEffect>()
 			for (o in member.activePotionEffects) {
-				pe = o as PotionEffect
+				val pe = o as PotionEffect
 				
-				while (pt.isMember(target) && mobs.hasNext()) target = mobs.next()
-				
-				if (pt.isMember(target)) return SpellCastResult.NOTARGET            // Some desync, sorry for your mana :(
-				
-				if (Potion.potionTypes[pe.getPotionID()].isBadEffect) {
-					target.addPotionEffect(PotionEffect(pe).apply { isAmbient = pe.isAmbient })
-					remove.add(pe)
-					if (mobs.hasNext())
-						target = mobs.next()
-					else
-						mobs = l.iterator()
-				}
+				if (Potion.potionTypes[pe.getPotionID()].isBadEffect)
+					toRemove.add(pe)
 			}
 			
-			for (r in remove) member.removePotionEffect(r.potionID)
-			remove.clear()
+			for (pe in toRemove) {
+				removed += PotionEffect(pe.potionID, pe.duration / targets.size, pe.amplifier / targets.size, pe.isAmbient)
+				member.removePotionEffect(pe.potionID)
+			}
 		}
 		
-		for (e in l) if (!pt.isMember(e)) e.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, duration, efficiency.I))
+		for (pe in removed)
+			for (target in targets)
+				target.addPotionEffect(pe)
+		
+		for (e in targets)
+			e.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, duration, efficiency.I))
 		
 		return result
 	}

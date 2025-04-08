@@ -276,6 +276,7 @@ import alfheim.common.item.AlfheimItems.ragnarokEmblem
 import alfheim.common.item.AlfheimItems.rationBelt
 import alfheim.common.item.AlfheimItems.realitySword
 import alfheim.common.item.AlfheimItems.resonator
+import alfheim.common.item.AlfheimItems.riftSword
 import alfheim.common.item.AlfheimItems.ringFeedFlower
 import alfheim.common.item.AlfheimItems.ringSpider
 import alfheim.common.item.AlfheimItems.rodBlackHole
@@ -516,6 +517,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(elvoriumBoots)
 		addItem(realitySword)
 		
+		addItem(riftSword)
 		addItem(soulSword)
 		
 		//addItem (storyToken)

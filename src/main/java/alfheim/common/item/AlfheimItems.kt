@@ -3,6 +3,7 @@ package alfheim.common.item
 import alfheim.api.ModInfo
 import alfheim.api.lib.LibOreDict
 import alfheim.common.block.AlfheimBlocks
+import alfheim.common.core.handler.WorkInProgressItemsHandler.WIP
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.*
 import alfheim.common.item.creator.*
@@ -13,6 +14,7 @@ import alfheim.common.item.equipment.armor.fenrir.*
 import alfheim.common.item.equipment.bauble.*
 import alfheim.common.item.equipment.bauble.faith.ItemRagnarokEmblem
 import alfheim.common.item.equipment.tool.*
+import alfheim.common.item.equipment.tool.rift.*
 import alfheim.common.item.equipment.tool.terrasteel.ItemTerraHoe
 import alfheim.common.item.interaction.thaumcraft.*
 import alfheim.common.item.material.*
@@ -115,7 +117,9 @@ object AlfheimItems {
 	val mjolnir: Item
 	val moonlightBow: Item
 	val multibauble: Item
+	val organs: Item
 	val paperBreak: Item
+	val paperRace: Item
 	val peacePipe: Item
 	val pendantSuperIce: Item
 	val pixieAttractor: Item
@@ -129,6 +133,8 @@ object AlfheimItems {
 	val rationBelt: Item
 	val realitySword: Item
 	val resonator: Item
+	val riftPick: Item
+	val riftSword: Item
 	val ringFeedFlower: Item
 	val ringSpider: Item
 	val rodBlackHole: Item
@@ -263,7 +269,9 @@ object AlfheimItems {
 		mjolnir = ItemMjolnir()
 		moonlightBow = ItemMoonlightBow()
 		multibauble = ItemMultibauble()
+		organs = ItemOrgans()
 		paperBreak = ItemPaperBreak()
+		paperRace = ItemPaperRace()
 		peacePipe = ItemPeacePipe()
 		pendantSuperIce = ItemSuperIcePendant()
 		pixieAttractor = ItemPendant("PixieAttractor")
@@ -277,6 +285,8 @@ object AlfheimItems {
 		rationBelt = ItemRationBelt()
 		realitySword = ItemRealitySword()
 		resonator = ItemResonator()
+		riftPick = ItemRiftPick().WIP()
+		riftSword = ItemRiftSword().WIP()
 		ringFeedFlower = ItemFeedFlowerRing()
 		ringSpider = ItemSpiderRing()
 		rodBlackHole = ItemRodBlackHole()

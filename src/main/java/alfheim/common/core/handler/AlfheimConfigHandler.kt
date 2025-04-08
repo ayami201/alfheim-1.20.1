@@ -258,6 +258,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var legendarySpells = arrayOf("sacrifice", "isaacstorm", "resurrect", "timestop", "warhood")
 	var maxPartyMembers = 5
 	var raceManaMult = 2.toByte()
+	var spellSortByAffinity = true
 	var superSpellBosses = false
 	
 	// MMO HUD
@@ -296,7 +297,6 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		enableAlfheimRespawn = loadProp(CATEGORY_ALFHEIM, "enableAlfheimRespawn", enableAlfheimRespawn, false, "Set this to false to disable respawning in Alfheim")
 		floatingIslandCountMax = loadProp(CATEGORY_ALFHEIM, "floatingIslandCountMax", floatingIslandCountMax, false, "Max count of floating islands in world", 1)
 		floatingIslandCountPerPlayer = loadProp(CATEGORY_ALFHEIM, "floatingIslandCountPerPlayer", floatingIslandCountPerPlayer, false, "Max count of floating islands per player in world", 1)
-		enableAlfheimRespawn = loadProp(CATEGORY_ALFHEIM, "enableAlfheimRespawn", enableAlfheimRespawn, false, "Set this to false to disable respawning in Alfheim")
 		grabMidgardPortal = loadProp(CATEGORY_ALFHEIM, "grabMidgardPortal", grabMidgardPortal, false, "Set this to true to teleport near existing active loaded portal when leaving Alfheim instead of world spawn")
 		increasedSpiritsRange = loadProp(CATEGORY_ALFHEIM, "increasedSpiritsRange", increasedSpiritsRange, false, "Set this to false to reduce nighttime spirits spawn range in Alfheim (may increase FPS)")
 		rainbowPolys = loadProp(CATEGORY_ALFHEIM, "rainbowPolys", rainbowPolys, false, "How smooth will rainbow and rays in Alfheim sky be (higher number - more polygons)")
@@ -477,6 +477,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		legendarySpells = loadProp(CATEGORY_MMO, "legendarySpells", legendarySpells, false, "Spells that are considered 'epic' thus costing same for all races", false)
 		maxPartyMembers = loadProp(CATEGORY_MMO, "maxPartyMembers", maxPartyMembers, false, "How many people can be in single party at the same time")
 		raceManaMult = loadProp(CATEGORY_MMO, "raceManaMult", raceManaMult.I, false, "Mana cost multiplier for spells with not your affinity").toByte()
+		spellSortByAffinity = loadProp(CATEGORY_MMO, "spellSortByAffinity", spellSortByAffinity, true, "Set this to false to remove affinity spells sorting")
 		superSpellBosses = loadProp(CATEGORY_MMO, "superSpellBoss", superSpellBosses, false, "Set this to true to make bosses vulnerable to legendary spells")
 		
 		partyHUDScale = loadProp(CATEGORY_HUD, "partyHUDScale", partyHUDScale, false, "Party HUD Scale (1 < bigger; 1 > smaller)")
@@ -486,6 +487,11 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	}
 	
 	fun initWorldCoordsForElvenStory(save: String) {
+		if (save.isBlank()) {
+			zones.fill(Vector3(0, 300, 0))
+			return
+		}
+		
 		val file = File("$save/data/${ModInfo.MODID}/AlfheimCoords.txt")
 		if (!file.exists()) makeDefaultWorldCoords(file)
 		
@@ -538,10 +544,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 			fw.close()
 		} catch (e: IOException) {
 			ASJUtilities.error("Unable to generate default Alfheim Coords data. Setting all to [0, 300, 0]...", e)
-			
-			for (i in zones.indices) {
-				zones[i] = Vector3(0, 300, 0)
-			}
+			zones.fill(Vector3(0, 300, 0)) 
 		}
 	}
 	

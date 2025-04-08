@@ -21,6 +21,12 @@ class ItemCarver: ItemMod("Carver") {
 		eventForge()
 	}
 	
+	override fun hasContainerItem(stack: ItemStack?) = true
+	
+	override fun getContainerItem(stack: ItemStack?) = stack
+	
+	override fun doesContainerItemLeaveCraftingGrid(stack: ItemStack?) = false
+	
 	override fun addInformation(stack: ItemStack, player: EntityPlayer?, list: MutableList<Any?>, adv: Boolean) {
 		addStringToTooltip(list, "${getUnlocalizedNameInefficiently(stack)}.mode.${stack.carverMode}")
 	}

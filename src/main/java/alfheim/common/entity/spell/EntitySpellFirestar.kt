@@ -2,13 +2,17 @@ package alfheim.common.entity.spell
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.api.AlfheimAPI
 import alfheim.api.spell.*
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.core.handler.*
+import alfheim.common.network.*
+import alfheim.common.network.packet.Message2d
 import alfheim.common.spell.fire.SpellFirestar
 import alfheim.common.spell.illusion.SpellDarkness
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.*
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.Potion
 import net.minecraft.util.DamageSource
@@ -35,6 +39,13 @@ class EntitySpellFirestar(world: World, val caster: EntityLivingBase?): Entity(w
 	override fun onEntityUpdate() {
 		if (!AlfheimConfigHandler.enableMMO || caster == null || caster.isDead || ticksExisted > (SpellFirestar.duration / if (powered) 2 else 1)) {
 			setDead()
+			
+			if (caster is EntityPlayerMP) {
+				val cd = SpellFirestar.getCooldown()
+				CardinalSystem.SpellCastingSystem.setCoolDown(caster, SpellFirestar, cd)
+				NetworkService.sendTo(Message2d(M2d.COOLDOWN, (SpellFirestar.race.ordinal and 0xF shl 28 or (AlfheimAPI.getSpellID(SpellFirestar) and 0xFFFFFFF)).D, cd.D), caster)
+			}
+			
 			return
 		}
 		
@@ -49,8 +60,17 @@ class EntitySpellFirestar(world: World, val caster: EntityLivingBase?): Entity(w
 			if (it === caster || CardinalSystem.PartySystem.mobsSameParty(caster, it)) {
 				it.addPotionEffect(PotionEffectU(Potion.fireResistance.id, 10))
 				it.heal(SpellFirestar.efficiency.F)
+				
+				if ((ticksExisted % if (powered) 10 else 50) != 0) return@forEach
+				
+				val bleeding = it.getActivePotionEffect(AlfheimConfigHandler.potionIDBleeding) ?: return@forEach
+				
+				if (bleeding.amplifier > 0)
+					bleeding.amplifier -= 1
+				else
+					it.removePotionEffect(AlfheimConfigHandler.potionIDBleeding)
 			} else {
-				it.attackEntityFrom(DamageSource.inFire, SpellBase.over(caster, SpellDarkness.damage))
+				it.attackEntityFrom(DamageSource.inFire, SpellBase.over(caster, SpellDarkness.damage * if (powered) 2 else 1))
 			}
 		}
 	}

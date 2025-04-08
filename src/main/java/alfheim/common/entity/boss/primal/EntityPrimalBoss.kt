@@ -24,6 +24,7 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.*
 import net.minecraft.entity.item.EntityItem
+import net.minecraft.entity.monster.IMob
 import net.minecraft.entity.player.*
 import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
@@ -38,7 +39,7 @@ import kotlin.math.*
 typealias PrimalBossMovingSound = EntityBoundMovingSound<EntityPrimalBoss>
 
 @Suppress("LeakingThis")
-abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBossWithName, IIntersectAttackEntity, ICustomArmSwingEndEntity, IForceKill, IElementalEntity {
+abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBossWithName, IIntersectAttackEntity, ICustomArmSwingEndEntity, IForceKill, IElementalEntity, IMob {
 	
 	private var maxHit = 1f
 	private var lastHit = 0f
@@ -224,6 +225,8 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 	abstract fun protectorEntityClass(): Class<*>
 	
 	open fun canUlt(): Boolean {
+		if (heldItem == null) return false // disarmed *shrug*
+		
 		if (ultCD > 0) return false
 		if (!ASJUtilities.chance(playersOnArena().count { Vector3.entityDistance(this, it as EntityPlayerMP) <= 7 } * 20)) {
 			ultCD = 100
@@ -469,6 +472,8 @@ abstract class EntityPrimalBoss(world: World): EntityCreature(world), IBotaniaBo
 	
 	override fun dropFewItems(byPlayer: Boolean, looting: Int) {
 		if (worldObj.isRemote || isAlive || !byPlayer) return
+		
+		if (ASJUtilities.chance(20 + looting * 5)) entityDropItem(ItemStack(battleMusicDisc), height / 2)
 		
 		dropItems()
 	}

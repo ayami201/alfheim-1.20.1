@@ -247,22 +247,29 @@ object EventHandlerClient {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onClonePlayer(e: PlayerEvent.Clone) {
-		if (AlfheimConfigHandler.enableElvenStory) {
+		if (AlfheimConfigHandler.enableElvenStory)
 			e.entityPlayer.raceID = e.original.raceID
-		}
 	}
 	
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onFOV(e: FOVUpdateEvent) {
-		if (AlfheimConfigHandler.enableMMO && e.entity.getActivePotionEffect(AlfheimConfigHandler.potionIDIceLens) != null) e.newfov = 0.1f
+		if (AlfheimConfigHandler.enableMMO && e.entity.getActivePotionEffect(AlfheimConfigHandler.potionIDIceLens) != null)
+			e.newfov = 0.1f
 	}
 	
 	@SubscribeEvent(receiveCanceled = true)
 	@SideOnly(Side.CLIENT)
 	fun onFog(e: EntityViewRenderEvent.FogDensity) {
 		val rve = mc.renderViewEntity
-		if (rve is EntityPlayer && rve.capabilities.isCreativeMode || !AlfheimConfigHandler.enableMMO || !rve.isPotionActive(AlfheimConfigHandler.potionIDNoclip) || e.block.material !== Material.water && e.block.material !== Material.lava) return
+		if (rve is EntityPlayer &&
+		    rve.capabilities.isCreativeMode ||
+		    !AlfheimConfigHandler.enableMMO ||
+		    !rve.isPotionActive(AlfheimConfigHandler.potionIDNoclip) ||
+		    e.block.material !== Material.water &&
+		    e.block.material !== Material.lava)
+			return
+		
 		glFogi(GL_FOG_MODE, GL_EXP)
 		e.density = 0.05f
 		e.isCanceled = true

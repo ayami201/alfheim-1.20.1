@@ -3,6 +3,7 @@ package alfheim.common.entity.spell
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.spell.*
+import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.CardinalSystem.PartySystem
@@ -19,7 +20,12 @@ import kotlin.math.*
 
 class EntitySpellDriftingMine(world: World): Entity(world), ITimeStopSpecific {
 	
-	var caster: EntityLivingBase? = null
+	val caster: EntityPlayer? 
+		get() = worldObj.getPlayerEntityByName(casterName)
+	
+	var casterName
+		get() = dataWatcher.getWatchableObjectString(2)!!
+		set(value) = dataWatcher.updateObject(2, value)
 	
 	override val isImmune = false
 	
@@ -28,17 +34,23 @@ class EntitySpellDriftingMine(world: World): Entity(world), ITimeStopSpecific {
 	}
 	
 	constructor(world: World, shooter: EntityLivingBase): this(world) {
-		caster = shooter
-		setPositionAndRotation(caster!!.posX, caster!!.posY + caster!!.height * 0.75, caster!!.posZ, caster!!.rotationYaw, caster!!.rotationPitch)
-		if (caster!!.isSneaking) return
-		val m = Vector3(caster!!.lookVec).mul(SpellDriftingMine.efficiency)
-		motionX = m.x
-		motionY = m.y
-		motionZ = m.z
+		casterName = shooter.commandSenderName
+		setPositionAndRotation(shooter.posX, shooter.posY + shooter.height * 0.75, shooter.posZ, shooter.rotationYaw, shooter.rotationPitch)
+		
+		if (shooter.isSneaking) return
+		
+		val m = Vector3(shooter.lookVec).mul(SpellDriftingMine.efficiency)
+		setMotion(m.x, m.y, m.z)
+	}
+	
+	override fun entityInit() {
+		dataWatcher.addObject(2, "")
 	}
 	
 	fun onImpact(mop: MovingObjectPosition?) {
 		if (!worldObj.isRemote) {
+			val caster = caster
+			
 			mop?.entityHit?.attackEntityFrom(DamageSourceSpell.explosion(this, caster), SpellBase.over(caster, SpellDriftingMine.damage))
 			
 			getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox(SpellDriftingMine.radius)).forEach {
@@ -52,46 +64,50 @@ class EntitySpellDriftingMine(world: World): Entity(world), ITimeStopSpecific {
 	}
 	
 	override fun onUpdate() {
-		if (!AlfheimConfigHandler.enableMMO || !worldObj.isRemote && (caster != null && caster!!.isDead || !worldObj.blockExists(posX.I, posY.I, posZ.I))) {
-			setDead()
-		} else {
-			moveEntity(motionX, motionY, motionZ)
-			
-			if (ASJUtilities.isClient) return
-			super.onUpdate()
-			
-			if (ticksExisted == SpellDriftingMine.duration || isBurning) onImpact(null)
-			
-			val vec3 = Vec3.createVectorHelper(posX, posY, posZ)
-			val vec31 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ)
-			var movingobjectposition: MovingObjectPosition? = worldObj.rayTraceBlocks(vec3, vec31)
-			
-			if (movingobjectposition == null) {
-				val l = getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox.addCoord(motionX, motionY, motionZ).expand(1))
-				l.remove(caster)
-				
-				for (e in l)
-					if (e.canBeCollidedWith() && !PartySystem.mobsSameParty(caster, e) && Vector3.entityDistance(this, e) < 3) {
-						movingobjectposition = MovingObjectPosition(e)
-						break
-					}
-			}
-			
-			if (movingobjectposition != null) onImpact(movingobjectposition)
-			
-			val f1 = sqrt(motionX * motionX + motionZ * motionZ)
-			rotationYaw = (atan2(motionZ, motionX) * 180.0 / Math.PI).F + 90f
-			
-			rotationPitch = (atan2(f1.D, motionY) * 180.0 / Math.PI).F - 90f
-			while (rotationPitch - prevRotationPitch < -180f) prevRotationPitch -= 360f
-			while (rotationPitch - prevRotationPitch >= 180f) prevRotationPitch += 360f
-			while (rotationYaw - prevRotationYaw < -180f) prevRotationYaw -= 360f
-			while (rotationYaw - prevRotationYaw >= 180f) prevRotationYaw += 360f
-			
-			rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2f
-			rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2f
-			
+		val caster: EntityLivingBase? = caster
+		
+		if (!AlfheimConfigHandler.enableMMO || !worldObj.isRemote && (caster == null || caster.isDead || !worldObj.blockExists(posX.I, posY.I, posZ.I))) {
+			return setDead()
 		}
+		
+		if (ASJUtilities.isClient && CardinalSystemClient.PlayerSegmentClient.party?.isMember(caster) != true) {
+			return setDead()
+		}
+		
+		moveEntity(motionX, motionY, motionZ)
+		
+		super.onUpdate()
+		
+		if (ticksExisted == SpellDriftingMine.duration || isBurning) onImpact(null)
+		
+		val vec3 = Vec3.createVectorHelper(posX, posY, posZ)
+		val vec31 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ)
+		var movingobjectposition: MovingObjectPosition? = worldObj.rayTraceBlocks(vec3, vec31)
+		
+		if (movingobjectposition == null) {
+			val l = getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox.addCoord(motionX, motionY, motionZ).expand(1))
+			l.remove(caster)
+			
+			for (e in l)
+				if (e.canBeCollidedWith() && !PartySystem.mobsSameParty(caster, e) && Vector3.entityDistance(this, e) < 3) {
+					movingobjectposition = MovingObjectPosition(e)
+					break
+				}
+		}
+		
+		if (movingobjectposition != null) onImpact(movingobjectposition)
+		
+		val f1 = sqrt(motionX * motionX + motionZ * motionZ)
+		rotationYaw = (atan2(motionZ, motionX) * 180.0 / Math.PI).F + 90f
+		
+		rotationPitch = (atan2(f1.D, motionY) * 180.0 / Math.PI).F - 90f
+		while (rotationPitch - prevRotationPitch < -180f) prevRotationPitch -= 360f
+		while (rotationPitch - prevRotationPitch >= 180f) prevRotationPitch += 360f
+		while (rotationYaw - prevRotationYaw < -180f) prevRotationYaw -= 360f
+		while (rotationYaw - prevRotationYaw >= 180f) prevRotationYaw += 360f
+		
+		rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2f
+		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2f
 	}
 	
 	override fun canBeCollidedWith() = true
@@ -101,16 +117,13 @@ class EntitySpellDriftingMine(world: World): Entity(world), ITimeStopSpecific {
 	@SideOnly(Side.CLIENT)
 	override fun getShadowSize() = 0f
 	
-	override fun affectedBy(uuid: UUID) = caster!!.uniqueID != uuid
-	
-	public override fun entityInit() {}
+	override fun affectedBy(uuid: UUID) = caster?.uniqueID != uuid
 	
 	public override fun readEntityFromNBT(nbt: NBTTagCompound) {
-		if (nbt.hasKey("castername")) caster = worldObj.getPlayerEntityByName(nbt.getString("castername")) else setDead()
-		if (caster == null) setDead()
+		casterName = nbt.getString("castername")
 	}
 	
 	public override fun writeEntityToNBT(nbt: NBTTagCompound) {
-		if (caster is EntityPlayer) nbt.setString("castername", caster!!.commandSenderName)
+		nbt.setString("castername", casterName)
 	}
 }

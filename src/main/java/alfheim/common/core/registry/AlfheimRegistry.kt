@@ -101,7 +101,7 @@ object AlfheimRegistry {
 		PotionEternity.eventForge()
 		PotionGoldRush
 		PotionHystrix.eventForge()
-		PotionAlfheim(AlfheimConfigHandler.potionIDIceLens, "icelens", false, 0xDDFFFF)
+		PotionIceLens
 		PotionLeftFlame
 		PotionLightningShield.eventForge()
 		PotionManaVoid
@@ -181,6 +181,7 @@ object AlfheimRegistry {
 		registerEntity(EntityPrimalBossChunkAttack::class.java, "ChunkAttack", nextEntityID)
 		registerEntity(EntityPrimalMark::class.java, "PrimalMark", nextEntityID)
 		registerEntity(EntityResonance::class.java, "Resonance", nextEntityID)
+		registerEntity(EntityRift::class.java, "Rift", nextEntityID)
 		registerEntity(EntitySniceBall::class.java, "SniceBall", nextEntityID)
 		registerEntity(EntityThrowableItem::class.java, "ThrownItem", nextEntityID)
 		registerEntity(EntityThrownPotion::class.java, "ThrownPotion", nextEntityID)
@@ -303,7 +304,7 @@ object AlfheimRegistry {
 	private fun registerSpells() {
 		SpellAcidMyst
 		SpellAport
-		SpellAquaBind
+//		SpellAquaBind
 		SpellAquaStream
 		SpellBattleHorn
 		SpellBeastWithin

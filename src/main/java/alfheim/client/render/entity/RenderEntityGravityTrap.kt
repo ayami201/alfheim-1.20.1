@@ -63,6 +63,7 @@ object RenderEntityGravityTrap: Render() {
 		
 		override fun postRender() {
 			glShadeModel(GL_FLAT)
+			glEnable(GL_CULL_FACE)
 		}
 	}.also { RenderPostShaders.registerShadedObject(it) }
 }

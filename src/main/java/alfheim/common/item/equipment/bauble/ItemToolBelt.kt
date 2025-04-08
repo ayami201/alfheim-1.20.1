@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.texture.*
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.*
 import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
@@ -265,7 +265,9 @@ object ToolbeltEventHandler {
 				val item = heldItem.copy()
 				
 				player.inventory[player.inventory.currentItem] = null
-				player.inventory.markDirty()
+				
+				if (player is EntityPlayerMP)
+					player.sendContainerToPlayer(player.inventoryContainer)
 				
 				ItemToolBelt.setItem(player, beltStack, item, segment)
 			}
@@ -277,7 +279,8 @@ object ToolbeltEventHandler {
 			else if (!player.inventory.addItemStackToInventory(toolStack))
 				player.dropPlayerItemWithRandomChoice(toolStack, false)
 			
-			player.inventory.markDirty()
+			if (player is EntityPlayerMP)
+				player.sendContainerToPlayer(player.inventoryContainer)
 		}
 	}
 	

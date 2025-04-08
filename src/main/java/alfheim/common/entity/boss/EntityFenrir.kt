@@ -24,6 +24,7 @@ import net.minecraft.block.Block
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.*
+import net.minecraft.entity.monster.IMob
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
@@ -34,7 +35,7 @@ import vazkii.botania.common.Botania
 import java.awt.Rectangle
 import kotlin.math.*
 
-class EntityFenrir(world: World): EntityCreature(world), IBotaniaBossWithName {
+class EntityFenrir(world: World): EntityCreature(world), IBotaniaBossWithName, IMob {
 	
 	// data
 	var bladesCooldown = 0
@@ -396,7 +397,7 @@ class EntityFenrir(world: World): EntityCreature(world), IBotaniaBossWithName {
 		entityDropItem(ElvenResourcesMetas.FenrirFur.stack(rand.nextInt(looting * 2 + 2) + 3), 5f)
 		
 		val (x, y, z) = Vector3(source).mf()
-		getEntitiesWithinAABB(worldObj, EntityPlayer::class.java, FenrirDomain.boundBox.copy().offset(x, y, z)).shuffled().forEach { player ->
+		getEntitiesWithinAABB(worldObj, EntityPlayer::class.java, FenrirDomain.boundBox.copy().offset(x, y, z)).forEach { player ->
 			val data = relics.shuffled().firstOrNull { !player.hasAchievement(it.first) } ?: return@forEach
 			val stack = ItemStack(data.second)
 			
@@ -405,7 +406,8 @@ class EntityFenrir(world: World): EntityCreature(world), IBotaniaBossWithName {
 			return
 		}
 		
-		if (ASJUtilities.chance(5 + looting)) entityDropItem(lightRelics.random().copy(), 0f)
+		if (ASJUtilities.chance(5 + looting * 5)) entityDropItem(lightRelics.random().copy(), 0f)
+		if (ASJUtilities.chance(20 + looting * 5)) entityDropItem(ItemStack(AlfheimItems.discFenrir), 0f)
 	}
 	
 	override fun isAIEnabled() = true

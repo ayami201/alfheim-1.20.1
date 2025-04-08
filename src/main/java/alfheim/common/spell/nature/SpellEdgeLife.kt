@@ -7,7 +7,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import net.minecraft.entity.EntityLivingBase
 import kotlin.math.max
 
-object SpellEdgeLife: SpellBase("edgeLife", EnumRace.CAITSITH, 25000, 6600, 1) {
+object SpellEdgeLife: SpellBase("edgeLife", EnumRace.CAITSITH, 25000, 1200, 1) {
 	
 	override var duration = 100
 	override var efficiency = 0.5

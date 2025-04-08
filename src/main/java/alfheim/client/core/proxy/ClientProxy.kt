@@ -30,6 +30,7 @@ import alfheim.common.entity.boss.primal.*
 import alfheim.common.entity.item.EntityItemImmortal
 import alfheim.common.entity.spell.*
 import alfheim.common.floatingisland.EntityFloatingIsland
+import alfheim.common.integration.ThermalFoundationIntegration
 import alfheim.common.integration.travellersgear.TGHandlerBotaniaRenderer
 import alfheim.common.item.AlfheimItems
 import alfheim.common.lexicon.AlfheimLexiconData
@@ -84,6 +85,7 @@ object ClientProxy : CommonProxy() {
 		MinecraftForgeClient.registerItemRenderer(AlfheimItems.invisibleFlameLens, RenderLens())
 		MinecraftForgeClient.registerItemRenderer(AlfheimItems.moonlightBow, RenderMoonBow)
 		MinecraftForgeClient.registerItemRenderer(AlfheimBlocks.manaReflector.toItem(), RenderItemManaReflector)
+		MinecraftForgeClient.registerItemRenderer(AlfheimItems.organs, RenderItemOrgans)
 		MinecraftForgeClient.registerItemRenderer(AlfheimBlocks.rainbowFlowerFloating.toItem(), RenderFloatingFlowerRainbowItem)
 		MinecraftForgeClient.registerItemRenderer(AlfheimItems.royalStaff, RenderItemRoyalStaff)
 		MinecraftForgeClient.registerItemRenderer(AlfheimItems.surtrSword, RenderItemSurtrSword)
@@ -217,6 +219,7 @@ object ClientProxy : CommonProxy() {
 		
 		if (ConfigHandler.boundBlockWireframe) DoubleBoundItemRender
 		if (AlfheimCore.TravellersGearLoaded) TGHandlerBotaniaRenderer
+		if (ThermalFoundationIntegration.loaded) ThermalFoundationIntegration.eventForge()
 		if (AlfheimConfigHandler.enableElvenStory) enableESMGUIs()
 		if (AlfheimConfigHandler.enableMMO) enableMMOGUIs()
 		

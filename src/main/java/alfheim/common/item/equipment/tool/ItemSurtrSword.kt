@@ -1,13 +1,16 @@
 package alfheim.common.item.equipment.tool
 
 import alexsocol.asjlib.PotionEffectU
+import alexsocol.patcher.handler.PlayerReachDistanceHandler
 import alfheim.api.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.equipment.bauble.ItemPendant
+import com.google.common.collect.Multimap
 import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.*
+import net.minecraft.entity.ai.attributes.AttributeModifier
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
 
@@ -44,4 +47,10 @@ class ItemSurtrSword: ItemSword(AlfheimAPI.SURTR) {
 	override fun getUnlocalizedNameInefficiently(stack: ItemStack) = super.getUnlocalizedNameInefficiently(stack).replace("item\\.".toRegex(), "item.${ModInfo.MODID}:")
 	
 	override fun registerIcons(reg: IIconRegister) = Unit
+	
+	override fun getAttributeModifiers(stack: ItemStack?): Multimap<*, *> {
+		val modifiers = super.getAttributeModifiers(stack)
+		modifiers.put(PlayerReachDistanceHandler.reachDistance.attributeUnlocalizedName, AttributeModifier(field_111210_e, "Weapon modifier", 3.0, 0))
+		return modifiers
+	}
 }

@@ -34,6 +34,7 @@ import alfheim.common.core.handler.ragnarok.RagnarokHandler.summer
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.summerTicks
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.winter
 import alfheim.common.core.util.DamageSourceSpell
+import alfheim.common.crafting.crafter
 import alfheim.common.crafting.recipe.*
 import alfheim.common.entity.*
 import alfheim.common.entity.ai.EntityAICreeperAvoidPooka
@@ -265,10 +266,12 @@ object AlfheimHookHandler {
 		}
 		
 		if (player.capabilities.isCreativeMode) return let
+		
 		if (dimTo == dimensionIDHelheim) return let
 		if (dimTo == dimensionIDDomains) return block // only with TileDomainLobby
 		
-		return when (player.dimension) {
+		val dimFrom = player.dimension
+		return when (dimFrom) {
 			dimensionIDDomains  -> dimTo != (player.persistentData.getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE).getOrNull(3) ?: dimTo)
 			dimensionIDAlfheim  -> dimTo != 0 && dimTo != dimensionIDNiflheim
 			dimensionIDNiflheim -> dimTo != dimensionIDAlfheim
@@ -1238,7 +1241,7 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ALWAYS)
 	fun matches(recipe: AesirRingRecipe, inv: InventoryCrafting, world: World?): Boolean {
-		val crafter = (inv.eventHandler as? ContainerWorkbench)?.alfheim_synthetic_thePlayer ?: return false
+		val crafter = inv.crafter ?: return false
 		if (PlayerHandler.getPlayerBaubles(crafter)[0]?.item !== AlfheimItems.aesirEmblem) return false
 		
 		var foundThorRing = false
@@ -1412,25 +1415,6 @@ object AlfheimHookHandler {
 	@Hook(targetMethod = "getChunkFromBlockCoords")
 	fun getChunkFromBlockCoords(world: World, x: Int, z: Int) {
 		chunkCoors = x to z
-	}
-	
-	var replace = false
-	
-	@JvmStatic
-	@Hook
-	fun getCanSpawnHere(entity: EntityAnimal): Boolean {
-		replace = entity.worldObj.provider.dimensionId == dimensionIDAlfheim
-		return replace
-	}
-	
-	@JvmStatic
-	@Hook(injectOnExit = true, returnCondition = ALWAYS)
-	fun getBlock(world: World, x: Int, y: Int, z: Int, @ReturnValue block: Block): Block {
-		if (replace && (block === AlfheimBlocks.snowGrass || block === AlfheimBlocks.snowLayer || block === Blocks.snow_layer)) {
-			replace = false
-			return Blocks.grass
-		}
-		return block
 	}
 	
 	@JvmStatic
@@ -2172,5 +2156,35 @@ object AlfheimHookHandler {
 		val color = Color(Color.HSBtoRGB((entity.ticksExisted + ticks) % 360 / 360f * 10f, 1f, 1f))
 		val (r, g, b) = color.getRGBColorComponents(null)
 		return Color(r, g, b, 0.5f).rgb
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun getCollarColor(wolf: EntityWolf) = wolf.dataWatcher.getWatchableObjectByte(20).I
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun setCollarColor(wolf: EntityWolf, color: Int) = wolf.dataWatcher.updateObject(20, color.toByte())
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE)
+	fun interact(wolf: EntityWolf, player: EntityPlayer): Boolean {
+		if (!wolf.isTamed) return false
+		
+		val dye = player.heldItem ?: return false
+		if (dye.item === ModItems.dye) {
+			if (wolf.collarColor == dye.meta) return false
+			wolf.collarColor = dye.meta
+		} else if (dye.item === AlfheimItems.elvenResource && dye.meta == ElvenResourcesMetas.RainbowDust.I) {
+			if (wolf.collarColor == -1) return false
+			wolf.collarColor = -1
+		} else {
+			return false
+		}
+		
+		if (!player.capabilities.isCreativeMode && --dye.stackSize <= 0)
+			player.inventory.setInventorySlotContents(player.inventory.currentItem, null)
+		
+		return true
 	}
 }

@@ -1,9 +1,10 @@
 package alfheim.common.crafting.recipe
 
 import alexsocol.asjlib.*
+import alfheim.common.crafting.crafter
 import alfheim.common.item.AlfheimItems
 import baubles.common.lib.PlayerHandler
-import net.minecraft.inventory.*
+import net.minecraft.inventory.InventoryCrafting
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.IRecipe
 import net.minecraft.world.World
@@ -11,7 +12,7 @@ import net.minecraft.world.World
 object RecipeAesirCloak: IRecipe {
 	
 	override fun matches(inv: InventoryCrafting, world: World?): Boolean {
-		val crafter = (inv.eventHandler as? ContainerWorkbench)?.alfheim_synthetic_thePlayer ?: return false
+		val crafter = inv.crafter ?: return false
 		if (PlayerHandler.getPlayerBaubles(crafter)[0]?.item !== AlfheimItems.aesirEmblem) return false
 		
 		var foundCloak0 = false

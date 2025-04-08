@@ -18,7 +18,6 @@ import net.minecraft.item.*
 import net.minecraft.util.*
 import travellersgear.api.TravellersGearAPI
 import vazkii.botania.api.mana.IManaUsingItem
-import vazkii.botania.client.core.helper.RenderHelper
 
 @Optional.Interface(modid = "TravellersGear", iface = "alfheim.common.integration.travellersgear.ITravellersGearSynced", striprefs = true)
 class ItemPriestCloak: ItemBaubleCloak("priestCloak"), IManaUsingItem {
@@ -78,30 +77,6 @@ class ItemPriestCloak: ItemBaubleCloak("priestCloak"), IManaUsingItem {
 	override fun onUnequipped(stack: ItemStack, player: EntityLivingBase) {
 		if (player is EntityPlayer)
 			IFaithHandler.getFaithHandler(stack).onUnequipped(stack, player, IFaithHandler.FaithBauble.CLOAK)
-	}
-	
-	override fun addHiddenTooltip(stack: ItemStack, player: EntityPlayer, tooltip: MutableList<Any?>, adv: Boolean) {
-		try_ {
-			if (AlfheimCore.TravellersGearLoaded) {
-				addStringToTooltip(StatCollector.translateToLocal("TG.desc.gearSlot.tg.0"), tooltip)
-				val key = RenderHelper.getKeyDisplayString("TG.keybind.openInv")
-				if (key != null)
-					addStringToTooltip(StatCollector.translateToLocal("alfheimmisc.tgtooltip").replace("%key%".toRegex(), key), tooltip)
-			} else {
-				val type = getBaubleType(stack)
-				addStringToTooltip(StatCollector.translateToLocal("botania.baubletype." + type?.name?.lowercase()), tooltip)
-				val key = RenderHelper.getKeyDisplayString("Baubles Inventory")
-				if (key != null)
-					addStringToTooltip(StatCollector.translateToLocal("botania.baubletooltip").replace("%key%".toRegex(), key), tooltip)
-			}
-		}
-		
-		val cosmetic = getCosmeticItem(stack)
-		if (cosmetic != null)
-			addStringToTooltip(String.format(StatCollector.translateToLocal("botaniamisc.hasCosmetic"), cosmetic.displayName), tooltip)
-		
-		if (hasPhantomInk(stack))
-			addStringToTooltip(StatCollector.translateToLocal("botaniamisc.hasPhantomInk"), tooltip)
 	}
 	
 	fun addStringToTooltip(s: String, tooltip: MutableList<Any?>) {

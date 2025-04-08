@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.common.util.EnumHelper
 import vazkii.botania.api.recipe.RecipeElvenTrade
+import kotlin.collections.set
 
 @Suppress("unused")
 object AlfheimAPI {
@@ -24,9 +25,11 @@ object AlfheimAPI {
 	val elvoriumArmor = EnumHelper.addArmorMaterial("ALFHEIM_ELVORIUM", 50, intArrayOf(5, 8, 7, 4), 30)!!
 	val elementalArmor = EnumHelper.addArmorMaterial("ALFHEIM_ELEMENTAL", 20, intArrayOf(2, 9, 5, 2), 20)!!
 	val fenrirArmor = EnumHelper.addArmorMaterial("ALFHEIM_FENRIR", 32, intArrayOf(3, 7, 6, 2), 15)!!
+	val riftArmor = EnumHelper.addArmorMaterial("ALFHEIM_RIFT", 160, intArrayOf(6, 9, 8, 5), 1)!!
 	
 	val elvoriumToolMaterial = EnumHelper.addToolMaterial("ALFHEIM_ELVORIUM", 4, 2400, 9.5f, 3f, 30)!!
 	val mauftriumToolMaterial = EnumHelper.addToolMaterial("ALFHEIM_MAUFTRIUM", 10, 3000, 3f, 8f, 40)!!
+	val riftToolMaterial = EnumHelper.addToolMaterial("ALFHEIM_RIFT", 8, 2300, 64f, 5f, 1)!!
 	
 	// relic
 	var DAOLOS = EnumHelper.addToolMaterial("ALFHEIM_DAOLOS", 7, 1561, 16f, 7f, 50)!!
@@ -97,13 +100,20 @@ object AlfheimAPI {
 		return rec
 	}
 	
-	fun removeInfusionRecipe(rec: RecipeManaInfuser?): RecipeManaInfuser? =
+	fun removeInfuserRecipe(rec: RecipeManaInfuser?): RecipeManaInfuser? =
 		if (rec != null && manaInfuserRecipes.remove(rec)) rec else null
 	
-	fun removeInfusionRecipe(result: ItemStack): RecipeManaInfuser? =
-		manaInfuserRecipes.indices
-			.firstOrNull { ASJUtilities.isItemStackEqualCrafting(manaInfuserRecipes[it].output, result) }
-			?.let { manaInfuserRecipes.removeAt(it) }
+	fun removeInfuserRecipe(result: ItemStack): ArrayList<RecipeManaInfuser> {
+		val removed = ArrayList<RecipeManaInfuser>()
+		
+		manaInfuserRecipes.removeAll {
+			val remove = ASJUtilities.isItemStackEqualCrafting(it.output, result)
+			if (remove) removed += it
+			remove
+		}
+		
+		return removed
+	}
 	
 	/** Remove [output] from Alfheim trade portal  */
 	fun banRetrade(output: ItemStack) =

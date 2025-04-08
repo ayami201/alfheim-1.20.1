@@ -87,7 +87,7 @@ object EventHandler {
 					ASJUtilities.say(player, "elvenstory.welcome0")
 					ASJUtilities.say(player, "elvenstory.welcome1")
 					player.inventory.addItemStackToInventory(ItemStack(ModItems.lexicon))
-					player.setSpawnChunk(ChunkCoordinates(0, 250, 0), true, AlfheimConfigHandler.dimensionIDAlfheim)
+					player.setSpawnChunk(ChunkCoordinates(x, y, z), true, AlfheimConfigHandler.dimensionIDAlfheim)
 				}
 				
 				if (AlfheimConfigHandler.enableMMO)

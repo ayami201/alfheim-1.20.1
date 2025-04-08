@@ -2,7 +2,6 @@ package alfheim.common.entity.boss.ai.flugel
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alfheim.api.ModInfo
 import alfheim.common.entity.boss.EntityFlugel
 import vazkii.botania.common.Botania
 import vazkii.botania.common.entity.EntityFallingStar
@@ -22,7 +21,7 @@ class AIDeathray(flugel: EntityFlugel, task: AITask): AIBase(flugel, task) {
 		val deathray = flugel.aiTaskTimer
 		val source = flugel.source
 		val range = EntityFlugel.RANGE.F
-		if (ModInfo.DEV) if (!flugel.worldObj.isRemote) for (player in flugel.playersAround) ASJUtilities.chatLog("Deathray in $deathray", player)
+		
 		flugel.setPosition(source.posX + 0.5, (source.posY + 3).D, source.posZ + 0.5)
 		flugel.motionX = 0.0
 		flugel.motionY = 0.0

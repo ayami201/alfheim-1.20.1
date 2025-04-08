@@ -8,7 +8,7 @@ import alfheim.common.entity.spell.EntitySpellHarp
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 
-object SpellHarp: SpellBase("harp", EnumRace.POOKA, 15000, 3600, 30) {
+object SpellHarp: SpellBase("harp", EnumRace.POOKA, 15000, 100, 50) {
 	
 	override var damage = 0.5f
 	override var duration = 600

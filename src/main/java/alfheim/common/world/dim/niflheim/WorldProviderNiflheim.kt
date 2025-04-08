@@ -83,7 +83,7 @@ class WorldProviderNiflheim: WorldProvider() {
 	override fun shouldMapSpin(entity: String?, x: Double, y: Double, z: Double) = false
 	override fun canCoordinateBeSpawn(x: Int, z: Int) = true
 	override fun canRespawnHere() = enableNiflheimRespawn
-	override fun getRespawnDimension(player: EntityPlayerMP?) = if (enableNiflheimRespawn) dimensionIDNiflheim else dimensionIDAlfheim
+	override fun getRespawnDimension(player: EntityPlayerMP?) = if (canRespawnHere()) dimensionIDNiflheim else dimensionIDAlfheim
 	override fun getCloudRenderer(): IRenderHandler? = null
 	override fun getSkyRenderer() = DummyRenderHandler
 	override fun getWeatherRenderer() = if (mc.thePlayer?.capabilities?.isCreativeMode == true) DummyRenderHandler else WeatherRendererNiflheim

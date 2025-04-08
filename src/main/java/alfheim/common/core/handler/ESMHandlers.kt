@@ -2,6 +2,7 @@ package alfheim.common.core.handler
 
 import alexsocol.asjlib.*
 import alexsocol.patcher.event.*
+import alfheim.AlfheimCore
 import alfheim.api.ModInfo
 import alfheim.api.entity.EnumRace.*
 import alfheim.api.entity.race
@@ -49,6 +50,7 @@ object ESMHandler {
 	
 	@SubscribeEvent
 	fun onServerStarted(e: ServerStartingEvent) {
+		AlfheimCore.save = e.save
 		readModes(e.save)
 	}
 	

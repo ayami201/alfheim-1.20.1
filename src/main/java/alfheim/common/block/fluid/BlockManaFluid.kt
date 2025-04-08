@@ -2,6 +2,7 @@ package alfheim.common.block.fluid
 
 import alexsocol.asjlib.*
 import alfheim.api.event.PlayerInteractAdequateEvent
+import alfheim.common.block.AlfheimBlocks
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.*
@@ -12,6 +13,7 @@ import net.minecraft.init.Items
 import net.minecraft.item.*
 import net.minecraft.util.IIcon
 import net.minecraft.world.World
+import net.minecraftforge.event.entity.player.FillBucketEvent
 import net.minecraftforge.fluids.*
 import vazkii.botania.common.Botania
 import vazkii.botania.common.item.ModItems
@@ -74,6 +76,12 @@ class BlockManaFluid: BlockFluidClassic(ManaFluid, Material.water) {
 				player.dropPlayerItemWithRandomChoice(bottle, true)
 			
 			if (world.isRemote) player.swingItem()
+		}
+		
+		@SubscribeEvent
+		fun preventDraining(e: FillBucketEvent) {
+			if (e.current?.item === Items.bucket && e.world.getBlock(e.target.blockX, e.target.blockY, e.target.blockZ) == AlfheimBlocks.manaFluidBlock)
+				e.isCanceled = !e.entityPlayer.capabilities.isCreativeMode
 		}
 	}
 	

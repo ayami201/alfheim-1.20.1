@@ -148,8 +148,9 @@ class EntityThrym(world: World): EntityPrimalBoss(world), INiflheimEntity {
 					if (KnowledgeSystem.know(it, Knowledge.NIFLHEIM) && KnowledgeSystem.learn(it, Knowledge.NIFLHEIM_POST, AlfheimLexiconData.abyss))
 						gain++
 				}
-				if (gain > 0)
-					entityDropItem(ElvenResourcesMetas.WisdomBottle.stack(gain), 3f)
+				repeat(gain) {
+					entityDropItem(ElvenResourcesMetas.WisdomBottle.stack, 3f)
+				}
 			}
 		} else
 			entityDropItem(ElvenResourcesMetas.NiflheimEssence.stack(ASJUtilities.randInBounds(32, 64, rand)), 3f)

@@ -17,10 +17,12 @@ import vazkii.botania.common.item.ModItems
 object AlfheimAchievements {
 	
 	val achievements: MutableList<Achievement> = ArrayList()
+	val page: AchievementPage
 	
 	val alfheim: Achievement // go to alfheim
 	val breadBoom: Achievement // they are overfed
 	val firework: Achievement // rocketride
+	val fuckup: Achievement // use race resetter
 	val grass: Achievement // grass
 	val infuser: Achievement // build up infuser
 	val midgardsormr: Achievement // maximize
@@ -46,6 +48,7 @@ object AlfheimAchievements {
 	val divineMarksman: Achievement // show your marksman skill
 	val flugelKill: Achievement
 	val flugelHardKill: Achievement
+	val organs: Achievement // your organs fell out
 	val outstander: Achievement // survive
 	val rosaBomb: Achievement // bomb 'em all
 	
@@ -54,7 +57,8 @@ object AlfheimAchievements {
 		breadBoom = AlfheimAchievement("breadBoom", 32, 32, Items.bread, null).setSpecial()
 		firework = AlfheimAchievement("firework", -3, 3, Items.fireworks, null).setSpecial()
 		flugelKill = AlfheimAchievement("flugelKill", 2, 0, ModItems.flightTiara, null)
-		grass = AlfheimAchievement("grass", -2, -1, ItemStack(Blocks.grass), alfheim)
+		fuckup = AlfheimAchievement("fuckup", 1, 2, AlfheimItems.paperRace, alfheim)
+		grass = AlfheimAchievement("grass", -2, -1, Blocks.grass, alfheim)
 		infuser = AlfheimAchievement("infuser", 1, -2, AlfheimBlocks.manaInfuser, alfheim)
 		midgardsormr = AlfheimAchievement("midgardsormr", -2, 2, ItemStack(AlfheimBlocks.snakeBody, 1, 1), null).setSpecial()
 		slime = AlfheimAchievement("slime", -1, 3, Items.slime_ball, null).setSpecial()
@@ -64,6 +68,7 @@ object AlfheimAchievements {
 		flugelHardKill = AlfheimAchievement("flugelHardKill", 5, 1, ElvenResourcesMetas.MuspelheimEssence.stack, flugelSoul)
 		
 		mask = AlfheimAchievement("mask", 6, 0, AlfheimItems.mask, flugelSoul)
+		organs = AlfheimAchievement("organs", 5, -1, AlfheimItems.organs, flugelSoul)
 		
 		akashic = AlfheimAchievement("akashic", 8, -5, AlfheimItems.akashicRecords, mask)
 		daolos = AlfheimAchievement("daolos", 8, 6, AlfheimItems.daolos, null)
@@ -79,10 +84,11 @@ object AlfheimAchievements {
 		subspace = AlfheimAchievement("subspace", 8, 1, AlfheimItems.subspaceSpear, null)
 		
 		divineMarksman = AlfheimAchievement("divineMarksman", 10, -1, ItemStack(Blocks.red_flower, 1, 2), moonlightBow).setSpecial()
-		outstander = AlfheimAchievement("outstander", 5, -1, Items.diamond_chestplate, mask).setSpecial()
+		outstander = AlfheimAchievement("outstander", 6, 3, Items.diamond_chestplate, mask).setSpecial()
 		rosaBomb = AlfheimAchievement("rosaBomb", 10, 1, Blocks.red_flower, subspace).setSpecial()
 		
-		AchievementPage.registerAchievementPage(AchievementPage(ModInfo.MODID.capitalized(), *achievements.toTypedArray()))
+		page = AchievementPage(ModInfo.MODID.capitalized(), *achievements.toTypedArray())
+		AchievementPage.registerAchievementPage(page)
 		
 		AlfheimAchievementHandler
 	}

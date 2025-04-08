@@ -4,12 +4,14 @@ import alexsocol.asjlib.ASJUtilities
 import alfheim.client.render.world.*
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDAlfheim
 import alfheim.common.core.handler.AlfheimConfigHandler.enableAlfheimRespawn
 import alfheim.common.core.handler.AlfheimConfigHandler.enableElvenStory
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.world.data.CustomWorldData.Companion.customData
 import alfheim.common.world.dim.alfheim.biome.*
 import alfheim.common.world.dim.alfheim.customgens.*
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.ChunkCoordinates
 import net.minecraft.world.biome.BiomeGenBase
 import ru.vamig.worldengine.*
@@ -115,6 +117,7 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 	override fun getEntrancePortalLocation() = spawnPoint
 	override fun getRandomizedSpawnPoint() = spawnPoint
 	override fun canRespawnHere() = enableElvenStory || enableAlfheimRespawn
+	override fun getRespawnDimension(player: EntityPlayerMP?) = if (canRespawnHere()) dimensionIDAlfheim else 0
 	override fun getSkyRenderer() = SkyRendererAlfheim
 	override fun getWeatherRenderer() = WeatherRendererAlfheim
 	override fun getCloudHeight() = 164f

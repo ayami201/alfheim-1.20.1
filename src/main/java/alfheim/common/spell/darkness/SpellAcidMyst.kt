@@ -1,4 +1,4 @@
-package alfheim.common.spell.water
+package alfheim.common.spell.darkness
 
 import alexsocol.asjlib.*
 import alfheim.api.entity.EnumRace
@@ -9,8 +9,9 @@ import net.minecraft.client.renderer.Tessellator
 import net.minecraft.entity.EntityLivingBase
 import org.lwjgl.opengl.GL11.*
 
-object SpellAcidMyst: SpellBase("acidmyst", EnumRace.UNDINE, 8000, 400, 20) {
+object SpellAcidMyst: SpellBase("acidmyst", EnumRace.IMP, 8000, 400, 20) {
 	
+	override var damage = 2f
 	override var duration = 50
 	override var radius = 4.5
 	

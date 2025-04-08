@@ -3,6 +3,7 @@ package alfheim.common.block
 import alexsocol.asjlib.*
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileDoubleCamo
+import alfheim.common.lexicon.AlfheimLexiconData
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.block.*
 import net.minecraft.block.material.Material
@@ -18,11 +19,12 @@ import net.minecraft.util.*
 import net.minecraft.world.*
 import net.minecraftforge.client.ForgeHooksClient
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
+import vazkii.botania.api.lexicon.*
 import vazkii.botania.api.wand.IWandable
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import kotlin.math.max
 
-abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boolean = true): BlockContainerMod(material), IWandable {
+abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boolean = true): BlockContainerMod(material), IWandable, ILexiconable {
 	
 	init {
 		setStepSound(soundTypeWood)
@@ -187,6 +189,7 @@ abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boo
 	override fun registerBlockIcons(reg: IIconRegister) = Unit
 	override fun getIcon(side: Int, meta: Int) = null
 	override fun getIcon(world: IBlockAccess?, x: Int, y: Int, z: Int, side: Int) = null
+	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.dumbDecor
 	
 	companion object {
 		

@@ -1,19 +1,23 @@
 package alfheim.common.block
 
-import alexsocol.asjlib.ASJUtilities
+import alexsocol.asjlib.*
 import alfheim.api.entity.*
 import alfheim.client.core.helper.IconHelper
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileRaceSelector
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.lexicon.AlfheimLexiconData
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageRaceSelection
+import cpw.mods.fml.common.eventhandler.*
+import cpw.mods.fml.relauncher.*
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
 import net.minecraft.world.World
+import net.minecraftforge.event.entity.player.ItemTooltipEvent
 import vazkii.botania.api.lexicon.ILexiconable
 
 class BlockRaceSelector: BlockContainerMod(Material.glass), ILexiconable {
@@ -28,24 +32,29 @@ class BlockRaceSelector: BlockContainerMod(Material.glass), ILexiconable {
 	}
 	
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+		if (!world.isRemote) return false
+		
+		if (!AlfheimConfigHandler.enableElvenStory) {
+			ASJUtilities.say(player, "alfheimmisc.panel.esmDisabled")
+			return false
+		}
+		
 		val tile = world.getTileEntity(x, y, z) as? TileRaceSelector ?: return false
 		if (player.race != EnumRace.HUMAN)
 			tile.teleport(player)
 		
-		if (!world.isRemote) return false
-		
 		val res = onBlockActivated2(world, x, y, z, player, side, hitX, hitZ, tile)
-		if (res.first) {
-			tile.activeRotation = res.second.actRot
-			tile.rotation = res.second.rotation
-			tile.custom = res.second.custom
-			tile.female = res.second.female
-			tile.timer = res.second.timer
-
-			NetworkService.sendToServer(MessageRaceSelection(res.second.meta.first, res.second.custom, res.second.female, res.second.giveRace, res.second.meta.second, res.second.rotation, res.second.actRot, res.second.timer, x, y, z, world.provider.dimensionId))
-		}
+		if (!res.first) return false
 		
-		return res.first
+		tile.activeRotation = res.second.actRot
+		tile.rotation = res.second.rotation
+		tile.custom = res.second.custom
+		tile.female = res.second.female
+		tile.timer = res.second.timer
+		
+		NetworkService.sendToServer(MessageRaceSelection(res.second.meta.first, res.second.custom, res.second.female, res.second.giveRace, res.second.meta.second, res.second.rotation, res.second.actRot, res.second.timer, x, y, z, world.provider.dimensionId))
+		
+		return true
 	}
 	
 	private fun onBlockActivated2(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitZ: Float, tile: TileRaceSelector): Pair<Boolean, ActivationResult> {
@@ -81,7 +90,7 @@ class BlockRaceSelector: BlockContainerMod(Material.glass), ILexiconable {
 		if (meta == 0) {
 			if (isMid(hitX, hitZ)) {
 				res.custom = !tile.custom
-				ASJUtilities.say(player, "alfheimmisc.skintoggle${if (res.custom) "1" else "0"}")
+				ASJUtilities.say(player, "alfheimmisc.panel.skintoggle${if (res.custom) "1" else "0"}")
 				return true to res
 			}
 			
@@ -139,5 +148,20 @@ class BlockRaceSelector: BlockContainerMod(Material.glass), ILexiconable {
 
 	private data class ActivationResult(var meta: Pair<Boolean, Int>, var custom: Boolean, var female: Boolean, var rotation: Int, var actRot: Int, var timer: Int, var giveRace: Boolean) {
 		constructor(): this(false to 0, false, false, 0, 0, 0, false)
+	}
+	
+	companion object {
+		
+		init {
+			eventForge()
+		}
+		
+		@Suppress("UNCHECKED_CAST")
+		@SideOnly(Side.CLIENT)
+		@SubscribeEvent(priority = EventPriority.HIGHEST)
+		fun addInfoWhenESMDisabled(e: ItemTooltipEvent) {
+			if (e.itemStack.block === AlfheimBlocks.raceSelector && !AlfheimConfigHandler.enableElvenStory)
+				addStringToTooltip(e.toolTip as MutableList<Any?>, "alfheimmisc.panel.esmDisabled")
+		}
 	}
 }

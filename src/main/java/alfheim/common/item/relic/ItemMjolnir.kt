@@ -53,11 +53,14 @@ class ItemMjolnir: ItemRelic("Mjolnir") {
 	
 	// ################ Left-click ################
 	
-	override fun onEntitySwing(entity: EntityLivingBase, stack: ItemStack?): Boolean {
-		if (!entity.worldObj.isRemote && entity.isSneaking && isWorthy(entity))
-			EntitySpellFenrirStorm(entity.worldObj, entity, true).spawn()
+	override fun onEntitySwing(entity: EntityLivingBase, stack: ItemStack): Boolean {
+		if (entity.worldObj.isRemote || !entity.isSneaking || !isWorthy(entity) || stack.cooldown > 0)
+			return false
 		
-		return super.onEntitySwing(entity, stack)
+		EntitySpellFenrirStorm(entity.worldObj, entity, true).spawn()
+		stack.cooldown = 100
+		
+		return false
 	}
 	
 	override fun hitEntity(stack: ItemStack, entity: EntityLivingBase, attacker: EntityLivingBase): Boolean {

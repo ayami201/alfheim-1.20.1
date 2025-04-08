@@ -11,7 +11,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ElvenFlightHelper
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.entity.boss.ai.flugel.*
-import alfheim.common.item.AlfheimItems
+import alfheim.common.item.*
 import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.item.relic.ItemFlugelSoul
 import baubles.common.lib.PlayerHandler
@@ -27,6 +27,7 @@ import net.minecraft.entity.*
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry
 import net.minecraft.entity.ai.EntityAIWatchClosest
 import net.minecraft.entity.item.EntityItem
+import net.minecraft.entity.monster.IMob
 import net.minecraft.entity.player.*
 import net.minecraft.init.*
 import net.minecraft.item.*
@@ -49,7 +50,7 @@ import java.awt.Rectangle
 import java.util.regex.*
 import kotlin.math.*
 
-class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
+class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, IMob {
 	
 	val playersDamage: HashMap<String, Float> = HashMap()
 	
@@ -328,7 +329,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 				droppedRecord = true
 			}
 			
-			if (!droppedRecord && Math.random() < 0.2) entityDropItem(ItemStack(if (isMiku) AlfheimItems.discFlugelMeme else if (isUltraMode) AlfheimItems.discFlugelUltra else AlfheimItems.discFlugel), 1f)
+			if (!droppedRecord && ASJUtilities.chance(20 + looting * 5)) entityDropItem(ItemStack(if (isMiku) AlfheimItems.discFlugelMeme else if (isUltraMode) AlfheimItems.discFlugelUltra else AlfheimItems.discFlugel), 1f)
 		}
 		
 		if (ConfigHandler.relicsEnabled && !hard) {
@@ -360,8 +361,15 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 		
 		if (players.isEmpty() && aiTask != AITask.NONE) dropState()
 		
-		if (ASJUtilities.isClient && !isDead && players.isNotEmpty() && !worldObj.isRecordPlaying(sx, sy, sz))
-			worldObj.playRecord((if (isMiku) AlfheimItems.discFlugelMeme else if (isUltraMode) AlfheimItems.discFlugelUltra else AlfheimItems.discFlugel) as ItemRecord, sx, sy, sz)
+		if (ASJUtilities.isClient && !isDead) {
+			val isPlaying = !worldObj.isRecordPlaying(sx, sy, sz)
+			
+			if (players.isNotEmpty()) {
+				if (!isPlaying) worldObj.playRecord((if (isMiku) AlfheimItems.discFlugelMeme else if (isUltraMode) AlfheimItems.discFlugelUltra else AlfheimItems.discFlugel) as ItemRecord, sx, sy, sz)
+			} else {
+				if (isPlaying) worldObj.stopRecord(sx, sy, sz)
+			}
+		}
 		
 		if (ticksExisted % 20 == 0) {
 			// PARTYKLZ!!!
@@ -474,6 +482,9 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName {
 					continue
 				}
 			}
+			
+			if (!worldObj.isRemote && isUltraMode && ticksExisted % ItemOrgans.EJECT_FREQUENCY == 0 && aiTask !== AITask.NONE)
+				ItemOrgans.ejectOrgans(player)
 		}
 		
 		if (isDead) return

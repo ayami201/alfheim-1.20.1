@@ -1,9 +1,8 @@
 package alfheim.common.item.equipment.bauble
 
+import alexsocol.asjlib.mc
 import baubles.api.BaubleType
 import cpw.mods.fml.relauncher.*
-import net.minecraft.client.Minecraft
-import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -30,15 +29,14 @@ class ItemSpiderRing: ItemBauble("SpiderRing"), IManaUsingItem {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	fun clientWornTick(stack: ItemStack?, player: EntityLivingBase) {
-		if (!ItemNBTHelper.getBoolean(stack, TAG_ACTIVE, false)) return
+	fun clientWornTick(stack: ItemStack?, player: EntityPlayer) {
+		if (!ItemNBTHelper.getBoolean(stack, TAG_ACTIVE, false) ||
+		    player !== mc.thePlayer ||
+		    player.isCollidedHorizontally ||
+		    !mc.gameSettings.keyBindForward.keyCode.let { Keyboard.isKeyDown(it) })
+			return
 		
-		if (player is EntityPlayerSP && player === Minecraft.getMinecraft().thePlayer) {
-			if (player.isCollidedHorizontally) {
-				if (Minecraft.getMinecraft().gameSettings.keyBindForward.keyCode.let { Keyboard.isKeyDown(it) })
-					player.motionY = max(player.motionY, 0.11)
-			}
-		}
+		player.motionY = max(player.motionY, 0.11)
 	}
 	
 	override fun usesMana(stack: ItemStack?) = true

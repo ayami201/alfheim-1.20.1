@@ -23,12 +23,10 @@ import net.minecraft.item.*
 import net.minecraft.potion.Potion
 import net.minecraft.stats.*
 import net.minecraft.util.EntityDamageSource
-import net.minecraft.world.World
 import net.minecraftforge.event.entity.living.*
 import net.minecraftforge.oredict.OreDictionary
 import vazkii.botania.api.mana.*
 import vazkii.botania.common.core.helper.ItemNBTHelper
-import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.lib.LibOreDict
 import kotlin.math.*
 
@@ -39,13 +37,6 @@ class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem, IElementalItem 
 	init {
 		creativeTab = AlfheimTab
 		unlocalizedName = "SoulSword"
-	}
-	
-	override fun onItemRightClick(stack: ItemStack, world: World?, player: EntityPlayer): ItemStack {
-		if (player.isSneaking && stack.getItemDamage() > 0 && ASJUtilities.consumeItemStack(player.inventory, ItemStack(ModItems.manaResource, 1, 5)))
-			repair(stack, 100)
-		
-		return super.onItemRightClick(stack, world, player)
 	}
 	
 	override fun onLeftClickEntity(stack: ItemStack, player: EntityPlayer, entity: Entity): Boolean {
@@ -117,6 +108,8 @@ class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem, IElementalItem 
 	override fun getUnlocalizedNameInefficiently(stack: ItemStack?): String {
 		return super.getUnlocalizedNameInefficiently(stack).replace("item.".toRegex(), "item.${ModInfo.MODID}:")
 	}
+	
+	override fun isDamageable() = true
 	
 	override fun getIsRepairable(sword: ItemStack?, material: ItemStack?) = OreDictionary.getOres(LibOreDict.LIFE_ESSENCE).any { ore ->
 		OreDictionary.itemMatches(material, ore, false)

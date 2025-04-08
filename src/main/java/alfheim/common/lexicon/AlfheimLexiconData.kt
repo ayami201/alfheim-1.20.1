@@ -7,6 +7,7 @@ import alexsocol.asjlib.extendables.block.BlockModMeta
 import alfheim.AlfheimCore
 import alfheim.api.*
 import alfheim.api.crafting.recipe.TunerIncantation
+import alfheim.api.spell.SpellBase
 import alfheim.client.core.handler.CardinalSystemClient.PlayerSegmentClient
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.*
@@ -500,7 +501,8 @@ object AlfheimLexiconData {
 		
 		beltRation.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeRationBelt))
 		
-		carver.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeCarver))
+		carver.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeCarver), PageText("2"), PageCraftingRecipe("3", AlfheimRecipes.recipeStencil))
+		LexiconRecipeMappings.map(ItemStack(AlfheimFluffBlocks.composite), carver, 0)
 		
 		chakramEnder.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeChakramEnder))
 		
@@ -812,7 +814,13 @@ object AlfheimLexiconData {
 		
 		redstoneRelay.setLexiconPages(PageText("0"), PageText("1"), PageManaInfusionRecipe("2", AlfheimRecipes.recipeRedstoneRelay))
 		
-		resonator.setLexiconPages(*Array(5) { PageText("$it") }, PageCraftingRecipe("5", AlfheimRecipes.recipeResonator))
+		resonator.setLexiconPages(
+			*Array(5) { PageText("$it") },
+			PageCraftingRecipe("5", AlfheimRecipes.recipeResonator),
+			PageText("6"),
+			*arrayOf(AlfheimRecipes.tuningResonatorDillation, AlfheimRecipes.tuningResonatorPersistence, AlfheimRecipes.tuningResonatorUnlimit).mapIndexed { id, it ->
+				PageTuningRecipe ("${7 + id}", it, ItemStack(AlfheimItems.resonator))
+			}.toTypedArray())
 		
 		ringsAura.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeAuraRingPink), PageCraftingRecipe("2", AlfheimRecipes.recipeAuraRingElven), PageCraftingRecipe("3", AlfheimRecipes.recipeAuraRingGod)).icon = ItemStack(AlfheimItems.auraRingElven)
 		
@@ -1346,8 +1354,14 @@ object AlfheimLexiconData {
 			spells!!.setPriority()
 				.setLexiconPages(*Array(4) { PageText("$it") })
 			
-			val l = ArrayList(AlfheimAPI.spells)
-			l.sortBy { it.name }
+			val l: List<SpellBase>
+			if (AlfheimConfigHandler.spellSortByAffinity) {
+				l = AlfheimAPI.spellMapping.toSortedMap().values.flatMap { it.sortedBy(SpellBase::name) }
+			} else {
+				l = ArrayList(AlfheimAPI.spells)
+				l.sortBy { it.name }
+			}
+			
 			for (spell in l) spells!!.addPage(PageSpell(spell))
 		}
 		
@@ -1372,10 +1386,13 @@ object AlfheimLexiconData {
 		amuletNimbus.knowledgeType = elvenKnowledge
 		amulterCrescent.knowledgeType = elvenKnowledge
 		anomaly.knowledgeType = elvenKnowledge
+		anomalyHarvester.knowledgeType = elvenKnowledge
 		anyavil.knowledgeType = elvenKnowledge
 		armilla.knowledgeType = elvenKnowledge
 		astrolabe.knowledgeType = elvenKnowledge
 		beltRation.knowledgeType = elvenKnowledge
+		chakramEnder.knowledgeType = elvenKnowledge
+		chakramThunder.knowledgeType = elvenKnowledge
 		chalk.knowledgeType = elvenKnowledge
 		corpInj.knowledgeType = elvenKnowledge
 		corpQuandex.knowledgeType = elvenKnowledge
@@ -1383,7 +1400,9 @@ object AlfheimLexiconData {
 		colorOverride.knowledgeType = elvenKnowledge
 		dasGold.knowledgeType = elvenKnowledge
 		deathSeed.knowledgeType = elvenKnowledge
+		disguiseBelt.knowledgeType = elvenKnowledge
 		elementalSet.knowledgeType = elvenKnowledge
+		elementalTuning.knowledgeType = elvenKnowledge
 		elvenSet.knowledgeType = elvenKnowledge
 		elves.knowledgeType = elvenKnowledge
 		elvorium.knowledgeType = elvenKnowledge
@@ -1396,6 +1415,8 @@ object AlfheimLexiconData {
 		flowerBud.knowledgeType = elvenKnowledge
 		flowerEnderchid.knowledgeType = elvenKnowledge
 		flowerPetronia.knowledgeType = elvenKnowledge
+		flowerRattlerose.knowledgeType = elvenKnowledge
+		flowerTradescantia.knowledgeType = elvenKnowledge
 		flugel.knowledgeType = elvenKnowledge
 		fracturedSpace.knowledgeType = elvenKnowledge
 		gaiaButton.knowledgeType = elvenKnowledge
@@ -1408,8 +1429,11 @@ object AlfheimLexiconData {
 		lootInt.knowledgeType = elvenKnowledge
 		manaImba.knowledgeType = elvenKnowledge
 		manaLamp.knowledgeType = elvenKnowledge
+		manaReflector.knowledgeType = elvenKnowledge
+		manaTuner.knowledgeType = elvenKnowledge
 		mobs.knowledgeType = elvenKnowledge
 		multbauble.knowledgeType = elvenKnowledge
+		nidhoggTooth.knowledgeType = elvenKnowledge
 		ores.knowledgeType = elvenKnowledge
 		openChest.knowledgeType = elvenKnowledge
 		pixie.knowledgeType = elvenKnowledge
@@ -1417,6 +1441,7 @@ object AlfheimLexiconData {
 		pylons.knowledgeType = elvenKnowledge
 		rainbowFlora.knowledgeType = elvenKnowledge
 		reality.knowledgeType = elvenKnowledge
+		resonator.knowledgeType = elvenKnowledge
 		ringAnomaly.knowledgeType = elvenKnowledge
 		ringsAura.knowledgeType = elvenKnowledge
 		rodClick.knowledgeType = elvenKnowledge
@@ -1429,10 +1454,12 @@ object AlfheimLexiconData {
 		shimmer.knowledgeType = elvenKnowledge
 		shrines.knowledgeType = elvenKnowledge
 		silencer.knowledgeType = elvenKnowledge
+		slimes.knowledgeType = elvenKnowledge
 		soulSword.knowledgeType = elvenKnowledge
 		subshroom.knowledgeType = elvenKnowledge
-		chakramThunder.knowledgeType = elvenKnowledge
+		toolbelt.knowledgeType = elvenKnowledge
 		trade.knowledgeType = elvenKnowledge
+		tunedSaplings.knowledgeType = elvenKnowledge
 		uberSpreader.knowledgeType = elvenKnowledge
 		winery.knowledgeType = elvenKnowledge
 		worldgen.knowledgeType = elvenKnowledge
@@ -1448,17 +1475,17 @@ object AlfheimLexiconData {
 		emblemHeimdall.knowledgeType = elvenKnowledge
 		emblemOdin.knowledgeType = elvenKnowledge
 		
-		cloakThor.knowledgeType = elvenKnowledge
-		cloakSif.knowledgeType = elvenKnowledge
+//		cloakThor.knowledgeType = elvenKnowledge
+//		cloakSif.knowledgeType = elvenKnowledge
 		cloakNjord.knowledgeType = elvenKnowledge
-		cloakLoki.knowledgeType = elvenKnowledge
+//		cloakLoki.knowledgeType = elvenKnowledge
 		cloakHeimdall.knowledgeType = elvenKnowledge
 		cloakOdin.knowledgeType = elvenKnowledge
 		
 		rodThor.knowledgeType = elvenKnowledge
 		rodSif.knowledgeType = elvenKnowledge
 		rodNjord.knowledgeType = elvenKnowledge
-		rodLoki.knowledgeType = elvenKnowledge
+//		rodLoki.knowledgeType = elvenKnowledge
 		rodOdin.knowledgeType = elvenKnowledge
 		
 		if (ThaumcraftSuffusionRecipes.recipesLoaded) {

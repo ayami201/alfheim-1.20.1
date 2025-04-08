@@ -7,8 +7,10 @@ import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.CardinalSystem.PartySystem
 import alfheim.common.core.util.DamageSourceSpell
-import alfheim.common.spell.water.SpellAcidMyst
+import alfheim.common.spell.darkness.SpellAcidMyst
 import net.minecraft.entity.*
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 import java.util.*
@@ -35,10 +37,23 @@ class EntitySpellAcidMyst(world: World, val caster: EntityLivingBase?): Entity(w
 		if (ticksExisted % 20 == 0) VisualEffectHandler.sendPacket(VisualEffects.ACID, this)
 		
 		val l = getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, getBoundingBox(posX, posY, posZ).expand(SpellAcidMyst.radius))
+		
 		l.remove(caster)
+		
 		l.forEach {
-			if (!PartySystem.mobsSameParty(caster, it) && Vector3.entityDistance(caster, it) <= SpellAcidMyst.radius)
-				it.attackEntityFrom(DamageSourceSpell.poisonMagic, SpellBase.over(caster, SpellAcidMyst.damage))
+			if (PartySystem.mobsSameParty(caster, it) || Vector3.entityDistance(caster, it) > SpellAcidMyst.radius)
+				return@forEach
+			
+			if (!it.attackEntityFrom(DamageSourceSpell.poisonMagic, SpellBase.over(caster, SpellAcidMyst.damage)))
+				return@forEach
+			
+			val equipment: MutableList<ItemStack?> = it.lastActiveItems.toMutableList()
+			if (it is EntityPlayer) equipment += it.heldItem
+			
+			equipment.forEach { stack ->
+				if (stack != null && stack.item.isDamageable)
+					stack.damageItem(20, it)
+			}
 		}
 	}
 	

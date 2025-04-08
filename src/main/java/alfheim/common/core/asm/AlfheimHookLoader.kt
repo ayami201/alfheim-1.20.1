@@ -24,6 +24,8 @@ class AlfheimHookLoader: HookLoader() {
 	
 	init {
 		AlfheimConfigHandler.loadConfig(File("config/Alfheim/Alfheim.cfg"))
+		
+		System.setProperty("forge.forceDisplayStencil", "true")
 	}
 	
 	override fun getASMTransformerClass() = arrayOf(AlfheimClassTransformer::class.java.name)
@@ -76,5 +78,6 @@ class AlfheimHookLoader: HookLoader() {
 		registerAdditionalInterface("thaumcraft/common/entities/monster/EntityWisp", "alfheim/common/core/helper/IElementalEntity")
 		registerAdditionalInterface("vazkii/botania/common/item/equipment/bauble/ItemAuraRing", "vazkii/botania/api/mana/IManaItem")
 		registerAdditionalInterface("vazkii/botania/common/item/relic/ItemAesirRing", "alfheim/api/item/IStepupItem")
+		registerAdditionalInterface("vazkii/botania/common/entity/EntityDoppleganger", "net/minecraft/entity/monster/IMob")
 	}
 }

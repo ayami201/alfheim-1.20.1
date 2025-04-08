@@ -8,7 +8,7 @@ import alfheim.common.entity.spell.EntitySpellFirestar
 import net.minecraft.entity.EntityLivingBase
 import kotlin.math.min
 
-object SpellFirestar: SpellBase("firestar", EnumRace.SALAMANDER, 6000, 2400, 30) {
+object SpellFirestar: SpellBase("firestar", EnumRace.SALAMANDER, 6000, 400, 1) {
 	
 	override var damage = 1f
 	override var duration = 200

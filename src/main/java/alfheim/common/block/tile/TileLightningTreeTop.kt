@@ -45,7 +45,7 @@ class TileLightningTreeTop: TileEntity() {
 				l.boltLivingTime = -1
 				l.setDead()
 				
-				newLightnings += FakeLightning(world, rod.xCoord + 0.5, rod.yCoord + 1.5, rod.zCoord + 0.5)
+				newLightnings += FakeLightning(world, rod.xCoord.D, rod.yCoord + 1.5, rod.zCoord.D)
 			}
 			
 			newLightnings.forEach(world::addWeatherEffect)

@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.*
 import alfheim.api.event.PlayerInteractAdequateEvent
+import alfheim.client.core.helper.IconHelper
 import alfheim.client.gui.ItemsRemainingRenderHandler
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.entity.EntityResonance
@@ -11,21 +12,25 @@ import alfheim.common.item.AlfheimItems
 import com.google.common.collect.HashMultimap
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.registry.GameRegistry
+import cpw.mods.fml.relauncher.*
 import net.minecraft.block.Block
+import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
-import net.minecraft.util.StatCollector
+import net.minecraft.util.*
 import net.minecraft.world.World
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import vazkii.botania.api.mana.*
+import vazkii.botania.common.item.equipment.tool.terrasteel.ItemTerraPick
 
 class ItemResonator: ItemPickaxe(AlfheimAPI.elvoriumToolMaterial), IManaUsingItem {
+	
+	lateinit var iconTipped: IIcon
 	
 	init {
 		creativeTab = AlfheimTab
 		maxDamage = 2400
-		setTextureName(ModInfo.MODID + ":Resonator")
 		unlocalizedName = "Resonator"
 		eventForge()
 	}
@@ -54,9 +59,9 @@ class ItemResonator: ItemPickaxe(AlfheimAPI.elvoriumToolMaterial), IManaUsingIte
 			stack.setItemDamage(stack.getItemDamage() - 1)
 	}
 	
-	override fun onLeftClickEntity(stack: ItemStack, player: EntityPlayer, entity: Entity): Boolean {
+	override fun onLeftClickEntity(resonator: ItemStack, player: EntityPlayer, entity: Entity): Boolean {
 		val (x, y, z) = Vector3.fromEntityCenter(entity).mf()
-		EntityResonance(entity.worldObj, player, x, y, z, stack.mode, stack.target, 1).spawn()
+		EntityResonance(entity.worldObj, player, x, y, z, resonator.mode, resonator.target, ItemTerraPick.isTipped(resonator), resonator.persistent, resonator.dilated, 1).spawn(resonator.limit)
 		
 		return true
 	}
@@ -68,7 +73,7 @@ class ItemResonator: ItemPickaxe(AlfheimAPI.elvoriumToolMaterial), IManaUsingIte
 		val resonator = e.entityPlayer.heldItem ?: return
 		if (resonator.item !== AlfheimItems.resonator) return
 		
-		EntityResonance(e.entityPlayer.worldObj, e.entityPlayer, e.x, e.y, e.z, resonator.mode, resonator.target, 1).spawn()
+		EntityResonance(e.entityPlayer.worldObj, e.entityPlayer, e.x, e.y, e.z, resonator.mode, resonator.target, ItemTerraPick.isTipped(resonator), resonator.persistent, resonator.dilated, 1).spawn(resonator.limit)
 		
 		e.isCanceled = true
 	}
@@ -88,13 +93,27 @@ class ItemResonator: ItemPickaxe(AlfheimAPI.elvoriumToolMaterial), IManaUsingIte
 		val y = placeVec.y.mfloor() + 1
 		val z = placeVec.z.mfloor()
 		
-		EntityResonance(e.player.worldObj, e.player, x, y, z, resonator.mode, resonator.target, 1).spawn()
+		EntityResonance(e.player.worldObj, e.player, x, y, z, resonator.mode, resonator.target, ItemTerraPick.isTipped(resonator), resonator.persistent, resonator.dilated, 1).spawn(resonator.limit)
 	}
 	
+	@SideOnly(Side.CLIENT)
 	override fun addInformation(stack: ItemStack, player: EntityPlayer, list: MutableList<Any?>, adv: Boolean) {
 		addStringToTooltip(list, "alfheimmisc.resonator.mode${stack.mode}")
 		addStringToTooltip(list, "alfheimmisc.resonator.target${stack.target}")
 	}
+	
+	@SideOnly(Side.CLIENT)
+	override fun registerIcons(reg: IIconRegister) {
+		itemIcon = IconHelper.forItem(reg, this)
+		iconTipped = IconHelper.forItem(reg, this, "Tipped")
+	}
+	
+	override fun getIcon(stack: ItemStack, pass: Int) = if (ItemTerraPick.isTipped(stack)) iconTipped else itemIcon
+	
+	// workaround for fucked-up getIcon methods 
+	@SideOnly(Side.CLIENT)
+	override fun requiresMultipleRenderPasses() = true
+	override fun getRenderPasses(metadata: Int) = 1
 	
 	@Suppress("OVERRIDE_DEPRECATION")
 	override fun getItemAttributeModifiers() = HashMultimap.create<Any?, Any?>()!!
@@ -111,13 +130,31 @@ class ItemResonator: ItemPickaxe(AlfheimAPI.elvoriumToolMaterial), IManaUsingIte
 	companion object {
 		
 		const val MANA_PER_DAMAGE = 100
+		const val MAX_FOR_PLAYER = 5
+		
+		const val TAG_UNLIMITED = "unlimited"
+		
+		var ItemStack.dilated
+			get() = ItemNBTHelper.getBoolean(this, EntityResonance.TAG_PERSISTENT, false)
+			set(value) = ItemNBTHelper.setBoolean(this, EntityResonance.TAG_PERSISTENT, value)
 		
 		private var ItemStack.mode
 			get() = ItemNBTHelper.getInt(this, EntityResonance.TAG_MODE, 0)
 			set(value) = ItemNBTHelper.setInt(this, EntityResonance.TAG_MODE, value)
 		
+		var ItemStack.persistent
+			get() = ItemNBTHelper.getBoolean(this, EntityResonance.TAG_PERSISTENT, false)
+			set(value) = ItemNBTHelper.setBoolean(this, EntityResonance.TAG_PERSISTENT, value)
+		
 		private var ItemStack.target
 			get() = ItemNBTHelper.getInt(this, EntityResonance.TAG_TARGET, 0)
 			set(value) = ItemNBTHelper.setInt(this, EntityResonance.TAG_TARGET, value)
+		
+		var ItemStack.unlimited
+			get() = ItemNBTHelper.getBoolean(this, TAG_UNLIMITED, false)
+			set(value) = ItemNBTHelper.setBoolean(this, TAG_UNLIMITED, value)
+		
+		private val ItemStack.limit
+			get() = if (unlimited) -1 else MAX_FOR_PLAYER
 	}
 }

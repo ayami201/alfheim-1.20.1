@@ -1,12 +1,22 @@
 package alfheim.common.core.asm.hook.replacer
 
+import alexsocol.asjlib.render.ASJRenderHelper.glColor1u
+import alfheim.common.block.AlfheimBlocks
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.DamageSourceSpell
+import alfheim.common.item.ItemIridescent
+import cofh.thermalfoundation.fluid.TFFluids
 import com.KAIIIAK.classManipulators.HookReplacer
 import com.KAIIIAK.classManipulators.HookReplacer.Replacer.*
+import net.minecraft.block.Block
+import net.minecraft.client.renderer.entity.RenderWolf
 import net.minecraft.entity.Entity
+import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.*
+import net.minecraft.init.Blocks
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.util.DamageSource
+import org.lwjgl.opengl.GL11.glColor3f
 import vazkii.botania.common.block.tile.TileCocoon
 import vazkii.botania.common.core.handler.SheddingHandler
 import vazkii.botania.common.core.handler.SheddingHandler.ShedPattern
@@ -78,4 +88,55 @@ fun getShedPattern(static: SheddingHandler, entity: Entity): ShedPattern? {
 	POPLine();stop()
 	
 	return null
+}
+
+@HookReplacer
+fun shouldRenderPass(render: RenderWolf, wolf: EntityWolf?, pass: Int, ticks: Float): Int {
+	startFROM()
+	POPLine();glColor3f(EntitySheep.fleeceColorTable[ILOAD("4")][0], EntitySheep.fleeceColorTable[ILOAD("4")][1], EntitySheep.fleeceColorTable[ILOAD("4")][2])
+	POPLine();startTO()
+	POPLine();applyCollarColor(ILOAD("4"))
+	POPLine();stop()
+	
+	return -1
+}
+
+fun applyCollarColor(colorIndex: Int) {
+	if (colorIndex == -1) {
+		val color = ItemIridescent.rainbowColor()
+		glColor1u(color)
+	} else {
+		val (r, g, b) = EntitySheep.fleeceColorTable[colorIndex and 15]
+		glColor3f(r, g, b)
+	}
+}
+
+@HookReplacer
+fun getCanSpawnHere(entity: EntityAnimal): Boolean {
+	startFROM()
+	POPLine();POP(entity.worldObj.getBlock(ILOAD("1"), ILOAD("2") - 1, ILOAD("3")))
+	POPLine();startTO()
+	POPLine();POP(checkBlockForSpawn(entity, ILOAD("1"), ILOAD("2") - 1, ILOAD("3")))
+	POPLine();stop()
+	
+	return true
+}
+
+fun checkBlockForSpawn(entity: EntityAnimal, x: Int, y: Int, z: Int): Block {
+	val block = entity.worldObj.getBlock(x, y, z)
+	
+	if (entity.worldObj.provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim)
+		if (block === AlfheimBlocks.snowGrass || block === Blocks.snow_layer || block === AlfheimBlocks.snowLayer)
+			return Blocks.grass
+	
+	return block
+}
+
+@HookReplacer
+fun preInit(static: TFFluids?) {
+	startFROM()
+	POPLine();POP("mana")
+	POPLine();startTO()
+	POPLine();POP("primalmana")
+	POPLine();stop()
 }

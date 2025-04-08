@@ -33,6 +33,8 @@ class NEIAlfheimConfig: IConfigureNEI {
 		API.hideItem(ItemStack(AlfheimBlocks.starBlock2))
 		API.hideItem(ItemStack(AlfheimItems.discFlugelMeme))
 		API.hideItem(ItemStack(AlfheimItems.flugelHead2))
+		API.hideItem(ItemStack(AlfheimItems.organs))
+		API.hideItem(ItemStack(AlfheimItems.paperRace))
 		
 		if (!ContributorsPrivacyHelper.isCorrect(mc.session.username, "AlexSocol"))
 			API.hideItem(ItemStack(AlfheimItems.royalStaff))

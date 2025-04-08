@@ -6,7 +6,7 @@ import alfheim.api.spell.SpellBase
 import alfheim.common.core.handler.*
 import net.minecraft.entity.EntityLivingBase
 
-object SpellBeastWithin: SpellBase("beastwithin", EnumRace.CAITSITH, 10000, 1200, 25) {
+object SpellBeastWithin: SpellBase("beastwithin", EnumRace.CAITSITH, 10000, 400, 25) {
 	
 	override var damage = 100f
 	override var duration = 200
