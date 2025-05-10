@@ -1,6 +1,6 @@
 <news>
 	<version id="LATEST">
-		<val>60</val>
+		<val>R-60</val>
 	</version>
 	<version id="UNIVERSAL">
 		<val>$json["Official Alfheim Discord server is here! *",{"text":"click","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Join discord server","color":"gold"}},"clickEvent":{"action":"open_url","value":"https://discord.gg/dqQXZHq"}},"*"]</val>
@@ -151,7 +151,7 @@
 	</version>
 	<version id="53">
 		<val>Snake game flower and fixes</val>
-	</version
+	</version>
 	<version id="54">
 		<val>Just a bunch of fixes</val>
 	</version>
