@@ -23,7 +23,7 @@ class WorldGenIridescence: IWorldGenerator {
 		val z = chunkZ * 16 + rand.nextInt(16)
 		val y = world.getTopSolidOrLiquidBlock(x, z) - 1
 		
-		if (rand.nextInt(100) == 0) {
+		if (rand.nextInt(20) == 0) {
 			ItemColorSeeds.addBlockSwapper(world, null, x, y, z, 1000)
 			return
 		}
@@ -51,5 +51,8 @@ class WorldGenIridescence: IWorldGenerator {
 		
 		world.setBlock(x, y + 1, z, AlfheimBlocks.irisSapling)
 		(AlfheimBlocks.irisSapling as BlockColoredSapling).growTree(world, x, y + 1, z, rand)
+		
+		if (world.getBlock(x, y + 1, z) === AlfheimBlocks.irisSapling)
+			world.setBlockToAir(x, y + 1, z)
 	}
 }

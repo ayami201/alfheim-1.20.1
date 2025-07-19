@@ -12,13 +12,15 @@ import org.lwjgl.opengl.GL11.*
 
 object RenderBlockAnyavil: ISimpleBlockRenderingHandler {
 	
+	private val instance = TileAnyavil()
+	
 	override fun renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
 		glPushMatrix()
 		glRotatef(-90f, 0f, 1f, 0f)
 		glTranslated(-0.45, -0.6, -0.45)
 		glScaled(0.95)
 		
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(TileAnyavil(), 0.0, 0.0, 0.0, 0f)
+		TileEntityRendererDispatcher.instance.renderTileEntityAt(instance, 0.0, 0.0, 0.0, 0f)
 		glPopMatrix()
 	}
 	

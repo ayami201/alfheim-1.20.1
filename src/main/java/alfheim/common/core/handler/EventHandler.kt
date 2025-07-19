@@ -288,7 +288,7 @@ object EventHandler {
 		
 		CardinalSystem.PartySystem.getMobParty(e.entityLiving)?.setDead(e.entityLiving, true)
 		
-		if (e.entityLiving !is EntityPlayer || e.source.damageType == "Respawn" || MinecraftServer.getServer()?.isSinglePlayer != false || AlfheimConfigHandler.deathScreenAddTime <= 0 || ItemTankMask.canBeSaved(e.entityLiving as EntityPlayer)) return
+		if (e.entityLiving !is EntityPlayer || e.source.damageType == "Respawn" || MinecraftServer.getServer()?.isMultiPlayer != true || AlfheimConfigHandler.deathScreenAddTime <= 0 || ItemTankMask.canBeSaved(e.entityLiving as EntityPlayer)) return
 		
 		if (!e.entityLiving.isPotionActive(AlfheimConfigHandler.potionIDLeftFlame)) {
 			e.entityLiving.clearActivePotions()
@@ -459,17 +459,17 @@ object EventHandler {
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	fun heatPlayerInMuspelheim(e: SheerColdHandler.SheerColdTickEvent) {
-		if (!AlfheimConfigHandler.hotHell) return
-		
+	fun applyHeatAndCold(e: SheerColdHandler.SheerColdTickEvent) {
 		val entity = e.entityLiving
-		if (entity.worldObj.provider.dimensionId != -1) return
+		val biomeID = entity.worldObj.getBiomeGenForCoords(entity.posX.mfloor(), entity.posZ.mfloor()).biomeID
 		
-		var heat = -0.05f
-		if (entity.posY <= 35) // if near lava
-			heat -= 0.0375f
+		val change = when (biomeID) {
+			in AlfheimConfigHandler.biomesCold ->  0.05f
+			in AlfheimConfigHandler.biomesHot  -> -0.05f
+			else -> return
+		}
 		
-		e.delta = (e.delta ?: 0f) + heat
+		e.delta = (e.delta ?: 0f) + change
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOW)

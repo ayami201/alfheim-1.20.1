@@ -1,28 +1,40 @@
+@file:Suppress("UNUSED_PARAMETER")
+
 package alfheim.common.core.asm.hook.replacer
 
 import alexsocol.asjlib.render.ASJRenderHelper.glColor1u
 import alfheim.common.block.AlfheimBlocks
+import alfheim.common.block.colored.BlockAuroraDirt
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.DamageSourceSpell
-import alfheim.common.item.ItemIridescent
+import alfheim.common.item.*
 import cofh.thermalfoundation.fluid.TFFluids
 import com.KAIIIAK.classManipulators.HookReplacer
 import com.KAIIIAK.classManipulators.HookReplacer.Replacer.*
-import net.minecraft.block.Block
+import net.minecraft.block.*
 import net.minecraft.client.renderer.entity.RenderWolf
 import net.minecraft.entity.Entity
 import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.*
 import net.minecraft.init.Blocks
 import net.minecraft.network.play.server.S12PacketEntityVelocity
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.DamageSource
+import net.minecraft.world.World
 import org.lwjgl.opengl.GL11.glColor3f
+import vazkii.botania.client.render.tile.RenderTileFloatingFlower
+import vazkii.botania.common.block.ModBlocks
+import vazkii.botania.common.block.decor.IFloatingFlower
 import vazkii.botania.common.block.tile.TileCocoon
 import vazkii.botania.common.core.handler.SheddingHandler
 import vazkii.botania.common.core.handler.SheddingHandler.ShedPattern
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.entity.EntityDoppleganger
 import vazkii.botania.common.item.rod.ItemGravityRod
+import java.util.*
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.component3
 
 @HookReplacer(targetMethod = "hatch")
 fun replaceSpecialChance(thiz: TileCocoon) {
@@ -140,3 +152,44 @@ fun preInit(static: TFFluids?) {
 	POPLine();POP("primalmana")
 	POPLine();stop()
 }
+
+@HookReplacer
+fun updateTick(block: BlockDynamicLiquid, world: World, x: Int, y: Int, z: Int, rand: Random) {
+	startFROM()
+	POPLine();POP(Blocks.stone)
+	POPLine();startTO()
+	POPLine();POP(getStoneBlock(world))
+	POPLine();stop()
+}
+
+fun getStoneBlock(world: World): Block = 
+	if (world.provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim) ModBlocks.livingrock else Blocks.stone
+
+@HookReplacer
+fun func_149805_n(block: BlockLiquid, world: World, x: Int, y: Int, z: Int) {
+	startFROM()
+	POPLine();POP(Blocks.cobblestone)
+	POPLine();startTO()
+	POPLine();POP(getCobblestoneBlock(world))
+	POPLine();stop()
+}
+
+fun getCobblestoneBlock(world: World): Block =
+	if (world.provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim) AlfheimBlocks.livingcobble else Blocks.cobblestone
+
+@HookReplacer
+fun renderTileEntityAt(render: RenderTileFloatingFlower, tile: TileEntity, x: Double, y: Double, z: Double, ticks: Float) {
+	val flower = tile as IFloatingFlower
+	
+	startFROM()
+	POPLine();POP(flower.islandType.color)
+	POPLine();startTO()
+	POPLine();POP(getColor(tile, flower))
+	POPLine();stop()
+}
+
+fun getColor(tile: TileEntity, flower: IFloatingFlower) =
+	if (flower.islandType === ItemColorSeeds.islandTypes.last())
+		BlockAuroraDirt.getBlockColor(tile.xCoord, tile.yCoord, tile.zCoord)
+	else
+		flower.islandType.color

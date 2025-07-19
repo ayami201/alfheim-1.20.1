@@ -41,7 +41,7 @@ class EntitySpellAcidMyst(world: World, val caster: EntityLivingBase?): Entity(w
 		l.remove(caster)
 		
 		l.forEach {
-			if (PartySystem.mobsSameParty(caster, it) || Vector3.entityDistance(caster, it) > SpellAcidMyst.radius)
+			if (PartySystem.mobsSameParty(caster, it) || Vector3.entityDistance(this, it) > SpellAcidMyst.radius)
 				return@forEach
 			
 			if (!it.attackEntityFrom(DamageSourceSpell.poisonMagic, SpellBase.over(caster, SpellAcidMyst.damage)))

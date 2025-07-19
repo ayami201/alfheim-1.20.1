@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity
 import ru.vamig.worldengine.*
 import stanhebben.zenscript.annotations.*
 
-@ZenClass("mods." + ModInfo.MODID + ".MobSpawn")
+@ZenClass("mods.${ModInfo.MODID}.MobSpawn")
 object MTHandlerMobSpawn {
 	
 	@ZenMethod

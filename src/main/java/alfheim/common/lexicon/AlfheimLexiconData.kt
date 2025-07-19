@@ -602,6 +602,9 @@ object AlfheimLexiconData {
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.alfStorage, 1, 1), essences, 6)
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.alfStorage, 1, 2), essences, 4)
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.alfStorage, 1, 3), essences, 4)
+		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.alfStorage, 1, 4), LexiconData.gaiaRitualHardmode, 2)
+		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.alfStorage, 1, 5), LexiconData.pool, 8)
+		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.softStorage, 1, 3), LexiconData.gaiaRitual, 3)
 		LexiconRecipeMappings.map(MuspelheimEssence.stack, essences, 1)
 		LexiconRecipeMappings.map(NiflheimEssence.stack, essences, 1)
 		LexiconRecipeMappings.map(MauftriumNugget.stack, essences, 6)
@@ -772,6 +775,7 @@ object AlfheimLexiconData {
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.elvenOre, 1, 4), ores, 2)
 		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.elvenOre, 1, 5), ores, 2)
 		LexiconRecipeMappings.map(IffesalDust.stack, ores, 2)
+		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.softStorage, 1, 2), ores, 2)
 		
 		pastoralSeeds.setLexiconPages(PageText("0"),
 									  PageCraftingRecipe("1", AlfheimRecipes.recipesRedstoneRoot),
@@ -791,6 +795,7 @@ object AlfheimLexiconData {
 			LexiconRecipeMappings.map(ItemStack(AlfheimItems.irisSeeds, 1, i), pastoralSeeds, 2)
 		
 		pixie.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipePixieAttractor)).icon = ItemStack(AlfheimItems.pixieAttractor)
+		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.softStorage, 1, 1), LexiconData.elvenResources, 5)
 		
 		portal.setLexiconPages(*Array(3) { PageText("$it") },
 							   PageCraftingRecipe("3", AlfheimRecipes.recipeAlfheimPortal),
@@ -920,7 +925,7 @@ object AlfheimLexiconData {
 									 else PageCraftingRecipe(if (AlfheimCore.stupidMode) "2s" else "2", AlfheimRecipes.recipeUberSpreader)).icon = ItemStack(ModBlocks.spreader, 1, 4)
 		LexiconRecipeMappings.map(ItemStack(ModBlocks.spreader, 1, 4), uberSpreader, 2)
 		
-		warBanner.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeWarBanner0))
+		warBanner.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeWarBanner))
 		
 		winery.setLexiconPages(*Array(12) { PageText("$it") },
 							   PageCraftingRecipe("12", AlfheimRecipes.recipeBarrel),
@@ -1475,17 +1480,17 @@ object AlfheimLexiconData {
 		emblemHeimdall.knowledgeType = elvenKnowledge
 		emblemOdin.knowledgeType = elvenKnowledge
 		
-//		cloakThor.knowledgeType = elvenKnowledge
-//		cloakSif.knowledgeType = elvenKnowledge
+		cloakThor.knowledgeType = elvenKnowledge
+		cloakSif.knowledgeType = elvenKnowledge
 		cloakNjord.knowledgeType = elvenKnowledge
-//		cloakLoki.knowledgeType = elvenKnowledge
+		cloakLoki.knowledgeType = elvenKnowledge
 		cloakHeimdall.knowledgeType = elvenKnowledge
 		cloakOdin.knowledgeType = elvenKnowledge
 		
 		rodThor.knowledgeType = elvenKnowledge
 		rodSif.knowledgeType = elvenKnowledge
 		rodNjord.knowledgeType = elvenKnowledge
-//		rodLoki.knowledgeType = elvenKnowledge
+		rodLoki.knowledgeType = elvenKnowledge
 		rodOdin.knowledgeType = elvenKnowledge
 		
 		if (ThaumcraftSuffusionRecipes.recipesLoaded) {
@@ -1494,8 +1499,6 @@ object AlfheimLexiconData {
 	}
 	
 	fun disableESM() {
-		setKnowledgeTypes()
-		
 		removeEntry(esm, categoryAlfheim)
 		removeEntry(races, categoryAlfheim)
 	}
@@ -1512,13 +1515,9 @@ object AlfheimLexiconData {
 		
 		if (!categoryAlfheim.entries.contains(esm)) addEntry(esm, categoryAlfheim)
 		if (!categoryAlfheim.entries.contains(races)) addEntry(races, categoryAlfheim)
-		
-		setKnowledgeTypes()
 	}
 	
 	fun disableMMO() {
-		setKnowledgeTypes()
-		
 		removeEntry(parties, categoryAlfheim)
 		removeEntry(spells, categoryAlfheim)
 		removeEntry(targets, categoryAlfheim)
@@ -1537,8 +1536,6 @@ object AlfheimLexiconData {
 		if (!categoryAlfheim.entries.contains(parties)) addEntry(parties, categoryAlfheim)
 		if (!categoryAlfheim.entries.contains(spells)) addEntry(spells, categoryAlfheim)
 		if (!categoryAlfheim.entries.contains(targets)) addEntry(targets, categoryAlfheim)
-		
-		setKnowledgeTypes()
 	}
 	
 	private fun removeEntry(entry: LexiconEntry?, category: LexiconCategory) {

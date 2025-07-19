@@ -9,7 +9,7 @@ import net.minecraftforge.common.BiomeDictionary.Type
 import ru.vamig.worldengine.standardcustomgen.*
 import vazkii.botania.common.block.ModBlocks
 
-object BiomeIslandForest: BiomeAlfheim(-1.0, 0.82, 1.8, 3, 250.0, 1.0, 75, 4, "Forest", Type.FOREST, Type.DENSE, Type.LUSH) {
+object BiomeIslandForest: BiomeAlfheim(-10.0/*-1.0*/, 0.82, 1.8, 3, 250.0, 1.0, 75, 4, "Forest", Type.FOREST, Type.DENSE, Type.LUSH) {
 	
 	init {
 		var standardBiomeLayers = WE_BiomeLayer()
@@ -34,5 +34,7 @@ object BiomeIslandForest: BiomeAlfheim(-1.0, 0.82, 1.8, 3, 250.0, 1.0, 75, 4, "F
 		decorateChunkGen_List.add(g)
 		val w = WorldGenGrapesWhiteAlfheim(2, AlfheimBlocks.grapesWhite)
 		decorateChunkGen_List.add(w)
+		val mp = WorldGenMelonPumpkins()
+		decorateChunkGen_List.add(mp)
 	}
 }

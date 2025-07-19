@@ -20,7 +20,8 @@ import alfheim.common.entity.item.*
 import alfheim.common.entity.spell.*
 import alfheim.common.floatingisland.EntityFloatingIsland
 import alfheim.common.item.*
-import alfheim.common.item.material.ElvenResourcesMetas
+import alfheim.common.item.material.*
+import alfheim.common.item.material.ElvenResourcesMetas.ElementalSlimeBall
 import alfheim.common.potion.*
 import alfheim.common.potion.berries.*
 import alfheim.common.spell.darkness.*
@@ -37,6 +38,7 @@ import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim.Companion.addEntry
 import cpw.mods.fml.common.registry.EntityRegistry
 import cpw.mods.fml.common.registry.GameRegistry.registerTileEntity
 import net.minecraft.entity.*
+import net.minecraft.entity.monster.EntitySlime
 import net.minecraft.init.*
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
@@ -44,6 +46,7 @@ import net.minecraft.world.biome.BiomeGenBase
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.common.Botania
 import vazkii.botania.common.block.*
+import vazkii.botania.common.core.handler.*
 import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower
 import vazkii.botania.common.lib.LibBlockNames
@@ -57,6 +60,7 @@ object AlfheimRegistry {
 	}
 	
 	fun init() {
+		registerSheddings()
 		registerSpells()
 		loadAllPinkStuff()
 	}
@@ -153,7 +157,6 @@ object AlfheimRegistry {
 		registerEntity(EntityAlfheimPixie::class.java, "Pixie", nextEntityID, 0xFF76D6, 0xFFE3FF)
 		registerEntity(EntityRollingMelon::class.java, "RollingMelon", nextEntityID, 0xBECB25, 0x5B751A)
 		registerEntity(EntityRook::class.java, "Rook", nextEntityID)
-		registerEntity(EntitySit::class.java, "Sit", nextEntityID)
 		registerEntity(EntitySnowSprite::class.java, "SnowSprite", nextEntityID, 0xEEFFFF, 0xE3F3F3)
 		registerEntity(EntitySurtr::class.java, "Surtr", nextEntityID)
 		registerEntity(EntityThrym::class.java, "Thrym", nextEntityID)
@@ -182,6 +185,7 @@ object AlfheimRegistry {
 		registerEntity(EntityPrimalMark::class.java, "PrimalMark", nextEntityID)
 		registerEntity(EntityResonance::class.java, "Resonance", nextEntityID)
 		registerEntity(EntityRift::class.java, "Rift", nextEntityID)
+		registerEntity(EntitySit::class.java, "Sit", nextEntityID)
 		registerEntity(EntitySniceBall::class.java, "SniceBall", nextEntityID)
 		registerEntity(EntityThrowableItem::class.java, "ThrownItem", nextEntityID)
 		registerEntity(EntityThrownPotion::class.java, "ThrownPotion", nextEntityID)
@@ -571,5 +575,22 @@ object AlfheimRegistry {
 //		AlfheimAPI.addOreWeightEnd("oreHeeEndium", 200)
 //		AlfheimAPI.addOreWeightEnd("oreHeeIgneousRock", 200)
 //		AlfheimAPI.addOreWeightEnd("oreHeeEndPowder", 200)
+	}
+	
+	fun registerSheddings() {
+		val slimePattern = SheddingHandler.patterns.find { it.EntityClass === EntitySlime::class.java }
+		registerShedding(EntityElementalSlime::class.java, ElementalSlimeBall.stack, slimePattern?.rate ?: 21000, slimePattern?.rate ?: 40)
+		
+		registerShedding(EntityButterfly::class.java, ElvenFoodMetas.Nectar.stack, 26000, 10)
+		registerShedding(EntityAlfheimPixie::class.java, ItemStack(ModItems.manaResource, 1, 8), 26000, 20)
+		registerShedding(EntityRollingMelon::class.java, ItemStack(Items.melon_seeds), 21000, 40)
+		registerShedding(EntitySnowSprite::class.java, ItemStack(Items.snowball), 12000, 20)
+		
+		if (ConfigHandler.config.hasChanged())
+			ConfigHandler.config.save()
+	}
+	
+	fun registerShedding(targetClass: Class<out Entity>, stack: ItemStack, rate: Int, size: Int) {
+		SheddingHandler.defaultPatterns += SheddingHandler.ShedPattern(targetClass, stack, rate, size)
 	}
 }

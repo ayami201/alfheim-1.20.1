@@ -3,10 +3,13 @@ package alfheim.common.entity
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.entity.IAlfheimMob
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.material.*
 import alfheim.common.world.dim.alfheim.biome.*
 import cpw.mods.fml.relauncher.*
 import net.minecraft.entity.*
+import net.minecraft.init.Items
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
@@ -32,13 +35,18 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 		get() = getFlag(7)
 		set(value) = setFlag(7, value)
 	
+	var size
+		get() = dataWatcher.getWatchableObjectFloat(2)
+		set(value) = dataWatcher.updateObject(2, value)
+	
 	init {
-		setSize(0.25f, 0.25f)
+		size = 0.25f
+		setSize(size, size)
 	}
 	
-	override fun applyEntityAttributes() {
-		super.applyEntityAttributes()
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).baseValue = 2.0
+	override fun entityInit() {
+		super.entityInit()
+		dataWatcher.addObject(2, 0.25f)
 	}
 	
 	override fun canBePushed() = false
@@ -48,7 +56,7 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 	override fun canTriggerWalking() = false
 	override fun doesEntityNotTriggerPressurePlate() = true
 	
-	override fun getDropItem() = null
+	override fun getDropItem(): Item? = null
 	
 	override fun dropFewItems(hit: Boolean, looting: Int) {
 		val count = max(1, looting) * if (isGiant) ASJUtilities.randInBounds(7, 15, rng) else 1
@@ -62,6 +70,11 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 				entityDropItem(stack, 0f)
 			}
 		}
+	}
+	
+	override fun dropRareDrop(wtf: Int) {
+		if (isGiant && AlfheimConfigHandler.extendedElvenStory)
+			dropItem(Items.string, 1)
 	}
 	
 	private val immuneTo = arrayOf(DamageSource.inWall.damageType, DamageSource.drown.damageType, DamageSource.fall.damageType)
@@ -85,18 +98,16 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 			}
 		} else if (!resized)  {
 			(worldObj.provider as? WE_WorldProvider)?.chunkProvider?.let {
-				if (WE_Biome.getBiomeAt(it, posX.mfloor(), posZ.mfloor()).isEqualTo(BiomeIslandGiantFlowers)) {
+				if (WE_Biome.getBiomeAt(it, posX.mfloor(), posZ.mfloor()).isEqualTo(BiomePitGiantFlowers))
 					isGiant = true
-					getEntityAttribute(SharedMonsterAttributes.maxHealth).baseValue = 20.0
-					health = maxHealth
-				}
 			}
 			
+			size = rand.nextFloat() * 1.5f + 1
 			resized = true
 		}
 		
-		if (isGiant)
-			setSize(2.5f, 2.5f)
+		if (isGiant && width != size)
+			setSize(size, size)
 		
 		motionY *= 0.6
 		val (x, y, z) = Vector3.fromEntity(this).mf()
@@ -106,8 +117,13 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 		super.onEntityUpdate()
 	}
 	
+	override fun setSize(width: Float, height: Float) {
+		super.setSize(width, height)
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).baseValue = round(8.0 * width)
+		health = maxHealth
+	}
+	
 	override fun updateAITasks() {
-		//super.updateAITasks();
 		if (spawnPosition != null && (!worldObj.isAirBlock(spawnPosition!!.posX, spawnPosition!!.posY, spawnPosition!!.posZ) || spawnPosition!!.posY < 1)) {
 			spawnPosition = null
 		}
@@ -143,7 +159,7 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 		val chunk = (worldObj.provider as? WE_WorldProvider)?.chunkProvider
 		if (chunk != null) {
 			val biomeAt = WE_Biome.getBiomeAt(chunk, posX.mfloor(), posZ.mfloor())
-			flagBiome = biomeAt.isEqualTo(BiomeField) || biomeAt.isEqualTo(BiomeIslandGiantFlowers)
+			flagBiome = biomeAt.isEqualTo(BiomeField) || biomeAt.isEqualTo(BiomePitGiantFlowers)
 		}
 		
 		return flagTime && flagBiome && posY > 64 && super.getCanSpawnHere()
@@ -161,6 +177,7 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 		
 		nbt.setBoolean(TAG_GIANT, isGiant)
 		nbt.setBoolean(TAG_RESIZED, resized)
+		nbt.setFloat(TAG_SIZE, size)
 	}
 	
 	override fun readEntityFromNBT(nbt: NBTTagCompound) {
@@ -168,10 +185,12 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 		
 		isGiant = nbt.getBoolean(TAG_GIANT)
 		resized = nbt.getBoolean(TAG_RESIZED)
+		size = nbt.getFloat(TAG_SIZE)
 	}
 	
 	companion object {
 		const val TAG_GIANT = "giant"
 		const val TAG_RESIZED = "resized"
+		const val TAG_SIZE = "size"
 	}
 }

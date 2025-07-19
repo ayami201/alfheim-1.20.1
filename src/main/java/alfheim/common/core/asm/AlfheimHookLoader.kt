@@ -66,6 +66,7 @@ class AlfheimHookLoader: HookLoader() {
 		
 		SuperWrapperTransformer.registerSuperWrapperContainer("alfheim.common.core.asm.superwrapper.SuperWrapperHandler")
 		
+		registerHookReplacerContainer("alfheim.common.core.asm.hook.replacer.HookReplacerHandler")
 		registerHookReplacerContainer("alfheim.common.core.asm.hook.replacer.HookReplacerHandlerKt")
 		
 		registerAdditionalInterfaces()

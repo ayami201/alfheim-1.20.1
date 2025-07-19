@@ -143,7 +143,7 @@ class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 		val (x, y, z) = data.getIntArray(TAG_RELIC_COORDS)
 		
 		val tile = dimWorld.getTileEntity(x, y, z) as? TileItemDisplay ?: return false
-		val relic = tile[0] ?: return false
+		val relic = tile[0]?.copy() ?: return false
 		tile[0] = null
 		
 		data.setBoolean(TAG_TAKEN, true)

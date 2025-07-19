@@ -12,10 +12,12 @@ import org.lwjgl.opengl.GL11.*
 
 object RenderBlockAnomalyHarvester: ISimpleBlockRenderingHandler {
 	
+	private val instance = TileAnomalyHarvester()
+	
 	override fun renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
 		glPushMatrix()
 		glTranslated(-0.5)
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(TileAnomalyHarvester(), 0.0, 0.0, 0.0, 0f)
+		TileEntityRendererDispatcher.instance.renderTileEntityAt(instance, 0.0, 0.0, 0.0, 0f)
 		glPopMatrix()
 	}
 	

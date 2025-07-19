@@ -36,7 +36,7 @@ class ItemRodPortal: ItemMod("rodPortal") {
 						AlfheimBlocks.niflheimBlock to AlfheimConfigHandler.dimensionIDNiflheim with false)
 	
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
-		if (RagnarokHandler.ragnarok || player.dimension == 1) return stack // no escape for the end
+		if (RagnarokHandler.ragnarok) return stack
 		
 		val (x, y, z) = Vector3.fromEntity(player).mf()
 		

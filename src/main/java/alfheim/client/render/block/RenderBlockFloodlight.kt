@@ -11,10 +11,11 @@ import org.lwjgl.opengl.GL11.*
 
 object RenderBlockFloodlight: ISimpleBlockRenderingHandler {
 	
+	private val instance = TileFloodLight()
+	
 	override fun renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
 		glPushMatrix()
-//		glTranslated(-0.5, -0.7, -0.5)
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(TileFloodLight(), 0.0, 0.0, 0.0, 0f)
+		TileEntityRendererDispatcher.instance.renderTileEntityAt(instance, 0.0, 0.0, 0.0, 0f)
 		glPopMatrix()
 	}
 	

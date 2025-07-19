@@ -64,7 +64,7 @@ tile.alfheim:circuitSapling.name=通量木树苗
 tile.alfheim:circuitWood.name=通量木原木
 tile.alfheim:cracklingStar.name=裂纹星
 tile.alfheim:CorporeaAutocrafter.name=多媒体序列器
-tile.alfheim:CorporeaInjector.name多媒体置入器
+tile.alfheim:CorporeaInjector.name=多媒体置入器
 tile.alfheim:CorporeaSparkBase.name=多媒体火花底座
 tile.alfheim:CorporeaRatBase.name=多媒体量子索引
 tile.alfheim:Chair0.name=酒吧椅
@@ -269,6 +269,7 @@ tile.alfheim:schemaMarker.name=结构图标记方块
 tile.alfheim:schematicAnnihilator.name=结构抹除装置
 tile.alfheim:schematicOak.name=结构生成器
 tile.alfheim:Spire.name=沉睡尖塔
+tile.softStorage0.name=虹彩花瓣块
 tile.Stalactite0.name=钟乳石
 tile.Stalactite1.name=钟乳石
 tile.Stalactite2.name=钟乳石
@@ -572,7 +573,7 @@ item.RodClicker.leftclick.true=击打模式
 item.alfheim:RodFracturedSpace.name=空间碎裂之杖
 item.alfheim:rodPortal.name=爱因斯坦-罗森桥权杖
 item.alfheim:RodRedstone.name=红石调试杖
-item.alfheim:RodSuperExchange.地壳权杖
+item.alfheim:RodSuperExchange.name=地壳权杖
 item.alfheim:SaveIvy.name=抗溶之藤
 item.botania:Serenade.name=无忧夜曲
 item.botania:SifRing.name=希芙之戒
@@ -1451,7 +1452,6 @@ tile.alfheim:itemDisplay3.name=魔灵钢物品托盘
 tile.alfheim:itemDisplay4.name=始源魂灵物品托盘
 
 tile.alfheim:rainbowDirt.name=虹彩土壤
-tile.alfheim:rainbowPetalBlock.name=虹彩花瓣块
 tile.alfheim:coloredDirt.name=虹彩土壤
 tile.alfheim:rainbowLeaves.name=虹彩树叶
 tile.alfheim:irisLeaves.name=虹彩树叶
@@ -1818,9 +1818,9 @@ item.botania:VolcanoBoots.name=火山战靴
 
 item.alfheim:LavaMelon.name=熔岩瓜
 
-entity.alfheim:DedMoroz.name=冬将军
-entity.alfheim:SnowSprite.name=血精灵
-entity.alfheim:SniceBall.name=小雪球
+entity.alfheim.DedMoroz.name=冬将军
+entity.alfheim.SnowSprite.name=血精灵
+entity.alfheim.SniceBall.name=小雪球
 
 entity.alfheim.FireSpirit.name=火焰之魂
 entity.alfheim.FireSpirit.greater.name=大型火焰之魂

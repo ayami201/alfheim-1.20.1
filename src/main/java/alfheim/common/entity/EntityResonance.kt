@@ -2,6 +2,7 @@ package alfheim.common.entity
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.common.core.asm.hook.replacer.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.tool.ItemResonator
@@ -16,7 +17,6 @@ import net.minecraft.util.DamageSource
 import net.minecraft.world.World
 import vazkii.botania.common.core.handler.ConfigHandler
 import vazkii.botania.common.item.equipment.tool.ToolCommons
-import vazkii.botania.common.item.equipment.tool.elementium.ItemElementiumPick
 
 class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: Int, _mode: Int, _target: Int, _voiding: Boolean, _persistent: Boolean, _dilated: Boolean, _chance: Int): Entity(world) {
 	
@@ -211,7 +211,7 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 				if (block.removedByPlayer(world, player, x, y, z, true)) {
 					block.onBlockDestroyedByPlayer(world, x, y, z, meta)
 					
-					if (!dispose || !ItemElementiumPick.isDisposable(block)) {
+					if (!dispose || !HookReplacerHandler.isDisposable(block, meta)) {
 						val prev = player.foodStats.foodExhaustionLevel
 						block.harvestBlock(world, player, x, y, z, meta)
 						player.foodStats.foodExhaustionLevel = prev

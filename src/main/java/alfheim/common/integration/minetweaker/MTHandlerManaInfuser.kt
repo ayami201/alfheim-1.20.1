@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack
 import stanhebben.zenscript.annotations.*
 import vazkii.botania.api.BotaniaAPI
 
-@ZenClass("mods." + ModInfo.MODID + ".ManaInfuser")
+@ZenClass("mods.${ModInfo.MODID}.ManaInfuser")
 object MTHandlerManaInfuser {
 	
 	@ZenMethod

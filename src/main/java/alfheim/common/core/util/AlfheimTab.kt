@@ -97,7 +97,7 @@ import alfheim.common.block.AlfheimBlocks.rainbowFlowerFloating
 import alfheim.common.block.AlfheimBlocks.rainbowGrass
 import alfheim.common.block.AlfheimBlocks.rainbowLeaves
 import alfheim.common.block.AlfheimBlocks.rainbowMushroom
-import alfheim.common.block.AlfheimBlocks.rainbowPetalBlock
+import alfheim.common.block.AlfheimBlocks.softStorage
 import alfheim.common.block.AlfheimBlocks.rainbowPlanks
 import alfheim.common.block.AlfheimBlocks.rainbowSlab
 import alfheim.common.block.AlfheimBlocks.rainbowStairs
@@ -381,7 +381,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(irisLamp)
 		addBlock(kindling)
 		addBlock(alfStorage)
-		addBlock(rainbowPetalBlock)
+		addBlock(softStorage)
 		addBlock(barrel)
 		
 		if (AlfheimCore.winter) {

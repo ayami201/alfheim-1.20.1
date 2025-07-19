@@ -184,7 +184,7 @@ class WorldProviderNiflheim: WorldProvider() {
 			
 			val (x, y, z) = Vector3.fromEntity(entity).mf()
 			
-			var cold = 0.05f
+			var cold = 0f
 			if (entity.worldObj.getPrecipitationHeight(x, z) >= y) { // if in snow
 				if (y >= 128) // if above ground
 					cold += 0.0375f
@@ -199,6 +199,8 @@ class WorldProviderNiflheim: WorldProvider() {
 				entity.entityData.removeTag(TAG_IN_MIST)
 				cold += 0.0375f
 			}
+			
+			if (cold == 0f) return
 			
 			e.delta = (e.delta ?: 0f) + cold
 		}

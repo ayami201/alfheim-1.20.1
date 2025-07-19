@@ -36,7 +36,7 @@ class BlockColoredDoubleGrass(var colorSet: Int): BlockDoublePlant(), IDoublePla
 	init {
 		setBlockNameSafe(name)
 		setCreativeTab(AlfheimTab)
-		setStepSound(Block.soundTypeGrass)
+		setStepSound(soundTypeGrass)
 	}
 	
 	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, isRemote: Boolean) = false
@@ -66,9 +66,6 @@ class BlockColoredDoubleGrass(var colorSet: Int): BlockDoublePlant(), IDoublePla
 	@SideOnly(Side.CLIENT)
 	override fun getRenderColor(meta: Int): Int {
 		val subtype = meta % TYPES
-		if (subtype >= TYPES)
-			return 0xFFFFFF
-		
 		val color = EntitySheep.fleeceColorTable[subtype + TYPES * colorSet]
 		return Color(color[0], color[1], color[2]).rgb
 	}

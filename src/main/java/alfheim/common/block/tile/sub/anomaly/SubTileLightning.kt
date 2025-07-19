@@ -112,30 +112,32 @@ class SubTileLightning: SubTileAnomalyBase() {
 	
 	override fun onActivated(stack: ItemStack?, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Boolean {
 		stack ?: return false
-		if (stack.item === ModItems.manaResource && stack.stackSize > 0 && stack.meta == 5) {
-			--stack.stackSize
-			
-			for (d in ForgeDirection.VALID_DIRECTIONS) {
-				if (world.getBlock(x + d.offsetX, y + d.offsetY, z + d.offsetZ) === ModBlocks.pylon && world.getBlockMetadata(x + d.offsetX, y + d.offsetY, z + d.offsetZ) == 2) {
-					transfer = 200
-					side = d
-					break
-				}
+		if (stack.item !== ModItems.manaResource || stack.stackSize <= 0 || stack.meta != 5) return false
+		--stack.stackSize
+		
+		for (d in ForgeDirection.VALID_DIRECTIONS) {
+			if (world.getBlock(x + d.offsetX, y + d.offsetY, z + d.offsetZ) === ModBlocks.pylon && world.getBlockMetadata(x + d.offsetX, y + d.offsetY, z + d.offsetZ) == 2) {
+				transfer = 200
+				side = d
+				break
 			}
-			
-			world.playSoundEffect(x.D, y.D, z.D, "botania:runeAltarStart", 1f, 1f)
-			
-			for (i in 0..7) {
-				ve.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize()
-				vt.add(ve.x / 2.25, ve.y / 2.25, ve.z / 2.25)
-				ve.multiply(1.5).add(x + 0.5, y + 0.5, z + 0.5)
-				Botania.proxy.lightningFX(worldObj, vt, ve, 50f, worldObj.rand.nextLong(), 0, 0xFF0000)
-			}
-			
-			if (player is EntityPlayerMP)
-				KnowledgeSystem.learn(player, Knowledge.PYLONS)
 		}
-		return false
+		
+		if (transfer != 200) return false
+		
+		world.playSoundEffect(x.D, y.D, z.D, "botania:runeAltarStart", 1f, 1f)
+		
+		for (i in 0..7) {
+			ve.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize()
+			vt.add(ve.x / 2.25, ve.y / 2.25, ve.z / 2.25)
+			ve.multiply(1.5).add(x + 0.5, y + 0.5, z + 0.5)
+			Botania.proxy.lightningFX(worldObj, vt, ve, 50f, worldObj.rand.nextLong(), 0, 0xFF0000)
+		}
+		
+		if (player is EntityPlayerMP)
+			KnowledgeSystem.learn(player, Knowledge.PYLONS)
+		
+		return true
 	}
 	
 	override fun performEffect(target: Any) {

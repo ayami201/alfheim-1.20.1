@@ -81,7 +81,7 @@ class EntityMuspelson(world: World): EntityMob(world), IMuspelheimEntity, IAlfhe
 	override fun func_145780_a(x: Int, y: Int, z: Int, block: Block) = playSound("mob.irongolem.walk", 1f, 1f)
 	
 	override fun attackEntityFrom(source: DamageSource, damage: Float): Boolean {
-		if (source.isExplosion) return false
+		if (source.isExplosion || source.entity is IMuspelheimEntity) return false
 		
 		return super.attackEntityFrom(source, damage)
 	}

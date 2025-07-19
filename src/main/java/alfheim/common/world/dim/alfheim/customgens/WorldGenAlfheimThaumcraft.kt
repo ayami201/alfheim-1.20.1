@@ -20,7 +20,7 @@ import java.util.*
 
 object WorldGenAlfheimThaumcraft: IWorldGenerator {
 	
-	val noTreeBiomes = arrayOf(BiomeBeach, BiomeSandbank, BiomeRiver, BiomeIslandGiantFlowers)
+	val noTreeBiomes = arrayOf(BiomeBeach, BiomeSandbank, BiomeRiver, BiomePitGiantFlowers)
 	
 	init {
 		ThaumcraftWorldGenerator.addDimBlacklist(AlfheimConfigHandler.dimensionIDAlfheim, 1)

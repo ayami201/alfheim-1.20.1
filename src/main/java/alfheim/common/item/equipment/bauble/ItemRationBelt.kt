@@ -26,7 +26,7 @@ class ItemRationBelt: ItemBauble("RationBelt"), IBaubleRender {
 		val player = entity as? EntityPlayer ?: return
 		val stats = player.foodStats
 		
-		if (player.ticksExisted % 80 == 0 && stats.foodLevel < 20) {
+		if (player.ticksExisted % 80 == 0 && stats.foodLevel < 18) {
 			for (i in 0..8) {
 				val slot = player.inventory[i] ?: continue
 				val item = slot.item

@@ -4,7 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.ASJTile
 import alfheim.api.*
 import alfheim.common.block.AlfheimBlocks
-import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.handler.*
 import com.google.common.base.Function
 import net.minecraft.block.Block
 import net.minecraft.entity.item.EntityItem
@@ -60,21 +60,35 @@ class TileTradePortal: ASJTile() {
 			val aabb = portalAABB
 			
 			if (ticksOpen > 60) run {
-				if (ConfigHandler.elfPortalParticlesEnabled)
-					blockParticle(meta)
+				if (worldObj.isRemote) {
+					if (ConfigHandler.elfPortalParticlesEnabled)
+						blockParticle(meta)
+					
+					return@run
+				}
 				
-				if (worldObj.rand.nextInt(AlfheimConfigHandler.tradePortalRate) == 0 && !worldObj.isRemote) setRandomRecipe()
+				if (worldObj.rand.nextInt(AlfheimConfigHandler.tradePortalRate) == 0) setRandomRecipe()
 				
-				if (tradeRecipe != null && !worldObj.isRemote) {
-					getEntitiesWithinAABB(worldObj, EntityItem::class.java, aabb).forEach {
-						if (it.isDead) return@forEach
-						
+				val items = getEntitiesWithinAABB(worldObj, EntityItem::class.java, aabb).filter { !it.isDead && it.entityItem != null }
+				
+				if (tradeRecipe != null) {
+					items.forEach {
 						val stack = it.entityItem
-						if (stack != null && isTradeAvailable(stack, tradeRecipe!!.output)) {
-							stack.stackSize -= tradeRecipe!!.output.stackSize
-							performTrade()
-							return@run
-						}
+						if (!isTradeAvailable(stack, tradeRecipe!!.output)) return@forEach
+						
+						stack.stackSize -= tradeRecipe!!.output.stackSize
+						performTrade()
+						return@run
+					}
+				} else {
+					items.forEach {
+						if (it.entityData.getBoolean(TAG_PORTAL_FLAG))
+							return@forEach
+						
+						if (it.entityItem.stackSize > 0)
+							TradingGiftsHandler.addMidgardGift(it.entityItem, it.worldObj.rand)
+						
+						it.setDead()
 					}
 				}
 			}
@@ -147,11 +161,15 @@ class TileTradePortal: ASJTile() {
 		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord)
 	}
 	
-	fun spawnItem(stack: ItemStack) = EntityItem(worldObj, xCoord + 0.5, yCoord + 1.5, zCoord + 0.5, stack).spawn()
+	fun spawnItem(stack: ItemStack) {
+		val item = EntityItem(worldObj, xCoord + 0.5, yCoord + 1.5, zCoord + 0.5, stack)
+		item.entityData.setBoolean(TAG_PORTAL_FLAG, true)
+		item.spawn()
+	}
 	
 	fun setTradeRecipe(recipe: RecipeElvenTrade?) {
 		tradeRecipe = recipe
-		if (worldObj != null) worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType())
+		ASJUtilities.dispatchTEToNearbyPlayers(this)
 	}
 	
 	override fun writeCustomNBT(nbt: NBTTagCompound) {
@@ -248,7 +266,8 @@ class TileTradePortal: ASJTile() {
 		
 		const val TAG_TICKS_OPEN = "ticksOpen"
 		const val TAG_RECIPE_MULT = "recipeMult"
-		const val TAG_RECIPE_NUM = "recipeNub"
+		const val TAG_RECIPE_NUM = "recipeNum"
+		const val TAG_PORTAL_FLAG = "_elvenPortal"
 		
 		private val CONVERTER_X_Z = Function<IntArray, IntArray> { input -> intArrayOf(input!![2], input[1], input[0]) }
 		

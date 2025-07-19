@@ -240,7 +240,7 @@ object RagnarokHandler {
 					ItemPriestEmblem.getEmblem(missing, it as EntityPlayer) != null && !it.entityData.getBoolean(TAG_ALREADY_TP)
 				} as? EntityPlayer
 				
-				if (server.isSinglePlayer || suitablePlayer == null) {
+				if (!server.isMultiPlayer || suitablePlayer == null) {
 					EntityElf(player.worldObj).setPriest(missing).apply {
 						val (x, _, z) = Vector3().rand().normalize().mul(ASJUtilities.randInBounds(4, 8, player.rng)).add(player).mf()
 						val y = player.worldObj.getTopSolidOrLiquidBlock(x, z) + 1
@@ -1038,9 +1038,10 @@ object RagnarokHandler {
 			removeTag(TAG_STUN)
 		}
 		
-		if (e.isCanceled) return
+		if (e.isCanceled || !was) return
+		
 		val protected = entity is EntityPlayer && (entity.capabilities.isCreativeMode || ItemPendant.canProtect(entity, NIFLHEIM, 10))
-		if (was && !protected) entity.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDEternity, 1200, PotionEternity.STUN))
+		if (!protected) entity.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDEternity, 1200, PotionEternity.STUN))
 	}
 	
 	fun checkSet(e: EntityLivingBase, set: Array<ItemStack>): Boolean {

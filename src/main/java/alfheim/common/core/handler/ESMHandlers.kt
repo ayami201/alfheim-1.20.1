@@ -50,7 +50,6 @@ object ESMHandler {
 	
 	@SubscribeEvent
 	fun onServerStarted(e: ServerStartingEvent) {
-		AlfheimCore.save = e.save
 		readModes(e.save)
 	}
 	
@@ -233,7 +232,7 @@ object ESMHandler {
 		if (tg is EntityTameable && !tg.isTamed) {
 			tg.isTamed = true
 			tg.func_152115_b(player.uniqueID.toString())
-		} else if (tg is EntityHorse) {
+		} else if (tg is EntityHorse && !tg.isTame) {
 			tg.setTamedBy(player)
 			tg.worldObj.setEntityState(tg, 7.toByte())
 		} else return

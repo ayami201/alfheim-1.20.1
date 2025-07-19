@@ -59,8 +59,8 @@ class BlockAnomaly: BlockContainerMod(anomaly), ILexiconable {
 		ASJUtilities.dispatchTEToNearbyPlayers(te)
 	}
 	
-	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		return (world.getTileEntity(x, y, z) as TileAnomaly).onActivated(player!!.currentEquippedItem, player, world, x, y, z)
+	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+		return (world.getTileEntity(x, y, z) as TileAnomaly).onActivated(player.heldItem, player, world, x, y, z)
 	}
 	
 	override fun getSubBlocks(block: Item, tab: CreativeTabs?, list: MutableList<Any?>) {

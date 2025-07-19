@@ -362,7 +362,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 		if (players.isEmpty() && aiTask != AITask.NONE) dropState()
 		
 		if (ASJUtilities.isClient && !isDead) {
-			val isPlaying = !worldObj.isRecordPlaying(sx, sy, sz)
+			val isPlaying = worldObj.isRecordPlaying(sx, sy, sz)
 			
 			if (players.isNotEmpty()) {
 				if (!isPlaying) worldObj.playRecord((if (isMiku) AlfheimItems.discFlugelMeme else if (isUltraMode) AlfheimItems.discFlugelUltra else AlfheimItems.discFlugel) as ItemRecord, sx, sy, sz)
@@ -907,6 +907,11 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			
 			if (world.difficultySetting == EnumDifficulty.PEACEFUL) {
 				if (!world.isRemote) ASJUtilities.say(player, "alfheimmisc.flugel.peacefulNoob")
+				return false
+			}
+			
+			if (!hard && !ultra && player.hasAchievement(AlfheimAchievements.flugelSoul)) {
+				if (!world.isRemote) ASJUtilities.say(player, "alfheimmisc.flugel.used")
 				return false
 			}
 			

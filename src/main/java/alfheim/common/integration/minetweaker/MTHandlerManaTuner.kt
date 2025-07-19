@@ -12,13 +12,13 @@ import net.minecraft.item.*
 import stanhebben.zenscript.annotations.*
 import vazkii.botania.api.BotaniaAPI
 
-@ZenClass("mods." + ModInfo.MODID + ".ManaTuner")
+@ZenClass("mods.${ModInfo.MODID}.ManaTuner")
 object MTHandlerManaTuner {
 	
 	@ZenMethod
 	@JvmStatic
 	fun addRecipe(incantation: String, result: IItemStack, core: IItemStack, inputs: Array<IIngredient?>) {
-		MineTweakerAPI.apply(Add(incantation, getStack(result).item, getStack(core), getObjects(inputs)))
+		MineTweakerAPI.apply(Add(incantation, getStack(result), getStack(core), getObjects(inputs)))
 	}
 	
 	@ZenMethod
@@ -31,7 +31,7 @@ object MTHandlerManaTuner {
 		page.onPageAdded(entry, pageIndex)
 	}
 	
-	private class Add(val incantation: String, val result: Item, val core: ItemStack, val inputs: Array<Any>): IUndoableAction {
+	private class Add(val incantation: String, val result: ItemStack, val core: ItemStack, val inputs: Array<Any>): IUndoableAction {
 		
 		lateinit var added: TunerIncantationIO
 		

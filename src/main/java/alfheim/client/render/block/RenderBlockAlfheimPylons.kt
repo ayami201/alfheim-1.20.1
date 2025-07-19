@@ -12,6 +12,8 @@ import org.lwjgl.opengl.GL11.*
 
 object RenderBlockAlfheimPylons: ISimpleBlockRenderingHandler {
 	
+	private val instance = TileAlfheimPylon()
+	
 	override fun renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
 		glPushMatrix()
 		glTranslated(-0.5, -0.7, -0.5)
@@ -19,7 +21,7 @@ object RenderBlockAlfheimPylons: ISimpleBlockRenderingHandler {
 		RenderTileAlfheimPylons.red = metadata == 2
 		RenderTileAlfheimPylons.creation = metadata == 3
 		RenderTileAlfheimPylons.hand = true
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(TileAlfheimPylon(), 0.0, 0.0, 0.0, 0f)
+		TileEntityRendererDispatcher.instance.renderTileEntityAt(instance, 0.0, 0.0, 0.0, 0f)
 		glPopMatrix()
 	}
 	

@@ -81,8 +81,6 @@ class EntityRift(world: World): Entity(world) {
 	
 	companion object {
 		
-		var useStencil = false
-		
 		init {
 			eventForge()
 		}
@@ -101,15 +99,13 @@ class EntityRift(world: World): Entity(world) {
 				glPushMatrix()
 				glTranslated(it.posX, it.posY, it.posZ)
 				
-				if (useStencil) {
-					glEnable(GL_STENCIL_TEST)
-					glColorMask(false, false, false, false)
-					glDepthMask(false)
-					glStencilFunc(GL_ALWAYS, 1, 255)
-					glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE)
-					glStencilMask(255)
-					glClear(GL_STENCIL_BUFFER_BIT)
-				}
+				glEnable(GL_STENCIL_TEST)
+				glColorMask(false, false, false, false)
+				glDepthMask(false)
+				glStencilFunc(GL_ALWAYS, 1, 255)
+				glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE)
+				glStencilMask(255)
+				glClear(GL_STENCIL_BUFFER_BIT)
 				
 				glDisable(GL_CULL_FACE)
 				glDisable(GL_TEXTURE_2D)
@@ -117,23 +113,19 @@ class EntityRift(world: World): Entity(world) {
 				glEnable(GL_TEXTURE_2D)
 				glEnable(GL_CULL_FACE)
 				
-				if (useStencil) {
-					glDepthMask(true)
-					glColorMask(true, true, true, true)
-					glStencilMask(0)
-					glStencilFunc(GL_EQUAL, 1, 255)
-					glEnable(GL_DEPTH_TEST)
-				}
+				glDepthMask(true)
+				glColorMask(true, true, true, true)
+				glStencilMask(0)
+				glStencilFunc(GL_EQUAL, 1, 255)
+				glEnable(GL_DEPTH_TEST)
 
 				glEnable(GL_BLEND)
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 				renderInside(rand, 1f - max(0f, it.ticksExisted + e.partialTicks - (it.lifespan - 10)) / 10)
 				
-				if (useStencil) {
-					glStencilFunc(GL_NOTEQUAL, 1, 255)
-					glDisable(GL_STENCIL_TEST)
-					glClear(GL_STENCIL_BUFFER_BIT)
-				}
+				glStencilFunc(GL_NOTEQUAL, 1, 255)
+				glDisable(GL_STENCIL_TEST)
+				glClear(GL_STENCIL_BUFFER_BIT)
 
 				glPopMatrix()
 			}
@@ -199,7 +191,7 @@ class EntityRift(world: World): Entity(world) {
 		fun renderInside(rand: Random, fade: Float) {
 			glColor4f(0f, 0f, 0f, fade)
 			
-			if (useStencil) glDepthFunc(GL_ALWAYS)
+			glDepthFunc(GL_ALWAYS)
 			
 			glCullFace(GL_FRONT)
 			ASJShaderHelper.useShader(LibShaderIDs.idNoise) { id ->
@@ -209,7 +201,7 @@ class EntityRift(world: World): Entity(world) {
 			ASJShaderHelper.releaseShader()
 			glCullFace(GL_BACK)
 			
-			if (useStencil) glDepthFunc(GL_LEQUAL)
+			glDepthFunc(GL_LEQUAL)
 			
 			repeat(ASJUtilities.randInBounds(4, 8, rand)) {
 				val mob = try {

@@ -45,9 +45,8 @@ object FaithHandlerSif: IFaithHandler {
 		val attacker = e.source.entity as? EntityLivingBase ?: return
 		val player = e.entityLiving as? EntityPlayer ?: return
 		if (ItemPriestCloak.getCloak(1, player) == null) return
-		if (getGodPowerLevel(player) < 4) return
 		
-		if (!isInsideOfSector(Vector3.fromEntity(attacker), Vector3.fromEntity(player), -player.rotationYaw, if (attacker is EntityPlayerMP) attacker.theItemInWorldManager.blockReachDistance else 5.0))
+		if (!isInsideOfSector(Vector3.fromEntity(attacker), Vector3.fromEntity(player), -player.rotationYaw + 180f, if (attacker is EntityPlayerMP) attacker.theItemInWorldManager.blockReachDistance else 5.0))
 			e.isCanceled = true
 	}
 	

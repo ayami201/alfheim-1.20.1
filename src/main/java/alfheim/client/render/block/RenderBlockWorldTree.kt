@@ -13,12 +13,14 @@ import org.lwjgl.opengl.GL11.*
 
 object RenderBlockWorldTree: ISimpleBlockRenderingHandler {
 	
+	private val instance = TileWorldTree()
+	
 	override fun renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
 		glPushMatrix()
 		glTranslated(-0.5)
 		
 		RenderTileWorldTree.forcedApples = true
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(TileWorldTree(), 0.0, 0.0, 0.0, 0f)
+		TileEntityRendererDispatcher.instance.renderTileEntityAt(instance, 0.0, 0.0, 0.0, 0f)
 		RenderTileWorldTree.forcedApples = false
 		
 		glPopMatrix()

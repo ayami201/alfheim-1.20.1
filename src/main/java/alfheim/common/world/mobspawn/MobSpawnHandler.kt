@@ -65,8 +65,8 @@ object MobSpawnHandler {
 		registerMob("TwilightForest.Wild Deer", 8, 2, 4, d) { it.biomeCheck(BiomeIslandForest, BiomeMountTopForest, BiomePitForest) }
 		registerMob("TwilightForest.Forest Raven", 4, 1, 1, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
 		registerMob("TwilightForest.Forest Squirrel", 10, 1, 3, d) { it.biomeCheck(BiomeIslandForest, BiomeMountTopForest, BiomePitForest) }
-		registerMob("TwilightForest.Tiny Bird", 10, 1, 3, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomeIslandGiantFlowers, BiomeMountLow, BiomeMountMid, BiomeMountHigh, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
-		registerMob("TwilightForest.Bighorn Sheep", 10, 2, 4, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomeIslandGiantFlowers, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
+		registerMob("TwilightForest.Tiny Bird", 10, 1, 3, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomePitGiantFlowers, BiomeMountLow, BiomeMountMid, BiomeMountHigh, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
+		registerMob("TwilightForest.Bighorn Sheep", 10, 2, 4, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomePitGiantFlowers, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
 		registerMob("TwilightForest.Wild Boar", 10, 2, 4, d) { it.biomeCheck(BiomeField, BiomeIslandForest, BiomeMountTopField, BiomeMountTopForest, BiomePitForest) }
 		registerMob("TwilightForest.Glacier Penguin", 8, 1, 4, d) {
 			val (xOff, zOff) = NiflheimLocationGenerator.portalXZ(it.worldObj)

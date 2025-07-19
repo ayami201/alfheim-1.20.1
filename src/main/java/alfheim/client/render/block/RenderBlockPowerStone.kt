@@ -14,12 +14,13 @@ import kotlin.math.*
 
 object RenderBlockPowerStone: ISimpleBlockRenderingHandler {
 	
+	private val instance = TilePowerStone()
+	
 	override fun renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
 		glPushMatrix()
 		glTranslated(-0.5)
 		RenderTilePowerStone.forceMeta = max(0, min(metadata, LibResourceLocations.obelisk.size))
-		
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(TilePowerStone(), 0.0, 0.0, 0.0, 0f)
+		TileEntityRendererDispatcher.instance.renderTileEntityAt(instance, 0.0, 0.0, 0.0, 0f)
 		glPopMatrix()
 	}
 	

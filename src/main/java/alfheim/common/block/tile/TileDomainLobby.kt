@@ -97,7 +97,7 @@ class TileDomainLobby: TileImmobile() {
 		
 		val domain = AlfheimAPI.domains[name] ?: return
 		
-		if (forcePlayer == null && !MinecraftServer.getServer().isSinglePlayer && players.size < domain.minPlayers) {
+		if (forcePlayer == null && MinecraftServer.getServer().isMultiPlayer && players.size < domain.minPlayers) {
 			players.forEach { ASJUtilities.say(it, "alfheimmisc.ragnarok.domain.notEnoughParticipants") }
 			cooldown = 300
 			return

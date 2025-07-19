@@ -3,7 +3,7 @@ package alfheim.common.world.dim.alfheim.customgens
 import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks
-import alfheim.common.world.dim.alfheim.biome.BiomeIslandGiantFlowers
+import alfheim.common.world.dim.alfheim.biome.BiomePitGiantFlowers
 import net.minecraft.world.World
 import ru.vamig.worldengine.*
 import ru.vamig.worldengine.standardcustomgen.StructureBaseClass
@@ -33,7 +33,7 @@ object WorldGenMutatedFlowers: StructureBaseClass() {
 	
 	override fun generate(world: World, rand: Random, x: Int, y: Int, z: Int, chunkProvider: WE_ChunkProvider): Boolean {
 		arrayOf(-1 to -1, 1 to 1, -1 to 1, 1 to -1).forEach { (i, k) ->
-			if (WE_Biome.getBiomeAt(chunkProvider, x + i * 24, z + k * 24) !== BiomeIslandGiantFlowers)
+			if (WE_Biome.getBiomeAt(chunkProvider, x + i * 24, z + k * 24) !== BiomePitGiantFlowers)
 				return false
 		}
 		

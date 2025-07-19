@@ -5,6 +5,7 @@ import alfheim.common.entity.EntityButterfly
 import net.minecraft.client.model.*
 import net.minecraft.entity.Entity
 import net.minecraft.util.MathHelper
+import org.lwjgl.opengl.GL11
 
 /**
  * ModelButterfly - AlexSocol
@@ -38,10 +39,13 @@ class ModelButterfly(val pass: Int): ModelBase() {
 	}
 	
 	override fun render(entity: Entity, f: Float, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float) {
+		entity as EntityButterfly
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity)
 		
-		if (entity is EntityButterfly && entity.isGiant)
-			glScalef(10f)
+		if (entity.isGiant) {
+			GL11.glPushMatrix()
+			glScalef(entity.size / 0.25f)
+		}
 		
 		if (pass == 0) {
 			shape1.render(f5)
@@ -51,8 +55,8 @@ class ModelButterfly(val pass: Int): ModelBase() {
 			shape3.render(f5)
 		}
 		
-		if (entity is EntityButterfly && entity.isGiant)
-			glScalef(0.1f)
+		if (entity.isGiant)
+			GL11.glPopMatrix()		
 	}
 	
 	/**

@@ -127,7 +127,7 @@ class EntityAlfheimPixie(world: World): EntityFlyingCreature(world), IElementalE
 		val chunk = (worldObj.provider as? WE_WorldProvider)?.chunkProvider
 		if (chunk != null) {
 			val biomeAt = WE_Biome.getBiomeAt(chunk, posX.mfloor(), posZ.mfloor())
-			flagBiome = biomeAt.isEqualTo(BiomeField) || biomeAt.isEqualTo(BiomeIslandGiantFlowers)
+			flagBiome = biomeAt.isEqualTo(BiomeField) || biomeAt.isEqualTo(BiomePitGiantFlowers)
 		}
 		
 		return flagTime && flagBiome && posY > 64 && super.getCanSpawnHere()

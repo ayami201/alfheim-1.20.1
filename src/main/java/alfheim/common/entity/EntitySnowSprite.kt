@@ -116,7 +116,7 @@ class EntitySnowSprite(world: World): EntityFlyingCreature(world), INiflheimEnti
 		val flagBiome = if (WRATH_OF_THE_WINTER) {
 			val cp = (worldObj.provider as? WE_WorldProvider)?.chunkProvider ?: return false
 			val biomeAt = WE_Biome.getBiomeAt(cp, posX.mfloor().toLong(), posZ.mfloor().toLong())
-			biomeAt === BiomeField || biomeAt === BiomeIslandGiantFlowers
+			biomeAt === BiomeField || biomeAt === BiomePitGiantFlowers
 		} else {
 			val (xOff, zOff) = NiflheimLocationGenerator.portalXZ(worldObj)
 			NiflheimLocationGenerator.yobaFunction2d(posX.mfloor() - xOff, posZ.mfloor() - zOff)
