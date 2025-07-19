@@ -453,6 +453,11 @@ object AnomalyHarvesterBehaviors {
 				for (z in aabb.minZ.I..aabb.maxZ.I.minus(1)) {
 					val block = tile.worldObj.getBlock(x, y, z)
 					
+					if (tile.worldObj.isRemote) {
+						block.randomDisplayTick(tile.worldObj, x, y, z, tile.worldObj.rand)
+						continue
+					}
+					
 					if (block === Blocks.air ||
 					    block is BlockFire && !tile.worldObj.gameRules.getGameRuleBooleanValue("doFireTick"))
 						continue

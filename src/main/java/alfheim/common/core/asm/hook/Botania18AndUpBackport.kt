@@ -143,10 +143,8 @@ object Botania18AndUpBackport {
 	
 	// ######## https://botaniamod.net/changelog.html#r1-11-378-fake #16
 	
-	@JvmStatic
-	@Hook
-	fun addItem(tile: TileAlfPortal, stack: ItemStack?) {
-		if (stack?.item !== Items.bread || tile.worldObj.isRemote) return
+	fun addItem(tile: TileAlfPortal, stack: ItemStack?): Boolean {
+		if (stack?.item !== Items.bread || tile.worldObj.isRemote) return false
 		
 		val (x, y, z) = Vector3.fromTileEntityCenter(tile)
 		tile.worldObj.createExplosion(null, x, y + 2, z, 3f, true)
@@ -154,6 +152,8 @@ object Botania18AndUpBackport {
 		getEntitiesWithinAABB(tile.worldObj, EntityPlayerMP::class.java, getBoundingBox(x, y, z).expand(8)).forEach {
 			it.triggerAchievement(AlfheimAchievements.breadBoom)
 		}
+		
+		return true
 	}
 	
 	// ######## https://botaniamod.net/changelog.html#1-16-5-420-1-fake #3 AND https://botaniamod.net/changelog.html#r1-7-229-fake #11

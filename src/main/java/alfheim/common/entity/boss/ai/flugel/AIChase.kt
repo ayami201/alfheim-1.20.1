@@ -4,6 +4,7 @@ import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.random
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.entity.boss.EntityFlugel
+import alfheim.common.item.AlfheimItems
 import cpw.mods.fml.common.registry.GameRegistry
 
 class AIChase(flugel: EntityFlugel, task: AITask): AIBase(flugel, task) {
@@ -22,18 +23,20 @@ class AIChase(flugel: EntityFlugel, task: AITask): AIBase(flugel, task) {
 			val player = flugel.worldObj.getPlayerEntityByName(flugel.playersDamage.keys.random(flugel.rng) ?: return) ?: return
 			if (player.capabilities.isCreativeMode) return
 			
-			for (a in 0..9)
+			repeat(10) {
 				for (slot1 in player.inventory.mainInventory.indices) {
 					val slot2 = flugel.worldObj.rand.nextInt(player.inventory.mainInventory.size)
 					
 					val stack1 = player.inventory.mainInventory[slot1]
 					val stack2 = player.inventory.mainInventory[slot2]
 					
+					if (stack1?.item === AlfheimItems.organs || stack2?.item === AlfheimItems.organs) continue
+					
 					var flagStack1 = stack1 != null
 					if (flagStack1) {
 						val id = GameRegistry.findUniqueIdentifierFor(stack1.item)
 						flagStack1 = if (id != null)
-							flagStack1 && AlfheimConfigHandler.flugelSwapBlackList.contains(id.toString())
+							AlfheimConfigHandler.flugelSwapBlackList.contains(id.toString())
 						else
 							false
 					}
@@ -42,7 +45,7 @@ class AIChase(flugel: EntityFlugel, task: AITask): AIBase(flugel, task) {
 					if (flagStack2) {
 						val id = GameRegistry.findUniqueIdentifierFor(stack2.item)
 						flagStack2 = if (id != null)
-							flagStack2 && AlfheimConfigHandler.flugelSwapBlackList.contains(id.toString())
+							AlfheimConfigHandler.flugelSwapBlackList.contains(id.toString())
 						else
 							false
 					}
@@ -52,6 +55,7 @@ class AIChase(flugel: EntityFlugel, task: AITask): AIBase(flugel, task) {
 					player.inventory.mainInventory[slot1] = stack2
 					player.inventory.mainInventory[slot2] = stack1
 				}
+			}
 		}
 	}
 	

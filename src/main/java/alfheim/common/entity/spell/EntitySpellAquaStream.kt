@@ -20,7 +20,7 @@ class EntitySpellAquaStream(world: World): Entity(world), ITimeStopSpecific {
 	override val isImmune = false
 	
 	init {
-		setSize(1f, 1f)
+		setSize(0f, 0f)
 	}
 	
 	constructor(world: World, caster: EntityLivingBase): this(world) {
@@ -30,10 +30,12 @@ class EntitySpellAquaStream(world: World): Entity(world), ITimeStopSpecific {
 	
 	override fun onEntityUpdate() {
 		val caster = caster
-		if (!AlfheimConfigHandler.enableMMO || caster == null || caster.isDead || caster.posX != posX || caster.posY != posY || caster.posZ != posZ || ticksExisted > SpellAquaStream.duration) {
+		if (!AlfheimConfigHandler.enableMMO || caster == null || caster.isDead || ticksExisted > SpellAquaStream.duration) {
 			setDead()
 			return
 		}
+		setPosition(caster.posX, caster.posY, caster.posZ)
+		
 		if (isDead || ASJUtilities.isClient) return
 		
 		var mop = ASJUtilities.getMouseOver(caster, SpellAquaStream.radius, true)

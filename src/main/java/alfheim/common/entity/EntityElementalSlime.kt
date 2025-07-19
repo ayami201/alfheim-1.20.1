@@ -3,9 +3,12 @@ package alfheim.common.entity
 import alexsocol.asjlib.*
 import alfheim.api.entity.IAlfheimMob
 import alfheim.common.core.helper.*
-import alfheim.common.item.material.ItemElvenResource
+import alfheim.common.item.AlfheimItems
+import alfheim.common.item.material.*
 import net.minecraft.client.particle.EntityBreakingFX
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.monster.EntitySlime
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
 import net.minecraft.world.World
@@ -39,7 +42,7 @@ class EntityElementalSlime(world: World): EntitySlime(world), IElementalEntity, 
 		if (looting > 0)
 			count += rand.nextInt(looting + 1)
 		
-		entityDropItem(dropStack(count), 0f)
+		super.entityDropItem(dropStack(count), 0f)
 	}
 	
 	fun dropStack(size: Int = 1) = ItemElvenResource.ballForElement(elements.first(), size)
@@ -75,10 +78,22 @@ class EntityElementalSlime(world: World): EntitySlime(world), IElementalEntity, 
 	
 	override fun readEntityFromNBT(nbt: NBTTagCompound) {
 		super.readEntityFromNBT(nbt)
-		dataWatcher.updateObject(2, nbt.getInteger(TAG_ELEMENT))
+		
+		if (nbt.hasKey(TAG_ELEMENT, 99))
+			dataWatcher.updateObject(2, nbt.getInteger(TAG_ELEMENT))
 	}
 	
 	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
+	
+	override fun entityDropItem(stack: ItemStack, height: Float): EntityItem {
+		val element = elements.first()
+		return super.entityDropItem(
+			if (stack.item === AlfheimItems.elvenResource && stack.meta == ElvenResourcesMetas.ElementalSlimeBall.I)
+				ItemElvenResource.ballForElement(element, stack.stackSize)
+			else
+				stack, 
+			height)
+	}
 	
 	companion object {
 		const val TAG_ELEMENT = "element"

@@ -116,7 +116,6 @@ object AlfheimBlocks {
 	val rainbowGrass: Block
 	val rainbowLeaves: Block
 	val rainbowMushroom: Block
-	val rainbowPetalBlock: Block
 	val rainbowPlanks: Block
 	val rainbowSlab: Block
 	val rainbowSlabFull: Block
@@ -143,6 +142,7 @@ object AlfheimBlocks {
 	val snakeObject: Block
 	val snowGrass: Block
 	val snowLayer: Block
+	val softStorage: Block
 	val spire: Block
 	val starBlock: Block
 	val starBlock2: Block
@@ -304,7 +304,6 @@ object AlfheimBlocks {
 		rainbowLeaves = BlockRainbowLeaves()
 		rainbowGrass = BlockRainbowGrass()
 		rainbowMushroom = BlockRainbowMushroom()
-		rainbowPetalBlock = BlockRainbowPetalBlock()
 		rainbowPlanks = BlockRainbowPlanks()
 		rainbowSlab = BlockRainbowWoodSlab(false)
 		rainbowSlabFull = BlockRainbowWoodSlab(true)
@@ -335,6 +334,7 @@ object AlfheimBlocks {
 		snakeObject = BlockSnakeObject()
 		snowGrass = BlockSnowGrass()
 		snowLayer = BlockSnowLayer()
+		softStorage = BlockSoftStorage()
 		spire = BlockSpire()
 		starBlock = BlockStar()
 		starBlock2 = BlockCracklingStar()
@@ -428,7 +428,7 @@ object AlfheimBlocks {
 		
 		tunedSapling = BlockTunedSapling()
 		
-		AlfheimAPI.coldBlocks.addAll(arrayOf(snowLayer, poisonIce))
+		AlfheimAPI.coldBlocks.addAll(arrayOf(poisonIce))
 		AlfheimAPI.warmBlocks.addAll(arrayOf(redFlame, ModBlocks.blazeBlock, netherLeaves, netherBerry, netherSapling, netherPlanks, netherSlabs, netherSlabsFull, netherStairs, netherWood))
 		
 		registerBurnables()
@@ -476,9 +476,11 @@ object AlfheimBlocks {
 		registerOre("endstone", ItemStack(Blocks.end_stone))
 		registerOre("grassSnow", ItemStack(snowGrass))
 		registerOre("snowLayer", ItemStack(snowLayer))
+		registerOre("niflStone", ItemStack(niflheimBlock))
 		
 		BotaniaAPI.registerSemiDisposableBlock(BLibOreDict.LIVING_ROCK)
 		BotaniaAPI.registerSemiDisposableBlock("endstone")
+		BotaniaAPI.registerDisposableBlock("niflStone")
 		
 		registerOre(LibOreDict.DRAGON_ORE, ItemStack(elvenOre))
 		registerOre(LibOreDict.ELEMENTIUM_ORE, ItemStack(elvenOre, 1, 1))

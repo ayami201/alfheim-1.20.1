@@ -6,6 +6,7 @@ import alfheim.api.ModInfo
 import alfheim.api.entity.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.ElvenStoryModeSystem
+import alfheim.common.item.ItemPaperRace
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.*
 import net.minecraft.entity.player.EntityPlayer
@@ -27,6 +28,8 @@ class TileRaceSelector: ASJTile() {
 
 			NetworkService.sendToAll(MessageRaceInfo(player.commandSenderName, rotation + 1))
 			NetworkService.sendToAll(MessageSkinInfo(player.commandSenderName, female, custom))
+			
+			ItemPaperRace.give(player, player.worldObj.totalWorldTime)
 		}
 		
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3)

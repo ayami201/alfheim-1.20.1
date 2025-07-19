@@ -18,7 +18,7 @@ object ThrymDomain: Domain(ModInfo.MODID, "Thrym", AlfheimConfigHandler.domainPl
 	override val firstConquerors = arrayOf("Ilya3000", "Kompotik", "Pelmeshkins")
 	override val firstConquerorsUnknown = arrayOf("ᛁᛚᛁᚨᛏᛉᛉᛉ", "ᚲᛟᛗᛈᛟᛏᛁᚲ", "ᛈᛖᛚᛗᛖᛊᚺᚲᛁᚾᛊ")
 	
-	override fun isLocked(world: World) = if (RagnarokHandler.finished || RagnarokHandler.winter) false else !RagnarokHandler.canStartWinter()
+	override fun isLocked(world: World) = if (RagnarokHandler.finished) false else !RagnarokHandler.canStartWinter()
 	
 	override fun canEnter(players: List<EntityPlayer>): Boolean {
 		if (!RagnarokHandler.thrymFirstTime) return true

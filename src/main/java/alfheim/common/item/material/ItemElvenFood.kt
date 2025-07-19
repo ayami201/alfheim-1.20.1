@@ -12,11 +12,11 @@ import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Items
 import net.minecraft.item.*
 import net.minecraft.potion.*
 import net.minecraft.util.IIcon
 import net.minecraft.world.World
+import vazkii.botania.common.item.ModItems
 import kotlin.math.*
 
 class ItemElvenFood: ItemFood(0, 0f, false) {
@@ -144,7 +144,7 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 	override fun getContainerItem(stack: ItemStack): ItemStack? {
 		return when (entries.getOrNull(stack.meta)) {
 			RedWine, WhiteWine, Champagne -> ElvenResourcesMetas.Jug.stack
-			JellyBottle                   -> ItemStack(Items.glass_bottle)
+			JellyBottle                   -> ItemStack(ModItems.vial, 1, 1)
 			else                          -> null
 		}
 	}

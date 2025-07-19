@@ -1,4 +1,4 @@
-package alfheim.common.spell.darkness
+package alfheim.common.spell.illusion
 
 import alexsocol.asjlib.ASJUtilities
 import alexsocol.asjlib.math.Vector3
@@ -8,7 +8,7 @@ import alfheim.common.core.handler.CardinalSystem
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 
-object SpellJoin: SpellBase("join", EnumRace.IMP, 10000, 1200, 30) {
+object SpellJoin: SpellBase("join", EnumRace.SPRIGGAN, 10000, 1200, 30) {
 	
 	override val usableParams
 		get() = emptyArray<Any>()

@@ -19,7 +19,7 @@ object RenderEntityLolicorn: RenderLiving(ModelEntityLolicorn, 0.5f) {
 	override fun renderModel(entity: EntityLivingBase, f: Float, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float) {
 		entity as EntityLolicorn
 		
-		mainModel = entity.type.model()
+		mainModel = entity.type.model ?: return
 		
 		val hide = mainModel is ModelEntityLolicorn && (mc.thePlayer === entity.riddenByEntity && mc.gameSettings?.thirdPersonView == 0)
 		

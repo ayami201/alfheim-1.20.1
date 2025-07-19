@@ -2,6 +2,7 @@ package alfheim.common.entity
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.common.core.asm.hook.replacer.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.tool.ItemResonator
@@ -16,21 +17,32 @@ import net.minecraft.util.DamageSource
 import net.minecraft.world.World
 import vazkii.botania.common.core.handler.ConfigHandler
 import vazkii.botania.common.item.equipment.tool.ToolCommons
-import vazkii.botania.common.item.equipment.tool.elementium.ItemElementiumPick
 
-class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: Int, _mode: Int, _target: Int, _chance: Int): Entity(world) {
+class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: Int, _mode: Int, _target: Int, _voiding: Boolean, _persistent: Boolean, _dilated: Boolean, _chance: Int): Entity(world) {
 	
-	var chance
+	var chance // to spread to other blocks
 		get() = dataWatcher.getWatchableObjectInt(2)
 		set(value) = dataWatcher.updateObject(2, value)
 	
-	var mode
+	var dilated // less time on auto, more time on manual
+		get() = getFlag(2)
+		set(value) = setFlag(2, value)
+	
+	var mode // 0 - 2s cd, 1 - 5s cd, 2 - 5s cd no dig
 		get() = dataWatcher.getWatchableObjectInt(3)
 		set(value) = dataWatcher.updateObject(3, value)
 	
-	var target
+	var persistent // higher chance to spread on each iteration
+		get() = getFlag(6)
+		set(value) = setFlag(6, value)
+	
+	var target // 0 - any id/meta, 1 - same id, any meta, 2 - same id&meta
 		get() = dataWatcher.getWatchableObjectInt(4)
 		set(value) = dataWatcher.updateObject(4, value)
+	
+	var voiding // void "trash" loot
+		get() = getFlag(7)
+		set(value) = setFlag(7, value)
 	
 	var rupturing = false
 	
@@ -38,16 +50,19 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 		setSize(0f, 0f)
 		setPosition(x + 0.5, y + 0.5, z + 0.5)
 		chance = _chance
+		dilated = _dilated
 		mode = _mode
+		persistent = _persistent
 		target = _target
+		voiding = _voiding
 	}
 	
-	constructor(world: World): this(world, null, 0, 0, 0, 0, 0, 1)
+	constructor(world: World): this(world, null, 0, 0, 0, 0, 0, false, false, false, 1)
 	
 	override fun onUpdate() {
 		val noSkip = mode == 2 && getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox(0.5)).isNotEmpty()
 		
-		if (!noSkip) if (ticksExisted < if (mode > 0) 100 else 40) return
+		if (!noSkip) if (ticksExisted < activationTime) return
 		
 		try {
 			burst()
@@ -90,7 +105,7 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 						if (worldObj.getTileEntity(i, j, k) != null) continue
 						
 						if (getEntitiesWithinAABB(worldObj, EntityResonance::class.java, getBoundingBox(i, j, k).offset(0.5).expand(1)).isEmpty())
-							EntityResonance(worldObj, host, i, j, k, 0, target, chance + 50).spawn(false)
+							EntityResonance(worldObj, host, i, j, k, 0, target, voiding, persistent, dilated, chance + if (persistent) CHANCE_INCR_PERS else CHANCE_INCR).spawn(-1)
 					}
 		
 		setDead()
@@ -111,10 +126,10 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 		if (attacked)
 			ToolCommons.damageItem(host.heldItem, 1, host, ItemResonator.MANA_PER_DAMAGE)
 		
-		return removeBlockWithDrops(host, host.heldItem, worldObj, x, y, z, false)
+		return removeBlockWithDrops(host, host.heldItem, worldObj, x, y, z, voiding)
 	}
 	
-	fun spawn(byPlayer: Boolean = true) {
+	fun spawn(limit: Int) {
 		val samePos = getEntitiesWithinAABB(worldObj, EntityResonance::class.java, boundingBox(0.5))
 		
 		samePos.forEach {
@@ -127,13 +142,13 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 		
 		if (samePos.isNotEmpty()) return
 		
-		if (byPlayer)
-			if (worldObj.loadedEntityList.filterIsInstance<EntityResonance>().count { it.host === host } >= MAX_FOR_PLAYER)
+		if (limit != -1)
+			if (worldObj.loadedEntityList.filterIsInstance<EntityResonance>().count { it.host === host } >= limit)
 				return
 		
 		worldObj.spawnEntityInWorld(this)
 		
-		if (byPlayer)
+		if (limit != -1)
 			playSound("alfheim:resonator.fire", rand.nextFloat() * 0.5f + 0.75f, rand.nextFloat() * 0.5f + 0.75f)
 	}
 	
@@ -156,22 +171,31 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 		nbt.setInteger(TAG_CHANCE, chance)
 		nbt.setInteger(TAG_MODE, mode)
 		nbt.setInteger(TAG_TARGET, target)
+		nbt.setBoolean(TAG_VOIDING, voiding)
 	}
 	
 	override fun readEntityFromNBT(nbt: NBTTagCompound) {
 		chance = nbt.getInteger(TAG_CHANCE)
 		mode = nbt.getInteger(TAG_MODE)
 		target = nbt.getInteger(TAG_TARGET)
+		voiding = nbt.getBoolean(TAG_VOIDING)
 	}
 	
 	companion object {
 		
-		const val MAX_FOR_PLAYER = 5
+		const val CHANCE_INCR = 50
+		const val CHANCE_INCR_PERS = 30
+		
 		const val TAG_CHANCE = "chance"
 		const val TAG_MODE = "mode"
+		const val TAG_PERSISTENT = "persistent"
 		const val TAG_TARGET = "target"
+		const val TAG_VOIDING = "voiding"
 		
 		val damageResonance = DamageSource("resonance").setDamageBypassesArmor()
+		
+		private val EntityResonance.activationTime
+			get() = if (mode > 0) (if (dilated) 200 else 100) else (if (dilated) 3 else 40)
 		
 		fun removeBlockWithDrops(player: EntityPlayer, stack: ItemStack, world: World, x: Int, y: Int, z: Int, dispose: Boolean): Boolean {
 			if (world.isRemote || !world.blockExists(x, y, z)) return false
@@ -187,7 +211,7 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 				if (block.removedByPlayer(world, player, x, y, z, true)) {
 					block.onBlockDestroyedByPlayer(world, x, y, z, meta)
 					
-					if (!dispose || !ItemElementiumPick.isDisposable(block)) {
+					if (!dispose || !HookReplacerHandler.isDisposable(block, meta)) {
 						val prev = player.foodStats.foodExhaustionLevel
 						block.harvestBlock(world, player, x, y, z, meta)
 						player.foodStats.foodExhaustionLevel = prev

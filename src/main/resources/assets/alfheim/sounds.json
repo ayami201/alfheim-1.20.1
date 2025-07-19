@@ -14,134 +14,109 @@
 	"fenrir.attack": {
 		"category": "hostile",
 		"sounds": [
-			{
-				"name": "fenrir/attack",
-				"stream": false
-			}
+			"fenrir/attack"
 		]
 	},
-	"fenrir.howl": { 
+	"fenrir.howl": {
 		"category": "hostile",
 		"sounds": [
-			{
-				"name": "fenrir/howl",
-				"stream": false
-			}
+			"fenrir/howl"
 		]
 	},
 	"fenrir.hrrr": {
 		"category": "hostile",
 		"sounds": [
-			{
-				"name": "fenrir/hrrr",
-				"stream": false
-			}
+			"fenrir/hrrr"
 		]
 	},
 	"fenrir.hurt": {
 		"category": "hostile",
 		"sounds": [
-			{
-				"name": "fenrir/hurt",
-				"stream": false
-			}
+			"fenrir/hurt"
+		]
+	},
+	"glass": {
+		"category": "player",
+		"sounds": [
+			"glass"
 		]
 	},
 	"horn.bhorn": {
 		"category": "player",
 		"sounds": [
-			{
-				"name": "horn/bhorn",
-				"stream": false
-			}
+			"horn/bhorn"
 		]
 	},
 	"horn.ehorn": {
 		"category": "player",
 		"sounds": [
-			{
-				"name": "horn/ehorn",
-				"stream": false
-			}
+			"horn/ehorn"
 		]
 	},
 	"horn.ghorn": {
 		"category": "player",
 		"sounds": [
-			{
-				"name": "horn/ghorn",
-				"stream": false
-			}
+			"horn/ghorn"
 		]
 	},
 	"niflportal": {
 		"category": "block",
 		"sounds": [
-			{
-				"name": "niflportal",
-				"stream": false
-			}
+			"niflportal"
 		]
 	},
-	"redexp": {
+	"organ.heart": {
 		"category": "player",
 		"sounds": [
-			{
-				"name": "redexp",
-				"stream": false
-			}
+			"organs/heart"
 		]
 	},
-	"resonator.blast": {
+	"organ.liver": {
 		"category": "player",
 		"sounds": [
-			{
-				"name": "resonatorBlast", 
-				"stream": false
-			}
+			"organs/liver"
 		]
 	},
-	"resonator.fire": {
+	"organ.lungs": {
 		"category": "player",
 		"sounds": [
-			{
-				"name": "resonatorFire", 
-				"stream": false
-			}
+			"organs/lungs"
+		]
+	},
+	"organ.nerves": {
+		"category": "player",
+		"sounds": [
+			"organs/nerves"
 		]
 	},
 	"quad": {
 		"category": "player",
 		"sounds": [
-			{
-				"name": "quad",
-				"stream": false
-			}
+			"quad"
 		]
 	},
 	"quadh": {
 		"category": "player",
 		"sounds": [
-			{
-				"name": "quadh",
-				"stream": false
-			}
+			"quadh"
 		]
 	},
-	"warbanner": {
+	"redexp": {
 		"category": "player",
 		"sounds": [
-			{
-				"name": "warbanner",
-				"stream": false
-			}
+			"redexp"
 		]
 	},
-	"wind": {
+	"resonator.blast": {
 		"category": "player",
 		"sounds": [
-			"wind1",
-			"wind2"
+			"resonatorBlast"
+		]
+	},
+	"resonator.fire": {
+		"category": "player",
+		"sounds": [
+			"resonatorFire"
 		]
 	},
 	"surtr.fireball.form": {
@@ -340,6 +315,19 @@
 		"category": "hostile",
 		"sounds": [
 			"thrym/whirlwind"
+		]
+	},
+	"warbanner": {
+		"category": "player",
+		"sounds": [
+			"warbanner"
+		]
+	},
+	"wind": {
+		"category": "player",
+		"sounds": [
+			"wind1",
+			"wind2"
 		]
 	}
 }

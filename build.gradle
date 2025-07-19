@@ -1,5 +1,5 @@
 buildscript {
-	ext.kotlinVersion = '2.0.10'
+	ext.kotlinVersion = '2.1.21'
 	
 	repositories {
 		mavenCentral()
@@ -32,7 +32,7 @@ repositories {
 }
 
 group = "main"
-version = "60"
+version = "61"
 archivesBaseName = "Alfheim"
 
 minecraft {
@@ -41,7 +41,6 @@ minecraft {
 }
 
 dependencies {
-	implementation fileTree(dir: 'lib', include: ['*.jar'])
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 }
 

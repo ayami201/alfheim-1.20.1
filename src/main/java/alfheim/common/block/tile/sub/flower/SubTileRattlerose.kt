@@ -99,14 +99,14 @@ class SubTileRattlerose: SubTileGenerating() {
 	private fun move(dir: ForgeDirection) {
 		if (dir == UNKNOWN) return
 		
-		val curHead = snake.first
+		val curHead = snake.first()
 		val newHead = curHead.first + dir.offsetX to curHead.second + dir.offsetZ
 		snake.addFirst(newHead)
 		
 		val last = if (newHead != food) snake.removeLast() else null
 		
 		if (isCollision()) {
-			snake.addLast(last)
+			snake.addLast(last!!)
 			snake.removeFirst()
 			fail = true
 			return
@@ -163,7 +163,7 @@ class SubTileRattlerose: SubTileGenerating() {
 	}
 	
 	private fun isCollision(): Boolean {
-		val head = snake.first
+		val head = snake.first()
 		if (head.first < 0 || head.first >= RANGE || head.second < 0 || head.second >= RANGE) return true
 		val body = snake.subList(1, snake.size)
 		return body.contains(head)

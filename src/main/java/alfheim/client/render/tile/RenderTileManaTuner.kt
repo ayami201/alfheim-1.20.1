@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.ForgeHooksClient
 import net.minecraftforge.client.model.AdvancedModelLoader
 import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL12
 import vazkii.botania.client.core.handler.ClientTickHandler
 import java.awt.Color
 import kotlin.math.*
@@ -88,6 +89,7 @@ object RenderTileManaTuner: TileEntitySpecialRenderer() {
 			glTranslatef(0f, 0.15f * sin((time + i * 10) / 5), 0f)
 			
 			mc.renderEngine.bindTexture(if (stack.item is ItemBlock) TextureMap.locationBlocksTexture else TextureMap.locationItemsTexture)
+			glEnable(GL12.GL_RESCALE_NORMAL)
 			glScalef(2f)
 			
 			if (ForgeHooksClient.renderEntityItem(EntityItem(tuner.worldObj, tuner.xCoord + 0.5, tuner.yCoord + 1.5, tuner.zCoord + 0.5, stack), stack, 0f, 0f, tuner.worldObj.rand, mc.renderEngine, renderBlocks, 1)) {

@@ -1,6 +1,6 @@
 package alfheim.common.core.util
 
-import alexsocol.asjlib.ASJUtilities
+import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 import alfheim.api.ModInfo
 import net.minecraft.util.StatCollector
@@ -12,28 +12,25 @@ import javax.xml.parsers.DocumentBuilderFactory
 object InfoLoader {
 	
 	val info: MutableList<String> = ArrayList()
-	var outdated = false
 	
 	var doneChecking = false
-	var onlineVersion = 0
 	var triedToWarnPlayer = false
 	
 	fun start() {
 		ThreadLoadInfo()
 	}
 	
-	fun getNodeValue(root: Node, attributeValue: String): String {
+	fun getVersionValText(root: Node, targetVersion: String): String {
 		val versions = root.childNodes
 		for (i in 0 until versions.length) {
 			val version = versions.item(i)
-			if (!version.hasChildNodes() || !version.hasAttributes() || version.attributes.item(0).nodeValue != attributeValue) continue
+			if (!version.hasChildNodes() || !version.hasAttributes() || !version.attributes.getNamedItem("id").nodeValue.endsWith(targetVersion)) continue
 			
-			val vals = version.childNodes // <string>s in next iteration
+			val vals = version.childNodes
 			for (j in 0 until vals.length) {
 				val aval = vals.item(j)
 				if (!aval.hasChildNodes()) continue
 				
-				// only one will be parsed
 				return aval.childNodes.item(0).nodeValue
 			}
 		}
@@ -50,17 +47,30 @@ object InfoLoader {
 		override fun run() {
 			try {
 				val root = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(URL("https://bitbucket.org/AlexSocol/alfheim/raw/" + (if (ModInfo.DEV) "development" else "master") + "/news/" + MinecraftForge.MC_VERSION + ".xml").openStream()).documentElement
-				val latest = getNodeValue(root, "LATEST")
-				onlineVersion = latest.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1].toInt()
-				outdated = onlineVersion > AlfheimCore.meta.version.replace("\\D".toRegex(), "").toInt()
-				if (outdated) info.add(StatCollector.translateToLocalFormatted("alfheimmisc.update", AlfheimCore.meta.version, latest))
-				var s: String? = getNodeValue(root, "UNIVERSAL")
-				info.addAll(listOf(*s!!.split("&".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
-				s = getNodeValue(root, AlfheimCore.meta.version)
-				if (s.isNotEmpty()) {
-					info.add("=====================================================")
-					info.addAll(listOf(*s.split("&".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
+				val latest = getVersionValText(root, "LATEST")
+				
+				val onlineVersion = latest.split("-").let { it.getOrNull(1) ?: it.getOrNull(0) ?: "0" }.toInt()
+				var localVersion = AlfheimCore.meta.version.replace("\\D".toRegex(), "").toInt()
+				
+				if (onlineVersion > localVersion)
+					info.add(StatCollector.translateToLocalFormatted("alfheimmisc.update", localVersion, onlineVersion))
+				
+				info.add(getVersionValText(root, "UNIVERSAL"))
+				
+				var addedLines = false
+				while (localVersion < onlineVersion) {
+					if (!addedLines) {
+						info.add("=====================================================")
+						addedLines = true
+					}
+					
+					getVersionValText(root, localVersion.toString()).apply { 
+						if (isNotEmpty()) info.add(this)
+					}
+					
+					localVersion++
 				}
+				
 				ASJUtilities.log("Successfully loaded news & version")
 			} catch (e: Exception) {
 				ASJUtilities.error("Unable to load news & version from official repo. Check your internet connection.", e)

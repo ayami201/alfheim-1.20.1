@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alfheim.client.core.helper.IconHelper
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.tile.TileRainbowManaFlame
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.*
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.texture.IIconRegister
@@ -41,11 +42,14 @@ class ItemRodPrismatic: ItemMod("rodRainbowLight"), IManaUsingItem, IPhantomInka
 		if (pass > 0) 0xFFFFFF else ItemIridescent.rainbowColor()
 	
 	override fun onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+		if (world.provider.dimensionId == AlfheimConfigHandler.dimensionIDHelheim) return false
+		
 		if (world.getBlock(x, y, z) == AlfheimBlocks.rainbowFlame) {
 			world.setBlock(x, y, z, Blocks.air)
 			world.playSoundEffect(x.D + 0.5, y.D + 0.5, z.D + 0.5, "random.fizz", 0.3F, Math.random().F * 0.4F + 0.8F)
 			return true
 		}
+		
 		val toPlace = ItemStack(AlfheimBlocks.rainbowFlame)
 		if (!ManaItemHandler.requestManaExactForTool(stack, player, COST, false)) return false
 		val dir = ForgeDirection.getOrientation(side)

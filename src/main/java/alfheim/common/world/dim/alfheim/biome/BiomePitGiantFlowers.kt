@@ -9,7 +9,7 @@ import net.minecraftforge.common.BiomeDictionary.Type
 import ru.vamig.worldengine.standardcustomgen.*
 import vazkii.botania.common.block.ModBlocks
 
-object BiomeIslandGiantFlowers: BiomeAlfheim(-10.0, -1.0, 1.8, 3, 250.0, 2.0, 71, 2, "Mutated field", Type.PLAINS, Type.DENSE, Type.LUSH) {
+object BiomePitGiantFlowers: BiomeAlfheim(1.0, 10.0, 1.8, 3, 250.0, 2.0, 71, 2, "Mutated field", Type.PLAINS, Type.DENSE, Type.LUSH) {
 	
 	init {
 		var standardBiomeLayers = WE_BiomeLayer()

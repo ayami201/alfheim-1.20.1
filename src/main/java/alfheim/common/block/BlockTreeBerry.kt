@@ -9,6 +9,7 @@ import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenFoodMetas
 import alfheim.common.lexicon.AlfheimLexiconData
 import net.minecraft.block.Block
+import net.minecraft.block.IGrowable
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
@@ -19,13 +20,14 @@ import net.minecraftforge.common.*
 import vazkii.botania.api.lexicon.ILexiconable
 import java.util.*
 
-class BlockTreeBerry(val leaves: Block, val type: Int): BlockContainerMod(Material.vine), ILexiconable, IPlantable {
+class BlockTreeBerry(val leaves: Block, val type: Int): BlockContainerMod(Material.vine), ILexiconable, IPlantable, IGrowable {
 	
 	lateinit var icons: Array<IIcon>
 	
 	init {
 		setBlockName("TreeBerry$type")
 		setHardness(0f)
+		tickRandomly = true
 		setStepSound(soundTypeGrass)
 	}
 	
@@ -101,6 +103,14 @@ class BlockTreeBerry(val leaves: Block, val type: Int): BlockContainerMod(Materi
 	override fun getPlant(world: IBlockAccess, x: Int, y: Int, z: Int) = world.getBlock(x, y, z)!!
 	
 	override fun getPlantMetadata(world: IBlockAccess, x: Int, y: Int, z: Int) = world.getBlockMetadata(x, y, z)
+	
+	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, isRemote: Boolean) = !isRemote && world.getBlockMetadata(x, y, z) < 2 // can bonemeal at all, will use item if true
+	
+	override fun func_149852_a(world: World?, random: Random, x: Int, y: Int, z: Int) = random.nextInt(10) == 0 // is bonemeal applied
+	
+	override fun func_149853_b(world: World, random: Random?, x: Int, y: Int, z: Int) { // bonemeal action
+		world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) + 1, 3)
+	}
 	
 	override fun getDrops(world: World, x: Int, y: Int, z: Int, metadata: Int, fortune: Int): ArrayList<ItemStack> {
 		return arrayListOf(ItemStack(getItemDropped(metadata, world.rand, fortune) ?: return arrayListOf(), quantityDropped(metadata, fortune, world.rand), damageDropped(metadata)))

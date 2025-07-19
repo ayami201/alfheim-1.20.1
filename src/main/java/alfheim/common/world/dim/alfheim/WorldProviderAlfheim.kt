@@ -4,12 +4,14 @@ import alexsocol.asjlib.ASJUtilities
 import alfheim.client.render.world.*
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDAlfheim
 import alfheim.common.core.handler.AlfheimConfigHandler.enableAlfheimRespawn
 import alfheim.common.core.handler.AlfheimConfigHandler.enableElvenStory
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.world.data.CustomWorldData.Companion.customData
 import alfheim.common.world.dim.alfheim.biome.*
 import alfheim.common.world.dim.alfheim.customgens.*
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.ChunkCoordinates
 import net.minecraft.world.biome.BiomeGenBase
 import ru.vamig.worldengine.*
@@ -50,12 +52,21 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 		
 		val ores = WE_OreGen()
 		val m = AlfheimConfigHandler.oregenMultiplier
-		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 0, 1, 8, 1 * m, 2 * m, 75, 1, 16)  // Dragonstone
-		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 1, 1, 8, 3 * m, 6 * m, 100, 1, 64) // Elementium
-		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 2, 4, 8, 1 * m, 1 * m, 100, 1, 48) // Quartz
-		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 3, 1, 8, 2 * m, 3 * m, 100, 1, 32) // Gold
-		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 4, 1, 4, 1 * m, 1 * m, 50, 1, 16)  // Iffesal
-		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 5, 4, 8, 1 * m, 1 * m, 100, 1, 48) // Lapis
+//		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 0, 1, 8, 1 * m, 2 * m, 75 , 1, 16) // Dragonstone
+//		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 1, 1, 8, 3 * m, 6 * m, 100, 1, 64) // Elementium
+//		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 2, 4, 8, 1 * m, 1 * m, 100, 1, 48) // Quartz
+//		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 3, 1, 8, 2 * m, 3 * m, 100, 1, 32) // Gold
+//		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 4, 1, 4, 1 * m, 1 * m, 50 , 1, 16) // Iffesal
+//		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 5, 4, 8, 1 * m, 1 * m, 100, 1, 48) // Lapis
+		
+		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 0, 2,  4, 1 * m,  2 * m, 100,  1, 16)  // Dragonstone
+		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 1, 3,  6, 6 * m, 18 * m, 100,  1, 59)  // Elementium
+		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 1, 2,  4, 8 * m, 24 * m, 100, 60, 140) // Elementium
+		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 2, 3,  6, 6 * m, 18 * m, 100,  1, 59)  // Quartz
+		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 2, 2,  4, 8 * m, 24 * m, 100, 60, 140) // Quartz
+		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 3, 2,  4, 2 * m,  3 * m, 100,  1, 34)  // Gold
+		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 4, 2,  3, 2 * m,  4 * m,  50, 16, 48)  // Iffesal
+		ores.add(AlfheimBlocks.elvenOre, ModBlocks.livingrock, 5, 4, 10, 1 * m,  2 * m, 100,  1, 26)  // Lapis
 		
 		cp.decorateChunkGen_List.add(WorldGenAlfheim)
 		if (worldFeatures) {
@@ -67,7 +78,7 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 		}
 		
 		WE_Biome.addBiomeToGeneration(cp, BiomeField)
-		WE_Biome.addBiomeToGeneration(cp, BiomeIslandGiantFlowers)
+		WE_Biome.addBiomeToGeneration(cp, BiomePitGiantFlowers)
 		WE_Biome.addBiomeToGeneration(cp, BiomeBeach)
 		WE_Biome.addBiomeToGeneration(cp, BiomeSandbank)
 		WE_Biome.addBiomeToGeneration(cp, BiomeRiver)
@@ -81,7 +92,7 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 		
 		if (!worldFeatures)
 			listOf(BiomeField,
-				   BiomeIslandGiantFlowers,
+				   BiomePitGiantFlowers,
 				   BiomeBeach,
 				   BiomeSandbank,
 				   BiomeRiver,
@@ -115,6 +126,7 @@ class WorldProviderAlfheim: WE_WorldProvider() {
 	override fun getEntrancePortalLocation() = spawnPoint
 	override fun getRandomizedSpawnPoint() = spawnPoint
 	override fun canRespawnHere() = enableElvenStory || enableAlfheimRespawn
+	override fun getRespawnDimension(player: EntityPlayerMP?) = if (canRespawnHere()) dimensionIDAlfheim else 0
 	override fun getSkyRenderer() = SkyRendererAlfheim
 	override fun getWeatherRenderer() = WeatherRendererAlfheim
 	override fun getCloudHeight() = 164f

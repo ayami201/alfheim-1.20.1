@@ -12,11 +12,13 @@ import org.lwjgl.opengl.GL11.*
 
 object RenderBlockSpire: ISimpleBlockRenderingHandler {
 	
+	private val instance = TileSpire()
+	
 	override fun renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
 		glPushMatrix()
 		glScaled(0.5)
 		glTranslatef(0f, -1f, 0f)
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(TileSpire(), 0.0, 0.0, 0.0, 0f)
+		TileEntityRendererDispatcher.instance.renderTileEntityAt(instance, 0.0, 0.0, 0.0, 0f)
 		glPopMatrix()
 	}
 	

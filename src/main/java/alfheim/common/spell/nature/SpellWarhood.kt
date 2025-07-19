@@ -1,4 +1,4 @@
-package alfheim.common.spell.fire
+package alfheim.common.spell.nature
 
 import alexsocol.asjlib.ASJUtilities
 import alfheim.api.entity.EnumRace
@@ -7,7 +7,7 @@ import alfheim.common.core.handler.CardinalSystem
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 
-object SpellWarhood: SpellBase("warhood", EnumRace.SALAMANDER, 256000, 72000, 100, true) {
+object SpellWarhood: SpellBase("warhood", EnumRace.CAITSITH, 256000, 72000, 100, true) {
 	
 	override val usableParams
 		get() = emptyArray<Any>()

@@ -43,7 +43,7 @@ object VisualEffectHandlerClient {
 		
 		when (s) {
 			ACID               -> spawnAcid(d[0], d[1], d[2])
-			AQUABIND           -> spawnAquaBind(d[0], d[1], d[2])
+//			AQUABIND           -> spawnAquaBind(d[0], d[1], d[2])
 			AQUASTREAM_HIT     -> spawnAquaStreamHit(d[0], d[1], d[2])
 			BIFROST            -> spawnBifrost(d[0], d[1], d[2])
 			BIFROST_DONE       -> spawnBifrostFinish(d[0], d[1], d[2], d[3].I)
@@ -70,7 +70,6 @@ object VisualEffectHandlerClient {
 			GUNGNIR            -> spawnGungnir(d[0].I, d[1].I)
 			HEAL               -> spawnBurst(d[0], d[1], d[2], 0f, 1f, 0f)
 			HORN               -> horn(d[0], d[1], d[2])
-			ICELENS            -> addIceLens()
 			ICONCRACK          -> spawnIconCrack(d[0], d[1], d[2], d[3].I, d[4].I)
 			LIGHTNING          -> spawnLightning(d[0], d[1], d[2], d[3], d[4], d[5], d[6].F, d[7].I, d[8].I, d.getOrElse(9) { 1.0 }.I)
 			MANA               -> addMana(d[0], d[1].I)
@@ -105,10 +104,6 @@ object VisualEffectHandlerClient {
 	
 	fun activateEmblem(eID: Double, active: Double) {
 		activeEmblems[eID.I] = active != 0.0
-	}
-	
-	fun addIceLens() {
-		mc.thePlayer.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDIceLens, SpellIceLens.duration))
 	}
 	
 	fun addMana(enID: Double, mana: Int) {
@@ -146,19 +141,19 @@ object VisualEffectHandlerClient {
 	fun spawnAcid(x: Double, y: Double, z: Double) {
 		for (i in 0..255) {
 			v.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize().mul(Math.random() * 9, Math.random() * 9, Math.random() * 9)
-			Botania.proxy.wispFX(mc.theWorld, x + v.x, y + v.y, z + v.z, (Math.random() * 0.2).F, 1f, 0f, 2f, 0f, 2f)
+			Botania.proxy.wispFX(mc.theWorld, x + v.x, y + v.y, z + v.z, (Math.random() * 0.2).F, 0f, 1f, 2f, 0f, 2f)
 		}
 	}
 	
-	fun spawnAquaBind(x: Double, y: Double, z: Double) {
-		var j = 0
-		while (j < 360) {
-			val i = cos(j.D) * SpellAquaBind.radius
-			val k = sin(j.D) * SpellAquaBind.radius
-			Botania.proxy.wispFX(mc.theWorld, x + i, y, z + k, 0f, 0.5f, 1f, 0.5f)
-			j += 5
-		}
-	}
+//	fun spawnAquaBind(x: Double, y: Double, z: Double) {
+//		var j = 0
+//		while (j < 360) {
+//			val i = cos(j.D) * SpellAquaBind.radius
+//			val k = sin(j.D) * SpellAquaBind.radius
+//			Botania.proxy.wispFX(mc.theWorld, x + i, y, z + k, 0f, 0.5f, 1f, 0.5f)
+//			j += 5
+//		}
+//	}
 	
 	fun spawnWisp(x: Double, y: Double, z: Double, red: Float, green: Float, blue: Float, size: Float, mx: Float, my: Float, mz: Float, age: Float, depth: Boolean) {
 		Botania.proxy.setWispFXDepthTest(depth)
@@ -438,9 +433,9 @@ object VisualEffectHandlerClient {
 	}
 	
 	fun spawnSmoke(x: Double, y: Double, z: Double) {
-		for (i in 0..255) {
-			v.rand().sub(0.5).normalize().mul(Math.random() * SpellSmokeScreen.radius)
-			Botania.proxy.wispFX(mc.theWorld, x + v.x, y + v.y, z + v.z, 0.1f, 0.1f, 0.1f, (Math.random() * 4 + 4).F, (Math.random() * -0.075).F, 10f)
+		for (i in 0..511) {
+			v.rand().sub(0.5).normalize().mul((1 - exp(-Math.random() * 5)) * SpellSmokeScreen.radius)
+			Botania.proxy.wispFX(mc.theWorld, x + v.x, y + v.y, z + v.z, 0.1f, 0.1f, 0.1f, (Math.random() * 4 + 8).F, (Math.random() * -0.075).F, 10f)
 		}
 	}
 	
@@ -518,7 +513,7 @@ object VisualEffectHandlerClient {
 	}
 	
 	enum class VisualEffects {
-		ACID, AQUABIND, AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CHALK, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, ENDER, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FIRESTAR, FIREWORK, GAIA_SOUL, GRAVITY, GUNGNIR, HEAL, HORN, ICELENS, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SNICE_MARK, SPARKLE, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
+		ACID, /*AQUABIND,*/ AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CHALK, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, ENDER, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FIRESTAR, FIREWORK, GAIA_SOUL, GRAVITY, GUNGNIR, HEAL, HORN, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SNICE_MARK, SPARKLE, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
 	}
 	
 	fun onDeath(target: EntityLivingBase) {

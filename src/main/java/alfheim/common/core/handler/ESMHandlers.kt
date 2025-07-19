@@ -2,6 +2,7 @@ package alfheim.common.core.handler
 
 import alexsocol.asjlib.*
 import alexsocol.patcher.event.*
+import alfheim.AlfheimCore
 import alfheim.api.ModInfo
 import alfheim.api.entity.EnumRace.*
 import alfheim.api.entity.race
@@ -231,7 +232,7 @@ object ESMHandler {
 		if (tg is EntityTameable && !tg.isTamed) {
 			tg.isTamed = true
 			tg.func_152115_b(player.uniqueID.toString())
-		} else if (tg is EntityHorse) {
+		} else if (tg is EntityHorse && !tg.isTame) {
 			tg.setTamedBy(player)
 			tg.worldObj.setEntityState(tg, 7.toByte())
 		} else return

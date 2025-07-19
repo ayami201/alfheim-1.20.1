@@ -9,6 +9,7 @@ import alfheim.common.floatingisland.FloatingIslandInteractionHandler.intersects
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.ItemCarver.Companion.CarverMode
 import alfheim.common.item.ItemCarver.Companion.carverMode
+import alfheim.common.lexicon.AlfheimLexiconData
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageFuckedUpServerPrecision
 import net.minecraft.block.Block
@@ -34,7 +35,8 @@ class BlockComposite: BlockDoubleCamo(info = false) {
 		if (stack?.item !== AlfheimItems.carver && (stack?.block === Blocks.air || stack?.block is BlockDoubleCamo))
 			return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ)
 		
-		if (ASJUtilities.isClient) NetworkService.sendToServer(MessageFuckedUpServerPrecision(x, y, z, side, hitX, hitY, hitZ))
+		if (ASJUtilities.isClient)
+			NetworkService.sendToServer(MessageFuckedUpServerPrecision(x, y, z, side, hitX, hitY, hitZ))
 		
 		return true
 	}
@@ -313,4 +315,5 @@ class BlockComposite: BlockDoubleCamo(info = false) {
 	override fun topSide(meta: Int) = -1
 	override fun getRenderType() = LibRenderIDs.idComposite
 	override fun createNewTileEntity(world: World?, meta: Int) = TileComposite()
+	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.carver
 }

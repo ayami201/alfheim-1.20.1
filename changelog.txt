@@ -1,13 +1,34 @@
 Innovations:
- Shapeshifting Belt to change race and gender
- Recipe and lexicon for Botanist's Toolbelt
- ESM and MMO disabled by default
- Config to move Alfheim entries to Botania categories
- [MMO] Indicator on an entity for Priority Target spell
+ New mechanic in Flugel tier 3 combat
+ Stencil item for copying carved blocks
+ Skulls alchemy transmutation recipe
+ More resonator modes and abilities
+ New storage blocks
+ Config for biomes with sheer cold/blazing heat mechanics
+ Floating islands will drop configurable amount of blocks on explosion
+ Blacklist for blocks floating islands will collide with
+ "Gifts" for elves and midgardians will actually appear in the trade portals
+ Anyavil now has repair GUI
+ Vanilla mushrooms transmutation
+ Added sheddings for Alfheim mobs
+ Mobs won't attack riders with white wine effect
+ Tile entity items render optimizations
+ Melons and pumpkins worldgen in island forests
+ Ore gen rebalance
+ [WIP] Sword and pickaxe of the rift
+ [ESM] Race reset item
+ [ESM] New recipes and mechanics for extended play time
+ [MMO] Removed aqua bind spell
+ [MMO] Changed affinities of some spells
+ [MMO] Revamped many spells
+ [MMO] Config for sorting spells by affinity in lexicon
 
 Fixes:
- Elves aggroing on players for no reason
- Magma and elemental slimes shedding slimeballs
- [ESM] Race icon issues when max flight time is set to 0
- [MMO] Target indicator sometimes being gray and not rotating smoothly
- [MMO] QuadDamage sequence 
+ Knowledge types of some lexicon entries
+ Bosses music disk drop
+ Mod saving data to the drive root
+ Decreased lifespan of shedding-dropped items to 1 minute
+ Yggdrasil blocks burn time
+ Elementium pick's disposability meta ignoring
+ Cobblestone generator generating cobblestone instead of livingcobble on some hybrid servers
+ Update checker

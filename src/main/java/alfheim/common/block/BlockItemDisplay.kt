@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.*
 import net.minecraft.inventory.*
 import net.minecraft.item.*
 import net.minecraft.util.*
@@ -94,7 +94,8 @@ class BlockItemDisplay: BlockContainerMod(Material.wood), ILexiconable, IFuelHan
 					player.setCurrentItemOrArmor(0, null)
 				}
 				
-				player.inventory.markDirty()
+				if (player is EntityPlayerMP)
+					player.sendContainerToPlayer(player.inventoryContainer)
 			}
 		}
 		

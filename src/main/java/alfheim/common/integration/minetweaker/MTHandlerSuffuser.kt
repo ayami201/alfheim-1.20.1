@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack
 import stanhebben.zenscript.annotations.*
 import vazkii.botania.api.BotaniaAPI
 
-@ZenClass("mods." + ModInfo.MODID + ".Suffuser")
+@ZenClass("mods.${ModInfo.MODID}.Suffuser")
 object MTHandlerSuffuser {
 	
 	@ZenMethod

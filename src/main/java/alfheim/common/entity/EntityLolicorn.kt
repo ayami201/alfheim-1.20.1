@@ -8,7 +8,6 @@ import alfheim.api.spell.ITimeStopSpecific
 import alfheim.client.model.entity.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
-import cpw.mods.fml.relauncher.*
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.model.ModelBase
@@ -86,26 +85,24 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 	override fun setHealth(hp: Float) = Unit // NO-OP
 	
 	override fun fall(f: Float) {
-		if (f > 1f) {
+		if (f > 1f)
 			playSound("mob.horse.land", 0.4f, 1f)
-		}
 		
 		val i = f * 0.5f - 3f
+		if (i <= 0) return
 		
-		if (i > 0) {
-			val block = worldObj.getBlock(posX.mfloor(), (posY - 0.2 - prevRotationYaw).mfloor(), posZ.mfloor())
-			
-			if (block.material !== Material.air) {
-				val soundtype = block.stepSound
-				playSoundAtEntity(soundtype.stepResourcePath, soundtype.getVolume() * 0.5f, soundtype.pitch * 0.75f)
-			}
-		}
+		val block = worldObj.getBlock(posX.mfloor(), (posY - 0.2 - prevRotationYaw).mfloor(), posZ.mfloor())
+		if (block.material === Material.air) return
+		
+		val soundtype = block.stepSound
+		playSoundAtEntity(soundtype.stepResourcePath, soundtype.getVolume() * 0.5f, soundtype.pitch * 0.75f)
 	}
 	
 	override fun interact(player: EntityPlayer?): Boolean {
 		var sup = false
 		try {
 			if (player == null) return false
+			
 			if (owner.isNotEmpty() && player.commandSenderName != owner) {
 				ASJUtilities.say(player, "Owned by $owner")
 				return false
@@ -125,13 +122,13 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 	}
 	
 	override fun onLivingUpdate() {
-		if (rand.nextInt(200) == 0) {
+		if (rand.nextInt(200) == 0)
 			tailMovement = 1
-		}
 		
 		super.onLivingUpdate()
 		
-		if (rider == null && posY < -256) setDead()
+		if (rider == null && posY < -256)
+			setDead()
 	}
 	
 	override fun onUpdate() {
@@ -143,10 +140,10 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 	}
 	
 	fun doTPorDIE() {
-		val master = MinecraftServer.getServer()?.configurationManager?.func_152612_a(owner) ?: run { setDead(); return }
-		if (master.dimension != dimension) {
-			setDead(); return
-		}
+		val master = MinecraftServer.getServer()?.configurationManager?.func_152612_a(owner) ?: return setDead()
+		if (master.dimension != dimension)
+			return setDead()
+		
 		if (requests.remove(owner))
 			master.also {
 				setPosition(it.posX, it.posY, it.posZ)
@@ -166,7 +163,7 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 		
 		if (mF > 0f)
 			for (i in 1..8) {
-				val c = Color.getHSBColor(Math.random().F, 1f, 1f)
+				val c = Color.getHSBColor((ticksExisted * 10) % 360 / 360f, 1f, 1f)
 				worldObj.spawnParticle("reddust", posX + Math.random() - 0.5, posY + Math.random() - 0.5, posZ + Math.random() - 0.5, c.red / 255.0, c.green / 255.0, c.blue / 255.0)
 			}
 	}
@@ -188,29 +185,27 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 	override fun func_145780_a(x: Int, y: Int, z: Int, block: Block) {
 		var soundtype: Block.SoundType = block.stepSound
 		
-		if (worldObj.getBlock(x, y + 1, z) === Blocks.snow_layer) {
+		if (worldObj.getBlock(x, y + 1, z) === Blocks.snow_layer)
 			soundtype = Blocks.snow_layer.stepSound
-		}
 		
-		if (!block.material.isLiquid) {
+		if (block.material.isLiquid) return
+		
+		if (riddenByEntity != null) {
+			++tugudukCounter
 			
-			if (riddenByEntity != null) {
-				++tugudukCounter
+			if (tugudukCounter > 5 && tugudukCounter % 3 == 0) {
+				playSound("mob.horse.gallop", soundtype.getVolume() * 0.15f, soundtype.pitch)
 				
-				if (tugudukCounter > 5 && tugudukCounter % 3 == 0) {
-					playSound("mob.horse.gallop", soundtype.getVolume() * 0.15f, soundtype.pitch)
-					
-					if (rand.nextInt(10) == 0) {
-						playSound("mob.horse.breathe", soundtype.getVolume() * 0.6f, soundtype.pitch)
-					}
-				} else if (tugudukCounter <= 5) {
-					playSound("mob.horse.wood", soundtype.getVolume() * 0.15f, soundtype.pitch)
+				if (rand.nextInt(10) == 0) {
+					playSound("mob.horse.breathe", soundtype.getVolume() * 0.6f, soundtype.pitch)
 				}
-			} else if (soundtype === Block.soundTypeWood) {
+			} else if (tugudukCounter <= 5) {
 				playSound("mob.horse.wood", soundtype.getVolume() * 0.15f, soundtype.pitch)
-			} else {
-				playSound("mob.horse.soft", soundtype.getVolume() * 0.15f, soundtype.pitch)
 			}
+		} else if (soundtype === Block.soundTypeWood) {
+			playSound("mob.horse.wood", soundtype.getVolume() * 0.15f, soundtype.pitch)
+		} else {
+			playSound("mob.horse.soft", soundtype.getVolume() * 0.15f, soundtype.pitch)
 		}
 	}
 	
@@ -243,10 +238,10 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 	var look = Vector3()
 	
 	override fun updateRiderPosition() {
-		if (riddenByEntity != null) {
-			look.set(lookVec).mul(1.0, 0.0, 1.0).normalize().mul(-0.25)
-			riddenByEntity.setPosition(posX + look.x, posY + mountedYOffset + riddenByEntity.getYOffset(), posZ + look.z)
-		}
+		if (riddenByEntity == null) return
+		
+		look.set(lookVec).mul(1.0, 0.0, 1.0).normalize().mul(-0.25)
+		riddenByEntity.setPosition(posX + look.x, posY + mountedYOffset + riddenByEntity.getYOffset(), posZ + look.z)
 	}
 	
 	override fun writeEntityToNBT(nbt: NBTTagCompound) {
@@ -311,7 +306,7 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 		
 		enum class EnumMountType(val postfix: String,
 		                         val texture: ResourceLocation,
-		                             modelProvider: () -> Any,
+		                             modelProvider: () -> ModelBase,
 		                         val preRenderCallback: () -> Unit = {},
 		                         val livingSound: String = "mob.horse.idle",
 		                         val angrySoundName: String = "mob.horse.angry"
@@ -321,23 +316,9 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 			FENRIR(".Fenrir", LibResourceLocations.fenrir, { ModelEntityFenrir }, { glScalef(1.5f) }, "mob.wolf.growl", "mob.wolf.growl"),
 			SLEIPNIR(".Odin", LibResourceLocations.sleipnir, { ModelEntitySleipnir });
 			
-			private val model: Any
-			
-			init {
-				model = if (ASJUtilities.isClient) {
-					modelProvider()
-				} else {
-					0
-				}
-			}
-			
-			@SideOnly(Side.CLIENT)
-			fun model(): ModelBase {
-				return model as ModelBase
-			}
+			val model: ModelBase? = if (ASJUtilities.isClient) modelProvider() else null
 			
 			companion object {
-				
 				fun valueOfOrNull(value: String): EnumMountType? = try { valueOf(value) } catch (e: IllegalArgumentException) { null }
 			}
 		}

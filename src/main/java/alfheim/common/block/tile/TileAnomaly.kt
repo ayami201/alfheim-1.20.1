@@ -47,7 +47,7 @@ class TileAnomaly: TileImmobile() {
 	}
 	
 	fun spawnWisps() {
-		if (worldObj.isRemote || !worldObj.getBiomeGenForCoords(xCoord, zCoord).let { it is BiomeField || it is BiomeIslandGiantFlowers || it is BiomeIslandForest || it is BiomePitForest }) return
+		if (worldObj.isRemote || !worldObj.getBiomeGenForCoords(xCoord, zCoord).let { it is BiomeField || it is BiomePitGiantFlowers || it is BiomeIslandForest || it is BiomePitForest }) return
 		if (subTileName != "Warp" && subTileName != "Lightning") return
 		
 		for (i in 0..worldObj.rand.nextInt(3))

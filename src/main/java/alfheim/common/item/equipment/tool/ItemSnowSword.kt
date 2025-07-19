@@ -1,13 +1,16 @@
 package alfheim.common.item.equipment.tool
 
 import alexsocol.asjlib.meta
+import alexsocol.patcher.handler.PlayerReachDistanceHandler
 import alfheim.client.core.helper.IconHelper
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenResourcesMetas
+import com.google.common.collect.Multimap
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.ai.attributes.AttributeModifier
 import net.minecraft.item.ItemStack
 import net.minecraft.potion.*
 import net.minecraft.util.IIcon
@@ -47,4 +50,10 @@ class ItemSnowSword: ItemManasteelSword(snow, "SnowSword") {
 	}
 	
 	override fun getIconIndex(stack: ItemStack) = if (stack.displayName.trim().equals("chunchunmaru", true)) katanaIcon else itemIcon
+	
+	override fun getAttributeModifiers(stack: ItemStack?): Multimap<*, *> {
+		val modifiers = super.getAttributeModifiers(stack)
+		modifiers.put(PlayerReachDistanceHandler.reachDistance.attributeUnlocalizedName, AttributeModifier(field_111210_e, "Weapon modifier", 1.5, 0))
+		return modifiers
+	}
 }

@@ -122,19 +122,23 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var authTimeout = 200
 	var barrierTreeAllowAnyPlayer = false
 	var blackLotusDropRate = 0.05
+	var biomesCold = intArrayOf(*niflheimBiomeIDs)
+	var biomesHot = intArrayOf(8)
 	var cataclysmCooldown = 600
 	var effectScreenOverlay = true
 	var enderOreWeights = arrayOf("oreEndCoal:9000", "oreEndDiamond:500", "oreEndEmerald:500", "oreEndGold:3635", "oreEndIron:5790", "oreEndLapis:3250", "oreEndRedstone:5600", "oreDraconium:200")
 	var eventBanner = true
+	var extendedElvenStory = false
 	var fancies = true
 	var faultLinePersistence = 3000
+	var floatingIslandDrops = 0.01
+	var floatingIslandNoCollisionBlocks = arrayOf("Natura:Cloud")
 	var floatingIslandPathfinder = true
 	var floatingIslandSyncedDataInitLimit = 31
 	var floodLightQuality = 10
 	var flugelSwapBlackList = emptyArray<String>()
 	var gourmaryllisDifficulty = 2
 	var hotControls = 2
-	var hotHell = true
 	var imPatheticWeakAndScaredDontTouchMyWorlds = false
 	var interactEventChecks = false
 	var lexiconSort = false
@@ -258,6 +262,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var legendarySpells = arrayOf("sacrifice", "isaacstorm", "resurrect", "timestop", "warhood")
 	var maxPartyMembers = 5
 	var raceManaMult = 2.toByte()
+	var spellSortByAffinity = true
 	var superSpellBosses = false
 	
 	// MMO HUD
@@ -296,7 +301,6 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		enableAlfheimRespawn = loadProp(CATEGORY_ALFHEIM, "enableAlfheimRespawn", enableAlfheimRespawn, false, "Set this to false to disable respawning in Alfheim")
 		floatingIslandCountMax = loadProp(CATEGORY_ALFHEIM, "floatingIslandCountMax", floatingIslandCountMax, false, "Max count of floating islands in world", 1)
 		floatingIslandCountPerPlayer = loadProp(CATEGORY_ALFHEIM, "floatingIslandCountPerPlayer", floatingIslandCountPerPlayer, false, "Max count of floating islands per player in world", 1)
-		enableAlfheimRespawn = loadProp(CATEGORY_ALFHEIM, "enableAlfheimRespawn", enableAlfheimRespawn, false, "Set this to false to disable respawning in Alfheim")
 		grabMidgardPortal = loadProp(CATEGORY_ALFHEIM, "grabMidgardPortal", grabMidgardPortal, false, "Set this to true to teleport near existing active loaded portal when leaving Alfheim instead of world spawn")
 		increasedSpiritsRange = loadProp(CATEGORY_ALFHEIM, "increasedSpiritsRange", increasedSpiritsRange, false, "Set this to false to reduce nighttime spirits spawn range in Alfheim (may increase FPS)")
 		rainbowPolys = loadProp(CATEGORY_ALFHEIM, "rainbowPolys", rainbowPolys, false, "How smooth will rainbow and rays in Alfheim sky be (higher number - more polygons)")
@@ -348,19 +352,23 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		authTimeout = loadProp(CATEGORY_GENERAL, "authTimeout", authTimeout, false, "Time limit for client to send authentication credentials", 100, 600)
 		barrierTreeAllowAnyPlayer = loadProp(CATEGORY_GENERAL, "barrierTreeAllowAnyPlayer", barrierTreeAllowAnyPlayer, false, "Set this to true to allow any player to bypass barrier trees")
 		blackLotusDropRate = loadProp(CATEGORY_GENERAL, "blackLotusDropRate", blackLotusDropRate, false, "Rate of black loti dropping from Manaseal Creepers")
+		biomesCold = loadProp(CATEGORY_GENERAL, "biomesCold", biomesCold, false, "List of cold biomes where sheer cold will be accumulating")
+		biomesHot = loadProp(CATEGORY_GENERAL, "biomesHot", biomesHot, false, "List of hot biomes where blazing heat will be accumulating")
 		cataclysmCooldown = loadProp(CATEGORY_GENERAL, "cataclysmCooldown", cataclysmCooldown, false, "Average ticks between cataclysms", 100, 6000)
 		effectScreenOverlay = loadProp(CATEGORY_GENERAL, "effectScreenOverlay", effectScreenOverlay, false, "Set this to false to disable screen overlay for effects like heat/cold")
 		enderOreWeights = loadProp(CATEGORY_GENERAL, "enderOreWeights", enderOreWeights, false, "Map of OreDict name to ore weight (more weight - more chace to spawn) for Orechid Endium")
 		eventBanner = loadProp(CATEGORY_GENERAL, "eventBanner", eventBanner, false, "Set this to false to disable event banner popup")
+		extendedElvenStory = loadProp(CATEGORY_GENERAL, "extendedElvenStory", extendedElvenStory, true, "Set this to true to enable recipes for extended stay in Alfheim")
 		fancies = loadProp(CATEGORY_GENERAL, "fancies", fancies, false, "Set this to false to locally disable fancies rendering on you (for contributors only)")
 		faultLinePersistence = loadProp(CATEGORY_GENERAL, "faultLinePersistence", faultLinePersistence, false, "Persistence for Fault Lines (lower value - smaller faults)")
+		floatingIslandDrops = loadProp(CATEGORY_GENERAL, "floatingIslandDrops", floatingIslandDrops, false, "Percent of floating islands blocks to be dropped on destruction (0 - none, 0.5 - 50%, 1 - 100%)", 0.0, 1.0)
+		floatingIslandNoCollisionBlocks = loadProp(CATEGORY_GENERAL, "floatingIslandNoCollisionBlocks", floatingIslandNoCollisionBlocks, true, "List of collidable blocks floating islands won't collide with", false)
 		floatingIslandPathfinder = loadProp(CATEGORY_GENERAL, "floatingIslandPathfinder", floatingIslandPathfinder, false, "Set this to false to disable entity's pathfinding on floating islands. This will make them stand still on islands, but will also lower the server load")
 		floatingIslandSyncedDataInitLimit = loadProp(CATEGORY_GENERAL, "floatingIslandSyncedDataInitLimit", floatingIslandSyncedDataInitLimit, false, "Increase that limit ONLY if you have mods that extend DataWatcher IDs and want really large floating island")
 		floodLightQuality = loadProp(CATEGORY_GENERAL, "floodLightQuality", floodLightQuality, false, "Determines floodlight raycasting steps (lower values - more quality and CPU load). Must be an integer divisor of 360", 1, 120)
 		flugelSwapBlackList = loadProp(CATEGORY_GENERAL, "flugelSwapBlackList", flugelSwapBlackList, false, "Blacklist for items that flugel can't swap [modid:name]", false)
 		gourmaryllisDifficulty = loadProp(CATEGORY_GENERAL, "gourmaryllisDifficulty", gourmaryllisDifficulty, false, "Difficulty of Gourmaryllis functionality: 0 - default, 1 - as in 1.12.2, 2 - hardcore", 0, 2)
 		hotControls = loadProp(CATEGORY_GENERAL, "hotControls", hotControls, false, "High overheat value would mess your controls if set to 2, only on Hard difficulty if set to 1, would not mess completely if set to 0", 0, 2)
-		hotHell = loadProp(CATEGORY_GENERAL, "hotHell", hotHell, false, "Set this to false to remove overheating in Muspleheim (Hell/Nether)")
 		imPatheticWeakAndScaredDontTouchMyWorlds = loadProp(CATEGORY_GENERAL, "imPatheticWeakAndScaredDontTouchMyWorlds", imPatheticWeakAndScaredDontTouchMyWorlds, false, "Set this to true to disable hardcoded world destruction during Ragnarok and affect ONLY Alfheim")
 		interactEventChecks = loadProp(CATEGORY_GENERAL, "interactEventChecks", interactEventChecks, false, "Distance checks when firing interaction events, results may be unclear")
 		lexiconSort = loadProp(CATEGORY_GENERAL, "lexiconSort", lexiconSort, true, "Set this to true to sort Alfheim lexicon entries to vanilla categories")
@@ -477,6 +485,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		legendarySpells = loadProp(CATEGORY_MMO, "legendarySpells", legendarySpells, false, "Spells that are considered 'epic' thus costing same for all races", false)
 		maxPartyMembers = loadProp(CATEGORY_MMO, "maxPartyMembers", maxPartyMembers, false, "How many people can be in single party at the same time")
 		raceManaMult = loadProp(CATEGORY_MMO, "raceManaMult", raceManaMult.I, false, "Mana cost multiplier for spells with not your affinity").toByte()
+		spellSortByAffinity = loadProp(CATEGORY_MMO, "spellSortByAffinity", spellSortByAffinity, true, "Set this to false to remove affinity spells sorting")
 		superSpellBosses = loadProp(CATEGORY_MMO, "superSpellBoss", superSpellBosses, false, "Set this to true to make bosses vulnerable to legendary spells")
 		
 		partyHUDScale = loadProp(CATEGORY_HUD, "partyHUDScale", partyHUDScale, false, "Party HUD Scale (1 < bigger; 1 > smaller)")
@@ -486,6 +495,11 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	}
 	
 	fun initWorldCoordsForElvenStory(save: String) {
+		if (save.isBlank()) {
+			zones.fill(Vector3(0, 300, 0))
+			return
+		}
+		
 		val file = File("$save/data/${ModInfo.MODID}/AlfheimCoords.txt")
 		if (!file.exists()) makeDefaultWorldCoords(file)
 		
@@ -538,10 +552,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 			fw.close()
 		} catch (e: IOException) {
 			ASJUtilities.error("Unable to generate default Alfheim Coords data. Setting all to [0, 300, 0]...", e)
-			
-			for (i in zones.indices) {
-				zones[i] = Vector3(0, 300, 0)
-			}
+			zones.fill(Vector3(0, 300, 0)) 
 		}
 	}
 	

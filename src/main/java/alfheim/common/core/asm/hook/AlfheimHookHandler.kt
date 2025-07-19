@@ -17,7 +17,6 @@ import alfheim.client.render.entity.RenderEntityFloatingIsland
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.*
 import alfheim.common.block.alt.BlockAltLeaves
-import alfheim.common.block.colored.BlockAuroraDirt
 import alfheim.common.block.tile.*
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDAlfheim
@@ -34,6 +33,7 @@ import alfheim.common.core.handler.ragnarok.RagnarokHandler.summer
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.summerTicks
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.winter
 import alfheim.common.core.util.DamageSourceSpell
+import alfheim.common.crafting.crafter
 import alfheim.common.crafting.recipe.*
 import alfheim.common.entity.*
 import alfheim.common.entity.ai.EntityAICreeperAvoidPooka
@@ -99,8 +99,10 @@ import net.minecraft.world.gen.structure.*
 import net.minecraftforge.client.IItemRenderer.ItemRenderType
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fluids.IFluidBlock
+import net.minecraftforge.oredict.OreDictionary
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL12
 import ru.vamig.worldengine.*
@@ -122,7 +124,6 @@ import vazkii.botania.client.fx.*
 import vazkii.botania.client.gui.lexicon.*
 import vazkii.botania.client.integration.nei.recipe.RecipeHandlerPetalApothecary
 import vazkii.botania.client.lib.LibResources
-import vazkii.botania.client.model.ModelMiniIsland
 import vazkii.botania.client.render.tile.*
 import vazkii.botania.common.Botania
 import vazkii.botania.common.achievement.ModAchievements
@@ -134,6 +135,7 @@ import vazkii.botania.common.block.subtile.generating.SubTileDaybloom
 import vazkii.botania.common.block.tile.*
 import vazkii.botania.common.block.tile.mana.*
 import vazkii.botania.common.core.BotaniaCreativeTab
+import vazkii.botania.common.core.handler.SheddingHandler
 import vazkii.botania.common.core.proxy.CommonProxy
 import vazkii.botania.common.crafting.recipe.*
 import vazkii.botania.common.entity.*
@@ -265,10 +267,12 @@ object AlfheimHookHandler {
 		}
 		
 		if (player.capabilities.isCreativeMode) return let
+		
 		if (dimTo == dimensionIDHelheim) return let
 		if (dimTo == dimensionIDDomains) return block // only with TileDomainLobby
 		
-		return when (player.dimension) {
+		val dimFrom = player.dimension
+		return when (dimFrom) {
 			dimensionIDDomains  -> dimTo != (player.persistentData.getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE).getOrNull(3) ?: dimTo)
 			dimensionIDAlfheim  -> dimTo != 0 && dimTo != dimensionIDNiflheim
 			dimensionIDNiflheim -> dimTo != dimensionIDAlfheim
@@ -299,30 +303,6 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ALWAYS)
 	fun isOnSpecialSoil(flower: TileFloatingSpecialFlower) = flower.islandType === ItemColorSeeds.islandOvergrowth
-	
-	@SideOnly(CLIENT)
-	@JvmStatic
-	@Hook
-	fun renderTileEntityAt(render: RenderTileFloatingFlower, tile: TileEntity, d0: Double, d1: Double, d2: Double, t: Float) {
-		hookColor = (tile as IFloatingFlower).islandType === ItemColorSeeds.islandTypes.last()
-		if (!hookColor) return
-		
-		Color(BlockAuroraDirt.getBlockColor(tile.xCoord, tile.yCoord, tile.zCoord)).getRGBColorComponents(colors)
-	}
-	
-	var hookColor = false
-	val colors = floatArrayOf(1f, 1f, 1f)
-	
-	@SideOnly(CLIENT)
-	@JvmStatic
-	@Hook
-	fun render(model: ModelMiniIsland) {
-		if (!hookColor) return
-		hookColor = false
-		
-		val (r, g, b) = colors
-		glColor3f(r, g, b)
-	}
 	
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
@@ -358,44 +338,6 @@ object AlfheimHookHandler {
 		if (!AlfheimCore.TravellersGearLoaded) return 0f
 		val gear = TravellersGearAPI.getExtendedInventory(player)
 		return gear.indices.sumOf { i -> (gear[i]?.let { (it.item as? IManaDiscountBauble)?.getDiscount(it, i, player) } ?: 0f) }
-	}
-	
-	var stoneHook = false
-	var cobbleHook = false
-	
-	@JvmStatic
-	@Hook
-	fun updateTick(block: BlockDynamicLiquid, world: World, x: Int, y: Int, z: Int, rand: Random) {
-		stoneHook = world.provider.dimensionId == dimensionIDAlfheim
-	}
-	
-	@JvmStatic
-	@Hook
-	fun func_149805_n(block: BlockLiquid, world: World, x: Int, y: Int, z: Int) {
-		cobbleHook = world.provider.dimensionId == dimensionIDAlfheim
-	}
-	
-	@JvmStatic
-	@Hook(returnCondition = ON_TRUE, returnAnotherMethod = "replaceSetBlock")
-	fun setBlock(world: World, x: Int, y: Int, z: Int, block: Block): Boolean {
-		return (cobbleHook && block === Blocks.cobblestone) || (stoneHook && block === Blocks.stone)
-	}
-	
-	@JvmStatic
-	fun replaceSetBlock(world: World, x: Int, y: Int, z: Int, block: Block): Boolean {
-		var newBlock = block
-		
-		if (cobbleHook && block === Blocks.cobblestone) {
-			cobbleHook = false
-			newBlock = AlfheimBlocks.livingcobble
-		}
-		
-		if (stoneHook && block === Blocks.stone) {
-			stoneHook = false
-			newBlock = ModBlocks.livingrock
-		}
-		
-		return world.setBlock(x, y, z, newBlock, 0, 3)
 	}
 	
 	@JvmStatic
@@ -786,9 +728,12 @@ object AlfheimHookHandler {
 	}
 	
 	@JvmStatic
-	@Hook(returnCondition = ALWAYS, injectOnExit = true)
-	fun getKnowledgeType(entry: LexiconEntry, @ReturnValue type: KnowledgeType): KnowledgeType {
-		return if (type === BotaniaAPI.elvenKnowledge && AlfheimConfigHandler.enableElvenStory) BotaniaAPI.basicKnowledge else type
+	@Hook
+	fun openBook(static: ItemLexicon?, player: EntityPlayer, stack: ItemStack, world: World?, skipSound: Boolean) {
+		val l = stack.item as ILexicon
+		
+		if (!l.isKnowledgeUnlocked(stack, BotaniaAPI.elvenKnowledge) && AlfheimConfigHandler.enableElvenStory && player.race !== EnumRace.HUMAN)
+			l.unlockKnowledge(stack, BotaniaAPI.elvenKnowledge)
 	}
 	
 	@JvmStatic
@@ -1228,17 +1173,22 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE, booleanReturnConstant = false)
 	fun matches(recipe: RecipePureDaisy, world: World, x: Int, y: Int, z: Int, pureDaisy: SubTileEntity?, block: Block, meta: Int): Boolean {
-		if (recipe.output !== ModBlocks.livingwood) return false
-		
-		if (block === AlfheimBlocks.altWood1 && meta in arrayOf(3, 7, 11, 15)) return true
-		
-		return world.provider.dimensionId == dimensionIDAlfheim
+		when (recipe.output) {
+			ModBlocks.livingwood -> {
+				if (block === AlfheimBlocks.altWood1 && meta in arrayOf(3, 7, 11, 15)) return true
+				
+				return world.provider.dimensionId == dimensionIDAlfheim
+			}
+			
+			Blocks.cobblestone   -> return world.provider.dimensionId == dimensionIDAlfheim
+			else                 -> return false
+		}
 	}
 	
 	@JvmStatic
 	@Hook(returnCondition = ALWAYS)
 	fun matches(recipe: AesirRingRecipe, inv: InventoryCrafting, world: World?): Boolean {
-		val crafter = (inv.eventHandler as? ContainerWorkbench)?.alfheim_synthetic_thePlayer ?: return false
+		val crafter = inv.crafter ?: return false
 		if (PlayerHandler.getPlayerBaubles(crafter)[0]?.item !== AlfheimItems.aesirEmblem) return false
 		
 		var foundThorRing = false
@@ -1281,11 +1231,6 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
 	fun onItemUse(eye: ItemFlugelEye, stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		if (player.hasAchievement(AlfheimAchievements.flugelSoul)) {
-			ASJUtilities.say(player, "alfheimmisc.flugel.used")
-			return false
-		}
-		
 		if (player.isSneaking) return EntityFlugel.spawn(player, stack, world, x, y, z, false, false)
 		return false
 	}
@@ -1405,44 +1350,6 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ALWAYS)
 	fun hasSearchBar(tab: BotaniaCreativeTab) = AlfheimConfigHandler.searchTabBotania
-	
-	var chunkCoors = Int.MAX_VALUE to Int.MAX_VALUE
-	
-	@JvmStatic
-	@Hook(targetMethod = "getChunkFromBlockCoords")
-	fun getChunkFromBlockCoords(world: World, x: Int, z: Int) {
-		chunkCoors = x to z
-	}
-	
-	var replace = false
-	
-	@JvmStatic
-	@Hook
-	fun getCanSpawnHere(entity: EntityAnimal): Boolean {
-		replace = entity.worldObj.provider.dimensionId == dimensionIDAlfheim
-		return replace
-	}
-	
-	@JvmStatic
-	@Hook(injectOnExit = true, returnCondition = ALWAYS)
-	fun getBlock(world: World, x: Int, y: Int, z: Int, @ReturnValue block: Block): Block {
-		if (replace && (block === AlfheimBlocks.snowGrass || block === AlfheimBlocks.snowLayer || block === Blocks.snow_layer)) {
-			replace = false
-			return Blocks.grass
-		}
-		return block
-	}
-	
-	@JvmStatic
-	@Hook(injectOnExit = true, returnCondition = ALWAYS)
-	fun getBiomeGenForWorldCoords(c: Chunk, x: Int, z: Int, cm: WorldChunkManager, @ReturnValue oldBiome: BiomeGenBase): BiomeGenBase? {
-		if (chunkCoors.first != Int.MAX_VALUE || chunkCoors.second != Int.MAX_VALUE) {
-			val biome = WE_Biome.getBiomeAt((cm as? WE_WorldChunkManager ?: return oldBiome).cp, chunkCoors.first.toLong(), chunkCoors.second.toLong())
-			chunkCoors = Int.MAX_VALUE to Int.MAX_VALUE
-			return biome
-		} else
-			return oldBiome
-	}
 	
 	@SideOnly(CLIENT)
 	@JvmStatic
@@ -1938,31 +1845,9 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE, returnAnotherMethod = "getDigSpeed")
 	fun func_150893_a(item: ItemPickaxe, stack: ItemStack?, block: Block) = block.material === Material.glass
+	
 	@JvmStatic
 	fun getDigSpeed(item: ItemPickaxe, stack: ItemStack?, block: Block) = item.func_150913_i().efficiencyOnProperMaterial
-	
-	@JvmStatic
-	@Hook(targetMethod = "onPlayerInteract")
-	fun onPlayerInteractPre(item: ItemManaResource, event: PlayerInteractEvent?) {
-		hookRaytrace = true
-	}
-	
-	var hookRaytrace = false
-	
-	@JvmStatic
-	@Hook(returnCondition = ON_NOT_NULL)
-	fun raytraceFromEntity(static: ToolCommons?, world: World?, player: Entity?, stopOnLiquid: Boolean, range: Double): MovingObjectPosition? {
-		if (!hookRaytrace) return null
-		hookRaytrace = false
-		
-		return ToolCommons.raytraceFromEntity(world, player, true, range)
-	}
-	
-	@JvmStatic
-	@Hook(targetMethod = "onPlayerInteract", injectOnExit = true)
-	fun onPlayerInteractPost(item: ItemManaResource, event: PlayerInteractEvent?) {
-		hookRaytrace = false
-	}
 	
 	@JvmStatic
 	@Hook(injectOnExit = true, priority = HookPriority.HIGH)
@@ -2172,5 +2057,101 @@ object AlfheimHookHandler {
 		val color = Color(Color.HSBtoRGB((entity.ticksExisted + ticks) % 360 / 360f * 10f, 1f, 1f))
 		val (r, g, b) = color.getRGBColorComponents(null)
 		return Color(r, g, b, 0.5f).rgb
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun getCollarColor(wolf: EntityWolf) = wolf.dataWatcher.getWatchableObjectByte(20).I
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS)
+	fun setCollarColor(wolf: EntityWolf, color: Int) = wolf.dataWatcher.updateObject(20, color.toByte())
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE)
+	fun interact(wolf: EntityWolf, player: EntityPlayer): Boolean {
+		if (!wolf.isTamed) return false
+		
+		val dye = player.heldItem ?: return false
+		if (dye.item === ModItems.dye) {
+			if (wolf.collarColor == dye.meta) return false
+			wolf.collarColor = dye.meta
+		} else if (dye.item === AlfheimItems.elvenResource && dye.meta == ElvenResourcesMetas.RainbowDust.I) {
+			if (wolf.collarColor == -1) return false
+			wolf.collarColor = -1
+		} else {
+			return false
+		}
+		
+		if (!player.capabilities.isCreativeMode && --dye.stackSize <= 0)
+			player.inventory.setInventorySlotContents(player.inventory.currentItem, null)
+		
+		return true
+	}
+	
+	@JvmStatic
+	@Hook(targetMethod = "onLivingUpdate")
+	fun onLivingUpdatePre(target: SheddingHandler, event: LivingUpdateEvent) {
+		event.entity.captureDrops = true
+	}
+	
+	@JvmStatic
+	@Hook(targetMethod = "onLivingUpdate", injectOnExit = true)
+	fun onLivingUpdatePost(target: SheddingHandler, event: LivingUpdateEvent) {
+		val entity = event.entity
+		
+		entity.capturedDrops.forEach {
+			it.lifespan = 1200
+			entity.worldObj.spawnEntityInWorld(it)
+		}
+		
+		entity.capturedDrops.clear()
+		entity.captureDrops = false
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE)
+	fun addItem(tile: TileAlfPortal, stack: ItemStack): Boolean {
+		if (Botania18AndUpBackport.addItem(tile, stack)) return true
+		
+		BotaniaAPI.elvenTradeRecipes.forEach { recipe ->
+			recipe.inputs.forEach {
+				if (when (it) {
+						is String    -> {
+							OreDictionary.getOres(it).forEach { ostack ->
+								val cstack = ostack.copy()
+								if (cstack.getItemDamage() == Short.MAX_VALUE.toInt())
+									cstack.setItemDamage(stack.getItemDamage())
+								
+								if (stack.isItemEqual(cstack)) return false
+							}
+							
+							false
+						}
+						
+						is ItemStack -> recipe.simpleAreStacksEqual(it, stack)
+						else         -> true
+					})
+					return false
+			}
+		}
+		
+		TradingGiftsHandler.addAlfheimGift(stack, tile.worldObj.rand)
+		return true
+	}
+	
+	@JvmStatic
+	@Hook
+	fun renderTileEntityAt(render: RenderTileRuneAltar, tile: TileEntity?, x: Double, y: Double, z: Double, ticks: Float) {
+		glEnable(GL12.GL_RESCALE_NORMAL)
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS) // huinya iz-pod konya
+	fun canInteractWith(container: ContainerRepair, player: EntityPlayer): Boolean {
+		val block = container.theWorld.getBlock(container.field_82861_i, container.field_82858_j, container.field_82859_k)
+		if (block !== Blocks.anvil && block !== AlfheimBlocks.anyavil) return false
+		
+		return player.getDistanceSq(container.field_82861_i + 0.5, container.field_82858_j + 0.5, container.field_82859_k + 0.5) <= 64
 	}
 }

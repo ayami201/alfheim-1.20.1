@@ -70,9 +70,8 @@ object CorporeaAdvancedHelper {
 			}
 		}
 		
-		if (did) {
+		if (did) 
 			inv.markDirty()
-		}
 		
 		return stack
 	}

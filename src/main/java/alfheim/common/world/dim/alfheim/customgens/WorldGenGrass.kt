@@ -26,44 +26,49 @@ class WorldGenGrass(val grass: Boolean, val flowers: Boolean, val doubleFlowers:
 		val cz = chunkZ * 16
 		if (botanicalFlowers) {
 			val dist = min(8, max(1, ConfigHandler.flowerPatchSize))
-			for (i in 0 until ConfigHandler.flowerQuantity)
-				if (rand.nextInt((ConfigHandler.flowerPatchChance / mod).roundToInt()) == 0) {
-					val x = cx + rand.nextInt(16)
-					val z = cz + rand.nextInt(16)
-					val y = world.getTopSolidOrLiquidBlock(x, z)
-					val color = rand.nextInt(17)
-					val primus = rand.nextInt(380) == 0
-					for (j in 0 until ConfigHandler.flowerDensity * ConfigHandler.flowerPatchChance) {
-						val x1 = x + rand.nextInt(dist * 2) - dist
-						val z1 = z + rand.nextInt(dist * 2) - dist
-						if (world.isAirBlock(x1, y, z1) && world.getBlock(x1, y - 1, z1) inl grassBlocks)
-							if (primus) {
-								world.setBlock(x1, y, z1, ModBlocks.specialFlower, 0, 2)
-								val flower = world.getTileEntity(x1, y, z1) as TileSpecialFlower
-								flower.setSubTile(if (rand.nextBoolean()) LibBlockNames.SUBTILE_NIGHTSHADE_PRIME else LibBlockNames.SUBTILE_DAYBLOOM_PRIME)
-								val subtile = flower.subTile as SubTileDaybloom
-								subtile.setPrimusPosition()
-							} else {
-								val rainbow = color == 16
-								
-								world.setBlock(x1, y, z1, if (rainbow) AlfheimBlocks.rainbowGrass else ModBlocks.flower, if (rainbow) 2 else color, 2)
-								// `can place` condition start
-								if (rand.nextDouble() < ConfigHandler.flowerTallChance
-									&& (
-										if (rainbow)
-											(AlfheimBlocks.rainbowGrass as IGrowable).func_149851_a(world, x1, y, z1, false)
-										else
-											(ModBlocks.flower as BlockModFlower).func_149851_a(world, x1, y, z1, false)
-									   ))
-								// `can place` condition end
-									if (rainbow) {
-										world.setBlock(x1, y, z1, AlfheimBlocks.rainbowTallFlower, 0, 0)
-										world.setBlock(x1, y + 1, z1, AlfheimBlocks.rainbowTallFlower, 8, 0)
-									} else
-										BlockModFlower.placeDoubleFlower(world, x1, y, z1, color, 0)
-							}
+			for (i in 0 until ConfigHandler.flowerQuantity) {
+				if (rand.nextInt((ConfigHandler.flowerPatchChance / mod).roundToInt()) != 0) continue
+				
+				val x = cx + rand.nextInt(16)
+				val z = cz + rand.nextInt(16)
+				val y = world.getTopSolidOrLiquidBlock(x, z)
+				val color = rand.nextInt(17)
+				val primus = rand.nextInt(380) == 0
+				
+				for (j in 0 until ConfigHandler.flowerDensity * ConfigHandler.flowerPatchChance) {
+					val x1 = x + rand.nextInt(dist * 2) - dist
+					val z1 = z + rand.nextInt(dist * 2) - dist
+					
+					if (!world.isAirBlock(x1, y, z1) || !(world.getBlock(x1, y - 1, z1) inl grassBlocks)) continue
+					
+					if (primus) {
+						world.setBlock(x1, y, z1, ModBlocks.specialFlower, 0, 2)
+						val flower = world.getTileEntity(x1, y, z1) as? TileSpecialFlower ?: continue
+						
+						flower.setSubTile(if (rand.nextBoolean()) LibBlockNames.SUBTILE_NIGHTSHADE_PRIME else LibBlockNames.SUBTILE_DAYBLOOM_PRIME)
+						val subtile = flower.subTile as SubTileDaybloom
+						subtile.setPrimusPosition()
+					} else {
+						val rainbow = color == 16
+						
+						world.setBlock(x1, y, z1, if (rainbow) AlfheimBlocks.rainbowGrass else ModBlocks.flower, if (rainbow) 2 else color, 2)
+						// `can place` condition start
+						if (rand.nextDouble() < ConfigHandler.flowerTallChance
+							&& (
+								if (rainbow)
+									(AlfheimBlocks.rainbowGrass as IGrowable).func_149851_a(world, x1, y, z1, false)
+								else
+									(ModBlocks.flower as BlockModFlower).func_149851_a(world, x1, y, z1, false)
+							   ))
+						// `can place` condition end
+							if (rainbow) {
+								world.setBlock(x1, y, z1, AlfheimBlocks.rainbowTallFlower, 0, 0)
+								world.setBlock(x1, y + 1, z1, AlfheimBlocks.rainbowTallFlower, 8, 0)
+							} else
+								BlockModFlower.placeDoubleFlower(world, x1, y, z1, color, 0)
 					}
 				}
+			}
 		}
 		
 		for (i in 0 until ConfigHandler.mushroomQuantity) {
@@ -132,6 +137,5 @@ class WorldGenGrass(val grass: Boolean, val flowers: Boolean, val doubleFlowers:
 		                           Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, Blocks.tallgrass, // 5 6 7 8 9 10
 		                           Blocks.double_plant, Blocks.double_plant                                                                    // 11 12
 		)
-		
 	}
 }

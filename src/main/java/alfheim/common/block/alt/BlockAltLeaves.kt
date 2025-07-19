@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Blocks
 import net.minecraft.item.*
 import net.minecraft.util.IIcon
 import net.minecraft.world.*
@@ -62,7 +63,7 @@ class BlockAltLeaves: BlockLeavesMod(), IGlowingLayerBlock {
 	}
 	
 	override fun getIcon(side: Int, meta: Int): IIcon {
-		setGraphicsLevel(mc.gameSettings.fancyGraphics)
+		setGraphicsLevel(!Blocks.leaves.isOpaqueCube)
 		return textures[field_150127_b].safeGet(meta and decayBit().inv())
 	}
 	

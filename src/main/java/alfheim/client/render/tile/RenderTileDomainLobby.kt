@@ -7,7 +7,7 @@ import alfheim.api.lib.LibResourceLocations
 import alfheim.common.block.tile.TileDomainLobby
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.equipment.bauble.faith.ItemRagnarokEmblem
-import net.minecraft.client.renderer.Tessellator
+import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.*
@@ -27,7 +27,8 @@ object RenderTileDomainLobby: TileEntitySpecialRenderer() {
 		mc.renderEngine.bindTexture(LibResourceLocations.domainDoor)
 		
 		val tes = Tessellator.instance
-		tes.setBrightness(tile.getBlockType().getMixedBrightnessForBlock(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord))
+		// ЕБАЛ Я В РОТ ЭТОТ БЛЯДСКИЙ ТЕССЕЛЛЯТОР, ЕГО БЛЯДСКИЙ БРАЙТНЕС НИХУЯ НЕ ЗАДОКУМЕНТИРОВАННЫЙ И В ЦЕЛОМ РАЗРАБОТЧИКОВ ЭТОЙ ВССАТОЙ И ВСРАТОЙ ХУЕТЫ
+		ASJRenderHelper.setBlend()
 		tes.startDrawingQuads()
 		
 		tes.addVertexWithUV( 3.0,  3.0, 0.249, 0.0, 0.0)
@@ -41,6 +42,7 @@ object RenderTileDomainLobby: TileEntitySpecialRenderer() {
 		tes.addVertexWithUV(-2.0,  3.0, 0.751, 1.0, 0.0)
 		
 		tes.draw()
+		ASJRenderHelper.discard()
 		
 		glEnable(GL_CULL_FACE)
 		glPopMatrix()

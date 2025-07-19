@@ -51,7 +51,6 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 			"vazkii.botania.common.item.rod.ItemTerraformRod"                  -> core { `ItemTerraformRod$ClassVisitor`(it) }
 			"vazkii.botania.common.lib.LibItemNames"                           -> core { `LibItemNames$ClassVisitor`(it) }
 			// fixes for stupid coders:
-			"cofh.thermalfoundation.fluid.TFFluids"                            -> core { `TFFluids$ClassVisitor`(it) }
 			"com.emoniph.witchery.client.ClientEvents\$GUIOverlay"             -> core { `ClientEvents$GUIOverlay$ClassVisitor`(it) }
 			else                                                               -> this.basicClass
 		}
@@ -648,32 +647,6 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 						}
 					}
 				}
-			}
-		}
-	}
-	
-	private inner class `TFFluids$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
-		
-		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
-			if (name == "registerFluid") {
-				logger.debug("Visiting ThermalFoundation's TFFluids#registerFluid: $name$desc")
-				return `TFFluids$registerFluid$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
-			}
-			return super.visitMethod(access, name, desc, signature, exceptions)
-		}
-		
-		private inner class `TFFluids$registerFluid$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
-			
-			override fun visitVarInsn(opcode: Int, i: Int) {
-				if (opcode == ASTORE && i == 0) {
-					super.visitInsn(POP)
-					
-					super.visitVarInsn(ALOAD, 1)
-					super.visitMethodInsn(INVOKESTATIC, "alfheim/common/integration/ThermalFoundationIntegration\$Hooks", "postRegisterFluid", "(Ljava/lang/String;)V", false)
-					return
-				}
-				
-				super.visitVarInsn(opcode, i)
 			}
 		}
 	}

@@ -146,8 +146,16 @@ class ItemElvenDisguise: ItemBauble("DisguiseBelt"), IManaUsingItem, IBaubleRend
 			get() = ItemNBTHelper.getInt(this, TAG_RACE, EnumRace.HUMAN.ordinal)
 			set(value) = ItemNBTHelper.setInt(this, TAG_RACE, value)
 		
-		fun getDisguise(player: EntityPlayer): EnumRace? = PlayerHandler.getPlayerBaubles(player)[3]?.race
+		fun getDisguise(player: EntityPlayer): EnumRace? {
+			val stack = PlayerHandler.getPlayerBaubles(player)[3] ?: return null
+			if (stack.item !is ItemElvenDisguise) return null
+			return stack.race
+		}
 		
-		fun getGurl(player: EntityPlayer): Boolean? = PlayerHandler.getPlayerBaubles(player)[3]?.booba
+		fun getGurl(player: EntityPlayer): Boolean? {
+			val stack = PlayerHandler.getPlayerBaubles(player)[3] ?: return null
+			if (stack.item !is ItemElvenDisguise) return null
+			return stack.booba
+		}
 	}
 }

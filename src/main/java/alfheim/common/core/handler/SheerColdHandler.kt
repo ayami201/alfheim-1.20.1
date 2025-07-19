@@ -88,8 +88,8 @@ object SheerColdHandler {
 		delta = MathHelper.clamp_float(delta, -100f, 100f)
 		
 		target.cold = MathHelper.clamp_float(target.cold + delta, -100f, 100f)
-		if (EntityList.getEntityString(target) in AlfheimConfigHandler.overcoldBlacklist) target.cold = min(0f, target.cold)
-		if (EntityList.getEntityString(target) in AlfheimConfigHandler.overheatBlacklist) target.cold = max(0f, target.cold)
+		if (EntityList.getEntityString(target) in AlfheimConfigHandler.overcoldBlacklist || target is INiflheimEntity) target.cold = min(0f, target.cold)
+		if (EntityList.getEntityString(target) in AlfheimConfigHandler.overheatBlacklist || target is IMuspelheimEntity) target.cold = max(0f, target.cold)
 		
 		val cold = target.cold
 		
@@ -113,11 +113,11 @@ object SheerColdHandler {
 		// DoT instead of constant
 		if (target.ticksExisted % 50 != 0) return
 		
-		if (cold >= 100f && target !is INiflheimEntity && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, (target.maxHealth * 0.01f + 0.15f))
-		if (cold <= -100f && target !is IMuspelheimEntity && !canProtect(target, MUSPELHEIM)) target.attackEntityFrom(DamageSourceSpell.soulburn, (target.maxHealth * 0.01f + 0.15f))
+		if (cold >= 100f && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, (target.maxHealth * 0.01f + 0.15f))
+		if (cold <= -100f && !canProtect(target, MUSPELHEIM)) target.attackEntityFrom(DamageSourceSpell.soulburn, (target.maxHealth * 0.01f + 0.15f))
 	}
 	
-	private fun canProtect(target: EntityLivingBase, type: ItemPendant.Companion.EnumPrimalWorldType, cost: Int = 1): Boolean {
+	private fun canProtect(target: EntityLivingBase, type: ItemPendant.Companion.EnumPrimalWorldType, cost: Int = 50): Boolean {
 		if (target !is EntityPlayer) return false
 		return ItemPendant.canProtect(target, type, cost)
 	}

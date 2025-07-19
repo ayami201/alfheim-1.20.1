@@ -64,7 +64,7 @@ tile.alfheim:circuitSapling.name=通量木树苗
 tile.alfheim:circuitWood.name=通量木原木
 tile.alfheim:cracklingStar.name=裂纹星
 tile.alfheim:CorporeaAutocrafter.name=多媒体序列器
-tile.alfheim:CorporeaInjector.name多媒体置入器
+tile.alfheim:CorporeaInjector.name=多媒体置入器
 tile.alfheim:CorporeaSparkBase.name=多媒体火花底座
 tile.alfheim:CorporeaRatBase.name=多媒体量子索引
 tile.alfheim:Chair0.name=酒吧椅
@@ -209,6 +209,7 @@ tile.NiflheimBlock.Runic.name=符文封冻石
 tile.NiflheimBlock.Stone.name=封冻石
 tile.alfheim:NiflheimIce.name=永恒极寒之冰
 tile.NiflheimPortal.name=不竭之泉水
+fluid.NiflheimPortal=不竭之泉水
 tile.alfheim:orechidEndium.name=末影凝矿兰
 tile.botania:flower.orechidEndium.name=末影凝矿兰
 tile.alfheim:orechidEndium.lore=史矛革的财富
@@ -268,6 +269,7 @@ tile.alfheim:schemaMarker.name=结构图标记方块
 tile.alfheim:schematicAnnihilator.name=结构抹除装置
 tile.alfheim:schematicOak.name=结构生成器
 tile.alfheim:Spire.name=沉睡尖塔
+tile.softStorage0.name=虹彩花瓣块
 tile.Stalactite0.name=钟乳石
 tile.Stalactite1.name=钟乳石
 tile.Stalactite2.name=钟乳石
@@ -571,7 +573,7 @@ item.RodClicker.leftclick.true=击打模式
 item.alfheim:RodFracturedSpace.name=空间碎裂之杖
 item.alfheim:rodPortal.name=爱因斯坦-罗森桥权杖
 item.alfheim:RodRedstone.name=红石调试杖
-item.alfheim:RodSuperExchange.地壳权杖
+item.alfheim:RodSuperExchange.name=地壳权杖
 item.alfheim:SaveIvy.name=抗溶之藤
 item.botania:Serenade.name=无忧夜曲
 item.botania:SifRing.name=希芙之戒
@@ -866,13 +868,14 @@ alfheimmisc.nowayout=对不起,我不会让你出去-你的灵魂太虚弱了,�
 alfheimmisc.quandex=量子索引已装备
 alfheimmisc.relic=&6遗物&7
 alfheimmisc.saveIvy=已绑定抗溶之藤
-alfheimmisc.skintoggle0=你会用你自己的皮肤
-alfheimmisc.skintoggle1=你的皮肤被设定为对应的精灵种族
 alfheimmisc.teamnotmob=盟友无法被选定为目标
 alfheimmisc.tgtooltip=摁下&b%s&7以打开旅行者工具栏
 alfheimmisc.unknownMaterials=未知材料
 alfheimmisc.update=看上去你正在使用一个过期的版本(%s). 也许你应该更新到 %s?
 alfheimmisc.wolfblood=你感受到狼血的力量正在你的身体里流动
+
+alfheimmisc.panel.skintoggle0=你会用你自己的皮肤
+alfheimmisc.panel.skintoggle1=你的皮肤被设定为对应的精灵种族
 
 alfheimmisc.attunement.armor=+%d%% %s 保护
 alfheimmisc.attunement.weapon=%d%% 的伤害转换成了 %s 伤害
@@ -1449,7 +1452,6 @@ tile.alfheim:itemDisplay3.name=魔灵钢物品托盘
 tile.alfheim:itemDisplay4.name=始源魂灵物品托盘
 
 tile.alfheim:rainbowDirt.name=虹彩土壤
-tile.alfheim:rainbowPetalBlock.name=虹彩花瓣块
 tile.alfheim:coloredDirt.name=虹彩土壤
 tile.alfheim:rainbowLeaves.name=虹彩树叶
 tile.alfheim:irisLeaves.name=虹彩树叶
@@ -1816,9 +1818,9 @@ item.botania:VolcanoBoots.name=火山战靴
 
 item.alfheim:LavaMelon.name=熔岩瓜
 
-entity.alfheim:DedMoroz.name=冬将军
-entity.alfheim:SnowSprite.name=血精灵
-entity.alfheim:SniceBall.name=小雪球
+entity.alfheim.DedMoroz.name=冬将军
+entity.alfheim.SnowSprite.name=血精灵
+entity.alfheim.SniceBall.name=小雪球
 
 entity.alfheim.FireSpirit.name=火焰之魂
 entity.alfheim.FireSpirit.greater.name=大型火焰之魂

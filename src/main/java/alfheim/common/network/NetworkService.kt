@@ -34,6 +34,7 @@ object NetworkService {
 		registerPacket(MessageFIBlock::class, Side.CLIENT)
 		registerPacket(MessageGleipnirLeash::class, Side.CLIENT)
 		registerPacket(MessageHotSpellC::class, Side.CLIENT)
+		registerPacket(MessageOrgans::class, Side.CLIENT)
 		registerPacket(MessageParty::class, Side.CLIENT)
 		registerPacket(MessageRaceInfo::class, Side.CLIENT)
 		registerPacket(MessageRedstoneSignalsSync::class, Side.CLIENT)

@@ -11,9 +11,11 @@ import org.lwjgl.opengl.GL11.*
 
 object RenderBlockManaTuner: ISimpleBlockRenderingHandler {
 	
+	private val instance = TileManaTuner()
+	
 	override fun renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
 		glPushMatrix()
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(TileManaTuner(), 0.0, 0.0, 0.0, 0f)
+		TileEntityRendererDispatcher.instance.renderTileEntityAt(instance, 0.0, 0.0, 0.0, 0f)
 		glPopMatrix()
 	}
 	

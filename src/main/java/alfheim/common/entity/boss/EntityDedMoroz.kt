@@ -56,7 +56,7 @@ class EntityDedMoroz(world: World): EntityMob(world), IBotaniaBossWithName, INif
 	
 	override fun applyEntityAttributes() {
 		super.applyEntityAttributes()
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).baseValue = 1.0
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).baseValue = 4.0
 		getEntityAttribute(SharedMonsterAttributes.followRange).baseValue = 20.0
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).baseValue = 0.9
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).baseValue = 0.25
@@ -70,6 +70,12 @@ class EntityDedMoroz(world: World): EntityMob(world), IBotaniaBossWithName, INif
 			target.addPotionEffect(PotionEffect(Potion.moveSlowdown.id, 200))
 			true
 		} else false
+	}
+	
+	override fun attackEntityFrom(src: DamageSource?, amount: Float): Boolean {
+		if (src?.entity is INiflheimEntity) return false
+		
+		return super.attackEntityFrom(src, amount)
 	}
 	
 	override fun damageEntity(src: DamageSource, amount: Float) {

@@ -170,7 +170,7 @@ object ThaumcraftAlfheimModule {
 	}
 	
 	fun registerRecipes() {
-		if (AlfheimConfigHandler.overrideFMCaps) {
+		if (botaniaCaps) {
 			ConfigResearch.recipes[capManasteelRecipe] = addArcaneCraftingRecipe(capManasteelResearch,
 																				 ItemStack(naturalWandCap, 1, 0),
 																				 AspectList()
@@ -338,7 +338,7 @@ object ThaumcraftAlfheimModule {
 	}
 	
 	fun registerResearches() {
-		if (AlfheimConfigHandler.overrideFMCaps) {
+		if (botaniaCaps) {
 			ResearchItem(capManasteelResearch, "THAUMATURGY",
 						 AspectList().add(Aspect.METAL, 3).add(Aspect.EXCHANGE, 3).add(Aspect.TOOL, 3),
 						 4, 0, 1,
@@ -485,7 +485,7 @@ object ThaumcraftAlfheimModule {
 	}
 	
 	fun postPostInit() {
-		if (!Loader.isModLoaded("ForbiddenMagic") || !AlfheimConfigHandler.overrideFMCaps) return
+		if (!botaniaCaps) return
 		
 		getCraftingRecipes().removeAll { (it as? ShapedArcaneRecipe ?: return@removeAll false).research in arrayOf("CAP_manasteel", "CAP_elementium") }
 		
@@ -495,4 +495,6 @@ object ThaumcraftAlfheimModule {
 			result.item === fmCapItem && result.meta == 2
 		}
 	}
+	
+	val botaniaCaps get() = !Loader.isModLoaded("ForbiddenMagic") || AlfheimConfigHandler.overrideFMCaps
 }

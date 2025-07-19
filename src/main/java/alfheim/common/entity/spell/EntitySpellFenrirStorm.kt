@@ -52,6 +52,7 @@ class EntitySpellFenrirStorm(world: World): Entity(world), ITimeStopSpecific {
 			setDead()
 			return
 		}
+		
 		if (isDead || ASJUtilities.isClient) return
 		
 		val caster = caster ?: return
@@ -73,8 +74,10 @@ class EntitySpellFenrirStorm(world: World): Entity(world), ITimeStopSpecific {
 		}
 		
 		if (ticksExisted != 4 && !mjolnir) return
+		
 		getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, area.toAABB()).forEach { e ->
-			if (e !== caster && area.intersectsWith(OrientedBB(e.boundingBox()))) e.attackEntityFrom(DamageSourceSpell.lightningIndirect(this, caster), SpellBase.over(caster, SpellFenrirStorm.damage))
+			if (e !== caster && area.intersectsWith(OrientedBB(e.boundingBox())))
+				e.attackEntityFrom(DamageSourceSpell.lightningIndirect(this, caster), if (mjolnir) 5f else SpellBase.over(caster, SpellFenrirStorm.damage))
 		}
 	}
 	

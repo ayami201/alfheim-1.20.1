@@ -11,6 +11,8 @@ import vazkii.botania.common.block.tile.TileFloatingFlower
 
 object RenderFloatingFlowerRainbowItem: RenderFloatingFlowerItem() {
 	
+	private val instance = TileFloatingFlowerRainbow()
+	
 	override fun renderItem(type: ItemRenderType?, stack: ItemStack, vararg data: Any?) {
 		GL11.glPushMatrix()
 		if (type == ItemRenderType.ENTITY) glTranslated(-0.65)
@@ -20,7 +22,7 @@ object RenderFloatingFlowerRainbowItem: RenderFloatingFlowerItem() {
 		GL11.glScalef(s, s, s)
 		GL11.glRotatef(-5f, 1f, 0f, 0f)
 		TileFloatingFlower.forcedStack = TileFloatingFlowerRainbow.getDisplayStack { stack.meta }
-		TileEntityRendererDispatcher.instance.renderTileEntityAt(TileFloatingFlowerRainbow(), 0.0, 0.0, 0.0, 0.0f)
+		TileEntityRendererDispatcher.instance.renderTileEntityAt(instance, 0.0, 0.0, 0.0, 0.0f)
 		GL11.glDisable(GL11.GL_BLEND)
 		GL11.glPopMatrix()
 	}

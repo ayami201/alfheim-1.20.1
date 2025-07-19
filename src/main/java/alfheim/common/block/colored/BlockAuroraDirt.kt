@@ -120,6 +120,8 @@ class BlockAuroraDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
 //		addToTooltip(tooltip, "misc.${LibMisc.MOD_ID}.color.aurora")
 //	}
 	
+	override fun isFertile(world: World?, x: Int, y: Int, z: Int) = true
+	
 	override fun shouldRegisterInNameSet() = false
 	
 	override fun setBlockName(name: String): Block {

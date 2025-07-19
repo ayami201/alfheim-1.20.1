@@ -82,7 +82,6 @@ class ItemRagnarokEmblem: ItemBauble("aesirEmblemWeak"), IBaubleRender, IManaDis
 		if (player !is EntityPlayer) return
 		
 		if (player.timesDied >= 5) {
-			
 			PlayerHandler.getPlayerBaubles(player)[0] = null
 			
 			if (!player.inventory.addItemStackToInventory(stack))

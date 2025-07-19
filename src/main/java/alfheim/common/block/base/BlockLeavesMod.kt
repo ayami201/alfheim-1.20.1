@@ -10,6 +10,7 @@ import cpw.mods.fml.relauncher.*
 import net.minecraft.block.*
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.*
 import net.minecraft.world.*
@@ -55,7 +56,7 @@ abstract class BlockLeavesMod: BlockLeaves(), IShearable, ILexiconable {
 	
 	@SideOnly(Side.CLIENT)
 	override fun getIcon(side: Int, meta: Int): IIcon? {
-		setGraphicsLevel(mc.gameSettings.fancyGraphics)
+		setGraphicsLevel(!Blocks.leaves.isOpaqueCube)
 		return icons[field_150127_b]
 	}
 	

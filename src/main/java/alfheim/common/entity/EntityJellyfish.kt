@@ -15,6 +15,7 @@ import net.minecraft.potion.*
 import net.minecraft.util.*
 import net.minecraft.world.World
 import ru.vamig.worldengine.*
+import vazkii.botania.common.item.ModItems
 import java.util.*
 import kotlin.math.*
 
@@ -157,7 +158,7 @@ class EntityJellyfish(world: World): EntityWaterMob(world), IElementalEntity, IA
 	override fun interact(player: EntityPlayer): Boolean {
 		val stack = player.heldItem
 		
-		if (stack?.item !== Items.glass_bottle)
+		if (stack?.item !== ModItems.vial || stack.meta != 1)
 			return super.interact(player)
 		
 		if (!player.capabilities.isCreativeMode) {

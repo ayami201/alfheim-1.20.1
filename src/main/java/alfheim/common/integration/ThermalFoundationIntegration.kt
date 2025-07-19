@@ -1,12 +1,14 @@
 package alfheim.common.integration
 
-import alexsocol.asjlib.*
+import cofh.core.render.IconRegistry
 import cpw.mods.fml.common.Loader
+import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.registry.GameRegistry
+import cpw.mods.fml.relauncher.*
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.FluidRegistry
+import net.minecraftforge.client.event.TextureStitchEvent
 import net.minecraftforge.oredict.OreDictionary
 import vazkii.botania.common.lib.LibOreDict
 
@@ -33,16 +35,12 @@ object ThermalFoundationIntegration {
 		}
 	}
 	
-	@Suppress("unused")
-	object Hooks {
-		
-		// fixing stupid TF mistake -_-
-		// THAT IS NOT C++ !!!
-		@JvmStatic
-		fun postRegisterFluid(name: String) {
-			val fluid = FluidRegistry.getFluid(name) ?: return // unreachable but just in case
-			val TFFluids = Class.forName("cofh.thermalfoundation.fluid.TFFluids")
-			ASJReflectionHelper.setStaticValue(TFFluids, fluid, "fluid${name.capitalized()}")
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent(priority = EventPriority.LOW)
+	fun replaceIcons(paramPost: TextureStitchEvent.Pre) {
+		if ((paramPost as TextureStitchEvent).map.textureType == 0) {
+			IconRegistry.addIcon("FluidPrimalmana", "thermalfoundation:fluid/Fluid_Mana_Still", paramPost.map)
+			IconRegistry.addIcon("FluidPrimalmana1", "thermalfoundation:fluid/Fluid_Mana_Flow", paramPost.map)
 		}
 	}
 }

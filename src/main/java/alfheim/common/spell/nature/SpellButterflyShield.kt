@@ -7,7 +7,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.TargetingSystem
 import net.minecraft.entity.EntityLivingBase
 
-object SpellButterflyShield: SpellBase("butterflyshield", EnumRace.CAITSITH, 8000, 12000, 30) {
+object SpellButterflyShield: SpellBase("butterflyshield", EnumRace.CAITSITH, 8000, 7200, 30) {
 	
 	override var duration = 6000
 	override var efficiency = 3.0

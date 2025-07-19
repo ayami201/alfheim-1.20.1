@@ -8,7 +8,7 @@ import alfheim.common.core.handler.*
 import alfheim.common.core.handler.CardinalSystem.TargetingSystem
 import net.minecraft.entity.EntityLivingBase
 
-object SpellNineLives: SpellBase("ninelives", EnumRace.CAITSITH, 16000, 3000, 30) {
+object SpellNineLives: SpellBase("ninelives", EnumRace.CAITSITH, 16000, 600, 30) {
 	
 	override var duration = 36000
 	

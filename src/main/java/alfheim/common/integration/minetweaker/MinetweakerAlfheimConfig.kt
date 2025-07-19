@@ -8,14 +8,12 @@ import minetweaker.api.oredict.IOreDictEntry
 object MinetweakerAlfheimConfig {
 	
 	fun loadConfig() {
-		MineTweakerAPI.registerClass(MTHandlerAnyavil::class.java)
+		MineTweakerAPI.registerClass(MTHandlerGeneral::class.java)
 		MineTweakerAPI.registerClass(MTHandlerManaInfuser::class.java)
 		MineTweakerAPI.registerClass(MTHandlerManaTuner::class.java)
 		MineTweakerAPI.registerClass(MTHandlerMobSpawn::class.java)
-		MineTweakerAPI.registerClass(MTHandlerPetronia::class.java)
 		MineTweakerAPI.registerClass(MTHandlerSpells::class.java)
 		MineTweakerAPI.registerClass(MTHandlerSuffuser::class.java)
-		MineTweakerAPI.registerClass(MTHandlerTradePortal::class.java)
 	}
 	
 	fun getStack(istack: IItemStack) = MineTweakerMC.getItemStack(istack)!!

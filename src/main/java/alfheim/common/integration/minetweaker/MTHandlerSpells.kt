@@ -4,7 +4,7 @@ import alfheim.api.*
 import minetweaker.*
 import stanhebben.zenscript.annotations.*
 
-@ZenClass("mods." + ModInfo.MODID + ".Spells")
+@ZenClass("mods.${ModInfo.MODID}.Spells")
 object MTHandlerSpells {
 	
 	@ZenMethod

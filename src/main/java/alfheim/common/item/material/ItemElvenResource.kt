@@ -1,13 +1,14 @@
 package alfheim.common.item.material
 
 import alexsocol.asjlib.*
+import alexsocol.patcher.asm.hook.ASJSuperWrapperHandler
 import alfheim.AlfheimCore
 import alfheim.api.*
 import alfheim.api.lib.LibOreDict
 import alfheim.client.core.helper.*
-import alfheim.common.block.AlfheimBlocks
+import alfheim.common.block.*
 import alfheim.common.block.colored.rainbow.BlockRainbowGrass
-import alfheim.common.block.tile.TileAnomaly
+import alfheim.common.block.tile.*
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
@@ -17,6 +18,7 @@ import alfheim.common.entity.EntityElementalSlime
 import alfheim.common.item.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.Companion.of
+import alfheim.common.item.relic.ItemTankMask.Companion.limboCounter
 import alfheim.common.world.dim.niflheim.ChunkProviderNiflheim
 import cpw.mods.fml.common.IFuelHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
@@ -24,11 +26,13 @@ import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.Entity
+import net.minecraft.entity.*
+import net.minecraft.entity.passive.EntitySheep
 import net.minecraft.entity.player.*
 import net.minecraft.init.*
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.*
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.*
 import net.minecraft.util.*
 import net.minecraft.world.World
@@ -261,6 +265,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 				return if (usages >= 3) ItemStack(Items.glass_bottle) else stack
 			}
 			YggFruit -> {
+				player.limboCounter = 0
 				CardinalSystem.CommonSystem.loseHearts(player, -1)
 				player.heal(player.maxHealth)
 				player.foodStats.addStats(20, 20f)
@@ -279,6 +284,20 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	
 	override fun hasEffect(stack: ItemStack, pass: Int) = stack.meta == WisdomBottle.I || stack.meta == YggFruit.I
 	
+	override fun hasContainerItem(stack: ItemStack) = stack.meta == Stencil.I && ItemNBTHelper.getInt(stack, TAG_USAGES, 0) < MAX_STENCIL_USES
+	
+	override fun getContainerItem(stack: ItemStack): ItemStack? {
+		val uses = ItemNBTHelper.getInt(stack, TAG_USAGES, 0)
+		if (uses == MAX_STENCIL_USES) return null
+		
+		val copy = stack.copy()
+		ItemNBTHelper.setInt(stack, TAG_USAGES, uses + 1)
+		
+		return copy
+	}
+	
+	override fun doesContainerItemLeaveCraftingGrid(stack: ItemStack) = stack.meta != Stencil.I
+	
 	override fun addInformation(stack: ItemStack, player: EntityPlayer?, tooltip: MutableList<Any?>, advanced: Boolean) {
 		when (stack.meta) {
 			DomainKey.I -> addStringToTooltip(tooltip, "alfheimmisc.creative")
@@ -290,7 +309,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		}
 	}
 	
-	val singles = arrayOf(WisdomBottle.I, DomainKey.I)
+	val singles = arrayOf(WisdomBottle.I, DomainKey.I, Stencil.I)
 	
 	override fun getItemStackLimit(stack: ItemStack) = if (stack.meta in singles) 1 else 64
 	
@@ -330,8 +349,30 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 				if (!world.isRemote) ASJUtilities.say(player, "alfheimmisc.gaia.wrongitem")
 				false
 			}
+		} else
+		// copy composite
+		if (stack.meta == Stencil.I && block === AlfheimFluffBlocks.composite) {
+			ItemNBTHelper.setCompound(stack, TAG_STENCIL, NBTTagCompound().apply {
+				val tile = world.getTileEntity(x, y, z) as? TileComposite ?: return false
+				tile.writeCustomNBT(this)
+			})
+			return true
 		}
 		return false
+	}
+	
+	override fun itemInteractionForEntity(stack: ItemStack, player: EntityPlayer?, sheep: EntityLivingBase?): Boolean {
+		if (stack.meta != RainbowDust.I ||
+		    sheep !is EntitySheep ||
+		    sheep.sheared || 
+		    ASJSuperWrapperHandler.getFlag(sheep, 6))
+			return false
+		
+		sheep.fleeceColor = 0
+		ASJSuperWrapperHandler.setFlag(sheep, 6, true)
+		--stack.stackSize
+		
+		return true
 	}
 	
 	override fun getBurnTime(fuel: ItemStack): Int {
@@ -362,9 +403,12 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		lateinit var drive1: IIcon
 		lateinit var weed1: IIcon
 		
-		const val TAG_USAGES = "usages"
+		const val MAX_STENCIL_USES = 100
+		
 		const val TAG_ELEMENT = "element"
 		const val TAG_RAINBOW = "rainbow"
+		const val TAG_STENCIL = "stencil"
+		const val TAG_USAGES = "usages"
 		
 		private val ItemStack.element get() = ElementalDamage.valueOf(ItemNBTHelper.getString(this, TAG_ELEMENT, ElementalDamage.COMMON.name))
 		
@@ -422,6 +466,7 @@ enum class ElvenResourcesMetas {
 	DomainKey,
 	SaveIvy,
 	ElementalSlimeBall,
+	Stencil,
 	;
 	
 	val I get() = ordinal

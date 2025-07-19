@@ -112,7 +112,6 @@ object FaithHandlerThor: IFaithHandler {
 		if (e.source.damageType != DamageSource.fall.damageType) return
 		val player = e.entityLiving as? EntityPlayer ?: return
 		val cloak = ItemPriestCloak.getCloak(0, player) ?: return
-		if (getGodPowerLevel(player) < 7) return
 		
 		if (!ManaItemHandler.requestManaExact(cloak, player, e.ammount.I, true)) return
 		

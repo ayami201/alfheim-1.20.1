@@ -66,7 +66,7 @@ object ContributorsPrivacyHelper {
 	private fun register(contributor: String, passwordHash: String) {
 		authCredits[contributor] = passwordHash
 		
-		if (MinecraftServer.getServer()?.isSinglePlayer != false)
+		if (MinecraftServer.getServer()?.isMultiPlayer != true)
 			contributors[contributor] = contributor // no power on server if no response
 	}
 	
@@ -99,7 +99,7 @@ object ContributorsPrivacyHelper {
 	fun onPlayerLogin(e: PlayerEvent.PlayerLoggedInEvent) {
 		val player = e.player as? EntityPlayerMP ?: return
 		
-		if (MinecraftServer.getServer()?.isSinglePlayer == true) return
+		if (MinecraftServer.getServer()?.isMultiPlayer == false) return
 
 		NetworkService.sendTo(MessageContributor(isRequest = true), player)
 		
@@ -109,7 +109,7 @@ object ContributorsPrivacyHelper {
 	
 	@SubscribeEvent
 	fun onPlayerLogout(e: PlayerEvent.PlayerLoggedOutEvent) {
-		if (MinecraftServer.getServer()?.isSinglePlayer == true) return
+		if (MinecraftServer.getServer()?.isMultiPlayer == false) return
 
 		contributors.values.removeAll { it == e.player.commandSenderName }
 	}

@@ -4,12 +4,13 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.entity.EnumRace
 import alfheim.api.spell.SpellBase
+import alfheim.common.entity.EntityLightningMark
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.effect.EntityLightningBolt
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 
 object SpellThor: SpellBase("thor", EnumRace.SYLPH, 6000, 1200, 30) {
 	
+	override var duration = 10
 	override var radius = 32.0
 	
 	override val usableParams
@@ -43,7 +44,7 @@ object SpellThor: SpellBase("thor", EnumRace.SYLPH, 6000, 1200, 30) {
 			result = checkCast(caster)
 			if (result != SpellCastResult.OK) return result
 			
-			caster.worldObj.addWeatherEffect(EntityLightningBolt(caster.worldObj, x.D, y.D, z.D))
+			EntityLightningMark(caster, x + 0.5, y.D, z + 0.5).spawn()
 			return result
 		}
 		

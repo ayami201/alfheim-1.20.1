@@ -51,8 +51,8 @@ class IncantationEquipmentElementalTuning(val element: String, incantation: Stri
 		
 		var counter = 0
 		
-		const val TAG_ELEMENT = "${ModInfo.MODID}_element"
-		const val TAG_ELEMENT_LEVEL = "${ModInfo.MODID}_element_level"
+		const val TAG_ELEMENT = "${ModInfo.MODID}:element"
+		const val TAG_ELEMENT_LEVEL = "${ModInfo.MODID}:element_level"
 		
 		init {
 			if (ASJUtilities.isClient) eventForge()

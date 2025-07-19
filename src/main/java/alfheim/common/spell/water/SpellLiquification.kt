@@ -6,10 +6,11 @@ import alfheim.api.event.SpellCastEvent
 import alfheim.api.spell.SpellBase
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
+import net.minecraft.init.*
 import net.minecraft.item.ItemStack
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fluids.*
 import vazkii.botania.common.block.tile.TileAltar
 
 object SpellLiquification: SpellBase("liquification", EnumRace.UNDINE, 2000, 100, 5) {
@@ -22,9 +23,10 @@ object SpellLiquification: SpellBase("liquification", EnumRace.UNDINE, 2000, 100
 		val mop = ASJUtilities.getSelectedBlock(caster, radius, false)
 		if (mop == null || mop.typeOfHit != MovingObjectType.BLOCK || mop.sideHit == -1) return SpellCastResult.WRONGTGT
 		
-		val te = caster.worldObj.getTileEntity(mop.blockX, mop.blockY, mop.blockZ) as? TileAltar
+		val te = caster.worldObj.getTileEntity(mop.blockX, mop.blockY, mop.blockZ)
+		val isTank = te is TileAltar || te is IFluidTank
 		
-		if (te == null) when (mop.sideHit) {
+		if (!isTank) when (mop.sideHit) {
 			0 -> --mop.blockY
 			1 -> ++mop.blockY
 			2 -> --mop.blockZ
@@ -38,9 +40,17 @@ object SpellLiquification: SpellBase("liquification", EnumRace.UNDINE, 2000, 100
 		val cost = getCostForRace(caster, race, getManaCost(), hard)
 		if (!consumeMana(caster, cost, false, this)) return SpellCastResult.NOMANA
 		
-		if (te != null) {
-			te.hasWater = true
+		if (isTank) {
+			if (te is TileAltar) {
+				if (te.hasWater) return SpellCastResult.WRONGTGT
+				te.hasWater = true
+			} else if (te is IFluidTank) {
+				if (te.fill(FluidStack(FluidRegistry.WATER, 1000), true) == 0)
+					return SpellCastResult.WRONGTGT
+			}
+			
 			ASJUtilities.dispatchTEToNearbyPlayers(te)
+			consumeMana(caster, cost, true, this)
 			return SpellCastResult.OK
 		}
 		

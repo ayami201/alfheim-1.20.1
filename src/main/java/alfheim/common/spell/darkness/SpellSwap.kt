@@ -1,4 +1,4 @@
-package alfheim.common.spell.illusion
+package alfheim.common.spell.darkness
 
 import alexsocol.asjlib.ASJUtilities
 import alexsocol.asjlib.math.Vector3
@@ -9,7 +9,7 @@ import alfheim.common.core.util.DamageSourceSpell
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 
-object SpellSwap: SpellBase("swap", EnumRace.LEPRECHAUN, 12000, 1200, 20) {
+object SpellSwap: SpellBase("swap", EnumRace.IMP, 12000, 1200, 20) {
 	
 	override var damage = 10f
 	

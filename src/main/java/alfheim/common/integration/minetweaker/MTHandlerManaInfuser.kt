@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack
 import stanhebben.zenscript.annotations.*
 import vazkii.botania.api.BotaniaAPI
 
-@ZenClass("mods." + ModInfo.MODID + ".ManaInfuser")
+@ZenClass("mods.${ModInfo.MODID}.ManaInfuser")
 object MTHandlerManaInfuser {
 	
 	@ZenMethod
@@ -45,7 +45,7 @@ object MTHandlerManaInfuser {
 		override fun canUndo() = true
 		
 		override fun undo() {
-			AlfheimAPI.removeInfusionRecipe(recipe)
+			AlfheimAPI.removeInfuserRecipe(recipe)
 		}
 		
 		override fun describe() = "Adding Mana Infuser recipe $recipe"
@@ -57,14 +57,10 @@ object MTHandlerManaInfuser {
 	
 	private class Remove(private val output: ItemStack): IUndoableAction {
 		
-		val removed = ArrayList<RecipeManaInfuser>()
+		var removed = ArrayList<RecipeManaInfuser>()
 		
 		override fun apply() {
-			var rec = AlfheimAPI.removeInfusionRecipe(output)
-			while (rec != null) {
-				removed.add(rec)
-				rec = AlfheimAPI.removeInfusionRecipe(output)
-			}
+			removed = AlfheimAPI.removeInfuserRecipe(output)
 		}
 		
 		override fun canUndo() = true

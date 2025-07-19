@@ -18,6 +18,7 @@ import cpw.mods.fml.common.*
 import cpw.mods.fml.common.Mod.*
 import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event.*
+import net.minecraft.server.MinecraftServer
 import vazkii.botania.common.Botania
 
 @Suppress("UNUSED_PARAMETER")
@@ -30,7 +31,7 @@ object AlfheimCore {
 	@Metadata(MODID)
 	lateinit var meta: ModMetadata
 	
-	var save = ""
+	val save get() = MinecraftServer.getServer().entityWorld.saveHandler.worldDirectory.absolutePath
 	
 	var MineTweakerLoaded = false
 	var NEILoaded = false
@@ -113,8 +114,6 @@ object AlfheimCore {
 	
 	@EventHandler
 	fun starting(e: FMLServerStartingEvent) {
-		save = e.server.entityWorld.saveHandler.worldDirectory.absolutePath
-		
 		if (AlfheimConfigHandler.enableElvenStory) AlfheimConfigHandler.initWorldCoordsForElvenStory(save)
 		AlfheimConfigHandler.syncConfig()
 		e.registerServerCommand(CommandAlfheim)

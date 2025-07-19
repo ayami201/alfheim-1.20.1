@@ -1,6 +1,7 @@
 package alfheim.common.core.handler
 
 import alexsocol.asjlib.*
+import alfheim.api.event.AlfheimModeChangedEvent
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.item.AlfheimItems
 import baubles.common.lib.PlayerHandler
@@ -9,6 +10,7 @@ import net.minecraft.entity.item.EntityFireworkRocket
 import net.minecraft.entity.passive.EntityHorse
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.*
+import net.minecraft.stats.AchievementList
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import vazkii.botania.common.item.ModItems
@@ -62,5 +64,20 @@ object AlfheimAchievementHandler {
 						horse.horseChest[1]?.item == Items.golden_horse_armor
 		
 		if (armorFlag && baublesFlag && horseFlag) player.triggerAchievement(AlfheimAchievements.wingedHussar)
+	}
+	
+	@SubscribeEvent
+	fun hideEsm(e: AlfheimModeChangedEvent) {
+		val enabled = e.esm && !e.esmOld
+		val disabled = !e.esm && e.esmOld
+		
+		if (disabled) {
+			val set = setOf(AlfheimAchievements.fuckup)
+			AchievementList.achievementList.removeAll(set)
+			AlfheimAchievements.page.achievements.removeAll(set)
+		} else if (enabled) {
+			if (AlfheimAchievements.fuckup !in AchievementList.achievementList) AchievementList.achievementList.add(AlfheimAchievements.fuckup)
+			if (AlfheimAchievements.fuckup !in AlfheimAchievements.page.achievements) AlfheimAchievements.page.achievements.add(AlfheimAchievements.fuckup)
+		}
 	}
 }

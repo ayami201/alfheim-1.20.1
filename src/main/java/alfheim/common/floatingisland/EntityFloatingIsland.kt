@@ -5,12 +5,15 @@ import alexsocol.asjlib.math.Vector3
 import alfheim.api.ModInfo
 import alfheim.api.entity.IMulticollidableEntity
 import alfheim.client.sound.EntityBoundMovingSound
+import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.*
 import com.google.gson.JsonParseException
+import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.*
 import net.minecraft.entity.*
 import net.minecraft.init.Blocks
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.*
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.*
@@ -171,7 +174,7 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 				}
 			}
 			
-			if (worldObj.totalWorldTime % 100 == 0L && worldObj.func_147461_a(thisBB).isNotEmpty())
+			if (worldObj.totalWorldTime % 100 == 0L && worldObj.hasSolidBlockCollisions(thisBB, this))
 				duying = true
 			
 			loadChunk()
@@ -186,7 +189,10 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 	}
 	
 	fun onDeathUpdate() {
-		if (deathTimer++ > 300) return setDead()
+		if (deathTimer++ > 300) {
+			dropBlocks()
+			return setDead()
+		}
 		
 		val big = deathTimer > 240
 		if (ASJUtilities.isServer) run {
@@ -222,6 +228,35 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 		}
 
 		Botania.proxy.setWispFXDistanceLimit(true)
+	}
+	
+	fun dropBlocks() {
+		if (worldObj.isRemote) return
+		
+		val nameToStack = HashMap<String, ItemStack>()
+		val nameToCount = HashMap<String, Int>()
+		
+		blockAccess.blockMap.values.shuffled().run { take((size * AlfheimConfigHandler.floatingIslandDrops).I) }.forEach {
+			if (it.block === AlfheimBlocks.lootbox) return@forEach
+			
+			repeat(it.block.quantityDropped(it.meta, 0, rand)) { _ ->
+				val item = it.block.getItemDropped(it.meta, rand, 0) ?: return@repeat
+				val stack = ItemStack(item, 0, it.block.damageDropped(it.meta))
+				nameToStack.computeIfAbsent(stack.toString()) { stack }
+				nameToCount.compute(stack.toString()) { _, count -> (count ?: 0) + 1 }
+			}
+		}
+		
+		nameToStack.forEach { (key, stack) -> 
+			var count = nameToCount[key] ?: return@forEach
+			
+			while (count > 0) {
+				val toDrop = stack.copy()
+				toDrop.stackSize = min(count, toDrop.item.getItemStackLimit(toDrop))
+				count -= toDrop.stackSize
+				entityDropItem(toDrop, 0f)//.setMotion(rand.nextDouble() * 2 - 1, 0.0, rand.nextDouble() * 2 - 1)
+			}
+		}
 	}
 	
 	fun loadChunk() {
@@ -378,6 +413,35 @@ class EntityFloatingIsland(world: World): Entity(world), IMulticollidableEntity 
 		init {
 			FloatingIslandInteractionHandler.eventForge()
 			BotaniaAPI.blacklistEntityFromGravityRod(EntityFloatingIsland::class.java)
+		}
+		
+		val ignoredBlocks: List<Block> = AlfheimConfigHandler.floatingIslandNoCollisionBlocks.mapNotNull {
+			val (modid, name) = it.split(":")
+			GameRegistry.findBlock(modid, name)
+		}
+		
+		fun World.hasSolidBlockCollisions(aabb: AxisAlignedBB, entity: Entity?): Boolean {
+			for (i in aabb.minX.mfloor() ..< aabb.maxX.mceil()) {
+				if (i !in -30_000_000..30_000_000) return true
+				
+				for (k in aabb.minZ.mfloor() ..< aabb.maxZ.mceil()) {
+					if (k !in -30_000_000..30_000_000) return true
+					
+					if (!blockExists(i, 64, k)) continue
+					
+					for (j in aabb.minY.mfloor() - 1..< aabb.maxY.mceil()) {
+						val block = getBlock(i, j, k)
+						if (block inl ignoredBlocks) continue
+						
+						val list = ArrayList<AxisAlignedBB?>()
+						block.addCollisionBoxesToList(this, i, j, k, aabb, list, entity)
+						
+						if (list.filterNotNull().isNotEmpty()) return true
+					}
+				}
+			}
+			
+			return false
 		}
 	}
 }

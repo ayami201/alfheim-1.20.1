@@ -54,15 +54,22 @@ class BlockAnyavil: BlockContainerMod(Material.iron), IManaTrigger, IWandable, I
 	
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
 		val te = world.getTileEntity(x, y, z) as TileItemContainer
-		val stack = player.inventory.getCurrentItem()
+		val stack = player.heldItem
 		
 		if (stack?.item === ModItems.twigWand) return onUsedByWand(player, stack, world, x, y, z, side)
 		
-		if (player.isSneaking) return false
+		if (stack == null && !player.isSneaking) {
+			if (!player.worldObj.isRemote)
+				player.displayGUIAnvil(x, y, z)
+			
+			return true
+		}
+		
 		if (te.item != null) {
 			if (!world.isRemote) EntityItem(world, x + 0.5, y + 0.5, z + 0.5, te.item!!).spawn()
 			te.item = null
 		}
+		
 		if (stack != null && stack.stackSize == 1 && stack.item.isDamageable && GameRegistry.findUniqueIdentifierFor(stack.item).toString() !in AlfheimConfigHandler.repairBlackList) {
 			te.item = stack.copy()
 			te.item!!.stackSize = stack.stackSize

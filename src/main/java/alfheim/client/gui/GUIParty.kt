@@ -10,6 +10,8 @@ import alfheim.client.render.entity.RenderWings
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.PartySystem.Party
 import alfheim.common.core.helper.*
+import cpw.mods.fml.common.eventhandler.Cancelable
+import cpw.mods.fml.common.eventhandler.Event
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.Tessellator
@@ -20,6 +22,7 @@ import net.minecraft.potion.*
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
+import net.minecraftforge.common.MinecraftForge
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL13.GL_CLAMP_TO_BORDER
 import vazkii.botania.api.BotaniaAPI
@@ -61,7 +64,11 @@ object GUIParty: Gui() {
 		
 		// ################################################################ SELF ################################################################
 		
-		if (AlfheimConfigHandler.selfHealthUI) {
+		val selfEvent = PartyGuiRenderEvent(PartyGuiRenderEvent.PartyGuiPart.SELF)
+		
+		if (AlfheimConfigHandler.selfHealthUI) run self@ {
+			if (MinecraftForge.EVENT_BUS.post(selfEvent)) return@self
+			
 			glPushMatrix()
 			
 			glColor4d(1.0, 1.0, 1.0, 1.0)
@@ -410,7 +417,12 @@ object GUIParty: Gui() {
 		}
 		
 		// ################################################################ TARGET ################################################################
-		if (AlfheimConfigHandler.targetUI && PlayerSegmentClient.target != null) {
+		
+		val targetEvent = PartyGuiRenderEvent(PartyGuiRenderEvent.PartyGuiPart.TARGET)
+		
+		if (AlfheimConfigHandler.targetUI && PlayerSegmentClient.target != null) run target@ {
+			if (MinecraftForge.EVENT_BUS.post(targetEvent)) return@target
+			
 			glPushMatrix()
 			glColor4d(1.0, 1.0, 1.0, 1.0)
 			glTranslated(event.resolution.scaledWidth.D / 2.0 / s - 120, 0.0, 0.0)
@@ -538,7 +550,7 @@ object GUIParty: Gui() {
 			glPopMatrix()
 		}
 		
-		// ################ icon: ################
+		// ################ icons: ################
 		run {
 			var y = 0
 			zLevel = -80f
@@ -548,7 +560,7 @@ object GUIParty: Gui() {
 			glTranslated(-1.0 / 24, -1.0 / 24, 0.0)
 			glMatrixMode(GL_MODELVIEW)
 			
-			if (AlfheimConfigHandler.selfHealthUI) {
+			if (AlfheimConfigHandler.selfHealthUI && !selfEvent.isCanceled) {
 				mc.textureManager.bindTexture(LibResourceLocations.icons[player.raceID])
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER)
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER)
@@ -604,9 +616,9 @@ object GUIParty: Gui() {
 			glColor4f(1f, 1f, 1f, 1f)
 			
 			run tg_icon@{
-				l = PlayerSegmentClient.target
-				if (l == null) return@tg_icon
+				l = PlayerSegmentClient.target ?: return@tg_icon
 				if (!AlfheimConfigHandler.targetUI) return@tg_icon
+				if (targetEvent.isCanceled) return@tg_icon
 				
 				glPushMatrix()
 				glTranslated(event.resolution.scaledWidth.D / 2.0 / s - 116, 11.0, 0.0)
@@ -672,5 +684,12 @@ object GUIParty: Gui() {
 		Tessellator.instance.addVertexWithUV(x + width, y, zLevel.D, (u + width) * f, v * f1)
 		Tessellator.instance.addVertexWithUV(x, y, zLevel.D, u * f, v * f1)
 		Tessellator.instance.draw()
+	}
+}
+
+@Cancelable
+open class PartyGuiRenderEvent(val part: PartyGuiPart): Event() {
+	enum class PartyGuiPart {
+		SELF, TARGET
 	}
 }
