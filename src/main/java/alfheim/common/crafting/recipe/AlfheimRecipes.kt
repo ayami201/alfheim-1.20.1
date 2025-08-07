@@ -2823,10 +2823,11 @@ object AlfheimRecipes {
 		
 		recipeRedstoneRelay = BotaniaAPI.registerManaInfusionRecipe(ItemStack(redstoneRelay), ItemStack(redstone_block), 15000)
 		
-		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 0), ItemStack(skullPlacer, 1, 4), 6666)
-		repeat(4) {
-			BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, it + 1), ItemStack(skullPlacer, 1, it), 6666)
-		}
+		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 2), ItemStack(skullPlacer, 1, 3), 66666)
+		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 0), ItemStack(skullPlacer, 1, 2), 6666)
+		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 1), ItemStack(skullPlacer, 1, 0), 66666)
+		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 4), ItemStack(skullPlacer, 1, 1), 6666)
+		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 3), ItemStack(skullPlacer, 1, 4), 666)
 		
 		recipeRiftShard = BotaniaAPI.registerManaAlchemyRecipe(RiftShardEmpty.stack, ItemStack(bifrostPerm), 12000)
 		

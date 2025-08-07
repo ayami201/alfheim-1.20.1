@@ -2090,26 +2090,6 @@ object AlfheimHookHandler {
 	}
 	
 	@JvmStatic
-	@Hook(targetMethod = "onLivingUpdate")
-	fun onLivingUpdatePre(target: SheddingHandler, event: LivingUpdateEvent) {
-		event.entity.captureDrops = true
-	}
-	
-	@JvmStatic
-	@Hook(targetMethod = "onLivingUpdate", injectOnExit = true)
-	fun onLivingUpdatePost(target: SheddingHandler, event: LivingUpdateEvent) {
-		val entity = event.entity
-		
-		entity.capturedDrops.forEach {
-			it.lifespan = 1200
-			entity.worldObj.spawnEntityInWorld(it)
-		}
-		
-		entity.capturedDrops.clear()
-		entity.captureDrops = false
-	}
-	
-	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
 	fun addItem(tile: TileAlfPortal, stack: ItemStack): Boolean {
 		if (Botania18AndUpBackport.addItem(tile, stack)) return true
