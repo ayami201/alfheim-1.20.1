@@ -42,7 +42,10 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 			
 			"vazkii.botania.common.block.tile.TileManaFlame"                   -> core { `TileManaFlame$ClassVisitor`(it) }
 			"vazkii.botania.common.block.tile.TileSpecialFlower"               -> core { `TileSpecialFlower$ClassVisitor`(it) }
-			"vazkii.botania.common.entity.EntityDoppleganger"                  -> core(ClassReader.SKIP_FRAMES) { `EntityDoppleganger$ClassVisitor`(it) }
+			"vazkii.botania.common.entity.EntityDoppleganger"                  -> {
+				this.basicClass = core(ClassReader.SKIP_FRAMES) { `EntityDoppleganger$ClassVisitor`(it) }
+				changeTeleport()
+			}
 			"vazkii.botania.common.item.ItemFlowerBag"                         -> core { `ItemFlowerBag$ClassVisitor`(it) }
 			"vazkii.botania.common.item.equipment.bauble.ItemMiningRing",
 			"vazkii.botania.common.item.equipment.bauble.ItemWaterRing"        -> core { `ItemInfiniEffect$ClassVisitor`(transformedName.split("\\.".toRegex())[6], it) }
@@ -677,6 +680,22 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 				super.visitInsn(if (opcode == ICONST_1) ICONST_0 else opcode)
 			}
 		}
+	}
+	
+	private fun changeTeleport() = tree { cn ->
+		val mn = cn.methods.find { it.name == "onLivingUpdate" || (it.name == "e" && it.desc == "()Z") } ?: return@tree
+		
+		val i = object: Iterable<AbstractInsnNode> {
+			override fun iterator() = mn.instructions.iterator()
+		}
+		
+		val invoke = i.find { it is MethodInsnNode && it.name == "teleportTo" } as? MethodInsnNode ?: return@tree
+		invoke.name = if (OBF) "b" else "setPosition"
+		invoke.desc = "(DDD)V"
+		mn.instructions.remove(invoke.next) // remove POP
+		
+		val ldc = i.find { it is LdcInsnNode && it.cst == 1.6 } as? LdcInsnNode ?: return@tree
+		ldc.cst = 3.6
 	}
 	
 	companion object {

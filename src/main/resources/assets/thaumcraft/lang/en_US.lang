@@ -10,21 +10,25 @@ item.AlfheimCap.4.name=Mauftrium Cap
 item.AlfheimRod.0.name=Livingwood Rod
 item.AlfheimRod.1.name=Dreamwood Rod
 item.AlfheimRod.2.name=Spiritual Staff Core
+item.AlfheimRod.3.name=World Tree Staff Core
 
 item.Wand.alfheimManasteel.cap=Manasteel Banded
 item.Wand.alfheimTerrasteel.cap=Terrasteel Bossed
-item.Wand.alfheimElementium.cap=Elementium Bandned
+item.Wand.alfheimElementium.cap=Elementium Banded
 item.Wand.alfheimElvorium.cap=Elvorium Bossed
 item.Wand.alfheimMauftrium.cap=Mauftrium Embraced
 item.Wand.alfheimLivingwood.rod=Livingwood
 item.Wand.alfheimDreamwood.rod=Dreamwood
 item.Wand.alfheimSpiritual.rod=Spiritual
+item.Wand.alfheimYggdrasil.rod=World
 
 ##########################################################___OTHER___###########################################################
 
 itemGroup.NTC=Natural Thaumaturgy
 
 ######################################################___THAUMONOMICON___#######################################################
+
+tc.research_category.ALFHEIM=Natural Thaumaturgy
 
 #tc.research_name.=
 #tc.research_text.=
@@ -55,16 +59,37 @@ tc.research_page.ROD_alfheimLivingwood.1=Livingwood is a good decision for those
 
 tc.research_name.ROD_alfheimDreamwood=Dreamwood Wand Core
 tc.research_text.ROD_alfheimDreamwood=[ALF] Rod of the dream
-tc.research_page.ROD_alfheimDreamwood.1=Dreamwood by itself is unstable for creating rods from. At first, you need to infuse it with some mana, to strengthen its structure.<BR><BR><BR>Now using Infused Dreamwood Twigs and some vis you can make a rod, capable to store 65 vis of each type. 
+tc.research_page.ROD_alfheimDreamwood.1=Dreamwood by itself is unstable for creating rods from. At first, you need to infuse it with some mana, to strengthen its structure.<LINE>Now using Infused Dreamwood Twigs and some vis you can make a rod, capable to store 65 vis of each type. 
 
 tc.research_name.ROD_alfheimSpiritual_staff=Spiritual Staff Core
 tc.research_text.ROD_alfheimSpiritual_staff=[ALF] Rainbow regenerator
 tc.research_page.ROD_alfheimSpiritual_staff.1=After slaying the Guardian of Gaia his spirit was condensed into tangible form. Experimenting with those spirits gived unexpected results - using them to create a wand core will lead this core to collect all nearby mana and somehow transform it into vis.<BR>Such a core can store up to 85 vis of every type. You think this amount might be even higher, but you have no ideas how to increase it.
 
+tc.research_name.ROD_alfheimYggdrasil_staff=World Tree Staff Core
+tc.research_text.ROD_alfheimYggdrasil_staff=[ALF] Odin approved
+tc.research_page.ROD_alfheimYggdrasil_staff.1=The sacred tree Yggdrasil represents the metaphorical axis of the universe and is a symbol of the unity of all things in all worlds for many peoples.<BR>You simply cannot ignore such a mythological and cultural phenomenon without experimenting on every branch of the legendary ash tree.<BR>Unfortunately, the object of research is incredibly hard, and the only way to obtain even a piece of its bark is to arm yourself with the tooth of an evil serpent.
+tc.research_page.ROD_alfheimYggdrasil_staff.2=In your barbaric researches, you stumbled upon an equally fascinating piece of the world tree - the Fruit of Yggdrasil. This rare treasure, found beneath the tree's crown, possesses a truly extraordinary life force.<BR>This peculiarity immediately gave you a strange thought: "Why not combine the fruit, the wood, and a little thaumaturgy?"<BR>The result was a new staff core, capable of restoring the wielder's health, inspiring them to new research, and replenishing Vis for mana in its storage, which is twice as large as the one of Staff Core of the Primal.
+
 tc.research_name.alfheimTRANSELEMENTIUM=Elementium Transmutation
-tc.research_text.alfheimTRANSELEMENTIUM=Transmutation of metals into elementium
+tc.research_text.alfheimTRANSELEMENTIUM=[ALF] Transmutation of metals into elementium
 tc.research_page.alfheimTRANSELEMENTIUM.1=You have discovered a way to multiply elementium by steeping elementium nuggets in §5metallum§0 harvested from other metals.
 
 tc.research_name.alfheimPUREELEMENTIUM=Elementium Purification
-tc.research_text.alfheimPUREELEMENTIUM=Purification of elementium into native clusters
+tc.research_text.alfheimPUREELEMENTIUM=[ALF] Purification of elementium into native clusters
 tc.research_page.alfheimPUREELEMENTIUM.1=Native clusters are rare concentrations of metals in its purest form. You have discovered a way to purify and concentrate normal elementium ore into a native elementium cluster.<BR>When smelted these clusters produces twice the normal amount of elementium ingots.
+
+# cringy copypaste because 
+tc.research_name.ALF.CAP_gold=Gold Wand Caps
+tc.research_text.ALF.CAP_gold=Capping things off with style
+tc.research_name.ALF.CAP_thaumium=Thaumium Wand Caps
+tc.research_text.ALF.CAP_thaumium=Magical wand caps
+tc.research_name.ALF.CAP_void=Void metal Wand Caps
+tc.research_text.ALF.CAP_void=Power from beyond
+tc.research_name.ALF.ROD_greatwood=Greatwood Wand Core
+tc.research_text.ALF.ROD_greatwood=Repository of magical energy
+tc.research_name.ALF.ROD_silverwood=Silverwood Wand Core
+tc.research_text.ALF.ROD_silverwood=Magical to the core
+tc.research_name.ALF.PUREIRON=Metal Purification
+tc.research_text.ALF.PUREIRON=Purification of metals into native clusters
+tc.research_name.ALF.TRANSIRON=Metal Transmutation
+tc.research_text.ALF.TRANSIRON=Transformation of metals into iron

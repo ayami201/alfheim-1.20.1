@@ -140,7 +140,7 @@ abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boo
 		
 		try {
 			mc.effectRenderer.addEffect(EntityDiggingFX(world, i, j, k, 0.0, 0.0, 0.0, block, meta, side).applyColourMultiplier(x, y, z).multiplyVelocity(0.2f).multipleParticleScaleBy(0.6f))
-		} catch (ignore: Throwable) {}
+		} catch (_: Throwable) {}
 		
 		world.setBlockMetadataWithNotify(x, y, z, ourMeta, 4)
 		
@@ -168,7 +168,7 @@ abstract class BlockDoubleCamo(material: Material = Material.wood, val info: Boo
 					}
 				}
 			}
-		} catch (ignore: Throwable) {}
+		} catch (_: Throwable) {}
 		
 		world.setBlockMetadataWithNotify(x, y, z, ourMeta, 4)
 		

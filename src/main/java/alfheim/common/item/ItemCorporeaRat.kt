@@ -37,12 +37,12 @@ class ItemCorporeaRat: ItemMod("CorporeaRat"), ICoordBoundItem {
 		return true
 	}
 	
-	override fun getBinding(stack: ItemStack) = getBindPos(mc.thePlayer, stack) // fuck you sideonly shit
+	override fun getBinding(stack: ItemStack) = getBindPos(mc.thePlayer, stack, false) // fuck you sideonly shit
 	
-	fun getBindPos(player: EntityPlayer, stack: ItemStack): ChunkCoordinates? {
+	fun getBindPos(player: EntityPlayer, stack: ItemStack, anyDim: Boolean): ChunkCoordinates? {
 		val y = ItemNBTHelper.getInt(stack, TAG_Y, -1)
 		
-		return if (y == -1 || player.dimension != ItemNBTHelper.getInt(stack, TAG_D, 0)) null else ChunkCoordinates(ItemNBTHelper.getInt(stack, TAG_X, 0), y, ItemNBTHelper.getInt(stack, TAG_Z, 0))
+		return if (y == -1 || (!anyDim && player.dimension != ItemNBTHelper.getInt(stack, TAG_D, 0))) null else ChunkCoordinates(ItemNBTHelper.getInt(stack, TAG_X, 0), y, ItemNBTHelper.getInt(stack, TAG_Z, 0))
 	}
 	
 	companion object RatInputHandler: ICorporeaAutoCompleteController {
@@ -64,7 +64,7 @@ class ItemCorporeaRat: ItemMod("CorporeaRat"), ICoordBoundItem {
 			val stack = event.player.heldItem ?: return
 			val item = stack.item as? ItemCorporeaRat ?: return
 			if (TileCorporeaIndex.InputHandler.getNearbyIndexes(event.player).isNotEmpty()) return
-			val (x, y, z) = item.getBindPos(event.player, stack) ?: return
+			val (x, y, z) = item.getBindPos(event.player, stack, true) ?: return
 			val world = MinecraftServer.getServer().worldServerForDimension(ItemNBTHelper.getInt(stack, TAG_D, 0)) ?: return
 			val rat = world.getTileEntity(x, y, z) as? TileCorporeaRat ?: return
 			val spark = rat.spark ?: return

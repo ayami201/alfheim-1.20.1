@@ -9,7 +9,7 @@ import net.minecraft.world.*
 
 class BlockCalicoWoodSlab(full: Boolean, source: Block = AlfheimBlocks.calicoPlanks): BlockRainbowWoodSlab(full, source), IExplosionDampener {
 	
-	override fun getFullBlock() = AlfheimBlocks.calicoSlabsFull as BlockSlab
+	override fun getFullBlock() = AlfheimBlocks.calicoSlabFull as BlockSlab
 	
 	override fun register() {
 		GameRegistry.registerBlock(this, ItemSlabMod::class.java, name)

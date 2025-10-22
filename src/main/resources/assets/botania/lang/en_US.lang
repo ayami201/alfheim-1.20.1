@@ -250,7 +250,7 @@ alfheim.page.corpInj1=Finally, sorting!
 alfheim.entry.corpQuandex=Corporea Quantizator
 alfheim.tagline.corpQuandex=Incorporeal corporea access
 alfheim.page.corpQuandex0=A &1Corporea Quantizator&0 is similar in function to a &1Corporea Index&0, but differs in only one feature: it allows you to send the requested items, even if the request came from a completely different dimension. Of course, it would be nice to somehow contact the Quantizator so as not to feel stupid, shouting requests into the void, being thousands of blocks from the corporea network.
-alfheim.page.corpQuandex1=For this purpose &1Corporea Quandex&0 can be used, which acts as a receiver for the requested items. Just right-click on the quantizer with the Quantizator to establish a connection. But be careful, the process of transferring items over long distances and through dimensions consumes a decent amount of mana from the player's personal storages.
+alfheim.page.corpQuandex1=For this purpose &1Corporea Quandex&0 can be used, which acts as a receiver for the requested items. Just right-click on the Quantizator with the Quandex to establish a connection. But be careful, the process of transferring items over long distances and through dimensions consumes a decent amount of mana from the player's personal storages.
 alfheim.page.corpQuandex2=Faster than pigeon mail
 alfheim.page.corpQuandex3=Contactless delivery
 
@@ -460,7 +460,7 @@ alfheim.entry.winery=Winery
 alfheim.tagline.winery=Drink to every home
 alfheim.page.winery0=Since ancient times, the craftsmen of Midgard have known the method of producing good wine, but no one of them dares to be proud of this fact, one has only to taste the results of labor and magic of the elves.
 alfheim.page.winery1=Of course, being a rather cunning and resourceful race, humans were able to negotiate with the elven winemakers about mutually beneficial instruction of their disciples, but the terms of this agreement remain a mystery to most races. It is only known that on the first day of training, the masters tell their students a story...
-alfheim.page.winery2=Just a story, but, as the students themselves say after returning home, this is enough to make wine of the highest quality by the standards of Midgard. Of course, if the student listened attentively and did not ask stupid questions like: “Why is white wine made from green grapes?”, the answer is very simple...
+alfheim.page.winery2=Just a story, but, as the students themselves say after returning home, this is enough to make wine of the highest quality by the standards of Midgard. Of course, if the student listened attentively and did not ask stupid questions like: "Why is white wine made from green grapes?", the answer is very simple...
 alfheim.page.winery3=Mastray learned this story, though not firsthand, so it is available to people only in the following form:
 alfheim.page.winery4=&oOnce, a dwarf meadbrewer was wandering across the expanses of the eastern plains in search of new plants for its mead. He was tired of mead from herbs and flowers, whose bitterness was softened only by a solid piece of freshly cooked beef. And the dwarf decided to try something new in his craft.&0
 alfheim.page.winery5=&oHe has long laid eyes on the grape bushes growing here - under old trees, or there - on the water surfaces of rivers, sparkling under the rays of the sun with red and green tints. But no matter how hard the dwarf meadbrewer tried, nothing worthwhile came out of it...&0
@@ -905,6 +905,11 @@ alfheim.entry.goddessCharm=Benevolent Goddess' Charm
 alfheim.tagline.goddessCharm=Prevents explosions from damaging the world
 alfheim.page.goddessCharm0=The Benevolent Goddess' Charm is a defensive Bauble that's worn in the Amulet slot. When worn, it uses Mana to prevent explosions in its wearer's vicinity from damaging any blocks in the world.
 alfheim.page.goddessCharm1=Keep TNT away from children!
+
+alfheim.entry.tcwands=Wand Overcharge
+alfheim.tagline.tcwands=Exceeding the capacity
+alfheim.page.tcwands0=Sometimes the art of &5Thaumaturgy&0 requires more than you are currently capable of. One great example being ever increasing vis cost in your &4Arcane Worktable&0. You obviously can use more capacious rods, more conductive end-caps, more discounting gear, but there might be times those tricks just won't cut it. Luckily, elven mages came up with a neat solution.
+alfheim.page.tcwands1=With the help of some mana they managed to attune their wands to be capable of holding just a little over their initial vis capacity using various shards as catalysts for each primal aspect. The only downside to this process is a decreasing impact each catalyst has: the more capacity is exceeded, the less vis you will squeeze from each into your rod.
 
 ################################################################ EBT ################################################################
 

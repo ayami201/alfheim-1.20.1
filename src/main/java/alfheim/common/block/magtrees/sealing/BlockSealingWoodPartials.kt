@@ -10,10 +10,10 @@ import net.minecraft.world.World
 class BlockSealingWoodSlab(full: Boolean, source: Block = AlfheimBlocks.sealingPlanks): BlockRainbowWoodSlab(full, source), ISoundSilencer {
 	
 	init {
-		setStepSound(Block.soundTypeCloth)
+		setStepSound(soundTypeCloth)
 	}
 	
-	override fun getFullBlock() = AlfheimBlocks.sealingSlabsFull as BlockSlab
+	override fun getFullBlock() = AlfheimBlocks.sealingSlabFull as BlockSlab
 	
 	override fun register() {
 		GameRegistry.registerBlock(this, ItemSlabMod::class.java, name)
@@ -29,7 +29,7 @@ class BlockSealingWoodSlab(full: Boolean, source: Block = AlfheimBlocks.sealingP
 class BlockSealingWoodStairs(source: Block = AlfheimBlocks.sealingPlanks): BlockRainbowWoodStairs(source), ISoundSilencer {
 	
 	init {
-		setStepSound(Block.soundTypeCloth)
+		setStepSound(soundTypeCloth)
 	}
 	
 	override fun register() {

@@ -286,7 +286,7 @@ object AnomalyHarvesterBehaviors {
 		if (tile.worldObj.isRemote) {
 			AlfheimHookHandler.wispNoclip = false
 			
-			for (c in 0..3) {
+			repeat(4) {
 				val (x, y, z) = tile.radius.copy().mul(Vector3().rand().sub(0.5)).add(tile.offset)
 				Botania.proxy.wispFX(tile.worldObj, tile.xCoord + x + 0.5, tile.yCoord + y - 0.5, tile.zCoord + z + 0.5, 0.5f, 0.9f, 1f, 0.1f, -0.1f, 1f)
 			}
@@ -346,7 +346,7 @@ object AnomalyHarvesterBehaviors {
 		if (tile.worldObj.isRemote) {
 			AlfheimHookHandler.wispNoclip = false
 			
-			for (c in 0..3) {
+			repeat(4) {
 				val (x, y, z) = tile.radius.copy().mul(Vector3().rand().sub(0.5)).add(tile.offset)
 				Botania.proxy.wispFX(tile.worldObj, tile.xCoord + x + 0.5 - mX * 10, tile.yCoord + y + 0.5 - mY * 10, tile.zCoord + z + 0.5 - mZ * 10, 0.3f, 0.9f, 0.8f, 0.1f, mX, mY, mZ, 1f)
 			}
@@ -433,7 +433,7 @@ object AnomalyHarvesterBehaviors {
 		
 		val aabb = tile.getAoE()
 		
-		for (i in 0 until tile.power.I) {
+		repeat(tile.power.I) {
 			getEntitiesWithinAABB(tile.worldObj, Entity::class.java, aabb).forEach {
 				if (!it.isEntityAlive) return@forEach
 				

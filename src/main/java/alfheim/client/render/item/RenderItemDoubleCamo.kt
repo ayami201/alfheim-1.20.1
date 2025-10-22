@@ -33,7 +33,7 @@ class RenderItemDoubleCamo(val renderId: Int, val getTile: () -> TileDoubleCamo)
 			glRotatef(-90f, 0f, 1f, 0f)
 			glTranslated(0.0, 0.5, -0.5)
 		}
-		val (x, y, z) = (mc.thePlayer?.let { Vector3.fromEntity(it).add(0, 0.1, 0) } ?: Vector3()).mf()
+		val (x, y, z) = intArrayOf(0, 300, 0)
 		glTranslatef(-x.F, -y.F, -z.F)
 		if (type == ENTITY || type == INVENTORY) glTranslated(-0.5)
 		

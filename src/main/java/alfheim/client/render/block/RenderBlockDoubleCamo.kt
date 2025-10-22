@@ -20,7 +20,7 @@ abstract class RenderBlockDoubleCamo(val id: Int): ISimpleBlockRenderingHandler 
 		
 		return try {
 			renderBlock(tile.worldObj, rb, x, y, z, world.getBlockMetadata(x, y, z), tile)
-		} catch (ignore: Throwable) {
+		} catch (_: Throwable) {
 			return false
 		}
 	}

@@ -1,6 +1,21 @@
 Innovations:
  Rebalanced skull recipes
+ Config to completely disable Botania mob shedding
+ Config to disable subspacian's ability to teleport to other dims
+ New issues with some items of decorative blocks render
+ [TC] Custom research category
+ [TC] World Tree Staff Core
+ [TC] Wand overcharge tuning
+ oiia
 
 Fixes:
+ Quandex interdimensional requests
  Shedding error: "Silently" catching entity tracking error
- Hit-/collision box of Double Block with snow layer 
+ Ridden chickens now won't shed
+ Hit-/collision box of Double Block with snow layer
+ Lexica Botania disappearing in elven gateway
+ Old issues with some items of decorative blocks render
+ Right elvorium boot lighting
+ Gaia failing to teleport to beacon during soul restructurization ritual
+ Event-based biome temperature change ignoring world config
+ Event-based biome temperature change affecting Muspelheim and Niflheim biomes

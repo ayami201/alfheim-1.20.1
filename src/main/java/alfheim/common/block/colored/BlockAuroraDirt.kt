@@ -1,6 +1,7 @@
 package alfheim.common.block.colored
 
 import alexsocol.asjlib.*
+import alexsocol.asjlib.math.Vector3
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.base.BlockMod
 import alfheim.common.item.block.ItemBlockAurora
@@ -10,6 +11,7 @@ import net.minecraft.block.*
 import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.util.ChunkCoordinates
 import net.minecraft.world.*
 import net.minecraftforge.common.IPlantable
 import net.minecraftforge.common.util.ForgeDirection
@@ -20,32 +22,11 @@ import kotlin.math.roundToInt
 class BlockAuroraDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
 	
 	companion object {
-		private data class Vec3i(var x: Int, var y: Int, var z: Int)
-		
-		private data class Vec3d(var x: Double, var y: Double, var z: Double) {
-			
-			operator fun plus(v: Vec3d): Vec3d {
-				x += v.x
-				y += v.y
-				z += v.z
-				return this
-			}
-			
-			operator fun times(d: Double): Vec3d {
-				x *= d
-				y *= d
-				z *= d
-				return this
-			}
-			
-			constructor(v: Vec3i): this(v.x.D, v.y.D, v.z.D)
-		}
-		
-		private fun fromVec(vec: Vec3i): Int = (((vec.x + 256) % 256) shl 16) or (((vec.y + 256) % 256) shl 8) or ((vec.z + 256) % 256)
+		private fun fromVec(vec: ChunkCoordinates): Int = (((vec.posX + 256) % 256) shl 16) or (((vec.posY + 256) % 256) shl 8) or ((vec.posZ + 256) % 256)
 		
 		private fun fromPos(x: Double, y: Double, z: Double) = fromVec(trilinearInterp(x, y, z))
 		
-		private fun fromPos(x: Int, y: Int, z: Int): Vec3i {
+		private fun fromPos(x: Int, y: Int, z: Int): ChunkCoordinates {
 			var red = x * 32 + y * 16
 			if (red and 256 != 0) {
 				red = 255 - (red and 255)
@@ -64,10 +45,10 @@ class BlockAuroraDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
 			}
 			green = green and 255
 			
-			return Vec3i(red, blue, green)
+			return ChunkCoordinates(red, blue, green)
 		}
 		
-		private fun trilinearInterp(x: Double, y: Double, z: Double): Vec3i {
+		private fun trilinearInterp(x: Double, y: Double, z: Double): ChunkCoordinates {
 			val x0 = (x - 0.5).roundToInt()
 			val y0 = (y - 0.5).roundToInt()
 			val z0 = (z - 0.5).roundToInt()
@@ -82,26 +63,26 @@ class BlockAuroraDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
 			val zd = z1 - z
 			val zl = z1 - z0
 			
-			val c000 = Vec3d(fromPos(x0, y0, z0))
-			val c001 = Vec3d(fromPos(x0, y0, z1))
-			val c010 = Vec3d(fromPos(x0, y1, z0))
-			val c011 = Vec3d(fromPos(x0, y1, z1))
-			val c100 = Vec3d(fromPos(x1, y0, z0))
-			val c101 = Vec3d(fromPos(x1, y0, z1))
-			val c110 = Vec3d(fromPos(x1, y1, z0))
-			val c111 = Vec3d(fromPos(x1, y1, z1))
+			val c000 = Vector3(fromPos(x0, y0, z0))
+			val c001 = Vector3(fromPos(x0, y0, z1))
+			val c010 = Vector3(fromPos(x0, y1, z0))
+			val c011 = Vector3(fromPos(x0, y1, z1))
+			val c100 = Vector3(fromPos(x1, y0, z0))
+			val c101 = Vector3(fromPos(x1, y0, z1))
+			val c110 = Vector3(fromPos(x1, y1, z0))
+			val c111 = Vector3(fromPos(x1, y1, z1))
 			
-			val c00 = (c000 * xd) + (c100 * (xl - xd))
-			val c01 = (c001 * xd) + (c101 * (xl - xd))
-			val c10 = (c010 * xd) + (c110 * (xl - xd))
-			val c11 = (c011 * xd) + (c111 * (xl - xd))
+			val c00 = c000.mul(xd).add(c100.mul(xl - xd))
+			val c01 = c001.mul(xd).add(c101.mul(xl - xd))
+			val c10 = c010.mul(xd).add(c110.mul(xl - xd))
+			val c11 = c011.mul(xd).add(c111.mul(xl - xd))
 			
-			val c0 = (c00 * yd) + (c10 * (yl - yd))
-			val c1 = (c01 * yd) + (c11 * (yl - yd))
+			val c0 = c00.mul(yd).add(c10.mul(yl - yd))
+			val c1 = c01.mul(yd).add(c11.mul(yl - yd))
 			
-			val c = (c0 * zd) + (c1 * (zl - zd))
+			val c = c0.mul(zd).add(c1.mul(zl - zd))
 			
-			return Vec3i(c.x.mfloor(), c.y.mfloor(), c.z.mfloor())
+			return ChunkCoordinates(c.x.mfloor(), c.y.mfloor(), c.z.mfloor())
 		}
 		
 		fun getBlockColor(x: Int, y: Int, z: Int) = fromVec(fromPos(x, y, z))

@@ -9,7 +9,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent
 
 object WorkInProgressItemsHandler {
 	
-	val wipList = ArrayList<Item>()
+	val wipList = HashSet<Item>()
 	
 	init {
 		eventForge()

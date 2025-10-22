@@ -8,7 +8,10 @@ import thaumcraft.api.wands.IWandRodOnUpdate
 import thaumcraft.common.items.wands.ItemWandCasting
 import vazkii.botania.api.mana.ManaItemHandler
 
-class NaturalWandRodOnUpdate: IWandRodOnUpdate {
+object NaturalWandRodOnUpdate: IWandRodOnUpdate {
+	
+	const val COST = 100
+	val primals = Aspect.getPrimalAspects()
 	
 	override fun onUpdate(stack: ItemStack, player: EntityPlayer) {
 		if (player.ticksExisted % 20 != 0) return
@@ -19,10 +22,5 @@ class NaturalWandRodOnUpdate: IWandRodOnUpdate {
 		for (primal in primals)
 			if (wand.getVis(stack, primal) < wand.getMaxVis(stack) && (if (forTool) ManaItemHandler.requestManaExactForTool(stack, player, COST, true) else ManaItemHandler.requestManaExact(stack, player, COST, true)))
 				wand.addVis(stack, primal, 1, true)
-	}
-	
-	companion object {
-		const val COST = 100
-		val primals = Aspect.getPrimalAspects()
 	}
 }

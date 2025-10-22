@@ -33,6 +33,7 @@ import tconstruct.tools.TinkerTools
 import thaumcraft.common.config.ConfigItems
 import vazkii.botania.api.BotaniaAPI.*
 import vazkii.botania.api.lexicon.*
+import vazkii.botania.common.Botania
 import vazkii.botania.common.block.ModBlocks
 import vazkii.botania.common.brew.ModBrews
 import vazkii.botania.common.core.handler.ConfigHandler
@@ -179,6 +180,7 @@ object AlfheimLexiconData {
 	lateinit var subshroom: LexiconEntry
 	lateinit var subspear: LexiconEntry
 	lateinit var tctrees: LexiconEntry
+	lateinit var tcwands: LexiconEntry
 	lateinit var temperature: LexiconEntry
 	lateinit var terraHarvester: LexiconEntry
 	lateinit var throwablePotions: LexiconEntry
@@ -984,6 +986,16 @@ object AlfheimLexiconData {
 		
 		if (AlfheimConfigHandler.enableElvenStory) initElvenStory()
 		
+		if (Botania.thaumcraftLoaded) {
+			tcwands = object: AlfheimLexiconEntry("tcwands", categoryAlfheim) {
+				override fun getSubtitle() = "[Alfheim x Thaumcraft]"
+			}
+			
+			tcwands.setLexiconPages(PageText("0"), PageText("1"),
+			                        PageTuningIORecipe("2", AlfheimRecipes.tuningThaumWand!!))
+				.icon = ItemStack(ConfigItems.itemShard, 1, 6)
+		}
+		
 		// ################################################################
 		
 		treeCrafting.setLexiconPages(PageText("0"),
@@ -1495,6 +1507,9 @@ object AlfheimLexiconData {
 		
 		if (ThaumcraftSuffusionRecipes.recipesLoaded) {
 			tctrees.knowledgeType = elvenKnowledge
+		}
+		if (Botania.thaumcraftLoaded) {
+			tcwands.knowledgeType = elvenKnowledge
 		}
 	}
 	

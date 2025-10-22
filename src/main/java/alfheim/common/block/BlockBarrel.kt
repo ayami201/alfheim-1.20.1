@@ -26,7 +26,7 @@ class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable {
 		setBlockName("barrel")
 		setHardness(1f)
 		setLightOpacity(0)
-		setStepSound(Block.soundTypeWood)
+		setStepSound(soundTypeWood)
 	}
 	
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {

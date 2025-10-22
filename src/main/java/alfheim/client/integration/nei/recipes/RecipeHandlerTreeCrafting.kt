@@ -69,14 +69,10 @@ open class RecipeHandlerTreeCrafting: TemplateRecipeHandler() {
 		while (true) {
 			var recipe: RecipeTreeCrafting?
 			do {
-				do {
-					if (!var2.hasNext()) {
-						return
-					}
-					
-					recipe = var2.next()
-				} while (recipe == null)
-			} while ((recipe!!.output.stackTagCompound == null || !NEIServerUtils.areStacksSameType(recipe.output, result)) && (recipe.output.stackTagCompound != null || !NEIServerUtils.areStacksSameTypeCrafting(recipe.output, result) /*|| recipe.output.item === Items.skull*/))
+				if (!var2.hasNext()) return
+				
+				recipe = var2.next()
+			} while ((recipe.output.stackTagCompound == null || !NEIServerUtils.areStacksSameType(recipe.output, result)) && (recipe.output.stackTagCompound != null || !NEIServerUtils.areStacksSameTypeCrafting(recipe.output, result)))
 			
 			arecipes.add(getCachedRecipe(recipe))
 		}

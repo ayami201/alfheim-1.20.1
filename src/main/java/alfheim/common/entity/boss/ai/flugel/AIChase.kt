@@ -1,11 +1,9 @@
 package alfheim.common.entity.boss.ai.flugel
 
+import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alexsocol.asjlib.random
-import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.entity.boss.EntityFlugel
 import alfheim.common.item.AlfheimItems
-import cpw.mods.fml.common.registry.GameRegistry
 
 class AIChase(flugel: EntityFlugel, task: AITask): AIBase(flugel, task) {
 	
@@ -13,49 +11,38 @@ class AIChase(flugel: EntityFlugel, task: AITask): AIBase(flugel, task) {
 	
 	override fun startExecuting() {
 		flugel.noClip = true
-		val s = flugel.stage
-		val i = if (s == 1) 200 else if (s == 2) 100 else 50
-		flugel.aiTaskTimer = flugel.worldObj.rand.nextInt(i) + i
+		val i = when (flugel.stage) {
+			1    -> 200
+			2    -> 100
+			else -> 50
+		}
 		
-		lowest = flugel.worldObj.rand.nextInt(10) == 0
+		flugel.aiTaskTimer = flugel.rng.nextInt(i) + i
 		
-		if (flugel.worldObj.rand.nextInt(4) == 0) {
-			val player = flugel.worldObj.getPlayerEntityByName(flugel.playersDamage.keys.random(flugel.rng) ?: return) ?: return
-			if (player.capabilities.isCreativeMode) return
+		lowest = flugel.rng.nextInt(10) == 0
+		
+		if (flugel.rng.nextInt(4) != 0) return
+		// scramble items:
+		
+		val player = flugel.worldObj.getPlayerEntityByName(flugel.playersDamage.keys.random(flugel.rng) ?: return) ?: return
+		if (player.capabilities.isCreativeMode) return
+		
+		val inv = player.inventory
+		val slots = inv.mainInventory.indices.toMutableList()
+		val items = slots.toList().mapNotNull {
+			val stack = inv[it] ?: return@mapNotNull null
 			
-			repeat(10) {
-				for (slot1 in player.inventory.mainInventory.indices) {
-					val slot2 = flugel.worldObj.rand.nextInt(player.inventory.mainInventory.size)
-					
-					val stack1 = player.inventory.mainInventory[slot1]
-					val stack2 = player.inventory.mainInventory[slot2]
-					
-					if (stack1?.item === AlfheimItems.organs || stack2?.item === AlfheimItems.organs) continue
-					
-					var flagStack1 = stack1 != null
-					if (flagStack1) {
-						val id = GameRegistry.findUniqueIdentifierFor(stack1.item)
-						flagStack1 = if (id != null)
-							AlfheimConfigHandler.flugelSwapBlackList.contains(id.toString())
-						else
-							false
-					}
-					
-					var flagStack2 = stack2 != null
-					if (flagStack2) {
-						val id = GameRegistry.findUniqueIdentifierFor(stack2.item)
-						flagStack2 = if (id != null)
-							AlfheimConfigHandler.flugelSwapBlackList.contains(id.toString())
-						else
-							false
-					}
-					
-					if (flagStack1 || flagStack2) continue
-					
-					player.inventory.mainInventory[slot1] = stack2
-					player.inventory.mainInventory[slot2] = stack1
-				}
+			if (stack.item === AlfheimItems.organs) {
+				slots.remove(it)
+				return@mapNotNull null
 			}
+			
+			inv[it] = null
+			stack.copy()
+		}
+		
+		items.forEach {
+			inv[slots.removeRandom()!!] = it
 		}
 	}
 	

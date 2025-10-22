@@ -858,7 +858,6 @@ alfheimmisc.fracturedSpace.debug.tooltipPos=Позиция привязки: X: 
 alfheimmisc.fracturedSpace.debug.tooltipDim=Измерение привязки: %s
 
 alfheimmisc.ragnarok.conquerors=Впервые покорён:
-alfheimmisc.ragnarok.conquerors.unknown=ᚠᛁᚱᛊᛏ ᚲᛟᚾᚲᚢᛖᚱᛖᛞ ᛒᚨᛁ:
 alfheimmisc.ragnarok.domain.locked=На данный момент этот домен закрыт!
 alfheimmisc.ragnarok.domain.notEnoughParticipants=Недостаточно участников!
 alfheimmisc.ragnarok.domain.surtrnotallow=<Сурт> Вход в обитель Повелителя Огня закрыт для простых смертных! Проваливайте!
@@ -1486,8 +1485,8 @@ misc.alfheim.color.17=Аврора
 
 misc.alfheim.customSize=Радиус: %1$s
 
-tc.aspect.tincturem=Цвет, Радужность
-tc.aspect.help.tincturem=радужные вещи
+tc.aspect.tinctura=Цвет, Радужность
+tc.aspect.help.tinctura=радужные вещи
 
 misc.alfheim.contains=Содержит:
 misc.alfheim.containsNothing=Пусто
@@ -1856,8 +1855,8 @@ general.integration.thaumcraft=Thaumcraft
 general.integration.thaumcraft.tooltip=Интеграция с Thaumcraft.
 TC.botaniaAspects=Аспекты для Botania
 TC.botaniaAspects.tooltip=Установите значение этого параметра на 'false', чтобы отключить добавление аспектов в Botania.
-TC.tincturem=Аспект Tincturem
-TC.tincturem.tooltip=Установите значение этого параметра на 'false', чтобы использовать аспект Sensus вместо аспекта Tincturem.
+TC.tinctura=Аспект Tinctura
+TC.tinctura.tooltip=Установите значение этого параметра на 'false', чтобы использовать аспект Sensus вместо аспекта Tinctura.
 TC.treeCrafting=Создание деревьев
 TC.treeCrafting.tooltip=[GoG] Установите значение этого параметра на 'false', чтобы удалить рецепты деревьев из Thaumcraft в древесном наполнителе.
 

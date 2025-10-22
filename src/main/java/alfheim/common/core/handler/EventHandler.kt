@@ -6,7 +6,6 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.patcher.event.*
 import alfheim.api.entity.*
-import alfheim.api.spell.SpellBase
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
 import alfheim.common.achievement.AlfheimAchievements
@@ -163,24 +162,14 @@ object EventHandler {
 	
 	@SubscribeEvent
 	fun onEntityAttacked(e: LivingAttackEvent) {
-		var amount = e.ammount // oh srsly 'mm' ?
 		val target = e.entityLiving
 		val attacker = e.source.entity
-		
-		if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDBerserk) == true)
-			amount *= 1.2f
-		if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDOvermage) == true && (e.source is DamageSourceSpell || (e.source.isMagicDamage && (attacker as? EntityPlayer)?.let { SpellBase.consumeMana(it, (amount * 100).I, true) } == true)))
-			amount *= 1.2f
-		if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDNinja) == true)
-			amount *= 0.8f
 		
 		if (AlfheimConfigHandler.enableMMO) {
 			if (CardinalSystem.PartySystem.friendlyFire(target, e.source)) {
 				e.isCanceled = true
 				return
 			}
-			if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDQuadDamage) == true)
-				amount *= 4f
 			
 			if ((attacker as? EntityLivingBase)?.isPotionActive(AlfheimConfigHandler.potionIDLeftFlame) == true || target.isPotionActive(AlfheimConfigHandler.potionIDLeftFlame)) {
 				e.isCanceled = true
@@ -464,9 +453,10 @@ object EventHandler {
 		val biomeID = entity.worldObj.getBiomeGenForCoords(entity.posX.mfloor(), entity.posZ.mfloor()).biomeID
 		
 		val change = when (biomeID) {
-			in AlfheimConfigHandler.biomesCold ->  0.05f
-			in AlfheimConfigHandler.biomesHot  -> -0.05f
-			else -> return
+			in AlfheimConfigHandler.biomesCold,
+			in AlfheimConfigHandler.niflheimBiomeIDs -> 0.05f
+			in AlfheimConfigHandler.biomesHot        -> -0.05f
+			else                                     -> return
 		}
 		
 		e.delta = (e.delta ?: 0f) + change

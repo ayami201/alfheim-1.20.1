@@ -68,14 +68,16 @@ open class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncan
 			glPopMatrix()
 		}
 		
-		val inputs = incantation.inputs
+		val inputs = incantation.getInputs(target, ticksElapsed)
 		val degreePerInput = (360f / inputs.size).I
 		var currentDegree = if (ConfigHandler.lexiconRotatingItems) if (GuiScreen.isShiftKeyDown()) ticksElapsed.F else ticksElapsed + ClientTickHandler.partialTicks else 0f
 		
 		for (obj in inputs) {
 			var input = obj
-			if (input is String)
-				input = OreDictionary.getOres(input)[0]
+			if (input is String) {
+				val ores = OreDictionary.getOres(input)
+				input = ores[ticksElapsed / 20 % ores.size]
+			}
 			
 			renderItemAtAngle(gui, currentDegree, input as ItemStack)
 			

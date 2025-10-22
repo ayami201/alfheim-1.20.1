@@ -858,7 +858,6 @@ alfheimmisc.fracturedSpace.debug.tooltipPos=Bound position: X %s, Y %s, Z %s
 alfheimmisc.fracturedSpace.debug.tooltipDim=Bound dimension: %s
 
 alfheimmisc.ragnarok.conquerors=First conquered by:
-alfheimmisc.ragnarok.conquerors.unknown=ᚠᛁᚱᛊᛏ ᚲᛟᚾᚲᚢᛖᚱᛖᛞ ᛒᚨᛁ:
 alfheimmisc.ragnarok.domain.locked=For now this Domain is locked!
 alfheimmisc.ragnarok.domain.notEnoughParticipants=Not enough participants!
 alfheimmisc.ragnarok.domain.surtrnotallow=<Surtr> Entrance to the Fire Lord's abode is closed to mere mortals! Get lost!
@@ -1120,7 +1119,7 @@ item.FlugelSoul.sign11=Pisces
 
 itemGroup.Alfheim=Alfheim
 
-##########################################################___ШАРАДЫ___##########################################################
+##########################################################___SHARADS___##########################################################
 
 charades.question1=<Vafþrúðnir> Then there were no abodes of mortals, no issued laws, no huts and no palaces, no jarls and no slaves. Only two who announced everything. Light and darkness, wildness and silence, flame and fog. What am I talking about?
 charades.question2=<Vafþrúðnir> There is no earth and heaven, no sea and forest. No Sun and Moon, no death and immortality. There is no born and death, no blesses and no curses. There is nothing. What am I talking about?
@@ -1488,8 +1487,8 @@ misc.alfheim.color.17=Aurora
 
 misc.alfheim.customSize=Radius: %1$s
 
-tc.aspect.tincturem=Color, Iridescence
-tc.aspect.help.tincturem=rainbow things
+tc.aspect.tinctura=Color, Iridescence
+tc.aspect.help.tinctura=rainbow things
 
 misc.alfheim.contains=Contains:
 misc.alfheim.containsNothing=Empty
@@ -1804,7 +1803,7 @@ voidFog=Void Fog
 
 general.integration.thaumcraft=Thaumcraft
 TC.botaniaAspects=Botania Aspects
-TC.tincturem=Tincturem Aspect
+TC.tinctura=Tinctura Aspect
 TC.treeCrafting=Tree Crafting
 
 general.integration.tconstruct=Tinkers' Construct

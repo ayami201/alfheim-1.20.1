@@ -22,6 +22,7 @@ object LibRenderIDs {
 	val idMultipass = RenderingRegistry.getNextAvailableRenderId()
 	val idNiflheim = RenderingRegistry.getNextAvailableRenderId()
 	val idNidhoggTooth = RenderingRegistry.getNextAvailableRenderId()
+	val idOnyx = RenderingRegistry.getNextAvailableRenderId()
 	val idPowerStone = RenderingRegistry.getNextAvailableRenderId()
 	val idPylon = RenderingRegistry.getNextAvailableRenderId()
 	val idSimpleDoubleBlock = RenderingRegistry.getNextAvailableRenderId()
