@@ -12,5 +12,5 @@ class IncantationElementalSlimeGrowth(application: (EntityElementalSlime) -> Boo
 		AlfheimAPI.tunerIncantations[incantation.lowercase()] = this
 	}
 	
-	override fun getInputs(target: EntityElementalSlime, renderTick: Int) = Array(4) { ItemElvenResource.ballForElement(target.elements.first()) }.toList()
+	override fun getInputs(target: EntityElementalSlime) = Array(4) { ItemElvenResource.ballForElement(target.elements.first()) }.toList()
 }

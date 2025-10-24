@@ -177,8 +177,9 @@ object ThaumcraftAlfheimModule {
 		CropUtils.addClickableCrop(ItemStack(AlfheimBlocks.grapesWhite), 2)
 		
 		AlfheimLexiconData.ores.setLexiconPages(PageText("TC"))
-		for (i in 0..7)
-			LexiconRecipeMappings.map(ItemStack(alfheimThaumOre, 1, i), AlfheimLexiconData.ores, 3)
+		repeat(8) {
+			LexiconRecipeMappings.map(ItemStack(alfheimThaumOre, 1, it), AlfheimLexiconData.ores, 3)
+		}
 	}
 	
 	fun registerRecipes() {

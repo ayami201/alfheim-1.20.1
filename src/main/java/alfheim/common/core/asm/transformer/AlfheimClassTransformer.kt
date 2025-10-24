@@ -683,16 +683,15 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 	}
 	
 	private fun changeTeleport() = tree { cn ->
-		val mn = cn.methods.find { it.name == "onLivingUpdate" || (it.name == "e" && it.desc == "()Z") } ?: return@tree
+		val mn = cn.methods.find { it.name == "onLivingUpdate" || it.name == "func_70636_d" } ?: return@tree
 		
 		val i = object: Iterable<AbstractInsnNode> {
 			override fun iterator() = mn.instructions.iterator()
 		}
 		
 		val invoke = i.find { it is MethodInsnNode && it.name == "teleportTo" } as? MethodInsnNode ?: return@tree
-		invoke.name = if (OBF) "b" else "setPosition"
-		invoke.desc = "(DDD)V"
 		mn.instructions.remove(invoke.next) // remove POP
+		mn.instructions[invoke] = MethodInsnNode(invoke.opcode, invoke.owner, if (OBF) "func_70107_b" else "setPosition", "(DDD)V", false)
 		
 		val ldc = i.find { it is LdcInsnNode && it.cst == 1.6 } as? LdcInsnNode ?: return@tree
 		ldc.cst = 3.6

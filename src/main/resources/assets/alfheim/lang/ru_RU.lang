@@ -1,6 +1,14 @@
 ###########################################################___БЛОКИ___##########################################################
 # tile..name=
 tile.alfheim:AlfheimPortal.name=Ядро портала в Альфхейм
+tile.AlfheimThaumOre.0.name=Киноварь
+tile.AlfheimThaumOre.1.name=Грозовая руда
+tile.AlfheimThaumOre.2.name=Огненная руда
+tile.AlfheimThaumOre.3.name=Ледяная руда
+tile.AlfheimThaumOre.4.name=Руда землянного кристалла
+tile.AlfheimThaumOre.5.name=Руда кристалла порядка
+tile.AlfheimThaumOre.6.name=Энтропийная руда
+tile.AlfheimThaumOre.7.name=Янтарная руда
 tile.alfStorage0.name=Блок эльвория
 tile.alfStorage1.name=§6Блок мауфтрия
 tile.alfStorage2.name=Блок силы Муспельхейма

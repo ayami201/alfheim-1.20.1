@@ -5,8 +5,8 @@ import alexsocol.asjlib.get
 import alfheim.api.AlfheimAPI
 import alfheim.api.AlfheimAPI.set
 import alfheim.api.crafting.recipe.TunerIncantation
-import alfheim.common.crafting.recipe.IncantationThaumWandOvercharge.apply
 import alfheim.common.crafting.recipe.IncantationThaumWandOvercharge.TAG_OVERCHARGE
+import alfheim.common.crafting.recipe.IncantationThaumWandOvercharge.apply
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
@@ -17,7 +17,8 @@ import thaumcraft.common.items.wands.ItemWandCasting
 import kotlin.math.ceil
 import kotlin.math.min
 
-object IncantationThaumWandOvercharge: TunerIncantation<ItemStack>(ItemStack::class.java, "o kama suli e ijo lili o pana e ijo mama tawa insa ona", Array(4) { TAG_OVERCHARGE }, ::apply) {
+object IncantationThaumWandOvercharge: TunerIncantation<ItemStack>(ItemStack::class.java, "o kama suli e ijo lili o pana e ijo mama tawa insa ona", Array(4) { TAG_OVERCHARGE }, { apply(it) }) {
+	
 	const val TAG_OVERCHARGE = "overchargeIngredient_"
 	
 	const val TAG_ALL_SMALL = "${TAG_OVERCHARGE}all_small"
@@ -122,7 +123,7 @@ object IncantationThaumWandOvercharge: TunerIncantation<ItemStack>(ItemStack::cl
 		return true
 	}
 	
-	override fun getInputs(target: ItemStack, renderTick: Int): List<Any> {
+	override fun getInputsForRender(renderTick: Int): List<Any> {
 		val s = renderTick / 20
 		return Array(s % 16 + 1) { renderTags[(s + it) % renderTags.size] }.toList()
 	}

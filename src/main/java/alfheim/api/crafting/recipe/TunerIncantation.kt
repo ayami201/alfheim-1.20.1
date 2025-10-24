@@ -27,7 +27,7 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 	}
 	
 	open fun matches(inv: IInventory, target: @UnsafeVariance T): Boolean {
-		val inputsMissing = ArrayList(getInputs(target, -1))
+		val inputsMissing = ArrayList(getInputs(target))
 		
 		for (i in 0 until inv.sizeInventory) {
 			val stack = inv[i] ?: break
@@ -65,7 +65,8 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 		return inputsMissing.isEmpty()
 	}
 	
-	open fun getInputs(target: @UnsafeVariance T, renderTick: Int): List<Any> = ArrayList(inputs)
+	open fun getInputs(target: @UnsafeVariance T): List<Any> = ArrayList(inputs)
+	open fun getInputsForRender(renderTick: Int): List<Any> = ArrayList(inputs)
 	
 	enum class EnumTargetType {
 		BLOCK, ENTITY, ITEM, TILE

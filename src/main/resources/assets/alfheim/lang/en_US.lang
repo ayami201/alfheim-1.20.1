@@ -1,6 +1,14 @@
 ##########################################################___BLOCKS___##########################################################
 # tile..name=
 tile.alfheim:AlfheimPortal.name=Alfheim Portal Core
+tile.AlfheimThaumOre.0.name=Cinnabar Ore
+tile.AlfheimThaumOre.1.name=Air Infused Livingrock
+tile.AlfheimThaumOre.2.name=Fire Infused Livingrock
+tile.AlfheimThaumOre.3.name=Water Infused Livingrock
+tile.AlfheimThaumOre.4.name=Earth Infused Livingrock
+tile.AlfheimThaumOre.5.name=Order Infused Livingrock
+tile.AlfheimThaumOre.6.name=Entropy Infused Livingrock
+tile.AlfheimThaumOre.7.name=Amber Bearing Livingrock
 tile.alfStorage0.name=Block of Elvorium
 tile.alfStorage1.name=§6Block of Mauftrium
 tile.alfStorage2.name=Block of Muspelheim Power
@@ -60,7 +68,7 @@ tile.alfheim:calicoWood.name=Calico Wood
 tile.alfheim:circuitLeaves.name=Circuitree Leaves
 tile.alfheim:circuitPlanks.name=Circuitree Planks
 tile.alfheim:circuitPlanksSlab.name=Circuitree Planks Slab
-tile.alfheim:circuitPlanksSlabFull.name=Circuitree Planks Slabs
+tile.alfheim:circuitPlanksSlabFull.name=Circuitree Planks Slab
 tile.alfheim:circuitPlanksStairs.name=Circuitree Planks Stairs
 tile.alfheim:circuitSapling.name=Circuitree Sapling
 tile.alfheim:circuitWood.name=Circuitree Wood
@@ -1640,16 +1648,16 @@ item.alfheim:reactionDagger.name=Dagger of the Perfect Soul
 
 tile.alfheim:kindling.name=Blaze Kindling
 
-tile.alfheim:rainbowPlanksSlab.name=Iridescent Slab
-tile.alfheim:rainbowPlanksSlabFull.name=Iridescent Slab
-tile.alfheim:irisPlanksSlab.name=Iridescent Slab
-tile.alfheim:irisPlanksSlabFull.name=Iridescent Slab
-tile.alfheim:lightningPlanksSlab.name=Thunderous Slab
-tile.alfheim:lightningPlanksSlabFull.name=Thunderous Slab
-tile.alfheim:netherPlanksSlab.name=Infernal Slab
-tile.alfheim:netherPlanksSlabFull.name=Infernal Slab
-tile.alfheim:sealingPlanksSlab.name=Sealing Slab
-tile.alfheim:sealingPlanksSlabFull.name=Sealing Slab
+tile.alfheim:rainbowPlanksSlab.name=Iridescent Planks Slab
+tile.alfheim:rainbowPlanksSlabFull.name=Iridescent Planks Slab
+tile.alfheim:irisPlanksSlab.name=Iridescent Planks Slab
+tile.alfheim:irisPlanksSlabFull.name=Iridescent Planks Slab
+tile.alfheim:lightningPlanksSlab.name=Thunderous Planks Slab
+tile.alfheim:lightningPlanksSlabFull.name=Thunderous Planks Slab
+tile.alfheim:netherPlanksSlab.name=Infernal Planks Slab
+tile.alfheim:netherPlanksSlabFull.name=Infernal Planks Slab
+tile.alfheim:sealingPlanksSlab.name=Sealing Planks Slab
+tile.alfheim:sealingPlanksSlabFull.name=Sealing Planks Slab
 
 tile.alfheim:amplifier.name=Sonic Amplifier
 

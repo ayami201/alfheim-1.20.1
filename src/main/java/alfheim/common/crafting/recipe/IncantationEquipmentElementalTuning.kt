@@ -40,7 +40,7 @@ class IncantationEquipmentElementalTuning(val element: String, incantation: Stri
 		return super.matches(inv, target)
 	}
 	
-	override fun getInputs(target: ItemStack, renderTick: Int): List<Any> {
+	override fun getInputs(target: ItemStack): List<Any> {
 		val level = ItemNBTHelper.getInt(target, TAG_ELEMENT_LEVEL, 0)
 		val er = Array(level + 1) { ItemElvenResource.ballForElement(ElementalDamage.valueOf(element)) }
 		val manaWeave = Array(level + 7) { LibOreDict.MANAWEAVE_CLOTH }

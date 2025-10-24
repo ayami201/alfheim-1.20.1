@@ -23,7 +23,7 @@ class BlockAlfheimThaumOre: Block(Material.rock), ILexiconable {
 	val rand = Random()
 	
 	init {
-		setBlockName("blockCustomOre")
+		setBlockName("AlfheimThaumOre")
 		setCreativeTab(ThaumcraftAlfheimModule.tcnTab)
 		setHardness(1.5f)
 		setHarvestLevel("pickaxe", 2, 0)
@@ -72,13 +72,8 @@ class BlockAlfheimThaumOre: Block(Material.rock), ILexiconable {
 		when (meta) {
 			0    -> ret.add(ItemStack(ThaumcraftAlfheimModule.alfheimThaumOre, 1, 0))
 			7    -> ret.add(ItemStack(ConfigItems.itemResource, 1 + world.rand.nextInt(fortune + 1), 6))
-			
-			else -> {
-				val q = 1 + world.rand.nextInt(2 + fortune)
-				
-				for (a in 0 until q) {
-					ret.add(ItemStack(ConfigItems.itemShard, 1, meta - 1))
-				}
+			else -> repeat(1 + world.rand.nextInt(2 + fortune)) {
+				ret.add(ItemStack(ConfigItems.itemShard, 1, meta - 1))
 			}
 		}
 		
