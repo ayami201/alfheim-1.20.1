@@ -8,7 +8,7 @@ import net.minecraft.block.*
 
 class BlockBarrierWoodSlab(full: Boolean, source: Block = AlfheimBlocks.barrierPlanks): BlockRainbowWoodSlab(full, source) {
 	
-	override fun getFullBlock() = AlfheimBlocks.barrierSlabsFull as BlockSlab
+	override fun getFullBlock() = AlfheimBlocks.barrierSlabFull as BlockSlab
 	
 	override fun register() {
 		GameRegistry.registerBlock(this, ItemSlabMod::class.java, name)

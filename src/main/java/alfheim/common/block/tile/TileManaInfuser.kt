@@ -127,7 +127,7 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 			val r = sin((ticks - 100) / 10.0) * 2
 			val g = sin(wticks * Math.PI / 180 * 0.55)
 			
-			for (i in 0 until totalSpiritCount) {
+			repeat(totalSpiritCount) {
 				val x = xCoord.D + sin(wticks * Math.PI / 180) * r + 0.5
 				val y = yCoord.D + 0.25 + abs(r) * 0.7
 				val z = zCoord.D + cos(wticks * Math.PI / 180) * r + 0.5
@@ -138,8 +138,9 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 				Botania.proxy.wispFX(worldObj, x, y + 1, z, colorsfx[0], colorsfx[1], colorsfx[2], Math.random().F * 0.1f + 0.1f, (Math.random() - 0.5).F * 0.05f, (Math.random() - 0.5).F * 0.05f, (Math.random() - 0.5).F * 0.05f, 0.9f)
 				
 				if (ticks == 100)
-					for (j in 0..14)
+					repeat(15) {
 						Botania.proxy.wispFX(worldObj, xCoord + 0.5, yCoord + 1.25, zCoord + 0.5, colorsfx[0], colorsfx[1], colorsfx[2], Math.random().F * 0.15f + 0.15f, (Math.random() - 0.5f).F * 0.125f, (Math.random() - 0.5f).F * 0.125f, (Math.random() - 0.5f).F * 0.125f)
+					}
 			}
 		}
 	}
@@ -175,15 +176,15 @@ class TileManaInfuser: ASJTile(), ISparkAttachable {
 	}
 	
 	fun doneParticles() {
-		for (i in 0..63) {
+		repeat(64) {
 			v.set(Math.random() - 0.5, 0.0, Math.random() - 0.5).normalize().mul(Math.random() * 0.2 + 0.1)
 			Botania.proxy.wispFX(worldObj, xCoord + 0.5, yCoord.D + 1.65 + Math.random() * 0.2, zCoord + 0.5, 1f, 0.01f, 0.01f, 0.5f, v.x.F, v.y.F, v.z.F, 0.5f)
 		}
-		for (i in 0..15) {
+		repeat(16) {
 			v.set(0.0, 1.0, 0.0).mul(Math.random() * 0.2 + 0.1)
 			Botania.proxy.wispFX(worldObj, xCoord + 0.5, yCoord.D + 1.0 + Math.random(), zCoord + 0.5, 1f, 0.01f, 0.01f, 0.5f, v.x.F, v.y.F, v.z.F, 0.5f)
 		}
-		for (i in 0..63) {
+		repeat(64) {
 			Botania.proxy.sparkleFX(worldObj, xCoord.D + 0.5 + Math.random() * 0.25 - 0.125, (yCoord + 4).D, zCoord.D + 0.5 + Math.random() * 0.25 - 0.125, 1f, 0.01f, 0.01f, 5f, 15)
 		}
 	}

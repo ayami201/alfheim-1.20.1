@@ -10,10 +10,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.common.core.handler.SheddingHandler;
 import vazkii.botania.common.item.equipment.tool.ToolCommons;
 import vazkii.botania.common.item.equipment.tool.elementium.ItemElementiumPick;
 import vazkii.botania.common.item.material.ItemManaResource;
@@ -99,5 +101,15 @@ public class HookReplacerHandler {
 					   : player instanceof EntityPlayerMP
 								 ? ((EntityPlayerMP) player).theItemInWorldManager.getBlockReachDistance()
 								 : (double) Minecraft.getMinecraft().playerController.getBlockReachDistance();
+	}
+	
+	@HookReplacer
+	@SuppressWarnings("DataFlowIssue")
+	public static void onLivingUpdate(SheddingHandler target, LivingEvent.LivingUpdateEvent event) {
+		startFROM();
+		POPLine();event.entity.entityDropItem(HookReplacer.Replacer.<SheddingHandler.ShedPattern>ALOAD("2").getItemStack(), 0.0F);
+		POPLine();startTO();
+		POPLine();event.entity.entityDropItem(HookReplacer.Replacer.<SheddingHandler.ShedPattern>ALOAD("2").getItemStack(), 0.0F).lifespan = 1200;
+		POPLine();stop();
 	}
 }

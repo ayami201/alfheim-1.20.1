@@ -55,7 +55,7 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 		stepHeight = 1.5f
 		flySpeed = 0.95f
 		
-		setSize(1.4f, 1.6f)
+		setSize(1.4f, 2.6f)
 		
 		navigator.avoidsWater = true
 		tasks.addTask(0, EntityAISwimming(this))
@@ -70,6 +70,8 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 		dataWatcher.addObject(16, "")
 		dataWatcher.addObject(17, 0)
 	}
+	
+	override fun getMountedYOffset() = 1.2
 	
 	override fun isAIEnabled() = true
 	
@@ -162,7 +164,7 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 		super.moveEntityWithHeading(mS, mF)
 		
 		if (mF > 0f)
-			for (i in 1..8) {
+			repeat(8) {
 				val c = Color.getHSBColor((ticksExisted * 10) % 360 / 360f, 1f, 1f)
 				worldObj.spawnParticle("reddust", posX + Math.random() - 0.5, posY + Math.random() - 0.5, posZ + Math.random() - 0.5, c.red / 255.0, c.green / 255.0, c.blue / 255.0)
 			}
@@ -319,7 +321,7 @@ class EntityLolicorn(world: World): EntityRidableFlying(world), ITimeStopSpecifi
 			val model: ModelBase? = if (ASJUtilities.isClient) modelProvider() else null
 			
 			companion object {
-				fun valueOfOrNull(value: String): EnumMountType? = try { valueOf(value) } catch (e: IllegalArgumentException) { null }
+				fun valueOfOrNull(value: String): EnumMountType? = try { valueOf(value) } catch (_: IllegalArgumentException) { null }
 			}
 		}
 	}

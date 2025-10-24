@@ -3,6 +3,7 @@ package alfheim.common.block
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.client.core.helper.IconHelper
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.ItemBlockSubspacian
 import alfheim.common.lexicon.AlfheimLexiconData
@@ -56,18 +57,18 @@ class BlockSubspacian: BlockBush(Material.plants), ILexiconable {
 			var target: Entity = entity
 			
 			val (x, y, z) = when {
-				!collide && chance < 1  -> {
+				AlfheimConfigHandler.interdimensionalSubspacian && !collide && chance < 1 -> {
 					dimTo = DimensionManager.getStaticDimensionIDs().toList().random(entity.rng)!!
 					Vector3(MinecraftServer.getServer().worldServerForDimension(dimTo)?.spawnPoint ?: ChunkCoordinates(0, 64, 0))
 				}
-				chance < 26 -> {
+				chance < 26                                                               -> {
 					Vector3.fromEntity(world.loadedEntityList.random(entity.rng) as Entity)
 				}
-				!collide && chance < 51 -> {
+				!collide && chance < 51                                                   -> {
 					target = world.loadedEntityList.random(entity.rng) as Entity
 					Vector3.fromEntity(entity)
 				}
-				else        -> {
+				else                                                                      -> {
 					Vector3().rand().sub(0.5).normalize().mul((Math.random() * if (collide) 64 else 256) + 16).add(entity)
 				}
 			}

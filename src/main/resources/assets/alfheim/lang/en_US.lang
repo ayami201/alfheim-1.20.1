@@ -1,6 +1,14 @@
 ##########################################################___BLOCKS___##########################################################
 # tile..name=
 tile.alfheim:AlfheimPortal.name=Alfheim Portal Core
+tile.AlfheimThaumOre.0.name=Cinnabar Ore
+tile.AlfheimThaumOre.1.name=Air Infused Livingrock
+tile.AlfheimThaumOre.2.name=Fire Infused Livingrock
+tile.AlfheimThaumOre.3.name=Water Infused Livingrock
+tile.AlfheimThaumOre.4.name=Earth Infused Livingrock
+tile.AlfheimThaumOre.5.name=Order Infused Livingrock
+tile.AlfheimThaumOre.6.name=Entropy Infused Livingrock
+tile.AlfheimThaumOre.7.name=Amber Bearing Livingrock
 tile.alfStorage0.name=Block of Elvorium
 tile.alfStorage1.name=§6Block of Mauftrium
 tile.alfStorage2.name=Block of Muspelheim Power
@@ -60,7 +68,7 @@ tile.alfheim:calicoWood.name=Calico Wood
 tile.alfheim:circuitLeaves.name=Circuitree Leaves
 tile.alfheim:circuitPlanks.name=Circuitree Planks
 tile.alfheim:circuitPlanksSlab.name=Circuitree Planks Slab
-tile.alfheim:circuitPlanksSlabFull.name=Circuitree Planks Slabs
+tile.alfheim:circuitPlanksSlabFull.name=Circuitree Planks Slab
 tile.alfheim:circuitPlanksStairs.name=Circuitree Planks Stairs
 tile.alfheim:circuitSapling.name=Circuitree Sapling
 tile.alfheim:circuitWood.name=Circuitree Wood
@@ -858,7 +866,6 @@ alfheimmisc.fracturedSpace.debug.tooltipPos=Bound position: X %s, Y %s, Z %s
 alfheimmisc.fracturedSpace.debug.tooltipDim=Bound dimension: %s
 
 alfheimmisc.ragnarok.conquerors=First conquered by:
-alfheimmisc.ragnarok.conquerors.unknown=ᚠᛁᚱᛊᛏ ᚲᛟᚾᚲᚢᛖᚱᛖᛞ ᛒᚨᛁ:
 alfheimmisc.ragnarok.domain.locked=For now this Domain is locked!
 alfheimmisc.ragnarok.domain.notEnoughParticipants=Not enough participants!
 alfheimmisc.ragnarok.domain.surtrnotallow=<Surtr> Entrance to the Fire Lord's abode is closed to mere mortals! Get lost!
@@ -1120,7 +1127,7 @@ item.FlugelSoul.sign11=Pisces
 
 itemGroup.Alfheim=Alfheim
 
-##########################################################___ШАРАДЫ___##########################################################
+##########################################################___SHARADS___##########################################################
 
 charades.question1=<Vafþrúðnir> Then there were no abodes of mortals, no issued laws, no huts and no palaces, no jarls and no slaves. Only two who announced everything. Light and darkness, wildness and silence, flame and fog. What am I talking about?
 charades.question2=<Vafþrúðnir> There is no earth and heaven, no sea and forest. No Sun and Moon, no death and immortality. There is no born and death, no blesses and no curses. There is nothing. What am I talking about?
@@ -1488,8 +1495,8 @@ misc.alfheim.color.17=Aurora
 
 misc.alfheim.customSize=Radius: %1$s
 
-tc.aspect.tincturem=Color, Iridescence
-tc.aspect.help.tincturem=rainbow things
+tc.aspect.tinctura=Color, Iridescence
+tc.aspect.help.tinctura=rainbow things
 
 misc.alfheim.contains=Contains:
 misc.alfheim.containsNothing=Empty
@@ -1641,16 +1648,16 @@ item.alfheim:reactionDagger.name=Dagger of the Perfect Soul
 
 tile.alfheim:kindling.name=Blaze Kindling
 
-tile.alfheim:rainbowPlanksSlab.name=Iridescent Slab
-tile.alfheim:rainbowPlanksSlabFull.name=Iridescent Slab
-tile.alfheim:irisPlanksSlab.name=Iridescent Slab
-tile.alfheim:irisPlanksSlabFull.name=Iridescent Slab
-tile.alfheim:lightningPlanksSlab.name=Thunderous Slab
-tile.alfheim:lightningPlanksSlabFull.name=Thunderous Slab
-tile.alfheim:netherPlanksSlab.name=Infernal Slab
-tile.alfheim:netherPlanksSlabFull.name=Infernal Slab
-tile.alfheim:sealingPlanksSlab.name=Sealing Slab
-tile.alfheim:sealingPlanksSlabFull.name=Sealing Slab
+tile.alfheim:rainbowPlanksSlab.name=Iridescent Planks Slab
+tile.alfheim:rainbowPlanksSlabFull.name=Iridescent Planks Slab
+tile.alfheim:irisPlanksSlab.name=Iridescent Planks Slab
+tile.alfheim:irisPlanksSlabFull.name=Iridescent Planks Slab
+tile.alfheim:lightningPlanksSlab.name=Thunderous Planks Slab
+tile.alfheim:lightningPlanksSlabFull.name=Thunderous Planks Slab
+tile.alfheim:netherPlanksSlab.name=Infernal Planks Slab
+tile.alfheim:netherPlanksSlabFull.name=Infernal Planks Slab
+tile.alfheim:sealingPlanksSlab.name=Sealing Planks Slab
+tile.alfheim:sealingPlanksSlabFull.name=Sealing Planks Slab
 
 tile.alfheim:amplifier.name=Sonic Amplifier
 
@@ -1804,7 +1811,7 @@ voidFog=Void Fog
 
 general.integration.thaumcraft=Thaumcraft
 TC.botaniaAspects=Botania Aspects
-TC.tincturem=Tincturem Aspect
+TC.tinctura=Tinctura Aspect
 TC.treeCrafting=Tree Crafting
 
 general.integration.tconstruct=Tinkers' Construct

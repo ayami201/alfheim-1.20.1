@@ -23,6 +23,7 @@ import alfheim.common.block.mana.*
 import alfheim.common.block.schema.*
 import alfheim.common.block.tile.sub.flower.*
 import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.handler.WorkInProgressItemsHandler.WIP
 import alfheim.common.core.util.AlfheimTab
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -107,6 +108,7 @@ object AlfheimBlocks {
 	val nidhoggTooth: Block
 	val niflheimBlock: Block
 	val niflheimPortal: Block
+	val onyx: Block
 	val poisonIce: Block
 	val powerStone: Block
 	val raceSelector: Block
@@ -171,7 +173,7 @@ object AlfheimBlocks {
 	val barrierPlanks: Block
 	val barrierSapling: Block
 	val barrierSlabs: Block
-	val barrierSlabsFull: Block
+	val barrierSlabFull: Block
 	val barrierStairs: Block
 	val barrierWood: Block
 	
@@ -180,7 +182,7 @@ object AlfheimBlocks {
 	val calicoPlanks: Block
 	val calicoSapling: Block
 	val calicoSlabs: Block
-	val calicoSlabsFull: Block
+	val calicoSlabFull: Block
 	val calicoStairs: Block
 	val calicoWood: Block
 	
@@ -189,7 +191,7 @@ object AlfheimBlocks {
 	val circuitPlanks: Block
 	val circuitSapling: Block
 	val circuitSlabs: Block
-	val circuitSlabsFull: Block
+	val circuitSlabFull: Block
 	val circuitStairs: Block
 	val circuitWood: Block
 	
@@ -198,7 +200,7 @@ object AlfheimBlocks {
 	val lightningPlanks: Block
 	val lightningSapling: Block
 	val lightningSlabs: Block
-	val lightningSlabsFull: Block
+	val lightningSlabFull: Block
 	val lightningStairs: Block
 	val lightningWood: Block
 	
@@ -207,7 +209,7 @@ object AlfheimBlocks {
 	val netherPlanks: Block
 	val netherSapling: Block
 	val netherSlabs: Block
-	val netherSlabsFull: Block
+	val netherSlabFull: Block
 	val netherStairs: Block
 	val netherWood: Block
 	
@@ -216,7 +218,7 @@ object AlfheimBlocks {
 	val sealingPlanks: Block
 	val sealingSapling: Block
 	val sealingSlabs: Block
-	val sealingSlabsFull: Block
+	val sealingSlabFull: Block
 	val sealingStairs: Block
 	val sealingWood: Block
 	
@@ -281,7 +283,7 @@ object AlfheimBlocks {
 		irisWood1 = BlockColoredWood(1)
 		irisWood2 = BlockColoredWood(2)
 		irisWood3 = BlockColoredWood(3)
-		itemFrame = BlockItemFrame()
+		itemFrame = BlockItemFrame().WIP()
 		helheimBlock = BlockPattern(ModInfo.MODID, Material.rock, "HelheimBlock", AlfheimTab, hardness = -1f, harvLvl = Int.MAX_VALUE, resistance = Float.MAX_VALUE)
 		kindling = BlockKindling()
 		livingcobble = BlockLivingCobble()
@@ -295,6 +297,7 @@ object AlfheimBlocks {
 		nidhoggTooth = BlockNidhoggTooth()
 		niflheimBlock = BlockNiflheim()
 		niflheimPortal = BlockNiflheimPortal()
+		onyx = BlockOnyx().WIP()
 		poisonIce = BlockNiflheimIce()
 		powerStone = BlockPowerStone()
 		raceSelector = BlockRaceSelector()
@@ -365,9 +368,9 @@ object AlfheimBlocks {
 		barrierPlanks = BlockBarrierPlanks()
 		barrierSapling = BlockBarrierSapling()
 		barrierSlabs = BlockBarrierWoodSlab(false)
-		barrierSlabsFull = BlockBarrierWoodSlab(true)
+		barrierSlabFull = BlockBarrierWoodSlab(true)
 		barrierSlabs.register()
-		barrierSlabsFull.register()
+		barrierSlabFull.register()
 		barrierStairs = BlockBarrierWoodStairs()
 		barrierWood = BlockBarrierWood()
 		
@@ -376,9 +379,9 @@ object AlfheimBlocks {
 		calicoPlanks = BlockCalicoPlanks()
 		calicoSapling = BlockCalicoSapling()
 		calicoSlabs = BlockCalicoWoodSlab(false)
-		calicoSlabsFull = BlockCalicoWoodSlab(true)
+		calicoSlabFull = BlockCalicoWoodSlab(true)
 		calicoSlabs.register()
-		calicoSlabsFull.register()
+		calicoSlabFull.register()
 		calicoStairs = BlockCalicoWoodStairs()
 		calicoWood = BlockCalicoWood()
 		
@@ -387,9 +390,9 @@ object AlfheimBlocks {
 		circuitPlanks = BlockCircuitPlanks()
 		circuitSapling = BlockCircuitSapling()
 		circuitSlabs = BlockCircuitWoodSlab(false)
-		circuitSlabsFull = BlockCircuitWoodSlab(true)
+		circuitSlabFull = BlockCircuitWoodSlab(true)
 		circuitSlabs.register()
-		circuitSlabsFull.register()
+		circuitSlabFull.register()
 		circuitStairs = BlockCircuitWoodStairs()
 		circuitWood = BlockCircuitWood()
 		
@@ -398,9 +401,9 @@ object AlfheimBlocks {
 		lightningPlanks = BlockLightningPlanks()
 		lightningSapling = BlockLightningSapling()
 		lightningSlabs = BlockLightningWoodSlab(false)
-		lightningSlabsFull = BlockLightningWoodSlab(true)
+		lightningSlabFull = BlockLightningWoodSlab(true)
 		lightningSlabs.register()
-		lightningSlabsFull.register()
+		lightningSlabFull.register()
 		lightningStairs = BlockLightningWoodStairs()
 		lightningWood = BlockLightningWood()
 		
@@ -409,9 +412,9 @@ object AlfheimBlocks {
 		netherPlanks = BlockNetherPlanks()
 		netherSapling = BlockNetherSapling()
 		netherSlabs = BlockNetherWoodSlab(false)
-		netherSlabsFull = BlockNetherWoodSlab(true)
+		netherSlabFull = BlockNetherWoodSlab(true)
 		netherSlabs.register()
-		netherSlabsFull.register()
+		netherSlabFull.register()
 		netherStairs = BlockNetherWoodStairs()
 		netherWood = BlockNetherWood()
 		
@@ -420,16 +423,16 @@ object AlfheimBlocks {
 		sealingPlanks = BlockSealingPlanks()
 		sealingSapling = BlockSealingSapling()
 		sealingSlabs = BlockSealingWoodSlab(false)
-		sealingSlabsFull = BlockSealingWoodSlab(true)
+		sealingSlabFull = BlockSealingWoodSlab(true)
 		sealingSlabs.register()
-		sealingSlabsFull.register()
+		sealingSlabFull.register()
 		sealingStairs = BlockSealingWoodStairs()
 		sealingWood = BlockSealingWood()
 		
 		tunedSapling = BlockTunedSapling()
 		
 		AlfheimAPI.coldBlocks.addAll(arrayOf(poisonIce))
-		AlfheimAPI.warmBlocks.addAll(arrayOf(redFlame, ModBlocks.blazeBlock, netherLeaves, netherBerry, netherSapling, netherPlanks, netherSlabs, netherSlabsFull, netherStairs, netherWood))
+		AlfheimAPI.warmBlocks.addAll(arrayOf(redFlame, ModBlocks.blazeBlock, netherLeaves, netherBerry, netherSapling, netherPlanks, netherSlabs, netherSlabFull, netherStairs, netherWood))
 		
 		registerBurnables()
 		registerPaintables()
@@ -493,7 +496,7 @@ object AlfheimBlocks {
 		
 		registerOre(LibOreDict.NIFLEUR_ORE, BlockNiflheim.NiflheimBlockMetas.ORE.stack)
 		
-		val quartzs = arrayOf(ModFluffBlocks.darkQuartz, ModFluffBlocks.manaQuartz, ModFluffBlocks.blazeQuartz, ModFluffBlocks.lavenderQuartz, ModFluffBlocks.redQuartz, ModFluffBlocks.elfQuartz, ModFluffBlocks.sunnyQuartz)
+		val quartzs = arrayOf(ModFluffBlocks.darkQuartz, ModFluffBlocks.manaQuartz, ModFluffBlocks.blazeQuartz, ModFluffBlocks.lavenderQuartz, ModFluffBlocks.redQuartz, ModFluffBlocks.elfQuartz, ModFluffBlocks.sunnyQuartz).filterNotNull()
 		
 		BLibOreDict.QUARTZ.forEachIndexed { id, it ->
 			registerOre("block${it.capitalized()}", ItemStack(quartzs[id]))
@@ -726,14 +729,14 @@ object AlfheimBlocks {
 		setBurnable(calicoLeaves, 30, 60)
 		setBurnable(calicoPlanks, 5, 20)
 		setBurnable(calicoSlabs, 5, 20)
-		setBurnable(calicoSlabsFull, 5, 20)
+		setBurnable(calicoSlabFull, 5, 20)
 		setBurnable(calicoStairs, 5, 20)
 		setBurnable(calicoWood, 5, 5)
 		
 		setBurnable(circuitLeaves, 30, 60)
 		setBurnable(circuitPlanks, 5, 20)
 		setBurnable(circuitSlabs, 5, 20)
-		setBurnable(circuitSlabsFull, 5, 20)
+		setBurnable(circuitSlabFull, 5, 20)
 		setBurnable(circuitStairs, 5, 20)
 		setBurnable(circuitWood, 5, 5)
 		
@@ -754,7 +757,7 @@ object AlfheimBlocks {
 		setBurnable(lightningLeaves, 30, 60)
 		setBurnable(lightningPlanks, 5, 20)
 		setBurnable(lightningSlabs, 5, 20)
-		setBurnable(lightningSlabsFull, 5, 20)
+		setBurnable(lightningSlabFull, 5, 20)
 		setBurnable(lightningStairs, 5, 20)
 		setBurnable(lightningWood, 5, 5)
 		
@@ -770,7 +773,7 @@ object AlfheimBlocks {
 		setBurnable(sealingLeaves, 30, 60)
 		setBurnable(sealingPlanks, 5, 20)
 		setBurnable(sealingSlabs, 5, 20)
-		setBurnable(sealingSlabsFull, 5, 20)
+		setBurnable(sealingSlabFull, 5, 20)
 		setBurnable(sealingStairs, 5, 20)
 		setBurnable(sealingWood, 5, 5)
 	}

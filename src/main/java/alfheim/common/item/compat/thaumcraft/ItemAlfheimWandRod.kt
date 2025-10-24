@@ -1,13 +1,13 @@
 package alfheim.common.item.compat.thaumcraft
 
 import alexsocol.asjlib.meta
+import alexsocol.asjlib.safeGet
 import alfheim.common.integration.thaumcraft.ThaumcraftAlfheimModule
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.*
 import net.minecraft.util.IIcon
-import kotlin.math.*
 
 class ItemAlfheimWandRod: Item() {
 	
@@ -21,12 +21,12 @@ class ItemAlfheimWandRod: Item() {
 	
 	@SideOnly(Side.CLIENT)
 	override fun registerIcons(reg: IIconRegister) {
-		textures = Array(3) { reg.registerIcon("thaumcraft:AlfRod$it") }
+		textures = Array(4) { reg.registerIcon("thaumcraft:AlfRod$it") }
 	}
 	
 	@SideOnly(Side.CLIENT)
 	override fun getIconFromDamage(meta: Int): IIcon {
-		return textures[max(0, min(meta, textures.size - 1))]
+		return textures.safeGet(meta)
 	}
 	
 	@SideOnly(Side.CLIENT)

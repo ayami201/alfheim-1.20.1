@@ -48,15 +48,16 @@ open class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncan
 		glDisable(GL_BLEND)
 		
 		val inCircle = result ?: target
-		if (inCircle is ItemStack) {
-			renderItemAtGridPos(gui, 3, 0, inCircle, false)
-		} else if (inCircle is String) {
-			val xPos = gui.left + 3 * 29 + 7 + 10
-			val yPos = gui.top + 24 - 7
-			val text = StatCollector.translateToLocal(inCircle)
-			val font = mc.fontRenderer
-			font.drawString(text, xPos - font.getStringWidth(text) / 2, yPos, 0)
-			glColor4f(1f, 1f, 1f, 1f)
+		when (inCircle) {
+			is ItemStack -> renderItemAtGridPos(gui, 3, 0, inCircle, false)
+			is String    -> {
+				val xPos = gui.left + 3 * 29 + 7 + 10
+				val yPos = gui.top + 24 - 7
+				val text = StatCollector.translateToLocal(inCircle)
+				val font = mc.fontRenderer
+				font.drawString(text, xPos - font.getStringWidth(text) / 2, yPos, 0)
+				glColor4f(1f, 1f, 1f, 1f)
+			}
 		}
 		
 		renderItemAtGridPos(gui, 2, 1, ItemStack(AlfheimBlocks.manaTuner), false)
@@ -68,14 +69,16 @@ open class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncan
 			glPopMatrix()
 		}
 		
-		val inputs = incantation.inputs
+		val inputs = incantation.getInputsForRender(ticksElapsed)
 		val degreePerInput = (360f / inputs.size).I
 		var currentDegree = if (ConfigHandler.lexiconRotatingItems) if (GuiScreen.isShiftKeyDown()) ticksElapsed.F else ticksElapsed + ClientTickHandler.partialTicks else 0f
 		
 		for (obj in inputs) {
 			var input = obj
-			if (input is String)
-				input = OreDictionary.getOres(input)[0]
+			if (input is String) {
+				val ores = OreDictionary.getOres(input)
+				input = ores[ticksElapsed / 20 % ores.size]
+			}
 			
 			renderItemAtAngle(gui, currentDegree, input as ItemStack)
 			

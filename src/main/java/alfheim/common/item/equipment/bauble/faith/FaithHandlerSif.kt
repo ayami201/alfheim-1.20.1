@@ -175,7 +175,7 @@ object FaithHandlerSif: IFaithHandler {
 	override fun doParticles(stack: ItemStack, player: EntityPlayer) {
 		if (player.ticksExisted % 10 != 0) return
 		
-		for (i in 0..6) {
+		repeat(7) {
 			val color = Color(ColorOverrideHelper.getColor(player, 0x964B00))
 			val r = color.red.F / 255F
 			val g = color.green.F / 255F

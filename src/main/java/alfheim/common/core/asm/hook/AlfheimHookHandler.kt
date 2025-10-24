@@ -14,7 +14,6 @@ import alfheim.api.lib.LibResourceLocations
 import alfheim.api.spell.SpellBase
 import alfheim.client.core.handler.CardinalSystemClient
 import alfheim.client.render.entity.RenderEntityFloatingIsland
-import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.*
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.block.tile.*
@@ -24,6 +23,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDDomains
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDHelheim
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDNiflheim
 import alfheim.common.core.handler.AlfheimConfigHandler.increasedSpiritsRange
+import alfheim.common.core.handler.AlfheimConfigHandler.oiiaId
 import alfheim.common.core.handler.HilarityHandler.AttributionNameChecker.getCurrentNickname
 import alfheim.common.core.handler.SheerColdHandler.cold
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.MAX_SUMMER_TICKS
@@ -50,20 +50,22 @@ import alfheim.common.item.rod.ItemRodClicker
 import alfheim.common.potion.PotionSoulburn
 import alfheim.common.spell.earth.SpellGoldRush
 import alfheim.common.world.data.CustomWorldData.Companion.customData
+import alfheim.common.world.dim.niflheim.biome.BiomeNiflheim
 import alfheim.common.world.mobspawn.MobSpawnHandler
 import baubles.common.lib.PlayerHandler
 import cofh.asmhooks.HooksCore
 import com.google.common.collect.Multimap
 import com.meteor.extrabotany.api.hugetools.HugeItemRenderer
 import com.meteor.extrabotany.client.render.item.GunRenderer
+import cpw.mods.fml.relauncher.*
 import cpw.mods.fml.relauncher.Side.CLIENT
-import cpw.mods.fml.relauncher.SideOnly
 import gloomyfolken.hooklib.asm.*
 import gloomyfolken.hooklib.asm.Hook.ReturnValue
 import gloomyfolken.hooklib.asm.ReturnCondition.*
 import net.minecraft.block.*
 import net.minecraft.block.material.Material
 import net.minecraft.client.gui.*
+import net.minecraft.client.model.ModelOcelot
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.particle.EntityFX
 import net.minecraft.client.renderer.*
@@ -93,19 +95,17 @@ import net.minecraft.server.management.ServerConfigurationManager
 import net.minecraft.tileentity.*
 import net.minecraft.util.*
 import net.minecraft.world.*
-import net.minecraft.world.biome.*
-import net.minecraft.world.chunk.Chunk
+import net.minecraft.world.biome.BiomeGenBase
 import net.minecraft.world.gen.structure.*
 import net.minecraftforge.client.IItemRenderer.ItemRenderType
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
-import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fluids.IFluidBlock
 import net.minecraftforge.oredict.OreDictionary
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL12
-import ru.vamig.worldengine.*
+import scala.Function.const
 import thaumcraft.api.aspects.AspectList
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager
 import travellersgear.api.TravellersGearAPI
@@ -142,7 +142,6 @@ import vazkii.botania.common.entity.*
 import vazkii.botania.common.item.*
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower
 import vazkii.botania.common.item.equipment.bauble.ItemBauble
-import vazkii.botania.common.item.equipment.tool.ToolCommons
 import vazkii.botania.common.item.lens.LensFirework
 import vazkii.botania.common.item.material.ItemManaResource
 import vazkii.botania.common.item.relic.*
@@ -1978,6 +1977,9 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ALWAYS, injectOnExit = true)
 	fun getFloatTemperature(biome: BiomeGenBase, x: Int, y: Int, z: Int, @ReturnValue result: Float): Float {
+		if (AlfheimConfigHandler.imPatheticWeakAndScaredDontTouchMyWorlds || 
+		    biome is BiomeNiflheim || biome === BiomeGenBase.hell) return result
+		
 		return when {
 			winter -> -1.5f
 			summer -> 1.5f
@@ -2090,28 +2092,9 @@ object AlfheimHookHandler {
 	}
 	
 	@JvmStatic
-	@Hook(targetMethod = "onLivingUpdate")
-	fun onLivingUpdatePre(target: SheddingHandler, event: LivingUpdateEvent) {
-		event.entity.captureDrops = true
-	}
-	
-	@JvmStatic
-	@Hook(targetMethod = "onLivingUpdate", injectOnExit = true)
-	fun onLivingUpdatePost(target: SheddingHandler, event: LivingUpdateEvent) {
-		val entity = event.entity
-		
-		entity.capturedDrops.forEach {
-			it.lifespan = 1200
-			entity.worldObj.spawnEntityInWorld(it)
-		}
-		
-		entity.capturedDrops.clear()
-		entity.captureDrops = false
-	}
-	
-	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
 	fun addItem(tile: TileAlfPortal, stack: ItemStack): Boolean {
+		if (stack.item is ILexicon) return false
 		if (Botania18AndUpBackport.addItem(tile, stack)) return true
 		
 		BotaniaAPI.elvenTradeRecipes.forEach { recipe ->
@@ -2153,5 +2136,107 @@ object AlfheimHookHandler {
 		if (block !== Blocks.anvil && block !== AlfheimBlocks.anyavil) return false
 		
 		return player.getDistanceSq(container.field_82861_i + 0.5, container.field_82858_j + 0.5, container.field_82859_k + 0.5) <= 64
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE)
+	fun onLivingUpdate(target: SheddingHandler, event: LivingUpdateEvent) = AlfheimConfigHandler.disableShedding || event.entity.let { it is EntityChicken && it.func_152116_bZ() } 
+	
+	
+	// oiia
+	
+	const val TAG_OIIA = "${ModInfo.MODID}.oiia"
+	const val TAG_OIIAS = "${ModInfo.MODID}.oiiaS"
+	const val OIIA_DUR = 50
+	const val OIIA_FREQ = 150 
+	val OIIA_RANDOM = Random()
+	
+	@JvmStatic
+	@Hook(isMandatory = false)
+	fun updateAITick(ocelot: EntityOcelot) {
+		if (!ocelot.entityData.getBoolean(TAG_OIIA) || !ensureData(ocelot)) return
+		
+		ocelot.dataWatcher.updateObject(oiiaId, 1)
+		ocelot.dataWatcher.setObjectWatched(oiiaId)
+	}
+	
+	private fun ensureData(ocelot: Entity): Boolean {
+		val obj = ocelot.dataWatcher.getWatchedObject(oiiaId)
+		if (obj == null) {
+			ocelot.dataWatcher.addObject(oiiaId, 0)
+			return true
+		} else {
+			return obj.objectType == 2
+		}
+	}
+	
+	private fun oiiaTest(ocelot: Entity, model: ModelOcelot): Boolean {
+		OIIA_RANDOM.setSeed(ocelot.entityId + ocelot.ticksExisted / OIIA_FREQ + 1L)
+		
+		val randomDuration = ASJUtilities.randInBounds(OIIA_DUR - OIIA_DUR / 2, OIIA_DUR + OIIA_DUR / 2, OIIA_RANDOM)
+		
+		return ((ensureData(ocelot) && ocelot.dataWatcher.getWatchableObjectInt(oiiaId) != 1)
+		        || model.field_78163_i != 1
+		        || ocelot.ticksExisted % OIIA_FREQ !in 0..randomDuration)
+	}
+	
+	@SideOnly(CLIENT)
+	@JvmStatic
+	@Hook(isMandatory = false, targetMethod = "render")
+	fun preRender(model: ModelOcelot, ocelot: Entity, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float, f6: Float) {
+		if (oiiaTest(ocelot, model)) {
+			ocelot.entityData.setBoolean(TAG_OIIAS, false)
+			return
+		}
+		
+		if (!ocelot.entityData.getBoolean(TAG_OIIAS)) {
+			ocelot.entityData.setBoolean(TAG_OIIAS, true)
+			ocelot.worldObj.playSound(ocelot.posX, ocelot.posY, ocelot.posZ, "${ModInfo.MODID}:oiia", 1f, 1f, false)
+		}
+		
+		OIIA_RANDOM.setSeed(ocelot.entityId + ocelot.ticksExisted / OIIA_FREQ + 1L)
+		val randomSpeed = ASJUtilities.randInBounds(100, 200, OIIA_RANDOM)
+		
+		glPushMatrix()
+		val time = ocelot.ticksExisted % 360 + mc.timer.renderPartialTicks
+		val angle = (time * randomSpeed) % 360f
+		glRotatef(angle, 0f, 1f, 0f)
+		glTranslatef(0f, -0.5f - sin(time.D / 150 * randomSpeed).F / 8f, 0f)
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE)
+	fun setRotationAngles(model: ModelOcelot, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float, f6: Float, ocelot: Entity): Boolean {
+		if (oiiaTest(ocelot, model)) return false
+		
+		model.ocelotBody.rotateAngleX = Math.toRadians(90.0).F
+		
+		model.ocelotBackRightLeg.rotateAngleX = Math.toRadians(-75.0).F
+		model.ocelotBackLeftLeg.rotateAngleX  = Math.toRadians(-75.0).F
+		
+		model.ocelotFrontRightLeg.rotateAngleX = Math.toRadians(20.0).F
+		model.ocelotFrontLeftLeg.rotateAngleX  = Math.toRadians(20.0).F
+		
+		model.ocelotTail.rotateAngleY = Math.toRadians(-45.0).F
+		model.ocelotTail2.rotateAngleY = Math.toRadians(180.0).F
+		model.ocelotTail2.rotateAngleX = Math.toRadians(90.0).F
+		model.ocelotTail2.rotationPointX = -4f
+		model.ocelotTail2.rotationPointY = 20f
+		model.ocelotTail2.rotationPointZ = 12f
+		
+		return true
+	}
+	
+	@SideOnly(CLIENT)
+	@JvmStatic
+	@Hook(isMandatory = false, targetMethod = "render", injectOnExit = true)
+	fun postRender(model: ModelOcelot, ocelot: Entity, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float, f6: Float) {
+		if (oiiaTest(ocelot, model)) return
+		
+		glPopMatrix()
+		model.ocelotTail.rotateAngleY = 0f
+		model.ocelotTail2.rotationPointX = 0f
+		model.ocelotTail2.rotateAngleY = 0f
 	}
 }

@@ -424,9 +424,9 @@ class ItemRagnarokEmblem: ItemBauble("aesirEmblemWeak"), IBaubleRender, IManaDis
 			get() = getBoolean(this, "SIF", false)
 			set(v) = setBoolean(this, "SIF", v)
 		
-		private var ItemStack.start: Vector3I
-			get() = Vector3I(getIntArray(this, "heimdal_start", intArrayOf(-1, -1, -1)))
-			set(v) = setIntArray(this, "heimdal_start", v.ints)
+		private var ItemStack.start
+			get() = getIntArray(this, "heimdal_start", intArrayOf(-1, -1, -1))
+			set(v) = setIntArray(this, "heimdal_start", v)
 		
 		fun goHeimdall(stack: ItemStack, player: EntityPlayer) {
 			if (stack.HEIMDAL) return
@@ -445,18 +445,18 @@ class ItemRagnarokEmblem: ItemBauble("aesirEmblemWeak"), IBaubleRender, IManaDis
 			
 			val (sx, sy, sz) = stack.start
 			if (sy != -1 && (player.capabilities.isFlying || player.isSprinting)) {
-				stack.start = Vector3I(-1, -1, -1)
+				stack.start = intArrayOf(-1, -1, -1)
 				return
 			}
 			
 			if (block1 === ModBlocks.bifrost || block2 === ModBlocks.bifrost) {
 				if (sy == -1) {
-					stack.start = Vector3I(x, y, z)
+					stack.start = intArrayOf(x, y, z)
 					return
 				}
 			} else {
 				if (sy == -1) return
-				stack.start = Vector3I(-1, -1, -1)
+				stack.start = intArrayOf(-1, -1, -1)
 			}
 			
 			val distance = Vector3.pointDistanceSpace(x, y, z, sx, sy, sz)
@@ -606,10 +606,5 @@ class ItemRagnarokEmblem: ItemBauble("aesirEmblemWeak"), IBaubleRender, IManaDis
 				if (RagnarokHandler.canEndRagnarok()) RagnarokHandler.endRagnarok()
 			}
 		}
-	}
-	
-	private data class Vector3I(var x: Int, var y: Int, var z: Int) {
-		constructor(ints: IntArray): this(ints[0], ints[1], ints[2])
-		val ints get() = intArrayOf(x, y, z)
 	}
 }

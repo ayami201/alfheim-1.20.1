@@ -60,6 +60,7 @@ object ClientProxy : CommonProxy() {
 	override fun registerRenderThings() {
 		ClientProxy.jingleTheBells = AlfheimCore.jingleTheBells
 		
+		@Suppress("UnusedExpression") // STFU
 		LibRenderIDs
 		
 		if (ShaderHelper.useShaders()) {
@@ -67,6 +68,7 @@ object ClientProxy : CommonProxy() {
 			
 			LibShaderIDs.idColor3d = ASJShaderHelper.createProgram("shaders/position.vert", "shaders/color3d.frag")
 			LibShaderIDs.idCORE = ASJShaderHelper.createProgram("shaders/Vertex.vert", "shaders/CORE.frag")
+			LibShaderIDs.idFresnel = ASJShaderHelper.createProgram("shaders/Vertex.vert", "shaders/Fresnel.frag")
 			LibShaderIDs.idGravity = ASJShaderHelper.createProgram(null, "shaders/gravity.frag")
 			LibShaderIDs.idNoise = ASJShaderHelper.createProgram("shaders/position.vert", "shaders/noise4d.frag")
 			LibShaderIDs.idShadow = ASJShaderHelper.createProgram(null, "shaders/shadow.frag")
@@ -113,6 +115,7 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerBlockHandler(RenderBlockManaTuner)
 		RenderingRegistry.registerBlockHandler(RenderBlockNidhoggTooth)
 		RenderingRegistry.registerBlockHandler(RenderBlockNiflheimSet)
+		RenderingRegistry.registerBlockHandler(RenderShaderBlock(LibShaderIDs.idFresnel, LibRenderIDs.idOnyx))
 		RenderingRegistry.registerBlockHandler(RenderBlockPowerStone)
 		RenderingRegistry.registerBlockHandler(RenderSimpleDoubleBlock)
 		RenderingRegistry.registerBlockHandler(RenderBlockShrinePanel)

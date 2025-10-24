@@ -195,6 +195,7 @@ import alfheim.common.block.AlfheimFluffBlocks.table
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.block.BlockNiflheim.NiflheimBlockMetas
 import alfheim.common.block.tile.TileAnomaly
+import alfheim.common.core.asm.hook.AlfheimHookHandler
 import alfheim.common.core.asm.hook.extender.ItemLensExtender.EnumAlfheimLens.*
 import alfheim.common.core.asm.hook.extender.ItemTwigWandExtender
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -323,10 +324,12 @@ import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.common.item.material.ItemElvenResource
 import cpw.mods.fml.common.registry.GameRegistry.*
 import net.minecraft.block.Block
+import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.monster.*
+import net.minecraft.entity.passive.EntityOcelot
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks.*
 import net.minecraft.init.Items
@@ -611,9 +614,10 @@ object AlfheimRecipes {
 	lateinit var tuningSaplings: Array<TunerIncantationIO>
 	lateinit var tuningSlimeSize: TunerIncantation<EntityLivingBase>
 	lateinit var tuningMagmaSize: TunerIncantation<EntityLivingBase>
-	lateinit var tuningElementalSlimeSize: ElementalSlimeGrowthTune
+	lateinit var tuningElementalSlimeSize: IncantationElementalSlimeGrowth
 	var tuningTaintSize: TunerIncantation<EntityLivingBase>? = null
 	var tuningGelatSize: TunerIncantation<EntityLivingBase>? = null
+	var tuningThaumWand: TunerIncantationIO? = null
 	
 	lateinit var tuningAkashicRecords: TunerIncantationIO
 	lateinit var tuningDaolos: TunerIncantationIO
@@ -2296,8 +2300,8 @@ object AlfheimRecipes {
 				  "WWW", "WWW",
 				  'W', ItemStack(dwarfPlanks))
 		
-		val quartzs = arrayOf(quartz_block, blazeQuartz, darkQuartz, elfQuartz, lavenderQuartz, manaQuartz, redQuartz, sunnyQuartz, shimmerQuartz)
-		
+		// darkQuartz may be null
+		val quartzs = arrayOf(quartz_block, blazeQuartz, darkQuartz, elfQuartz, lavenderQuartz, manaQuartz, redQuartz, sunnyQuartz, shimmerQuartz).filterNotNull()
 		for (q in quartzs) {
 			addShapelessOreDictRecipe(ItemStack(q, 1, 5), ItemStack(q), if (q === darkQuartz) DYES[0] else DYES[15])
 			addOreDictRecipe(ItemStack(q, 4, 6), "QQ", "QQ", 'Q', ItemStack(q))
@@ -2823,10 +2827,11 @@ object AlfheimRecipes {
 		
 		recipeRedstoneRelay = BotaniaAPI.registerManaInfusionRecipe(ItemStack(redstoneRelay), ItemStack(redstone_block), 15000)
 		
-		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 0), ItemStack(skullPlacer, 1, 4), 6666)
-		repeat(4) {
-			BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, it + 1), ItemStack(skullPlacer, 1, it), 6666)
-		}
+		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 2), ItemStack(skullPlacer, 1, 3), 66666)
+		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 0), ItemStack(skullPlacer, 1, 2), 6666)
+		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 1), ItemStack(skullPlacer, 1, 0), 66666)
+		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 4), ItemStack(skullPlacer, 1, 1), 6666)
+		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(skullPlacer, 1, 3), ItemStack(skullPlacer, 1, 4), 666)
 		
 		recipeRiftShard = BotaniaAPI.registerManaAlchemyRecipe(RiftShardEmpty.stack, ItemStack(bifrostPerm), 12000)
 		
@@ -2946,6 +2951,8 @@ object AlfheimRecipes {
 			registerItemCraftTuning("kasi kiwen pi kili loje o kama linja mute",		ItemStack(tunedSapling, 1, 7), ItemStack(sapling)),
 		)
 		
+		AlfheimAPI.registerIncantation<EntityOcelot>("oiiaiuiiiiai") { it.entityData.setBoolean(AlfheimHookHandler.TAG_OIIA, true); true }
+		
 //		tuningCats = mapOf(
 //			"soweli pi linja uta o kama kule ike" to arrayOf(3, 11, 14, 15).map { ItemStack(dye, 1, it) },
 //			"soweli pi linja uta o kama loje jelo" to arrayOf(0, 0, 4, 15).map { ItemStack(dye, 1, it) },
@@ -2973,9 +2980,15 @@ object AlfheimRecipes {
 		
 		tuningSlimeSize = registerSlimeGrowthTune<EntitySlime>(ItemStack(slime_ball))
 		tuningMagmaSize = registerSlimeGrowthTune<EntityMagmaCube>(ItemStack(magma_cream))
-		tuningElementalSlimeSize = ElementalSlimeGrowthTune(slimeGrowthApplication<EntityElementalSlime>())
+		tuningElementalSlimeSize = IncantationElementalSlimeGrowth(slimeGrowthApplication<EntityElementalSlime>())
 		
-		if (Botania.thaumcraftLoaded) tuningTaintSize = registerSlimeGrowthTune<EntityThaumicSlime>(ItemStack(ConfigItems.itemResource, 1, 11))
+		if (Botania.thaumcraftLoaded) {
+			tuningTaintSize = registerSlimeGrowthTune<EntityThaumicSlime>(ItemStack(ConfigItems.itemResource, 1, 11))
+			
+			val wand = ItemStack(ConfigItems.itemWandCasting)
+			tuningThaumWand = TunerIncantationIO(IncantationThaumWandOvercharge, wand, wand)
+		}
+		
 		if (AlfheimCore.TiCLoaded) tuningGelatSize = registerSlimeGrowthTune<BlueSlime>(ItemStack(TinkerWorld.strangeFood))
 		
 		val smiteSword = ItemStack(golden_sword).apply { addEnchantment(Enchantment.smite, 5) }

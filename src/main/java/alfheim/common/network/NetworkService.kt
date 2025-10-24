@@ -8,6 +8,7 @@ import cpw.mods.fml.common.network.NetworkRegistry
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
 import cpw.mods.fml.relauncher.*
 import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.server.MinecraftServer
 import kotlin.reflect.KClass
 
 object NetworkService {
@@ -68,14 +69,50 @@ object NetworkService {
 		}
 	}
 	
-	fun sendTo(packet: AlfheimPacket<*>, receiver: EntityPlayerMP) = network.sendTo(packet, receiver)
+	fun sendTo(packet: AlfheimPacket<*>, receiver: EntityPlayerMP) {
+		try {
+			network.sendTo(packet, receiver)
+		} catch (e: Exception) {
+			ASJUtilities.error("Error sending packet ${packet::class.java.name} to ${receiver.commandSenderName}: ", e)
+		}
+	}
 	
-	fun sendToAll(packet: AlfheimPacket<*>) = network.sendToAll(packet)
+	fun sendToAll(packet: AlfheimPacket<*>) {
+		if (MinecraftServer.getServer()?.configurationManager?.playerEntityList?.isNotEmpty() != true) return
+		
+		try {
+			network.sendToAll(packet)
+		} catch (e: Exception) {
+			ASJUtilities.error("Error sending packet ${packet::class.java.name} to all: ", e)
+		}
+	}
 	
-	fun sendToDim(packet: AlfheimPacket<*>, dimId: Int) = network.sendToDimension(packet, dimId)
+	fun sendToDim(packet: AlfheimPacket<*>, dimId: Int) {
+		if (MinecraftServer.getServer()?.worldServerForDimension(dimId)?.playerEntities?.isNotEmpty() != true) return
+		
+		try {
+			network.sendToDimension(packet, dimId)
+		} catch (e: Exception) {
+			ASJUtilities.error("Error sending packet ${packet::class.java.name} to dim $dimId: ", e)
+		}
+	}
 	
-	fun sendToAllAround(packet: AlfheimPacket<*>, targetPoint: NetworkRegistry.TargetPoint) = network.sendToAllAround(packet, targetPoint)
+	fun sendToAllAround(packet: AlfheimPacket<*>, tp: NetworkRegistry.TargetPoint) {
+		if (MinecraftServer.getServer()?.worldServerForDimension(tp.dimension)?.playerEntities?.isNotEmpty() != true) return
+		
+		try {
+			network.sendToAllAround(packet, tp)
+		} catch (e: Exception) {
+			ASJUtilities.error("Error sending packet ${packet::class.java.name} to point (${tp.x},${tp.y},${tp.z})x${tp.range} in dim ${tp.dimension}: ", e)
+		}
+	}
 	
 	@SideOnly(Side.CLIENT)
-	fun sendToServer(packet: AlfheimPacket<*>) = network.sendToServer(packet)
+	fun sendToServer(packet: AlfheimPacket<*>) {
+		try {
+			network.sendToServer(packet)
+		} catch (e: Exception) {
+			ASJUtilities.error("Error sending packet ${packet::class.java.name} to server: ", e)
+		}
+	}
 }

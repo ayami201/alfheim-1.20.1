@@ -44,6 +44,17 @@ class BlockDoubleBlock: BlockDoubleCamo(Material.iron), IFenceConnectable, IFenc
 					block.setBlockBoundsBasedOnState(wrapper, x, y, z)
 					block.getCollisionBoundingBoxFromPool(world, x, y, z)?.let { if (it.intersectsWith(aabb)) list += it }
 				}
+				is BlockSnow, is BlockSnowLayer -> {
+					block.setBlockBoundsBasedOnState(wrapper, x, y, z)
+					getBoundingBox(
+						x + block.blockBoundsMinX,
+						y + block.blockBoundsMinY,
+						z + block.blockBoundsMinZ,
+						x + block.blockBoundsMaxX,
+						y + block.blockBoundsMaxY,
+						z + block.blockBoundsMaxZ
+					).let { if (it.intersectsWith(aabb)) list += it }
+				}
 				else           -> {
 					block.addCollisionBoxesToList(world, x, y, z, aabb, list, null)
 				}

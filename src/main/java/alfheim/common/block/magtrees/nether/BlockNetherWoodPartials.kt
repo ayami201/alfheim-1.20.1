@@ -17,7 +17,7 @@ class BlockNetherWoodSlab(full: Boolean, source: Block = AlfheimBlocks.netherPla
 		setLightLevel(0.5f)
 	}
 	
-	override fun getFullBlock() = AlfheimBlocks.netherSlabsFull as BlockSlab
+	override fun getFullBlock() = AlfheimBlocks.netherSlabFull as BlockSlab
 	
 	override fun register() {
 		GameRegistry.registerBlock(this, ItemSlabMod::class.java, name)

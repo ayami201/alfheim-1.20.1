@@ -59,7 +59,7 @@ object RenderTileDomainLobby: TileEntitySpecialRenderer() {
 			list.addAll(domain.firstConquerorsUnknown)
 		}
 		
-		list.add(0, EnumChatFormatting.UNDERLINE + StatCollector.translateToLocal("alfheimmisc.ragnarok.conquerors" + if (know) "" else ".unknown"))
+		list.add(0, EnumChatFormatting.UNDERLINE + if (know) StatCollector.translateToLocal("alfheimmisc.ragnarok.conquerors") else "ᚠᛁᚱᛊᛏ ᚲᛟᚾᚲᚢᛖᚱᛖᛞ ᛒᚨᛁ:")
 		
 		glPushMatrix()
 		ASJRenderHelper.setGlow()

@@ -65,6 +65,12 @@
 			"niflportal"
 		]
 	},
+	"oiia": {
+		"category": "neutral",
+		"sounds": [
+			"oiia"
+		]
+	},
 	"organ.heart": {
 		"category": "player",
 		"sounds": [

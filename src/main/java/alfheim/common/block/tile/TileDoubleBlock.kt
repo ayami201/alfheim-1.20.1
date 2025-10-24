@@ -5,7 +5,7 @@ import net.minecraft.init.Blocks
 class TileDoubleBlock: TileDoubleCamo() {
 	
 	init {
-		blockTop = Blocks.fire
+		blockTop = Blocks.water
 		blockBottom = Blocks.glass
 	}
 }

@@ -783,7 +783,6 @@ alfheimmisc.fracturedSpace.debug.tooltipPos=绑定坐标: X %s, Y %s, Z %s
 alfheimmisc.fracturedSpace.debug.tooltipDim=绑定维度: %s
 
 alfheimmisc.ragnarok.conquerors=首次被征服于:
-alfheimmisc.ragnarok.conquerors.unknown=ᚠᛁᚱᛊᛏ ᚲᛟᚾᚲᚢᛖᚱᛖᛞ ᛒᚨᛁ:
 alfheimmisc.ragnarok.domain.locked=目前该领域已被锁定!
 alfheimmisc.ragnarok.domain.notEnoughParticipants=参与度不足!
 alfheimmisc.ragnarok.domain.surtrnotallow=<苏尔特>火焰领主的住所禁止凡人进入！滚开！
@@ -1375,8 +1374,8 @@ misc.alfheim.color.17=霞光
 
 misc.alfheim.customSize=范围: %1$s
 
-tc.aspect.tincturem=虹彩色
-tc.aspect.help.tincturem=彩虹般的颜色
+tc.aspect.tinctura=虹彩色
+tc.aspect.help.tinctura=彩虹般的颜色
 
 misc.alfheim.contains=包含:
 misc.alfheim.containsNothing=空空如也
@@ -1691,7 +1690,7 @@ voidFog=虚空雾
 
 general.integration.thaumcraft=神秘时代
 TC.botaniaAspects=植物魔法要素
-TC.tincturem=Tincturem要素
+TC.tinctura=Tinctura要素
 TC.treeCrafting=树木创造
 
 general.integration.tconstruct=匠魂

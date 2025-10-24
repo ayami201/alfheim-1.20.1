@@ -21,7 +21,7 @@ class BlockCircuitWoodSlab(full: Boolean, source: Block = AlfheimBlocks.circuitP
 		onBlockAdded(world, x, y, z)
 	}
 	
-	override fun getFullBlock() = AlfheimBlocks.circuitSlabsFull as BlockSlab
+	override fun getFullBlock() = AlfheimBlocks.circuitSlabFull as BlockSlab
 	
 	override fun register() {
 		GameRegistry.registerBlock(this, ItemSlabMod::class.java, name)

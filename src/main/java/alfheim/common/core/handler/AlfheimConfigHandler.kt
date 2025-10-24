@@ -122,9 +122,10 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var authTimeout = 200
 	var barrierTreeAllowAnyPlayer = false
 	var blackLotusDropRate = 0.05
-	var biomesCold = intArrayOf(*niflheimBiomeIDs)
+	var biomesCold = intArrayOf()
 	var biomesHot = intArrayOf(8)
 	var cataclysmCooldown = 600
+	var disableShedding = false
 	var effectScreenOverlay = true
 	var enderOreWeights = arrayOf("oreEndCoal:9000", "oreEndDiamond:500", "oreEndEmerald:500", "oreEndGold:3635", "oreEndIron:5790", "oreEndLapis:3250", "oreEndRedstone:5600", "oreDraconium:200")
 	var eventBanner = true
@@ -136,11 +137,11 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var floatingIslandPathfinder = true
 	var floatingIslandSyncedDataInitLimit = 31
 	var floodLightQuality = 10
-	var flugelSwapBlackList = emptyArray<String>()
 	var gourmaryllisDifficulty = 2
 	var hotControls = 2
 	var imPatheticWeakAndScaredDontTouchMyWorlds = false
 	var interactEventChecks = false
+	var interdimensionalSubspacian = true
 	var lexiconSort = false
 	var lightningsSpeed = 20
 	var longSeasons = true
@@ -159,6 +160,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var newStorageTexture = true
 	var notifications = true
 	var numericalMana = true
+	var oiiaId = 2
 	var overcoldBlacklist = arrayOf("alfheim.DedMoroz", "alfheim.SnowSprite", "Skeleton", "SnowMan")
 	var overheatBlacklist = arrayOf("alfheim.Muspelson", "alfheim.FireSpirit", "Blaze", "Ghast", "LavaSlime", "PigZombie", "Skeleton", "WitherBoss")
 	var rattleroseSpeed = 20
@@ -191,7 +193,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	
 	// TC INTEGRATION
 	var addAspectsToBotania = true
-	var addTincturemAspect = true
+	var addTincturaAspect = true
 	var overrideFMCaps = true
 	var thaumTreeSuffusion = true
 	
@@ -352,11 +354,12 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		authTimeout = loadProp(CATEGORY_GENERAL, "authTimeout", authTimeout, false, "Time limit for client to send authentication credentials", 100, 600)
 		barrierTreeAllowAnyPlayer = loadProp(CATEGORY_GENERAL, "barrierTreeAllowAnyPlayer", barrierTreeAllowAnyPlayer, false, "Set this to true to allow any player to bypass barrier trees")
 		blackLotusDropRate = loadProp(CATEGORY_GENERAL, "blackLotusDropRate", blackLotusDropRate, false, "Rate of black loti dropping from Manaseal Creepers")
-		biomesCold = loadProp(CATEGORY_GENERAL, "biomesCold", biomesCold, false, "List of cold biomes where sheer cold will be accumulating")
-		biomesHot = loadProp(CATEGORY_GENERAL, "biomesHot", biomesHot, false, "List of hot biomes where blazing heat will be accumulating")
+		biomesCold = loadProp(CATEGORY_GENERAL, "biomesCold", biomesCold, false, "List of cold biomes where sheer cold will be accumulating", false)
+		biomesHot = loadProp(CATEGORY_GENERAL, "biomesHot", biomesHot, false, "List of hot biomes where blazing heat will be accumulating", false)
 		cataclysmCooldown = loadProp(CATEGORY_GENERAL, "cataclysmCooldown", cataclysmCooldown, false, "Average ticks between cataclysms", 100, 6000)
+		disableShedding = loadProp(CATEGORY_GENERAL, "disableShedding", disableShedding, false, "Set this to true to completely disable mob shedding from Botania")
 		effectScreenOverlay = loadProp(CATEGORY_GENERAL, "effectScreenOverlay", effectScreenOverlay, false, "Set this to false to disable screen overlay for effects like heat/cold")
-		enderOreWeights = loadProp(CATEGORY_GENERAL, "enderOreWeights", enderOreWeights, false, "Map of OreDict name to ore weight (more weight - more chace to spawn) for Orechid Endium")
+		enderOreWeights = loadProp(CATEGORY_GENERAL, "enderOreWeights", enderOreWeights, false, "Map of OreDict name to ore weight (more weight - more chace to spawn) for Orechid Endium", false)
 		eventBanner = loadProp(CATEGORY_GENERAL, "eventBanner", eventBanner, false, "Set this to false to disable event banner popup")
 		extendedElvenStory = loadProp(CATEGORY_GENERAL, "extendedElvenStory", extendedElvenStory, true, "Set this to true to enable recipes for extended stay in Alfheim")
 		fancies = loadProp(CATEGORY_GENERAL, "fancies", fancies, false, "Set this to false to locally disable fancies rendering on you (for contributors only)")
@@ -366,11 +369,11 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		floatingIslandPathfinder = loadProp(CATEGORY_GENERAL, "floatingIslandPathfinder", floatingIslandPathfinder, false, "Set this to false to disable entity's pathfinding on floating islands. This will make them stand still on islands, but will also lower the server load")
 		floatingIslandSyncedDataInitLimit = loadProp(CATEGORY_GENERAL, "floatingIslandSyncedDataInitLimit", floatingIslandSyncedDataInitLimit, false, "Increase that limit ONLY if you have mods that extend DataWatcher IDs and want really large floating island")
 		floodLightQuality = loadProp(CATEGORY_GENERAL, "floodLightQuality", floodLightQuality, false, "Determines floodlight raycasting steps (lower values - more quality and CPU load). Must be an integer divisor of 360", 1, 120)
-		flugelSwapBlackList = loadProp(CATEGORY_GENERAL, "flugelSwapBlackList", flugelSwapBlackList, false, "Blacklist for items that flugel can't swap [modid:name]", false)
 		gourmaryllisDifficulty = loadProp(CATEGORY_GENERAL, "gourmaryllisDifficulty", gourmaryllisDifficulty, false, "Difficulty of Gourmaryllis functionality: 0 - default, 1 - as in 1.12.2, 2 - hardcore", 0, 2)
 		hotControls = loadProp(CATEGORY_GENERAL, "hotControls", hotControls, false, "High overheat value would mess your controls if set to 2, only on Hard difficulty if set to 1, would not mess completely if set to 0", 0, 2)
 		imPatheticWeakAndScaredDontTouchMyWorlds = loadProp(CATEGORY_GENERAL, "imPatheticWeakAndScaredDontTouchMyWorlds", imPatheticWeakAndScaredDontTouchMyWorlds, false, "Set this to true to disable hardcoded world destruction during Ragnarok and affect ONLY Alfheim")
 		interactEventChecks = loadProp(CATEGORY_GENERAL, "interactEventChecks", interactEventChecks, false, "Distance checks when firing interaction events, results may be unclear")
+		interdimensionalSubspacian = loadProp(CATEGORY_GENERAL, "interdimensionalSubspacian", interdimensionalSubspacian, false, "Set this to false to forbid subspacian sending eater to other dimension")
 		lexiconSort = loadProp(CATEGORY_GENERAL, "lexiconSort", lexiconSort, true, "Set this to true to sort Alfheim lexicon entries to vanilla categories")
 		lightningsSpeed = loadProp(CATEGORY_GENERAL, "lightningsSpeed", lightningsSpeed, false, "How many ticks it takes between two lightings are spawned in Lightning Anomaly render")
 		longSeasons = loadProp(CATEGORY_GENERAL, "longSeasons", longSeasons, true, "Set this to false to make seasons last 1 real day instead of 3")
@@ -389,8 +392,9 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		newStorageTexture = loadProp(CATEGORY_GENERAL, "newStorageTexture", newStorageTexture, true, "Set this to false to disable new storage blocks textures")
 		notifications = loadProp(CATEGORY_GENERAL, "notifications", notifications, false, "Set this to false to disable custom notifications and version check")
 		numericalMana = loadProp(CATEGORY_GENERAL, "numericalMana", numericalMana, false, "Set this to false to disable numerical mana representation")
-		overcoldBlacklist = loadProp(CATEGORY_GENERAL, "overcoldBlacklist", overcoldBlacklist, false, "List of entity names with no cold gauge filling ", false)
-		overheatBlacklist = loadProp(CATEGORY_GENERAL, "overheatBlacklist", overheatBlacklist, false, "List of entity names with no heat gauge filling ", false)
+		oiiaId = loadProp(CATEGORY_GENERAL, "oiiaId", oiiaId, false, "Change this if you are getting crash 'Duplicate id value for ...' from DataWatcher")
+		overcoldBlacklist = loadProp(CATEGORY_GENERAL, "overcoldBlacklist", overcoldBlacklist, false, "List of entity names with no cold gauge filling", false)
+		overheatBlacklist = loadProp(CATEGORY_GENERAL, "overheatBlacklist", overheatBlacklist, false, "List of entity names with no heat gauge filling", false)
 		rattleroseSpeed = loadProp(CATEGORY_GENERAL, "rattleroseSpeed", rattleroseSpeed, false, "Rattlerose game update speed (one time per N ticks). Set to 0 to switch to manual control")
 		realLightning = loadProp(CATEGORY_GENERAL, "realLightning", realLightning, false, "Set this to true to make Rod of the Thundering Peaks summon real (weather) lightning")
 		relicsProtectionBlackList = loadProp(CATEGORY_GENERAL, "relicsProtectionBlackList", relicsProtectionBlackList, false, "Blacklist for relics protection [modid:name]", false)
@@ -422,7 +426,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		poolRainbowCapacity = loadProp(CATEGORY_INTEGRATION, "poolRainbowCapacity", poolRainbowCapacity, false, "Fabulous manapool capacity (for custom modpacks with A LOT of mana usage. Can be applied only to NEW pools)")
 		
 		addAspectsToBotania = loadProp(CATEGORY_INT_TC, "TC.botaniaAspects", addAspectsToBotania, true, "Set this to false to disable adding aspects to Botania")
-		addTincturemAspect = loadProp(CATEGORY_INT_TC, "TC.tincturem", addTincturemAspect, true, "Set this to false to use Sensus instead of Color aspect")
+		addTincturaAspect = loadProp(CATEGORY_INT_TC, "TC.tinctura", addTincturaAspect, true, "Set this to false to use Sensus instead of Tinctura aspect")
 		overrideFMCaps = loadProp(CATEGORY_INT_TC, "TC.overrideFMCaps", overrideFMCaps, true, "[FM] Set this to false to keep Botania metals wand caps from Forbidden Magic recipe")
 		thaumTreeSuffusion = loadProp(CATEGORY_INT_TC, "TC.treeCrafting", thaumTreeSuffusion, true, "Set this to false to remove Thaumcraft plants Dendric Suffusion")
 		

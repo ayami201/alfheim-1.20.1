@@ -66,6 +66,7 @@ open class TunerIncantation<out T: Any>(val clazz: Class<@UnsafeVariance T>, val
 	}
 	
 	open fun getInputs(target: @UnsafeVariance T): List<Any> = ArrayList(inputs)
+	open fun getInputsForRender(renderTick: Int): List<Any> = ArrayList(inputs)
 	
 	enum class EnumTargetType {
 		BLOCK, ENTITY, ITEM, TILE
