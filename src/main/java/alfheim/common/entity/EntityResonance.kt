@@ -97,7 +97,7 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 				for (j in y.bidiRange(1))
 					for (k in z.bidiRange(1)) {
 						val atBlock = worldObj.getBlock(i, j, k)
-						if (atBlock.isAir(worldObj, i, j, k)) continue
+						if (atBlock.isAir(worldObj, i, j, k) || atBlock.material.isLiquid) continue
 						
 						if (target > 0 && atBlock !== targetBlock) continue
 						if (target > 1 && worldObj.getBlockMetadata(i, j, k) != targetMeta) continue

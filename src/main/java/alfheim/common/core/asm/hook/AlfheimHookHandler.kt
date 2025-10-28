@@ -105,7 +105,6 @@ import net.minecraftforge.fluids.IFluidBlock
 import net.minecraftforge.oredict.OreDictionary
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL12
-import scala.Function.const
 import thaumcraft.api.aspects.AspectList
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager
 import travellersgear.api.TravellersGearAPI

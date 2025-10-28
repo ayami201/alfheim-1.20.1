@@ -115,7 +115,7 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerBlockHandler(RenderBlockManaTuner)
 		RenderingRegistry.registerBlockHandler(RenderBlockNidhoggTooth)
 		RenderingRegistry.registerBlockHandler(RenderBlockNiflheimSet)
-		RenderingRegistry.registerBlockHandler(RenderShaderBlock(LibShaderIDs.idFresnel, LibRenderIDs.idOnyx))
+		RenderingRegistry.registerBlockHandler(RenderBlockOnyx)
 		RenderingRegistry.registerBlockHandler(RenderBlockPowerStone)
 		RenderingRegistry.registerBlockHandler(RenderSimpleDoubleBlock)
 		RenderingRegistry.registerBlockHandler(RenderBlockShrinePanel)

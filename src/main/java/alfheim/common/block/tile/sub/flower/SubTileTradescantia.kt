@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntityChest
 import net.minecraft.util.*
 import net.minecraft.village.MerchantRecipe
 import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.oredict.OreDictionary
 import org.lwjgl.opengl.GL11.*
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.mana.IManaItem
@@ -85,7 +86,9 @@ class SubTileTradescantia: SubTileFunctional() {
 					val cash1i = cashs.indexOfFirst {
 						val copy = it.copy()
 						ItemNBTHelper.initNBT(copy)
-						copy.stackSize >= buy1.stackSize && ASJUtilities.isItemStackEqualCrafting(buy1, copy)
+						val buy1Copy = buy1.copy()
+						if (buy1.meta == OreDictionary.WILDCARD_VALUE) buy1Copy.meta = copy.meta
+						copy.stackSize >= buy1Copy.stackSize && ASJUtilities.isItemStackEqualCrafting(buy1Copy, copy)
 					}
 					
 					if (cash1i == -1) continue
@@ -102,7 +105,9 @@ class SubTileTradescantia: SubTileFunctional() {
 						cash2i = cashs.indexOfFirst {
 							val copy = it.copy()
 							ItemNBTHelper.initNBT(copy)
-							copy.stackSize >= buy2.stackSize && ASJUtilities.isItemStackEqualCrafting(buy2, copy)
+							val buy2Copy = buy2.copy()
+							if (buy2.meta == OreDictionary.WILDCARD_VALUE) buy2Copy.meta = copy.meta
+							copy.stackSize >= buy2Copy.stackSize && ASJUtilities.isItemStackEqualCrafting(buy2Copy, copy)
 						}
 						
 						if (cash2i == -1) continue
@@ -218,16 +223,18 @@ class SubTileTradescantia: SubTileFunctional() {
 		val slowdown = slowdownFactor
 		
 		getEntitiesWithinAABB(supertile.worldObj, EntityItem::class.java, supertile.boundingBox()).forEach {
-			if (it.isDead || it.entityItem == null || it.entityItem.stackSize < 1)
+			val stack = it.entityItem
+			
+			if (it.isDead || stack == null || stack.stackSize < 1)
 				return@forEach it.setDead()
 			
 			if (it.age < 60 + slowdown)
 				return@forEach
 			
-			cashs += it.entityItem.copy()
+			cashs += stack.copy()
 			
-			it.entityItem.stackSize = 0
-			it.setEntityItemStack(ItemStack(null as Item?))
+			stack.stackSize = 0
+			it.setEntityItemStack(stack)
 			it.setDead()
 		}
 		
@@ -241,7 +248,8 @@ class SubTileTradescantia: SubTileFunctional() {
 			
 			cashs += stack.copy()
 			
-			it.stack = null
+			stack.stackSize = 0
+			it.stack = stack
 			it.setDead()
 		}
 		
