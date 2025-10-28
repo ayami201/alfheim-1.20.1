@@ -19,10 +19,10 @@ import net.minecraftforge.common.MinecraftForge
 import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.common.lexicon.LexiconData
 
-class BlockSoftStorage: BlockModMeta(Material.plants, 4, ModInfo.MODID, "softStorage", AlfheimTab, 0.4f, null, 0), ILexiconable {
+class BlockSoftStorage: BlockModMeta(Material.cloth, 4, ModInfo.MODID, "softStorage", AlfheimTab, 0.4f, null, 0), ILexiconable {
 	
 	init {
-		setStepSound(soundTypeGrass)
+		setStepSound(soundTypeCloth)
 		if (ASJUtilities.isClient)
 			MinecraftForge.EVENT_BUS.register(this)
 	}

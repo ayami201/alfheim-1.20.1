@@ -324,7 +324,6 @@ import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.common.item.material.ItemElvenResource
 import cpw.mods.fml.common.registry.GameRegistry.*
 import net.minecraft.block.Block
-import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
@@ -3140,7 +3139,7 @@ object AlfheimRecipes {
 		
 		addInfuserRecipe(ItemStack(netherrack),
 		                 666,
-		                 blaze_powder,
+		                 ItemStack(blaze_powder),
 		                 ItemStack(livingcobble))
 		
 		addOreDictRecipe(ItemStack(Items.brewing_stand),

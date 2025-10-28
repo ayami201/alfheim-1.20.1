@@ -1,11 +1,8 @@
-#version 130
-
-//precision highp float;
+#version 120
 
 varying vec3 fNormal;
 varying vec3 vertexLocalPos;
 varying vec3 vertexCamPos;
-varying vec3 vertexWorldPos;
 varying vec2 texcoord;
 
 void main() {
@@ -16,10 +13,9 @@ void main() {
 
     vertexLocalPos = gl_Vertex.xyz;
 
-//    vertexWorldPos = vertexLocalPos;
-
     texcoord = vec2(gl_MultiTexCoord0);
 
     gl_Position = gl_ProjectionMatrix * pos;
     gl_FrontColor = gl_Color;
+    gl_FogFragCoord = abs(pos.z);
 }
