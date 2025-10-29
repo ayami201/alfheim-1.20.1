@@ -1,7 +1,7 @@
 Innovations:
- Tradescantia wildcard metadata support
- Resonator now ignores liquids
+ 
 
 Fixes:
- Manapool crash with Tradescantia
- [ESM] Extended recipes crash
+ White grapes random self-destruction
+ White grapes item not placing block directly on water
+ New flower bag GUI background

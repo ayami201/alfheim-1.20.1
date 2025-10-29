@@ -103,8 +103,9 @@ class EntitySnowSprite(world: World): EntityFlyingCreature(world), INiflheimEnti
 	override fun setDead() {
 		super.setDead()
 		if (worldObj.isRemote)
-			for (i in 0..11)
+			repeat(12) {
 				Botania.proxy.sparkleFX(worldObj, posX + (Math.random() - 0.5) * 0.5, posY + (Math.random() - 0.5) * 0.5, posZ + (Math.random() - 0.5) * 0.5, (Math.random() * 0.25 + 0.25).F, 1f, 1f, 1f + Math.random().F * 0.25f, 10)
+			}
 	}
 	
 	override fun getCanSpawnHere(): Boolean {

@@ -109,7 +109,7 @@ object FlowerBagExtender {
 		mc.textureManager.bindTexture(LibResourceLocations.flowerBagExtended)
 		val k = (gui.width - gui.xSize) / 2
 		val l = (gui.height - gui.ySize) / 2
-		gui.drawTexturedModalRect(k, l, 0, 0, gui.xSize, gui.ySize + 18 * 3)
+		gui.drawTexturedModalRect(k, l, 0, 0, gui.xSize, gui.ySize)
 		val slotList = gui.inventorySlots.inventorySlots
 		
 		for (slot in slotList) {
