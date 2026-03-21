@@ -67,7 +67,7 @@ class ItemRodElemental(name: String, private val barrier: () -> Block): ItemMod(
 	}
 	
 	override fun onUpdate(stack: ItemStack, world: World?, entity: Entity?, slotID: Int, inHand: Boolean) {
-		if (stack.meta > 0) stack.meta = stack.meta - 1
+		if (stack.meta > 0) stack.meta -= 1
 	}
 	
 	override fun usesMana(stack: ItemStack): Boolean {

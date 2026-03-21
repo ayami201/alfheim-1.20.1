@@ -30,7 +30,7 @@ object EntityElfJunkmanLogic {
 		if (race == -1)
 			trades.forEach { it += TradeEntry(toGive, willGet1 to willGet2 with willGet3) }
 		else
-			trades.get(race) += TradeEntry(toGive, willGet1 to willGet2 with willGet3)
+			trades[race] += TradeEntry(toGive, willGet1 to willGet2 with willGet3)
 	}
 	
 	val emptyTrade = TradeResult(0, null)

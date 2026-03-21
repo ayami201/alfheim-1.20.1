@@ -15,7 +15,7 @@ object SpellShadowVortex: SpellBase("shadowvortex", EnumRace.SPRIGGAN, 2000, 80,
 	override var radius = 5.0
 	
 	override val usableParams
-		get() = arrayOf(damage, efficiency, radius)
+		get() = arrayOf<Number>(damage, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val res = checkCastOver(caster)

@@ -29,6 +29,7 @@ abstract class ItemBaubleCloak(name: String): ItemBauble(name), ITravellersGearS
 	
 	override fun getSlot(stack: ItemStack) = 0
 	
+	@Optional.Method(modid = "TravellersGear") // required by new kotlin
 	override fun onTravelGearEquip(player: EntityPlayer, stack: ItemStack) {
 		super.onTravelGearEquip(player, stack)
 		onEquippedOrLoadedIntoWorld(stack, player)
@@ -38,6 +39,7 @@ abstract class ItemBaubleCloak(name: String): ItemBauble(name), ITravellersGearS
 		onWornTick(stack, player)
 	}
 	
+	@Optional.Method(modid = "TravellersGear") // required by new kotlin
 	override fun onTravelGearUnequip(player: EntityPlayer, stack: ItemStack) {
 		super.onTravelGearUnequip(player, stack)
 		onUnequipped(stack, player)

@@ -32,7 +32,7 @@ import vazkii.botania.common.item.equipment.tool.terrasteel.ItemTerraSword
 import vazkii.botania.common.item.relic.ItemRelic
 import java.util.*
 
-@Suppress("unused", "UNUSED_PARAMETER") // TODO remove most hooks and use `EntityDamageSource$init` hook for functionality
+@Suppress("UNUSED_PARAMETER")
 object ElementalDamageAdapter {
 	
 	var setAir = false

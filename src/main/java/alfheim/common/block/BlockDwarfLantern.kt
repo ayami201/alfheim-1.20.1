@@ -35,7 +35,7 @@ class BlockDwarfLantern: BlockMod(Material.rock) {
 	@SideOnly(Side.CLIENT)
 	override fun loadTextures(event: TextureStitchEvent.Pre) {
 		if (event.map.textureType == 0)
-			iconSide = InterpolatedIconHelper.forBlock(event.map, this, "", "decor")!!
+			iconSide = InterpolatedIconHelper.forBlock(event.map, this, "", "decor")
 	}
 	
 	override fun getIcon(side: Int, meta: Int) = (if (meta != 1) {

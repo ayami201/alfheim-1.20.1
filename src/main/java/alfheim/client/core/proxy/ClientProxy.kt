@@ -23,8 +23,6 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.proxy.CommonProxy
 import alfheim.common.crafting.recipe.AlfheimRecipes
 import alfheim.common.entity.*
-import alfheim.common.entity.EntitySubspace
-import alfheim.common.entity.EntitySubspaceSpear
 import alfheim.common.entity.boss.*
 import alfheim.common.entity.boss.primal.*
 import alfheim.common.entity.item.EntityItemImmortal

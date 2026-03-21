@@ -38,7 +38,7 @@ class BlockRainbowMushroom: BlockMushroom(), IInfusionStabiliser, IHornHarvestab
 		setCreativeTab(AlfheimTab)
 		setLightLevel(0.2f)
 		setHardness(0f)
-		setStepSound(Block.soundTypeGrass)
+		setStepSound(soundTypeGrass)
 		setBlockBounds(0.3f, 0f, 0.3f, 0.8f, 1f, 0.8f)
 		tickRandomly = false
 		if (ASJUtilities.isClient)

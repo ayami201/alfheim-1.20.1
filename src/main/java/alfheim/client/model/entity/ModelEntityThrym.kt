@@ -7,12 +7,12 @@ import net.minecraft.init.Blocks
 
 object ModelEntityThrym: ModelEntityPrimalBoss() {
 	
-	override lateinit var head: ModelRenderer
-	override lateinit var body: ModelRenderer
-	override lateinit var rightarm: ModelRenderer
-	override lateinit var leftarm: ModelRenderer
-	override lateinit var rightleg: ModelRenderer
-	override lateinit var leftleg: ModelRenderer
+	override var head: ModelRenderer
+	override var body: ModelRenderer
+	override var rightarm: ModelRenderer
+	override var leftarm: ModelRenderer
+	override var rightleg: ModelRenderer
+	override var leftleg: ModelRenderer
 	
 	var shape20: ModelRenderer
 	var shape91: ModelRenderer

@@ -1,7 +1,14 @@
 Innovations:
- 
+ New config category for temperature related changes
+ Unified and improved temperature protection logic
+ Muspelheim fire of eternity has a chance to replace regular fire
+ Removed elemental attributes from eternity blocks' damage
+ Adjusted Orechid Alfarem rates
+ Updated tuning sequences
+ Updated Chinese translation (by Bugmageddon)
 
 Fixes:
- White grapes random self-destruction
- White grapes item not placing block directly on water
- New flower bag GUI background
+ Crash when dark quartz is disabled
+ Niflheim ice of eternity required tool
+ Shader compilation errors on AMD or Linux
+ Reach distance tooltip display

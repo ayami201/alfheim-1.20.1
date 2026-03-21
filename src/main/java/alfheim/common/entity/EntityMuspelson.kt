@@ -31,6 +31,7 @@ class EntityMuspelson(world: World): EntityMob(world), IMuspelheimEntity, IAlfhe
 	override val elements = EnumSet.of(ElementalDamage.FIRE, ElementalDamage.EARTH)!!
 	
 	init {
+		tasks.addTask(0, EntityAISwimming(this))
 		tasks.addTask(4, EntityAIAttackOnCollide(this, EntityLivingBase::class.java, 1.2, false))
 		tasks.addTask(4, EntityAIAttackOnCollide(this, EntityPlayer::class.java, 1.2, false))
 		tasks.addTask(4, EntityAIAttackOnCollide(this, EntityFireSpirit::class.java, 1.2, false))

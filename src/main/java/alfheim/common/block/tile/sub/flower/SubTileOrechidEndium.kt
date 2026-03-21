@@ -34,7 +34,7 @@ class SubTileOrechidEndium: SubTileOrechid() {
 	
 	override fun getOreMap() = AlfheimAPI.oreWeightsEnd
 	
-	override fun getSourceBlock() = Blocks.end_stone
+	override fun getSourceBlock() = Blocks.end_stone!!
 	
 	override fun getCost() = COST
 	

@@ -35,7 +35,7 @@ class BlockRainbowDoubleFlower: BlockDoublePlant(), ILexiconable, IDoublePlant {
 	init {
 		setBlockNameSafe(name)
 		setCreativeTab(AlfheimTab)
-		setStepSound(Block.soundTypeGrass)
+		setStepSound(soundTypeGrass)
 		if (ASJUtilities.isClient)
 			MinecraftForge.EVENT_BUS.register(this)
 	}
@@ -44,8 +44,8 @@ class BlockRainbowDoubleFlower: BlockDoublePlant(), ILexiconable, IDoublePlant {
 	@SideOnly(Side.CLIENT)
 	fun loadTextures(event: TextureStitchEvent.Pre) {
 		if (event.map.textureType == 0) {
-			topFlowerIcon = InterpolatedIconHelper.forBlock(event.map, this, "Top")!!
-			bottomFlowerIcon = InterpolatedIconHelper.forBlock(event.map, this)!!
+			topFlowerIcon = InterpolatedIconHelper.forBlock(event.map, this, "Top")
+			bottomFlowerIcon = InterpolatedIconHelper.forBlock(event.map, this)
 		}
 	}
 	
@@ -122,14 +122,8 @@ class BlockRainbowDoubleFlower: BlockDoublePlant(), ILexiconable, IDoublePlant {
 					val i1 = world.getBlockMetadata(x, y - 1, z)
 					val j1 = func_149890_d(i1)
 					
-					if (j1 != 3 && j1 != 2) ;
-					//p_149681_1_.func_147480_a(p_149681_2_, p_149681_3_ - 1, p_149681_4_, true)
-					else {
-						/*if (!world.isRemote && player.currentEquippedItem?.item === Items.shears)
-							dropBlock(world, x, y, z, i1, player)*/
-						
+					if (j1 == 3 || j1 == 2)
 						world.setBlockToAir(x, y - 1, z)
-					}
 				} else {
 					world.setBlockToAir(x, y - 1, z)
 				}

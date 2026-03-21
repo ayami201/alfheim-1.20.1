@@ -207,7 +207,7 @@ object HilarityHandler {
 		val actualNamesCache = HashMap<String, String>()
 		
 		val gson = Gson()
-		val type = object: TypeToken<Map<String, Any>>() {}.type
+		val type = object: TypeToken<Map<String, Any>>() {}.type!!
 		
 		fun getCurrentNickname(oldName: String): String {
 			return actualNamesCache.computeIfAbsent(oldName) {

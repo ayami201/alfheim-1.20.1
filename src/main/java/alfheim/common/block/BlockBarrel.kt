@@ -7,7 +7,6 @@ import alfheim.common.block.tile.TileBarrel
 import alfheim.common.item.material.*
 import alfheim.common.lexicon.AlfheimLexiconData
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.Entity

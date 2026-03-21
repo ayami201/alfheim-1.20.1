@@ -15,7 +15,7 @@ object SpellDragonGrowl: SpellBase("dragongrowl", EnumRace.POOKA, 12000, 2400, 2
 	override var radius = 8.0
 	
 	override val usableParams
-		get() = arrayOf(duration, efficiency, radius)
+		get() = arrayOf<Number>(duration, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val list = getEntitiesWithinAABB(caster.worldObj, EntityLivingBase::class.java, caster.boundingBox.expand(radius))

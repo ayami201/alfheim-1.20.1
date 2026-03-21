@@ -12,7 +12,7 @@ import vazkii.botania.api.mana.IManaSpreader
 import vazkii.botania.client.core.helper.IconHelper
 import vazkii.botania.common.item.lens.*
 
-@Suppress("unused", "UNUSED_PARAMETER")
+@Suppress("UNUSED_PARAMETER")
 object ItemLensExtender {
 	
 	private const val PROP_NONE = 0

@@ -1,7 +1,9 @@
 #version 120
 
+#ifdef GL_ES
 precision highp float;
 precision highp int;
+#endif
 
 uniform vec4 color2;
 uniform float ftime;

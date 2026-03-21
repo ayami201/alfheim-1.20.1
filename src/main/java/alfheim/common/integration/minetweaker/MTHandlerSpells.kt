@@ -110,7 +110,7 @@ object MTHandlerSpells {
 	private class Params(name: String, private val damage: Float, private val duration: Int, private val efficiency: Double, private val radius: Double): IUndoableAction {
 		
 		val spell = AlfheimAPI.getSpellInstance(name)!!
-		var oldVals = arrayOf(0f, 0, 0.0, 0.0)
+		var oldVals = arrayOf<Number>(0f, 0, 0.0, 0.0)
 		
 		override fun apply() {
 			oldVals = arrayOf(spell.damage, spell.duration, spell.efficiency, spell.radius)

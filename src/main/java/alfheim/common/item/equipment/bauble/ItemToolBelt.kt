@@ -179,7 +179,7 @@ class ItemToolBelt: ItemBauble("toolbelt"), IBaubleRender, IBlockProvider {
 			map[name] = base + slotStack.stackSize
 		}
 		
-		if (map.size > 0) list.add("${EnumChatFormatting.AQUA}" + StatCollector.translateToLocal("misc.${ModInfo.MODID}.contains"))
+		if (map.isNotEmpty()) list.add("${EnumChatFormatting.AQUA}" + StatCollector.translateToLocal("misc.${ModInfo.MODID}.contains"))
 		else list.add("${EnumChatFormatting.AQUA}" + StatCollector.translateToLocal("misc.${ModInfo.MODID}.containsNothing"))
 		
 		val keys = ArrayList(map.keys)

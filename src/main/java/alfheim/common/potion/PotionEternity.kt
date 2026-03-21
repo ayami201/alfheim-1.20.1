@@ -1,10 +1,10 @@
 package alfheim.common.potion
 
 import alexsocol.asjlib.getActivePotionEffect
+import alfheim.api.entity.INiflheimEntity
 import alfheim.api.event.SpellCastEvent
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.DamageSourceSpell
-import alfheim.common.item.equipment.bauble.ItemPendant
 import cpw.mods.fml.common.eventhandler.*
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.attributes.*
@@ -52,7 +52,7 @@ object PotionEternity: PotionAlfheim(AlfheimConfigHandler.potionIDEternity, "ete
 			if (target.isSneaking) target.getActivePotionEffect(id)?.duration = 0
 			
 			if (time >= 115) return
-		} else if (amp and IRREMOVABLE == 0 && target is EntityPlayer && ItemPendant.canProtect(target, ItemPendant.Companion.EnumPrimalWorldType.NIFLHEIM, time)) {
+		} else if (amp and IRREMOVABLE == 0 && INiflheimEntity.checkProtection(target, time)) {
 			target.getActivePotionEffect(id)?.duration = 0
 			return
 		}
@@ -71,13 +71,8 @@ object PotionEternity: PotionAlfheim(AlfheimConfigHandler.potionIDEternity, "ete
 			}
 		}
 		
-		if (attack) run {
-			if (target is EntityPlayer && ItemPendant.canProtect(target, ItemPendant.Companion.EnumPrimalWorldType.NIFLHEIM, 300))
-				return
-			
+		if (attack && !INiflheimEntity.checkProtection(target, 300))
 			target.attackEntityFrom(DamageSourceSpell.nifleice, 1f)
-			return
-		}
 	}
 	
 	@SubscribeEvent

@@ -13,7 +13,6 @@ import java.awt.Color
 import kotlin.math.min
 
 /** This class adds new set of dreamwood wands and handles everything (I hope)  */
-@Suppress("UNUSED_PARAMETER")
 object ItemTwigWandExtender {
 	
 	lateinit var icons: Array<IIcon>

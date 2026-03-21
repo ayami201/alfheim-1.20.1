@@ -78,7 +78,7 @@ object FaithHandlerHeimdall: IFaithHandler {
 		val motVec = getMotionVec(player)
 		val (x, y, z) = Vector3(player.posX + motVec.x, (player.posY + if (player.isSneaking) -2.99 else -0.99).mfloor(), player.posZ + motVec.z).mf()
 		
-		if (y < 0 || y >= 256) return
+		if (y !in 0..<256) return
 		
 		for (i in -2..2)
 			for (k in -2..2) {

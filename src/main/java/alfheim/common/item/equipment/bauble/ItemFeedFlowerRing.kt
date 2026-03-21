@@ -34,7 +34,7 @@ class ItemFeedFlowerRing: ItemBauble("FeedFlower"), IManaUsingItem {
 				}
 	}
 	
-	override fun getBaubleType(stack: ItemStack?): BaubleType? {
+	override fun getBaubleType(stack: ItemStack?): BaubleType {
 		return BaubleType.RING
 	}
 	

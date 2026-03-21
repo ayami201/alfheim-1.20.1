@@ -15,7 +15,7 @@ object SpellSmokeScreen: SpellBase("smokescreen", EnumRace.SPRIGGAN, 5000, 600, 
 	override var duration = 200
 	
 	override val usableParams
-		get() = arrayOf(duration, radius)
+		get() = arrayOf<Number>(duration, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCast(caster)

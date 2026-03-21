@@ -1,5 +1,3 @@
-@file:Suppress("UNUSED_PARAMETER")
-
 package alfheim.common.core.asm.hook.replacer
 
 import alexsocol.asjlib.render.ASJRenderHelper.glColor1u
@@ -13,10 +11,11 @@ import com.KAIIIAK.classManipulators.HookReplacer
 import com.KAIIIAK.classManipulators.HookReplacer.Replacer.*
 import net.minecraft.block.*
 import net.minecraft.client.renderer.entity.RenderWolf
-import net.minecraft.entity.Entity
+import net.minecraft.entity.*
 import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.*
 import net.minecraft.init.Blocks
+import net.minecraft.item.ItemStack
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.DamageSource
@@ -30,12 +29,11 @@ import vazkii.botania.common.core.handler.SheddingHandler
 import vazkii.botania.common.core.handler.SheddingHandler.ShedPattern
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.entity.EntityDoppleganger
+import vazkii.botania.common.item.equipment.bauble.ItemWaterRing
 import vazkii.botania.common.item.rod.ItemGravityRod
 import java.util.*
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.component3
 
+//@formatter:off
 @HookReplacer(targetMethod = "hatch")
 fun replaceSpecialChance(thiz: TileCocoon) {
 	startFROM()
@@ -193,3 +191,14 @@ fun getColor(tile: TileEntity, flower: IFloatingFlower) =
 		BlockAuroraDirt.getBlockColor(tile.xCoord, tile.yCoord, tile.zCoord)
 	else
 		flower.islandType.color
+
+@HookReplacer
+fun onWornTick(item: ItemWaterRing, stack: ItemStack?, player: EntityLivingBase?) {
+	startFROM();POP(-42);startTO();POP(0);stop()
+}
+
+@HookReplacer
+fun onUnequipped(item: ItemWaterRing, stack: ItemStack?, player: EntityLivingBase?) {
+	startFROM();POP(-42);startTO();POP(0);stop()
+}
+//@formatter:on

@@ -56,7 +56,7 @@ open class ItemSnowArmor(type: Int, name: String): ItemManasteelArmor(type, name
 	
 	fun repair(stack: ItemStack, world: World, player: EntityPlayer) {
 		if (stack.meta > 0 && ManaItemHandler.requestManaExact(stack, player, MANA_PER_DAMAGE * 2, world.isRemote))
-			stack.meta = stack.meta - 1
+			stack.meta -= 1
 	}
 	
 	override fun onUpdate(stack: ItemStack, world: World, player: Entity, slot: Int, inHand: Boolean) {
@@ -131,6 +131,7 @@ open class ItemSnowArmor(type: Int, name: String): ItemManasteelArmor(type, name
 		return false
 	}
 	
+	@Suppress("UNCHECKED_CAST")
 	override fun addInformationAfterShift(stack: ItemStack?, player: EntityPlayer, list: MutableList<Any?>, adv: Boolean) {
 		addStringToTooltip(getArmorSetTitle(player), list as MutableList<String>)
 		addArmorSetDescription(stack, list as MutableList<String>)

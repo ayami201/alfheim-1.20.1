@@ -27,7 +27,7 @@ class SubTileWarp: SubTileAnomalyBase() {
 				val list = allAround(EntityLivingBase::class.java, radius.D)
 				list.removeAll { it is EntityPlayer && it.capabilities.isCreativeMode }
 				
-				if (list.size > 0) {
+				if (list.isNotEmpty()) {
 					if (list.size == 1) {
 						l.add(LivingCoords(list.removeAt(0), x.D, y.D, z.D, radius))
 					} else {

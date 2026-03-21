@@ -14,7 +14,7 @@ object SpellDriftingMine: SpellBase("driftingmine", EnumRace.LEPRECHAUN, 6000, 1
 	override var radius = 5.0
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, efficiency, radius)
+		get() = arrayOf<Number>(damage, duration, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCastOver(caster)

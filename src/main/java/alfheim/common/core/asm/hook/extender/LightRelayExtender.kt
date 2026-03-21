@@ -99,7 +99,7 @@ object LightRelayExtender {
 					return ChunkCoordinates(target.xCoord, target.yCoord, target.zCoord)
 				}
 				
-				return default
+				default
 			}
 			else -> default
 		}

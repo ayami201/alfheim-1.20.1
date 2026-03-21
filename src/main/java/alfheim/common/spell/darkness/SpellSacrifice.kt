@@ -13,7 +13,7 @@ object SpellSacrifice: SpellBase("sacrifice", EnumRace.IMP, 256000, 75000, 100, 
 	override var radius = 32.0
 	
 	override val usableParams
-		get() = arrayOf(damage, radius)
+		get() = arrayOf<Number>(damage, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		// if (!WorldGuardCommons.canDoSomethingHere(caster)) return SpellCastResult.NOTALLOW

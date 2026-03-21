@@ -14,7 +14,7 @@ object SpellDeathMark: SpellBase("deathmark", EnumRace.IMP, 24000, 3000, 10) {
 	override var duration = 600
 	
 	override val usableParams
-		get() = arrayOf(damage, duration)
+		get() = arrayOf<Number>(damage, duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val tg = TargetingSystem.getTarget(caster)

@@ -1,5 +1,5 @@
 buildscript {
-	ext.kotlinVersion = '2.1.21'
+	ext.kotlinVersion = '2.3.20'
 	
 	repositories {
 		mavenCentral()
@@ -32,7 +32,7 @@ repositories {
 }
 
 group = "main"
-version = "64-dev"
+version = "64"
 archivesBaseName = "Alfheim"
 
 minecraft {
@@ -86,7 +86,7 @@ idea {
 	module {
 		inheritOutputDirs = false
 		outputDir = file('build/classes/main/')
-		excludeDirs += file('minecraft')
+		excludeDirs += file(project.minecraft.runDir)
 	}
 }
 

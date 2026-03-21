@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.Container
+import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
@@ -127,7 +128,7 @@ class BlockFunnel: BlockContainerMod(Material.wood), IWandHUD, ILexiconable {
 		
 		if (tile != null && tile is TileLivingwoodFunnel) {
 			for (i1 in 0 until tile.sizeInventory) {
-				val itemstack = tile.get(i1)
+				val itemstack = tile[i1]
 				
 				if (itemstack != null) {
 					val f = this.random.nextFloat() * 0.8f + 0.1f
@@ -207,7 +208,7 @@ class BlockFunnel: BlockContainerMod(Material.wood), IWandHUD, ILexiconable {
 	 */
 	override fun getComparatorInputOverride(world: World?, x: Int, y: Int, z: Int, side: Int): Int {
 		if (world == null) return 0
-		return Container.calcRedstoneFromInventory(getTile(world, x, y, z))
+		return Container.calcRedstoneFromInventory(world.getTileEntity(x, y, z) as? IInventory ?: return 0)
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -216,9 +217,6 @@ class BlockFunnel: BlockContainerMod(Material.wood), IWandHUD, ILexiconable {
 		inside_icon = IconHelper.forName(reg, "funnel_inside")
 		outside_icon = IconHelper.forName(reg, "funnel_outside")
 	}
-	
-	fun getTile(world: IBlockAccess, x: Int, y: Int, z: Int): TileLivingwoodFunnel? =
-		world.getTileEntity(x, y, z) as TileLivingwoodFunnel
 	
 	/**
 	 * Gets the icon name of the ItemBlock corresponding to this block. Used by hoppers.

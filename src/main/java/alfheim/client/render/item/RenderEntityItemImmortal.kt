@@ -42,10 +42,10 @@ object RenderEntityItemImmortal: Render() {
 		val f2 = MathHelper.sin((entity.age.F + ticks) / 10f + entity.hoverStart) * 0.1f + 0.1f
 		val f3 = ((entity.age + ticks) / 20f + entity.hoverStart) * (180 / Math.PI.F)
 		val b0 = when {
-			stack.stackSize > 1  -> 2
-			stack.stackSize > 5  -> 3
-			stack.stackSize > 20 -> 4
 			stack.stackSize > 40 -> 5
+			stack.stackSize > 20 -> 4
+			stack.stackSize > 5  -> 3
+			stack.stackSize > 1  -> 2
 			else                 -> 1
 		}
 		glTranslated(x, y + f2, z)

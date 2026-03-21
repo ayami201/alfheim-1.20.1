@@ -1,10 +1,47 @@
 ##########################################################___BLOCKS___##########################################################
 # tile..name=
 tile.alfheim:AlfheimPortal.name=艾尔夫海姆之门核心
+tile.AlfheimThaumOre.0.name=朱砂矿
+tile.AlfheimThaumOre.1.name=空气灌注活石
+tile.AlfheimThaumOre.2.name=火焰灌注活石
+tile.AlfheimThaumOre.3.name=水流灌注活石
+tile.AlfheimThaumOre.4.name=大地灌注活石
+tile.AlfheimThaumOre.5.name=秩序灌注活石
+tile.AlfheimThaumOre.6.name=混沌灌注活石
+tile.AlfheimThaumOre.7.name=琥珀蕴生活石
 tile.alfStorage0.name=魔灵钢块
 tile.alfStorage1.name=§6始源魂灵钢块
 tile.alfStorage2.name=炽热之力块
 tile.alfStorage3.name=极寒之力块
+tile.alfStorage4.name=盖亚魂锭块
+tile.alfStorage5.name=魔力珍珠块
+tile.ItemFrame.name=物品展示框
+tile.alfheim:ManaReflector.name=魔力反射器
+tile.NidhoggTooth.name=尼德霍格之牙碎片
+tile.alfheim:rattlerose.name=响铃花
+tile.botania:flower.rattlerose.name=响铃花
+tile.alfheim:rattlerose.lore=无毒，但很吵
+tile.Snake0.name=蛇首
+tile.Snake1.name=蛇首
+tile.Snake2.name=蛇首
+tile.Snake3.name=蛇首
+tile.Snake4.name=蛇身
+tile.Snake5.name=蛇身
+tile.Snake6.name=蛇身
+tile.Snake7.name=蛇身
+tile.Snake8.name=蛇身
+tile.Snake9.name=蛇身
+tile.Snake10.name=蛇身
+tile.Snake11.name=蛇身
+tile.Snake12.name=蛇身
+tile.Snake13.name=蛇身
+tile.Snake14.name=蛇身
+tile.Snake15.name=蛇身
+tile.SnakeObject0.name=蛇蛋
+tile.SnakeObject1.name=蛇之饵料
+tile.softStorage1.name=精灵尘块
+tile.softStorage2.name=伊夫萨尔块
+tile.softStorage3.name=盖亚魂块
 tile.botania:altar9.name=活石花药台
 tile.alfheim:AnimatedTorch.name=浮动火炬
 tile.AnimatedTorch.desc.random=随机
@@ -607,6 +644,15 @@ item.botania:WarBanner.name=荣耀战旗
 item.alfheim:WisdomBottle.name=智慧泉水
 item.alfheim:WolfBloodPotion.name=狼血魔药
 item.alfheim:YggFruit.name=世界树果实
+item.alfheim:ElvenChakram1.name=末影飞轮
+item.alfheim:ElvenFood.WhiteGrapes.name=青葡萄  【修正：英文为 Green Grapes，与白葡萄区分】
+item.alfheim:Organs.name=内脏
+item.alfheim:PaperRace.name=新生契约
+item.alfheim:PaperRace.desc=将重置你的种族并传送回选择面板
+item.alfheim:PaperRace.fail=操作超时或物品不属于你
+item.Resonator.name=共振器
+item.alfheim:Stencil.name=模板
+
 
 ##########################################################___OTHER___###########################################################
 
@@ -758,6 +804,24 @@ alfheim.potion.WTFBerry4=热能吸收
 alfheim.potion.WTFBerry4.postfix=炼狱果蜜饯
 alfheim.potion.WTFBerry5=寂静伪装
 alfheim.potion.WTFBerry5.postfix=寂静果蜜饯
+alfheim.potion.edgeLife=边缘生命
+alfheim.potion.edgeLife.postfix=坚定意志药水
+alfheim.potion.hystrix=豪猪刺
+alfheim.potion.hystrix.postfix=液态豪猪诱变剂
+alfheim.potion.overcold=凛寒
+alfheim.potion.overcold.postfix=凛寒药水
+alfheim.potion.overheat=炽热
+alfheim.potion.overheat.postfix=炽热药水
+alfheim.potion.priorityTarget=优先目标
+alfheim.potion.priorityTarget.postfix=标记药水
+alfheim.potion.timeAnchor=时间锚点
+alfheim.potion.timeAnchor.postfix=平平无奇药水
+alfheim.potion.timeConquest=时间征服
+alfheim.potion.timeConquest.postfix=活力沙包药水
+alfheim.potion.voodooDoll=巫毒娃娃
+alfheim.potion.voodooDoll.postfix=容器束缚药水
+alfheim.potion.voodooTarget=巫毒目标
+alfheim.potion.voodooTarget.postfix=束缚容器药水
 
 alfheimmisc.flugel.alreadyhere=我已经在这里了
 alfheimmisc.flugel.badArena=即使尽你最大的努力,仪式仍然没有接受你的祭奠,检查一下周围和下方的障碍物是个好主意
@@ -875,6 +939,7 @@ alfheimmisc.wolfblood=你感受到狼血的力量正在你的身体里流动
 
 alfheimmisc.panel.skintoggle0=你会用你自己的皮肤
 alfheimmisc.panel.skintoggle1=你的皮肤被设定为对应的精灵种族
+alfheimmisc.panel.esmDisabled=§4不可用：ESM模式已禁用
 
 alfheimmisc.attunement.armor=+%d%% %s 保护
 alfheimmisc.attunement.weapon=%d%% 的伤害转换成了 %s 伤害
@@ -914,6 +979,24 @@ alfheimmisc.waila.holder.mana=魔力: %s
 alfheimmisc.waila.trade.available=还有 %s 次交易次数
 alfheimmisc.waila.trade.results=获得: 
 alfheimmisc.waila.trade.request=给予: 
+alfheimmisc.flugel.used=当你试图献祭时，信标不再像之前那样涌现能量。也许它已经耗尽了，你无能为力。
+alfheimmisc.blockcold=这块方块能在炎热之地为你带来凉爽
+alfheimmisc.blockwarm=这块方块能在极寒之地为你带来温暖
+alfheimmisc.mmoDisabled=§4不可用：MMO模式已禁用
+alfheimmisc.resonator.mode0=共振器的力场将在2秒后自动引爆。
+alfheimmisc.resonator.mode1=共振器的力场仅在你用其击中目标后引爆。
+alfheimmisc.resonator.mode2=共振器的力场将作为矩阵陷阱工作。
+alfheimmisc.resonator.mode0.short=自动
+alfheimmisc.resonator.mode1.short=手动
+alfheimmisc.resonator.mode2.short=矩阵
+alfheimmisc.resonator.target0=共振器的力场会扩散至任何方块。
+alfheimmisc.resonator.target1=共振器的力场会扩散至相似方块（忽略元数据）。
+alfheimmisc.resonator.target2=共振器的力场会扩散至相同方块（考虑元数据）。
+alfheimmisc.resonator.target0.short=所有方块
+alfheimmisc.resonator.target1.short=相似方块
+alfheimmisc.resonator.target2.short=相同方块
+alfheimmisc.relic.fail=你无法将 %s 握在手中
+alfheimmisc.stable= (稳定)
 
 death.attack.anomaly=%s 距离畸变太近而被杀死
 death.attack.bleeding=%s 流血致死
@@ -925,6 +1008,13 @@ death.attack.poison=%s 中毒而死
 death.attack.possession=%s 被虚空吞噬
 death.attack.sacrifice=%s 将自己献祭给黑暗
 death.attack.soulburn=%s 的灵魂燃烧殆尽
+death.attack.resonator=%s 与世界产生了共振
+death.attack.organs.heart=%s 的心脏说了声：我下班了！
+death.attack.organs.liver=%s 因毒性过重而死亡
+death.attack.organs.lungs=%s 忘了怎么呼吸
+death.attack.organs.nerves=%s 因焦虑过度而亡
+death.attack.wind=%s 被 %s 的飓风撕碎
+
 
 death.attack.darkness_FF=%s 被 %s 献祭献祭召唤出的暗黑之力杀死
 death.attack.firewall=%s 因为试图穿过 %s 的火墙而被烧死
@@ -968,9 +1058,9 @@ entity.alfheim.MuspelheimSun.name=炽热烈阳
 entity.alfheim.MuspelheimSunSlash.name=炽热烈阳斩
 entity.alfheim.Pixie.name=小精灵
 entity.alfheim.Rook.name=半神的守卫
-entity.alfheim.SpellAcidMyst.name=酸液
+entity.alfheim.SpellAcidMyst.name=剧毒魔雾
 entity.alfheim.SpellAquaStream.name=水流
-entity.alfheim.SpellDriftingMine.name=灵能爆弹
+entity.alfheim.SpellDriftingMine.name=灵能爆裂
 entity.alfheim.SpellFenrirStorm.name=芬里尔风暴
 entity.alfheim.SpellFireball.name=火球
 entity.alfheim.SpellFirewall.name=火墙
@@ -1029,7 +1119,7 @@ charades.question5=<Vafþrúðnir> 所有的道路都通往河对岸的地方.�
 charades.question6=<Vafþrúðnir> 古老的存在说道,那从不争斗,从不杀戮,从不咒骂的东西...曾经毒害了诸多不朽存在的思想,他们开始互相争斗,杀戮,咒骂从天空到夜晚的一切.我在说什么？
 charades.question7=<Vafþrúðnir> 生于铁森林之中,死之女王的兄弟,女先知所说的：神祇的灾难,带来死亡,吞噬光明.他被早已不存于现实之物束缚,他遭到了欺骗,而最终的清算将会是残酷无比的.我在说什么？
 
-charades.answer1=%s) Great War
+charades.answer1=%s) 诸神之战
 charades.answer2=%s) 穆斯帕尔海姆（炽热）和尼弗尔海姆（极寒）
 charades.answer3=%s) 洛基
 charades.answer4=%s) 外域
@@ -1040,12 +1130,12 @@ charades.answer8=%s) 时空扭曲
 charades.answer9=%s) 英灵殿的战士
 charades.answer10=%s) 日月
 charades.answer11=%s) 尘世巨蛇
-charades.answer12=%s) 时间的源头
+charades.answer12=%s) 时间之初
 charades.answer13=%s) 芬里尔的监牢
-charades.answer14=%s) 原初深渊
-charades.answer15=%s) 第一个世界
+charades.answer14=%s) 金伦加鸿沟(原初深渊)
+charades.answer15=%s) 最初的世界
 charades.answer16=%s) 诸神黄昏
-charades.answer17=%s) 摆渡人
+charades.answer17=%s) 卡戎(冥河摆渡人)
 charades.answer18=%s) 恶魔召唤
 charades.answer19=%s) 被深渊所控制的天翼族
 charades.answer20=%s) 诸神黄昏
@@ -1054,16 +1144,16 @@ charades.answer22=%s) 凋灵与末影龙
 charades.answer23=%s) 末影龙
 charades.answer24=%s) 宫廷政变
 charades.answer25=%s) 睡美人
-charades.answer26=%s) 伊米尔
+charades.answer26=%s) 尤弥尔
 charades.answer27=%s) Notch与Herobrine
-charades.answer28=%s) 伊米尔身躯所创造的有形世界
+charades.answer28=%s) 尤弥尔身躯所创造的有形世界
 charades.answer29=%s) 创世
 charades.answer30=%s) 下届
 charades.answer31=%s) 赫尔海姆（冥界）
-charades.answer32=%s) 大爆炸
+charades.answer32=%s) 宇宙大爆炸
 charades.answer33=%s) 末影
 charades.answer34=%s) 欧德姆布拉
-charades.answer35=%s) 原初深渊
+charades.answer35=%s) 金伦加鸿沟(原初深渊)
 
 charades.final1=<%s> 智者啊,告诉我,有什么办法可以阻止世界被深渊所吞噬
 charades.final2=<Vafþrúðnir> 那稳定现实的锚定将会是答案
@@ -1214,14 +1304,18 @@ race.SPRIGGAN.name=夜精灵
 race.UNDINE.name=水精灵
 race.IMP.name=魔精灵
 race.ALV.name=艾尔夫
+gender.false=女
+gender.true=男
+key.akashic.desc=收回遗物
 
 #########################################################___SPELLS___###########################################################
 
-spell.cast=魔法
+spell.cast=吟唱
 
 spell.acidmyst.name=剧毒魔雾
 spell.aquabind.name=潮汐捆缚
 spell.aquastream.name=潮汐冲击
+spell.aport.name=空间召唤
 spell.battlehorn.name=狂战乐章
 spell.beastwithin.name=野兽本能
 spell.blink.name=空间穿梭
@@ -1237,6 +1331,7 @@ spell.dispel.name=祛魔辟朽
 spell.dragongrowl.name=镇魂龙啸
 spell.driftingmine.name=灵能爆裂
 spell.echo.name=魂灵寻位
+spell.edgeLife.name=边缘生命
 spell.fenrirstorm.name=雷霆风暴
 spell.fireball.name=爆裂火球
 spell.firestar.name=火焰新星
@@ -1247,6 +1342,7 @@ spell.hammerfall.name=浩土陨星
 spell.harp.name=仙琴灵乐
 spell.healing.name=愈魂疗伤
 spell.hollowbody.name=身化虚灵
+spell.hystrix.name=豪猪刺
 spell.icelens.name=凛冰棱镜
 spell.ignition.name=灵能烈焰
 spell.isaacstorm.name=以撒魔力风暴
@@ -1260,8 +1356,11 @@ spell.ninelives.name=灵能替死
 spell.noclip.name=虚幻之体
 spell.noteshot.name=划空音符
 spell.outdare.name=讽心嘲魂
+spell.overcold.name=凛寒
+spell.overheat.name=炽热
 spell.poisonroots.name=毒藤缠绕
 spell.purifyingsurface.name=神圣净化
+spell.priorityTarget.name=优先目标
 spell.rain.name=奥术-骤雨
 spell.repair.name=修复
 spell.resurrect.name=复生
@@ -1277,12 +1376,15 @@ spell.thunder.name=奥术-雷暴
 spell.truesight.name=魔力窥视
 spell.titanhit.name=泰坦之击
 spell.timestop.name=时光冻结
+spell.timeAnchor.name=时间锚点
+spell.timeConquest.name=时间征服
 spell.uphealth.name=圣灵守护
 spell.wallwarp.name=身融浩土
 spell.warhood.name=战争意志
 spell.waterbreathing.name=坎水之息
 spell.wellolife.name=生命源泉
 spell.windblades.name=风暴利刃
+spell.whisper.name=昏睡耳语
 
 spell.acidmyst.mtinfo=名称: 剧毒魔雾 | 伤害 %s 持续时间 %s 生效范围 %s
 spell.aquabind.mtinfo=名称: 潮汐捆缚 | 持续时间 %s 作用级别 %s 生效范围 %s
@@ -1796,8 +1898,8 @@ dialog.common.goodbyeHero=非常感谢！祝你好运!
 
 
 
-tile.AiryVirus0.name=艾利病毒
-tile.AiryVirus1.name=艾利病毒解药
+tile.AiryVirus0.name=虚境病毒
+tile.AiryVirus1.name=虚境病毒解药
 
 item.alfheim:SnowRelic.name=冰霜遗物
 item.botania:SnowSword.name=冰霜武士刀
@@ -1817,44 +1919,44 @@ item.botania:VolcanoBoots.name=火山战靴
 
 item.alfheim:LavaMelon.name=熔岩瓜
 
-entity.alfheim.DedMoroz.name=冬将军
-entity.alfheim.SnowSprite.name=血精灵
-entity.alfheim.SniceBall.name=小雪球
+entity.alfheim.DedMoroz.name=寒冬将军
+entity.alfheim.SnowSprite.name=雪之精灵
+entity.alfheim.SniceBall.name=雪团团
 
 entity.alfheim.FireSpirit.name=火焰之魂
-entity.alfheim.FireSpirit.greater.name=大型火焰之魂
-entity.alfheim.Muspelson.name=Muspelz Sonur
+entity.alfheim.FireSpirit.greater.name=巨型火焰之魂
+entity.alfheim.Muspelson.name=穆斯贝尔之子
 entity.alfheim.RollingMelon.name=滚动的西瓜
 entity.alfheim.RollingMelon.lava.name=滚动的熔岩瓜
 
-death.attack.frost=%s 被 %s 用冰寒刺骨的冷气杀死
+death.attack.frost=%s 被 %s 的严寒冻彻骨髓
 
-itemGroup.AlfheimModular=艾尔夫海姆-传闻记
+itemGroup.AlfheimModular=艾尔夫海姆-编年史
 
-alfheim.armorset.snow.name=冬将军装甲
+alfheim.armorset.snow.name=寒冬将军装甲
 alfheim.armorset.snow.desc=使用法杖和工具时增加20%的魔力消耗
 
 alfheim.armorset.volcano.name=熔岩元素
-alfheim.armorset.volcano.desc=工具和法杖小号的魔力减少20%
+alfheim.armorset.volcano.desc=工具和法杖的魔力消耗减少20%
 
 alfheimmisc.ded.awakening=§b你唤起了复仇的凛冬之魂
-alfheimmisc.ded.icebound=你感觉冬将军冰冷的目光将你冻在地上动弹不得
+alfheimmisc.ded.icebound=你感觉寒冬将军冰冷的目光将将你钉在地上动弹不得
 
-alfheimmisc.spirit.arenacorrupt=仪式场地被扭曲
+alfheimmisc.spirit.arenacorrupt=仪式场地已被扭曲
 alfheimmisc.spirit.badarena=仪式场地不合适,无法开始仪式
-alfheimmisc.spirit.flamedied=大型火焰之灵被Muspelz Sonur所吞噬,仪式失败
-alfheimmisc.spirit.nopylons=看上去水晶有点问题,检查一下附近的水晶
-alfheimmisc.spirit.peaceful=世界中和平的氛围阻止了仪式的进行
+alfheimmisc.spirit.flamedied=巨型火焰之灵被穆斯贝尔之子所吞噬,仪式失败
+alfheimmisc.spirit.nopylons=水晶似乎出了问题，检查一下附近的水晶。
+alfheimmisc.spirit.peaceful=世界中和平的氛围阻止了仪式的进行(不要开启和平模式)
 alfheimmisc.spirit.pylondied=支撑仪式的某个火焰之魂死亡,仪式需要更长的时间
 alfheimmisc.spirit.rain.start=仪式无法在恶劣天气中进行
 alfheimmisc.spirit.rain.inmid=突如其来的降雨打断了仪式
 alfheimmisc.spirit.success=仪式已完成
 
-alfheimmisc.donteat.1=Don't dare touch my gizzards, you weed!
-alfheimmisc.donteat.2=Don't eat me pwease!
-alfheimmisc.donteat.3=Baa go away, break some pumkins
+alfheimmisc.donteat.1=不许碰我的宝贝，你这呆瓜！
+alfheimmisc.donteat.2=求求你别吃我！
+alfheimmisc.donteat.3=咩~走开，去砸些南瓜啦
 
-alfheimmisc.WIP=&4[WIP]&7 Future content, please, keep at least one item
+alfheimmisc.WIP=&4[WIP]&7 未来内容，请至少保留一个物品
 
 ################ LEXICON ################
 

@@ -2,7 +2,7 @@ package alfheim.common.entity
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alfheim.common.core.asm.hook.replacer.*
+import alfheim.common.core.asm.hook.replacer.HookReplacerHandler
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.tool.ItemResonator
@@ -169,14 +169,18 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 	
 	override fun writeEntityToNBT(nbt: NBTTagCompound) {
 		nbt.setInteger(TAG_CHANCE, chance)
+		nbt.setBoolean(TAG_DILATED, dilated)
 		nbt.setInteger(TAG_MODE, mode)
+		nbt.setBoolean(TAG_PERSISTENT, persistent)
 		nbt.setInteger(TAG_TARGET, target)
 		nbt.setBoolean(TAG_VOIDING, voiding)
 	}
 	
 	override fun readEntityFromNBT(nbt: NBTTagCompound) {
 		chance = nbt.getInteger(TAG_CHANCE)
+		dilated = nbt.getBoolean(TAG_DILATED)
 		mode = nbt.getInteger(TAG_MODE)
+		persistent = nbt.getBoolean(TAG_PERSISTENT)
 		target = nbt.getInteger(TAG_TARGET)
 		voiding = nbt.getBoolean(TAG_VOIDING)
 	}
@@ -187,12 +191,13 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 		const val CHANCE_INCR_PERS = 30
 		
 		const val TAG_CHANCE = "chance"
+		const val TAG_DILATED = "dilated"
 		const val TAG_MODE = "mode"
 		const val TAG_PERSISTENT = "persistent"
 		const val TAG_TARGET = "target"
 		const val TAG_VOIDING = "voiding"
 		
-		val damageResonance = DamageSource("resonance").setDamageBypassesArmor()
+		val damageResonance = DamageSource("resonance").setDamageBypassesArmor()!!
 		
 		private val EntityResonance.activationTime
 			get() = if (mode > 0) (if (dilated) 200 else 100) else (if (dilated) 3 else 40)

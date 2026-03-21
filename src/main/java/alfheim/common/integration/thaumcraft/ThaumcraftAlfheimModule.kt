@@ -574,6 +574,7 @@ object ThaumcraftAlfheimModule {
 	val botaniaCaps get() = !Loader.isModLoaded("ForbiddenMagic") || AlfheimConfigHandler.overrideFMCaps
 	
 	// utility function from ThaumicBases by Modbder
+	@Suppress("UsePropertyAccessSyntax") // тупое ты дерьмо блядь
 	fun copy(original: ResearchItem, newKey: String, newCat: String, column: Int, row: Int): ResearchItem {
 		val copy = if (original.icon_resource != null) ResearchItem(newKey, newCat, original.tags, column, row, original.complexity, original.icon_resource)
 		else ResearchItem(newKey, newCat, original.tags, column, row, original.complexity, original.icon_item)
@@ -614,7 +615,7 @@ object ThaumcraftAlfheimModule {
 		if (!GuiScreen.isCtrlKeyDown()) return
 		
 		val stack = e.itemStack.copy()
-		val key = groupedObjectTags.get(listOf(stack.item, stack.meta))
+		val key = groupedObjectTags[listOf(stack.item, stack.meta)]
 		if (key != null) stack.meta = key[0]
 		
 		e.toolTip.add("Aspects:")

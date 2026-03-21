@@ -17,7 +17,7 @@ import alfheim.common.entity.boss.primal.EntityPrimalBoss
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.rod.ItemRodInterdiction
 import alfheim.common.spell.illusion.SpellSmokeScreen
-import alfheim.common.spell.water.*
+import alfheim.common.spell.water.SpellPurifyingSurface
 import net.minecraft.client.renderer.RenderGlobal
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityFallingBlock
@@ -505,7 +505,7 @@ object VisualEffectHandlerClient {
 		}
 	}
 	
-	private fun randomVec(length: Double): vazkii.botania.common.core.helper.Vector3 {
+	private fun randomVec(length: Double): Vector3 {
 		val vec = Bector3(0.0, Math.random() * length, 0.0)
 		vec.rotate(Math.random() * Math.PI * 2, Bector3(1.0, 0.0, 0.0))
 		vec.rotate(Math.random() * Math.PI * 2, Bector3(0.0, 0.0, 1.0))

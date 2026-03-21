@@ -32,6 +32,7 @@ class ItemSpearSubspace: ItemRelic("SpearSubspace"), IManaUsingItem, ILensEffect
 		setFull3D()
 	}
 	
+	@Suppress("UNCHECKED_CAST")
 	override fun getAttributeModifiers(stack: ItemStack?): Multimap<String, AttributeModifier> {
 		val attrib = super.getAttributeModifiers(stack) as Multimap<String, AttributeModifier>
 		val uuid = UUID(unlocalizedName.hashCode().toLong(), 0)

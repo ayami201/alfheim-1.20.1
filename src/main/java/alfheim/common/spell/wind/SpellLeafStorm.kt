@@ -14,7 +14,7 @@ object SpellLeafStorm: SpellBase("leafstorm", EnumRace.SYLPH, 30000, 36000, 60) 
 	override var radius = 8.0
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, efficiency, radius)
+		get() = arrayOf<Number>(damage, duration, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCastOver(caster)

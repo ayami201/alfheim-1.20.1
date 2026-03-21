@@ -7,6 +7,8 @@ import alfheim.common.block.tile.TileManaTuner
 import alfheim.common.lexicon.AlfheimLexiconData
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
@@ -15,10 +17,11 @@ import net.minecraft.world.World
 import vazkii.botania.api.internal.IManaBurst
 import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.api.mana.IManaTrigger
+import vazkii.botania.api.wand.IWandHUD
 import vazkii.botania.common.block.ModBlocks
-import vazkii.botania.common.block.tile.TileSimpleInventory
+import vazkii.botania.common.block.tile.*
 
-class BlockManaTuner: BlockContainerMod(Material.rock), ILexiconable, IManaTrigger {
+class BlockManaTuner: BlockContainerMod(Material.rock), ILexiconable, IManaTrigger, IWandHUD {
 	
 	init {
 		setBlockName("ManaTuner")
@@ -28,7 +31,7 @@ class BlockManaTuner: BlockContainerMod(Material.rock), ILexiconable, IManaTrigg
 	
 	override fun registerBlockIcons(reg: IIconRegister) = Unit
 	
-	override fun getIcon(side: Int, meta: Int) = ModBlocks.livingrock.getIcon(side, 0)
+	override fun getIcon(side: Int, meta: Int) = ModBlocks.livingrock.getIcon(side, 0)!!
 	
 	override fun isOpaqueCube() = false
 	
@@ -102,4 +105,8 @@ class BlockManaTuner: BlockContainerMod(Material.rock), ILexiconable, IManaTrigg
 	}
 	
 	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.manaTuner
+	
+	override fun renderHUD(mc: Minecraft, res: ScaledResolution, world: World, x: Int, y: Int, z: Int) {
+		(world.getTileEntity(x, y, z) as? TileManaTuner)?.renderHUD(mc, res)
+	}
 }

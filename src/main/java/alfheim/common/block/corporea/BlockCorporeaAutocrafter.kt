@@ -28,7 +28,7 @@ class BlockCorporeaAutocrafter: BlockContainerMod(Material.iron), ILexiconable, 
 	init {
 		setBlockName("CorporeaAutocrafter")
 		setHardness(5.5f)
-		setStepSound(Block.soundTypeMetal)
+		setStepSound(soundTypeMetal)
 	}
 	
 	override fun breakBlock(world: World, x: Int, y: Int, z: Int, block: Block?, meta: Int) {
@@ -157,7 +157,7 @@ class BlockCorporeaAutocrafter: BlockContainerMod(Material.iron), ILexiconable, 
 				
 				RenderHelper.enableGUIStandardItemLighting()
 				GL11.glEnable(GL12.GL_RESCALE_NORMAL)
-				RenderItem.getInstance().renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, request as ItemStack, xc, yc)
+				RenderItem.getInstance().renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, request, xc, yc)
 				RenderHelper.disableStandardItemLighting()
 				
 				GL11.glTranslatef(0f, 0f, 100f)

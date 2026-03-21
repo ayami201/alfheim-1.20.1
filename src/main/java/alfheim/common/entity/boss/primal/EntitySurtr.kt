@@ -210,7 +210,7 @@ class EntitySurtr(world: World): EntityPrimalBoss(world), IMuspelheimEntity {
 		worldObj.loadedEntityList.forEach {
 			if (it !is EntityMuspelheimSun && it !is EntityMuspelheimSunSlash) return@forEach
 			
-			if (arenaBB.intersectsWith((it as Entity).boundingBox))
+			if (arenaBB.intersectsWith(it.boundingBox))
 				it.setDead()
 		}
 	}

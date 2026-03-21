@@ -41,17 +41,17 @@ object RenderEntityFenrir: RenderLiving(ModelEntityFenrir, 2f) {
 	
 	override fun shouldRenderPass(wolf: EntityLivingBase, pass: Int, ticks: Float): Int {
 		wolf as EntityFenrir
-		return when {
-			pass == 1 && wolf.stage > 0 -> {
+		return when (pass) {
+			1 if wolf.stage > 0 -> {
 				ASJRenderHelper.setGlow()
 				bindTexture(LibResourceLocations.fenrir2)
 				1
 			}
-			pass == 2 && wolf.stage > 0        -> {
+			2 if wolf.stage > 0 -> {
 				ASJRenderHelper.discard()
 				-1
 			}
-			else                               -> -1
+			else                -> -1
 		}
 	}
 	

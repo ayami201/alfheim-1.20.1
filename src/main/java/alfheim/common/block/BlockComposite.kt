@@ -160,8 +160,6 @@ class BlockComposite: BlockDoubleCamo(info = false) {
 							
 							recursive(io, jo, ko, !player.isSneaking)
 						}
-						
-						else -> Unit
 					}
 					
 					return true

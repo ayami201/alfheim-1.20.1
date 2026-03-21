@@ -52,7 +52,7 @@ class EntityFrozenViking(world: World): EntityMob(world), INiflheimEntity, IAlfh
 	override fun getDeathSound() = "mob.zombie.death"
 	override fun func_145780_a(x: Int, y: Int, z: Int, block: Block) = playSound("mob.zombie.step", 0.15f, 1.0f) // get step sound
 	override fun getCreatureAttribute() = EnumCreatureAttribute.UNDEAD
-	override fun getDropItem() = if (rng.nextBoolean()) Items.rotten_flesh else Items.bone
+	override fun getDropItem() = (if (rng.nextBoolean()) Items.rotten_flesh else Items.bone)!!
 	override fun dropRareDrop(unknown: Int) {
 		fun randomDamaged(item: Item) = ItemStack(item, 1, rng.nextInt(item.maxDamage))
 		

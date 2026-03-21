@@ -14,7 +14,7 @@ import vazkii.botania.common.block.tile.mana.TilePool
 
 class RecipeHandlerManaInfuser: RecipeHandlerPetalApothecary() {
 	
-	inner class CachedManaInfuserRecipe(recipe: RecipeManaInfuser?): CachedPetalApothecaryRecipe(recipe, false) {
+	class CachedManaInfuserRecipe(recipe: RecipeManaInfuser?): CachedPetalApothecaryRecipe(recipe, false) {
 		
 		var manaUsage: Int = 0
 		

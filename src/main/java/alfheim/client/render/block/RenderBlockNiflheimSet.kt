@@ -49,7 +49,7 @@ object RenderBlockNiflheimSet: ISimpleBlockRenderingHandler {
 		GL11.glTranslatef(0.5f, 0.5f, 0.5f)
 	}
 	
-	fun getIconSafe(icon: IIcon?) = icon ?: (Minecraft.getMinecraft().textureManager.getTexture(TextureMap.locationBlocksTexture) as TextureMap).getAtlasSprite("missingno")
+	fun getIconSafe(icon: IIcon?) = (icon ?: (Minecraft.getMinecraft().textureManager.getTexture(TextureMap.locationBlocksTexture) as TextureMap).getAtlasSprite("missingno"))!!
 	
 	override fun renderWorldBlock(world: IBlockAccess?, x: Int, y: Int, z: Int, block: Block?, modelId: Int, renderer: RenderBlocks): Boolean {
 		val l = renderer.blockAccess.getBlockMetadata(x, y, z)

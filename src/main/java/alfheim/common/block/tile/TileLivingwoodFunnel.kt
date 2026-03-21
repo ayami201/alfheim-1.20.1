@@ -37,7 +37,7 @@ class TileLivingwoodFunnel: ASJTile(), IHopper {
 		
 		if (transferCooldown > 0) return
 		transferCooldown = 0
-		if (worldObj == null || worldObj.isRemote) return
+		
 		if (!BlockFunnel.getActiveStateFromMetadata(getBlockMetadata())) return
 		var flag = false
 		
@@ -273,7 +273,7 @@ class TileLivingwoodFunnel: ASJTile(), IHopper {
 		val list = selectEntitiesWithinAABB(world, EntityItem::class.java, getBoundingBox(x, y, z, x + 1, y + 1, z + 1)) {
 			it.isEntityAlive && it.entityItem?.let { i -> i.stackSize > 0 } == true
 		}
-		return if (list.size > 0) list[0] else null
+		return if (list.isNotEmpty()) list[0] else null
 	}
 	
 	private fun pullItemIn(hopper: IHopper, inventory: IInventory, slot: Int, side: Int): Boolean {

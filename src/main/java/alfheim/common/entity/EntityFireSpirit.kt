@@ -2,6 +2,7 @@ package alfheim.common.entity
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.api.entity.IMuspelheimEntity
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.*
@@ -24,7 +25,7 @@ import vazkii.botania.common.Botania
 import vazkii.botania.common.item.ModItems
 import kotlin.math.*
 
-class EntityFireSpirit(world: World): EntityLiving(world) {
+class EntityFireSpirit(world: World): EntityLiving(world), IMuspelheimEntity {
 	
 	var timer = 0
 	
@@ -61,7 +62,7 @@ class EntityFireSpirit(world: World): EntityLiving(world) {
 		if (if (master) {
 				!checkStructure(worldObj, x, y - 1, z, timer <= 0, null)
 			} else {
-				!(worldObj.getBlock(x, y, z) === AlfheimBlocks.redFlame)
+				worldObj.getBlock(x, y, z) !== AlfheimBlocks.redFlame
 			}) {
 			if (!worldObj.isRemote) {
 				health = 0f

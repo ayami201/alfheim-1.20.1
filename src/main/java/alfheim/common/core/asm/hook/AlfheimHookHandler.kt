@@ -96,6 +96,7 @@ import net.minecraft.tileentity.*
 import net.minecraft.util.*
 import net.minecraft.world.*
 import net.minecraft.world.biome.BiomeGenBase
+import net.minecraft.world.gen.feature.WorldGenFire
 import net.minecraft.world.gen.structure.*
 import net.minecraftforge.client.IItemRenderer.ItemRenderType
 import net.minecraftforge.common.MinecraftForge
@@ -152,7 +153,7 @@ import java.util.regex.*
 import kotlin.math.*
 import vazkii.botania.common.core.helper.Vector3 as Bector3
 
-@Suppress("UNUSED_PARAMETER", "NAME_SHADOWING", "unused", "FunctionName")
+@Suppress("NAME_SHADOWING", "unused", "FunctionName")
 object AlfheimHookHandler {
 	
 	var updatingTile = false
@@ -220,9 +221,12 @@ object AlfheimHookHandler {
 	}
 	
 	@JvmStatic
-	@Hook(returnCondition = ON_TRUE) // NO, CCC, you won't mess with fire on my territory!
-	fun updateTick(portal: BlockFire, world: World, x: Int, y: Int, z: Int, random: Random?): Boolean {
-		return world.provider.dimensionId == dimensionIDDomains
+	@Hook(returnCondition = ON_TRUE)
+	fun updateTick(fire: BlockFire, world: World, x: Int, y: Int, z: Int, random: Random?): Boolean {
+		if ((summer || ragnarok) && fire === Blocks.fire && world.provider.dimensionId == -1)
+			return world.setBlock(x, y, z, AlfheimBlocks.redFlame, 2, 3)
+		
+		return world.provider.dimensionId == dimensionIDDomains // NO, CCC, you won't mess with fire on my territory!
 	}
 	
 	@JvmStatic
@@ -2203,7 +2207,7 @@ object AlfheimHookHandler {
 		glTranslatef(0f, -0.5f - sin(time.D / 150 * randomSpeed).F / 8f, 0f)
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@SideOnly(CLIENT)
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
 	fun setRotationAngles(model: ModelOcelot, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float, f6: Float, ocelot: Entity): Boolean {
@@ -2237,5 +2241,30 @@ object AlfheimHookHandler {
 		model.ocelotTail.rotateAngleY = 0f
 		model.ocelotTail2.rotationPointX = 0f
 		model.ocelotTail2.rotateAngleY = 0f
+	}
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE)
+	fun onBlockAdded(fire: BlockFire, world: World, x: Int, y: Int, z: Int): Boolean {
+		if (fire !== Blocks.fire || world.provider.dimensionId != -1 || !(summer || ragnarok || ASJUtilities.chance(AlfheimConfigHandler.replaceHellFireChance * if (firegen) 5 else 1))) return false
+		if (Blocks.portal.func_150000_e(world, x, y, z)) return true
+		
+		return world.setBlock(x, y, z, AlfheimBlocks.redFlame, 2, 3)
+	}
+	
+	@JvmStatic
+	@Hook(targetMethod = "generate")
+	fun generatePre(wg: WorldGenFire, world: World, random: Random?, x: Int, y: Int, z: Int): Boolean {
+		firegen = true
+		return false
+	}
+	
+	var firegen = false
+	
+	@JvmStatic
+	@Hook(targetMethod = "generate", injectOnExit = true)
+	fun generatePost(wg: WorldGenFire, world: World, random: Random?, x: Int, y: Int, z: Int): Boolean {
+		firegen = false
+		return false
 	}
 }

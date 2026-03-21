@@ -15,7 +15,7 @@ object SpellPoisonRoots: SpellBase("poisonroots", EnumRace.IMP, 60000, 6000, 30)
 	override var efficiency = 4.0
 	
 	override val usableParams
-		get() = arrayOf(duration, efficiency, radius)
+		get() = arrayOf<Number>(duration, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val pt = (if (caster is EntityPlayer) PartySystem.getParty(caster) else PartySystem.getMobParty(caster)) ?: return SpellCastResult.NOTARGET

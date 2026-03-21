@@ -14,7 +14,7 @@ import net.minecraft.util.IIcon
 import net.minecraft.world.World
 import java.util.*
 
-@Suppress("unused", "UNUSED_PARAMETER")
+@Suppress("UNUSED_PARAMETER")
 object FurnaceExtender {
 	
 	lateinit var iconFrontLit: IIcon

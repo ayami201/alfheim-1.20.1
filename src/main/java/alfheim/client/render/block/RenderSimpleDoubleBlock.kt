@@ -241,10 +241,10 @@ object RenderSimpleDoubleBlock: ISimpleBlockRenderingHandler {
 	}
 	
 	fun getIcon(stack: ItemStack, x: Int, y: Int, z: Int, side: Int) =
-		if (renderBlocks.hasOverrideBlockTexture())
+		(if (renderBlocks.hasOverrideBlockTexture())
 			renderBlocks.overrideBlockTexture
 		else
-			renderBlocks.getIconSafe(stack.block.getIcon(renderBlocks.blockAccess, x, y, z, side))
+			renderBlocks.getIconSafe(stack.block.getIcon(renderBlocks.blockAccess, x, y, z, side)))!!
 	
 	fun setColorAndRender(stack: ItemStack, x: Int, y: Int, z: Int, side: Int, icon: IIcon) {
 		val color = getBlockColor(stack.block, x, y, z, side, icon)

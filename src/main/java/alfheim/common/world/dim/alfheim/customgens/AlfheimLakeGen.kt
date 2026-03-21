@@ -10,7 +10,7 @@ import java.util.*
 
 class AlfheimLakeGen(val chunksForLake: Int = 12, val minY: Int = 0, val maxY: Int = 255): IWorldGenerator {
 	
-	val lakeBlock = Blocks.water
+	val lakeBlock = Blocks.water!!
 	
 	val allowedReplacements = arrayOf(Blocks.air, Blocks.grass, Blocks.dirt, ModBlocks.livingrock, lakeBlock)
 	
@@ -35,7 +35,7 @@ class AlfheimLakeGen(val chunksForLake: Int = 12, val minY: Int = 0, val maxY: I
 		y -= 6
 		
 		val aboolean = BooleanArray(2048)
-		for (w in 0 until random.nextInt(4) + 4) {
+		repeat(random.nextInt(4) + 4) {
 			val d0 = random.nextDouble() * 6 + 3
 			val d1 = random.nextDouble() * 4 + 2
 			val d2 = random.nextDouble() * 6 + 3

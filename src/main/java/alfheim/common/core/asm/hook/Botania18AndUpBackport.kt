@@ -1,5 +1,3 @@
-@file:Suppress("UNUSED_PARAMETER", "unused")
-
 package alfheim.common.core.asm.hook
 
 import alexsocol.asjlib.*
@@ -207,7 +205,7 @@ object Botania18AndUpBackport {
 			val possible = ArrayList<Int>()
 			val alreadyHas = ArrayList<Int>()
 			for (i in 0..5) (if (dice.hasRelicAlready(player, i)) alreadyHas else possible).add(i)
-			if (alreadyHas.size > 0) possible.add(alreadyHas.random(world.rand)!!)
+			if (alreadyHas.isNotEmpty()) possible.add(alreadyHas.random(world.rand)!!)
 			relic = possible.random(world.rand)!!
 		}
 		

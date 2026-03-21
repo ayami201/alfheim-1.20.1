@@ -54,7 +54,7 @@ object AlfheimAchievementHandler {
 		}
 		
 		val tiaraStack = PlayerHandler.getPlayerBaubles(player)[0]
-		val baublesFlag = tiaraStack?.item == ModItems.flightTiara && tiaraStack?.meta == 4
+		val baublesFlag = tiaraStack?.item == ModItems.flightTiara && tiaraStack.meta == 4
 		
 		val horse = player.ridingEntity
 		val horseFlag = horse is EntityHorse &&

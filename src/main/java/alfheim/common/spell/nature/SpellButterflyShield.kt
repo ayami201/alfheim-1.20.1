@@ -13,7 +13,7 @@ object SpellButterflyShield: SpellBase("butterflyshield", EnumRace.CAITSITH, 800
 	override var efficiency = 3.0
 	
 	override val usableParams
-		get() = arrayOf(duration, efficiency)
+		get() = arrayOf<Number>(duration, efficiency)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val tg = TargetingSystem.getTarget(caster)

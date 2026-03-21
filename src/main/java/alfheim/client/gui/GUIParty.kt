@@ -10,9 +10,7 @@ import alfheim.client.render.entity.RenderWings
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.PartySystem.Party
 import alfheim.common.core.helper.*
-import cpw.mods.fml.common.eventhandler.Cancelable
-import cpw.mods.fml.common.eventhandler.Event
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.eventhandler.*
 import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.entity.*
@@ -242,7 +240,7 @@ object GUIParty: Gui() {
 					hp = min(pt.getHealth(i), hpm)
 				} else {
 					when (l) {
-						is EntityPlayer     -> col = (l as EntityPlayer).race.rgbColor
+						is EntityPlayer     -> col = l.race.rgbColor
 						
 						is INpc             -> {
 							color = -0xff5501
@@ -256,10 +254,10 @@ object GUIParty: Gui() {
 					}
 					
 					if (PlayerSegmentClient.target === l) color = 0x00FF00                // selected target
-					if (Vector3.entityDistance(player, l!!) > 32) color = 0xCCCCCC        // out of reach
+					if (Vector3.entityDistance(player, l) > 32) color = 0xCCCCCC        // out of reach
 					//if (mc.thePlayer.dimension != l.dimension) color = 0x888888		  // other dim
-					hpm = l!!.maxHealth
-					hp = min(l!!.health, hpm)
+					hpm = l.maxHealth
+					hp = min(l.health, hpm)
 				}
 				
 				if (pt.isDead(i)) {                                                        // dead
@@ -428,8 +426,8 @@ object GUIParty: Gui() {
 			glTranslated(event.resolution.scaledWidth.D / 2.0 / s - 120, 0.0, 0.0)
 			zLevel = -80f
 			l = PlayerSegmentClient.target
-			var hp = min(l!!.health, l!!.maxHealth)
-			var hpm = l!!.maxHealth
+			var hp = min(l!!.health, l.maxHealth)
+			var hpm = l.maxHealth
 			var col = -0x222223 // bg color
 			var st = false
 			var shadow = true

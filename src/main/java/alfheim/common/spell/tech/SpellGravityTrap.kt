@@ -18,7 +18,7 @@ object SpellGravityTrap: SpellBase("gravitytrap", EnumRace.LEPRECHAUN, 10000, 60
 	override var radius = 4.0
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, efficiency, radius)
+		get() = arrayOf<Number>(damage, duration, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val mop = ASJUtilities.getSelectedBlock(caster, efficiency, true)

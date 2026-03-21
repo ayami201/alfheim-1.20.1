@@ -2,7 +2,7 @@ package alfheim.common.entity.boss.ai.flugel
 
 import alfheim.common.entity.boss.EntityFlugel
 
-enum class AITask constructor(
+enum class AITask(
 	c: Double,
 	/** Insta-AIs can't be selected twice in a row  */
 	val instant: Boolean,

@@ -1,4 +1,4 @@
-@file:Suppress("unused", "UNUSED_PARAMETER")
+@file:Suppress("UNUSED_PARAMETER")
 
 package alfheim.common.core.asm.hook.fixes
 

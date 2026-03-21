@@ -47,11 +47,12 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 		unlocalizedName = "MoonlightBow"
 	}
 	
+	@Suppress("UNCHECKED_CAST")
 	override fun getAttributeModifiers(stack: ItemStack): Multimap<String, AttributeModifier> {
-		val attrib = super.getAttributeModifiers(stack)
+		val attrib = super.getAttributeModifiers(stack) as Multimap<String, AttributeModifier>
 		val uuid = UUID(unlocalizedName.hashCode().toLong(), 0)
 		attrib.put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(uuid, "Weapon modifier", 5.0, 0))
-		return attrib as Multimap<String, AttributeModifier>
+		return attrib
 	}
 	
 	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
@@ -130,7 +131,7 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 			if (!world.isRemote)
 				arrow.spawn()
 			
-			player.playSoundAtEntity("random.bow", 1f, 1f / (Item.itemRand.nextFloat() * 0.4f + 1.2f) + 0.5f)
+			player.playSoundAtEntity("random.bow", 1f, 1f / (itemRand.nextFloat() * 0.4f + 1.2f) + 0.5f)
 		}
 	}
 	
@@ -207,7 +208,7 @@ class ItemMoonlightBow: ItemBow(), IRelic {
 	
 	override fun bindToUsername(playerName: String?, stack: ItemStack?) = ItemRelic.bindToUsernameS(playerName, stack)
 	
-	override fun getSoulbindUsername(stack: ItemStack?) = ItemRelic.getSoulbindUsernameS(stack)
+	override fun getSoulbindUsername(stack: ItemStack?) = ItemRelic.getSoulbindUsernameS(stack)!!
 	
 	override fun getBindAchievement() = AlfheimAchievements.moonlightBow
 	

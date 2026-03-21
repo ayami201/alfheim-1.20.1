@@ -8,7 +8,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.ai.attributes.BaseAttributeMap
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.potion.Potion
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent
 
 object PotionQuadDamage: PotionAlfheim(AlfheimConfigHandler.potionIDQuadDamage, "quadDamage", false, 0x22FFFF) {
@@ -41,19 +40,19 @@ object PotionQuadDamage: PotionAlfheim(AlfheimConfigHandler.potionIDQuadDamage, 
 				seg.quadStage = 0
 			}
 			
-			2    -> if (e.spell.name == "icelens" && player.isPotionActive(AlfheimConfigHandler.potionIDStoneSkin) && player.getActivePotionEffect(Potion.field_76434_w.id)?.amplifier == 1) {
+			2    -> if (e.spell.name == "icelens" && player.isPotionActive(AlfheimConfigHandler.potionIDStoneSkin) && player.getActivePotionEffect(field_76434_w.id)?.amplifier == 1) {
 				++seg.quadStage
 			} else {
 				seg.quadStage = 0
 			}
 			
-			3    -> if (e.spell.name == "battlehorn" && player.isPotionActive(AlfheimConfigHandler.potionIDStoneSkin) && player.getActivePotionEffect(Potion.field_76434_w.id)?.amplifier == 1 && player.isPotionActive(AlfheimConfigHandler.potionIDIceLens)) {
+			3    -> if (e.spell.name == "battlehorn" && player.isPotionActive(AlfheimConfigHandler.potionIDStoneSkin) && player.getActivePotionEffect(field_76434_w.id)?.amplifier == 1 && player.isPotionActive(AlfheimConfigHandler.potionIDIceLens)) {
 				++seg.quadStage
 			} else {
 				seg.quadStage = 0
 			}
 			
-			4    -> if (e.spell.name == "thor" && player.isPotionActive(AlfheimConfigHandler.potionIDStoneSkin) && player.getActivePotionEffect(Potion.field_76434_w.id)?.amplifier == 1 && player.isPotionActive(AlfheimConfigHandler.potionIDIceLens)) {
+			4    -> if (e.spell.name == "thor" && player.isPotionActive(AlfheimConfigHandler.potionIDStoneSkin) && player.getActivePotionEffect(field_76434_w.id)?.amplifier == 1 && player.isPotionActive(AlfheimConfigHandler.potionIDIceLens)) {
 				++seg.quadStage
 			} else {
 				seg.quadStage = 0
@@ -72,12 +71,12 @@ object PotionQuadDamage: PotionAlfheim(AlfheimConfigHandler.potionIDQuadDamage, 
 		val player = e.entity as EntityPlayer
 		val seg = CardinalSystem.forPlayer(player)
 		
-		if (seg.quadStage < 5 || !player.isPotionActive(AlfheimConfigHandler.potionIDStoneSkin) || player.getActivePotionEffect(Potion.field_76434_w.id)?.amplifier != 1 || !player.isPotionActive(AlfheimConfigHandler.potionIDIceLens)) return
+		if (seg.quadStage < 5 || !player.isPotionActive(AlfheimConfigHandler.potionIDStoneSkin) || player.getActivePotionEffect(field_76434_w.id)?.amplifier != 1 || !player.isPotionActive(AlfheimConfigHandler.potionIDIceLens)) return
 		seg.quadStage = 0
 		player.removePotionEffect(AlfheimConfigHandler.potionIDStoneSkin)
-		player.removePotionEffect(Potion.field_76434_w.id)
+		player.removePotionEffect(field_76434_w.id)
 		player.removePotionEffect(AlfheimConfigHandler.potionIDIceLens)
-		player.removePotionEffect(Potion.damageBoost.id)
+		player.removePotionEffect(damageBoost.id)
 		player.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDQuadDamage, 600, 24))
 		e.isCanceled = true
 	}

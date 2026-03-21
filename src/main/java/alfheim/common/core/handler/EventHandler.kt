@@ -53,45 +53,42 @@ import vazkii.botania.common.entity.EntityDoppleganger
 import vazkii.botania.common.item.ModItems
 import kotlin.math.*
 
-@Suppress("unused")
 object EventHandler {
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	fun onPlayerLoggedIn(e: PlayerLoggedInEvent) {
-		val player = e.player
+		val player = e.player as EntityPlayerMP
 		
 		if (InfoLoader.doneChecking && !InfoLoader.triedToWarnPlayer) {
 			InfoLoader.triedToWarnPlayer = true
 			for (s in InfoLoader.info) {
-				if (s.startsWith("\$json"))
-					player.addChatMessage(IChatComponent.Serializer.func_150699_a(s.replace("\$json", "")))
+				if (s.startsWith($$"$json"))
+					player.addChatMessage(IChatComponent.Serializer.func_150699_a(s.replace($$"$json", "")))
 				else
 					ASJUtilities.say(player, s)
 			}
 		}
 		
-		if (player is EntityPlayerMP) {
-			NetworkService.sendTo(Message2d(M2d.MODES, (if (AlfheimConfigHandler.enableElvenStory) 1 else 0).D, (if (AlfheimConfigHandler.enableMMO) 1 else 0).D), player)
-			CardinalSystem.transfer(player)
-			if (AlfheimConfigHandler.enableElvenStory) {
-				NetworkService.sendTo(Message1d(M1d.ELVEN_FLIGHT_MAX, ElvenFlightHelper.max), player)
-				NetworkService.sendTo(MessageNI(Mni.WINGS_BL, *AlfheimConfigHandler.wingsBlackList), player)
-				if (!player.hasAchievement(AlfheimAchievements.alfheim) && player.dimension != AlfheimConfigHandler.dimensionIDAlfheim) {
-					val (x, y, z) = MinecraftServer.getServer().worldServerForDimension(AlfheimConfigHandler.dimensionIDAlfheim).provider.spawnPoint
-					ASJUtilities.sendToDimensionWithoutPortal(player, AlfheimConfigHandler.dimensionIDAlfheim, x + 0.5, y + 0.5, z + 0.5)
-					
-					player.rotationYaw = 180f
-					player.rotationPitch = 0f
-					player.triggerAchievement(AlfheimAchievements.alfheim)
-					ASJUtilities.say(player, "elvenstory.welcome0")
-					ASJUtilities.say(player, "elvenstory.welcome1")
-					player.inventory.addItemStackToInventory(ItemStack(ModItems.lexicon))
-					player.setSpawnChunk(ChunkCoordinates(x, y, z), true, AlfheimConfigHandler.dimensionIDAlfheim)
-				}
+		NetworkService.sendTo(Message2d(M2d.MODES, (if (AlfheimConfigHandler.enableElvenStory) 1 else 0).D, (if (AlfheimConfigHandler.enableMMO) 1 else 0).D), player)
+		CardinalSystem.transfer(player)
+		if (AlfheimConfigHandler.enableElvenStory) {
+			NetworkService.sendTo(Message1d(M1d.ELVEN_FLIGHT_MAX, ElvenFlightHelper.max), player)
+			NetworkService.sendTo(MessageNI(Mni.WINGS_BL, *AlfheimConfigHandler.wingsBlackList), player)
+			if (!player.hasAchievement(AlfheimAchievements.alfheim) && player.dimension != AlfheimConfigHandler.dimensionIDAlfheim) {
+				val (x, y, z) = MinecraftServer.getServer().worldServerForDimension(AlfheimConfigHandler.dimensionIDAlfheim).provider.spawnPoint
+				ASJUtilities.sendToDimensionWithoutPortal(player, AlfheimConfigHandler.dimensionIDAlfheim, x + 0.5, y + 0.5, z + 0.5)
 				
-				if (AlfheimConfigHandler.enableMMO)
-					NetworkService.sendTo(Message1d(M1d.DEATH_TIMER, AlfheimConfigHandler.deathScreenAddTime.D), player)
+				player.rotationYaw = 180f
+				player.rotationPitch = 0f
+				player.triggerAchievement(AlfheimAchievements.alfheim)
+				ASJUtilities.say(player, "elvenstory.welcome0")
+				ASJUtilities.say(player, "elvenstory.welcome1")
+				player.inventory.addItemStackToInventory(ItemStack(ModItems.lexicon))
+				player.setSpawnChunk(ChunkCoordinates(x, y, z), true, AlfheimConfigHandler.dimensionIDAlfheim)
 			}
+			
+			if (AlfheimConfigHandler.enableMMO)
+				NetworkService.sendTo(Message1d(M1d.DEATH_TIMER, AlfheimConfigHandler.deathScreenAddTime.D), player)
 		}
 	}
 	
@@ -451,11 +448,12 @@ object EventHandler {
 	fun applyHeatAndCold(e: SheerColdHandler.SheerColdTickEvent) {
 		val entity = e.entityLiving
 		val biomeID = entity.worldObj.getBiomeGenForCoords(entity.posX.mfloor(), entity.posZ.mfloor()).biomeID
+		val dim = entity.worldObj.provider.dimensionId
 		
 		val change = when (biomeID) {
 			in AlfheimConfigHandler.biomesCold,
-			in AlfheimConfigHandler.niflheimBiomeIDs -> 0.05f
-			in AlfheimConfigHandler.biomesHot        -> -0.05f
+			in AlfheimConfigHandler.niflheimBiomeIDs -> if (dim != AlfheimConfigHandler.dimensionIDNiflheim && dim in AlfheimConfigHandler.biomesColdDimBlacklist) return else 0.05f
+			in AlfheimConfigHandler.biomesHot        -> if (dim in AlfheimConfigHandler.biomesHotDimBlacklist) return else -0.05f
 			else                                     -> return
 		}
 		

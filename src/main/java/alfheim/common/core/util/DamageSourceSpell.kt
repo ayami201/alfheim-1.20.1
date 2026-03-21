@@ -29,7 +29,7 @@ open class DamageSourceSpell(type: String): DamageSource(type) {
 		/** Death Mark Spell */
 		val mark = DamageSourceSpell("curse").setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage().setTo(DARKNESS)
 		
-		val nifleice = DamageSource("nifleice").setDamageBypassesArmor().setDamageIsAbsolute().setTo(ICE)
+		val nifleice = DamageSource("nifleice").setDamageBypassesArmor().setDamageIsAbsolute()!!
 		
 		/** Priority Target spell */
 		val notPriorityTarget = DamageSourceSpell("lackOfFaith").setDamageBypassesArmor().setTo(PSYCHIC)
@@ -47,7 +47,7 @@ open class DamageSourceSpell(type: String): DamageSource(type) {
 		val sacrifice = DamageSourceSpell("sacrifice").setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage().setTo(PSYCHIC).setTo(DARKNESS)
 		
 		/** Red Flame */
-		val soulburn = DamageSource("soulburn").setDamageBypassesArmor().setDamageIsAbsolute().setTo(PSYCHIC).setTo(FIRE)
+		val soulburn = DamageSource("soulburn").setDamageBypassesArmor().setDamageIsAbsolute()!!
 		
 		fun explosion(dm: EntitySpellDriftingMine, caster: EntityLivingBase?) =
 			EntityDamageSourceIndirectSpell("explosion.player", caster, dm).setFireDamage().setExplosion()!!

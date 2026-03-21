@@ -24,7 +24,7 @@ import vazkii.botania.common.item.equipment.tool.terrasteel.*
 import vazkii.botania.common.item.relic.*
 import kotlin.math.*
 
-@Suppress("unused", "UNUSED_PARAMETER", "FunctionName", "INACCESSIBLE_TYPE")
+@Suppress("UNUSED_PARAMETER", "FunctionName", "INACCESSIBLE_TYPE")
 object GodAttributesHooks {
 	
 	/**

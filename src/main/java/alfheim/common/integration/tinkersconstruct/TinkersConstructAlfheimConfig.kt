@@ -5,6 +5,8 @@ import alfheim.AlfheimCore
 import alfheim.api.AlfheimAPI
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.AlfheimConfigHandler.materialIDs
+import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig.addPartBuilderMaterial
+import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig.addPartCastingMaterial
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenResourcesMetas
 import cpw.mods.fml.common.Loader
@@ -27,6 +29,7 @@ import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.common.block.ModBlocks
 import vazkii.botania.common.item.ModItems
 import java.awt.Color
+import java.lang.reflect.Constructor
 
 object TinkersConstructAlfheimConfig {
 	
@@ -109,7 +112,7 @@ object TinkersConstructAlfheimConfig {
 	
 	// Hackery for stupid Iguana -_- because it ignores the presence of IMC
 	// Sorry but go and "optimize" it with AT by yourself if you want to D:
-	val _IMCMessage by lazy {
+	val _IMCMessage: Constructor<IMCMessage> by lazy {
 		IMCMessage::class.java.getDeclaredConstructor(String::class.java, Any::class.java).also { it.isAccessible = true }
 	}
 	

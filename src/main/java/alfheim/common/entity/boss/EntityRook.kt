@@ -107,14 +107,14 @@ class EntityRook(world: World): EntityCreature(world), IBotaniaBossWithName { //
 		
 		// if (rand.nextInt(20) != 0) return;
 		if (collided is EntityPlayer && collided.capabilities.disableDamage) return
-		if (collided is EntityLivingBase && collided.isEntityInvulnerable()) return
+		if (collided is EntityLivingBase && collided.isEntityInvulnerable) return
 		
 		if (collided is EntityLivingBase) attackTarget = collided
 	}
 	
 	override fun attackEntityAsMob(target: Entity): Boolean {
 		if (target is EntityPlayer && target.capabilities.disableDamage) return false
-		if (target is EntityLivingBase && target.isEntityInvulnerable()) return false
+		if (target is EntityLivingBase && target.isEntityInvulnerable) return false
 		if (attackTimer > 0) return false
 		
 		attackTimer = 20

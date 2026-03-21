@@ -13,6 +13,7 @@ import net.minecraft.entity.*
 import net.minecraft.entity.ai.attributes.AttributeModifier
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
+import java.util.*
 
 class ItemSurtrSword: ItemSword(AlfheimAPI.SURTR) {
 	
@@ -50,7 +51,7 @@ class ItemSurtrSword: ItemSword(AlfheimAPI.SURTR) {
 	
 	override fun getAttributeModifiers(stack: ItemStack?): Multimap<*, *> {
 		val modifiers = super.getAttributeModifiers(stack)
-		modifiers.put(PlayerReachDistanceHandler.reachDistance.attributeUnlocalizedName, AttributeModifier(field_111210_e, "Weapon modifier", 3.0, 0))
+		modifiers.put(PlayerReachDistanceHandler.reachDistance.attributeUnlocalizedName, AttributeModifier(UUID.fromString("b7814d08-3eb2-4b55-b5f9-61bd3b0d4251"), "Weapon modifier", 3.0, 0))
 		return modifiers
 	}
 }

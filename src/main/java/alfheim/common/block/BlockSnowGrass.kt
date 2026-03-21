@@ -58,18 +58,18 @@ class BlockSnowGrass: BlockMod(Material.grass), IGrowable {
 		val above = world.getBlock(x, y + 1, z)
 		val meta = world.getBlockMetadata(x, y + 1, z)
 		
-		if (AlfheimCore.winter) run winter@ {
+		if (AlfheimCore.winter) {
 			if (above === Blocks.snow_layer)
 				world.setBlock(x, y + 1, z, AlfheimBlocks.snowLayer, meta, 3)
 			
 			// from BlockGrass:
 			if (world.getBlockLightValue(x, y + 1, z) < 4 && world.getBlockLightOpacity(x, y + 1, z) > 2) {
 				world.setBlock(x, y, z, Blocks.dirt)
-				return@winter
+				return
 			}
 			
 			if (!world.isRaining || world.getPrecipitationHeight(x, z) < y)
-				return@winter
+				return
 			
 			if (above === Blocks.air) {
 				world.setBlock(x, y + 1, z, AlfheimBlocks.snowLayer)
@@ -79,7 +79,7 @@ class BlockSnowGrass: BlockMod(Material.grass), IGrowable {
 				if (meta < upMeta) world.setBlockMetadataWithNotify(x, y + 1, z, meta + 1, 1 or 2)
 			}
 			
-			for (l in 0..3) {
+			repeat(4) {
 				val i = x + random.nextInt(3) - 1
 				val j = y + random.nextInt(4) - 3
 				val k = z + random.nextInt(3) - 1

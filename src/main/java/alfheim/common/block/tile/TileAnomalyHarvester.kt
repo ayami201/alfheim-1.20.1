@@ -385,7 +385,9 @@ object AnomalyHarvesterBehaviors {
 		val (x, y, z) = Vector3.fromTileEntityCenter(tile).add(tile.offset)
 		
 		if (tile.worldObj.isRemote) {
-			val (i, j, k) = Vector3(x, y, z).rand().sub(0.5)
+			if (tile.worldObj.rand.nextInt(20) != 0) return 0
+			
+			val (i, j, k) = Vector3().rand().sub(0.5).mul(tile.radius).add(x, y, z)
 			Botania.proxy.lightningFX(tile.worldObj, Bector3(x, y, z), Bector3(i, j, k), 1f, 0, 0xFF0000)
 			
 			return 0

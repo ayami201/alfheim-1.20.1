@@ -5,12 +5,18 @@ import alexsocol.asjlib.math.Vector3
 import alfheim.api.*
 import alfheim.api.entity.*
 import alfheim.api.event.PlayerInteractAdequateEvent
+import alfheim.common.core.handler.AlfheimConfigHandler.damageAddCold
+import alfheim.common.core.handler.AlfheimConfigHandler.damageAddHot
+import alfheim.common.core.handler.AlfheimConfigHandler.damageModCold
+import alfheim.common.core.handler.AlfheimConfigHandler.damageModHot
+import alfheim.common.core.handler.AlfheimConfigHandler.potionIDOverheat
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.item.equipment.bauble.ItemPendant
 import alfheim.common.item.equipment.bauble.ItemPendant.Companion.EnumPrimalWorldType.*
 import alfheim.common.network.*
 import alfheim.common.network.packet.Message1d
 import cpw.mods.fml.common.eventhandler.*
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
 import cpw.mods.fml.relauncher.*
 import net.minecraft.entity.*
 import net.minecraft.entity.item.EntityItem
@@ -40,6 +46,11 @@ object SheerColdHandler {
 		}
 	
 	@SubscribeEvent
+	fun onPlayerLoggedIn(e: PlayerLoggedInEvent) {
+		NetworkService.sendTo(Message1d(M1d.COLD, e.player.cold.D), e.player as EntityPlayerMP)
+	}
+	
+	@SubscribeEvent
 	fun onLivingUpdate(e: LivingUpdateEvent) {
 		val target = e.entityLiving
 		
@@ -54,7 +65,8 @@ object SheerColdHandler {
 		val event = SheerColdTickEvent(target)
 		if (MinecraftForge.EVENT_BUS.post(event)) return
 		
-		var defaultDelta = if (target.cold == 0f) 0f else 0.5f * target.cold.sign * -1
+		var value = target.cold
+		var defaultDelta = if (value == 0f) 0f else 0.5f * value.sign * -1
 		
 		if (defaultDelta != 0f) run {
 			val (x, y, z) = Vector3.fromEntity(target).mf()
@@ -81,45 +93,42 @@ object SheerColdHandler {
 					}
 		}
 		
-		var delta = event.delta ?: if (target.cold > 0) max(-target.cold, defaultDelta) else min(-target.cold, defaultDelta)
+		var delta = event.delta ?: if (value > 0) max(-value, defaultDelta) else min(-value, defaultDelta)
 		if (delta.isNaN()) delta = 0f
-		if (event.delta != null && (event.delta!! > 0 || target.cold > 0) && defaultDelta == -1f) delta = max(defaultDelta + delta, -target.cold)
-		if (event.delta != null && (event.delta!! < 0 || target.cold < 0) && defaultDelta == 1f) delta = min(defaultDelta + delta, -target.cold)
+		if (event.delta != null && (event.delta!! > 0 || value > 0) && defaultDelta == -1f) delta = max(defaultDelta + delta, -value)
+		if (event.delta != null && (event.delta!! < 0 || value < 0) && defaultDelta == 1f) delta = min(defaultDelta + delta, -value)
 		delta = MathHelper.clamp_float(delta, -100f, 100f)
 		
-		target.cold = MathHelper.clamp_float(target.cold + delta, -100f, 100f)
-		if (EntityList.getEntityString(target) in AlfheimConfigHandler.overcoldBlacklist || target is INiflheimEntity) target.cold = min(0f, target.cold)
-		if (EntityList.getEntityString(target) in AlfheimConfigHandler.overheatBlacklist || target is IMuspelheimEntity) target.cold = max(0f, target.cold)
+		value = MathHelper.clamp_float(value + delta, -100f, 100f)
 		
-		val cold = target.cold
+		if (value > 0f && INiflheimEntity.checkProtection(target, MathHelper.ceiling_float_int(value))) value = 0f
+		if (value < 0f && IMuspelheimEntity.checkProtection(target, MathHelper.ceiling_float_int(-value))) value = 0f
+		
+		target.cold = value
 		
 		if (AlfheimConfigHandler.potionIDOvercold != -1) {
-			if (cold >= 25f)
-				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOvercold, 10, (cold / 25).I - 1))
+			if (value >= 25f)
+				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOvercold, 10, (value / 25).I - 1))
 			else
 				target.removePotionEffect(AlfheimConfigHandler.potionIDOvercold)
 		}
-		if (AlfheimConfigHandler.potionIDOverheat != -1) {
-			if (cold <= -25f)
-				target.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDOverheat, 10, when {
-					cold <= -90f -> 2
-					cold <= -50f -> 1
+		if (potionIDOverheat != -1) {
+			if (value <= -25f)
+				target.addPotionEffect(PotionEffectU(
+					potionIDOverheat, 10, when {
+					value <= -90f -> 2
+					value <= -50f -> 1
 					else         -> 0
 				}))
 			else
-				target.removePotionEffect(AlfheimConfigHandler.potionIDOverheat)
+				target.removePotionEffect(potionIDOverheat)
 		}
 		
 		// DoT instead of constant
 		if (target.ticksExisted % 50 != 0) return
 		
-		if (cold >= 100f && !canProtect(target, NIFLHEIM)) target.attackEntityFrom(DamageSourceSpell.nifleice, (target.maxHealth * 0.01f + 0.15f))
-		if (cold <= -100f && !canProtect(target, MUSPELHEIM)) target.attackEntityFrom(DamageSourceSpell.soulburn, (target.maxHealth * 0.01f + 0.15f))
-	}
-	
-	private fun canProtect(target: EntityLivingBase, type: ItemPendant.Companion.EnumPrimalWorldType, cost: Int = 50): Boolean {
-		if (target !is EntityPlayer) return false
-		return ItemPendant.canProtect(target, type, cost)
+		if (value >= 100f) target.attackEntityFrom(DamageSourceSpell.nifleice, (target.maxHealth * damageModCold.F + damageAddCold.F))
+		if (value <= -100f) target.attackEntityFrom(DamageSourceSpell.soulburn, (target.maxHealth * damageModHot.F + damageAddHot.F))
 	}
 	
 	val neutralSounds = arrayOf("bat.idle", "cat.meow", "chicken.say", "cow.say", "pig.say", "sheep.say", "wolf.bark")
@@ -133,11 +142,11 @@ object SheerColdHandler {
 	@SubscribeEvent
 	fun onPlayerOvercold(e: LivingUpdateEvent) {
 		val target = e.entityLiving
-		if (target is INiflheimEntity) return
 		
 		val cold = target.cold
 		
-		if (cold >= 25f && !canProtect(target, NIFLHEIM, 0)) target.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 100, (cold / 25).I - 1))
+		if (cold >= 25f)
+			target.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 100, (cold / 25).I - 1))
 	}
 	
 	// additional "lag" with controls - AlfheimHookHandler#updatePlayerMoveState
@@ -179,10 +188,11 @@ object SheerColdHandler {
 	
 	@SubscribeEvent
 	fun weakHands(e: PlayerInteractAdequateEvent) {
-		if (abs(e.player.cold) < 90) return
+		val cold = e.player.cold
+		if (abs(cold) < 90) return
 
-		if (e.player.cold > 0 && ItemPendant.canProtect(e.player, NIFLHEIM, 0)) return
-		if (e.player.cold < 0 && ItemPendant.canProtect(e.player, MUSPELHEIM, 0)) return
+		if (cold > 0 && ItemPendant.canProtect(e.player, NIFLHEIM, 0)) return
+		if (cold < 0 && ItemPendant.canProtect(e.player, MUSPELHEIM, 0)) return
 
 		if (ASJUtilities.chance(0.5))
 			e.player.dropOneItem(true)

@@ -2,6 +2,7 @@ package alfheim.common.block
 
 import alexsocol.asjlib.PotionEffectU
 import alfheim.api.ModInfo
+import alfheim.api.entity.IMuspelheimEntity
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.block.ItemBlockLeavesMod
 import alfheim.common.item.equipment.bauble.ItemPendant
@@ -62,22 +63,20 @@ class BlockRedFlame: BlockFire(), ILexiconable {
 	override fun getFireIcon(i: Int) = icons[i]
 	
 	@SideOnly(Side.CLIENT)
-	override fun getIcon(p_149691_1_: Int, p_149691_2_: Int) = icons[0]
+	override fun getIcon(side: Int, meta: Int) = icons[0]
 	
-	override fun onEntityCollidedWithBlock(world: World, x: Int, y: Int, z: Int, entity: Entity) {
-		if (entity is EntityPlayer && ItemPendant.canProtect(entity, ItemPendant.Companion.EnumPrimalWorldType.MUSPELHEIM, 50)) return
+	override fun onEntityCollidedWithBlock(world: World, x: Int, y: Int, z: Int, e: Entity) {
+		if (IMuspelheimEntity.checkProtection(e, 50)) return
 		
-		entity.setInWeb()
+		e.setInWeb()
 		
-		if (entity !is EntityLivingBase)
-			return
+		if (world.isRemote || e !is EntityLivingBase) return
 		
-		val soulburn = PotionEffectU(AlfheimConfigHandler.potionIDSoulburn, 200)
-		entity.addPotionEffect(soulburn)
+		e.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDSoulburn, 200))
 	}
 	
 	override fun updateTick(world: World, x: Int, y: Int, z: Int, rand: Random) {
-		if (!world.gameRules.getGameRuleBooleanValue("doFireTick")) return
+		if (!world.gameRules.getGameRuleBooleanValue("doFireTick") || world.getBlockMetadata(x, y, z) == 2) return
 		if (!canPlaceBlockAt(world, x, y, z) || (world.rand.nextInt(100) == 0 && !world.getBlock(x, y - 1, z).isFireSource(world, x, y - 1, z, ForgeDirection.UP)))
 			world.setBlockToAir(x, y, z)
 	}

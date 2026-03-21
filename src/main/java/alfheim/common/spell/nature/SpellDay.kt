@@ -16,7 +16,7 @@ object SpellDay: SpellBase("day", EnumRace.CAITSITH, 30000, 6000, 50) {
 		
 		for (world in MinecraftServer.getServer().worldServers) {
 			val time = world.worldTime % 24000
-			world.worldTime = world.worldTime + ((if (time < 6000L) 6000L else 30000L) - time)
+			world.worldTime += ((if (time < 6000L) 6000L else 30000L) - time)
 		}
 		
 		return result

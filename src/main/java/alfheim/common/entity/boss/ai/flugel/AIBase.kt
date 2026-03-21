@@ -17,7 +17,7 @@ abstract class AIBase(internal val flugel: EntityFlugel, internal val task: AITa
 	
 	fun canContinue(): Boolean {
 		if (flugel.health <= 0 || flugel.aiTask != task) return false
-		flugel.aiTaskTimer = flugel.aiTaskTimer - 1
+		flugel.aiTaskTimer -= 1
 		return flugel.aiTaskTimer > 0
 	}
 	

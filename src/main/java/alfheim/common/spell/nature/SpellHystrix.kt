@@ -14,7 +14,7 @@ object SpellHystrix: SpellBase("hystrix", EnumRace.CAITSITH, 10000, 360, 60) {
 	override var radius = 5.0
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, radius)
+		get() = arrayOf<Number>(damage, duration, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val tg = TargetingSystem.getTarget(caster)

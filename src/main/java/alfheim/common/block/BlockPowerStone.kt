@@ -47,7 +47,7 @@ class BlockPowerStone: BlockModContainerMeta(Material.rock, 5, ModInfo.MODID, "P
 	override fun renderAsNormalBlock() = AlfheimConfigHandler.minimalGraphics
 	override fun getRenderType() = if (AlfheimConfigHandler.minimalGraphics) 0 else LibRenderIDs.idPowerStone
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, lexicon: ItemStack) = AlfheimLexiconData.shrines
-	override fun getIcon(side: Int, meta: Int) = icons.getOrNull(meta) ?: blockIcon
+	override fun getIcon(side: Int, meta: Int) = (icons.getOrNull(meta) ?: blockIcon)!!
 	
 	override fun registerBlockIcons(reg: IIconRegister) {
 		icons = if (!AlfheimConfigHandler.minimalGraphics) emptyArray()

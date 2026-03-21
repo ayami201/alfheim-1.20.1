@@ -4,7 +4,6 @@ import alexsocol.asjlib.toItem
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.magtrees.BlockMagicLeaves
 import alfheim.common.lexicon.AlfheimLexiconData
-import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
@@ -13,7 +12,7 @@ import java.util.*
 class BlockSealingLeaves: BlockMagicLeaves("sealingLeaves"), ISoundSilencer {
 	
 	init {
-		setStepSound(Block.soundTypeCloth)
+		setStepSound(soundTypeCloth)
 	}
 	
 	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = AlfheimBlocks.sealingSapling.toItem()

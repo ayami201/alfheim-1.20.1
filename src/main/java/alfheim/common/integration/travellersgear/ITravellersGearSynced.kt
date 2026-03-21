@@ -9,18 +9,22 @@ import vazkii.botania.common.core.helper.ItemNBTHelper
 @Optional.Interface(modid = "TravellersGear", iface = "travellersgear.api.ITravellersGear", striprefs = true)
 interface ITravellersGearSynced: ITravellersGear {
 	
+	@Optional.Method(modid = "TravellersGear") // required by new kotlin
 	override fun onTravelGearEquip(player: EntityPlayer, stack: ItemStack) {
 		ItemNBTHelper.setBoolean(stack, TAG_EQUIPPED, true)
 	}
 	
+	@Optional.Method(modid = "TravellersGear") // required by new kotlin
 	override fun onTravelGearTick(player: EntityPlayer, stack: ItemStack) {
 		// because for some reason it gets called AFTER unequip :/
 		if (ItemNBTHelper.getBoolean(stack, TAG_EQUIPPED, false))
 			onTravelGearTickSynced(player, stack)
 	}
 	
+	@Optional.Method(modid = "TravellersGear") // required by new kotlin
 	fun onTravelGearTickSynced(player: EntityPlayer, stack: ItemStack) = Unit
 	
+	@Optional.Method(modid = "TravellersGear") // required by new kotlin
 	override fun onTravelGearUnequip(player: EntityPlayer, stack: ItemStack) {
 		ItemNBTHelper.setBoolean(stack, TAG_EQUIPPED, false)
 	}

@@ -76,7 +76,7 @@ open class BlockColoredSapling(name: String = "irisSapling"): BlockSapling(), IL
 	override fun checkAndDropBlock(world: World?, x: Int, y: Int, z: Int) {
 		if (world != null && !canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0)
-			world.setBlock(x, y, z, Block.getBlockById(0), 0, 2)
+			world.setBlock(x, y, z, getBlockById(0), 0, 2)
 		}
 	}
 	

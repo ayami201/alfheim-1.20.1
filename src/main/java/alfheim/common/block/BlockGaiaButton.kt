@@ -88,7 +88,7 @@ class BlockGaiaButton: BlockButton(false), ITileEntityProvider, IWandable, ILexi
 	@SideOnly(Side.CLIENT)
 	override fun registerBlockIcons(reg: IIconRegister) = Unit
 	
-	override fun getIcon(side: Int, meta: Int) = AlfheimBlocks.sealingPlanks.getIcon(side, meta)
+	override fun getIcon(side: Int, meta: Int) = AlfheimBlocks.sealingPlanks.getIcon(side, meta)!!
 	
 	override fun getRenderColor(meta: Int) = 0xCCFFCC
 	

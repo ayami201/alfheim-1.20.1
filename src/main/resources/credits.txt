@@ -11,7 +11,8 @@ Inga Akuma              -    spriggan(m), salamander(f) base skins
 InsaneTriangle          -    pooka(m,f), leprechaun(m,f), imp(f), rorycorn skins
 noppes                  -    lolicorn base code
 riskyken                -    feather particle
-Austen (Xinzhou) Hong   -    chinese translation
+Austen (Xinzhou) Hong,
+Bugmageddon             -    chinese translation
 vidar90                 -    black dots shader on gravity spell
 Azanor                  -    textures of anomalies
 oneandonlyflexo         -    clicker rod and avatar textures

@@ -79,7 +79,6 @@ open class CommonProxy {
 		EventHandler.eventForge().eventFML()
 		ESMHandler.eventForge().eventFML()
 		ElvenFlightHandler.eventForge().eventFML()
-		ChestGenHandler
 		HilarityHandler
 		RagnarokHandler
 		SoulRestructuringHandler.eventForge()
@@ -89,7 +88,7 @@ open class CommonProxy {
 		EventHandlerWinter.eventFML()
 		EventHandlerSummer.eventForge()
 		SpriteKillHandler.eventForge()
-		SheerColdHandler.eventForge()
+		SheerColdHandler.eventForge().eventFML()
 		ChunkLoadingHandler
 		FloatingIslandGenerator.eventFML().eventForge()
 		ISpeedUpItem.eventForge()

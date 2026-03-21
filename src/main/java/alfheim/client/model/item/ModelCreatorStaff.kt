@@ -66,18 +66,18 @@ object ModelCreatorStaff: ModelBase() {
 		
 		glPushMatrix()
 		var i = (200f + MathHelper.sin(player.ticksExisted.F) * 5f + 5f).I
-		var j = i % 65536
-		var k = i / 65536
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j.F / 1f, k.F / 1f)
+		var j = i % 65536f
+		var k = i / 65536f
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k)
 		
 		glTranslated(0.0, -0.1, 0.0)
 		glScaled(1.2, 2.0, 1.2)
 		
 		Rod.render(0.0625f)
 		i = player.getBrightnessForRender(0f)
-		j = i % 65536
-		k = i / 65536
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j.F / 1f, k.F / 1f)
+		j = i % 65536f
+		k = i / 65536f
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k)
 		
 		glPopMatrix()
 		mc.renderEngine.bindTexture(capT)
@@ -144,17 +144,17 @@ object ModelCreatorStaff: ModelBase() {
 		val c = Color(0xFFE9CF)
 		glColor4f(c.red.F / 255f, c.green.F / 255f, c.blue.F / 255f, alpha)
 		i = (195f + MathHelper.sin(player.ticksExisted.F / 3f) * 10f + 10f).I
-		j = i % 65536
-		k = i / 65536
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j.F / 1f, k.F / 1f)
+		j = i % 65536f
+		k = i / 65536f
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k)
 		Focus.render(0.0625f)
 		glPopMatrix()
 		
 		glPushMatrix()
 		i = 200
-		j = i % 65536
-		k = i / 65536
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j.F / 1f, k.F / 1f)
+		j = i % 65536f
+		k = i / 65536f
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE)
 		
 		glDisable(GL_CULL_FACE)
@@ -170,9 +170,9 @@ object ModelCreatorStaff: ModelBase() {
 		
 		glPushMatrix()
 		i = 200
-		j = i % 65536
-		k = i / 65536
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j.F / 1f, k.F / 1f)
+		j = i % 65536f
+		k = i / 65536f
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE)
 		
 		for (rot in 0..3) {

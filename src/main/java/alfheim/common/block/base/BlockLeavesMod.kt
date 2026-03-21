@@ -29,7 +29,7 @@ abstract class BlockLeavesMod: BlockLeaves(), IShearable, ILexiconable {
 		setCreativeTab(AlfheimTab)
 		setHardness(0.2f)
 		setLightOpacity(1)
-		setStepSound(Block.soundTypeGrass)
+		setStepSound(soundTypeGrass)
 		if (ASJUtilities.isClient && isInterpolated())
 			MinecraftForge.EVENT_BUS.register(this)
 	}

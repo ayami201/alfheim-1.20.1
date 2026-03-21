@@ -95,13 +95,13 @@ object ModelEntityLolicorn: ModelBase() {
 		horseLeftSaddleRope.addBox(-0.5f, 0f, -0.5f, 1, 6, 1, 0f)
 		frontLeftHoof = ModelRenderer(this, 44, 51)
 		frontLeftHoof.setRotationPoint(4f, 16f, -8f)
-		frontLeftHoof.addBox(-2.4000000953674316f, 5.099999904632568f, -2.0999999046325684f, 4, 3, 4, 2.384185791015625E-7f)
+		frontLeftHoof.addBox(-2.4f, 5.1f, -2.1f, 4, 3, 4, 0f)
 		frontRightHoof = ModelRenderer(this, 60, 51)
 		frontRightHoof.setRotationPoint(-4f, 16f, -8f)
-		frontRightHoof.addBox(-1.600000023841858f, 5.099999904632568f, -2.0999999046325684f, 4, 3, 4, 2.384185791015625E-7f)
+		frontRightHoof.addBox(-1.6f, 5.1f, -2.1f, 4, 3, 4, 0f)
 		backRightHoof = ModelRenderer(this, 96, 51)
 		backRightHoof.setRotationPoint(-4f, 16f, 11f)
-		backRightHoof.addBox(-1.5f, 5.099999904632568f, -2f, 4, 3, 4, 2.384185791015625E-7f)
+		backRightHoof.addBox(-1.5f, 5.1f, -2f, 4, 3, 4, 0f)
 		backLeftLeg = ModelRenderer(this, 78, 29)
 		backLeftLeg.setRotationPoint(4f, 9f, 11f)
 		backLeftLeg.addBox(-2.5f, -2f, -2.5f, 4, 9, 5, 0f)
@@ -114,18 +114,18 @@ object ModelEntityLolicorn: ModelBase() {
 		tailBase = ModelRenderer(this, 44, 0)
 		tailBase.setRotationPoint(0f, 3f, 14f)
 		tailBase.addBox(-1f, -1f, 0f, 2, 2, 3, 0f)
-		setRotateAngle(tailBase, -1.1344640254974365f, 0f, 0f)
+		setRotateAngle(tailBase, -1.13f, 0f, 0f)
 		tailTip = ModelRenderer(this, 24, 3)
 		tailTip.setRotationPoint(0f, 3f, 14f)
 		tailTip.addBox(-1.5f, -4.5f, 9f, 3, 4, 7, 0f)
-		setRotateAngle(tailTip, -1.40215003490448f, 0f, 0f)
+		setRotateAngle(tailTip, -1.4f, 0f, 0f)
 		tailMiddle = ModelRenderer(this, 38, 7)
 		tailMiddle.setRotationPoint(0f, 3f, 14f)
 		tailMiddle.addBox(-1.5f, -2f, 3f, 3, 4, 7, 0f)
-		setRotateAngle(tailMiddle, -1.1344640254974365f, 0f, 0f)
+		setRotateAngle(tailMiddle, -1.134464f, 0f, 0f)
 		frontLeftShin = ModelRenderer(this, 44, 41)
 		frontLeftShin.setRotationPoint(4f, 16f, -8f)
-		frontLeftShin.addBox(-1.899999976158142f, 0f, -1.600000023841858f, 3, 5, 3, 0f)
+		frontLeftShin.addBox(-1.9f, 0f, -1.6f, 3, 5, 3, 0f)
 		horseRightSaddleMetal = ModelRenderer(this, 74, 4)
 		horseRightSaddleMetal.setRotationPoint(-5f, 3f, 2f)
 		horseRightSaddleMetal.addBox(-0.5f, 6f, -1f, 1, 2, 2, 0f)
@@ -134,13 +134,13 @@ object ModelEntityLolicorn: ModelBase() {
 		backRightLeg.addBox(-1.5f, -2f, -2.5f, 4, 9, 5, 0f)
 		frontLeftLeg = ModelRenderer(this, 44, 29)
 		frontLeftLeg.setRotationPoint(4f, 9f, -8f)
-		frontLeftLeg.addBox(-1.899999976158142f, -1f, -2.0999999046325684f, 3, 8, 4, 0f)
+		frontLeftLeg.addBox(-1.9f, -1f, -2.1f, 3, 8, 4, 0f)
 		backRightShin = ModelRenderer(this, 96, 43)
 		backRightShin.setRotationPoint(-4f, 16f, 11f)
 		backRightShin.addBox(-1f, 0f, -1.5f, 3, 5, 3, 0f)
 		frontRightLeg = ModelRenderer(this, 60, 29)
 		frontRightLeg.setRotationPoint(-4f, 9f, -8f)
-		frontRightLeg.addBox(-1.100000023841858f, -1f, -2.0999999046325684f, 3, 8, 4, 0f)
+		frontRightLeg.addBox(-1.1f, -1f, -2.1f, 3, 8, 4, 0f)
 		horseSaddleBottom = ModelRenderer(this, 80, 0)
 		horseSaddleBottom.setRotationPoint(0f, 2f, 2f)
 		horseSaddleBottom.addBox(-5f, 0f, -3f, 10, 1, 8, 0f)
@@ -152,10 +152,10 @@ object ModelEntityLolicorn: ModelBase() {
 		horseSaddleFront.addBox(-1.5f, -1f, -3f, 3, 1, 2, 0f)
 		backLeftHoof = ModelRenderer(this, 78, 51)
 		backLeftHoof.setRotationPoint(4f, 16f, 11f)
-		backLeftHoof.addBox(-2.5f, 5.099999904632568f, -2f, 4, 3, 4, 2.384185791015625E-7f)
+		backLeftHoof.addBox(-2.5f, 5.1f, -2f, 4, 3, 4, 0f)
 		frontRightShin = ModelRenderer(this, 60, 41)
 		frontRightShin.setRotationPoint(-4f, 16f, -8f)
-		frontRightShin.addBox(-1.100000023841858f, 0f, -1.600000023841858f, 3, 5, 3, 0f)
+		frontRightShin.addBox(-1.1f, 0f, -1.6f, 3, 5, 3, 0f)
 		horseLeftSaddleMetal = ModelRenderer(this, 74, 0)
 		horseLeftSaddleMetal.setRotationPoint(5f, 3f, 2f)
 		horseLeftSaddleMetal.addBox(-0.5f, 6f, -1f, 1, 2, 2, 0f)
@@ -250,9 +250,6 @@ object ModelEntityLolicorn: ModelBase() {
 		super.setLivingAnimations(entity, limb, prevLimb, ticks)
 		val lolicorn = entity as EntityLolicorn
 		
-		val f5 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * ticks
-		var f7 = f5 / (180f / Math.PI.F)
-		if (prevLimb > 0.2f) f7 += MathHelper.cos(limb * 0.4f) * 0.15f * prevLimb
 		val flag = lolicorn.tailMovement != 0
 		val flag2 = lolicorn.riddenByEntity != null
 		val f12 = entity.ticksExisted.F + ticks
@@ -263,7 +260,7 @@ object ModelEntityLolicorn: ModelBase() {
 		tailMiddle.rotationPointZ = 14f
 		body2.rotateAngleX = 0f
 		tailBase.rotationPointY = tailBase.rotationPointY
-		tailMiddle.rotationPointZ = 10 * tailMiddle.rotationPointZ
+		tailMiddle.rotationPointZ *= 10
 		body2.rotateAngleX = body2.rotateAngleX
 		frontLeftLeg.rotationPointY = 9f
 		frontLeftLeg.rotationPointZ = -8f

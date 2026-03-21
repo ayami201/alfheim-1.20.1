@@ -1,6 +1,7 @@
 package alfheim.client.render.item
 
 import alexsocol.asjlib.mc
+import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.ModInfo
 import alfheim.api.lib.LibResourceLocations
 import alfheim.common.core.handler.AlfheimConfigHandler
@@ -63,13 +64,13 @@ object RenderItemSnowSword: IItemRenderer {
 		glTranslated(-0.5, -0.5, -0.4 + 1 / 16f)
 		
 		if (!maru) {
-			if (type == INVENTORY) glEnable(GL_BLEND)
+			if (type == INVENTORY) ASJRenderHelper.setBlend()
 			
 			val icon = (ModItems.icePendant as ItemIcePendant).gemIcon
 			mc.renderEngine.bindTexture(TextureMap.locationItemsTexture)
 			ItemRenderer.renderItemIn2D(Tessellator.instance, icon.maxU, icon.minV, icon.minU, icon.maxV, icon.iconWidth, icon.iconHeight, 1f / 16f)
 			
-			if (type == INVENTORY) glDisable(GL_BLEND)
+			if (type == INVENTORY) ASJRenderHelper.discard()
 		}
 		
 		glPopMatrix()

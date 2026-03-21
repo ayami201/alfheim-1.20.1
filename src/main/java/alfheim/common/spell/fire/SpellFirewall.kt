@@ -15,7 +15,7 @@ object SpellFirewall: SpellBase("firewall", EnumRace.SALAMANDER, 4000, 200, 15) 
 	override var duration = 600
 	
 	override val usableParams
-		get() = arrayOf(damage, duration)
+		get() = arrayOf<Number>(damage, duration)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val wall = EntitySpellFirewall(caster.worldObj, caster)

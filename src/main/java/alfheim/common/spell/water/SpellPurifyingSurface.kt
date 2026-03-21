@@ -19,7 +19,7 @@ object SpellPurifyingSurface: SpellBase("purifyingsurface", EnumRace.UNDINE, 500
 	override var radius = 5.0
 	
 	override val usableParams
-		get() = arrayOf(duration, radius)
+		get() = arrayOf<Number>(duration, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCast(caster)

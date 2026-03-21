@@ -22,6 +22,7 @@ import vazkii.botania.common.item.material.ItemManaResource;
 
 import static com.KAIIIAK.classManipulators.HookReplacer.Replacer.*;
 
+//@formatter:off
 public class HookReplacerHandler {
 	
 	@HookReplacer
@@ -113,3 +114,4 @@ public class HookReplacerHandler {
 		POPLine();stop();
 	}
 }
+//@formatter:on

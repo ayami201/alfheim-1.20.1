@@ -64,7 +64,7 @@ class TileRift: ASJTile() {
 		
 		// pull entities
 		val list = getEntitiesWithinAABB(worldObj, Entity::class.java, boundingBox(range))
-		if (list.size <= 0) return
+		if (list.isEmpty()) return
 		
 		for (e in list) {
 			if (e is EntityPlayer && (e.capabilities.disableDamage || ItemSpatiotemporalRing.hasProtection(e))) continue

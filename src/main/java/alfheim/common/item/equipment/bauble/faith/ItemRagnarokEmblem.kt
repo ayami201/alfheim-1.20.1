@@ -281,11 +281,11 @@ class ItemRagnarokEmblem: ItemBauble("aesirEmblemWeak"), IBaubleRender, IManaDis
 		return getByteArray(stack, TAG_CONSUMED, ByteArray(6)).sum() / 6f * 0.25f
 	}
 	
-	override fun getUnlocalizedNameInefficiently(stack: ItemStack) = if (ASJUtilities.isClient && !canSeeTruth(mc.thePlayer)) AlfheimItems.aesirEmblem.getUnlocalizedNameInefficiently(stack)
-		else super.getUnlocalizedNameInefficiently(stack).replace("item\\.botania:".toRegex(), "item.${ModInfo.MODID}:")
+	override fun getUnlocalizedNameInefficiently(stack: ItemStack) = (if (ASJUtilities.isClient && !canSeeTruth(mc.thePlayer)) AlfheimItems.aesirEmblem.getUnlocalizedNameInefficiently(stack)
+	else super.getUnlocalizedNameInefficiently(stack).replace("item\\.botania:".toRegex(), "item.${ModInfo.MODID}:"))!!
 	
-	override fun getItemStackDisplayName(stack: ItemStack) = if (ASJUtilities.isClient && !canSeeTruth(mc.thePlayer)) AlfheimItems.aesirEmblem.getItemStackDisplayName(stack)
-		else super.getItemStackDisplayName(stack).replace("&".toRegex(), "\u00a7")
+	override fun getItemStackDisplayName(stack: ItemStack) = (if (ASJUtilities.isClient && !canSeeTruth(mc.thePlayer)) AlfheimItems.aesirEmblem.getItemStackDisplayName(stack)
+	else super.getItemStackDisplayName(stack).replace("&".toRegex(), "\u00a7"))!!
 	
 	@SideOnly(Side.CLIENT)
 	override fun registerIcons(reg: IIconRegister) = Unit

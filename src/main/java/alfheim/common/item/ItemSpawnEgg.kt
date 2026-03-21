@@ -119,7 +119,7 @@ class ItemSpawnEgg: ItemMod("SpawnEgg") {
 	
 	override fun registerIcons(reg: IIconRegister) = Unit
 	
-	override fun getIconFromDamageForRenderPass(meta: Int, pass: Int) = Items.spawn_egg.getIconFromDamageForRenderPass(meta, pass)
+	override fun getIconFromDamageForRenderPass(meta: Int, pass: Int) = Items.spawn_egg.getIconFromDamageForRenderPass(meta, pass)!!
 	
 	@SideOnly(Side.CLIENT)
 	override fun requiresMultipleRenderPasses() = true
@@ -140,7 +140,6 @@ class ItemSpawnEgg: ItemMod("SpawnEgg") {
 			mappings.add(clazz to color1 with color2)
 		}
 		
-		@Suppress("UNUSED_PARAMETER")
 		inline fun <reified T: Entity> forEntity(entity: T) = forEntity<T>()
 		
 		inline fun <reified T: Entity> forEntity(): ItemStack? {

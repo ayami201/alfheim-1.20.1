@@ -12,7 +12,7 @@ object SpellDarkness: SpellBase("darkness", EnumRace.SPRIGGAN, 256000, 75000, 10
 	override var duration = 300
 	
 	override val usableParams
-		get() = arrayOf(duration, radius)
+		get() = arrayOf<Number>(duration, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCastOver(caster)

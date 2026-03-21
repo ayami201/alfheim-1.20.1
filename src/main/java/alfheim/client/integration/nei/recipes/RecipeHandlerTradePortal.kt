@@ -23,7 +23,7 @@ class RecipeHandlerTradePortal: TemplateRecipeHandler() {
 	val recipeID: String
 		get() = "alfheim.tradeportal"
 	
-	inner class CachedTradePortalRecipe(recipe: RecipeElvenTrade?): TemplateRecipeHandler.CachedRecipe() {
+	inner class CachedTradePortalRecipe(recipe: RecipeElvenTrade?): CachedRecipe() {
 		
 		val outputs: MutableList<PositionedStack> = ArrayList()
 		lateinit var input: PositionedStack

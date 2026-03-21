@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11.*
 
 object RenderEntityWarBanner: Render() {
 	
-	val model = AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/WarBanner.obj"))
+	val model = AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/WarBanner.obj"))!!
 	
 	override fun doRender(entity: Entity, x: Double, y: Double, z: Double, yaw: Float, ticks: Float) {
 		glPushMatrix()

@@ -15,7 +15,7 @@ object SpellHarp: SpellBase("harp", EnumRace.POOKA, 15000, 100, 50) {
 	override var efficiency = 20.0
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, efficiency, radius)
+		get() = arrayOf<Number>(damage, duration, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val mop = ASJUtilities.getSelectedBlock(caster, 32.0, true)

@@ -44,7 +44,6 @@ import vazkii.botania.common.item.ModItems.*
 import vazkii.botania.common.item.relic.*
 import alexsocol.asjlib.ItemNBTHelper as AItemNBTHelper
 
-@Suppress("UNUSED_PARAMETER", "unused")
 object RelicHooks {
 	
 	// things so relics won't hurt you or do other unwanted stuff

@@ -36,7 +36,7 @@ import vazkii.botania.common.block.mana.BlockSpreader
 import vazkii.botania.common.block.tile.mana.TileSpreader
 import vazkii.botania.common.entity.EntityManaBurst
 
-@Suppress("UNUSED_PARAMETER", "NAME_SHADOWING", "unused", "FunctionName")
+@Suppress("NAME_SHADOWING", "unused", "FunctionName")
 object ManaSpreaderExtender {
 	
 	val UBER_MAX_MANA get() = AlfheimConfigHandler.uberSpreaderCapacity

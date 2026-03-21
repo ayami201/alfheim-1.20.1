@@ -22,7 +22,7 @@ class EntitySpellIsaacMissile(world: World): EntityThrowableCopy(world) {
 		get() {
 			val id = dataWatcher.getWatchableObjectInt(26)
 			val e = worldObj.getEntityByID(id)
-			return if (e is EntityLivingBase) e else null
+			return e as? EntityLivingBase
 		}
 		set(entity) {
 			dataWatcher.updateObject(26, entity?.entityId ?: -1)
@@ -51,7 +51,7 @@ class EntitySpellIsaacMissile(world: World): EntityThrowableCopy(world) {
 		}
 		
 		val entities = getEntitiesWithinAABB(worldObj, targetClass ?: IMob::class.java, getBoundingBox(posX, posY, posZ).expand(SpellIsaacStorm.radius))
-		while (entities.size > 0) {
+		while (entities.isNotEmpty()) {
 			val e = entities[worldObj.rand.nextInt(entities.size)] as Entity
 			if (e !is EntityLivingBase || e.isDead) {
 				entities.remove(e)

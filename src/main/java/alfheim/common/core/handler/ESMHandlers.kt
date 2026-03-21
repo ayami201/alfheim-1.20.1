@@ -2,7 +2,6 @@ package alfheim.common.core.handler
 
 import alexsocol.asjlib.*
 import alexsocol.patcher.event.*
-import alfheim.AlfheimCore
 import alfheim.api.ModInfo
 import alfheim.api.entity.EnumRace.*
 import alfheim.api.entity.race
@@ -13,8 +12,7 @@ import alfheim.common.network.*
 import alfheim.common.network.packet.*
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.gameevent.PlayerEvent.*
-import cpw.mods.fml.common.gameevent.TickEvent
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent
+import cpw.mods.fml.common.gameevent.TickEvent.*
 import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.*
 import net.minecraft.init.*
@@ -35,7 +33,6 @@ import vazkii.botania.common.item.equipment.tool.ToolCommons
 import vazkii.botania.common.world.WorldTypeSkyblock
 import java.io.File
 import kotlin.math.*
-import cpw.mods.fml.common.gameevent.TickEvent.Phase as TickPhase
 
 object ESMHandler {
 	
@@ -157,7 +154,7 @@ object ESMHandler {
 	
 	@SubscribeEvent
 	fun onPlayerUpdate(e: PlayerTickEvent) {
-		if (e.phase != TickEvent.Phase.START) return
+		if (e.phase != Phase.START) return
 		
 		if (AlfheimConfigHandler.enableElvenStory) {
 			doRaceAbility(e.player)
@@ -229,13 +226,19 @@ object ESMHandler {
 		if (isAbilityDisabled(player)) return
 		
 		val tg = e.target
-		if (tg is EntityTameable && !tg.isTamed) {
-			tg.isTamed = true
-			tg.func_152115_b(player.uniqueID.toString())
-		} else if (tg is EntityHorse && !tg.isTame) {
-			tg.setTamedBy(player)
-			tg.worldObj.setEntityState(tg, 7.toByte())
-		} else return
+		when (tg) {
+			is EntityTameable if !tg.isTamed -> {
+				tg.isTamed = true
+				tg.func_152115_b(player.uniqueID.toString())
+			}
+			
+			is EntityHorse if !tg.isTame     -> {
+				tg.setTamedBy(player)
+				tg.worldObj.setEntityState(tg, 7.toByte())
+			}
+			
+			else                             -> return
+		}
 		
 		player.addPotionEffect(PotionEffect(Potion.regeneration.id, 600))
 		player.addPotionEffect(PotionEffect(Potion.field_76444_x.id, 1800))
@@ -348,7 +351,7 @@ object ElvenFlightHandler {
 	
 	@SubscribeEvent
 	fun onPlayerUpdate(e: PlayerTickEvent) {
-		if (e.phase == TickPhase.START) return
+		if (e.phase == Phase.START) return
 		val player = e.player
 		
 		if (player is EntityPlayerMP)

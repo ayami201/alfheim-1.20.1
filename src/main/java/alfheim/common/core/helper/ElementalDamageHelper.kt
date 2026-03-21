@@ -180,7 +180,7 @@ object ElementalDamageHandler {
 	@SubscribeEvent(priority = EventPriority.LOW)
 	fun onHurt(e: LivingHurtEvent) {
 		e.ammount = calculateElements(e.source, e.entityLiving, e.ammount)
-		if (e.ammount > 0 && e.ammount <= 0f) e.isCanceled = true
+		if (e.ammount <= 0f) e.isCanceled = true
 	}
 	
 	@SubscribeEvent

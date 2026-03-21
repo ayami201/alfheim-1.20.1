@@ -13,7 +13,7 @@ import org.objectweb.asm.tree.*
 import vazkii.botania.api.subtile.SubTileEntity
 import vazkii.botania.common.block.tile.TileSpecialFlower
 
-@Suppress("NAME_SHADOWING", "ClassName", "unused", "LocalVariableName", "PrivatePropertyName")
+@Suppress("NAME_SHADOWING", "ClassName", "LocalVariableName", "PrivatePropertyName")
 class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 	
 	override val logger = Log4JLogger(ModInfo.MODID)
@@ -31,11 +31,11 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 			"vazkii.botania.client.core.helper.RenderHelper"                   -> core { `RenderHelper$ClassVisitor`(it) }
 			"vazkii.botania.client.render.tile.RenderTileFloatingFlower"       -> core { `RenderTileFloatingFlower$ClassVisitor`(it) }
 			
-			"vazkii.botania.common.block.decor.IFloatingFlower\$IslandType"    -> tree {
+			$$"vazkii.botania.common.block.decor.IFloatingFlower$IslandType" -> tree {
 				if (OBF || it.methods.any { m -> m.name == "getColor" && m.desc == "()I"}) return@tree
 				
 				val mn = MethodNode(ACC_PUBLIC, "getColor", "()I", null, null)
-				mn.instructions.add(LdcInsnNode(Integer(16777215)))
+				mn.instructions.add(LdcInsnNode(16777215))
 				mn.instructions.add(InsnNode(IRETURN))
 				it.methods.add(mn)
 			}
@@ -54,8 +54,8 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 			"vazkii.botania.common.item.rod.ItemTerraformRod"                  -> core { `ItemTerraformRod$ClassVisitor`(it) }
 			"vazkii.botania.common.lib.LibItemNames"                           -> core { `LibItemNames$ClassVisitor`(it) }
 			// fixes for stupid coders:
-			"com.emoniph.witchery.client.ClientEvents\$GUIOverlay"             -> core { `ClientEvents$GUIOverlay$ClassVisitor`(it) }
-			else                                                               -> this.basicClass
+			$$"com.emoniph.witchery.client.ClientEvents$GUIOverlay" -> core { `ClientEvents$GUIOverlay$ClassVisitor`(it) }
+			else                                                    -> this.basicClass
 		}
 	}
 	
@@ -134,7 +134,7 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 					sended = true
 					visitVarInsn(ALOAD, 0)
 					visitFieldInsn(GETFIELD, if (OBF) "my" else "net/minecraft/entity/EntityTrackerEntry", if (OBF) "a" else "myEntity", if (OBF) "Lsa;" else "Lnet/minecraft/entity/Entity;")
-					visitMethodInsn(INVOKESTATIC, "alfheim/common/core/handler/CardinalSystem\$PartySystem", "notifySpawn", if (OBF) "(Lsa;)V" else "(Lnet/minecraft/entity/Entity;)V", false)
+					visitMethodInsn(INVOKESTATIC, $$"alfheim/common/core/handler/CardinalSystem$PartySystem", "notifySpawn", if (OBF) "(Lsa;)V" else "(Lnet/minecraft/entity/Entity;)V", false)
 				}
 			}
 		}
@@ -157,8 +157,8 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 			override fun visitFieldInsn(opcode: Int, owner: String, name: String, desc: String) {
 				if (flag && opcode == GETSTATIC && (owner == "net/minecraft/util/DamageSource" || owner == "ro") && (name == "magic" || name == "k") && (desc == "Lnet/minecraft/util/DamageSource;" || desc == "Lro;")) {
 					flag = false
-					super.visitFieldInsn(GETSTATIC, "alfheim/common/core/util/DamageSourceSpell", "Companion", "Lalfheim/common/core/util/DamageSourceSpell\$Companion;")
-					super.visitMethodInsn(INVOKEVIRTUAL, "alfheim/common/core/util/DamageSourceSpell\$Companion", "getPoison", if (OBF) "()Lro;" else "()Lnet/minecraft/util/DamageSource;", false)
+					super.visitFieldInsn(GETSTATIC, "alfheim/common/core/util/DamageSourceSpell", "Companion", $$"Lalfheim/common/core/util/DamageSourceSpell$Companion;")
+					super.visitMethodInsn(INVOKEVIRTUAL, $$"alfheim/common/core/util/DamageSourceSpell$Companion", "getPoison", if (OBF) "()Lro;" else "()Lnet/minecraft/util/DamageSource;", false)
 					return
 				} else if (opcode == GETSTATIC && (owner == "net/minecraft/potion/Potion" || owner == "rv") && (name == "poison" || name == "u") && (desc == "Lnet/minecraft/potion/Potion;" || desc == "Lrv;")) flag = true
 				
@@ -272,7 +272,7 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 				
 				if (name == "setEntryToOpen") {
 					newName = "setEntryDataToOpen"
-					newDesc = "(Lvazkii/botania/api/lexicon/LexiconRecipeMappings\$EntryData;)V"
+					newDesc = $$"(Lvazkii/botania/api/lexicon/LexiconRecipeMappings$EntryData;)V"
 				}
 				
 				super.visitMethodInsn(opcode, owner, newName, newDesc, itf)
@@ -343,25 +343,25 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 						mv.visitTypeInsn(NEW, "java/awt/Color")
 						mv.visitInsn(DUP)
 						mv.visitVarInsn(ALOAD, 9)
-						mv.visitMethodInsn(INVOKEINTERFACE, "vazkii/botania/common/block/decor/IFloatingFlower", "getIslandType", "()Lvazkii/botania/common/block/decor/IFloatingFlower\$IslandType;", true)
-						mv.visitMethodInsn(INVOKEVIRTUAL, "vazkii/botania/common/block/decor/IFloatingFlower\$IslandType", "getColor", "()I", false)
+						mv.visitMethodInsn(INVOKEINTERFACE, "vazkii/botania/common/block/decor/IFloatingFlower", "getIslandType", $$"()Lvazkii/botania/common/block/decor/IFloatingFlower$IslandType;", true)
+						mv.visitMethodInsn(INVOKEVIRTUAL, $$"vazkii/botania/common/block/decor/IFloatingFlower$IslandType", "getColor", "()I", false)
 						mv.visitMethodInsn(INVOKESPECIAL, "java/awt/Color", "<init>", "(I)V", false)
 						mv.visitVarInsn(ASTORE, 12)
 						
 						mv.visitVarInsn(ALOAD, 12)
 						mv.visitMethodInsn(INVOKEVIRTUAL, "java/awt/Color", "getRed", "()I", false)
 						mv.visitInsn(I2F)
-						mv.visitLdcInsn(java.lang.Float("255.0"))
+						mv.visitLdcInsn(255f)
 						mv.visitInsn(FDIV)
 						mv.visitVarInsn(ALOAD, 12)
 						mv.visitMethodInsn(INVOKEVIRTUAL, "java/awt/Color", "getGreen", "()I", false)
 						mv.visitInsn(I2F)
-						mv.visitLdcInsn(java.lang.Float("255.0"))
+						mv.visitLdcInsn(255f)
 						mv.visitInsn(FDIV)
 						mv.visitVarInsn(ALOAD, 12)
 						mv.visitMethodInsn(INVOKEVIRTUAL, "java/awt/Color", "getBlue", "()I", false)
 						mv.visitInsn(I2F)
-						mv.visitLdcInsn(java.lang.Float("255.0"))
+						mv.visitLdcInsn(255f)
 						mv.visitInsn(FDIV)
 						mv.visitMethodInsn(INVOKESTATIC, "org/lwjgl/opengl/GL11", "glColor3f", "(FFF)V", false)
 					} else before = true
@@ -383,7 +383,10 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 		
 		override fun visitMethod(access: Int, name: String?, desc: String?, signature: String?, exceptions: Array<out String>?): MethodVisitor {
 			val mv = super.visitMethod(access, name, desc, signature, exceptions)
-			return if (name != "getColor" && name != "writeCustomNBT") `TileManaFlame$MethodVisitor`(mv) else mv
+			return if (name != "getColor" && name != "writeCustomNBT") {
+				logger.debug("Visiting RenderTileFloatingFlower#$name: $name$desc")
+				`TileManaFlame$MethodVisitor`(mv)
+			} else mv
 		}
 		
 		// Вазки ты еблан :з
@@ -398,7 +401,7 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 		}
 	}
 	
-	private inner class `TileSpecialFlower$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
+	private class `TileSpecialFlower$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 
 		override fun visitField(access: Int, name: String?, desc: String?, signature: String?, value: Any?): FieldVisitor {
 			val newVal = if (value == TileSpecialFlower.TAG_SUBTILE_NAME) SubTileEntity.TAG_TYPE else value
@@ -409,7 +412,7 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 			return `TileSpecialFlower$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 		}
 
-		private inner class `TileSpecialFlower$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
+		private class `TileSpecialFlower$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
 
 			override fun visitLdcInsn(cst: Any?) {
 				val newCst = if (cst == TileSpecialFlower.TAG_SUBTILE_NAME) SubTileEntity.TAG_TYPE else cst
@@ -658,7 +661,7 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
 			if (name == "renderHotbar") {
-				logger.debug("Visiting witchery's ClientEvents\$GUIOverlay#renderHotbar: $name$desc")
+				logger.debug($$"Visiting witchery's ClientEvents$GUIOverlay#renderHotbar: $$name$$desc")
 				return `ClientEvents$GUIOverlay$renderHotbar$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions)

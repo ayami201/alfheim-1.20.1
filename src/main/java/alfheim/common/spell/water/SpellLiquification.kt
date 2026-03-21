@@ -6,7 +6,7 @@ import alfheim.api.event.SpellCastEvent
 import alfheim.api.spell.SpellBase
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.*
+import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraftforge.common.MinecraftForge

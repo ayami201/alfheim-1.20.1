@@ -17,6 +17,7 @@ import net.minecraftforge.event.ServerChatEvent
 import net.minecraftforge.event.entity.living.LivingEvent
 import java.io.*
 import java.nio.file.*
+import java.nio.file.FileSystem
 import java.util.stream.*
 
 object EntityElfDialogLogic {

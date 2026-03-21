@@ -1,6 +1,7 @@
 package alfheim.common.block
 
 import alexsocol.asjlib.*
+import alexsocol.asjlib.extendables.MaterialPublic
 import alexsocol.asjlib.math.Vector3
 import alfheim.api.entity.INiflheimEntity
 import alfheim.common.block.base.BlockMod
@@ -9,7 +10,7 @@ import alfheim.common.item.equipment.bauble.ItemPendant
 import alfheim.common.lexicon.AlfheimLexiconData
 import alfheim.common.potion.PotionEternity
 import cpw.mods.fml.relauncher.*
-import net.minecraft.block.material.Material
+import net.minecraft.block.material.MapColor
 import net.minecraft.entity.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
@@ -23,13 +24,13 @@ import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.common.core.handler.ConfigHandler
 import java.util.*
 
-class BlockNiflheimIce: BlockMod(Material.packedIce), ILexiconable {
+class BlockNiflheimIce: BlockMod(material), ILexiconable {
 	
 	init {
 		setBlockName("NiflheimIce")
 		setCreativeTab(null)
 		setBlockUnbreakable()
-		setHarvestLevel("pick", 2)
+		setHarvestLevel("pickaxe", 2)
 		setLightOpacity(0)
 		setStepSound(soundTypeGlass)
 		tickRandomly = true
@@ -46,12 +47,9 @@ class BlockNiflheimIce: BlockMod(Material.packedIce), ILexiconable {
 		
 		if (ItemPendant.canProtect(player, ItemPendant.Companion.EnumPrimalWorldType.NIFLHEIM, 5)) hardness = 2f
 		
-		if (hardness < 0f) return 0f
+		if (hardness <= 0f) return 0f
 		
-		return if (!ForgeHooks.canHarvestBlock(this, player, metadata))
-			player.getBreakSpeed(this, true, metadata, x, y, z) / hardness / 100f
-		else
-			player.getBreakSpeed(this, false, metadata, x, y, z) / hardness / 30f
+		return player.getBreakSpeed(this, true, metadata, x, y, z) / hardness / if (!ForgeHooks.canHarvestBlock(this, player, metadata)) 100f else 30f
 	}
 	
 	override fun isOpaqueCube() = false
@@ -68,15 +66,13 @@ class BlockNiflheimIce: BlockMod(Material.packedIce), ILexiconable {
 	override fun dropBlockAsItem(w: World, x: Int, y: Int, z: Int, s: ItemStack) = Unit
 	
 	override fun onEntityWalking(w: World, x: Int, y: Int, z: Int, e: Entity) {
-		if (e is INiflheimEntity) return
-		if (e is EntityPlayer && ItemPendant.canProtect(e, ItemPendant.Companion.EnumPrimalWorldType.NIFLHEIM, 50)) return
+		if (INiflheimEntity.checkProtection(e, 50)) return
 		
 		e.setInWeb()
 		if (w.isRemote || e !is EntityLivingBase) return
 		
 		e.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 25, 2))
-		if (!e.isPotionActive(AlfheimConfigHandler.potionIDEternity))
-			e.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDEternity, 100, PotionEternity.ATTACK))
+		e.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDEternity, 100, PotionEternity.ATTACK))
 	}
 	
 	override fun onEntityCollidedWithBlock(w: World, x: Int, y: Int, z: Int, e: Entity) {
@@ -91,7 +87,7 @@ class BlockNiflheimIce: BlockMod(Material.packedIce), ILexiconable {
 		if (world.getBlockMetadata(x, y, z) == 2) return
 		
 		val below = world.getBlock(x, y - 1, z)
-		if ((below != Blocks.packed_ice || below != this) && world.rand.nextInt(100) == 0)
+		if (below != Blocks.packed_ice && below != this && world.rand.nextInt(100) == 0)
 			world.setBlockToAir(x, y, z)
 	}
 	
@@ -125,5 +121,7 @@ class BlockNiflheimIce: BlockMod(Material.packedIce), ILexiconable {
 	
 	companion object {
 		var destroyNextTick = true
+		
+		private val material = MaterialPublic(MapColor.iceColor, requiresNoTool = false)
 	}
 }

@@ -9,17 +9,15 @@ import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.bauble.faith.IFaithHandler
 import baubles.common.lib.PlayerHandler
-import cpw.mods.fml.common.Optional
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
-import net.minecraft.util.*
+import net.minecraft.util.IIcon
 import travellersgear.api.TravellersGearAPI
 import vazkii.botania.api.mana.IManaUsingItem
 
-@Optional.Interface(modid = "TravellersGear", iface = "alfheim.common.integration.travellersgear.ITravellersGearSynced", striprefs = true)
 class ItemPriestCloak: ItemBaubleCloak("priestCloak"), IManaUsingItem {
 	
 	companion object {

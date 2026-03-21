@@ -23,6 +23,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	const val CATEGORY_WORLDGEN_D = CATEGORY_DOMAINS + CATEGORY_SPLITTER + "worldgen"
 	const val CATEGORY_WORLDGEN_N = CATEGORY_NIFLHEIM + CATEGORY_SPLITTER + "worldgen"
 	const val CATEGORY_ENTITIES_N = CATEGORY_WORLDGEN_N + CATEGORY_SPLITTER + "entities"
+	const val CATEGORY_TEMPERATURE = CATEGORY_GENERAL + CATEGORY_SPLITTER + "temperature"
 	const val CATEGORY_POTIONS = CATEGORY_GENERAL + CATEGORY_SPLITTER + "potions"
 	const val CATEGORY_ESMODE = CATEGORY_GENERAL + CATEGORY_SPLITTER + "elvenstory"
 	const val CATEGORY_MMO = CATEGORY_ESMODE + CATEGORY_SPLITTER + "mmo"
@@ -117,13 +118,24 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var voidCreeper = intArrayOf(4, 1, 3)
 	var voidCreeperBiomeBlackList = intArrayOf(8, 9, 14, 15)
 	
+	// TEMPERATURE
+	var biomesCold = intArrayOf()
+	var biomesColdDimBlacklist = intArrayOf()
+	var biomesHot = intArrayOf(8)
+	var biomesHotDimBlacklist = intArrayOf()
+	var damageAddCold = 0.15
+	var damageAddHot = 0.15
+	var damageModCold = 0.01
+	var damageModHot = 0.03
+	var mobTemperature = true
+	var mobBlacklistCold = arrayOf("Skeleton", "SnowMan")
+	var mobBlacklistHot = arrayOf("Blaze", "Ghast", "LavaSlime", "PigZombie", "Skeleton", "WitherBoss")
+	
 	// OHTER
 	var alfheimSleepExtraCheck = true
 	var authTimeout = 200
 	var barrierTreeAllowAnyPlayer = false
 	var blackLotusDropRate = 0.05
-	var biomesCold = intArrayOf()
-	var biomesHot = intArrayOf(8)
 	var cataclysmCooldown = 600
 	var disableShedding = false
 	var effectScreenOverlay = true
@@ -149,7 +161,6 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var mobElements = arrayOf("Blaze:FIRE", "EnderDragon:DARKNESS", "Enderman:DARKNESS", "Ghast:AIR,PSYCHIC", "LavaSlime:FIRE,EARTH", "MushroomCow:NATURE", "SnowMan:ICE", "Slime:NATURE,WATER", "VillagerGolem:EARTH", "WitherBoss:DARKNESS", "Thaumcraft.EldritchCrab:DARKNESS", "Thaumcraft.EldritchGolem:EARTH", "Thaumcraft.EldritchGuardian:DARKNESS,PSYCHIC", "Thaumcraft.EldritchWarden:DARKNESS,PSYCHIC", "Thaumcraft.Firebat:FIRE", "Thaumcraft.MindSpider:PSYCHIC", "Thaumcraft.ThaumSlime:WATER,DARKNESS", "ThermalFoundation.Blizz:ICE", "ThermalFoundation.Blitz:ELECTRIC", "ThermalFoundation.Basalz:EARTH")
 	var minimalGraphics = false
 	var mobPriests = true
-	var mobTemperature = true
 	var moonbowMaxDmg = 20
 	var moonbowVelocity = 0.5f
 	var mountAlfheimOnly = false
@@ -161,13 +172,12 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var notifications = true
 	var numericalMana = true
 	var oiiaId = 2
-	var overcoldBlacklist = arrayOf("alfheim.DedMoroz", "alfheim.SnowSprite", "Skeleton", "SnowMan")
-	var overheatBlacklist = arrayOf("alfheim.Muspelson", "alfheim.FireSpirit", "Blaze", "Ghast", "LavaSlime", "PigZombie", "Skeleton", "WitherBoss")
 	var rattleroseSpeed = 20
 	var realLightning = false
 	var relicsProtectionBlackList = emptyArray<String>()
 	var renderBooba = true
 	var repairBlackList = emptyArray<String>()
+	var replaceHellFireChance = 5
 	var rocketRide = 2
 	var searchTabAlfheim = true
 	var searchTabBotania = true
@@ -279,6 +289,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		addCategory(CATEGORY_NIFLHEIM, "Niflheim dimension settings")
 		addCategory(CATEGORY_WORLDGEN_A, "Alfheim worldgen settings")
 		addCategory(CATEGORY_ENTITIES_A, "Alfheim entities settings")
+		addCategory(CATEGORY_TEMPERATURE, "Temperature settings")
 		addCategory(CATEGORY_POTIONS, "Potion IDs")
 		addCategory(CATEGORY_INTEGRATION, "Cross-mods and modpacks integration")
 		addCategory(CATEGORY_INT_TC, "Thaumcraft integration")
@@ -350,12 +361,22 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		
 		vikingSpawn = loadProp(CATEGORY_ENTITIES_N, "vikingSpawn", vikingSpawn, true, "Frozen Vikings max count per player, min and max group count")
 		
+		biomesCold = loadProp(CATEGORY_TEMPERATURE, "biomesCold", biomesCold, false, "List of cold biomes where sheer cold will be accumulating", false)
+		biomesColdDimBlacklist = loadProp(CATEGORY_TEMPERATURE, "biomesColdDimBlacklist", biomesColdDimBlacklist, false, "List of dimension IDs where 'biomesCold' won't trigger sheer cold accumulation", false)
+		biomesHot = loadProp(CATEGORY_TEMPERATURE, "biomesHot", biomesHot, false, "List of hot biomes where blazing heat will be accumulating", false)
+		biomesHotDimBlacklist = loadProp(CATEGORY_TEMPERATURE, "biomesHotDimBlacklist", biomesHotDimBlacklist, false, "List of dimension IDs where 'biomesHot' won't trigger blazing heat accumulation", false)
+		damageAddCold = loadProp(CATEGORY_TEMPERATURE, "damageAddCold", damageAddCold, false, "Sheer cold additional damage")
+		damageAddHot = loadProp(CATEGORY_TEMPERATURE, "damageAddHot", damageAddHot, false, "Blazing heat additional damage")
+		damageModCold = loadProp(CATEGORY_TEMPERATURE, "damageModCold", damageModCold, false, "Sheer cold damage scale of max HP")
+		damageModHot = loadProp(CATEGORY_TEMPERATURE, "damageModHot", damageModHot, false, "Blazing heat damage scale of max HP")
+		mobTemperature = loadProp(CATEGORY_TEMPERATURE, "mobTemperature", mobTemperature, false, "Set this to false to completely disable mobs getting overcold and overheat effects (may break some mechanics)")
+		mobBlacklistCold = loadProp(CATEGORY_TEMPERATURE, "mobBlacklistCold", mobBlacklistCold, false, "List of entity names immune to power of Niflheim", false)
+		mobBlacklistHot = loadProp(CATEGORY_TEMPERATURE, "mobBlacklistHot", mobBlacklistHot, false, "List of entity names immune to power of Muspelheim", false)
+		
 		alfheimSleepExtraCheck = loadProp(CATEGORY_GENERAL, "alfheimSleepExtraCheck", alfheimSleepExtraCheck, false, "Set this to false if you are skipping whole day while sleeping")
 		authTimeout = loadProp(CATEGORY_GENERAL, "authTimeout", authTimeout, false, "Time limit for client to send authentication credentials", 100, 600)
 		barrierTreeAllowAnyPlayer = loadProp(CATEGORY_GENERAL, "barrierTreeAllowAnyPlayer", barrierTreeAllowAnyPlayer, false, "Set this to true to allow any player to bypass barrier trees")
 		blackLotusDropRate = loadProp(CATEGORY_GENERAL, "blackLotusDropRate", blackLotusDropRate, false, "Rate of black loti dropping from Manaseal Creepers")
-		biomesCold = loadProp(CATEGORY_GENERAL, "biomesCold", biomesCold, false, "List of cold biomes where sheer cold will be accumulating", false)
-		biomesHot = loadProp(CATEGORY_GENERAL, "biomesHot", biomesHot, false, "List of hot biomes where blazing heat will be accumulating", false)
 		cataclysmCooldown = loadProp(CATEGORY_GENERAL, "cataclysmCooldown", cataclysmCooldown, false, "Average ticks between cataclysms", 100, 6000)
 		disableShedding = loadProp(CATEGORY_GENERAL, "disableShedding", disableShedding, false, "Set this to true to completely disable mob shedding from Botania")
 		effectScreenOverlay = loadProp(CATEGORY_GENERAL, "effectScreenOverlay", effectScreenOverlay, false, "Set this to false to disable screen overlay for effects like heat/cold")
@@ -381,7 +402,6 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		minimalGraphics = loadProp(CATEGORY_GENERAL, "minimalGraphics", minimalGraphics, true, "Set this to true to disable .obj models and shaders")
 		mobElements = loadProp(CATEGORY_GENERAL, "mobElements", mobElements, true, "Array of mob names to the list of their elements", false)
 		mobPriests = loadProp(CATEGORY_GENERAL, "mobPriests", mobPriests, false, "Set this to false so that only players can be priests")
-		mobTemperature = loadProp(CATEGORY_GENERAL, "mobTemperature", mobTemperature, false, "Set this to false to disable mobs getting overcold and overheat effects (may break some mechanics)")
 		moonbowMaxDmg = loadProp(CATEGORY_GENERAL, "moonbowMaxDmg", moonbowMaxDmg, false, "Max base damage for Phoebus Catastrophe")
 		moonbowVelocity = loadProp(CATEGORY_GENERAL, "moonbowVelocity", moonbowVelocity.D, false, "Phoebus Catastrophe charge speed").F
 		mountAlfheimOnly = loadProp(CATEGORY_GENERAL, "mountAlfheimOnly", mountAlfheimOnly, false, "Set this to false to make mounts summonable only in Alfheim")
@@ -393,13 +413,12 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		notifications = loadProp(CATEGORY_GENERAL, "notifications", notifications, false, "Set this to false to disable custom notifications and version check")
 		numericalMana = loadProp(CATEGORY_GENERAL, "numericalMana", numericalMana, false, "Set this to false to disable numerical mana representation")
 		oiiaId = loadProp(CATEGORY_GENERAL, "oiiaId", oiiaId, false, "Change this if you are getting crash 'Duplicate id value for ...' from DataWatcher")
-		overcoldBlacklist = loadProp(CATEGORY_GENERAL, "overcoldBlacklist", overcoldBlacklist, false, "List of entity names with no cold gauge filling", false)
-		overheatBlacklist = loadProp(CATEGORY_GENERAL, "overheatBlacklist", overheatBlacklist, false, "List of entity names with no heat gauge filling", false)
 		rattleroseSpeed = loadProp(CATEGORY_GENERAL, "rattleroseSpeed", rattleroseSpeed, false, "Rattlerose game update speed (one time per N ticks). Set to 0 to switch to manual control")
 		realLightning = loadProp(CATEGORY_GENERAL, "realLightning", realLightning, false, "Set this to true to make Rod of the Thundering Peaks summon real (weather) lightning")
 		relicsProtectionBlackList = loadProp(CATEGORY_GENERAL, "relicsProtectionBlackList", relicsProtectionBlackList, false, "Blacklist for relics protection [modid:name]", false)
 		renderBooba = loadProp(CATEGORY_GENERAL, "renderBooba", renderBooba, false, "Set this to false to disable ESM booba render")
 		repairBlackList = loadProp(CATEGORY_GENERAL, "repairBlackList", repairBlackList, false, "Blacklist of repairable items (ex: for anyavil) [modid:name]", false)
+		replaceHellFireChance = loadProp(CATEGORY_GENERAL, "replaceHellFireChance", replaceHellFireChance, false, "Chance for Fire Of Eternity to replace regular fire when placed in Muspelheim (x5 for worlgen)", 0, 100)
 		rocketRide = loadProp(CATEGORY_GENERAL, "rocketRide", rocketRide, false, "Rocket ride [-1 - not players, 0 - none, 1 - players, 2 - anyone]")
 		searchTabAlfheim = loadProp(CATEGORY_GENERAL, "searchTabAlfheim", searchTabAlfheim, false, "Set this to false to disable searchbar in Alfheim Tab")
 		searchTabBotania = loadProp(CATEGORY_GENERAL, "searchTabBotania", searchTabBotania, false, "Set this to false to disable searchbar in Botania Tab")

@@ -13,7 +13,7 @@ object SpellWindBlades: SpellBase("windblades", EnumRace.SYLPH, 8000, 120, 10) {
 	override var efficiency = 1.0
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, efficiency)
+		get() = arrayOf<Number>(damage, duration, efficiency)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCastOver(caster)

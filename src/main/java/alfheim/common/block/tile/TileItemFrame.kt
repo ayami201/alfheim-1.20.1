@@ -43,6 +43,7 @@ class TileItemFrame: ASJTile() {
 			frame.item?.writeToNBT(item)
 			nbt.setTag("item$id", item)
 			nbt.setInteger("rotation$id", frame.rotation)
+			nbt.setBoolean("invis$id", frame.invis)
 		}
 	}
 	
@@ -54,16 +55,11 @@ class TileItemFrame: ASJTile() {
 				continue
 			}
 			
-			frames[id] = Frame()
-			
-			val item = nbt.getCompoundTag("item$id")
-			frames[id]!!.item = ItemStack.loadItemStackFromNBT(item)
-			frames[id]!!.rotation = nbt.getInteger("rotation$id")
+			frames[id] = Frame(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("item$id")), nbt.getInteger("rotation$id"), nbt.getBoolean("invis$id"))
 		}
 	}
 }
 
-class Frame {
-	var item: ItemStack? = null
-	var rotation = 0
+class Frame(var item: ItemStack?, var rotation: Int, var invis: Boolean) {
+	constructor(): this(null, 0, false)
 }

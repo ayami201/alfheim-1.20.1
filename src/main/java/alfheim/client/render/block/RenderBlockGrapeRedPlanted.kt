@@ -45,7 +45,6 @@ object RenderBlockGrapeRedPlanted: ISimpleBlockRenderingHandler {
 			renderer.renderStandardBlock(fence, x, y, z)
 		}
 		
-		var flag = true
 		var flag1 = false
 		var flag2 = false
 		if (fence.canConnectFenceTo(world, x - 1, y, z) || fence.canConnectFenceTo(world, x + 1, y, z)) flag1 = true
@@ -67,28 +66,25 @@ object RenderBlockGrapeRedPlanted: ISimpleBlockRenderingHandler {
 		if (flag1) {
 			renderer.setRenderBounds(f4, f2, f, f5, f3, f1)
 			renderer.renderStandardBlock(fence, x, y, z)
-			flag = true
 		}
 		if (flag2) {
 			renderer.setRenderBounds(f, f2, f6, f1, f3, f7)
 			renderer.renderStandardBlock(fence, x, y, z)
-			flag = true
 		}
 		f2 = 0.375
 		f3 = 0.5625
 		if (flag1) {
 			renderer.setRenderBounds(f4, f2, f, f5, f3, f1)
 			renderer.renderStandardBlock(fence, x, y, z)
-			flag = true
 		}
 		if (flag2) {
 			renderer.setRenderBounds(f, f2, f6, f1, f3, f7)
 			renderer.renderStandardBlock(fence, x, y, z)
-			flag = true
 		}
 		renderer.field_152631_f = false
 		fence.setBlockBoundsBasedOnState(world, x, y, z)
-		return flag
+		
+		return true
 	}
 	
 	override fun renderInventoryBlock(block: Block?, metadata: Int, modelId: Int, renderer: RenderBlocks?) = Unit

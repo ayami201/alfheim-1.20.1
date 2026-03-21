@@ -522,12 +522,12 @@ object AlfheimRegistry {
 			AlfheimAPI.addOreWeightEnd(name, weight.toInt())
 		}
 		
-		AlfheimAPI.addOreWeightAlfheim("oreDragonstone", 2167)
-		AlfheimAPI.addOreWeightAlfheim("oreElementium", 6686)
-		AlfheimAPI.addOreWeightAlfheim("oreQuartzElven", 2218)
-		AlfheimAPI.addOreWeightAlfheim("oreGoldAlfheim", 3658)
-		AlfheimAPI.addOreWeightAlfheim("oreIffesal", 181)
-		AlfheimAPI.addOreWeightAlfheim("oreLapisAlfheim", 1153)
+		AlfheimAPI.addOreWeightAlfheim("oreDragonstone", 940)
+		AlfheimAPI.addOreWeightAlfheim("oreElementium", 35230)
+		AlfheimAPI.addOreWeightAlfheim("oreQuartzElven", 33307)
+		AlfheimAPI.addOreWeightAlfheim("oreGoldAlfheim", 1755)
+		AlfheimAPI.addOreWeightAlfheim("oreIffesal", 232)
+		AlfheimAPI.addOreWeightAlfheim("oreLapisAlfheim", 5480)
 		
 //		// Vanilla
 //		AlfheimAPI.addOreWeightEnd("oreEndCoal", 9000)

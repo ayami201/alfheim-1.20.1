@@ -14,7 +14,7 @@ object SpellVoodooDoll: SpellBase("voodooDoll", EnumRace.IMP, 2500, 20, 1) {
 	override var duration = 1200
 	
 	override val usableParams
-		get() = arrayOf(duration, damage)
+		get() = arrayOf<Number>(duration, damage)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		if (caster !is EntityPlayer) return SpellCastResult.NOTALLOW

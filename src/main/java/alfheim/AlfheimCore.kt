@@ -31,7 +31,7 @@ object AlfheimCore {
 	@Metadata(MODID)
 	lateinit var meta: ModMetadata
 	
-	val save get() = MinecraftServer.getServer().entityWorld.saveHandler.worldDirectory.absolutePath
+	val save: String get() = MinecraftServer.getServer().entityWorld.saveHandler.worldDirectory.absolutePath
 	
 	var MineTweakerLoaded = false
 	var NEILoaded = false
