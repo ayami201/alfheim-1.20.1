@@ -105,7 +105,7 @@ class BlockNiflheimPortal: BlockFluidClassic(niflheimPortalFluid, Material.water
 	companion object {
 		
 		var lastAudioTick = 0L
-		val niflheimPortalFluid: Fluid? = Fluid("niflheimportal").setDensity(10).setLuminosity(5).setTemperature(0).setViscosity(0).setGaseous(true).setRarity(EnumRarity.epic).apply { FluidRegistry.registerFluid(this) }
+		val niflheimPortalFluid = Fluid("niflheimportal").setDensity(10).setLuminosity(5).setTemperature(0).setViscosity(0).setGaseous(true).setRarity(EnumRarity.epic).apply { FluidRegistry.registerFluid(this) }!!
 		
 		init {
 			eventForge().eventFML()

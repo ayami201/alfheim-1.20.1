@@ -505,7 +505,7 @@ object VisualEffectHandlerClient {
 		}
 	}
 	
-	private fun randomVec(length: Double): Vector3 {
+	private fun randomVec(length: Double): Bector3 {
 		val vec = Bector3(0.0, Math.random() * length, 0.0)
 		vec.rotate(Math.random() * Math.PI * 2, Bector3(1.0, 0.0, 0.0))
 		vec.rotate(Math.random() * Math.PI * 2, Bector3(0.0, 0.0, 1.0))
