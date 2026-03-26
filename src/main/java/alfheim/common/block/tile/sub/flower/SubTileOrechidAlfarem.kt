@@ -18,7 +18,7 @@ class SubTileOrechidAlfarem: SubTileOrechid() {
 	
 	override fun getOreMap() = AlfheimAPI.oreWeightsAlfheim
 	
-	override fun getSourceBlock() = ModBlocks.livingrock
+	override fun getSourceBlock() = ModBlocks.livingrock!!
 	
 	override fun getCost() = COST
 	

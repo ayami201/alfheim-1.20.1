@@ -27,5 +27,5 @@ class BlockDirtDissolvable: BlockMod(Material.ground) {
 	override fun getItemDropped(meta: Int, rand: Random, fortune: Int) = null
 	override fun quantityDropped(rand: Random?) = 0
 	override fun registerBlockIcons(reg: IIconRegister) = Unit
-	override fun getIcon(side: Int, meta: Int) = Blocks.dirt.getIcon(0, 0)
+	override fun getIcon(side: Int, meta: Int) = Blocks.dirt.getIcon(0, 0)!!
 }

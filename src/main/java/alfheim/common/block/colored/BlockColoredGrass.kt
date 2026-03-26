@@ -25,7 +25,7 @@ class BlockColoredGrass: BlockTallGrass(), ILexiconable {
 	init {
 		setBlockName("irisGrass")
 		setCreativeTab(AlfheimTab)
-		setStepSound(Block.soundTypeGrass)
+		setStepSound(soundTypeGrass)
 	}
 	
 	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, remote: Boolean) = true

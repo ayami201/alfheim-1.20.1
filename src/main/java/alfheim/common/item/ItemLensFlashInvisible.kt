@@ -88,9 +88,9 @@ class ItemLensFlashInvisible: ItemMod("lensPhantomLight"), ICompositableLens {
 	}
 	
 	override fun collideBurst(burst: IManaBurst?, pos: MovingObjectPosition?, isManaBlock: Boolean, dead: Boolean, p4: ItemStack?): Boolean {
-		val entity: EntityThrowable? = burst as EntityThrowable
+		val entity = burst as EntityThrowable
 		
-		if (pos != null && entity != null) {
+		if (pos != null) {
 			val coords = burst.burstSourceChunkCoordinates
 			
 			if ((coords.posX != pos.blockX || coords.posY != pos.blockY || coords.posZ != pos.blockZ) && !burst.isFake && !isManaBlock) {

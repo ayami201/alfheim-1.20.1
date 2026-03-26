@@ -79,7 +79,7 @@ class BlockShimmerQuartzStairs(val block: BlockShimmerQuartz): BlockSpecialQuart
 		setCreativeTab(AlfheimTab)
 	}
 	
-	override fun setBlockName(par1Str: String): Block? {
+	override fun setBlockName(par1Str: String): Block {
 		GameRegistry.registerBlock(this, ItemBlockLeavesMod::class.java, par1Str)
 		unlocName = "tile.$par1Str"
 		return this

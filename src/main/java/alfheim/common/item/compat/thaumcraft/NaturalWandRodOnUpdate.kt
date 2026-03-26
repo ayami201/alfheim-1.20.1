@@ -11,7 +11,7 @@ import vazkii.botania.api.mana.ManaItemHandler
 object NaturalWandRodOnUpdate: IWandRodOnUpdate {
 	
 	const val COST = 100
-	val primals = Aspect.getPrimalAspects()
+	val primals = Aspect.getPrimalAspects()!!
 	
 	override fun onUpdate(stack: ItemStack, player: EntityPlayer) {
 		if (player.ticksExisted % 20 != 0) return

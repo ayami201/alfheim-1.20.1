@@ -71,7 +71,7 @@ class ItemWireAxe(val name: String = "axeRevelation", val toolMaterial: ToolMate
 	
 	override fun onUpdate(stack: ItemStack, world: World, player: Entity, par4: Int, par5: Boolean) {
 		if (!world.isRemote && player is EntityPlayer && stack.meta > 0 && ManaItemHandler.requestManaExactForTool(stack, player, getManaPerDamage() * 2, true))
-			stack.meta = stack.meta - 1
+			stack.meta -= 1
 	}
 	
 	override fun usesMana(stack: ItemStack) = true
@@ -134,7 +134,7 @@ class ItemWireAxe(val name: String = "axeRevelation", val toolMaterial: ToolMate
 	
 	override fun getAttributeModifiers(stack: ItemStack): Multimap<Any, Any> {
 		val multimap = HashMultimap.create<Any, Any>()
-		multimap.put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(Item.field_111210_e, "Weapon modifier", toolMaterial.damageVsEntity.D, 0))
+		multimap.put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(field_111210_e, "Weapon modifier", toolMaterial.damageVsEntity.D, 0))
 		multimap.put(godSlayingDamage.attributeUnlocalizedName, AttributeModifier(godUUID, "Weapon modifier", slayerDamage, 0))
 		return multimap
 	}

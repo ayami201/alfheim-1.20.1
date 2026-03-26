@@ -1,5 +1,3 @@
-@file:Suppress("UNUSED_PARAMETER")
-
 package alfheim.common.core.asm.superwrapper
 
 import com.KAIIIAK.superwrapper.SuperWrapper

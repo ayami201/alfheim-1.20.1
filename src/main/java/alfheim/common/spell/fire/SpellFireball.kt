@@ -18,7 +18,7 @@ object SpellFireball: SpellBase("fireball", EnumRace.SALAMANDER, 1000, 50, 5) {
 	override var radius = 2.0 // AoE
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, efficiency, radius)
+		get() = arrayOf<Number>(damage, duration, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val target = (caster as? EntityPlayer)?.let { CardinalSystem.TargetingSystem.getTarget(it) }?.let { if (it.isParty) null else it.target }

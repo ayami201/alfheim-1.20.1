@@ -113,21 +113,21 @@ class SubTileRattlerose: SubTileGenerating() {
 		}
 		
 		val tailMeta =
-						if (dir == NORTH && prevDir == NORTH) 4 else
-						if (dir == SOUTH && prevDir == SOUTH) 5 else
-						if (dir == WEST && prevDir == WEST) 6 else
-						if (dir == EAST && prevDir == EAST) 7 else
-						
-						if (dir == WEST && prevDir == SOUTH) 8 else
-						if (dir == WEST && prevDir == NORTH) 9 else
-						if (dir == SOUTH && prevDir == EAST) 12 else
-						if (dir == SOUTH && prevDir == WEST) 10 else
-						if (dir == EAST && prevDir == NORTH) 13 else
-						if (dir == EAST && prevDir == SOUTH) 11 else
-						if (dir == NORTH && prevDir == WEST) 14 else
-						if (dir == NORTH && prevDir == EAST) 15 else
-						
-						4
+			when (dir) {
+				NORTH if prevDir == NORTH -> 4
+				SOUTH if prevDir == SOUTH -> 5
+				WEST  if prevDir == WEST  -> 6
+				EAST  if prevDir == EAST  -> 7
+				WEST  if prevDir == SOUTH -> 8
+				WEST  if prevDir == NORTH -> 9
+				SOUTH if prevDir == EAST  -> 12
+				SOUTH if prevDir == WEST  -> 10
+				EAST  if prevDir == NORTH -> 13
+				EAST  if prevDir == SOUTH -> 11
+				NORTH if prevDir == WEST  -> 14
+				NORTH if prevDir == EAST  -> 15
+				else                      -> 4
+			}
 		tryToReplaceBlock(_x + curHead.first, _y, _z + curHead.second, snakeBlock, tailMeta)
 		tryToReplaceBlock(_x + newHead.first, _y, _z + newHead.second, snakeBlock, dir.ordinal - 2)
 		
@@ -164,7 +164,7 @@ class SubTileRattlerose: SubTileGenerating() {
 	
 	private fun isCollision(): Boolean {
 		val head = snake.first()
-		if (head.first < 0 || head.first >= RANGE || head.second < 0 || head.second >= RANGE) return true
+		if (head.first !in 0..<RANGE || head.second < 0 || head.second >= RANGE) return true
 		val body = snake.subList(1, snake.size)
 		return body.contains(head)
 	}

@@ -3,6 +3,7 @@ package alfheim.common.core.asm.hook.extender
 import alexsocol.asjlib.*
 import alfheim.api.lib.LibResourceLocations
 import alfheim.common.block.AlfheimBlocks
+import alfheim.common.compat.AngelicaCompat
 import gloomyfolken.hooklib.asm.*
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.entity.RenderItem
@@ -13,7 +14,6 @@ import net.minecraft.inventory.*
 import net.minecraft.item.ItemStack
 import net.minecraft.util.StatCollector
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
-import org.lwjgl.opengl.GL11
 import vazkii.botania.client.gui.SlotLocked
 import vazkii.botania.client.gui.bag.*
 import vazkii.botania.common.block.ModBlocks
@@ -105,11 +105,11 @@ object FlowerBagExtender {
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
 	fun drawGuiContainerBackgroundLayer(gui: GuiFlowerBag, ticks: Float, mouseX: Int, mouseY: Int) {
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f)
+		AngelicaCompat.glColor4f(1f, 1f, 1f, 1f)
 		mc.textureManager.bindTexture(LibResourceLocations.flowerBagExtended)
 		val k = (gui.width - gui.xSize) / 2
 		val l = (gui.height - gui.ySize) / 2
-		gui.drawTexturedModalRect(k, l, 0, 0, gui.xSize, gui.ySize + 18 * 3)
+		gui.drawTexturedModalRect(k, l, 0, 0, gui.xSize, gui.ySize)
 		val slotList = gui.inventorySlots.inventorySlots
 		
 		for (slot in slotList) {

@@ -13,5 +13,5 @@ class TileFloodLight: ASJTile() {
 	}
 	
 	override fun getMaxRenderDistanceSquared() = 65536.0
-	override fun getRenderBoundingBox() = INFINITE_EXTENT_AABB
+	override fun getRenderBoundingBox() = INFINITE_EXTENT_AABB!!
 }

@@ -1,7 +1,6 @@
 package alfheim.common.item.compat.thaumcraft
 
-import alexsocol.asjlib.meta
-import alexsocol.asjlib.safeGet
+import alexsocol.asjlib.*
 import alfheim.common.integration.thaumcraft.ThaumcraftAlfheimModule
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.texture.IIconRegister

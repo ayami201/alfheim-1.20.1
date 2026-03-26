@@ -149,6 +149,7 @@ class TileManaTuner: TileSimpleInventory(), IManaReceiver {
 
 	override fun getRenderBoundingBox() = boundingBox(1)
 	
+	@Suppress("EmptyRange") // ты сука шлюха тупая проститутка блядота ебота здохни нахуй уёбище
 	fun renderHUD(mc: Minecraft, res: ScaledResolution) {
 		val xc = res.scaledWidth / 2
 		val yc = res.scaledHeight / 2

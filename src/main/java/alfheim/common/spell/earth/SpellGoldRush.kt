@@ -16,7 +16,7 @@ object SpellGoldRush: SpellBase("goldrush", EnumRace.GNOME, 7000, 3000, 30) {
 	override var efficiency = 2.0
 	
 	override val usableParams
-		get() = arrayOf(duration, efficiency)
+		get() = arrayOf<Number>(duration, efficiency)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val pt = (if (caster is EntityPlayer) PartySystem.getParty(caster) else PartySystem.getMobParty(caster)) ?: return SpellCastResult.NOTARGET

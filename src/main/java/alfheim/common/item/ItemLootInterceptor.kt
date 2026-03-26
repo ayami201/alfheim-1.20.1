@@ -61,7 +61,7 @@ class ItemLootInterceptor: ItemMod("LootInterceptor"), IManaItem, IManaTooltipDi
 		iconActive = IconHelper.forItem(reg, this, "Active")
 	}
 	
-	override fun getIconFromDamage(meta: Int) = if (meta == 1) iconActive else itemIcon
+	override fun getIconFromDamage(meta: Int) = (if (meta == 1) iconActive else itemIcon)!!
 	override fun getManaFractionForDisplay(stack: ItemStack) = getMana(stack).F / getMaxMana(stack).F
 	override fun getMana(stack: ItemStack) = getInt(stack, TAG_MANA, 0)
 	override fun getMaxMana(stack: ItemStack) = 1000000

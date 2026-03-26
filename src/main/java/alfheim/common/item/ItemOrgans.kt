@@ -6,7 +6,7 @@ import alexsocol.asjlib.ItemNBTHelper.setInt
 import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.ModInfo
 import alfheim.client.core.helper.IconHelper
-import alfheim.client.gui.*
+import alfheim.client.gui.PartyGuiRenderEvent
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.core.helper.*
 import alfheim.common.network.NetworkService

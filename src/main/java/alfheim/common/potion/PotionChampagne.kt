@@ -11,7 +11,7 @@ object PotionChampagne: PotionAlfheim(AlfheimConfigHandler.potionIDChampagne, "c
 	
 	override fun performEffect(target: EntityLivingBase, amp: Int) {
 		target.activePotionEffects.iterator().onEach { it as PotionEffect
-			if (!Potion.potionTypes[it.potionID].isBadEffect) return@onEach
+			if (!potionTypes[it.potionID].isBadEffect) return@onEach
 			
 			remove()
 			target.onFinishedPotionEffect(it)

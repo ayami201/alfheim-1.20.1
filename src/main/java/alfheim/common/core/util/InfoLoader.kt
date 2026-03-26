@@ -1,6 +1,6 @@
 package alfheim.common.core.util
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.ASJUtilities
 import alfheim.AlfheimCore
 import alfheim.api.ModInfo
 import net.minecraft.util.StatCollector

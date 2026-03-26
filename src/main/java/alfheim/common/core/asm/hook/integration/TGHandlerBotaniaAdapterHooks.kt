@@ -13,7 +13,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent
 import travellersgear.api.TravellersGearAPI
 import vazkii.botania.common.item.equipment.bauble.*
 
-@Suppress("unused", "UNUSED_PARAMETER")
+@Suppress("UNUSED_PARAMETER")
 object TGHandlerBotaniaAdapterHooks {
 	
 	@JvmStatic

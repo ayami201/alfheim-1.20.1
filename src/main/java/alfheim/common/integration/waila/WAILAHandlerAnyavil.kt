@@ -11,7 +11,7 @@ import net.minecraft.world.World
 
 object WAILAHandlerAnyavil: IWailaDataProvider {
 	
-	private val TAG_ITEM = "waila:item"
+	private const val TAG_ITEM = "waila:item"
 	
 	override fun getNBTData(player: EntityPlayerMP, tile: TileEntity, result: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound {
 		if (tile is TileAnyavil) {

@@ -25,6 +25,7 @@ import net.minecraft.init.*
 import net.minecraft.item.EnumRarity
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ChunkCoordinates
+import net.minecraft.util.IIcon
 import net.minecraft.world.*
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.event.entity.player.FillBucketEvent
@@ -99,12 +100,12 @@ class BlockNiflheimPortal: BlockFluidClassic(niflheimPortalFluid, Material.water
 	}
 	
 	@SideOnly(Side.CLIENT)
-	override fun getIcon(side: Int, meta: Int) = if (side < 2) definedFluid.stillIcon else definedFluid.flowingIcon
+	override fun getIcon(side: Int, meta: Int): IIcon? = if (side < 2) definedFluid.stillIcon else definedFluid.flowingIcon
 	
 	companion object {
 		
 		var lastAudioTick = 0L
-		val niflheimPortalFluid = Fluid("niflheimportal").setDensity(10).setLuminosity(5).setTemperature(0).setViscosity(0).setGaseous(true).setRarity(EnumRarity.epic).apply { FluidRegistry.registerFluid(this) }
+		val niflheimPortalFluid = Fluid("niflheimportal").setDensity(10).setLuminosity(5).setTemperature(0).setViscosity(0).setGaseous(true).setRarity(EnumRarity.epic).apply { FluidRegistry.registerFluid(this) }!!
 		
 		init {
 			eventForge().eventFML()

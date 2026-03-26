@@ -34,6 +34,7 @@ class ItemGaiaSlayer: ItemMod("GaiaSlayer") {
 		return super.hitEntity(stack, target, attacker)
 	}
 	
+	@Suppress("UNCHECKED_CAST")
 	override fun getAttributeModifiers(stack: ItemStack): Multimap<String, AttributeModifier> {
 		val multimap = super.getAttributeModifiers(stack) as Multimap<String, AttributeModifier>
 		multimap.put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(field_111210_e, "Weapon modifier", Int.MAX_VALUE.D, 0))

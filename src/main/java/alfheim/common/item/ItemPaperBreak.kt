@@ -8,7 +8,7 @@ import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.*
+import net.minecraft.util.IIcon
 import net.minecraft.world.World
 import vazkii.botania.common.core.helper.ItemNBTHelper.getCompound
 
@@ -35,7 +35,7 @@ class ItemPaperBreak: ItemMod("PaperBreak") {
 		val pt = PartySystem.getParty(player)
 		val pl = pt.pl
 		val flag1 = name != null && name.isNotEmpty()
-		val flag2 = flag1 && name!!.equals(player.commandSenderName, ignoreCase = true)
+		val flag2 = flag1 && name.equals(player.commandSenderName, ignoreCase = true)
 		
 		if (player != pl && !flag2) {
 			ASJUtilities.say(player, "alfheimmisc.party.notpl")

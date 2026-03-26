@@ -64,7 +64,6 @@ import net.aetherteam.aether.AetherConfig as AetherIIConfig
 import thaumcraft.common.config.Config as ThaumcraftConfig
 import thebetweenlands.utils.confighandler.ConfigHandler as BetweenlandsConfig
 
-@Suppress("UNUSED_PARAMETER")
 object RagnarokHandler {
 	
 	var canKillThrym = false
@@ -399,42 +398,46 @@ object RagnarokHandler {
 		
 		val powerToBlock: Int
 		
-		if (priest is EntityPlayer) {
-			val emblemLight = ItemPriestEmblem.getEmblem(-1, priest) ?: return
-			
-			when (emblemLight.item) {
-				AlfheimItems.priestEmblem -> {
-					priest.timesDied++
-					if (cantConsume) return
+		when (priest) {
+			is EntityPlayer                                           -> {
+				val emblemLight = ItemPriestEmblem.getEmblem(-1, priest) ?: return
+				
+				when (emblemLight.item) {
+					AlfheimItems.priestEmblem -> {
+						priest.timesDied++
+						if (cantConsume) return
+						
+						powerToBlock = emblemLight.meta
+						arr[emblemLight.meta] = 1
+					}
 					
-					powerToBlock = emblemLight.meta
-					arr[emblemLight.meta] = 1
+					AlfheimItems.aesirEmblem  -> {
+						priest.timesDied++
+						if (cantConsume) return
+						val id = arr.indexOfFirst { it < 1 }
+						if (id == -1) return
+						
+						arr[id] = 1
+						powerToBlock = id
+					}
+					
+					else                      -> return
 				}
 				
-				AlfheimItems.aesirEmblem  -> {
-					priest.timesDied++
-					if (cantConsume) return
-					
-					val id = arr.indexOfFirst { it < 1 }
-					if (id == -1) return
-					
-					arr[id] = 1
-					powerToBlock = id
-				}
-				
-				else                      -> return
+				PlayerHandler.getPlayerBaubles(priest)[0] = null
 			}
 			
-			PlayerHandler.getPlayerBaubles(priest)[0] = null
-		} else if (priest is EntityElf && priest.job == EntityElf.EnumElfJob.PRIEST) {
-			if (priest.entityData.getBoolean(ItemSoulSword.TAG_WONT_DROP_SOUL) || cantConsume) return
+			is EntityElf if priest.job == EntityElf.EnumElfJob.PRIEST -> {
+				if (priest.entityData.getBoolean(ItemSoulSword.TAG_WONT_DROP_SOUL) || cantConsume) return
+				val meta = priest.jobSubrole
+				if (meta == -1 || arr[meta] > 0) return
+				arr[meta] = 1
+				powerToBlock = meta
+			}
 			
-			val meta = priest.jobSubrole
-			if (meta == -1 || arr[meta] > 0) return
-			arr[meta] = 1
-			powerToBlock = meta
-		} else {
-			return
+			else                                                      -> {
+				return
+			}
 		}
 		
 		ItemNBTHelper.setByteArray(emblemDark, ItemRagnarokEmblem.TAG_CONSUMED, arr)
@@ -770,8 +773,7 @@ object RagnarokHandler {
 			val twillightForestID = if (AlfheimCore.TwilightForestLoaded) TwilightForestMod.dimensionID else null
 			
 			fun getWorldAffectionLevel(world: World): WorldAffectionLevel {
-				val dimensionId: Int?
-				dimensionId = world.provider.dimensionId
+				val dimensionId = world.provider.dimensionId
 				
 				if (AlfheimConfigHandler.imPatheticWeakAndScaredDontTouchMyWorlds) return if (dimensionId == AlfheimConfigHandler.dimensionIDAlfheim) ALL else NONE
 				
@@ -996,7 +998,7 @@ object RagnarokHandler {
 		
 		val target = e.entityLiving
 		if (target.dimension != AlfheimConfigHandler.dimensionIDAlfheim) return
-		if (winter && target is INiflheimEntity || summer && target is IMuspelheimEntity) return
+		if (winter && INiflheimEntity.checkProtection(target, 1) || summer && IMuspelheimEntity.checkProtection(target, 1)) return
 		
 		val (x, y, z) = Vector3.fromEntity(target).mf()
 		val onAir = target.worldObj.getPrecipitationHeight(x, z) <= y

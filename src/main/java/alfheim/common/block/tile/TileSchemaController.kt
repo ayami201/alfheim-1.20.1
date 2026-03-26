@@ -368,9 +368,9 @@ open class TileSchemaController: TileEntity() {
 					worldObj.getTileEntity(x, y, z)?.let {
 						nbt = NBTTagCompound()
 						it.writeToNBT(nbt)
-						nbt!!.removeTag("x")
-						nbt!!.removeTag("y")
-						nbt!!.removeTag("z")
+						nbt.removeTag("x")
+						nbt.removeTag("y")
+						nbt.removeTag("z")
 					}
 					
 					if (map.containsKey(key))

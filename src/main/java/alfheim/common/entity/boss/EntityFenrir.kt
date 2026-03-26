@@ -442,21 +442,6 @@ class EntityFenrir(world: World): EntityCreature(world), IBotaniaBossWithName, I
 	
 	// ######################################################### RENDER ########################################################
 	
-	@SideOnly(Side.CLIENT)
-	fun getWolfShaking() = isDripping
-	
-	/**
-	 * Used when calculating the amount of shading to apply while the wolf is shaking.
-	 */
-	@SideOnly(Side.CLIENT)
-	fun getShadingWhileShaking(ticks: Float) = 0.75f + (prevTimeWolfShaking + (timeWolfShaking - prevTimeWolfShaking) * ticks) / 2f * 0.25f
-	
-	@SideOnly(Side.CLIENT)
-	fun getShakeAngle(ticks: Float, phase: Float): Float {
-		val f2 = max(0f, min(1f, (prevTimeWolfShaking + (timeWolfShaking - prevTimeWolfShaking) * ticks + phase) / 1.8f))
-		return MathHelper.sin(f2 * Math.PI.F) * MathHelper.sin(f2 * Math.PI.F * 11f) * 0.15f * Math.PI.F
-	}
-	
 	override fun getEyeHeight() = height * 0.8f
 	
 	@SideOnly(Side.CLIENT)

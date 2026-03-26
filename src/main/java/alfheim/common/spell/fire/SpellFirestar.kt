@@ -16,7 +16,7 @@ object SpellFirestar: SpellBase("firestar", EnumRace.SALAMANDER, 6000, 400, 1) {
 	override var radius = 8.0
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, efficiency, radius)
+		get() = arrayOf<Number>(damage, duration, efficiency, radius)
 	
 	var canDelete = false
 	

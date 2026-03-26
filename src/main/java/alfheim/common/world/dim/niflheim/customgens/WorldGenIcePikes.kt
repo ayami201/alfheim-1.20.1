@@ -53,8 +53,7 @@ object WorldGenIcePikes {
 		}
 		j1 = i1 - 1
 		
-		if (j1 < 0) j1 = 0
-		else if (j1 > 1) j1 = 1
+		if (j1 > 1) j1 = 1
 		
 		for (j2 in -j1..j1) {
 			k1 = -j1

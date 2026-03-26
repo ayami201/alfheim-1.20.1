@@ -16,8 +16,8 @@ object YggWandRodOnUpdate: IWandRodOnUpdate {
 	
 	const val COST = 100
 	
-	val primals = Aspect.getPrimalAspects()
-	val forHealing = AspectList().add(Aspect.WATER, 100).add(Aspect.EARTH, 100).add(Aspect.ORDER, 100)
+	val primals = Aspect.getPrimalAspects()!!
+	val forHealing = AspectList().add(Aspect.WATER, 100).add(Aspect.EARTH, 100).add(Aspect.ORDER, 100)!!
 	
 	override fun onUpdate(stack: ItemStack, player: EntityPlayer) {
 		if (player is EntityPlayerMP && player.ticksExisted % 1200 == 0 && player.rng.nextInt(10) == 0) {

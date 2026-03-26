@@ -2882,8 +2882,8 @@ object AlfheimRecipes {
 	
 	private fun registerTuning() {
 		IncantationEquipmentElementalTuning(ElementalDamage.FIRE.name,		"o ken e ni: kon seli li kama jo e tomo lon insa ijo")
-		IncantationEquipmentElementalTuning(ElementalDamage.WATER.name,		"telo tawa o tawa insa ijo ni")
-		IncantationEquipmentElementalTuning(ElementalDamage.AIR.name,		"kon pi musi sike o sike o awen lon ijo ni")
+		IncantationEquipmentElementalTuning(ElementalDamage.WATER.name,		"ijo ni o kama poki telo")
+		IncantationEquipmentElementalTuning(ElementalDamage.AIR.name,		"kon pi sike musi o sike o awen lon ijo ni")
 		IncantationEquipmentElementalTuning(ElementalDamage.EARTH.name,		"o wan e ijo ni e wawa pi kiwen ali")
 		IncantationEquipmentElementalTuning(ElementalDamage.ICE.name,		"o lete e ijo ni kepeken kon lete sina")
 		IncantationEquipmentElementalTuning(ElementalDamage.ELECTRIC.name,	"o wawa e ijo ni kepeken wawa pi sewi Tola")
@@ -2905,7 +2905,7 @@ object AlfheimRecipes {
 		}
 		
 		
-		tuningResonatorDillation = AlfheimAPI.registerIncantation<ItemStack>("o ken e ni: ilo ni li pana e ijo pakala mute mute a") {
+		tuningResonatorDillation = AlfheimAPI.registerIncantation<ItemStack>("o ante e tenpo pali pi ilo ni") {
 			if (it.item !== resonator || it.dilated) return@registerIncantation false
 			it.dilated = true
 			true
@@ -2917,7 +2917,7 @@ object AlfheimRecipes {
 			true
 		}
 		
-		tuningResonatorUnlimit = AlfheimAPI.registerIncantation<ItemStack>("o ante e tenpo pali pi ilo ni") {
+		tuningResonatorUnlimit = AlfheimAPI.registerIncantation<ItemStack>("o ken e ni: ilo ni li pana e ijo pakala mute mute a") {
 			if (it.item !== resonator || it.unlimited) return@registerIncantation false
 			it.unlimited = true
 			true
@@ -2947,7 +2947,7 @@ object AlfheimRecipes {
 			registerItemCraftTuning("kasi kiwen pi kili loje o kama jo e kasi linja",	ItemStack(tunedSapling, 1, 4), ItemStack(sapling)),
 			registerItemCraftTuning("kasi kiwen pi linja mute laso o kama suli",		ItemStack(tunedSapling, 1, 5), ItemStack(sapling, 1, 1)),
 			registerItemCraftTuning("kasi kiwen pimeja pi kili loje o kama lili",		ItemStack(tunedSapling, 1, 6), ItemStack(sapling, 1, 5)),
-			registerItemCraftTuning("kasi kiwen pi kili loje o kama linja mute",		ItemStack(tunedSapling, 1, 7), ItemStack(sapling)),
+			registerItemCraftTuning("kasi kiwen pi kili loje o kama jo e luka mute",	ItemStack(tunedSapling, 1, 7), ItemStack(sapling)),
 		)
 		
 		AlfheimAPI.registerIncantation<EntityOcelot>("oiiaiuiiiiai") { it.entityData.setBoolean(AlfheimHookHandler.TAG_OIIA, true); true }
@@ -2997,23 +2997,23 @@ object AlfheimRecipes {
 		tuningAkashicRecords	= registerItemCraftTuning("lipu pi sona ali",								akashicRecords,		shimmerrock, book, bookshelf, monocle, lexicon, RUNE[11])
 		tuningDaolos			= registerItemCraftTuning("ilo utala alasa telo",							daolos,				manasteelAxe, MUSPELHEIM_ESSENCE, water_bucket, JellyBottle.stack, fish, RUNE[0], RUNE[3])
 		tuningExcaliber			= registerItemCraftTuning("ilo utala sewi kiwen",							excaliber,			terraSword, MAUFTRIUM_NUGGET, smiteSword, GLOWSTONE_DUST, ItemStack(shrineLight, 1, 4), diceStack.copy())
-		tuningFlugelEye			= registerItemCraftTuning("oko pi ilo sewi jan. ilo ni li moli e sewi",		flugelEye,			ender_eye, RUNE[8], diceStack.copy(), ender_pearl, worldSeed, PIXIE_DUST)
-		tuningFlugelSoul		= registerItemCraftTuning("kon pi ilo sewi jan. ilo ni li moli e sewi",		flugelSoul,			ItemStack(manaResource, 1, 5), *Array(8) { LIFE_ESSENCE }, *Array(8) { RUNE[it + 8] })
+		tuningFlugelEye			= registerItemCraftTuning("oko pi ilo sewi ki moli e sewi a",	        	flugelEye,			ender_eye, RUNE[8], diceStack.copy(), ender_pearl, worldSeed, PIXIE_DUST)
+		tuningFlugelSoul		= registerItemCraftTuning("kon pi ilo sewi ki moli e sewi a",	        	flugelSoul,			ItemStack(manaResource, 1, 5), *Array(8) { LIFE_ESSENCE }, *Array(8) { RUNE[it + 8] })
 		tuningGjallarhorn		= registerItemCraftTuning("ilo kalama uta pi sewi Kejemetale",				gjallarhorn,		grassHorn, NIFLHEIM_ESSENCE, amplifier, RUNE[8], golden_horse_armor, skullPlacer)
-		tuningGleipnir			= registerItemCraftTuning("ilo linja ki ken awen e soweli suli",			gleipnir,			lead, amplifier, DasRheingold.stack, RUNE[2], FenrirFur.stack, fish, feather)
+		tuningGleipnir			= registerItemCraftTuning("ilo linja ki ken awen e soweli suli a",			gleipnir,			lead, amplifier, DasRheingold.stack, RUNE[2], FenrirFur.stack, fish, feather)
 		tuningGungnir			= registerItemCraftTuning("ilo palisa utala pi sewi Oten",					gungnir,			manaGun, FenrirFur.stack, arrow, ItemStack(ancientWill, 1, 4), ItemStack(lens, 1, SUPERCONDUCTOR.meta))
-		tuningHeimdallRing		= registerItemCraftTuning("sike pi palisa luka en pi sewi Kejemetale",		priestRingHeimdall,	pixieRing, MAUFTRIUM_NUGGET, RUNE[15], monocle, itemFinder, bifrostPerm, ender_eye)
-		tuningInfiniteFruit		= registerItemCraftTuning("kili pi sewi Sipe ki ken ala pini",				infiniteFruit,		golden_apple, RUNE[8], diceStack.copy(), manaCookie, manaBottle, RUNE[10])
+		tuningHeimdallRing		= registerItemCraftTuning("sike pi palisa luka pi sewi Kejemetale",		    priestRingHeimdall,	pixieRing, MAUFTRIUM_NUGGET, RUNE[15], monocle, itemFinder, bifrostPerm, ender_eye)
+		tuningInfiniteFruit		= registerItemCraftTuning("kili ki ken ala pini a pi sewi Sipe",			infiniteFruit,		golden_apple, RUNE[8], diceStack.copy(), manaCookie, manaBottle, RUNE[10])
 		tuningKingKey			= registerItemCraftTuning("ilo open pi jan ki lawa e jan lawa mute",		kingKey,			missileRod, RUNE[8], diceStack.copy(), golden_axe, golden_hoe, golden_sword)
-		tuningLokiRing			= registerItemCraftTuning("sike pi palisa luka en pi sewi Loki",			lokiRing,			pixieRing, diceStack.copy(), RUNE[8], RUNE[1], enderHand, sextant)
+		tuningLokiRing			= registerItemCraftTuning("sike pi palisa luka pi sewi Loki",			    lokiRing,			pixieRing, diceStack.copy(), RUNE[8], RUNE[1], enderHand, sextant)
 		tuningMjolnir			= registerItemCraftTuning("ilo utala wawa pi sewi Tola",					mjolnir,			elvenChakram, NIFLHEIM_ESSENCE, RUNE[13], SPLINTERS_THUNDERWOOD, SPLINTERS_THUNDERWOOD, TWIG_THUNDERWOOD, teruTeruBozu)
-		tuningMoonlightBow		= registerItemCraftTuning("ilo alasa palisa pi sewi Pepa",					moonlightBow,		crystalBow, MAUFTRIUM_NUGGET, RUNE[8], RUNE[5], colorOverride, noteblock, QUARTZ[6])
-		tuningNjordRing			= registerItemCraftTuning("sike pi palisa luka en pi sewi Nijete",			priestRingNjord,	pixieRing, MAUFTRIUM_NUGGET, RUNE[0], RUNE[3], ItemStack(fish, 1, 3), overgrowthSeed)
-		tuningOdinRing			= registerItemCraftTuning("sike pi palisa luka en pi sewi Oten",			odinRing,			pixieRing, diceStack.copy(), spider_eye, magma_cream, RUNE[13])
-		tuningSifRing			= registerItemCraftTuning("sike pi palisa luka en pi sewi Sipe",			priestRingSif,		pixieRing, MAUFTRIUM_NUGGET, RUNE[5], RUNE[2], DasRheingold.stack, overgrowthSeed)
+		tuningMoonlightBow		= registerItemCraftTuning("ilo alasa palisa pi sewi Popepu",				moonlightBow,		crystalBow, MAUFTRIUM_NUGGET, RUNE[8], RUNE[5], colorOverride, noteblock, QUARTZ[6])
+		tuningNjordRing			= registerItemCraftTuning("sike pi palisa luka pi sewi Nijete",			    priestRingNjord,	pixieRing, MAUFTRIUM_NUGGET, RUNE[0], RUNE[3], ItemStack(fish, 1, 3), overgrowthSeed)
+		tuningOdinRing			= registerItemCraftTuning("sike pi palisa luka pi sewi Oten",			    odinRing,			pixieRing, diceStack.copy(), spider_eye, magma_cream, RUNE[13])
+		tuningSifRing			= registerItemCraftTuning("sike pi palisa luka pi sewi Sipe",			    priestRingSif,		pixieRing, MAUFTRIUM_NUGGET, RUNE[5], RUNE[2], DasRheingold.stack, overgrowthSeed)
 		tuningSpearSubspace		= registerItemCraftTuning("ilo palisa utala ki lon ma ali pi pilin ala",	subspaceSpear,		InfusedDreamwoodTwig.stack, RUNE[8], MUSPELHEIM_ESSENCE, subspacian, enlighter, manaBomb)
 		tuningTankMask			= registerItemCraftTuning("len kiwen nasa pi sinpin lawa",					mask,				ItemStack(cosmetic, 1, 22), MAUFTRIUM_NUGGET, SaveIvy.stack, leather_helmet, RUNE[13], manaVoid)
-		tuningThorRing			= registerItemCraftTuning("sike pi palisa luka en pi sewi Tola",			thorRing,			pixieRing, diceStack.copy(), TERRA_STEEL, temperanceStone, RUNE[13], TWIG_THUNDERWOOD)
+		tuningThorRing			= registerItemCraftTuning("sike pi palisa luka pi sewi Tola",			    thorRing,			pixieRing, diceStack.copy(), TERRA_STEEL, temperanceStone, RUNE[13], TWIG_THUNDERWOOD)
 	}
 	
 	private inline fun <reified T: EntityLivingBase> registerSlimeGrowthTune(item: Any): TunerIncantation<EntityLivingBase> {
@@ -3036,15 +3036,15 @@ object AlfheimRecipes {
 		true
 	}
 	
-	fun registerItemCraftTuning(incantation: String, result: Item, _core: Any, vararg inputs: Any) =
-		registerItemCraftTuning(incantation, ItemStack(result), _core, *inputs)
+	fun registerItemCraftTuning(incantation: String, result: Item, acore: Any, vararg inputs: Any) =
+		registerItemCraftTuning(incantation, ItemStack(result), acore, *inputs)
 	
-	fun registerItemCraftTuning(incantation: String, result: ItemStack, _core: Any, vararg inputs: Any): TunerIncantationIO {
-		val core = when (_core) {
-			is Block -> ItemStack(_core)
-			is Item -> ItemStack(_core)
-			is ItemStack -> _core
-			else -> throw IllegalArgumentException("Tuning core $_core of type ${_core::class.java.name} is unexpected")
+	fun registerItemCraftTuning(incantation: String, result: ItemStack, acore: Any, vararg inputs: Any): TunerIncantationIO {
+		val core = when (acore) {
+			is Block -> ItemStack(acore)
+			is Item -> ItemStack(acore)
+			is ItemStack -> acore
+			else -> throw IllegalArgumentException("Tuning core $acore of type ${acore::class.java.name} is unexpected")
 		}
 		
 		val tuning = AlfheimAPI.registerIncantation<ItemStack>(incantation, *inputs.map {

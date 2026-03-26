@@ -27,7 +27,7 @@ class BlockAlfheimPortal: BlockContainerMod(Material.wood), ILexiconable {
 		setBlockTextureName(ModInfo.MODID + ":AlfheimPortal")
 		setHardness(10f)
 		setResistance(600f)
-		setStepSound(Block.soundTypeWood)
+		setStepSound(soundTypeWood)
 	}
 	
 	override fun loadTextures(map: TextureMap) {

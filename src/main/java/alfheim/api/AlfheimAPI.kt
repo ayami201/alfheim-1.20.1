@@ -17,7 +17,6 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.common.util.EnumHelper
 import vazkii.botania.api.recipe.RecipeElvenTrade
-import kotlin.collections.set
 
 @Suppress("unused")
 object AlfheimAPI {

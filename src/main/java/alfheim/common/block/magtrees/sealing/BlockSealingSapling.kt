@@ -13,7 +13,7 @@ import net.minecraft.world.World
 class BlockSealingSapling: BlockColoredSapling("sealingSapling"), ISoundSilencer {
 	
 	init {
-		setStepSound(Block.soundTypeCloth)
+		setStepSound(soundTypeCloth)
 	}
 	
 	override fun getGenerator(meta: Int) = HeartWoodTreeGen(5, AlfheimBlocks.sealingWood, 0, AlfheimBlocks.sealingWood, 0, AlfheimBlocks.sealingLeaves, 0, AlfheimBlocks.sealingBerry)

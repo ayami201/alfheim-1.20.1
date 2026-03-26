@@ -25,7 +25,7 @@ class ItemBlockGrapeWhite(block: Block): ItemBlock(block) {
 		if (!player.canPlayerEdit(i, j, k, mop.sideHit, stack))
 			return stack
 		
-		if (!world.isAirBlock(i, j, k) || AlfheimBlocks.grapesWhite.canBlockStay(world, i, j, k))
+		if (!world.isAirBlock(i, j, k) || !AlfheimBlocks.grapesWhite.canBlockStay(world, i, j, k))
 			return stack
 		
 		val blocksnapshot = BlockSnapshot.getBlockSnapshot(world, i, j, k)

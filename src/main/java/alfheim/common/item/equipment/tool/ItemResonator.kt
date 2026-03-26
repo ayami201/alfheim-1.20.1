@@ -2,7 +2,7 @@ package alfheim.common.item.equipment.tool
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import alfheim.api.*
+import alfheim.api.AlfheimAPI
 import alfheim.api.event.PlayerInteractAdequateEvent
 import alfheim.client.core.helper.IconHelper
 import alfheim.client.gui.ItemsRemainingRenderHandler
@@ -108,7 +108,7 @@ class ItemResonator: ItemPickaxe(AlfheimAPI.elvoriumToolMaterial), IManaUsingIte
 		iconTipped = IconHelper.forItem(reg, this, "Tipped")
 	}
 	
-	override fun getIcon(stack: ItemStack, pass: Int) = if (ItemTerraPick.isTipped(stack)) iconTipped else itemIcon
+	override fun getIcon(stack: ItemStack, pass: Int) = (if (ItemTerraPick.isTipped(stack)) iconTipped else itemIcon)!!
 	
 	// workaround for fucked-up getIcon methods 
 	@SideOnly(Side.CLIENT)
@@ -135,8 +135,8 @@ class ItemResonator: ItemPickaxe(AlfheimAPI.elvoriumToolMaterial), IManaUsingIte
 		const val TAG_UNLIMITED = "unlimited"
 		
 		var ItemStack.dilated
-			get() = ItemNBTHelper.getBoolean(this, EntityResonance.TAG_PERSISTENT, false)
-			set(value) = ItemNBTHelper.setBoolean(this, EntityResonance.TAG_PERSISTENT, value)
+			get() = ItemNBTHelper.getBoolean(this, EntityResonance.TAG_DILATED, false)
+			set(value) = ItemNBTHelper.setBoolean(this, EntityResonance.TAG_DILATED, value)
 		
 		private var ItemStack.mode
 			get() = ItemNBTHelper.getInt(this, EntityResonance.TAG_MODE, 0)

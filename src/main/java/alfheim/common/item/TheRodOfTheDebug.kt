@@ -6,7 +6,13 @@ import alfheim.api.entity.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
+import net.minecraftforge.oredict.OreDictionary
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
+import java.util.*
+import kotlin.math.sqrt
 
+@Suppress("KotlinConstantConditions", "ControlFlowWithEmptyBody")
 class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 	
 	init {
@@ -45,5 +51,30 @@ class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {
 		}
 		
 		return false
+	}
+	
+	private fun oreScanner(world: World) {
+		val ores = HashMap<String, Int>()
+		val chunks = 256
+		val range = sqrt(chunks.toDouble()).toInt()
+		
+		for (x in 0..<(16 * range))
+			for (y in 0..150)
+				for (z in 0..<(16 * range)) {
+					val block = world.getBlock(x, y, z)
+					val meta: Int = world.getBlockMetadata(x, y, z)
+					val oredict = OreDictionary.getOreName(OreDictionary.getOreID(ItemStack(block, 1, meta)))
+					if (oredict.lowercase(Locale.getDefault()).contains("ore")) {
+						val count: Int = (if (ores.containsKey(oredict)) ores[oredict] else 0)!!
+						ores[oredict] = count + 1
+					}
+				}
+		
+		var selectionStr = "Chunks checked: $chunks\n\n"
+		for (s in ores.keys) selectionStr = selectionStr + s + " = " + ores[s] + " (avg " + (ores[s]!!.toDouble() / chunks.toDouble()) + " per chunk)\n"
+		val selection = StringSelection(selectionStr)
+		Toolkit.getDefaultToolkit().systemClipboard.setContents(selection, selection)
+		
+		ASJUtilities.chatLog("Done!")
 	}
 }

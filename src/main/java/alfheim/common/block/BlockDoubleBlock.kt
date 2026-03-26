@@ -23,6 +23,8 @@ class BlockDoubleBlock: BlockDoubleCamo(Material.iron), IFenceConnectable, IFenc
 	override fun topSide(meta: Int) = 1
 	
 	override fun addCollisionBoxesToList(world: World, x: Int, y: Int, z: Int, aabb: AxisAlignedBB?, list: MutableList<Any?>, entity: Entity?) {
+		if (aabb == null) return
+		
 		val tile = world.getTileEntity(x, y, z) as? TileDoubleBlock ?: return super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity)
 		
 		fun addCollisions(block: Block, meta: Int) {
@@ -157,7 +159,7 @@ class WorldWrapper(val original: IBlockAccess): IBlockAccess {
 	var xOverride = 0
 	var yOverride = -1
 	var zOverride = 0
-	var blockOverride = Blocks.air
+	var blockOverride = Blocks.air!!
 	var blockOverrideMeta = 0
 	
 	fun setOverride(x: Int, y: Int, z: Int, block: Block, meta: Int) {
@@ -178,11 +180,11 @@ class WorldWrapper(val original: IBlockAccess): IBlockAccess {
 		return original.getBlockMetadata(x, y, z)
 	}
 	
-	override fun getTileEntity(x: Int, y: Int, z: Int) = original.getTileEntity(x, y, z)
+	override fun getTileEntity(x: Int, y: Int, z: Int) = original.getTileEntity(x, y, z)!!
 	override fun getLightBrightnessForSkyBlocks(x: Int, y: Int, z: Int, lightValue: Int) = original.getLightBrightnessForSkyBlocks(x, y, z, lightValue)
 	override fun isBlockProvidingPowerTo(x: Int, y: Int, z: Int, side: Int) = original.isBlockProvidingPowerTo(x, y, z, side)
 	override fun isAirBlock(x: Int, y: Int, z: Int) = original.isAirBlock(x, y, z)
-	override fun getBiomeGenForCoords(x: Int, z: Int) = original.getBiomeGenForCoords(x, z)
+	override fun getBiomeGenForCoords(x: Int, z: Int) = original.getBiomeGenForCoords(x, z)!!
 	override fun getHeight() = original.height
 	override fun extendedLevelsInChunkCache() = original.extendedLevelsInChunkCache()
 	override fun isSideSolid(x: Int, y: Int, z: Int, side: ForgeDirection?, default: Boolean) = original.isSideSolid(x, y, z, side, default)

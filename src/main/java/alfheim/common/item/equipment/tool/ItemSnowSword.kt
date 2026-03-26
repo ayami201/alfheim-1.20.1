@@ -16,6 +16,7 @@ import net.minecraft.potion.*
 import net.minecraft.util.IIcon
 import net.minecraftforge.common.util.EnumHelper
 import vazkii.botania.common.item.equipment.tool.manasteel.ItemManasteelSword
+import java.util.*
 
 class ItemSnowSword: ItemManasteelSword(snow, "SnowSword") {
 	
@@ -49,11 +50,11 @@ class ItemSnowSword: ItemManasteelSword(snow, "SnowSword") {
 		snice = IconHelper.forName(reg, "misc/snice")
 	}
 	
-	override fun getIconIndex(stack: ItemStack) = if (stack.displayName.trim().equals("chunchunmaru", true)) katanaIcon else itemIcon
+	override fun getIconIndex(stack: ItemStack) = if (stack.displayName.trim().equals("chunchunmaru", true)) katanaIcon else itemIcon!!
 	
 	override fun getAttributeModifiers(stack: ItemStack?): Multimap<*, *> {
 		val modifiers = super.getAttributeModifiers(stack)
-		modifiers.put(PlayerReachDistanceHandler.reachDistance.attributeUnlocalizedName, AttributeModifier(field_111210_e, "Weapon modifier", 1.5, 0))
+		modifiers.put(PlayerReachDistanceHandler.reachDistance.attributeUnlocalizedName, AttributeModifier(UUID.fromString("b7814d08-3eb2-4b55-b5f9-61bd3b0d4251"), "Weapon modifier", 1.5, 0))
 		return modifiers
 	}
 }

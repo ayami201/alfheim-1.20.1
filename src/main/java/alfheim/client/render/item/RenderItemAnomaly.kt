@@ -22,18 +22,23 @@ object RenderItemAnomaly: IItemRenderer {
 		helper != IItemRenderer.ItemRendererHelper.EQUIPPED_BLOCK
 	
 	override fun renderItem(type: ItemRenderType, item: ItemStack, vararg data: Any) {
-		if (type == ItemRenderType.ENTITY) {
-			glScaled(2.0)
-			glTranslated(-0.5, -0.25, -0.5)
-		} else if (type == ItemRenderType.EQUIPPED && data[1] is EntityPlayer) {
-			glTranslated(0.0, 0.0, -0.5)
-		} else if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
-			glRotated(93.2, 1.0, 0.0, 0.0)
-			glTranslated(0.0, -0.5, -1.0)
+		when (type) {
+			ItemRenderType.ENTITY                              -> {
+				glScaled(2.0)
+				glTranslated(-0.5, -0.25, -0.5)
+			}
+			ItemRenderType.EQUIPPED if data[1] is EntityPlayer -> {
+				glTranslated(0.0, 0.0, -0.5)
+			}
+			ItemRenderType.EQUIPPED_FIRST_PERSON               -> {
+				glRotated(93.2, 1.0, 0.0, 0.0)
+				glTranslated(0.0, -0.5, -1.0)
+			}
+			else                                               -> {
+				val (_, _, strip, color) = AlfheimAPI.getAnomaly(ItemBlockAnomaly.getType(item))
+				renderItemAnomaly(strip, color, 32)
+			}
 		}
-		
-		val (_, _, strip, color) = AlfheimAPI.getAnomaly(ItemBlockAnomaly.getType(item))
-		renderItemAnomaly(strip, color, 32)
 	}
 	
 	fun renderItemAnomaly(strip: Int, color: Int, frames: Int) {

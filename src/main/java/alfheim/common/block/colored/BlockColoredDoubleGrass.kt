@@ -136,12 +136,7 @@ class BlockColoredDoubleGrass(var colorSet: Int): BlockDoublePlant(), IDoublePla
 					val i1 = world.getBlockMetadata(x, y - 1, z)
 					val j1 = func_149890_d(i1)
 					
-					if (j1 != 3 && j1 != 2) ;
-					//p_149681_1_.func_147480_a(p_149681_2_, p_149681_3_ - 1, p_149681_4_, true)
-					else {
-//						if (!world.isRemote && player.currentEquippedItem?.item === Items.shears)
-//							dropBlock(world, x, y, z, i1, player)
-						
+					if (j1 == 3 || j1 == 2) {
 						world.setBlockToAir(x, y - 1, z)
 					}
 				} else {
@@ -151,19 +146,7 @@ class BlockColoredDoubleGrass(var colorSet: Int): BlockDoublePlant(), IDoublePla
 		} else if (player.capabilities.isCreativeMode && world.getBlock(x, y + 1, z) === this) {
 			world.setBlock(x, y + 1, z, Blocks.air, 0, 2)
 		}
-		
-		//super.onBlockHarvested(p_149681_1_, p_149681_2_, p_149681_3_, p_149681_4_, p_149681_5_, p_149681_6_)
 	}
-	
-	/*fun dropBlock(world: World, x: Int, y: Int, z: Int, meta: Int, player: EntityPlayer): Boolean {
-		return if (func_149887_c(meta)) false
-		else {
-			player.addStat(StatList.mineBlockStatArray[Block.getIdFromBlock(this)], 1)
-			val b0 = TYPES * colorSet + meta
-			this.dropBlockAsItem(world, x, y, z, ItemStack(AlfheimBlocks.irisGrass, 2, b0))
-			true
-		}
-	}*/
 	
 	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = null
 	

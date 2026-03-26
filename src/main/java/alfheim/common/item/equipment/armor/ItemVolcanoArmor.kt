@@ -39,7 +39,7 @@ open class ItemVolcanoArmor(type: Int, name: String): ItemManasteelArmor(type, n
 	
 	fun repair(stack: ItemStack, world: World, player: EntityPlayer) {
 		if (stack.meta > 0 && ManaItemHandler.requestManaExact(stack, player, MANA_PER_DAMAGE * 2, world.isRemote))
-			stack.meta = stack.meta - 1
+			stack.meta -= 1
 	}
 	
 	override fun onUpdate(stack: ItemStack, world: World, player: Entity, slot: Int, inHand: Boolean) {
@@ -153,7 +153,7 @@ open class ItemVolcanoArmor(type: Int, name: String): ItemManasteelArmor(type, n
 		
 		@SubscribeEvent
 		fun onPlayerHurting(e: LivingHurtEvent) {
-			if (e.entityLiving !is EntitySlime || e.entityLiving !is EntitySnowSprite || e.entityLiving is EntityMagmaCube) return
+			if ((e.entityLiving !is EntitySlime || e.entityLiving is EntityMagmaCube) && e.entityLiving !is EntitySnowSprite) return
 			if (!hasSet(e.source.entity as? EntityPlayer ?: return)) return
 			e.ammount *= 1.25f
 		}

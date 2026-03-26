@@ -11,7 +11,7 @@ import net.minecraft.entity.IMerchant
 import net.minecraft.entity.item.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.IInventory
-import net.minecraft.item.*
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityChest
 import net.minecraft.util.*
@@ -71,7 +71,7 @@ class SubTileTradescantia: SubTileFunctional() {
 			val boughts = ArrayList<ItemStack>()
 			
 			for (merchant in merchants) if (cantTrade()) break else {
-				for (recipe in merchant.getRecipes(buyer).apply { shuffle() }) if (cantTrade()) break else {
+				for (recipe in merchant.getRecipes(buyer).apply { (this as MutableList<*>).shuffle() }) if (cantTrade()) break else {
 					recipe as MerchantRecipe
 					
 					if (recipe.isRecipeDisabled) continue

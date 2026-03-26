@@ -86,6 +86,6 @@ class ItemRodPrismatic: ItemMod("rodRainbowLight"), IManaUsingItem, IPhantomInka
 	
 	companion object {
 		
-		val COST = 100
+		const val COST = 100
 	}
 }

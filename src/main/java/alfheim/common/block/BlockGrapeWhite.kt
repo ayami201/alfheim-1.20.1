@@ -51,10 +51,10 @@ class BlockGrapeWhite: BlockBush(), IGrowable, ILexiconable {
 	override fun getRenderType() = LibRenderIDs.idGrapeWhite
 	override fun addCollisionBoxesToList(world: World?, x: Int, y: Int, z: Int, aabb: AxisAlignedBB?, list: List<Any?>?, entity: Entity?) = if (entity !is EntityBoat) super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity) else Unit
 	override fun getCollisionBoundingBoxFromPool(world: World?, x: Int, y: Int, z: Int) = getBoundingBox(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ)
-	override fun canPlaceBlockOn(block: Block) = block === Blocks.water
+	override fun canPlaceBlockOn(block: Block) = block === Blocks.water || block === Blocks.flowing_water || block === AlfheimBlocks.manaFluidBlock
 	
 	override fun canBlockStay(world: World, x: Int, y: Int, z: Int) =
-		world.getBlock(x, y - 1, z).let { it === Blocks.water || it === AlfheimBlocks.manaFluidBlock } && world.getBlockMetadata(x, y - 1, z) == 0
+		world.getBlock(x, y - 1, z).let { it === Blocks.water || it === Blocks.flowing_water || it === AlfheimBlocks.manaFluidBlock } && world.getBlockMetadata(x, y - 1, z) == 0
 	
 	override fun updateTick(world: World, x: Int, y: Int, z: Int, random: Random) {
 		super.updateTick(world, x, y, z, random)

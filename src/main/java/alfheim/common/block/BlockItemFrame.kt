@@ -2,20 +2,20 @@ package alfheim.common.block
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.client.render.tile.RenderTileItemFrame
 import alfheim.common.block.base.BlockContainerMod
 import alfheim.common.block.tile.TileItemFrame
-import alfheim.common.core.handler.WorkInProgressItemsHandler.WIP
 import alfheim.common.item.block.ItemBlockItemFrame
 import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.*
-import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.*
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
+import vazkii.botania.common.item.ModItems
 import java.util.*
 import kotlin.math.*
 
@@ -30,8 +30,6 @@ class BlockItemFrame: BlockContainerMod(Material.wood) {
 		setStepSound(soundTypeWood)
 		
 		GameRegistry.registerBlock(this, ItemBlockItemFrame::class.java, name)
-		
-		WIP()
 	}
 	
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
@@ -43,7 +41,10 @@ class BlockItemFrame: BlockContainerMod(Material.wood) {
 		val heldItem: ItemStack? = player.heldItem
 		
 		if (frame.item != null) {
-			if (player.isSneaking) {
+			if (heldItem?.item === ModItems.phantomInk) {
+				frame.invis = true
+				--heldItem.stackSize
+			} else if (player.isSneaking) {
 				if (!player.inventory.addItemStackToInventory(frame.item))
 					player.dropPlayerItemWithRandomChoice(frame.item, false)
 				frame.item = null
@@ -161,7 +162,7 @@ class BlockItemFrame: BlockContainerMod(Material.wood) {
 		}
 		
 		if (tzmin > tmin) tmin = tzmin
-		if (tzmax < tmax) tmax = tzmax
+//		if (tzmax < tmax) tmax = tzmax
 		
 		// Calculate intersection point closest to the `start` point
 		val t = tmin
@@ -193,7 +194,17 @@ class BlockItemFrame: BlockContainerMod(Material.wood) {
 		}
 	}
 	
-	override fun getIcon(side: Int, meta: Int) = Blocks.planks.getIcon(0, 2)!!
+	override fun getPickBlock(target: MovingObjectPosition, world: World, x: Int, y: Int, z: Int, player: EntityPlayer?): ItemStack {
+		val empty = ItemStack(this)
+		
+		val tile = world.getTileEntity(x, y, z) as? TileItemFrame ?: return empty
+		val frameId = getSelectedFrame(tile, world, x, y, z, player) ?: return empty
+		val frame = tile.frames[frameId] ?: return empty
+		
+		return frame.item ?: empty
+	}
+	
+	override fun getIcon(side: Int, meta: Int) = RenderTileItemFrame.icon
 	override fun quantityDropped(meta: Int, fortune: Int, random: Random?) = 0
 	override fun getRenderType() = -1
 	override fun isOpaqueCube() = false
@@ -215,7 +226,7 @@ class BlockItemFrame: BlockContainerMod(Material.wood) {
 		fun canExist(world: World, x: Int, y: Int, z: Int, side: Int): Boolean {
 			val d = ForgeDirection.getOrientation(side)
 			val (i, j, k) = Vector3(x, y, z).add(d.offsetX, d.offsetY, d.offsetZ).I
-			return world.getBlock(i, j, k).isSideSolid(world, i, j, k, d)
+			return world.getBlock(i, j, k).material.isSolid
 		}
 		
 		// CCC code start
@@ -233,7 +244,7 @@ class BlockItemFrame: BlockContainerMod(Material.wood) {
 				v.yCoord += (player.getEyeHeight() - player.defaultEyeHeight).toDouble()
 			} else {
 				v.yCoord += player.getEyeHeight().toDouble()
-				if (player is EntityPlayerMP && player.isSneaking()) {
+				if (player is EntityPlayerMP && player.isSneaking) {
 					v.yCoord -= 0.08
 				}
 			}

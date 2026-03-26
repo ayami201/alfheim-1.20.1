@@ -52,8 +52,7 @@ object ThrownPotionDispenserHandler: IBehaviorDispenseItem {
 		BlockDispenser.dispenseBehaviorRegistry.putObject(AlfheimItems.splashPotion, this)
 	}
 	
-	override fun dispense(block: IBlockSource, stack: ItemStack): ItemStack? {
-		
+	override fun dispense(block: IBlockSource, stack: ItemStack): ItemStack {
 		val facing = ForgeDirection.getOrientation(BlockDispenser.func_149937_b(block.blockMetadata).ordinal)
 		
 		val x = block.xInt + facing.offsetX + 0.5
@@ -101,8 +100,7 @@ object ThrownItemDispenserHandler: IBehaviorDispenseItem {
 		BlockDispenser.dispenseBehaviorRegistry.putObject(AlfheimItems.fireGrenade, this)
 	}
 	
-	override fun dispense(block: IBlockSource, stack: ItemStack): ItemStack? {
-		
+	override fun dispense(block: IBlockSource, stack: ItemStack): ItemStack {
 		val facing = ForgeDirection.getOrientation(BlockDispenser.func_149937_b(block.blockMetadata).ordinal)
 		
 		val x = block.xInt + facing.offsetX + 0.5

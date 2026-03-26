@@ -1,8 +1,10 @@
 // http://alteredqualia.com/three/examples/webgl_shader_fireball.html
 #version 120
 
+#ifdef GL_ES
 precision highp float;
 precision highp int;
+#endif
 
 //
 // Description : Array and textureless GLSL 3D simplex noise function.

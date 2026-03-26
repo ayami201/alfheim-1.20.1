@@ -15,7 +15,7 @@ object SpellThrow: SpellBase("throw", EnumRace.SYLPH, 8000, 200, 10) {
 	override var radius = 2.0
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, efficiency, radius)
+		get() = arrayOf<Number>(damage, duration, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCast(caster)

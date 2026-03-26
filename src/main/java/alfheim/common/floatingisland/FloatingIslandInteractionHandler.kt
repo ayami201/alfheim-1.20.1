@@ -18,7 +18,7 @@ object FloatingIslandInteractionHandler {
 		
 		val island = when (e.action) {
 			RIGHT_CLICK_AIR    -> player.worldObj.loadedEntityList.filterIsInstance<EntityFloatingIsland>().firstOrNull { it.boundingBox(it.collisionBorderSize).intersectsWith(player.boundingBox(player.collisionBorderSize)) } ?: return
-			RIGHT_CLICK_ENTITY -> if (e.entity is EntityFloatingIsland) e.entity else return
+			RIGHT_CLICK_ENTITY -> e.entity as? EntityFloatingIsland ?: return
 			RIGHT_CLICK_BLOCK,
 			RIGHT_CLICK_LIQUID -> return
 		}
@@ -97,7 +97,7 @@ object FloatingIslandInteractionHandler {
 			if (tNear > tFar) return null
 			if (tFar < 0) return null
 		} else {
-			if (a.x < minX || a.x > maxX) return null
+			if (a.x !in minX..maxX) return null
 		}
 		
 		// Check intersection with Y planes
@@ -114,7 +114,7 @@ object FloatingIslandInteractionHandler {
 			if (tNear > tFar) return null
 			if (tFar < 0) return null
 		} else {
-			if (a.y < minY || a.y > maxY) return null
+			if (a.y !in minY..maxY) return null
 		}
 		
 		// Check intersection with Z planes
@@ -131,7 +131,7 @@ object FloatingIslandInteractionHandler {
 			if (tNear > tFar) return null
 			if (tFar < 0) return null
 		} else {
-			if (a.z < minZ || a.z > maxZ) return null
+			if (a.z !in minZ..maxZ) return null
 		}
 		
 		// Compute the intersection point

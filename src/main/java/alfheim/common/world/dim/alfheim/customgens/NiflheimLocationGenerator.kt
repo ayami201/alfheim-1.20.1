@@ -5,7 +5,7 @@ import alexsocol.asjlib.math.Vector3
 import alfheim.AlfheimCore
 import alfheim.api.ModInfo
 import alfheim.client.render.world.VisualEffectHandlerClient
-import alfheim.common.block.BlockNiflheimPortal
+import alfheim.common.block.*
 import alfheim.common.core.handler.*
 import alfheim.common.entity.EntityElf
 import cpw.mods.fml.common.eventhandler.*
@@ -57,9 +57,9 @@ object NiflheimLocationGenerator: WE_CreateChunkGen() {
 				
 				for (j in c downTo (c - 4)) {
 					when (data.chunkProvider.world.rand.nextInt(3)) {
-						0 -> setBlock(data, Blocks.dirt  , 1, i, j, k) // coarse dirt
-						1 -> setBlock(data, Blocks.sand  , 0, i, j, k)
-						2 -> setBlock(data, Blocks.gravel, 0, i, j, k)
+						0 -> setBlock(data, Blocks.dirt            , 1, i, j, k) // coarse dirt
+						1 -> setBlock(data, AlfheimBlocks.elvenSand, 0, i, j, k)
+						2 -> setBlock(data, Blocks.gravel          , 0, i, j, k)
 					}
 				}
 				

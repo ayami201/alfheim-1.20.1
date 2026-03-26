@@ -137,8 +137,8 @@ open class ItemRodLightning(name: String = "rodLightning"): ItemMod(name), IMana
 				}
 		}
 		
-		if (potential.size > 0)
-			while (potential.size > 0) {
+		if (potential.isNotEmpty())
+			while (potential.isNotEmpty()) {
 				val i = world.rand.nextInt(potential.size)
 				if (!potential[i].isDead) {
 					return potential[i]
@@ -218,7 +218,7 @@ open class ItemRodLightning(name: String = "rodLightning"): ItemMod(name), IMana
 		if (tile.currentMana >= COST_AVATAR && tile.isEnabled && tile.elapsedFunctionalTicks % 10 == 0) {
 			val entities = selectEntitiesWithinAABB(world, EntityLivingBase::class.java, te.boundingBox(range)) { it !is EntityPlayer && it !is IBossDisplayData }
 			
-			if (entities.size == 0) return
+			if (entities.isEmpty()) return
 			
 			val trial_target = ItemNBTHelper.getInt(stack, "target", -1)
 			var target: EntityLivingBase? = null
@@ -233,7 +233,7 @@ open class ItemRodLightning(name: String = "rodLightning"): ItemMod(name), IMana
 			}
 			
 			if (target == null) {
-				while (entities.size > 0) {
+				while (entities.isNotEmpty()) {
 					val i = world.rand.nextInt(entities.size)
 					
 					if (entities[i] is IMob && entities[i] !is EntityPlayer && entities[i] !is EntityPlayerMP) {

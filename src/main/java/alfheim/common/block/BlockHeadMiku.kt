@@ -43,6 +43,6 @@ class BlockHeadMiku: BlockSkull() {
 	override fun getDamageValue(world: World, x: Int, y: Int, z: Int) = 0
 	override fun damageDropped(meta: Int) = 0
 	override fun createNewTileEntity(world: World, meta: Int) = TileHeadMiku()
-	override fun getIcon(side: Int, meta: Int) = Blocks.wool.getIcon(0, 9)
+	override fun getIcon(side: Int, meta: Int) = Blocks.wool.getIcon(0, 9)!!
 	override fun getItemIconName() = "${ModInfo.MODID}:MikuHead"
 }

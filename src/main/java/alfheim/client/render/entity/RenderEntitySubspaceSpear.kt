@@ -48,6 +48,6 @@ object RenderEntitySubspaceSpear: Render() {
 		glPopMatrix()
 	}
 	
-	override fun getEntityTexture(entity: Entity) = if ((entity as? EntitySubspaceSpear)?.type == 1) TextureMap.locationItemsTexture else LibResourceLocations.spearSubspace
+	override fun getEntityTexture(entity: Entity) = (if ((entity as? EntitySubspaceSpear)?.type == 1) TextureMap.locationItemsTexture else LibResourceLocations.spearSubspace)!!
 	
 }

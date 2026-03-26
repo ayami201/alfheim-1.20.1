@@ -78,7 +78,7 @@ class EntityElvenChakram: EntityThrowable {
 			if (tracing) return@apply
 			
 			val t = trace
-			if (t.size <= 0 || index !in t.indices) return@apply
+			if (t.isEmpty() || index !in t.indices) return@apply
 			
 			val (mx, my, mz) = t[index++]
 			trace = t

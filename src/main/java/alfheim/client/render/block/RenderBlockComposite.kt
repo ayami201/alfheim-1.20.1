@@ -165,14 +165,14 @@ private class CompositionWorld(val original: IBlockAccess, val composition: Arra
 	
 	private operator fun Array<Array<Array<Pair<Block, Int>?>>>.get(i: Int, j: Int, k: Int) = composition.getOrNull(i)?.getOrNull(j)?.getOrNull(k)
 	
-	override fun getBlock(x: Int, y: Int, z: Int) = composition[x, y, z]?.first ?: Blocks.air
+	override fun getBlock(x: Int, y: Int, z: Int) = (composition[x, y, z]?.first ?: Blocks.air)!!
 	override fun getBlockMetadata(x: Int, y: Int, z: Int) = composition[x, y, z]?.second ?: 0
 	override fun getTileEntity(x: Int, y: Int, z: Int) = null
 	override fun isAirBlock(x: Int, y: Int, z: Int) = composition[x, y, z] == null
 	
 	override fun getLightBrightnessForSkyBlocks(x: Int, y: Int, z: Int, lightValue: Int) = original.getLightBrightnessForSkyBlocks(x, y, z, lightValue)
 	override fun isBlockProvidingPowerTo(x: Int, y: Int, z: Int, side: Int) = original.isBlockProvidingPowerTo(x, y, z, side)
-	override fun getBiomeGenForCoords(x: Int, z: Int) = original.getBiomeGenForCoords(x, z)
+	override fun getBiomeGenForCoords(x: Int, z: Int) = original.getBiomeGenForCoords(x, z)!!
 	override fun getHeight() = original.height
 	override fun extendedLevelsInChunkCache() = original.extendedLevelsInChunkCache()
 	override fun isSideSolid(x: Int, y: Int, z: Int, side: ForgeDirection?, default: Boolean) = original.isSideSolid(x, y, z, side, default)

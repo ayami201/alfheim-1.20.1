@@ -83,22 +83,10 @@ open class EntityItemImmortal: Entity {
 		
 		moveEntity(motionX, motionY, motionZ)
 		
-		val flag = prevPosX.I != posX.I || prevPosY.I != posY.I || prevPosZ.I != posZ.I
-		
-		if (flag || ticksExisted % 25 == 0) {
-			if (worldObj.getBlock(this).material === Material.lava) {
-				motionY = 0.2
-				motionX = ((rand.nextDouble() - rand.nextDouble()) * 0.2)
-				motionZ = ((rand.nextDouble() - rand.nextDouble()) * 0.2)
-				playSound("random.fizz", 0.4f, 2f + rand.nextFloat() * 0.4f)
-			}
-		}
-		
-		val f =
-			if (onGround)
-				worldObj.getBlock(this, y = -1).slipperiness * 0.98f
-			else
-				0.98f
+		val f = if (onGround)
+			worldObj.getBlock(this, y = -1).slipperiness * 0.98f
+		else
+			0.98f
 		
 		motionX *= f.D
 		motionY *= 0.98

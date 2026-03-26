@@ -49,6 +49,6 @@ class ItemStoryToken: ItemMod("StoryToken"), IElvenItem {
 	
 	companion object {
 		
-		val TAG_STORY = "story"
+		const val TAG_STORY = "story"
 	}
 }

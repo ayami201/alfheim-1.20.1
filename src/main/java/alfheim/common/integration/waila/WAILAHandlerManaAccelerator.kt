@@ -13,8 +13,8 @@ import vazkii.botania.api.mana.IManaItem
 
 object WAILAHandlerManaAccelerator: IWailaDataProvider {
 	
-	val TAG_MANA = "mana"
-	val TAG_MAX_MANA = "maxmana"
+	const val TAG_MANA = "mana"
+	const val TAG_MAX_MANA = "maxmana"
 	
 	override fun getNBTData(player: EntityPlayerMP, tile: TileEntity, result: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound {
 		if (tile is TileManaAccelerator) {

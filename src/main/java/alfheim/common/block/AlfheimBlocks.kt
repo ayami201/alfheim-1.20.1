@@ -34,8 +34,6 @@ import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.subtile.SubTileEntity
 import vazkii.botania.common.block.*
 import vazkii.botania.common.lib.LibBlockNames
-import kotlin.collections.forEachIndexed
-import kotlin.collections.set
 import vazkii.botania.common.lib.LibOreDict as BLibOreDict
 
 object AlfheimBlocks {
@@ -496,10 +494,10 @@ object AlfheimBlocks {
 		
 		registerOre(LibOreDict.NIFLEUR_ORE, BlockNiflheim.NiflheimBlockMetas.ORE.stack)
 		
-		val quartzs = arrayOf(ModFluffBlocks.darkQuartz, ModFluffBlocks.manaQuartz, ModFluffBlocks.blazeQuartz, ModFluffBlocks.lavenderQuartz, ModFluffBlocks.redQuartz, ModFluffBlocks.elfQuartz, ModFluffBlocks.sunnyQuartz).filterNotNull()
+		val quartzs = arrayOf(ModFluffBlocks.darkQuartz, ModFluffBlocks.manaQuartz, ModFluffBlocks.blazeQuartz, ModFluffBlocks.lavenderQuartz, ModFluffBlocks.redQuartz, ModFluffBlocks.elfQuartz, ModFluffBlocks.sunnyQuartz)
 		
 		BLibOreDict.QUARTZ.forEachIndexed { id, it ->
-			registerOre("block${it.capitalized()}", ItemStack(quartzs[id]))
+			registerOre("block${it.capitalized()}", ItemStack(quartzs[id] ?: return@forEachIndexed))
 		}
 		registerOre(LibOreDict.RAINBOW_QUARTZ_BLOCK, ItemStack(shimmerQuartz))
 		

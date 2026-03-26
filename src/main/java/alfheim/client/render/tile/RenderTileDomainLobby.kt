@@ -7,7 +7,7 @@ import alfheim.api.lib.LibResourceLocations
 import alfheim.common.block.tile.TileDomainLobby
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.equipment.bauble.faith.ItemRagnarokEmblem
-import net.minecraft.client.renderer.*
+import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.*

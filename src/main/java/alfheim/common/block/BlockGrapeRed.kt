@@ -70,13 +70,13 @@ class BlockGrapeRed(val stage: Int): BlockVine(), IGrowable, ILexiconable {
 	override fun onSheared(item: ItemStack?, world: IBlockAccess?, x: Int, y: Int, z: Int, fortune: Int) = arrayListOf(ItemStack(AlfheimBlocks.grapesRed[0]))
 	
 	@SideOnly(Side.CLIENT)
-	override fun getBlockColor() = 0xFFFFFF
+	override fun getBlockColor() = 0xBBBBBB
 	
 	@SideOnly(Side.CLIENT)
-	override fun getRenderColor(meta: Int) = 0xFFFFFF
+	override fun getRenderColor(meta: Int) = 0xBBBBBB
 	
 	@SideOnly(Side.CLIENT)
-	override fun colorMultiplier(world: IBlockAccess, x: Int, y: Int, z: Int) = 0xFFFFFF
+	override fun colorMultiplier(world: IBlockAccess, x: Int, y: Int, z: Int) = 0xBBBBBB
 	
 	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.winery
 }

@@ -17,6 +17,7 @@ import thaumcraft.common.lib.world.*
 import thaumcraft.common.lib.world.biomes.BiomeHandler
 import vazkii.botania.common.block.ModBlocks
 import java.util.*
+import kotlin.math.max
 
 object WorldGenAlfheimThaumcraft: IWorldGenerator {
 	
@@ -88,7 +89,7 @@ object WorldGenAlfheimThaumcraft: IWorldGenerator {
 			while (i < 8) {
 				randPosX = chunkX * 16 + random.nextInt(16)
 				randPosZ = chunkZ * 16 + random.nextInt(16)
-				randPosY = random.nextInt(Math.max(5, world.getHeightValue(randPosX, randPosZ) - 5))
+				randPosY = random.nextInt(max(5, world.getHeightValue(randPosX, randPosZ) - 5))
 				var meta = random.nextInt(6) + 1
 				if (random.nextInt(3) == 0) {
 					val e = BiomeHandler.getRandomBiomeTag(

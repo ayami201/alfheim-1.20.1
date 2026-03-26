@@ -1,5 +1,3 @@
-@file:Suppress("LocalVariableName")
-
 package alfheim.common.integration.thaumcraft
 
 import alfheim.api.ModInfo
@@ -753,7 +751,7 @@ object TCHandlerShadowFoxAspects {
 		
 		val list2 = AspectList().a(PLANT).a(AIR).a(COLOR)
 		ThaumcraftApi.registerObjectTag(wildStack(AlfheimBlocks.irisGrass), list2)
-		ThaumcraftApi.registerObjectTag(wildStack(AlfheimBlocks.rainbowGrass), list2)
+		ThaumcraftApi.registerObjectTag(wildStack(rainbowGrass), list2)
 		ThaumcraftApi.registerObjectTag(wildStack(AlfheimBlocks.irisTallGrass0), list2)
 		ThaumcraftApi.registerObjectTag(wildStack(AlfheimBlocks.irisTallGrass1), list2)
 		ThaumcraftApi.registerObjectTag(wildStack(AlfheimBlocks.rainbowTallGrass), list2)

@@ -1,7 +1,9 @@
 #version 120
 
+#ifdef GL_ES
 precision highp float;
 precision highp int;
+#endif
 
 uniform float ftime;
 uniform sampler2D explosion;

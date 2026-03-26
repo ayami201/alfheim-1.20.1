@@ -20,7 +20,7 @@ object SpellHammerfall: SpellBase("hammerfall", EnumRace.GNOME, 10000, 200, 20) 
 	override var radius = 10.0
 	
 	override val usableParams
-		get() = arrayOf(damage, radius)
+		get() = arrayOf<Number>(damage, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		if (!caster.onGround || caster.worldObj.isAirBlock(caster.posX.mfloor(), caster.posY.mfloor() - 1, caster.posZ.mfloor())) return SpellCastResult.WRONGTGT

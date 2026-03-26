@@ -24,7 +24,7 @@ import java.util.*
 
 object FaithHandlerOdin: IFaithHandler {
 	
-	val uuid_knock = UUID.fromString("bace7868-73c2-421e-989a-374cb1ffa3dc")
+	val uuid_knock = UUID.fromString("bace7868-73c2-421e-989a-374cb1ffa3dc")!!
 	val mod_knock = AttributeModifier(uuid_knock, "Odin faith modifier", 1.0, 0)
 	
 	init {
@@ -73,7 +73,6 @@ object FaithHandlerOdin: IFaithHandler {
 		
 		val entity = e.entity
 		if (entity !is EntityPotion && entity !is EntityThrownPotion) return
-		entity as EntityThrowable
 		
 		if (e.world.playerEntities.any {
 				it as EntityPlayer

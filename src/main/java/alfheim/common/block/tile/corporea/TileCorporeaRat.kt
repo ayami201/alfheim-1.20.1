@@ -29,7 +29,7 @@ class TileCorporeaRat: TileCorporeaBase(), ICorporeaRequestor {
 		
 		spark.onItemsRequested(stacks)
 		
-		val missing = count - stacks.sumBy { it?.stackSize ?: 0 }
+		val missing = count - stacks.sumOf { it?.stackSize ?: 0 }
 		
 		val name = requestQueue[request to count]?.removeFirstOrNull() ?: ""
 		val requestor = MinecraftServer.getServer()?.configurationManager?.func_152612_a(name)

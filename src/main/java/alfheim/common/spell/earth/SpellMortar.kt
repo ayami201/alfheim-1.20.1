@@ -14,7 +14,7 @@ object SpellMortar: SpellBase("mortar", EnumRace.GNOME, 7500, 200, 5) {
 	override var radius = 2.0 // AoE
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, efficiency, radius)
+		get() = arrayOf<Number>(damage, duration, efficiency, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCastOver(caster)

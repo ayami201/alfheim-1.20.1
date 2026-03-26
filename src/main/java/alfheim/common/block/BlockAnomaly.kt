@@ -34,7 +34,7 @@ class BlockAnomaly: BlockContainerMod(anomaly), ILexiconable {
 		setCreativeTab(AlfheimTab)
 		setLightLevel(1f)
 		setLightOpacity(0)
-		setStepSound(Block.soundTypeCloth)
+		setStepSound(soundTypeCloth)
 	}
 	
 	override fun shouldRegisterInNameSet() = false
@@ -117,7 +117,7 @@ class BlockAnomaly: BlockContainerMod(anomaly), ILexiconable {
 	
 	companion object {
 		
-		val anomaly = MaterialPublic(MapColor.airColor, blocksLight = false, opaque = false, solid = false).setImmovableMobility()
+		val anomaly = MaterialPublic(MapColor.airColor, blocksLight = false, opaque = false, solid = false).setImmovableMobility()!!
 		lateinit var iconUndefined: IIcon
 	}
 }

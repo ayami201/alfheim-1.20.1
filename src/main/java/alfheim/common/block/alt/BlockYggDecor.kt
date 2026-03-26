@@ -1,7 +1,7 @@
 package alfheim.common.block.alt
 
-import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.BlockModMeta
+import alexsocol.asjlib.toItem
 import alfheim.api.ModInfo
 import alfheim.common.core.util.AlfheimTab
 import cpw.mods.fml.common.IFuelHandler

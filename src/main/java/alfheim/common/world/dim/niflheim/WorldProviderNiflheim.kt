@@ -10,7 +10,6 @@ import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDAlfheim
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDNiflheim
 import alfheim.common.core.handler.AlfheimConfigHandler.enableNiflheimRespawn
 import alfheim.common.core.util.DamageSourceSpell
-import alfheim.common.item.equipment.bauble.ItemPendant
 import alfheim.common.world.data.CustomWorldData.Companion.customData
 import alfheim.common.world.dim.niflheim.biome.*
 import com.google.common.collect.HashMultimap
@@ -127,10 +126,9 @@ class WorldProviderNiflheim: WorldProvider() {
 				// current pos
 				val (cx, cy, cz) = mist.origin.copy().add(mist.motion.copy().mul(mist.speed))
 				
-				val list = getEntitiesWithinAABB(e.world, EntityLivingBase::class.java, getBoundingBox(cx, cy, cz).expand(10.0, 6.0, 10.0))
-				list.removeAll { it is INiflheimEntity }
-				list.removeAll { it is EntityPlayer && (it.capabilities.isCreativeMode || ItemPendant.canProtect(it, ItemPendant.Companion.EnumPrimalWorldType.NIFLHEIM, 300)) }
-				list.forEach {
+				getEntitiesWithinAABB(e.world, EntityLivingBase::class.java, getBoundingBox(cx, cy, cz).expand(10.0, 6.0, 10.0)).forEach {
+					if (INiflheimEntity.checkProtection(it, 300)) return@forEach
+					
 					it.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDIceLens, 50))
 					it.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 50, 4))
 					

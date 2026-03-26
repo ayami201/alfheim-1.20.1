@@ -14,8 +14,7 @@ import net.minecraft.util.IIcon
 import net.minecraftforge.client.event.RenderPlayerEvent
 import org.lwjgl.opengl.GL11.*
 import vazkii.botania.api.item.IBaubleRender
-import vazkii.botania.api.mana.IManaUsingItem
-import vazkii.botania.api.mana.ManaItemHandler
+import vazkii.botania.api.mana.*
 import vazkii.botania.client.core.helper.IconHelper
 import vazkii.botania.common.item.equipment.bauble.ItemBauble
 

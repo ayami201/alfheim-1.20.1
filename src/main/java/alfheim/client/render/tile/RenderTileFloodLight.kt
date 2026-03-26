@@ -14,9 +14,6 @@ import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.AdvancedModelLoader
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.component3
 import kotlin.math.*
 
 object RenderTileFloodLight: TileEntitySpecialRenderer() {

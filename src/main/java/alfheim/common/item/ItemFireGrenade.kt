@@ -19,7 +19,7 @@ class ItemFireGrenade: ItemMod("fireGrenade") {
 			MinecraftForge.EVENT_BUS.register(this)
 	}
 	
-	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack? {
+	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
 		if (!world.isRemote) {
 			EntityThrowableItem(player).spawn()
 			stack.stackSize--

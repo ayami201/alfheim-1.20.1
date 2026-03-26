@@ -17,9 +17,10 @@ object EFHandlerBanners {
 	
 	val coatNames = arrayOf("chile", "france", "japan", "germany", "greece", "iceland", "ireland", "israel", "jamaica", "singapore", "southafrica", "spain", "switzerland", "texas", "ukraine", "unitedstates", "alfheim", "ussr")
 	
+	@Suppress("UNCHECKED_CAST")
 	fun addBanners() {
 		try {
-			val clazz = Class.forName("ganymedes01.etfuturum.tileentities.TileEntityBanner\$EnumBannerPattern") as Class<Enum<*>>
+			val clazz = Class.forName($$"ganymedes01.etfuturum.tileentities.TileEntityBanner$EnumBannerPattern") as Class<Enum<*>>
 			for (i in coatNames.indices) {
 				try {
 					addPattern(clazz, coatNames[i], "c${if (i < 10) "0$i" else "$i"}", ItemStack(coatOfArms, 1, i))

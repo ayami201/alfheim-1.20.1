@@ -5,6 +5,7 @@ import net.minecraft.block.Block
 import net.minecraft.world.World
 import net.minecraft.world.gen.feature.WorldGenAbstractTree
 import java.util.*
+import kotlin.math.abs
 
 class SimpleTreeGen(val minTreeHeight: Int): WorldGenAbstractTree(true) {
 	
@@ -68,7 +69,7 @@ class SimpleTreeGen(val minTreeHeight: Int): WorldGenAbstractTree(true) {
 								for (k2 in z - l1..z + l1) {
 									val l2: Int = k2 - z
 									
-									if (Math.abs(j2) != l1 || Math.abs(l2) != l1 || random.nextInt(2) != 0 && i3 != 0) {
+									if (abs(j2) != l1 || abs(l2) != l1 || random.nextInt(2) != 0 && i3 != 0) {
 										val block1: Block = world.getBlock(i2, k1, k2)
 										
 										if (block1.isAir(world, i2, k1, k2) || block1.isLeaves(world, i2, k1, k2)) {

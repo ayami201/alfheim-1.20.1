@@ -169,7 +169,7 @@ class ItemDaolos: ItemAxe(AlfheimAPI.DAOLOS), IRelic {
 	
 	override fun bindToUsername(playerName: String?, stack: ItemStack?) = ItemRelic.bindToUsernameS(playerName, stack)
 	
-	override fun getSoulbindUsername(stack: ItemStack?) = ItemRelic.getSoulbindUsernameS(stack)
+	override fun getSoulbindUsername(stack: ItemStack?) = ItemRelic.getSoulbindUsernameS(stack)!!
 	
 	override fun getBindAchievement() = AlfheimAchievements.daolos
 	

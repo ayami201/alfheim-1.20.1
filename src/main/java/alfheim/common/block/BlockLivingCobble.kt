@@ -25,7 +25,7 @@ class BlockLivingCobble: BlockModMeta(Material.rock, 4, ModInfo.MODID, "LivingCo
 	
 	override fun getIcon(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int): IIcon {
 		val meta = world.getBlockMetadata(x, y, z)
-		if (meta == 3 && "$x$y$z".hashCode() % 2 == 0) return iconAlt
+		if (meta == 3 && ((31 * (31 * x + y) + z)) % 2 == 0) return iconAlt
 		
 		return super.getIcon(world, x, y, z, side)
 	}

@@ -39,15 +39,25 @@ class ItemElvenDisguise: ItemBauble("DisguiseBelt"), IManaUsingItem, IBaubleRend
 	}
 	
 	override fun onEquipped(stack: ItemStack, player: EntityLivingBase) {
+		ItemNBTHelper.setInt(stack, TAG_UPDATEABLE, 20)
+		
 		if (player is EntityPlayerMP) {
 			val (x, y, z) = Vector3.fromEntity(player)
 			NetworkService.sendToAllAround(MessageDisguise("", stack.booba, stack.raceId, true, player.commandSenderName), NetworkRegistry.TargetPoint(player.dimension, x, y, z, 64.0))
 		}
 		
+		doNotResend = true
 		super.onEquipped(stack, player)
+		doNotResend = false
 	}
 	
+	var doNotResend = false
+	
 	override fun onEquippedOrLoadedIntoWorld(stack: ItemStack, player: EntityLivingBase) {
+		if (doNotResend) return
+		
+		ItemNBTHelper.setInt(stack, TAG_UPDATEABLE, 20)
+		
 		if (player is EntityPlayerMP) {
 			val (x, y, z) = Vector3.fromEntity(player)
 			NetworkService.sendToAllAround(MessageDisguise("", stack.booba, stack.raceId, false, player.commandSenderName), NetworkRegistry.TargetPoint(player.dimension, x, y, z, 64.0))
@@ -55,6 +65,8 @@ class ItemElvenDisguise: ItemBauble("DisguiseBelt"), IManaUsingItem, IBaubleRend
 	}
 	
 	override fun onUnequipped(stack: ItemStack, player: EntityLivingBase) {
+		ItemNBTHelper.setInt(stack, TAG_UPDATEABLE, 20)
+		
 		if (player is EntityPlayerMP) {
 			val (x, y, z) = Vector3.fromEntity(player)
 			NetworkService.sendToAllAround(MessageDisguise(ItemNBTHelper.getString(stack, TAG_SKIN, "~"), stack.booba, -1, false, player.commandSenderName), NetworkRegistry.TargetPoint(player.dimension, x, y, z, 64.0))
@@ -64,6 +76,10 @@ class ItemElvenDisguise: ItemBauble("DisguiseBelt"), IManaUsingItem, IBaubleRend
 	override fun onWornTick(stack: ItemStack, player: EntityLivingBase) {
 		super.onWornTick(stack, player)
 		if (player !is EntityPlayer || !ASJUtilities.isServer) return
+		
+		val prev = ItemNBTHelper.getInt(stack, TAG_UPDATEABLE, 20)
+		if (prev > 0)
+			ItemNBTHelper.setInt(stack, TAG_UPDATEABLE, prev - 1)
 		
 		val cost = if (stack.race === EnumRace.ALV) COST_ALV else COST_OTHER
 		if (ManaItemHandler.requestManaExactForTool(stack, player, cost, true)) return
@@ -131,6 +147,7 @@ class ItemElvenDisguise: ItemBauble("DisguiseBelt"), IManaUsingItem, IBaubleRend
 		const val TAG_BOOBA = "booba"
 		const val TAG_RACE = "race"
 		const val TAG_SKIN = "skin"
+		const val TAG_UPDATEABLE = "updateable"
 		
 		private var ItemStack.booba: Boolean
 			get() = ItemNBTHelper.getBoolean(this, TAG_BOOBA, false)

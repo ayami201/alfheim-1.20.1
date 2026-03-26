@@ -37,13 +37,13 @@ class ItemManaweaveGlove: ItemBaubleGlove("ManaweaveGlove"), IManaDiscountBauble
 	}
 	
 	@SideOnly(Side.CLIENT)
-	override fun getIconFromDamage(dmg: Int) = if (ClientProxy.jingleTheBells) iconChristmas else super.getIconFromDamage(dmg)
+	override fun getIconFromDamage(dmg: Int) = (if (ClientProxy.jingleTheBells) iconChristmas else super.getIconFromDamage(dmg))!!
 	
 	@SideOnly(Side.CLIENT)
-	override fun getIconIndex(stack: ItemStack) = if (catHands(stack)) iconKAIIIAK else super.getIconIndex(stack)
+	override fun getIconIndex(stack: ItemStack) = (if (catHands(stack)) iconKAIIIAK else super.getIconIndex(stack))!!
 	
 	@SideOnly(Side.CLIENT)
-	override fun getIcon(stack: ItemStack, pass: Int) = super.getIconIndex(stack)
+	override fun getIcon(stack: ItemStack, pass: Int) = super.getIconIndex(stack)!!
 	
 	@SideOnly(Side.CLIENT)
 	private fun catHands(stack: ItemStack): Boolean {

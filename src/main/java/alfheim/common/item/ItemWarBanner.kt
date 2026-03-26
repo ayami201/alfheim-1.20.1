@@ -35,7 +35,7 @@ class ItemWarBanner: ItemBauble("WarBanner"), ICosmeticBauble {
 		list.add(ItemStack(item, 1, 1))
 	}
 	
-	override fun getIconFromDamage(meta: Int) = if (meta == 0) itemIcon else iconAlt
+	override fun getIconFromDamage(meta: Int) = (if (meta == 0) itemIcon else iconAlt)!!
 	
 	override fun registerIcons(reg: IIconRegister) {
 		itemIcon = IconHelper.forItem(reg, this)

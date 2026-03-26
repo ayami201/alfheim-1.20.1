@@ -10,7 +10,6 @@ import vazkii.botania.common.block.tile.*
 import vazkii.botania.common.block.tile.mana.TilePool
 import vazkii.botania.common.entity.EntitySpark
 
-@Suppress("unused")
 object SparkExtender {
 	
 	// ####################################################################################

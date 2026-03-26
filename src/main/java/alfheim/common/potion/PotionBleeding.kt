@@ -1,12 +1,12 @@
 package alfheim.common.potion
 
-import alexsocol.asjlib.*
+import alexsocol.asjlib.F
 import alexsocol.asjlib.math.Vector3
 import alfheim.AlfheimCore
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.DamageSourceSpell
 import net.minecraft.entity.EntityLivingBase
-import kotlin.math.*
+import kotlin.math.max
 
 object PotionBleeding: PotionAlfheim(AlfheimConfigHandler.potionIDBleeding, "bleeding", true, 0xFF0000) {
 	

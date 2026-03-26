@@ -50,12 +50,13 @@ class TileAnomaly: TileImmobile() {
 		if (worldObj.isRemote || !worldObj.getBiomeGenForCoords(xCoord, zCoord).let { it is BiomeField || it is BiomePitGiantFlowers || it is BiomeIslandForest || it is BiomePitForest }) return
 		if (subTileName != "Warp" && subTileName != "Lightning") return
 		
-		for (i in 0..worldObj.rand.nextInt(3))
+		repeat(worldObj.rand.nextInt(3) + 1) {
 			EntityList.createEntityByName("Thaumcraft.Wisp", worldObj)?.apply {
 				val (x, y, z) = Vector3.fromTileEntity(this@TileAnomaly).add(0.5)
 				setPosition(x, y, z)
 				spawn()
 			}
+		}
 	}
 	
 	fun onActivated(stack: ItemStack?, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Boolean {

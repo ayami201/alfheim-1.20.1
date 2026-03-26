@@ -129,10 +129,10 @@ class BlockAltWood(val set: Int): BlockModRotatedPillar(Material.wood), IFuelHan
 	
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?): LexiconEntry? {
 		val meta = world.getBlockMetadata(x, y, z)
-		return when {
-			set == 1 && meta % 8 == BlockAltLeaves.yggMeta - 4 + 1 -> AlfheimLexiconData.worldgen
-			set == 1 && meta % 8 == BlockAltLeaves.yggMeta - 4     -> null
-			else                                                   -> AlfheimLexiconData.irisSapling
+		return when (set) {
+			1 if meta % 8 == BlockAltLeaves.yggMeta - 4 + 1 -> AlfheimLexiconData.worldgen
+			1 if meta % 8 == BlockAltLeaves.yggMeta - 4     -> null
+			else                                            -> AlfheimLexiconData.irisSapling
 		}
 	}
 	

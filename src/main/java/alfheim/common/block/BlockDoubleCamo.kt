@@ -19,7 +19,7 @@ import net.minecraft.util.*
 import net.minecraft.world.*
 import net.minecraftforge.client.ForgeHooksClient
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
-import vazkii.botania.api.lexicon.*
+import vazkii.botania.api.lexicon.ILexiconable
 import vazkii.botania.api.wand.IWandable
 import vazkii.botania.common.core.helper.ItemNBTHelper
 import kotlin.math.max

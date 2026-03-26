@@ -1,15 +1,14 @@
 package alfheim.common.potion
 
 import alexsocol.asjlib.*
+import alfheim.api.entity.IMuspelheimEntity
 import alfheim.common.block.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.DamageSourceSpell
-import alfheim.common.item.equipment.bauble.ItemPendant
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.player.EntityPlayer
 import org.lwjgl.opengl.GL11.*
 
 object PotionSoulburn: PotionAlfheim(AlfheimConfigHandler.potionIDSoulburn, "soulburn", true, 0xCC4400) {
@@ -22,8 +21,8 @@ object PotionSoulburn: PotionAlfheim(AlfheimConfigHandler.potionIDSoulburn, "sou
 	}
 	
 	override fun performEffect(living: EntityLivingBase, amp: Int) {
-		if (living is EntityPlayer && ItemPendant.canProtect(living, ItemPendant.Companion.EnumPrimalWorldType.MUSPELHEIM, time)) {
-			living.getActivePotionEffect(id)?.duration = 1
+		if (IMuspelheimEntity.checkProtection(living, time)) {
+			living.getActivePotionEffect(id)?.duration = 0
 			return
 		}
 		

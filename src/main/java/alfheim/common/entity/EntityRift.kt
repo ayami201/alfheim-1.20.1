@@ -4,7 +4,7 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.asjlib.render.*
 import alfheim.api.ModInfo
-import alfheim.api.lib.*
+import alfheim.api.lib.LibShaderIDs
 import alfheim.client.render.world.SpellVisualizations
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.*
@@ -16,8 +16,8 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.DamageSource
 import net.minecraft.world.World
 import net.minecraftforge.client.event.RenderWorldLastEvent
-import org.lwjgl.opengl.*
 import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL20
 import vazkii.botania.client.core.handler.ClientTickHandler
 import vazkii.botania.common.Botania
 import java.util.*

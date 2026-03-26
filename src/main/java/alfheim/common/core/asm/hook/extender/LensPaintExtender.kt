@@ -21,6 +21,7 @@ import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimBlocks.starBlock
 import alfheim.common.block.AlfheimBlocks.starBlock2
 import alfheim.common.block.tile.*
+import alfheim.common.compat.AngelicaCompat
 import alfheim.common.item.ItemIridescent
 import cpw.mods.fml.relauncher.*
 import gloomyfolken.hooklib.asm.*
@@ -32,7 +33,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
 import net.minecraftforge.common.util.ForgeDirection
-import org.lwjgl.opengl.GL11
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.internal.IManaBurst
 import vazkii.botania.common.Botania
@@ -196,7 +196,7 @@ object LensPaintExtender {
 		if (result != 1 || !ASJSuperWrapperHandler.getFlag(sheep, 6)) return result
 		
 		val (r, g, b) = Color.getHSBColor((sheep.ticksExisted * 2 + sheep.entityId + ticks) % 360 / 360F, 1F, 1F).getRGBColorComponents(null)
-		GL11.glColor3f(r, g, b)
+		AngelicaCompat.glColor3f(r, g, b)
 		return result
 	}
 	

@@ -11,12 +11,12 @@ import org.lwjgl.opengl.GL11.*
 
 object ModelEntitySurtr: ModelEntityPrimalBoss() {
 	
-	override lateinit var head: ModelRenderer
-	override lateinit var body: ModelRenderer
-	override lateinit var rightarm: ModelRenderer
-	override lateinit var leftarm: ModelRenderer
-	override lateinit var rightleg: ModelRenderer
-	override lateinit var leftleg: ModelRenderer
+	override var head: ModelRenderer
+	override var body: ModelRenderer
+	override var rightarm: ModelRenderer
+	override var leftarm: ModelRenderer
+	override var rightleg: ModelRenderer
+	override var leftleg: ModelRenderer
 	
 	var shape8: ModelRenderer
 	var shape17: ModelRenderer

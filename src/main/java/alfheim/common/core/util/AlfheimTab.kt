@@ -97,7 +97,6 @@ import alfheim.common.block.AlfheimBlocks.rainbowFlowerFloating
 import alfheim.common.block.AlfheimBlocks.rainbowGrass
 import alfheim.common.block.AlfheimBlocks.rainbowLeaves
 import alfheim.common.block.AlfheimBlocks.rainbowMushroom
-import alfheim.common.block.AlfheimBlocks.softStorage
 import alfheim.common.block.AlfheimBlocks.rainbowPlanks
 import alfheim.common.block.AlfheimBlocks.rainbowSlab
 import alfheim.common.block.AlfheimBlocks.rainbowStairs
@@ -124,6 +123,7 @@ import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
 import alfheim.common.block.AlfheimBlocks.snakeObject
 import alfheim.common.block.AlfheimBlocks.snowGrass
 import alfheim.common.block.AlfheimBlocks.snowLayer
+import alfheim.common.block.AlfheimBlocks.softStorage
 import alfheim.common.block.AlfheimBlocks.spire
 import alfheim.common.block.AlfheimBlocks.stalactite
 import alfheim.common.block.AlfheimBlocks.stalagmite

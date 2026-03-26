@@ -14,11 +14,10 @@ import org.lwjgl.opengl.GL11.*
 import vazkii.botania.api.item.IPhantomInkable
 import vazkii.botania.client.core.helper.ShaderHelper
 
-class ModelElvoriumArmor
-/**armorType: 0 - head, 1 - body and arms, 2 - legs, 3 - feet. */
-(private val partType: Int): AdvancedArmorModel() {
-	
-	val sobakaSutula = arrayOf("GedeonGrays", "Gedeon_Grays")
+class ModelElvoriumArmor(
+	/**0 - head, 1 - body and arms, 2 - legs, 3 - feet. */
+	val partType: Int
+): AdvancedArmorModel() {
 	
 	override fun pre(entity: Entity) {
 		mc.renderEngine.bindTexture(LibResourceLocations.elvoriumArmor)
@@ -112,7 +111,7 @@ class ModelElvoriumArmor
 		}
 	}
 	
-	override fun hasOffhand(entity: Entity) = false // entity is EntityPlayer && entity.commandSenderName == "AlexSocol" && entity.heldItem?.item !== AlfheimItems.royalStaff
+	override fun hasOffhand(entity: Entity) = false
 	
 	companion object {
 		

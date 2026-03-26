@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import vazkii.botania.common.item.equipment.bauble.ItemAuraRing
 
-@Suppress("UNUSED_PARAMETER", "unused")
+@Suppress("unused")
 object ItemAuraRingExtender {
 	
 	@JvmStatic

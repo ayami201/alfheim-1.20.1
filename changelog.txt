@@ -1,7 +1,5 @@
 Innovations:
- Tradescantia wildcard metadata support
- Resonator now ignores liquids
+ Compatibility with Angelica
 
 Fixes:
- Manapool crash with Tradescantia
- [ESM] Extended recipes crash
+ Search tab crash

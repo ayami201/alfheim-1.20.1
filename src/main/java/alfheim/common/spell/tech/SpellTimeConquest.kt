@@ -13,7 +13,7 @@ object SpellTimeConquest: SpellBase("timeConquest", EnumRace.LEPRECHAUN, 50000, 
 	override var efficiency = 0.05
 	
 	override val usableParams
-		get() = arrayOf(duration, efficiency)
+		get() = arrayOf<Number>(duration, efficiency)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val tg = TargetingSystem.getTarget(caster)

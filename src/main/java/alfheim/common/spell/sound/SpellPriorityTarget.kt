@@ -15,7 +15,7 @@ object SpellPriorityTarget: SpellBase("priorityTarget", EnumRace.POOKA, 10000, 9
 	override var efficiency = 0.25
 	
 	override val usableParams
-		get() = arrayOf(duration, efficiency)
+		get() = arrayOf<Number>(duration, efficiency)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val tg = TargetingSystem.getTarget(caster)

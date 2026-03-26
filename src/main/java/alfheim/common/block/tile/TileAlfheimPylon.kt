@@ -118,7 +118,7 @@ class TileAlfheimPylon: ASJTile() {
 	
 	fun checkStructure(): TilePool? {
 		if (!UnsafeSchemaUtils.checkStructure(worldObj, xCoord, yCoord, zCoord, schema)) return null
-		return worldObj.getTileEntity(xCoord, yCoord - 2, zCoord) as? TilePool ?: return null
+		return worldObj.getTileEntity(xCoord, yCoord - 2, zCoord) as? TilePool
 	}
 	
 	fun youAreSoFuckedUp() {

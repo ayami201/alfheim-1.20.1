@@ -240,7 +240,7 @@ alfheim.entry.corpSeq=Corporea Sequencer
 alfheim.tagline.corpSeq=Requests the creation of items when needed
 alfheim.page.corpSeq0=The &1Corporea Sequencer&0 is designed to move items from one inventory to another, which opens up many useful applications. But it also has a number of limitations, for example, it always puts items only from top.
 alfheim.page.corpSeq1=First of all, the Sequencer must be connected to the &4Corporea network&0 using the &1Corporea spark&0. The request template is placed in the inventory above the Sequencer, and the requested item is placed in a frame on the Sequencer as a filter. Items from the template are placed in the inventory located one or two blocks below the Sequencer.
-alfheim.page.corpSeq2=For use in crafting automation, the number of items created per request is configured by clicking LMB and Shift-LMB. Pressing RMB with the wand on the Sequencer will reset the current request, and giving a redstone pulse will repeat the request for the expected item.
+alfheim.page.corpSeq2=For use in crafting automation, the number of items created per request is configured by leftclicking and Shift-leftclicking. Rightclicking with the wand on the Sequencer will reset the current request, and giving a redstone pulse will repeat the request for the expected item.
 alfheim.page.corpSeq3=Keep the order!
 
 alfheim.entry.corpInj=Corporea Injector
@@ -687,7 +687,7 @@ alfheim.tagline.garb_loki=Sneaking past your defenses
 alfheim.page.garb_loki0=No priest would be caught dead without a ceremonial robe, although robes aren't actually required to pay allegiance to a divinity.<br>These robes, beyond being fashionable, provide a tangible benefit. Loki's robes make their wearer unable to be tricked with Loki's typical tricks, like fire and explosives. In addition you gain +10% buff to agility to dodge an attack.
 alfheim.page.garb_loki1=Made with quality dwarven rocks
 
-botania.page.lokiRing0n=One of the six mythic rings of the &4aesir&0, the &1Ring of Loki&0 allows for the wearer to tap upon the Trickster God &4Loki&0 to effectively be in multiple places at once.<br>The setup for this ability requires, first and foremost, an empty hand. Sneak-right clicking on a block with said empty hand while having the &1Ring of Loki&0 equipped begins the procedure.
+botania.page.lokiRing0n=One of the six mythic rings of the &4aesir&0, the &1Ring of Loki&0 allows for the wearer to tap upon the Trickster God &4Loki&0 to effectively be in multiple places at once.<br>The setup for this ability requires, first and foremost, an empty hand. Sneak-rightclicking on a block with said empty hand while having the &1Ring of Loki&0 equipped begins the procedure.
 botania.page.lokiRing3n=Such a power does not come for free of course. Utilizing this ability costs &4Mana&0 from the user's inventory per each block placed. It's to note that the more blocks that are selected, the more expensive &4each placed block&0 becomes.<br>Lastly, this ring can be combined with the other five rings of the &4aesir&0 in a crafting table to create the ultimate ring.
 alfheim.entry.rod_loki=Rod of the Tricky Flame
 alfheim.tagline.rod_loki=Pinpoint flamethrower
@@ -843,14 +843,14 @@ alfheim.page.mitten1=Only today discounts on mana up to 50%!
 
 alfheim.entry.aniTorch=Animated Torch
 alfheim.tagline.aniTorch=Compact systems with a floating redstone torch
-alfheim.page.aniTorch0=The &1Animated Torch&0 is no more than a floating &1Redstone Torch&0 with a spark of magical autonomy.<br>The torch, when placed, will face a horizontal direction, providing power towards that direction. Sneak-right clicking it will rotate the torch 90 degrees, changing the power to the new direction instead.
+alfheim.page.aniTorch0=The &1Animated Torch&0 is no more than a floating &1Redstone Torch&0 with a spark of magical autonomy.<br>The torch, when placed, will face a horizontal direction, providing power towards that direction. Sneak-rightclicking it will rotate the torch 90 degrees, changing the power to the new direction instead.
 alfheim.page.aniTorch1=By default, whenever the torch is triggered, it'll turn 180 degrees, serving as a T-Flip-Flop Latch.<br>To trigger the torch one can either have a &4mana burst&0 collide with it, or have an adjacent &1Hovering Hourglass&0 turn. Either way will have the torch do its specified rotation.
 alfheim.page.aniTorch2=Using a &1Wand of the Forest&0 on the torch will change its mode. The default mode is &4Toggle&0, which was explained in the previous page.<br>The other two modes are &4Rotate&0, which will have the torch do a 90 degree spin every time, and &4Random&0, which will have the torch rotate towards a random direction.
 alfheim.page.aniTorch3=It's fallen and it can't get up
 
 alfheim.entry.astrolab=Worldshaper's Astrolabe
 alfheim.tagline.astrolab=A tool to help create planes
-alfheim.page.astrolab0=The &1Worldshaper's Astrolabe&0 is a handy tool to place down blocks, a lot of them, really quick.<br>To start off, sneak-right click the astrolabe on a block in the world. This will set the block that will be placed.<br>Sneak-right clicking with the astrolabe on the air will change how many blocks will get placed.
+alfheim.page.astrolab0=The &1Worldshaper's Astrolabe&0 is a handy tool to place down blocks, a lot of them, really quick.<br>To start off, sneak-rightclick the astrolabe on a block in the world. This will set the block that will be placed.<br>Sneak-rightclicking with the astrolabe on the air will change how many blocks will get placed.
 alfheim.page.astrolab1=When looking at a block with the astrolabe in hand, a quick preview will show up, of what blocks will be placed upon right-click.<br>To create the wall or floor displayed, alongside &4Mana&0, the respective blocks will be taken from the user's inventory, or items that can provide blocks to items such as the &1Rod of the Shifting Crust&0. (e.g. &1Rod of the Depths&0, &1Hand of Ender&0).
 alfheim.page.astrolab2=Builds walls, creates worlds
 

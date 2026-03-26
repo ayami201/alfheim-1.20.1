@@ -27,7 +27,7 @@ class BlockTreeCrafter(name: String, val block: Block): BlockContainerMod(Materi
 		setHardness(3f)
 		setResistance(5f)
 		setLightLevel(1f)
-		setStepSound(Block.soundTypeWood)
+		setStepSound(soundTypeWood)
 		setBlockName(name)
 		random = Random()
 	}

@@ -71,7 +71,7 @@ object SpellTitanHit: SpellBase("titanhit", EnumRace.GNOME, 30, 18, 5) {
 		var mana = 0
 		
 		val mat = world.getBlock(x, y, z).material
-		if (!(!world.isRemote || !remove && draw) || block == null || block.isAir(world, x, y, z) || !(block.getPlayerRelativeBlockHardness(player, world, x, y, z) > 0 || player.capabilities.isCreativeMode)) return mana
+		if (!(!world.isRemote || !remove && draw) || block == null || block.isAir(world, x, y, z) || !(block.getPlayerRelativeBlockHardness(player, world, x, y, z) > 0 || player.capabilities.isCreativeMode)) return 0
 		if (!player.capabilities.isCreativeMode && (!block.canHarvestBlock(player, meta) || !ToolCommons.isRightMaterial(mat, materialsListing))) return 0
 		
 		var flag = false

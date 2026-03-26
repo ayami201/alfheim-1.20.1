@@ -92,7 +92,7 @@ class ItemSoulSword: ItemSword(AlfheimAPI.SOUL), IManaUsingItem, IElementalItem 
 	
 	override fun getAttributeModifiers(stack: ItemStack): Multimap<String, AttributeModifier>? {
 		val multimap = HashMultimap.create<String, AttributeModifier>()
-		multimap.put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(Item.field_111210_e, "Weapon modifier", getDamageFromLevel(stack).D, 0))
+		multimap.put(SharedMonsterAttributes.attackDamage.attributeUnlocalizedName, AttributeModifier(field_111210_e, "Weapon modifier", getDamageFromLevel(stack).D, 0))
 		return multimap
 	}
 	

@@ -16,7 +16,7 @@ object SpellAcidMyst: SpellBase("acidmyst", EnumRace.IMP, 8000, 400, 20) {
 	override var radius = 4.5
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, radius)
+		get() = arrayOf<Number>(damage, duration, radius)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCastOver(caster)

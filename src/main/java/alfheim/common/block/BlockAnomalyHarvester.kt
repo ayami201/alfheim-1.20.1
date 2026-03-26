@@ -31,7 +31,7 @@ class BlockAnomalyHarvester: BlockContainerMod(Material.iron), IWandable, ILexic
 		setLightOpacity(0)
 		setHardness(5f)
 		setResistance(2000f)
-		setStepSound(Block.soundTypeMetal)
+		setStepSound(soundTypeMetal)
 	}
 	
 	override fun registerBlockIcons(reg: IIconRegister) = Unit

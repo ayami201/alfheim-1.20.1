@@ -41,7 +41,7 @@ class SubTileBudOfYggdrasil: SubTileFunctional() {
 		BotaniaAPI.internalHandler.drawComplexManaHUD(color, knownMana, maxMana, name, res, BotaniaAPI.internalHandler.getBindDisplayForFlowerType(this), isValidBinding)
 	}
 	
-	override fun getIcon() = BotaniaAPI.getSignatureForName("budOfYggdrasil").getIconForStack(null)
+	override fun getIcon() = BotaniaAPI.getSignatureForName("budOfYggdrasil").getIconForStack(null)!!
 	
 	override fun readFromPacketNBT(nbt: NBTTagCompound) {
 		super.readFromPacketNBT(nbt)

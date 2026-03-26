@@ -27,7 +27,7 @@ object SkyRendererAlfheim: IRenderHandler() {
 	val textureCrackInside = ResourceLocation(ModInfo.MODID, "textures/misc/crack1.png")
 	val planetTextures = Array(6) { ResourceLocation("${LibResources.MISC_PLANET}$it.png") }
 	
-	val dome = AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/dome.obj"))
+	val dome = AdvancedModelLoader.loadModel(ResourceLocation(ModInfo.MODID, "model/dome.obj"))!!
 	
 	var glSkyList = -1
 	
@@ -38,10 +38,8 @@ object SkyRendererAlfheim: IRenderHandler() {
 		val b2: Byte = 32
 		val i = 256 / b2 + 2
 		val f = 4.0
-		var j: Int
 		var k: Int
-		
-		j = -b2 * i
+		var j: Int = -b2 * i
 		while (j <= b2 * i) {
 			k = -b2 * i
 			while (k <= b2 * i) {

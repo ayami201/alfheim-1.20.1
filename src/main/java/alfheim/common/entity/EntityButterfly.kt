@@ -9,8 +9,7 @@ import alfheim.common.world.dim.alfheim.biome.*
 import cpw.mods.fml.relauncher.*
 import net.minecraft.entity.*
 import net.minecraft.init.Items
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
+import net.minecraft.item.*
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
 import net.minecraft.world.World
@@ -55,13 +54,14 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 	override fun isAIEnabled(): Boolean = true
 	override fun canTriggerWalking() = false
 	override fun doesEntityNotTriggerPressurePlate() = true
+	override fun getCreatureAttribute() = EnumCreatureAttribute.ARTHROPOD
 	
 	override fun getDropItem(): Item? = null
 	
 	override fun dropFewItems(hit: Boolean, looting: Int) {
 		val count = max(1, looting) * if (isGiant) ASJUtilities.randInBounds(7, 15, rng) else 1
 		
-		for (i in 0 until count) {
+		repeat(count) {
 			if (rng.nextBoolean())
 				entityDropItem(ElvenFoodMetas.Nectar.stack, 0f)
 			else {
@@ -92,7 +92,7 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 	
 	override fun onEntityUpdate() {
 		if (worldObj.isRemote) {
-			for (i in 0 until if (isGiant) 10 else 1) {
+			repeat(if (isGiant) 10 else 1) {
 				val color = Color(Color.HSBtoRGB((ClientTickHandler.ticksInGame * entityId) % 360 / 360f, 1f, 1f))
 				Botania.proxy.sparkleFX(worldObj, posX + Math.random() * width - width / 2, posY + Math.random() * height - height / 2, posZ + Math.random() * width - width / 2, color.red.F, color.green.F, color.blue.F, 0.1f + Math.random().F * 0.25f * if (isGiant) 10 else 1, 12)
 			}
@@ -146,9 +146,9 @@ class EntityButterfly(world: World): EntityFlyingCreature(world), IAlfheimMob {
 	
 	override fun setDead() {
 		super.setDead()
-		if (worldObj.isRemote)
-			for (i in 0..11)
-				Botania.proxy.sparkleFX(worldObj, posX + (Math.random() - 0.5) * 0.25, posY + 0.5 + (Math.random() - 0.5) * 0.25, posZ + (Math.random() - 0.5) * 0.25, 1f, 0.25f, 0.9f, 1f + Math.random().F * 0.25f, 5)
+		if (worldObj.isRemote) repeat (12) {
+			Botania.proxy.sparkleFX(worldObj, posX + (Math.random() - 0.5) * 0.25, posY + 0.5 + (Math.random() - 0.5) * 0.25, posZ + (Math.random() - 0.5) * 0.25, 1f, 0.25f, 0.9f, 1f + Math.random().F * 0.25f, 5)
+		}
 	}
 	
 	override fun getCanSpawnHere(): Boolean {

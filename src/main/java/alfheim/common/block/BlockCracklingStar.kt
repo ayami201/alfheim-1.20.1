@@ -99,7 +99,7 @@ class BlockCracklingStar: BlockContainerMod(Material.cloth), IWandable, ILexicon
 		if (player == null || world.isRemote) return false
 		val dwp = playerPositions[player.uniqueID]
 		
-		val here = DimWithPos(world.provider.dimensionId, x, y, z)
+		val here = DimWithPos(world, x, y, z)
 		
 		if (dwp == null)
 			playerPositions[player.uniqueID] = here

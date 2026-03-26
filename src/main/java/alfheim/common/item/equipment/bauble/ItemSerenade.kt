@@ -31,7 +31,7 @@ class ItemSerenade: ItemBauble("Serenade"), IBaubleRender {
 	override fun onItemRightClick(stack: ItemStack, world: World?, player: EntityPlayer): ItemStack {
 		return if (player.isSneaking) {
 			stack.doMusic = !stack.doMusic
-			return stack
+			stack
 		} else super.onItemRightClick(stack, world, player)
 	}
 	

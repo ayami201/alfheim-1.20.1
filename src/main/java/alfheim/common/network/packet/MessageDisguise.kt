@@ -10,7 +10,6 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
-import java.io.FileNotFoundException
 
 class MessageDisguise(var skin: String, var gurl: Boolean, var race: Int, var respond: Boolean, var targetName: String): AlfheimPacket<MessageDisguise>() {
 	
@@ -38,7 +37,7 @@ class MessageDisguise(var skin: String, var gurl: Boolean, var race: Int, var re
 					if (skin.indexOf(":") == -1) return null
 					
 					val (modid, name) = skin.split(":")
-					validateSkin(ResourceLocation(modid, name))
+					ResourceLocation(modid, name)
 				} else if (race == 0 || race == 10) AbstractClientPlayer.locationStevePng else (if (gurl) LibResourceLocations.oldFemale else LibResourceLocations.oldMale)[race - 1]
 				
 				target.func_152121_a(MinecraftProfileTexture.Type.SKIN, new)
@@ -51,15 +50,6 @@ class MessageDisguise(var skin: String, var gurl: Boolean, var race: Int, var re
 			}
 			
 			return null
-		}
-		
-		fun validateSkin(skin: ResourceLocation): ResourceLocation {
-			try {
-				mc.resourceManager.getResource(skin)
-				return skin
-			} catch (e: FileNotFoundException) {
-				return AbstractClientPlayer.locationStevePng
-			}
 		}
 	}
 }

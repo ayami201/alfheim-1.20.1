@@ -13,7 +13,7 @@ object SpellEdgeLife: SpellBase("edgeLife", EnumRace.CAITSITH, 25000, 1200, 1) {
 	override var efficiency = 0.5
 	
 	override val usableParams
-		get() = arrayOf(duration, efficiency)
+		get() = arrayOf<Number>(duration, efficiency)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val result = checkCast(caster)

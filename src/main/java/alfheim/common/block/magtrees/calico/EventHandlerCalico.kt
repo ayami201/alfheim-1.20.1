@@ -7,7 +7,7 @@ import net.minecraftforge.event.world.ExplosionEvent
 
 object EventHandlerCalico {
 	
-	val MAXRANGE = 8
+	const val MAXRANGE = 8
 	
 	@SubscribeEvent
 	fun catchExplosionPre(e: ExplosionEvent.Start) {
@@ -31,7 +31,7 @@ object EventHandlerCalico {
 			}
 		}
 		
-		if (explosiondampeners.size == 0) return
+		if (explosiondampeners.isEmpty()) return
 		
 		val dampener = explosiondampeners[e.world.rand.nextInt(explosiondampeners.size)]
 		

@@ -505,11 +505,12 @@ object CardinalSystem {
 					if (!segment.party.isPlayer(i)) continue
 					val mr = segment.party[i]
 					if (mr !is EntityPlayerMP) continue
-					NetworkService.sendTo(Message2d(M2d.PARTYID, e.getEntityId().D, segment.party.indexOf(e).D), mr)
+					NetworkService.sendTo(Message2d(M2d.PARTYID, e.entityId.D, segment.party.indexOf(e).D), mr)
 				}
 			}
 		}
 		
+		@Suppress("EmptyRange") // ты совсем блядь тупое уёбище нахуй?
 		class Party: Serializable, Cloneable {
 			
 			private var members: Array<Member?>
@@ -548,13 +549,12 @@ object CardinalSystem {
 					}
 				} else {
 					val e = mc.theWorld.getEntityByID(members[i]?.uuid?.mostSignificantBits?.I ?: 0)
-					return if (e is EntityLivingBase) e else null
+					return e as? EntityLivingBase
 				}
 				return null
 			}
 			
-			operator fun get(name: String) =
-				(0 until count).firstOrNull { members[it]?.name == name }?.let { get(it) }
+			operator fun get(name: String) = (0 until count).firstOrNull { members[it]?.name == name }?.let { get(it) }
 			
 			fun getHealth(i: Int) = members[i]?.health ?: 0f
 			
@@ -837,9 +837,8 @@ object CardinalSystem {
 			
 			private class Member(val name: String, var uuid: UUID, var mana: Int, val isPlayer: Boolean, var isDead: Boolean, var health: Float, var maxHealth: Float, var type: Int): Serializable, Cloneable {
 				
-				public override fun clone() = Member(name, uuid, mana, isPlayer, isDead, health, maxHealth, type)
+				override fun clone() = Member(name, uuid, mana, isPlayer, isDead, health, maxHealth, type)
 				
-				@Suppress("unused")
 				enum class MemberType {
 					
 					HUMAN, SALAMANDER, SYLPH, CAITSITH, POOKA, GNOME, LEPRECHAUN, SPRIGGAN, UNDINE, IMP, ALV, MOB, NPC, BOSS;

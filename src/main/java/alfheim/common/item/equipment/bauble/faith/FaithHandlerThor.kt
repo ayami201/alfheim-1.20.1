@@ -30,7 +30,7 @@ import vazkii.botania.common.core.helper.Vector3 as Bector3
 
 object FaithHandlerThor: IFaithHandler {
 	
-	val uuid = UUID.fromString("67d86aaf-e4c5-4f0e-af7e-7e56d1ec9fb0")
+	val uuid = UUID.fromString("67d86aaf-e4c5-4f0e-af7e-7e56d1ec9fb0")!!
 	val mod = AttributeModifier(uuid, "Thor faith modifier", 0.2, 1)
 	
 	private const val TAG_COOLDOWN = "lightning_cooldown"

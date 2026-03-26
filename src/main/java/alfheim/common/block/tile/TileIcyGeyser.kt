@@ -4,11 +4,11 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.ASJTile
 import alexsocol.asjlib.math.Vector3
 import alfheim.AlfheimCore
+import alfheim.api.entity.INiflheimEntity
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.SheerColdHandler.cold
-import alfheim.common.item.equipment.bauble.ItemPendant
 import net.minecraft.client.particle.*
-import net.minecraft.entity.*
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.*
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
@@ -45,8 +45,6 @@ class TileIcyGeyser: ASJTile() {
 				}
 			} else {
 				getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox().expand(1, 6, 1).offset(0, 7, 0)).forEach {
-					if (EntityList.getEntityString(it) in AlfheimConfigHandler.overcoldBlacklist) return@forEach
-					
 					if (it is EntityPlayer && it.capabilities.isCreativeMode) return@forEach
 					
 					val (x, y, z) = Vector3.fromEntity(it).sub(Vector3.fromTileEntityCenter(this)).normalize().mul(0.1)
@@ -58,7 +56,7 @@ class TileIcyGeyser: ASJTile() {
 					if (it is EntityPlayerMP)
 						it.playerNetServerHandler.sendPacket(S12PacketEntityVelocity(it))
 					
-					if (it is EntityPlayer && ItemPendant.canProtect(it, ItemPendant.Companion.EnumPrimalWorldType.NIFLHEIM, 10)) return@forEach
+					if (INiflheimEntity.checkProtection(it, 10)) return@forEach
 					
 					it.cold = 100f
 					it.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 100, 4))

@@ -16,7 +16,7 @@ object SpellWellOLife: SpellBase("wellolife", EnumRace.UNDINE, 7000, 600, 30) {
 	override var duration = 1200
 	
 	override val usableParams
-		get() = arrayOf(damage, duration, efficiency)
+		get() = arrayOf<Number>(damage, duration, efficiency)
 	
 	override fun performCast(caster: EntityLivingBase): SpellCastResult {
 		val pt = (if (caster is EntityPlayer) PartySystem.getParty(caster) else PartySystem.getMobParty(caster)) ?: return SpellCastResult.NOTARGET

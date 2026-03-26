@@ -131,7 +131,7 @@ object ModelEntityFlugel: ModelBipedNew() {
 		
 		super.render(entity, time, amplitude, ticksExisted, yawHead, pitchHead, size) // ItemFlightTiara
 		renderWings(entity, mc.timer.renderPartialTicks, -0x1)
-		if ((entity as? EntityFlugel)?.isUltraMode == true) {
+		if (entity.isUltraMode) {
 			val color = ASJRenderHelper.addAlpha(0x240935, 180)
 			renderWings(entity, mc.timer.renderPartialTicks, color)
 			

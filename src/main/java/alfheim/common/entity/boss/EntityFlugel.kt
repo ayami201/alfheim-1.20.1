@@ -153,7 +153,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 		if ((source.damageType != "player" && source !is DamageSourceSpell) || !isTruePlayer(player) && isEntityInvulnerable)
 			return false
 		
-		val prevDmg = playersDamage[player.commandSenderName] ?: return false
+		val prevDmg = playersDamage[player.commandSenderName] ?: (if (player.capabilities.isCreativeMode) 0.1f else null) ?: return false
 		if (!player.capabilities.isCreativeMode && player.capabilities.disableDamage) return false
 		
 		val crit = player.fallDistance > 0f && !player.onGround && !player.isOnLadder && !player.isInWater && !player.isPotionActive(Potion.blindness) && player.ridingEntity == null
@@ -317,8 +317,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 				entityDropItem(ItemStack(ModItems.blackLotus, if (voidLotus) 1 else rand.nextInt(3) + 1, if (voidLotus) 1 else 0), 1f)
 			}
 			
-			val runes = rand.nextInt(6) + 1
-			for (i in 0 until runes) if (Math.random() < 0.3) entityDropItem(ItemStack(ModItems.rune, 2 + rand.nextInt(3), rand.nextInt(16)), 1f)
+			repeat(rand.nextInt(6) + 1) { if (Math.random() < 0.3) entityDropItem(ItemStack(ModItems.rune, 2 + rand.nextInt(3), rand.nextInt(16)), 1f) }
 			if (Math.random() < 0.2) entityDropItem(ItemStack(ModItems.pinkinator), 1f)
 			
 			if (Math.random() < 0.3) {
@@ -339,6 +338,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 		}
 	}
 	
+	@Suppress("UNCHECKED_CAST")
 	override fun onLivingUpdate() {
 		super.onLivingUpdate()
 		
@@ -450,7 +450,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			val tiara = baubles[0]
 			val wasHere = player.commandSenderName in playersDamage
 			
-			if (tiara?.item === ModItems.flightTiara && tiara!!.meta == 1 && wasHere)
+			if (tiara?.item === ModItems.flightTiara && tiara.meta == 1 && wasHere)
 				ItemNBTHelper.setInt(tiara, TAG_TIME_LEFT, 1200)
 			else if (AlfheimConfigHandler.enableElvenStory && player.race == EnumRace.HUMAN)
 				ElvenFlightHelper[player] = ElvenFlightHelper.max

@@ -1,7 +1,6 @@
 package alfheim.common.crafting.recipe
 
-import alexsocol.asjlib.D
-import alexsocol.asjlib.get
+import alexsocol.asjlib.*
 import alfheim.api.AlfheimAPI
 import alfheim.api.AlfheimAPI.set
 import alfheim.api.crafting.recipe.TunerIncantation
@@ -11,11 +10,10 @@ import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 import thaumcraft.api.aspects.Aspect
-import thaumcraft.common.config.ConfigBlocks.*
-import thaumcraft.common.config.ConfigItems.*
+import thaumcraft.common.config.ConfigBlocks.blockCrystal
+import thaumcraft.common.config.ConfigItems.itemShard
 import thaumcraft.common.items.wands.ItemWandCasting
-import kotlin.math.ceil
-import kotlin.math.min
+import kotlin.math.*
 
 object IncantationThaumWandOvercharge: TunerIncantation<ItemStack>(ItemStack::class.java, "o kama suli e ijo lili o pana e ijo mama tawa insa ona", Array(4) { TAG_OVERCHARGE }, { apply(it) }) {
 	

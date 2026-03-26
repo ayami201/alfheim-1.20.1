@@ -51,7 +51,7 @@ class EntityAICreeperAvoidPooka(val creeper: EntityCreeper): EntityAIBase() {
 			else                                                                                                -> {
 				entityPathEntity = entityPathNavigate.getPathToXYZ(vec3.xCoord, vec3.yCoord, vec3.zCoord) ?: return false
 				
-				return entityPathEntity!!.isDestinationSame(vec3).also { if (it) player.playSoundAtEntity("mob.cat.meow", 1f, 1f) }
+				entityPathEntity!!.isDestinationSame(vec3).also { if (it) player.playSoundAtEntity("mob.cat.meow", 1f, 1f) }
 			}
 		}
 	}
