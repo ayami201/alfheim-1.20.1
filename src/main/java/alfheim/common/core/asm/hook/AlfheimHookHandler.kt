@@ -17,6 +17,7 @@ import alfheim.client.render.entity.RenderEntityFloatingIsland
 import alfheim.common.block.*
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.block.tile.*
+import alfheim.common.compat.AngelicaCompat
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDAlfheim
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDDomains
@@ -47,7 +48,6 @@ import alfheim.common.item.equipment.bauble.faith.ItemRagnarokEmblem
 import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.item.relic.ItemMjolnir
 import alfheim.common.item.rod.ItemRodClicker
-import alfheim.common.potion.PotionSoulburn
 import alfheim.common.spell.earth.SpellGoldRush
 import alfheim.common.world.data.CustomWorldData.Companion.customData
 import alfheim.common.world.dim.niflheim.biome.BiomeNiflheim
@@ -104,8 +104,6 @@ import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
 import net.minecraftforge.fluids.IFluidBlock
 import net.minecraftforge.oredict.OreDictionary
-import org.lwjgl.opengl.GL11.*
-import org.lwjgl.opengl.GL12
 import thaumcraft.api.aspects.AspectList
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager
 import travellersgear.api.TravellersGearAPI
@@ -467,10 +465,10 @@ object AlfheimHookHandler {
 			status = StatCollector.translateToLocal("botaniamisc.$status")
 		
 		RenderHelper.enableGUIStandardItemLighting()
-		glEnable(GL12.GL_RESCALE_NORMAL)
+		AngelicaCompat.enableRescaleNormal()
 		RenderItem.getInstance().renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, stack, x, y)
 		RenderItem.getInstance().renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, stack, x, y)
-		glDisable(GL12.GL_RESCALE_NORMAL)
+		AngelicaCompat.disableRescaleNormal()
 		RenderHelper.disableStandardItemLighting()
 		
 		mc.fontRenderer.drawString(timer, x + 22, y + 2, hourglass.color)
@@ -1436,24 +1434,21 @@ object AlfheimHookHandler {
 	@Hook(injectOnExit = true)
 	fun renderManaBar(hh: HUDHandler?, x: Int, y: Int, color: Int, alpha: Float, mana: Int, maxMana: Int) {
 		if (mana < 0 || !AlfheimConfigHandler.numericalMana || !numMana) return
-		glPushMatrix()
+		AngelicaCompat.glPushMatrix()
 		
 		val text = "$mana/$maxMana"
 		val x = x + 51 - mc.fontRenderer.getStringWidth(text) / 2
 		val y = y - mc.fontRenderer.FONT_HEIGHT
 		mc.fontRenderer.drawString(text, x, y, color, mc.currentScreen == null)
-		glPopMatrix()
+		AngelicaCompat.glPopMatrix()
 	}
 	
 	@SideOnly(CLIENT)
 	@JvmStatic
 	@Hook
 	fun renderOverlays(renderer: ItemRenderer, partialTicks: Float) {
-		if (mc.thePlayer.isPotionActive(AlfheimConfigHandler.potionIDSoulburn)) {
-			glDisable(GL_ALPHA_TEST)
-			PotionSoulburn.renderFireInFirstPerson()
-			glEnable(GL_ALPHA_TEST)
-		}
+		if (mc.thePlayer.isPotionActive(AlfheimConfigHandler.potionIDSoulburn))
+			AngelicaCompat.renderOverlays()
 	}
 	
 	var renderingBoss = false
@@ -1501,13 +1496,13 @@ object AlfheimHookHandler {
 				val color = if (boss is IBotaniaBossWithName) boss.getNameColor() else if (boss is IBotaniaBossWithShaderAndName) boss.getNameColor() else 0
 				val result = font.drawString(string, x, ny, color, true)
 				renderingBoss = false
-				glColor4f(1f, 1f, 1f, 1f)
+				AngelicaCompat.glColor4f(1f, 1f, 1f, 1f)
 				return result
 			}
 		}
 		
 		val result = font.drawString(string, x, ny, color, true)
-		glColor4f(1f, 1f, 1f, 1f)
+		AngelicaCompat.glColor4f(1f, 1f, 1f, 1f)
 		return result
 	}
 	
@@ -1517,9 +1512,9 @@ object AlfheimHookHandler {
 		val item = stack.item
 		
 		if (item is IManaItem && AlfheimConfigHandler.numericalMana) {
-			glDisable(GL_DEPTH_TEST)
+			AngelicaCompat.disableDepthTest()
 			mc.fontRenderer.drawStringWithShadow("${item.getMana(stack)}/${item.getMaxMana(stack)}", mouseX + offx - 1, mouseY - offy - height - 1 - mc.fontRenderer.FONT_HEIGHT, Color.HSBtoRGB(0.528f, (sin((ClientTickHandler.ticksInGame.F + ClientTickHandler.partialTicks).D * 0.2).F + 1f) * 0.3f + 0.4f, 1f))
-			glEnable(GL_DEPTH_TEST)
+			AngelicaCompat.enableDepthTest()
 		}
 	}
 	
@@ -1543,7 +1538,7 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook
 	fun renderQueued(fx: FXWisp, tessellator: Tessellator?, depthEnabled: Boolean) {
-		if (fx.blendmode != prevBlendMode) glBlendFunc(GL_SRC_ALPHA, fx.blendmode)
+		if (fx.blendmode != prevBlendMode) AngelicaCompat.renderQueued(fx.blendmode)
 	}
 	
 	@JvmStatic
@@ -2129,7 +2124,7 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook
 	fun renderTileEntityAt(render: RenderTileRuneAltar, tile: TileEntity?, x: Double, y: Double, z: Double, ticks: Float) {
-		glEnable(GL12.GL_RESCALE_NORMAL)
+		AngelicaCompat.enableRescaleNormal()
 	}
 	
 	@JvmStatic
@@ -2200,11 +2195,10 @@ object AlfheimHookHandler {
 		OIIA_RANDOM.setSeed(ocelot.entityId + ocelot.ticksExisted / OIIA_FREQ + 1L)
 		val randomSpeed = ASJUtilities.randInBounds(100, 200, OIIA_RANDOM)
 		
-		glPushMatrix()
+		AngelicaCompat.glPushMatrix()
 		val time = ocelot.ticksExisted % 360 + mc.timer.renderPartialTicks
 		val angle = (time * randomSpeed) % 360f
-		glRotatef(angle, 0f, 1f, 0f)
-		glTranslatef(0f, -0.5f - sin(time.D / 150 * randomSpeed).F / 8f, 0f)
+		AngelicaCompat.preRender(angle, time, randomSpeed)
 	}
 	
 	@SideOnly(CLIENT)
@@ -2237,7 +2231,7 @@ object AlfheimHookHandler {
 	fun postRender(model: ModelOcelot, ocelot: Entity, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float, f6: Float) {
 		if (oiiaTest(ocelot, model)) return
 		
-		glPopMatrix()
+		AngelicaCompat.glPopMatrix()
 		model.ocelotTail.rotateAngleY = 0f
 		model.ocelotTail2.rotationPointX = 0f
 		model.ocelotTail2.rotateAngleY = 0f
@@ -2267,4 +2261,8 @@ object AlfheimHookHandler {
 		firegen = false
 		return false
 	}
+	
+	@JvmStatic
+	@Hook(createMethod = true, returnCondition = ALWAYS)
+	fun getColor(type: IFloatingFlower.IslandType) = 0xFFFFFF
 }

@@ -32,7 +32,7 @@ object GodAttributesHooks {
 	 */
 	@JvmStatic
 	@Hook(createMethod = true, returnCondition = ReturnCondition.ALWAYS)
-	fun addCollisionBoxesToList(liquid: BlockLiquid, world: World, x: Int, y: Int, z: Int, entitysBox: AxisAlignedBB, list: MutableList<Any?>, player: Entity?) {
+	fun addCollisionBoxesToList(liquid: BlockLiquid, world: World?, x: Int, y: Int, z: Int, entityBox: AxisAlignedBB?, list: MutableList<Any?>?, player: Entity?) {
 		if (RagnarokHandler.blockedPowers[2]) return
 		
 		var aabb = liquid.getCollisionBoundingBoxFromPool(world, x, y, z)
@@ -46,12 +46,12 @@ object GodAttributesHooks {
 			
 			val fullBB = getBoundingBox(x, y, z).offset(0.5).expand(0.5)
 			
-			if (entitysBox.intersectsWith(fullBB)) {
+			if (entityBox?.intersectsWith(fullBB) == true) {
 				player.motionY = if (!player.isSneaking) max(player.motionY, 0.5) else min(player.motionY, -0.5)
 				take = true
 			}
 			
-			if (!player.isSneaking && world.getBlock(x, y + 1, z).isAir(world, x, y, z) && (player.posY - if (ASJUtilities.isClient && mc.thePlayer === player) 1.62 else 0.0) >= y + 1) {
+			if (!player.isSneaking && world?.getBlock(x, y + 1, z)?.isAir(world, x, y, z) == true && (player.posY - if (ASJUtilities.isClient && mc.thePlayer === player) 1.62 else 0.0) >= y + 1) {
 				aabb = fullBB
 				take = true
 			}
@@ -62,9 +62,8 @@ object GodAttributesHooks {
 			}
 		}
 		
-		if (aabb != null && entitysBox.intersectsWith(aabb)) {
-			list.add(aabb)
-		}
+		if (aabb != null && entityBox?.intersectsWith(aabb) == true)
+			list?.add(aabb)
 	}
 	
 	/**
@@ -73,14 +72,10 @@ object GodAttributesHooks {
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
 	fun addExhaustion(player: EntityPlayer, lvl: Float) {
-		if (RagnarokHandler.blockedPowers[5]) return
+		if (player.worldObj.isRemote || player.capabilities.disableDamage || RagnarokHandler.blockedPowers[5]) return
 		
-		if (!player.capabilities.disableDamage) {
-			if (!player.worldObj.isRemote) {
-				val dec = lvl / if (ItemPriestEmblem.getEmblem(5, player) != null) 4f else if (ItemRagnarokEmblem.getEmblem(player, 5) != null) 8f else 1f
-				player.foodStats.addExhaustion(dec)
-			}
-		}
+		val dec = lvl / if (ItemPriestEmblem.getEmblem(5, player) != null) 4f else if (ItemRagnarokEmblem.getEmblem(player, 5) != null) 8f else 1f
+		player.foodStats.addExhaustion(dec)
 	}
 	
 	/**
@@ -89,13 +84,11 @@ object GodAttributesHooks {
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
 	fun breakOtherBlock(axe: ItemTerraAxe, player: EntityPlayer, stack: ItemStack?, x: Int, y: Int, z: Int, originX: Int, originY: Int, originZ: Int, side: Int) {
-		if (RagnarokHandler.blockedPowers[1]) return
+		if (RagnarokHandler.blockedPowers[1] || !axe.shouldBreak(player)) return
 		
-		if (axe.shouldBreak(player)) {
-			val coords = ChunkCoordinates(x, y, z)
-			val range = if (ItemSifRing.getSifRing(player) != null) 64 else ItemTerraAxe.BLOCK_RANGE
-			ItemTerraAxe.addBlockSwapper(player.worldObj, player, stack, coords, range, true)
-		}
+		val coords = ChunkCoordinates(x, y, z)
+		val range = if (ItemSifRing.getSifRing(player) != null) 64 else ItemTerraAxe.BLOCK_RANGE
+		ItemTerraAxe.addBlockSwapper(player.worldObj, player, stack, coords, range, true)
 	}
 	
 	/**

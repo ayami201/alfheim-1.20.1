@@ -3,6 +3,7 @@
 package alfheim.common.core.asm.hook.fixes
 
 import alexsocol.asjlib.*
+import alfheim.common.compat.AngelicaCompat
 import cpw.mods.fml.relauncher.*
 import gloomyfolken.hooklib.asm.*
 import net.minecraft.client.renderer.*
@@ -10,7 +11,6 @@ import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.ItemStack
 import net.minecraftforge.client.event.RenderPlayerEvent
-import org.lwjgl.opengl.GL11
 import vazkii.botania.api.item.IBaubleRender
 import vazkii.botania.common.item.equipment.bauble.ItemFlightTiara
 import java.nio.charset.StandardCharsets
@@ -96,10 +96,7 @@ object FlightTiaraFix {
 		var h = 0.2f
 		var x = 0f
 		var z = 0.15f
-		GL11.glPushMatrix()
-		GL11.glEnable(GL11.GL_BLEND)
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
-		GL11.glColor4f(1f, 1f, 1f, 1f)
+		AngelicaCompat.onPlayerBaubleRender1()
 		val light = 15728880
 		val lightmapX = light % 65536
 		val lightmapY = light / 65536
@@ -120,7 +117,7 @@ object FlightTiaraFix {
 				ry = -((sin((player.ticksExisted + event.partialRenderTick) * 0.2) + 0.6) * if (flying) 12 else 5).F - 5
 				h = 0.85f
 				x = -0.125f
-				GL11.glColor4f(1f, 1f, 1f, 0.5f + if (flying) cos((player.ticksExisted + event.partialRenderTick) * 0.3).F * 0.25f + 0.25f else 0f)
+				AngelicaCompat.onPlayerBaubleRender2(flying, player, event)
 			}
 		}
 		val f = icon.minU
@@ -130,23 +127,16 @@ object FlightTiaraFix {
 		IBaubleRender.Helper.rotateIfSneaking(player)
 		
 		fun render() {
-			GL11.glTranslatef(x, h, z)
-			GL11.glRotatef(rz, 0f, 0f, 1f)
-			GL11.glRotatef(rx, 1f, 0f, 0f)
-			GL11.glRotatef(ry, 0f, 1f, 0f)
+			AngelicaCompat.onPlayerBaubleRender3(x, h, z, rz, rx, ry)
 			ItemRenderer.renderItemIn2D(Tessellator.instance, f1, f2, f, f3, icon.iconWidth, icon.iconHeight, 1f / 32f)
-			GL11.glRotatef(-ry, 0f, 1f, 0f)
-			GL11.glRotatef(-rx, 1f, 0f, 0f)
-			GL11.glRotatef(-rz, 0f, 0f, 1f)
-			GL11.glTranslatef(-x, -h, -z)
+			AngelicaCompat.onPlayerBaubleRender4(x, h, z, rz, rx, ry)
 		}
 		
 		render()
-		GL11.glScalef(-1f, 1f, 1f)
+		AngelicaCompat.onPlayerBaubleRender5()
 		render()
 		
-		GL11.glColor4f(1f, 1f, 1f, 1f)
-		GL11.glPopMatrix()
+		AngelicaCompat.onPlayerBaubleRender6()
 		
 		return true
 	}

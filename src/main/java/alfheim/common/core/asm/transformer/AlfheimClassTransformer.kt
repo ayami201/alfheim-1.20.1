@@ -6,7 +6,6 @@ import alfheim.api.ModInfo
 import alfheim.common.core.asm.hook.extender.ItemLensExtender
 import alfheim.common.core.handler.AlfheimConfigHandler
 import gloomyfolken.hooklib.asm.HookLogger.Log4JLogger
-import org.lwjgl.opengl.GL11
 import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.*
@@ -26,20 +25,8 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 			"net.minecraft.potion.Potion"                                      -> core { `Potion$ClassVisitor`(it) }
 			"thaumcraft.common.items.ItemNugget"                               -> core { `ItemNugget$ClassVisitor`(it) }
 			"vazkii.botania.client.core.handler.BaubleRenderHandler"           -> core { `BaubleRenderHandler$ClassVisitor`(it) }
-			"vazkii.botania.client.core.handler.LightningHandler"              -> core { `LightningHandler$ClassVisitor`(it) }
 			"vazkii.botania.client.core.handler.TooltipAdditionDisplayHandler" -> core { `TooltipAdditionDisplayHandler$ClassVisitor`(it) }
 			"vazkii.botania.client.core.helper.RenderHelper"                   -> core { `RenderHelper$ClassVisitor`(it) }
-			"vazkii.botania.client.render.tile.RenderTileFloatingFlower"       -> core { `RenderTileFloatingFlower$ClassVisitor`(it) }
-			
-			$$"vazkii.botania.common.block.decor.IFloatingFlower$IslandType" -> tree {
-				if (OBF || it.methods.any { m -> m.name == "getColor" && m.desc == "()I"}) return@tree
-				
-				val mn = MethodNode(ACC_PUBLIC, "getColor", "()I", null, null)
-				mn.instructions.add(LdcInsnNode(16777215))
-				mn.instructions.add(InsnNode(IRETURN))
-				it.methods.add(mn)
-			}
-			
 			"vazkii.botania.common.block.tile.TileManaFlame"                   -> core { `TileManaFlame$ClassVisitor`(it) }
 			"vazkii.botania.common.block.tile.TileSpecialFlower"               -> core { `TileSpecialFlower$ClassVisitor`(it) }
 			"vazkii.botania.common.entity.EntityDoppleganger"                  -> {
@@ -54,8 +41,8 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 			"vazkii.botania.common.item.rod.ItemTerraformRod"                  -> core { `ItemTerraformRod$ClassVisitor`(it) }
 			"vazkii.botania.common.lib.LibItemNames"                           -> core { `LibItemNames$ClassVisitor`(it) }
 			// fixes for stupid coders:
-			$$"com.emoniph.witchery.client.ClientEvents$GUIOverlay" -> core { `ClientEvents$GUIOverlay$ClassVisitor`(it) }
-			else                                                    -> this.basicClass
+			$$"com.emoniph.witchery.client.ClientEvents$GUIOverlay"            -> core { `ClientEvents$GUIOverlay$ClassVisitor`(it) }
+			else                                                               -> this.basicClass
 		}
 	}
 	
@@ -219,34 +206,6 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 		}
 	}
 	
-	private inner class `LightningHandler$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
-		
-		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
-			if (name == "onRenderWorldLast") {
-				logger.debug("Visiting LightningHandler#onRenderWorldLast: $name$desc")
-				return `LightningHandler$onRenderWorldLast$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
-			}
-			return super.visitMethod(access, name, desc, signature, exceptions)
-		}
-		
-		private inner class `LightningHandler$onRenderWorldLast$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
-			
-			override fun visitMethodInsn(opcode: Int, owner: String, name: String, desc: String, itf: Boolean) {
-				super.visitMethodInsn(opcode, owner, name, desc, itf)
-				
-				if (opcode == INVOKESTATIC) {
-					if (name == "glPushMatrix") {
-						mv.visitIntInsn(SIPUSH, GL11.GL_CULL_FACE)
-						mv.visitMethodInsn(INVOKESTATIC, "org/lwjgl/opengl/GL11", "glDisable", "(I)V", false)
-					} else if (name == "glPopmatrix") {
-						mv.visitIntInsn(SIPUSH, GL11.GL_CULL_FACE)
-						mv.visitMethodInsn(INVOKESTATIC, "org/lwjgl/opengl/GL11", "glEnable", "(I)V", false)
-					}
-				}
-			}
-		}
-	}
-	
 	private inner class `TooltipAdditionDisplayHandler$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
@@ -322,69 +281,12 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 		}
 	}
 	
-	private inner class `RenderTileFloatingFlower$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
-		
-		override fun visitMethod(access: Int, name: String, desc: String, signature: String?, exceptions: Array<String>?): MethodVisitor {
-			if (name == "renderTileEntityAt") {
-				logger.debug("Visiting RenderTileFloatingFlower#renderTileEntityAt: $name$desc")
-				return `RenderTileFloatingFlower$renderTileEntityAt$MethodVisitor`(super.visitMethod(access, name, desc, signature, exceptions))
-			}
-			return super.visitMethod(access, name, desc, signature, exceptions)
-		}
-		
-		private inner class `RenderTileFloatingFlower$renderTileEntityAt$MethodVisitor`(mv: MethodVisitor): MethodVisitor(ASM5, mv) {
-			
-			var before = false
-			var after = true
-			
-			override fun visitMethodInsn(opcode: Int, owner: String, name: String, desc: String?, itf: Boolean) {
-				if (name == "glPushMatrix") {
-					if (before) {
-						mv.visitTypeInsn(NEW, "java/awt/Color")
-						mv.visitInsn(DUP)
-						mv.visitVarInsn(ALOAD, 9)
-						mv.visitMethodInsn(INVOKEINTERFACE, "vazkii/botania/common/block/decor/IFloatingFlower", "getIslandType", $$"()Lvazkii/botania/common/block/decor/IFloatingFlower$IslandType;", true)
-						mv.visitMethodInsn(INVOKEVIRTUAL, $$"vazkii/botania/common/block/decor/IFloatingFlower$IslandType", "getColor", "()I", false)
-						mv.visitMethodInsn(INVOKESPECIAL, "java/awt/Color", "<init>", "(I)V", false)
-						mv.visitVarInsn(ASTORE, 12)
-						
-						mv.visitVarInsn(ALOAD, 12)
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/awt/Color", "getRed", "()I", false)
-						mv.visitInsn(I2F)
-						mv.visitLdcInsn(255f)
-						mv.visitInsn(FDIV)
-						mv.visitVarInsn(ALOAD, 12)
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/awt/Color", "getGreen", "()I", false)
-						mv.visitInsn(I2F)
-						mv.visitLdcInsn(255f)
-						mv.visitInsn(FDIV)
-						mv.visitVarInsn(ALOAD, 12)
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/awt/Color", "getBlue", "()I", false)
-						mv.visitInsn(I2F)
-						mv.visitLdcInsn(255f)
-						mv.visitInsn(FDIV)
-						mv.visitMethodInsn(INVOKESTATIC, "org/lwjgl/opengl/GL11", "glColor3f", "(FFF)V", false)
-					} else before = true
-				} else if (name == "glPopMatrix") {
-					if (after) {
-						mv.visitInsn(FCONST_1)
-						mv.visitInsn(FCONST_1)
-						mv.visitInsn(FCONST_1)
-						mv.visitMethodInsn(INVOKESTATIC, "org/lwjgl/opengl/GL11", "glColor3f", "(FFF)V", false)
-					} else after = false
-				}
-				
-				super.visitMethodInsn(opcode, owner, name, desc, itf)
-			}
-		}
-	}
-	
 	private inner class `TileManaFlame$ClassVisitor`(cv: ClassVisitor): ClassVisitor(ASM5, cv) {
 		
 		override fun visitMethod(access: Int, name: String?, desc: String?, signature: String?, exceptions: Array<out String>?): MethodVisitor {
 			val mv = super.visitMethod(access, name, desc, signature, exceptions)
 			return if (name != "getColor" && name != "writeCustomNBT") {
-				logger.debug("Visiting RenderTileFloatingFlower#$name: $name$desc")
+				logger.debug("Visiting TileManaFlame#$name: $name$desc")
 				`TileManaFlame$MethodVisitor`(mv)
 			} else mv
 		}

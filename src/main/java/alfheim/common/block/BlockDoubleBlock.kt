@@ -23,6 +23,8 @@ class BlockDoubleBlock: BlockDoubleCamo(Material.iron), IFenceConnectable, IFenc
 	override fun topSide(meta: Int) = 1
 	
 	override fun addCollisionBoxesToList(world: World, x: Int, y: Int, z: Int, aabb: AxisAlignedBB?, list: MutableList<Any?>, entity: Entity?) {
+		if (aabb == null) return
+		
 		val tile = world.getTileEntity(x, y, z) as? TileDoubleBlock ?: return super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity)
 		
 		fun addCollisions(block: Block, meta: Int) {

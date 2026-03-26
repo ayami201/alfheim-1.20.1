@@ -5,6 +5,7 @@ import alfheim.AlfheimCore
 import alfheim.api.lib.LibResourceLocations
 import alfheim.client.core.helper.IconHelper
 import alfheim.client.model.block.ModelSpreaderFrame
+import alfheim.common.compat.AngelicaCompat
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
@@ -22,7 +23,6 @@ import net.minecraft.item.*
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.*
 import net.minecraft.world.World
-import org.lwjgl.opengl.GL11.*
 import vazkii.botania.api.lexicon.LexiconEntry
 import vazkii.botania.api.mana.BurstProperties
 import vazkii.botania.client.core.handler.HUDHandler
@@ -114,8 +114,7 @@ object ManaSpreaderExtender {
 		HUDHandler.drawSimpleManaHUD(color, tile.knownMana, tile.maxMana, name, res)
 		val lens: ItemStack? = tile[0]
 		if (lens != null) {
-			glEnable(GL_BLEND)
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+			AngelicaCompat.renderHUD1()
 			val lensName = lens.displayName
 			val width = 16 + mc.fontRenderer.getStringWidth(lensName) / 2
 			val x = res.scaledWidth / 2 - width
@@ -124,14 +123,12 @@ object ManaSpreaderExtender {
 			RenderHelper.enableGUIStandardItemLighting()
 			RenderItem.getInstance().renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, lens, x, y)
 			RenderHelper.disableStandardItemLighting()
-			glDisable(GL_LIGHTING)
-			glDisable(GL_BLEND)
+			AngelicaCompat.renderHUD2()
 		}
 		if (tile.receiver != null) {
 			val receiverTile = tile.receiver as TileEntity
 			val recieverStack = ItemStack(tile.worldObj.getBlock(receiverTile.xCoord, receiverTile.yCoord, receiverTile.zCoord), 1, receiverTile.getBlockMetadata())
-			glEnable(GL_BLEND)
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+			AngelicaCompat.renderHUD1()
 			
 			@Suppress("UNNECESSARY_SAFE_CALL")
 			if (recieverStack?.item != null) {
@@ -144,10 +141,9 @@ object ManaSpreaderExtender {
 				RenderItem.getInstance().renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, recieverStack, x, y)
 				RenderHelper.disableStandardItemLighting()
 			}
-			glDisable(GL_LIGHTING)
-			glDisable(GL_BLEND)
+			AngelicaCompat.renderHUD2()
 		}
-		glColor4f(1f, 1f, 1f, 1f)
+		AngelicaCompat.glColor4f(1f, 1f, 1f, 1f)
 	}
 	
 	// ######## RenderSpreader
@@ -203,12 +199,12 @@ object ManaSpreaderExtender {
 			
 			var s = 1.15f
 			val t = s - 1
-			glTranslatef(0f, -t, 0f)
+			AngelicaCompat.glTranslatef(0f, -t, 0f)
 			glScalef(s)
 			ModelSpreaderFrame.render()
 			s = 1 / s
 			glScalef(s)
-			glTranslatef(0f, t, 0f)
+			AngelicaCompat.glTranslatef(0f, t, 0f)
 			
 			modelHook = false
 			
