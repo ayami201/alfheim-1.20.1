@@ -1,6 +1,6 @@
 <news>
 	<version id="LATEST">
-		<val>R-61</val>
+		<val>R-66</val>
 	</version>
 	<version id="UNIVERSAL">
 		<val>$json["Official Alfheim Discord server is here! *",{"text":"click","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Join discord server","color":"gold"}},"clickEvent":{"action":"open_url","value":"https://discord.gg/dqQXZHq"}},"*"]</val>
@@ -172,5 +172,20 @@
 	</version>
 	<version id="60">
 		<val>Lots of tweaks, improvements, and fixes</val>
+	</version>
+	<version id="61">
+		<val>Just take it</val>
+	</version>
+	<version id="62">
+		<val>Just take it</val>
+	</version>
+	<version id="63">
+		<val>Just take it</val>
+	</version>
+	<version id="64">
+		<val>Just take it</val>
+	</version>
+	<version id="65">
+		<val>Just take it</val>
 	</version>
 </news>
