@@ -11,6 +11,7 @@ import kotlin.math.*
 object AlfheimConfigHandler: ASJConfigHandler() {
 	
 	const val CATEGORY_PRELOAD = CATEGORY_GENERAL + CATEGORY_SPLITTER + "preload"
+	const val CATEGORY_BALANCE = CATEGORY_GENERAL + CATEGORY_SPLITTER + "balance"
 	const val CATEGORY_INTEGRATION = CATEGORY_GENERAL + CATEGORY_SPLITTER + "integration"
 	const val CATEGORY_INT_TC = CATEGORY_INTEGRATION + CATEGORY_SPLITTER + "thaumcraft"
 	const val CATEGORY_INT_TiC = CATEGORY_INTEGRATION + CATEGORY_SPLITTER + "tconstruct"
@@ -64,6 +65,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var floatingIslandCountPerPlayer = 5
 	var grabMidgardPortal = false
 	var increasedSpiritsRange = true
+	var overrideDimensionalRestrictions = false
 	var rainbowPolys = 360
 	var spiritsCountMultiplier = 0.5
 	
@@ -113,9 +115,9 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var vikingSpawn = intArrayOf(100, 4, 4)
 	
 	// - ALL
-	var elementalSlime = intArrayOf(10, 2, 4)
+	var elementalSlimeRates = intArrayOf(100, 4, 4)
 	var elementalSlimeBiomeBlackList = intArrayOf(8, 9, 14, 15)
-	var voidCreeper = intArrayOf(4, 1, 3)
+	var voidCreeperRates = intArrayOf(4, 1, 3)
 	var voidCreeperBiomeBlackList = intArrayOf(8, 9, 14, 15)
 	
 	// TEMPERATURE
@@ -128,10 +130,41 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var damageModCold = 0.01
 	var damageModHot = 0.03
 	var mobTemperature = true
-	var mobBlacklistCold = arrayOf("Skeleton", "SnowMan")
-	var mobBlacklistHot = arrayOf("Blaze", "Ghast", "LavaSlime", "PigZombie", "Skeleton", "WitherBoss")
+	var mobBlacklistCold = arrayOf("SnowMan")
+	var mobBlacklistHot = arrayOf("Blaze", "Ghast", "LavaSlime", "PigZombie", "WitherBoss")
 	
-	// OHTER
+	// BALANCE
+	var floatingIslandDrops = 0.01
+	var gourmaryllisDifficulty = 2
+	var looniumOverseed = false
+	var kudzuDelay = 20
+	var kudzuDropBlacklist = arrayOf("ingotInfernoDiamond")
+	var kudzuDropBlocks = false
+	var kudzuEasy = true
+	var kudzuMutatability = 5
+	var kudzuRadius = 127
+	var maceModifier = 0.5f
+	var moonbowMaxDmg = 20
+	var moonbowVelocity = 0.5f
+	var mountAlfheimOnly = false
+	var mountCost = 1000
+	var mountLife = 600
+	var multibaubleBlacklist = emptyArray<String>()
+	var multibaubleCount = 6
+	var rattleroseSpeed = 20
+	var repairBlackList = emptyArray<String>()
+	var soulSwordMaxLvl = Int.MAX_VALUE
+	var spreaderCapacityLebe = 64000
+	var spreaderCapacityMauf = 24000
+	var spreaderSpeedLebe = 8000
+	var spreaderSpeedMauf = 2400
+	var tradePortalRate = 1200
+	var triquetrumManaUsage = intArrayOf(100, 60)
+	var triquetrumMaxVolume = 400000
+	var triquetrumTiles = true
+	var uberBlaster = true
+	
+	// OTHER
 	var alfheimSleepExtraCheck = true
 	var authTimeout = 200
 	var barrierTreeAllowAnyPlayer = false
@@ -141,15 +174,13 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var effectScreenOverlay = true
 	var enderOreWeights = arrayOf("oreEndCoal:9000", "oreEndDiamond:500", "oreEndEmerald:500", "oreEndGold:3635", "oreEndIron:5790", "oreEndLapis:3250", "oreEndRedstone:5600", "oreDraconium:200")
 	var eventBanner = true
-	var extendedElvenStory = false
 	var fancies = true
 	var faultLinePersistence = 3000
-	var floatingIslandDrops = 0.01
+	var flagIdSheepRainbow = 31
 	var floatingIslandNoCollisionBlocks = arrayOf("Natura:Cloud")
 	var floatingIslandPathfinder = true
 	var floatingIslandSyncedDataInitLimit = 31
 	var floodLightQuality = 10
-	var gourmaryllisDifficulty = 2
 	var hotControls = 2
 	var imPatheticWeakAndScaredDontTouchMyWorlds = false
 	var interactEventChecks = false
@@ -157,43 +188,26 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var lexiconSort = false
 	var lightningsSpeed = 20
 	var longSeasons = true
-	var looniumOverseed = false
 	var mobElements = arrayOf("Blaze:FIRE", "EnderDragon:DARKNESS", "Enderman:DARKNESS", "Ghast:AIR,PSYCHIC", "LavaSlime:FIRE,EARTH", "MushroomCow:NATURE", "SnowMan:ICE", "Slime:NATURE,WATER", "VillagerGolem:EARTH", "WitherBoss:DARKNESS", "Thaumcraft.EldritchCrab:DARKNESS", "Thaumcraft.EldritchGolem:EARTH", "Thaumcraft.EldritchGuardian:DARKNESS,PSYCHIC", "Thaumcraft.EldritchWarden:DARKNESS,PSYCHIC", "Thaumcraft.Firebat:FIRE", "Thaumcraft.MindSpider:PSYCHIC", "Thaumcraft.ThaumSlime:WATER,DARKNESS", "ThermalFoundation.Blizz:ICE", "ThermalFoundation.Blitz:ELECTRIC", "ThermalFoundation.Basalz:EARTH")
 	var minimalGraphics = false
 	var mobPriests = true
-	var moonbowMaxDmg = 20
-	var moonbowVelocity = 0.5f
-	var mountAlfheimOnly = false
-	var mountCost = 1000
-	var mountLife = 600
-	var multibaubleBlacklist = emptyArray<String>()
-	var multibaubleCount = 6
 	var newStorageTexture = true
 	var notifications = true
 	var numericalMana = true
 	var oiiaId = 2
-	var rattleroseSpeed = 20
 	var realLightning = false
 	var relicsProtectionBlackList = emptyArray<String>()
 	var renderBooba = true
-	var repairBlackList = emptyArray<String>()
 	var replaceHellFireChance = 5
 	var rocketRide = 2
 	var searchTabAlfheim = true
 	var searchTabBotania = true
 	var schemaArray = IntArray(17) { -1 + it }
 	var schemaMaxSize = 64
-	var soulSwordMaxLvl = Int.MAX_VALUE
+	var shedLifespan = 1200
 	var storyLines = 4
 	var timelessProtection = true
-	var tradePortalRate = 1200
 	var triquetrumBlackList = emptyArray<String>()
-	var triquetrumManaUsage = intArrayOf(100, 60)
-	var triquetrumMaxDiagonal = 128.0
-	var triquetrumTiles = true
-	var uberBlaster = true
-	var uberSpreaderCapacity = 24000
-	var uberSpreaderSpeed = 2400
 	var wireoverpowered = true
 	lateinit var worldDestroyConfig: Map<Int, Int>
 	
@@ -216,6 +230,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	get() = field++
 	
 	var potionIDBeastWithin = potionID___COUNTER
+	var potionIDBeer = potionID___COUNTER
 	var potionIDBerserk = potionID___COUNTER
 	var potionIDBleeding = potionID___COUNTER
 	var potionIDButterShield = potionID___COUNTER
@@ -261,6 +276,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	// Elven Story
 	var bonusChest = false
 	var bothSpawnStructures = false
+	var extendedElvenStory = false
 	var flightTime = 12000
 	var flightRecover = 1.0
 	var wingsBlackList = IntArray(0)
@@ -285,6 +301,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	
 	override fun addCategories() {
 		addCategory(CATEGORY_PRELOAD, "Alfheim coremod and preload settings")
+		addCategory(CATEGORY_BALANCE, "Balance settings")
 		addCategory(CATEGORY_ALFHEIM, "Alfheim dimension settings")
 		addCategory(CATEGORY_NIFLHEIM, "Niflheim dimension settings")
 		addCategory(CATEGORY_WORLDGEN_A, "Alfheim worldgen settings")
@@ -316,6 +333,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		floatingIslandCountPerPlayer = loadProp(CATEGORY_ALFHEIM, "floatingIslandCountPerPlayer", floatingIslandCountPerPlayer, false, "Max count of floating islands per player in world", 1)
 		grabMidgardPortal = loadProp(CATEGORY_ALFHEIM, "grabMidgardPortal", grabMidgardPortal, false, "Set this to true to teleport near existing active loaded portal when leaving Alfheim instead of world spawn")
 		increasedSpiritsRange = loadProp(CATEGORY_ALFHEIM, "increasedSpiritsRange", increasedSpiritsRange, false, "Set this to false to reduce nighttime spirits spawn range in Alfheim (may increase FPS)")
+		overrideDimensionalRestrictions = loadProp(CATEGORY_ALFHEIM, "overrideDimensionalRestrictions", overrideDimensionalRestrictions, false, "Set this to true to remove dimensional teleportation restrictions for default mode")
 		rainbowPolys = loadProp(CATEGORY_ALFHEIM, "rainbowPolys", rainbowPolys, false, "How smooth will rainbow and rays in Alfheim sky be (higher number - more polygons)")
 		spiritsCountMultiplier = loadProp(CATEGORY_ALFHEIM, "spiritsCountMultiplier", spiritsCountMultiplier, false, "Affects nighttime spirits spawn count in Alfheim")
 		
@@ -345,18 +363,18 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		playerGroupDistance = loadProp(CATEGORY_ENTITIES_A, "playerGroupDistance", playerGroupDistance, false, "Distance in chunks for players to be considered as player group (for mob spawning balance)")
 		tfMobs = loadProp(CATEGORY_ENTITIES_A, "tfMobs", tfMobs, true, "Set this to false to remove Twilight Forest mobs from Alfheim spawn")
 		
-		butterflySpawn = loadProp(CATEGORY_ENTITIES_A, "butterflySpawn", butterflySpawn, false, "Butterfly max count per player, min and max group count")
-		cowSpawn = loadProp(CATEGORY_ENTITIES_A, "cowSpawn", cowSpawn, false, "Cows max count per player, min and max group count")
-		chickSpawn = loadProp(CATEGORY_ENTITIES_A, "chickSpawn", chickSpawn, false, "Chicken max count per player, min and max group count")
-		elvesSpawn = loadProp(CATEGORY_ENTITIES_A, "elvesSpawn", elvesSpawn, false, "Elves max count per player, min and max group count")
-		jellySpawn = loadProp(CATEGORY_ENTITIES_A, "jellySpawn", jellySpawn, false, "Jellyfish max count per player, min and max group count")
-		pigSpawn = loadProp(CATEGORY_ENTITIES_A, "pigSpawn", pigSpawn, false, "Pig max count per player, min and max group count")
-		pixieSpawn = loadProp(CATEGORY_ENTITIES_A, "pixieSpawn", pixieSpawn, false, "Pixie max count per player, min and max group count")
-		sheepSpawn = loadProp(CATEGORY_ENTITIES_A, "sheepSpawn", sheepSpawn, false, "Sheep max count per player, min and max group count")
+		butterflySpawn = loadProp(CATEGORY_ENTITIES_A, "butterflySpawn", butterflySpawn, true, "Butterfly max count per player, min and max group count")
+		cowSpawn = loadProp(CATEGORY_ENTITIES_A, "cowSpawn", cowSpawn, true, "Cows max count per player, min and max group count")
+		chickSpawn = loadProp(CATEGORY_ENTITIES_A, "chickSpawn", chickSpawn, true, "Chicken max count per player, min and max group count")
+		elvesSpawn = loadProp(CATEGORY_ENTITIES_A, "elvesSpawn", elvesSpawn, true, "Elves max count per player, min and max group count")
+		jellySpawn = loadProp(CATEGORY_ENTITIES_A, "jellySpawn", jellySpawn, true, "Jellyfish max count per player, min and max group count")
+		pigSpawn = loadProp(CATEGORY_ENTITIES_A, "pigSpawn", pigSpawn, true, "Pig max count per player, min and max group count")
+		pixieSpawn = loadProp(CATEGORY_ENTITIES_A, "pixieSpawn", pixieSpawn, true, "Pixie max count per player, min and max group count")
+		sheepSpawn = loadProp(CATEGORY_ENTITIES_A, "sheepSpawn", sheepSpawn, true, "Sheep max count per player, min and max group count")
 		
-		elementalSlime = loadProp(CATEGORY_ENTITIES, "elementalSlime", elementalSlime, false, "Elemental Slimes spawn weight (chance), min and max group count")
+		elementalSlimeRates = loadProp(CATEGORY_ENTITIES, "elementalSlimeRates", elementalSlimeRates, true, "Elemental Slimes spawn weight (chance), min and max group count")
 		elementalSlimeBiomeBlackList = loadProp(CATEGORY_ENTITIES, "elementalSlimeBiomeBlackList", elementalSlimeBiomeBlackList, true, "Biome blacklist for Elemental Slimes", false)
-		voidCreeper = loadProp(CATEGORY_ENTITIES, "voidCreeper", voidCreeper, false, "Manaseal Creeper spawn weight (chance), min and max group count")
+		voidCreeperRates = loadProp(CATEGORY_ENTITIES, "voidCreeperRates", voidCreeperRates, true, "Manaseal Creeper spawn weight (chance), min and max group count")
 		voidCreeperBiomeBlackList = loadProp(CATEGORY_ENTITIES, "voidCreeperBiomeBlackList", voidCreeperBiomeBlackList, true, "Biome blacklist for Manaseal Creepers", false)
 		
 		vikingSpawn = loadProp(CATEGORY_ENTITIES_N, "vikingSpawn", vikingSpawn, true, "Frozen Vikings max count per player, min and max group count")
@@ -373,6 +391,37 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		mobBlacklistCold = loadProp(CATEGORY_TEMPERATURE, "mobBlacklistCold", mobBlacklistCold, false, "List of entity names immune to power of Niflheim", false)
 		mobBlacklistHot = loadProp(CATEGORY_TEMPERATURE, "mobBlacklistHot", mobBlacklistHot, false, "List of entity names immune to power of Muspelheim", false)
 		
+		floatingIslandDrops = loadProp(CATEGORY_BALANCE, "floatingIslandDrops", floatingIslandDrops, false, "Percent of floating islands blocks to be dropped on destruction (0 - none, 0.5 - 50%, 1 - 100%)", 0.0, 1.0)
+		gourmaryllisDifficulty = loadProp(CATEGORY_BALANCE, "gourmaryllisDifficulty", gourmaryllisDifficulty, false, "Difficulty of Gourmaryllis functionality: 0 - default, 1 - as in 1.12.2, 2 - hardcore", 0, 2)
+		looniumOverseed = loadProp(CATEGORY_BALANCE, "looniumOverseed", looniumOverseed, true, "Set this to true to make loonium spawn overgrowth seeds (for servers with limited dungeons so all players can craft Gaia pylons)")
+		kudzuDelay = loadProp(CATEGORY_BALANCE, "kudzuDelay", kudzuDelay, false, "Average delay between kudzu brood ticks, higher values reduces server load", 5, 1200)
+		kudzuDropBlacklist = loadProp(CATEGORY_BALANCE, "kudzuDropBlacklist", kudzuDropBlacklist, false, "Blacklist of ore dictionary names kudzu won't drop (MineTweaker can add new oredict names to items)", false)
+		kudzuDropBlocks = loadProp(CATEGORY_BALANCE, "kudzuDropBlocks", kudzuDropBlocks, false, "Set this to true to make kudzu drop eaten blocks")
+		kudzuEasy = loadProp(CATEGORY_BALANCE, "kudzuEasy", kudzuEasy, false, "Set this to false to make kudzu spread in air")
+		kudzuMutatability = loadProp(CATEGORY_BALANCE, "kudzuMutatability", kudzuMutatability, false, "Chance of kudzu vine mutating on spread", 1, 100)
+		kudzuRadius = loadProp(CATEGORY_BALANCE, "kudzuRadius", kudzuRadius, false, "Max spread radius for kudzu vine", 15, 255)
+		maceModifier = loadProp(CATEGORY_BALANCE, "maceModifier", maceModifier.D, false, "Mace additional damage from fall distance modifier").F
+		moonbowMaxDmg = loadProp(CATEGORY_BALANCE, "moonbowMaxDmg", moonbowMaxDmg, false, "Max base damage for Phoebus Catastrophe")
+		moonbowVelocity = loadProp(CATEGORY_BALANCE, "moonbowVelocity", moonbowVelocity.D, false, "Phoebus Catastrophe charge speed").F
+		mountAlfheimOnly = loadProp(CATEGORY_BALANCE, "mountAlfheimOnly", mountAlfheimOnly, false, "Set this to false to make mounts summonable only in Alfheim")
+		mountCost = loadProp(CATEGORY_BALANCE, "mountCost", mountCost, false, "How much mana mount consumes on summoning (not teleporting)")
+		mountLife = loadProp(CATEGORY_BALANCE, "mountLife", mountLife, false, "How many ticks mount can stay unmounted")
+		multibaubleBlacklist = loadProp(CATEGORY_BALANCE, "multibaubleBlacklist", multibaubleBlacklist, false, "Blacklist for Ring of Elven King [modid:name]", false)
+		multibaubleCount = loadProp(CATEGORY_BALANCE, "multibaubleCount", multibaubleCount, false, "How many bauble box slots will be activated by Ring of Elven King")
+		rattleroseSpeed = loadProp(CATEGORY_BALANCE, "rattleroseSpeed", rattleroseSpeed, false, "Rattlerose game update speed (one time per N ticks). Set to 0 to switch to manual control")
+		repairBlackList = loadProp(CATEGORY_BALANCE, "repairBlackList", repairBlackList, false, "Blacklist of repairable items (ex: for anyavil) [modid:name]", false)
+		soulSwordMaxLvl = loadProp(CATEGORY_BALANCE, "soulSwordMaxLvl", soulSwordMaxLvl, false, "Sword of Ragnarok max level")
+//		spreaderCapacityLebe = loadProp(CATEGORY_BALANCE, "spreaderCapacityLebe", spreaderCapacityLebe, false, "Lebethron Spreader max mana cap") TODO back
+		spreaderCapacityMauf = loadProp(CATEGORY_BALANCE, "spreaderCapacityMauf", spreaderCapacityMauf, false, "Mauftrium Spreader max mana cap")
+//		spreaderSpeedLebe = loadProp(CATEGORY_BALANCE, "spreaderSpeedLebe", spreaderSpeedLebe, false, "Lebethron Spreader mana per shot") TODO back
+		spreaderSpeedMauf = loadProp(CATEGORY_BALANCE, "spreaderSpeedMauf", spreaderSpeedMauf, false, "Mauftrium Spreader mana per shot")
+		tradePortalRate = loadProp(CATEGORY_BALANCE, "tradePortalRate", tradePortalRate, false, "Portal updates every [N] ticks")
+		triquetrumBlackList = loadProp(CATEGORY_BALANCE, "triquetrumBlackList", triquetrumBlackList, false, "Blacklist for blocks that triquetrum can't swap [modid:name]", false)
+		triquetrumManaUsage = loadProp(CATEGORY_BALANCE, "triquetrumManaUsage", triquetrumManaUsage, false, "Mana usage for triquetrum, 1st is for tiles, 2nd for regular blocks")
+		triquetrumMaxVolume = loadProp(CATEGORY_BALANCE, "triquetrumMaxVolume", triquetrumMaxVolume, false, "Change this to limit triquetrum volume of operation")
+		triquetrumTiles = loadProp(CATEGORY_BALANCE, "triquetrumTiles", triquetrumTiles, false, "Set this to false to forbid triquetrum to move tiles")
+		uberBlaster = loadProp(CATEGORY_BALANCE, "uberBlaster", uberBlaster, false, "Set this to false to nerf blasters")
+		
 		alfheimSleepExtraCheck = loadProp(CATEGORY_GENERAL, "alfheimSleepExtraCheck", alfheimSleepExtraCheck, false, "Set this to false if you are skipping whole day while sleeping")
 		authTimeout = loadProp(CATEGORY_GENERAL, "authTimeout", authTimeout, false, "Time limit for client to send authentication credentials", 100, 600)
 		barrierTreeAllowAnyPlayer = loadProp(CATEGORY_GENERAL, "barrierTreeAllowAnyPlayer", barrierTreeAllowAnyPlayer, false, "Set this to true to allow any player to bypass barrier trees")
@@ -382,15 +431,14 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		effectScreenOverlay = loadProp(CATEGORY_GENERAL, "effectScreenOverlay", effectScreenOverlay, false, "Set this to false to disable screen overlay for effects like heat/cold")
 		enderOreWeights = loadProp(CATEGORY_GENERAL, "enderOreWeights", enderOreWeights, false, "Map of OreDict name to ore weight (more weight - more chace to spawn) for Orechid Endium", false)
 		eventBanner = loadProp(CATEGORY_GENERAL, "eventBanner", eventBanner, false, "Set this to false to disable event banner popup")
-		extendedElvenStory = loadProp(CATEGORY_GENERAL, "extendedElvenStory", extendedElvenStory, true, "Set this to true to enable recipes for extended stay in Alfheim")
 		fancies = loadProp(CATEGORY_GENERAL, "fancies", fancies, false, "Set this to false to locally disable fancies rendering on you (for contributors only)")
 		faultLinePersistence = loadProp(CATEGORY_GENERAL, "faultLinePersistence", faultLinePersistence, false, "Persistence for Fault Lines (lower value - smaller faults)")
-		floatingIslandDrops = loadProp(CATEGORY_GENERAL, "floatingIslandDrops", floatingIslandDrops, false, "Percent of floating islands blocks to be dropped on destruction (0 - none, 0.5 - 50%, 1 - 100%)", 0.0, 1.0)
+		flagIdSheepRainbow = loadProp(CATEGORY_GENERAL, "flagIdSheepRainbow", flagIdSheepRainbow, true, "Flag ID for sheep to be rainbow colored")
+		floatingIslandNoCollisionBlocks = loadProp(CATEGORY_GENERAL, "floatingIslandNoCollisionBlocks", floatingIslandNoCollisionBlocks, true, "List of collidable blocks floating islands won't collide with", false)
 		floatingIslandNoCollisionBlocks = loadProp(CATEGORY_GENERAL, "floatingIslandNoCollisionBlocks", floatingIslandNoCollisionBlocks, true, "List of collidable blocks floating islands won't collide with", false)
 		floatingIslandPathfinder = loadProp(CATEGORY_GENERAL, "floatingIslandPathfinder", floatingIslandPathfinder, false, "Set this to false to disable entity's pathfinding on floating islands. This will make them stand still on islands, but will also lower the server load")
 		floatingIslandSyncedDataInitLimit = loadProp(CATEGORY_GENERAL, "floatingIslandSyncedDataInitLimit", floatingIslandSyncedDataInitLimit, false, "Increase that limit ONLY if you have mods that extend DataWatcher IDs and want really large floating island")
 		floodLightQuality = loadProp(CATEGORY_GENERAL, "floodLightQuality", floodLightQuality, false, "Determines floodlight raycasting steps (lower values - more quality and CPU load). Must be an integer divisor of 360", 1, 120)
-		gourmaryllisDifficulty = loadProp(CATEGORY_GENERAL, "gourmaryllisDifficulty", gourmaryllisDifficulty, false, "Difficulty of Gourmaryllis functionality: 0 - default, 1 - as in 1.12.2, 2 - hardcore", 0, 2)
 		hotControls = loadProp(CATEGORY_GENERAL, "hotControls", hotControls, false, "High overheat value would mess your controls if set to 2, only on Hard difficulty if set to 1, would not mess completely if set to 0", 0, 2)
 		imPatheticWeakAndScaredDontTouchMyWorlds = loadProp(CATEGORY_GENERAL, "imPatheticWeakAndScaredDontTouchMyWorlds", imPatheticWeakAndScaredDontTouchMyWorlds, false, "Set this to true to disable hardcoded world destruction during Ragnarok and affect ONLY Alfheim")
 		interactEventChecks = loadProp(CATEGORY_GENERAL, "interactEventChecks", interactEventChecks, false, "Distance checks when firing interaction events, results may be unclear")
@@ -398,43 +446,25 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		lexiconSort = loadProp(CATEGORY_GENERAL, "lexiconSort", lexiconSort, true, "Set this to true to sort Alfheim lexicon entries to vanilla categories")
 		lightningsSpeed = loadProp(CATEGORY_GENERAL, "lightningsSpeed", lightningsSpeed, false, "How many ticks it takes between two lightings are spawned in Lightning Anomaly render")
 		longSeasons = loadProp(CATEGORY_GENERAL, "longSeasons", longSeasons, true, "Set this to false to make seasons last 1 real day instead of 3")
-		looniumOverseed = loadProp(CATEGORY_GENERAL, "looniumOverseed", looniumOverseed, true, "Set this to true to make loonium spawn overgrowth seeds (for servers with limited dungeons so all players can craft Gaia pylons)")
 		minimalGraphics = loadProp(CATEGORY_GENERAL, "minimalGraphics", minimalGraphics, true, "Set this to true to disable .obj models and shaders")
 		mobElements = loadProp(CATEGORY_GENERAL, "mobElements", mobElements, true, "Array of mob names to the list of their elements", false)
 		mobPriests = loadProp(CATEGORY_GENERAL, "mobPriests", mobPriests, false, "Set this to false so that only players can be priests")
-		moonbowMaxDmg = loadProp(CATEGORY_GENERAL, "moonbowMaxDmg", moonbowMaxDmg, false, "Max base damage for Phoebus Catastrophe")
-		moonbowVelocity = loadProp(CATEGORY_GENERAL, "moonbowVelocity", moonbowVelocity.D, false, "Phoebus Catastrophe charge speed").F
-		mountAlfheimOnly = loadProp(CATEGORY_GENERAL, "mountAlfheimOnly", mountAlfheimOnly, false, "Set this to false to make mounts summonable only in Alfheim")
-		mountCost = loadProp(CATEGORY_GENERAL, "mountCost", mountCost, false, "How much mana mount consumes on summoning (not teleporting)")
-		mountLife = loadProp(CATEGORY_GENERAL, "mountLife", mountLife, false, "How many ticks mount can stay unmounted")
-		multibaubleBlacklist = loadProp(CATEGORY_GENERAL, "multibaubleBlacklist", multibaubleBlacklist, false, "Blacklist for Ring of Elven King [modid:name]", false)
-		multibaubleCount = loadProp(CATEGORY_GENERAL, "multibaubleCount", multibaubleCount, false, "How many bauble box slots will be activated by Ring of Elven King")
 		newStorageTexture = loadProp(CATEGORY_GENERAL, "newStorageTexture", newStorageTexture, true, "Set this to false to disable new storage blocks textures")
 		notifications = loadProp(CATEGORY_GENERAL, "notifications", notifications, false, "Set this to false to disable custom notifications and version check")
 		numericalMana = loadProp(CATEGORY_GENERAL, "numericalMana", numericalMana, false, "Set this to false to disable numerical mana representation")
 		oiiaId = loadProp(CATEGORY_GENERAL, "oiiaId", oiiaId, false, "Change this if you are getting crash 'Duplicate id value for ...' from DataWatcher")
-		rattleroseSpeed = loadProp(CATEGORY_GENERAL, "rattleroseSpeed", rattleroseSpeed, false, "Rattlerose game update speed (one time per N ticks). Set to 0 to switch to manual control")
 		realLightning = loadProp(CATEGORY_GENERAL, "realLightning", realLightning, false, "Set this to true to make Rod of the Thundering Peaks summon real (weather) lightning")
 		relicsProtectionBlackList = loadProp(CATEGORY_GENERAL, "relicsProtectionBlackList", relicsProtectionBlackList, false, "Blacklist for relics protection [modid:name]", false)
 		renderBooba = loadProp(CATEGORY_GENERAL, "renderBooba", renderBooba, false, "Set this to false to disable ESM booba render")
-		repairBlackList = loadProp(CATEGORY_GENERAL, "repairBlackList", repairBlackList, false, "Blacklist of repairable items (ex: for anyavil) [modid:name]", false)
 		replaceHellFireChance = loadProp(CATEGORY_GENERAL, "replaceHellFireChance", replaceHellFireChance, false, "Chance for Fire Of Eternity to replace regular fire when placed in Muspelheim (x5 for worlgen)", 0, 100)
 		rocketRide = loadProp(CATEGORY_GENERAL, "rocketRide", rocketRide, false, "Rocket ride [-1 - not players, 0 - none, 1 - players, 2 - anyone]")
 		searchTabAlfheim = loadProp(CATEGORY_GENERAL, "searchTabAlfheim", searchTabAlfheim, false, "Set this to false to disable searchbar in Alfheim Tab")
 		searchTabBotania = loadProp(CATEGORY_GENERAL, "searchTabBotania", searchTabBotania, false, "Set this to false to disable searchbar in Botania Tab")
 		schemaArray = loadProp(CATEGORY_GENERAL, "schemaArray", schemaArray, false, "Which schemas are allowed to be generated", false)
 		schemaMaxSize = loadProp(CATEGORY_GENERAL, "schemaMaxSize", schemaMaxSize, false, "Max schema cuboid side length")
-		soulSwordMaxLvl = loadProp(CATEGORY_GENERAL, "soulSwordMaxLvl", soulSwordMaxLvl, false, "Sword of Ragnarok max level")
+		shedLifespan = loadProp(CATEGORY_GENERAL, "shedLifespan", shedLifespan, false, "Shedded items lifespan in ticks")
 		storyLines = loadProp(CATEGORY_GENERAL, "storyLines", storyLines, false, "Number of lines for story token")
 		timelessProtection = loadProp(CATEGORY_GENERAL, "timelessProtection", timelessProtection, false, "If true, Timeless Ivy won't allow item to break if you have enough mana (instead of post-regen it)")
-		tradePortalRate = loadProp(CATEGORY_GENERAL, "tradePortalRate", tradePortalRate, false, "Portal updates every [N] ticks")
-		triquetrumBlackList = loadProp(CATEGORY_GENERAL, "triquetrumBlackList", triquetrumBlackList, false, "Blacklist for blocks that triquetrum can't swap [modid:name]", false)
-		triquetrumManaUsage = loadProp(CATEGORY_GENERAL, "triquetrumManaUsage", triquetrumManaUsage, false, "Mana usage for triquetrum, 1st is for tiles, 2nd for regular blocks")
-		triquetrumMaxDiagonal = loadProp(CATEGORY_GENERAL, "triquetrumMaxDiagonal", triquetrumMaxDiagonal, false, "Change this to limit triquetrum area")
-		triquetrumTiles = loadProp(CATEGORY_GENERAL, "triquetrumTiles", triquetrumTiles, false, "Set this to false to forbid triquetrum to move tiles")
-		uberBlaster = loadProp(CATEGORY_GENERAL, "uberBlaster", uberBlaster, false, "Set this to false to nerf blasters")
-		uberSpreaderCapacity = loadProp(CATEGORY_GENERAL, "uberSpreaderCapacity", uberSpreaderCapacity, false, "Mauftrium Spreader max mana cap")
-		uberSpreaderSpeed = loadProp(CATEGORY_GENERAL, "uberSpreaderSpeed", uberSpreaderSpeed, false, "Mauftrium Spreader mana per shot")
 		wireoverpowered = loadProp(CATEGORY_GENERAL, "wire.overpowered", wireoverpowered, false, "Allow WireSegal far more power than any one person should have")
 		worldDestroyConfig = loadProp(CATEGORY_GENERAL, "worldDestroyConfig", emptyArray(), false, "List of world destruction types during Ragnarok in form of string 'dimID:type' (types: 0 - none, 1 - only while ginnungagap, 2 - all)", false).map {
 			val (id, type) = it.split(':')
@@ -453,6 +483,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		modifierIDs = loadProp(CATEGORY_INT_TiC, "TiC.modifierIDs", modifierIDs, true, "IDs for ManaCore modifiers respectively")
 		
 		potionIDBeastWithin = loadProp(CATEGORY_POTIONS, "potionIDBeastWithin", potionIDBeastWithin, true, "Potion id Beast Within")
+		potionIDBeer = loadProp(CATEGORY_POTIONS, "potionIDBeer", potionIDBeer, true, "Potion id for Beer")
 		potionIDBerserk = loadProp(CATEGORY_POTIONS, "potionIDBerserk", potionIDBerserk, true, "Potion id for Berserk")
 		potionIDBleeding = loadProp(CATEGORY_POTIONS, "potionIDBleeding", potionIDBleeding, true, "Potion id for Bleeding")
 		potionIDButterShield = loadProp(CATEGORY_MMOP, "potionIDButterShield", potionIDButterShield, true, "Potion id for Butterfly Shield")
@@ -495,8 +526,9 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		potionIDWtfBerry4 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry4", potionIDWtfBerry4, true, "Potion id for Nether Berry")
 		potionIDWtfBerry5 = loadProp(CATEGORY_POTIONS, "potionIDWtfBerry5", potionIDWtfBerry5, true, "Potion id for Sealing Berry")
 		
-		bonusChest = loadProp(CATEGORY_WORLDGEN_A, "bonusChest", bonusChest, false, "Set this to true to generate bonus chest in ESM sky box")
+		bonusChest = loadProp(CATEGORY_ESMODE, "bonusChest", bonusChest, false, "Set this to true to generate bonus chest in ESM")
 		bothSpawnStructures = loadProp(CATEGORY_ESMODE, "bothSpawnStructures", bothSpawnStructures, false, "Set this to true to generate both race room inside and portal on top of Yggdrasil on zero coords of Alfheim")
+		extendedElvenStory = loadProp(CATEGORY_ESMODE, "extendedElvenStory", extendedElvenStory, true, "Set this to true to enable recipes for extended stay in Alfheim")
 		flightTime = loadProp(CATEGORY_ESMODE, "flightTime", flightTime, false, "Elven flight fly points (faster you move - more you spend)")
 		flightRecover = loadProp(CATEGORY_ESMODE, "flightRecover", flightRecover, false, "Flight recover efficiency")
 		wingsBlackList = loadProp(CATEGORY_ESMODE, "wingsBlackList", wingsBlackList, false, "Wings will be unavailable in this dimension(s)", false)

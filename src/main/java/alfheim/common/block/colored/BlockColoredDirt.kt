@@ -32,7 +32,7 @@ class BlockColoredDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
 		stepSound = soundTypeGravel
 	}
 	
-	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, remote: Boolean) = world.isAirBlock(x, y + 1, z)
+	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, remote: Boolean) = true
 	
 	override fun func_149852_a(world: World, random: Random, x: Int, y: Int, z: Int) = true
 	

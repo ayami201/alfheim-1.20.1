@@ -3,6 +3,7 @@ package alfheim.common.core.command
 import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 import alfheim.api.event.AlfheimModeChangedEvent
+import alfheim.common.block.BlockKudzuVine
 import alfheim.common.block.BlockNiflheimPortal
 import alfheim.common.block.tile.TileDomainLobby
 import alfheim.common.core.handler.*
@@ -31,13 +32,17 @@ object CommandAlfheim: CommandBase() {
 			"mode" -> changeModes(sender, args)
 			"randgen" -> printRandGen(sender)
 			"knowledge" -> gainKnowledge(sender, args)
+			"stopkudzu" -> {
+				BlockKudzuVine.STOPPED = !BlockKudzuVine.STOPPED
+				ASJUtilities.say(sender, BlockKudzuVine.STOPPED.toString())
+			}
 			"surtrregen" -> regenerateSurtrDomain(sender, args)
 			else -> throw WrongUsageException(getCommandUsage(sender))
 		}
 	}
 	
 	override fun addTabCompletionOptions(sender: ICommandSender?, args: Array<String>): MutableList<Any?> {
-		if (args.size == 1) return getListOfStringsMatchingLastWord(args, "help", "mode", "randgen", "knowledge", "surtrregen")
+		if (args.size == 1) return getListOfStringsMatchingLastWord(args, "help", "mode", "randgen", "knowledge", "stopkudzu", "surtrregen")
 		
 		if (args.size == 2 || args.size == 3)
 			when (args[0]) {
@@ -59,6 +64,7 @@ object CommandAlfheim: CommandBase() {
 		ASJUtilities.say(sender, "/$commandName mode <ESM|MMO> - change current game mode")
 		ASJUtilities.say(sender, "/$commandName randgen - print coordinates of random gen")
 		ASJUtilities.say(sender, "/$commandName knowledge <knowledge> [player] - add knowledge to player")
+		ASJUtilities.say(sender, "/$commandName stopkudzu - Emergency stop kudzu spreading for current session (repeat command to resume)")
 		ASJUtilities.say(sender, "/$commandName surtrregen true - Reset Surtr domain data")
 	}
 	

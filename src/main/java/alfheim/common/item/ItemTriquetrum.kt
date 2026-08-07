@@ -53,8 +53,8 @@ class ItemTriquetrum: ItemMod("Triquetrum"), IDoubleBoundItem, IRotationDisplay 
 			second == null -> {
 				val (i, j, k) = first
 				
-				if (AlfheimConfigHandler.triquetrumMaxDiagonal != -1.0 && Vector3.pointDistanceSpace(i, j, k, x, y, z) > AlfheimConfigHandler.triquetrumMaxDiagonal) {
-					ASJUtilities.say(player, "item.Triquetrum.tooLarge", AlfheimConfigHandler.triquetrumMaxDiagonal)
+				if (AlfheimConfigHandler.triquetrumMaxVolume != -1 && abs(i - x) * abs(j - y) * abs(k - z) > AlfheimConfigHandler.triquetrumMaxVolume) {
+					ASJUtilities.say(player, "item.Triquetrum.tooLarge", AlfheimConfigHandler.triquetrumMaxVolume)
 					return false
 				}
 				

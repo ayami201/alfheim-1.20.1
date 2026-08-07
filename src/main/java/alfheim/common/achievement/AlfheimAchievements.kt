@@ -52,6 +52,14 @@ object AlfheimAchievements {
 	val outstander: Achievement // survive
 	val rosaBomb: Achievement // bomb 'em all
 	
+	// TODO back
+//	val fateBoard: Achievement
+//	val slingshot: Achievement
+//	val pocketArmor: Achievement
+//	val itemChest: Achievement
+//	val hornPlenty: Achievement
+//	val sphereNavigation: Achievement
+	
 	init {
 		alfheim = AlfheimAchievement("alfheim", 0, 0, ItemStack(AlfheimBlocks.alfheimPortal, 1, 1), null)
 		breadBoom = AlfheimAchievement("breadBoom", 32, 32, Items.bread, null).setSpecial()
@@ -86,6 +94,13 @@ object AlfheimAchievements {
 		divineMarksman = AlfheimAchievement("divineMarksman", 10, -1, ItemStack(Blocks.red_flower, 1, 2), moonlightBow).setSpecial()
 		outstander = AlfheimAchievement("outstander", 6, 3, Items.diamond_chestplate, mask).setSpecial()
 		rosaBomb = AlfheimAchievement("rosaBomb", 10, 1, Blocks.red_flower, subspace).setSpecial()
+		
+//		fateBoard = AlfheimAchievement("fateBoard", -6, 0, ItemStack(BlockListAB.fateBoard, 1, 1), null).setSpecial()
+//		slingshot = AlfheimAchievement("relicSlingshot", -6, 2, ItemStack(ItemListAB.itemFreyrSlingshot), fateBoard)
+//		pocketArmor = AlfheimAchievement("relicPocketArmor", -6, -2, ItemStack(ItemListAB.itemPocketWardrobe), fateBoard)
+//		itemChest = AlfheimAchievement("relicItemChest", -4, 1, ItemStack(ItemListAB.itemTalismanHiddenRiches), fateBoard)
+//		hornPlenty = AlfheimAchievement("relicHornPlenty", -4, -1, ItemStack(ItemListAB.itemHornPlenty), fateBoard)
+//		sphereNavigation = AlfheimAchievement("relicSphereNavigation", -8, 1, ItemStack(ItemListAB.itemSphereNavigation), fateBoard)
 		
 		page = AchievementPage(ModInfo.MODID.capitalized(), *achievements.toTypedArray())
 		AchievementPage.registerAchievementPage(page)

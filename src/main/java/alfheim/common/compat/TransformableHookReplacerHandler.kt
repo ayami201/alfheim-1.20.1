@@ -19,10 +19,10 @@ import java.awt.Color
 @HookReplacer
 fun shouldRenderPass(render: RenderWolf, wolf: EntityWolf?, pass: Int, ticks: Float): Int {
 	startFROM()
-	POPLine();glColor3f(EntitySheep.fleeceColorTable[ILOAD("4")][0], EntitySheep.fleeceColorTable[ILOAD("4")][1], EntitySheep.fleeceColorTable[ILOAD("4")][2])
-	POPLine();startTO()
-	POPLine();applyCollarColor(ILOAD("4"))
-	POPLine();stop()
+	glColor3f(EntitySheep.fleeceColorTable[ILOAD("4")][0], EntitySheep.fleeceColorTable[ILOAD("4")][1], EntitySheep.fleeceColorTable[ILOAD("4")][2])
+	startTO()
+	applyCollarColor(ILOAD("4"))
+	stop()
 	
 	return -1
 }
@@ -40,30 +40,32 @@ fun applyCollarColor(colorIndex: Int) {
 @HookReplacer(targetMethod = "onRenderWorldLast")
 fun onRenderWorldLast1(thiz: LightningHandler, event: RenderWorldLastEvent?) {
 	startFROM()
-	POPLine();GL11.glPushMatrix()
-	POPLine();startTO()
-	POPLine();GL11.glPushMatrix();GL11.glDisable(GL11.GL_CULL_FACE)
-	POPLine();stop()
+	GL11.glPushMatrix()
+	startTO()
+	GL11.glPushMatrix()
+	GL11.glDisable(GL11.GL_CULL_FACE)
+	stop()
 }
 
 @HookReplacer(targetMethod = "onRenderWorldLast")
 fun onRenderWorldLast2(thiz: LightningHandler, event: RenderWorldLastEvent?) {
 	startFROM()
-	POPLine();GL11.glPopMatrix()
-	POPLine();startTO()
-	POPLine();GL11.glPopMatrix();GL11.glEnable(GL11.GL_CULL_FACE)
-	POPLine();stop()
+	GL11.glPopMatrix()
+	startTO()
+	GL11.glPopMatrix()
+	GL11.glEnable(GL11.GL_CULL_FACE)
+	stop()
 }
 
 // SOURCES ARE FAKE!!!
 @HookReplacer(targetMethod = "renderTileEntityAt")
 fun renderTileEntityAt1(thiz: RenderTileFloatingFlower, tile: TileEntity, d0: Double, d1: Double, d2: Double, t: Float) {
 	startFROM()
-	POPLine();GL11.glPushMatrix()
+	GL11.glPushMatrix()
 	GL11.glTranslatef(0.5f, 1.4f, 0.5f)
-	POPLine();startTO()
-	POPLine();applyColor(tile)
-	POPLine();stop()
+	startTO()
+	applyColor(tile)
+	stop()
 } 
 
 fun applyColor(tile: TileEntity) {
@@ -81,12 +83,15 @@ fun applyColor(tile: TileEntity) {
 	GL11.glColor4f(r, g, b, 1f)
 }
 
-@HookReplacer(targetMethod = "renderTileEntityAt")
+// SOURCES ARE FAKE!!!
+@HookReplacer(targetMethod = "renderTileEntityAt", isMandatory = false) // not mandatory for GTNH Botania
 fun renderTileEntityAt2(thiz: RenderTileFloatingFlower, tile: TileEntity, d0: Double, d1: Double, d2: Double, t: Float) {
 	startFROM()
-	POPLine();GL11.glPopMatrix()
+	GL11.glPopMatrix()
 	POP(ALOAD<IFloatingFlower>("9").displayStack)
-	POPLine();startTO()
-	POPLine();GL11.glColor4f(1f, 1f, 1f, 1f);GL11.glPopMatrix();POP(ALOAD<IFloatingFlower>("9").displayStack)
-	POPLine();stop()
+	startTO()
+	GL11.glColor4f(1f, 1f, 1f, 1f)
+	GL11.glPopMatrix()
+	POP(ALOAD<IFloatingFlower>("9").displayStack)
+	stop()
 } 

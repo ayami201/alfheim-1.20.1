@@ -36,7 +36,7 @@ open class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncan
 	}
 	
 	override fun renderScreen(gui: IGuiLexiconEntry, mx: Int, my: Int) {
-		mc.renderEngine.bindTexture(LibResourceLocations.petalOverlay)
+		mc.renderEngine.bindTexture(PagePetalRecipe.petalOverlay)
 		
 		val target = targets[recipeAt]
 		val result = results?.get(recipeAt)
@@ -55,7 +55,10 @@ open class PageTuningRecipe(unlocalizedName: String, val incantation: TunerIncan
 				val yPos = gui.top + 24 - 7
 				val text = StatCollector.translateToLocal(inCircle)
 				val font = mc.fontRenderer
+				val uni = font.unicodeFlag
+				font.unicodeFlag = true
 				font.drawString(text, xPos - font.getStringWidth(text) / 2, yPos, 0)
+				font.unicodeFlag = uni
 				glColor4f(1f, 1f, 1f, 1f)
 			}
 		}

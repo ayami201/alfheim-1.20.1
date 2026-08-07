@@ -1,6 +1,7 @@
 package alfheim.common.crafting.recipe
 
 import alexsocol.asjlib.*
+import alexsocol.asjlib.ASJUtilities.TAG_ASJIGNORENBT
 import alexsocol.asjlib.ASJUtilities.addOreDictRecipe
 import alexsocol.asjlib.ASJUtilities.addShapelessOreDictRecipe
 import alfheim.AlfheimCore
@@ -100,6 +101,7 @@ import alfheim.common.block.AlfheimBlocks.irisWood3
 import alfheim.common.block.AlfheimBlocks.itemDisplay
 import alfheim.common.block.AlfheimBlocks.itemFrame
 import alfheim.common.block.AlfheimBlocks.kindling
+import alfheim.common.block.AlfheimBlocks.kudzuVine
 import alfheim.common.block.AlfheimBlocks.lightningPlanks
 import alfheim.common.block.AlfheimBlocks.lightningSapling
 import alfheim.common.block.AlfheimBlocks.lightningSlabs
@@ -196,12 +198,36 @@ import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.block.BlockNiflheim.NiflheimBlockMetas
 import alfheim.common.block.tile.TileAnomaly
 import alfheim.common.core.asm.hook.AlfheimHookHandler
+import alfheim.common.core.asm.hook.AlfheimHookHandler.ageLocked
+import alfheim.common.core.asm.hook.AlfheimHookHandler.ageLockedValue
 import alfheim.common.core.asm.hook.extender.ItemLensExtender.EnumAlfheimLens.*
 import alfheim.common.core.asm.hook.extender.ItemTwigWandExtender
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge.ABYSS_TRUTH
 import alfheim.common.core.handler.HilarityHandler.AttributionNameChecker.getCurrentNickname
 import alfheim.common.core.helper.*
+import alfheim.common.crafting.recipe.barrel.RecipeBeer
+import alfheim.common.crafting.recipe.barrel.RecipeWine
+import alfheim.common.crafting.recipe.barrel.RecipeWineWhite
+import alfheim.common.crafting.recipe.tuner.IncantationElementalSlimeGrowth
+import alfheim.common.crafting.recipe.tuner.IncantationEquipmentElementalTuning
+import alfheim.common.crafting.recipe.tuner.IncantationThaumWandOvercharge
+import alfheim.common.crafting.recipe.workbench.RecipeAesirCloak
+import alfheim.common.crafting.recipe.workbench.RecipeCleanRelic
+import alfheim.common.crafting.recipe.workbench.RecipeClearLoki
+import alfheim.common.crafting.recipe.workbench.RecipeElvenWeed
+import alfheim.common.crafting.recipe.workbench.RecipeHelmRevealingAlfheim
+import alfheim.common.crafting.recipe.workbench.RecipeLensPurification
+import alfheim.common.crafting.recipe.workbench.RecipeLensSplit
+import alfheim.common.crafting.recipe.workbench.RecipeLootInterceptor
+import alfheim.common.crafting.recipe.workbench.RecipeLootInterceptorClear
+import alfheim.common.crafting.recipe.workbench.RecipeRainbowLensDye
+import alfheim.common.crafting.recipe.workbench.RecipeResonatorTipping
+import alfheim.common.crafting.recipe.workbench.RecipeRingDyes
+import alfheim.common.crafting.recipe.workbench.RecipeSaveIvy
+import alfheim.common.crafting.recipe.workbench.RecipeSpecialFloatingFlower
+import alfheim.common.crafting.recipe.workbench.RecipeStencil
+import alfheim.common.crafting.recipe.workbench.RecipeThrowablePotion
 import alfheim.common.entity.EntityElementalSlime
 import alfheim.common.integration.thaumcraft.ThaumcraftSuffusionRecipes
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
@@ -325,7 +351,7 @@ import alfheim.common.item.material.ItemElvenResource
 import cpw.mods.fml.common.registry.GameRegistry.*
 import net.minecraft.block.Block
 import net.minecraft.enchantment.Enchantment
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.*
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.monster.*
 import net.minecraft.entity.passive.EntityOcelot
@@ -349,7 +375,6 @@ import vazkii.botania.common.Botania
 import vazkii.botania.common.block.ModBlocks.*
 import vazkii.botania.common.block.ModFluffBlocks.*
 import vazkii.botania.common.block.tile.mana.TilePool
-import vazkii.botania.common.core.helper.ItemNBTHelper
 import vazkii.botania.common.crafting.*
 import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.item.ModItems.*
@@ -601,10 +626,12 @@ object AlfheimRecipes {
 	lateinit var recipeCalicoTree: RecipeTreeCrafting
 	lateinit var recipeCircuitTree: RecipeTreeCrafting
 	lateinit var recipeBarrierTree: RecipeTreeCrafting
+	lateinit var recipeKudzu: RecipeTreeCrafting
 	
 	lateinit var tuningAnomalyStabilization: TunerIncantation<TileAnomaly>
 	lateinit var tuningAnomalyPackaging: TunerIncantation<TileAnomaly>
 	lateinit var tuningElementalSeer: TunerIncantation<ItemStack>
+	lateinit var tuningGrowthStop: TunerIncantation<EntityAgeable>
 	lateinit var tuningResonatorDillation: TunerIncantation<ItemStack>
 	lateinit var tuningResonatorPersistence: TunerIncantation<ItemStack>
 	lateinit var tuningResonatorUnlimit: TunerIncantation<ItemStack>
@@ -645,7 +672,7 @@ object AlfheimRecipes {
 		registerSmeltingRecipes()
 		registerManaInfuserRecipes()
 		registerDendrology()
-		registerRecipies()
+		registerRecipes()
 		registerTuning()
 		banRetrades()
 		extendESM()
@@ -2363,12 +2390,12 @@ object AlfheimRecipes {
 		recipesLeafDyes = BotaniaAPI.getLatestAddedRecipes(17)
 		
 		if (Botania.thaumcraftLoaded) {
-			val goggles = Item.itemRegistry.getObject("Thaumcraft:ItemGoggles") as Item
-			addShapelessRecipe(ItemStack(elementalHelmetRevealing), ItemStack(elementalHelmet), goggles)
-			addShapelessRecipe(ItemStack(elvoriumHelmetRevealing), ItemStack(elvoriumHelmet), goggles)
-			addShapelessRecipe(ItemStack(fenrirHelmetRevealing), ItemStack(fenrirHelmet), goggles)
-			addShapelessRecipe(ItemStack(snowHelmetRevealing), ItemStack(snowHelmet), goggles)
-			addShapelessRecipe(ItemStack(volcanoHelmetRevealing), ItemStack(volcanoHelmet), goggles)
+			addRecipe(RecipeHelmRevealingAlfheim(elementalHelmetRevealing, elementalHelmet))
+			addRecipe(RecipeHelmRevealingAlfheim(elvoriumHelmetRevealing, elvoriumHelmet))
+			addRecipe(RecipeHelmRevealingAlfheim(fenrirHelmetRevealing, fenrirHelmet))
+//			addRecipe(RecipeHelmRevealingAlfheim(ItemListAB.itemNebulaHelmReveal, ItemListAB.itemNebulaHelm)) TODO back
+			addRecipe(RecipeHelmRevealingAlfheim(snowHelmetRevealing, snowHelmet))
+			addRecipe(RecipeHelmRevealingAlfheim(volcanoHelmetRevealing, volcanoHelmet))
 		}
 		
 		addShapelessOreDictRecipe(ElvoriumNugget.stack(9), ELVORIUM_INGOT)
@@ -2462,7 +2489,7 @@ object AlfheimRecipes {
 		grasses.forEach { addShapelessOreDictRecipe(ItemStack(manaResource, 1, 6), "dustRedstone", it) }
 		recipesRedstoneRoot = BotaniaAPI.getLatestAddedRecipes(18)
 		
-		addShapelessOreDictRecipe(ItemStack(manaRingGod), MAUFTRIUM_INGOT, manaStoneGreater)
+		addShapelessOreDictRecipe(ItemStack(manaRingGod, 1, WILDCARD_VALUE), MAUFTRIUM_INGOT, manaStoneGreater)
 		recipeManaRingGod = BotaniaAPI.getLatestAddedRecipe()
 		
 		addShapelessOreDictRecipe(ItemStack(mushroom_stew), rainbowMushroom, rainbowMushroom, ItemStack(bowl))
@@ -2609,7 +2636,7 @@ object AlfheimRecipes {
 		
 		recipeManaStoneGreater = addInfuserRecipe(ItemStack(manaStoneGreater, 1, 1000),
 												  TilePool.MAX_MANA * 4,
-												  ItemStack(manaStone, 1, WILDCARD_VALUE).also { ItemNBTHelper.setBoolean(it, ASJUtilities.TAG_ASJIGNORENBT, true) },
+												  ItemStack(manaStone, 1, WILDCARD_VALUE).also { ItemNBTHelper.setBoolean(it, TAG_ASJIGNORENBT, true) },
 												  MuspelheimEssence.stack,
 		                                          ItemStack(manaResource, 4, 5),
 												  NiflheimEssence.stack)
@@ -2679,11 +2706,20 @@ object AlfheimRecipes {
 													 RUNE[15] // PRIDE
 		)
 		
+		recipeKudzu = AlfheimAPI.addTreeRecipe(666_666,
+			ItemStack(kudzuVine, 1, 15).also { ItemNBTHelper.initNBT(it) },
+			"${ModInfo.MODID}:KudzuVine",
+			ItemStack(cellBlock).also { ItemNBTHelper.setBoolean(it, TAG_ASJIGNORENBT, true) },
+			666,
+			ItemStack(tallgrass, 1, 1), ItemStack(subspacian), ItemStack(tallgrass, 1, 2),
+			ItemStack(grassSeeds), ItemStack(vineBall), ItemStack(fertilizer), ItemStack(deadbush),
+		)
+		
 		if (Botania.thaumcraftLoaded && AlfheimConfigHandler.thaumTreeSuffusion)
 			ThaumcraftSuffusionRecipes.initRecipes()
 	}
 	
-	private fun registerRecipies() {
+	private fun registerRecipes() {
 		val costTier1 = 5200
 		val costTier2 = 8000
 		val costTier3 = 12000
@@ -2837,10 +2873,6 @@ object AlfheimRecipes {
 		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(red_mushroom), ItemStack(brown_mushroom), 120)
 		BotaniaAPI.registerManaAlchemyRecipe(ItemStack(brown_mushroom), ItemStack(red_mushroom), 120)
 		
-		if (Botania.thaumcraftLoaded) {
-			addRecipe(RecipeHelmRevealingAlfheim())
-		}
-		
 		attributionSkull(getCurrentNickname("yrsegal"), irisSeeds, 16) // Bifrost Seeds
 		// Wire - I just love rainbows, what can I say?
 		attributionSkull(getCurrentNickname("l0nekitsune"), elvenResource, NetherwoodCoal.I)
@@ -2878,6 +2910,10 @@ object AlfheimRecipes {
 		RecipeSorter.register("${ModInfo.MODID}:resonatorTipping", RecipeResonatorTipping::class.java, RecipeSorter.Category.SHAPELESS, "")
 		addRecipe(RecipeStencil)
 		RecipeSorter.register("${ModInfo.MODID}:stencil", RecipeStencil::class.java, RecipeSorter.Category.SHAPELESS, "")
+		
+		AlfheimAPI.barrelRecipes.add(RecipeWine(RedGrapes.stack, RedWine.stack))
+		AlfheimAPI.barrelRecipes.add(RecipeWineWhite)
+		AlfheimAPI.barrelRecipes.add(RecipeBeer)
 	}
 	
 	private fun registerTuning() {
@@ -2952,6 +2988,14 @@ object AlfheimRecipes {
 		
 		AlfheimAPI.registerIncantation<EntityOcelot>("oiiaiuiiiiai") { it.entityData.setBoolean(AlfheimHookHandler.TAG_OIIA, true); true }
 		
+		tuningGrowthStop = AlfheimAPI.registerIncantation<EntityAgeable>("o awen e lili ona lon tenpo ale") {
+			if (!it.isChild) return@registerIncantation false
+			
+			it.ageLocked = true
+			it.ageLockedValue = it.growingAge
+			true
+		}
+		
 //		tuningCats = mapOf(
 //			"soweli pi linja uta o kama kule ike" to arrayOf(3, 11, 14, 15).map { ItemStack(dye, 1, it) },
 //			"soweli pi linja uta o kama loje jelo" to arrayOf(0, 0, 4, 15).map { ItemStack(dye, 1, it) },
@@ -2992,7 +3036,7 @@ object AlfheimRecipes {
 		
 		val smiteSword = ItemStack(golden_sword).apply { addEnchantment(Enchantment.smite, 5) }
 		
-		val diceStack = ItemStack(dice).apply { ItemNBTHelper.setBoolean(this, ASJUtilities.TAG_ASJIGNORENBT, true) }
+		val diceStack = ItemStack(dice).apply { ItemNBTHelper.setBoolean(this, TAG_ASJIGNORENBT, true) }
 		
 		tuningAkashicRecords	= registerItemCraftTuning("lipu pi sona ali",								akashicRecords,		shimmerrock, book, bookshelf, monocle, lexicon, RUNE[11])
 		tuningDaolos			= registerItemCraftTuning("ilo utala alasa telo",							daolos,				manasteelAxe, MUSPELHEIM_ESSENCE, water_bucket, JellyBottle.stack, fish, RUNE[0], RUNE[3])
@@ -3004,14 +3048,14 @@ object AlfheimRecipes {
 		tuningGungnir			= registerItemCraftTuning("ilo palisa utala pi sewi Oten",					gungnir,			manaGun, FenrirFur.stack, arrow, ItemStack(ancientWill, 1, 4), ItemStack(lens, 1, SUPERCONDUCTOR.meta))
 		tuningHeimdallRing		= registerItemCraftTuning("sike pi palisa luka pi sewi Kejemetale",		    priestRingHeimdall,	pixieRing, MAUFTRIUM_NUGGET, RUNE[15], monocle, itemFinder, bifrostPerm, ender_eye)
 		tuningInfiniteFruit		= registerItemCraftTuning("kili ki ken ala pini a pi sewi Sipe",			infiniteFruit,		golden_apple, RUNE[8], diceStack.copy(), manaCookie, manaBottle, RUNE[10])
-		tuningKingKey			= registerItemCraftTuning("ilo open pi jan ki lawa e jan lawa mute",		kingKey,			missileRod, RUNE[8], diceStack.copy(), golden_axe, golden_hoe, golden_sword)
+		tuningKingKey			= registerItemCraftTuning("ilo open pi jan ki lawa e jan lawa mute a",		kingKey,			missileRod, RUNE[8], diceStack.copy(), golden_axe, golden_hoe, golden_sword)
 		tuningLokiRing			= registerItemCraftTuning("sike pi palisa luka pi sewi Loki",			    lokiRing,			pixieRing, diceStack.copy(), RUNE[8], RUNE[1], enderHand, sextant)
 		tuningMjolnir			= registerItemCraftTuning("ilo utala wawa pi sewi Tola",					mjolnir,			elvenChakram, NIFLHEIM_ESSENCE, RUNE[13], SPLINTERS_THUNDERWOOD, SPLINTERS_THUNDERWOOD, TWIG_THUNDERWOOD, teruTeruBozu)
 		tuningMoonlightBow		= registerItemCraftTuning("ilo alasa palisa pi sewi Popepu",				moonlightBow,		crystalBow, MAUFTRIUM_NUGGET, RUNE[8], RUNE[5], colorOverride, noteblock, QUARTZ[6])
 		tuningNjordRing			= registerItemCraftTuning("sike pi palisa luka pi sewi Nijete",			    priestRingNjord,	pixieRing, MAUFTRIUM_NUGGET, RUNE[0], RUNE[3], ItemStack(fish, 1, 3), overgrowthSeed)
 		tuningOdinRing			= registerItemCraftTuning("sike pi palisa luka pi sewi Oten",			    odinRing,			pixieRing, diceStack.copy(), spider_eye, magma_cream, RUNE[13])
 		tuningSifRing			= registerItemCraftTuning("sike pi palisa luka pi sewi Sipe",			    priestRingSif,		pixieRing, MAUFTRIUM_NUGGET, RUNE[5], RUNE[2], DasRheingold.stack, overgrowthSeed)
-		tuningSpearSubspace		= registerItemCraftTuning("ilo palisa utala ki lon ma ali pi pilin ala",	subspaceSpear,		InfusedDreamwoodTwig.stack, RUNE[8], MUSPELHEIM_ESSENCE, subspacian, enlighter, manaBomb)
+		tuningSpearSubspace		= registerItemCraftTuning("ilo palisa utala ki lon ma ali pi pilin ala a",	subspaceSpear,		InfusedDreamwoodTwig.stack, RUNE[8], MUSPELHEIM_ESSENCE, subspacian, enlighter, manaBomb)
 		tuningTankMask			= registerItemCraftTuning("len kiwen nasa pi sinpin lawa",					mask,				ItemStack(cosmetic, 1, 22), MAUFTRIUM_NUGGET, SaveIvy.stack, leather_helmet, RUNE[13], manaVoid)
 		tuningThorRing			= registerItemCraftTuning("sike pi palisa luka pi sewi Tola",			    thorRing,			pixieRing, diceStack.copy(), TERRA_STEEL, temperanceStone, RUNE[13], TWIG_THUNDERWOOD)
 	}

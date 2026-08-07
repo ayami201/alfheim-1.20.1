@@ -5,6 +5,8 @@ import alexsocol.asjlib.math.Vector3
 import alfheim.api.spell.*
 import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.core.handler.*
+import alfheim.common.core.helper.ElementalDamage
+import alfheim.common.core.helper.setTo
 import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.spell.wind.SpellLeafStorm
 import net.minecraft.entity.*
@@ -43,7 +45,7 @@ class EntitySpellLeafStorm(world: World, val caster: EntityLivingBase?): Entity(
 			if (Vector3.entityDistance(caster, it) > SpellLeafStorm.radius) return@forEach
 			
 			if (CardinalSystem.PartySystem.mobsSameParty(caster, it)) it.addPotionEffect(PotionEffect(Potion.moveSpeed.id, 50, SpellLeafStorm.efficiency.I))
-			else it.attackEntityFrom(DamageSourceSpell.wind(this, caster).setDamageBypassesArmor(), SpellBase.over(caster, SpellLeafStorm.damage))
+			else it.attackEntityFrom(DamageSourceSpell.wind(this, caster).setDamageBypassesArmor().setTo(ElementalDamage.NATURE), SpellBase.over(caster, SpellLeafStorm.damage))
 		}
 	}
 	

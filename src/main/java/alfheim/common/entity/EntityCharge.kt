@@ -44,7 +44,7 @@ class EntityCharge(world: World, val flugel: EntityFlugel?, val target: EntityLi
 	
 	fun attackTarget(target: EntityLivingBase) {
 		if (flugel != null)
-			target.attackEntityFrom(DamageSourceSpell.shadow(flugel), if (flugel.isUltraMode) 10f else 5f)
+			flugel.attackTarget(target, DamageSourceSpell.shadow(flugel), if (flugel.isUltraMode) 10f else 5f)
 		else
 			target.attackEntityFrom(DamageSource.magic, 5f)
 		

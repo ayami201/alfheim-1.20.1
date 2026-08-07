@@ -377,12 +377,11 @@ class TileTreeCrafter: ASJTile(), ISparkAttachable {
 		
 		val copy = recipe.output.copy()
 		copy.tagCompound.setString("id", recipe.outTileId)
+		copy.tagCompound.setInteger("x", xCoord)
+		copy.tagCompound.setInteger("y", yCoord - 3)
+		copy.tagCompound.setInteger("z", zCoord)
 		
 		val tile = createAndLoadEntity(copy.tagCompound) ?: return
-		
-		tile.xCoord = xCoord
-		tile.yCoord = yCoord - 3
-		tile.zCoord = zCoord
 		
 		worldObj.setTileEntity(xCoord, yCoord - 3, zCoord, tile)
 	}

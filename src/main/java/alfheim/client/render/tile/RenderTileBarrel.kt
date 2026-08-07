@@ -27,45 +27,9 @@ object RenderTileBarrel: TileEntitySpecialRenderer() {
 		if (tile.closed)
 			ModelBarrel.renderCover(f5)
 		
-		glTranslatef(0f, (tile.wineLevel - 2) / -16f - 0.01f, 0f)
+		glTranslatef(0f, (tile.amountLevel - 2) / -16f - 0.01f, 0f)
 		
-		if (tile.wineStage <= TileBarrel.WINE_STAGE_MASH) {
-			if (tile.wineType == TileBarrel.WINE_TYPE_RED)
-				ModelBarrel.redMash.render(f5)
-			
-			if (tile.wineType == TileBarrel.WINE_TYPE_WHITE)
-				ModelBarrel.greenMash.render(f5)
-		}
-		
-		if (tile.wineStage >= TileBarrel.WINE_STAGE_MASH) {
-			glEnable(GL_BLEND)
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-			glTranslatef(0f, -1 / 64f, 0f)
-			
-			val a = when (tile.wineStage) {
-				TileBarrel.WINE_STAGE_MASH   -> 0.5f
-				TileBarrel.WINE_STAGE_LIQUID -> 1f
-				TileBarrel.WINE_STAGE_READY  -> 0.9f
-				else                         -> -1f
-			}
-			
-			glColor4f(1f, 1f, 1f, a)
-			
-			if (tile.wineType == TileBarrel.WINE_TYPE_RED)
-				ModelBarrel.redWine.render(f5)
-			
-			if (tile.wineType == TileBarrel.WINE_TYPE_WHITE)
-				ModelBarrel.greenWine.render(f5)
-			
-			if (tile.wineType == TileBarrel.WINE_TYPE_CHAMP) {
-				glColor4f(1f, 1f, 0.5f, a)
-				ModelBarrel.greenWine.render(f5)
-			}
-			
-			glDisable(GL_BLEND)
-			
-			glColor4f(1f, 1f, 1f, 1f)
-		}
+		tile.recipe?.renderLiquid(tile, f5)
 		
 		glPopMatrix()
 	}

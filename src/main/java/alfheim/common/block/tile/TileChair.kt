@@ -31,6 +31,10 @@ class TileChair: TileDoubleCamo() {
 		
 		class EntitySit(world: World): Entity(world) {
 			
+			init {
+				setSize(0f, 0f)
+			}
+			
 			override fun onEntityUpdate() {
 				if (!worldObj.isRemote)
 					if (riddenByEntity == null || worldObj.getBlock(this) !== AlfheimFluffBlocks.chair) setDead()
@@ -44,7 +48,7 @@ class TileChair: TileDoubleCamo() {
 			}
 			
 			override fun attackEntityFrom(src: DamageSource?, amount: Float) = false
-			override fun entityInit() = setSize(0f, 0f)
+			override fun entityInit() = Unit
 			override fun readEntityFromNBT(nbt: NBTTagCompound?) = Unit
 			override fun writeEntityToNBT(nbt: NBTTagCompound?) = Unit
 		}

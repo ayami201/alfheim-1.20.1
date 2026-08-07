@@ -15,6 +15,10 @@ import net.minecraft.world.World
 
 class EntityFireTornado(world: World): Entity(world) {
 	
+	init {
+		setSize(0f, 0f)
+	}
+	
 	override fun onUpdate() {
 		if (!RagnarokHandler.ginnungagap) return setDead()
 		
@@ -66,7 +70,6 @@ class EntityFireTornado(world: World): Entity(world) {
 	
 	override fun entityInit() {
 		noClip = true
-		setSize(0f, 0f)
 	}
 	
 	override fun writeEntityToNBT(nbt: NBTTagCompound) {

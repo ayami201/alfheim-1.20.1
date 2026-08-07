@@ -34,7 +34,7 @@ class TileRift: ASJTile() {
 		
 		val p = Vector3().rand().sub(0.5).normalize().mul(Math.random() * 4).add(this)
 		val m = Vector3.fromTileEntityCenter(this).sub(p).mul(0.05)
-		VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.GRAVITY, worldObj.provider.dimensionId, p.x, p.y, p.z, m.x, m.y, m.z)
+		VisualEffectHandler.sendPacket(VisualEffectHandlerClient.VisualEffects.SMOKE, worldObj.provider.dimensionId, p.x, p.y, p.z, m.x, m.y, m.z)
 		
 		// pull blocks
 		if (ticks++ % 10 == 0) {

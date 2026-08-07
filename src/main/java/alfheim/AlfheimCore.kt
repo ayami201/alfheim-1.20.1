@@ -5,21 +5,21 @@ import alexsocol.patcher.asm.worker.InterfaceAppenderWorker.registerAdditionalIn
 import alfheim.api.ModInfo.MODID
 import alfheim.common.core.command.*
 import alfheim.common.core.handler.*
-import alfheim.common.core.handler.ragnarok.RagnarokHandler
-import alfheim.common.core.proxy.CommonProxy
+import alfheim.common.core.handler.ragnarok.*
+import alfheim.common.core.proxy.*
 import alfheim.common.core.util.*
-import alfheim.common.integration.minetweaker.MinetweakerAlfheimConfig
+import alfheim.common.integration.minetweaker.*
 import alfheim.common.integration.thaumcraft.*
-import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
-import alfheim.common.integration.travellersgear.TravellersGearAlfheimConfig
-import alfheim.common.integration.waila.WAILAAlfheimConfig
-import alfheim.common.network.NetworkService
+import alfheim.common.integration.tinkersconstruct.*
+import alfheim.common.integration.travellersgear.*
+import alfheim.common.integration.waila.*
+import alfheim.common.network.*
 import cpw.mods.fml.common.*
 import cpw.mods.fml.common.Mod.*
 import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event.*
-import net.minecraft.server.MinecraftServer
-import vazkii.botania.common.Botania
+import net.minecraft.server.*
+import vazkii.botania.common.*
 
 @Suppress("UNUSED_PARAMETER")
 @Mod(modid = MODID, dependencies = "required-after:Botania", useMetadata = true, guiFactory = "$MODID.client.gui.GUIFactory", modLanguageAdapter = KotlinAdapter.className)
@@ -27,6 +27,9 @@ object AlfheimCore {
 	
 	@KotlinProxy(clientSide = "$MODID.client.core.proxy.ClientProxy", serverSide = "$MODID.common.core.proxy.CommonProxy")
 	lateinit var proxy: CommonProxy
+	
+//	@KotlinProxy(clientSide = "ab.client.core.proxy.ClientProxy", serverSide = "ab.common.core.proxy.CommonProxy")
+//	lateinit var abProxy: ab.common.core.proxy.CommonProxy
 	
 	@Metadata(MODID)
 	lateinit var meta: ModMetadata
@@ -70,6 +73,8 @@ object AlfheimCore {
 	
 	@EventHandler
 	fun preInit(e: FMLPreInitializationEvent) {
+//		abProxy.preInit(e)
+		
 		MineTweakerLoaded = Loader.isModLoaded("MineTweaker3")
 		NEILoaded = Loader.isModLoaded("NotEnoughItems")
 		TiCLoaded = Loader.isModLoaded("TConstruct")
@@ -88,12 +93,16 @@ object AlfheimCore {
 	
 	@EventHandler
 	fun init(e: FMLInitializationEvent) {
+//		abProxy.init(e)
+		
 		proxy.init()
 		proxy.initializeAndRegisterHandlers()
 	}
 	
 	@EventHandler
 	fun postInit(e: FMLPostInitializationEvent) {
+//		abProxy.postInit(e)
+		
 		proxy.registerKeyBinds()
 		proxy.registerRenderThings()
 		proxy.postInit()

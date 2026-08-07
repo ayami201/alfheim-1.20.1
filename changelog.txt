@@ -1,5 +1,35 @@
 Innovations:
- Compatibility with Angelica
+ Kudzu vine
+ Beer brewing
+ Age locking for growable entities
+ Deleted griefer creeper
+ Elemental slimes spawn logic is now equal to regular slimes
+ Flugel (tier 3) rebalance
+ Removed Iffesal dust drop from snow sprites
+ New config category for balance (existing props moved there, update your files)
+ Config for lifespan of shed items
+ Some modded pocket dimensions are now available from Alfheim
+ Improved Astrolabe logic
+ Improved Resonator logic
+ Volcano mace rework similar to vanilla mace
+ [ESM] New recipes and tweaks for extended play
+ [Aether] Alfheim can now be set as a dimension "below" the Aether
+ ...other minor changes
 
 Fixes:
- Search tab crash
+ Crafty Crate deleting items if blocked
+ Forced chunks overflow
+ Giant bifrost flower missing petals
+ Some mobs still being able to aggro when under Sealing Disguise
+ Narslimmus won't eat giant slimes
+ Split on death slimes now retain ability to be consumed by Narslimmus
+ Item Platforms logic
+ Niflheim ice and Muspelheim fire explosion resistance
+ Munchdew leaf search logic
+ Tigerseye creeper search logic
+ Composite lens recipe now accepts "slimeball" oredict
+ Corporea quandex logic
+ Unbound key bindings trigger from special keys (workaround for LWJGL issue)
+ [TC] Colored dirt considered harvestable by golems
+ [Starminer] Console spam from some entities being unable to spawn
+ ...other minor fixes

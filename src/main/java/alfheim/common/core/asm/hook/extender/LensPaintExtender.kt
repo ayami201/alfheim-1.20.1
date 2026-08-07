@@ -22,6 +22,7 @@ import alfheim.common.block.AlfheimBlocks.starBlock
 import alfheim.common.block.AlfheimBlocks.starBlock2
 import alfheim.common.block.tile.*
 import alfheim.common.compat.AngelicaCompat
+import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.ItemIridescent
 import cpw.mods.fml.relauncher.*
 import gloomyfolken.hooklib.asm.*
@@ -60,17 +61,17 @@ object LensPaintExtender {
 		
 		if (entityHit is EntitySheep) {
 			val r = 20
-			val targetColor = if (ASJSuperWrapperHandler.getFlag(entityHit, 6)) 16 else entityHit.fleeceColor
+			val targetColor = if (ASJSuperWrapperHandler.getFlag(entityHit, AlfheimConfigHandler.flagIdSheepRainbow)) 16 else entityHit.fleeceColor
 			val sheepList = getEntitiesWithinAABB(world, EntitySheep::class.java, getBoundingBox(entityHit.posX, entityHit.posY, entityHit.posZ).expand(r))
 			for (sheep in sheepList) {
-				if ((if (ASJSuperWrapperHandler.getFlag(sheep, 6)) 16 else sheep.fleeceColor) != targetColor) continue
+				if ((if (ASJSuperWrapperHandler.getFlag(sheep, AlfheimConfigHandler.flagIdSheepRainbow)) 16 else sheep.fleeceColor) != targetColor) continue
 				
 				if (storedColor == 16) {
 					sheep.fleeceColor = 0
-					ASJSuperWrapperHandler.setFlag(sheep, 6, true)
+					ASJSuperWrapperHandler.setFlag(sheep, AlfheimConfigHandler.flagIdSheepRainbow, true)
 				} else {
 					sheep.fleeceColor = storedColor
-					ASJSuperWrapperHandler.setFlag(sheep, 6, false)
+					ASJSuperWrapperHandler.setFlag(sheep, AlfheimConfigHandler.flagIdSheepRainbow, false)
 				}
 			}
 			return true
@@ -193,7 +194,7 @@ object LensPaintExtender {
 	@JvmStatic
 	@Hook(injectOnExit = true, isMandatory = false)
 	fun shouldRenderPass(render: RenderSheep, sheep: EntitySheep, pass: Int, ticks: Float, @Hook.ReturnValue result: Int): Int {
-		if (result != 1 || !ASJSuperWrapperHandler.getFlag(sheep, 6)) return result
+		if (result != 1 || !ASJSuperWrapperHandler.getFlag(sheep, AlfheimConfigHandler.flagIdSheepRainbow)) return result
 		
 		val (r, g, b) = Color.getHSBColor((sheep.ticksExisted * 2 + sheep.entityId + ticks) % 360 / 360F, 1F, 1F).getRGBColorComponents(null)
 		AngelicaCompat.glColor3f(r, g, b)
@@ -203,13 +204,13 @@ object LensPaintExtender {
 	@JvmStatic
 	@Hook(injectOnExit = true, isMandatory = false)
 	fun writeEntityToNBT(sheep: EntitySheep, nbt: NBTTagCompound) {
-		nbt.setBoolean(TAG_RAINBOW, ASJSuperWrapperHandler.getFlag(sheep, 6))
+		nbt.setBoolean(TAG_RAINBOW, ASJSuperWrapperHandler.getFlag(sheep, AlfheimConfigHandler.flagIdSheepRainbow))
 	}
 	
 	@JvmStatic
 	@Hook(injectOnExit = true, isMandatory = false)
 	fun readEntityFromNBT(sheep: EntitySheep, nbt: NBTTagCompound) {
-		ASJSuperWrapperHandler.setFlag(sheep, 6, nbt.getBoolean(TAG_RAINBOW))
+		ASJSuperWrapperHandler.setFlag(sheep, AlfheimConfigHandler.flagIdSheepRainbow, nbt.getBoolean(TAG_RAINBOW))
 	}
 	
 	const val TAG_RAINBOW = "${ModInfo.MODID}:rainbow"

@@ -27,7 +27,7 @@ object SpellSmokeScreen: SpellBase("smokescreen", EnumRace.SPRIGGAN, 5000, 600, 
 			
 			it.addPotionEffect(PotionEffect(Potion.blindness.id, duration))
 		}
-		VisualEffectHandler.sendPacket(VisualEffects.SMOKE, caster)
+		VisualEffectHandler.sendPacket(VisualEffects.SMOKESCREEN, caster)
 		return result
 	}
 }

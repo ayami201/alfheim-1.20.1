@@ -1,92 +1,132 @@
 package alfheim.common.block.tile
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.extendables.block.ASJTile
-import alfheim.common.item.material.ElvenFoodMetas
-import net.minecraft.nbt.NBTTagCompound
+import alexsocol.asjlib.extendables.block.*
+import alexsocol.asjlib.math.*
+import alfheim.api.*
+import alfheim.api.crafting.recipe.*
+import net.minecraft.entity.item.*
+import net.minecraft.entity.player.*
+import net.minecraft.item.*
+import net.minecraft.nbt.*
+import net.minecraftforge.common.util.*
 
 class TileBarrel: ASJTile() {
 	
-	var dark = false
+	var amountLevel = 0
 	var closed = true
-	var stomps = 0
+	var data = NBTTagCompound()
+	var name = ""
+	var recipeId = -1
 	var timer = 0
-	var wineLevel = 0
-	var wineStage = 0
-	var wineType = WINE_TYPE_NONE
+	
+	// no save
+	var redstoneLastTick = true
+	
+	val recipe: RecipeBarrel?
+		get() = AlfheimAPI.barrelRecipes.getOrNull(recipeId)
 	
 	override fun updateEntity() {
-		if (timer <= 0) return
+		if (worldObj.isRemote) return
 		
-		if (worldObj.getBlockLightValue(xCoord, yCoord, zCoord) > 4) dark = false
-		
-		if (closed) {
-			if (--timer == 0) {
-				wineStage = WINE_STAGE_READY
-				if (dark && wineType == WINE_TYPE_WHITE) wineType = WINE_TYPE_CHAMP
-				
-				if (worldObj.isRemote)
-					ASJUtilities.dispatchTEToNearbyPlayers(this)
-				
-				worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType())
-			}
-		} else {
-			if (++timer >= MAX_OPEN_TIME)
-				reset()
+		var redstone = false
+		for (dir in ForgeDirection.VALID_DIRECTIONS) {
+			val (x, y, z) = Vector3.fromTileEntity(this).add(dir.offsetX, dir.offsetY, dir.offsetZ).mf()
+			if (worldObj.getIndirectPowerLevelTo(x, y, z, dir.ordinal) <= 0) continue
+			redstone = true
+			break
 		}
+		
+		if (redstone && !redstoneLastTick) {
+			closed = !closed
+			sync()
+		}
+		redstoneLastTick = redstone
+		
+		if (!closed) for (item in getEntitiesWithinAABB(worldObj, EntityItem::class.java, boundingBox(-0.125))) {
+			if (item.isDead) continue
+			
+			val stack = item.entityItem ?: continue
+			if (stack.stackSize <= 0) continue
+			
+			if (recipe == null) {
+				if (!selectRecipeMatchingFirstInput(null, stack)) continue
+			} else {
+				if (!recipe!!.onInteractedWith(this, null, stack)) continue
+			}
+			
+			sync()
+			
+			if (stack.stackSize > 0) break
+			
+			item.setEntityItemStack(null)
+			item.setDead()
+			
+			break
+		}
+		
+		if (timer > 0) --timer
+		recipe?.serverTick(this)
+	}
+	
+	fun selectRecipeMatchingFirstInput(player: EntityPlayer?, stack: ItemStack): Boolean {
+		AlfheimAPI.barrelRecipes.forEachIndexed { index, variant -> 
+			if (!variant.isInitStack(stack)) return@forEachIndexed
+			
+			recipeId = index
+			recipe!!.onInteractedWith(this, player, stack)
+			
+			return true
+		}
+		
+		return false
+	}
+	
+	fun sync() {
+		if (!ASJUtilities.isServer) return
+		
+		ASJUtilities.dispatchTEToNearbyPlayers(this)
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType())
 	}
 	
 	fun reset() {
-		stomps = 0
+		amountLevel = 0
+		data.tagMap.clear()
+		recipeId = -1
 		timer = 0
-		wineLevel = 0
-		wineStage = 0
-		wineType = WINE_TYPE_NONE
+		sync()
 	}
 	
 	override fun readCustomNBT(nbt: NBTTagCompound) {
 		super.readCustomNBT(nbt)
+		
+		amountLevel = nbt.getInteger(TAG_AMOUNT_LEVEL)
 		closed = nbt.getBoolean(TAG_CLOSED)
-		stomps = nbt.getInteger(TAG_STOMPS)
+		data = nbt.getCompoundTag(TAG_DATA)
+		name = nbt.getString(TAG_NAME)
+		recipeId = nbt.getInteger(TAG_RECIPE)
 		timer = nbt.getInteger(TAG_TIMER)
-		wineLevel = nbt.getInteger(TAG_WINE_LEVEL)
-		wineStage = nbt.getInteger(TAG_WINE_STAGE)
-		wineType = nbt.getInteger(TAG_WINE_TYPE)
 	}
 	
 	override fun writeCustomNBT(nbt: NBTTagCompound) {
 		super.writeCustomNBT(nbt)
+		
+		nbt.setInteger(TAG_AMOUNT_LEVEL, amountLevel)
 		nbt.setBoolean(TAG_CLOSED, closed)
-		nbt.setInteger(TAG_STOMPS, stomps)
+		nbt.setTag(TAG_DATA, data)
+		nbt.setString(TAG_NAME, name)
+		nbt.setInteger(TAG_RECIPE, recipeId)
 		nbt.setInteger(TAG_TIMER, timer)
-		nbt.setInteger(TAG_WINE_LEVEL, wineLevel)
-		nbt.setInteger(TAG_WINE_STAGE, wineStage)
-		nbt.setInteger(TAG_WINE_TYPE, wineType)
 	}
 	
 	override fun getRenderBoundingBox() = boundingBox(1)
 	
 	companion object {
-		
-		const val WINE_STAGE_GRAPE = 1
-		const val WINE_STAGE_MASH = 2
-		const val WINE_STAGE_LIQUID = 3
-		const val WINE_STAGE_READY = 4
-		
-		const val WINE_TYPE_NONE = -1
-		const val WINE_TYPE_CHAMP = 0
-		val WINE_TYPE_WHITE = ElvenFoodMetas.WhiteGrapes.I
-		val WINE_TYPE_RED = ElvenFoodMetas.RedGrapes.I
-		
-		const val MAX_WINE_LEVEL = 12
-		const val FERMENTATION_TIME = 6000
-		const val MAX_OPEN_TIME = FERMENTATION_TIME + 666
-		
+		const val TAG_AMOUNT_LEVEL = "amountLevel"
 		const val TAG_CLOSED = "closed"
-		const val TAG_STOMPS = "stomps"
+		const val TAG_DATA = "data"
+		const val TAG_NAME = "name"
+		const val TAG_RECIPE = "recipe"
 		const val TAG_TIMER = "timer"
-		const val TAG_WINE_LEVEL = "wine_level"
-		const val TAG_WINE_STAGE = "wine_stage"
-		const val TAG_WINE_TYPE = "wine_type"
 	}
 }

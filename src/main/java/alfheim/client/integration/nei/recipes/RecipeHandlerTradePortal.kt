@@ -18,15 +18,13 @@ import vazkii.botania.api.recipe.RecipeElvenTrade
 import vazkii.botania.client.lib.LibResources
 import java.awt.Rectangle
 
+// Can't be an object!
 class RecipeHandlerTradePortal: TemplateRecipeHandler() {
-	
-	val recipeID: String
-		get() = "alfheim.tradeportal"
 	
 	inner class CachedTradePortalRecipe(recipe: RecipeElvenTrade?): CachedRecipe() {
 		
 		val outputs: MutableList<PositionedStack> = ArrayList()
-		lateinit var input: PositionedStack
+		var input: PositionedStack? = null
 		
 		init {
 			if (recipe != null) {
@@ -38,38 +36,26 @@ class RecipeHandlerTradePortal: TemplateRecipeHandler() {
 		fun setIngredients(inputs: List<Any>) {
 			for ((i, o) in inputs.withIndex()) {
 				if (o is String)
-					this.outputs.add(PositionedStack(OreDictionary.getOres(o), 60 + i * 18, 6))
+					outputs.add(PositionedStack(OreDictionary.getOres(o), 60 + i * 18, 6))
 				else
-					this.outputs.add(PositionedStack(o, 60 + i * 18, 6))
-				
+					outputs.add(PositionedStack(o, 60 + i * 18, 6))
 			}
 		}
 		
-		override fun getIngredients(): List<PositionedStack> {
-			return getCycledIngredients(cycleticks / 20, outputs)
-		}
+		override fun getIngredients(): List<PositionedStack> = getCycledIngredients(cycleticks / 20, outputs)
 		
-		override fun getResult(): PositionedStack {
-			return input
-		}
-		
+		override fun getResult() = input
 	}
 	
-	override fun getRecipeName(): String {
-		return StatCollector.translateToLocal("alfheim.nei.tradeportal")
-	}
+	override fun getRecipeName() = StatCollector.translateToLocal("alfheim.nei.tradeportal")!!
 	
-	override fun getGuiTexture(): String {
-		return LibResources.GUI_NEI_BLANK
-	}
+	override fun getGuiTexture() = LibResources.GUI_NEI_BLANK
 	
 	override fun loadTransferRects() {
-		transferRects.add(RecipeTransferRect(Rectangle(35, 30, 48, 48), recipeID))
+		transferRects.add(RecipeTransferRect(Rectangle(35, 30, 48, 48), RECIPE_ID))
 	}
 	
-	override fun recipiesPerPage(): Int {
-		return 1
-	}
+	override fun recipiesPerPage() = 1
 	
 	override fun drawBackground(recipe: Int) {
 		super.drawBackground(recipe)
@@ -82,24 +68,8 @@ class RecipeHandlerTradePortal: TemplateRecipeHandler() {
 		RenderItem.getInstance().renderIcon(35, 29, BlockTradePortal.textures[1], 48, 48)
 	}
 	
-	private fun hasElvenKnowledge(): Boolean {
-		/*EntityPlayer player = mc.thePlayer;
-		if (player != null) {
-			for (ItemStack stack : player.inventory.mainInventory) {
-				if (stack != null && stack.getItem() instanceof ILexicon) {
-					ILexicon lexicon = (ILexicon) stack.getItem();
-					if (lexicon.isKnowledgeUnlocked(stack, BotaniaAPI.elvenKnowledge)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;*/
-		return true
-	}
-	
 	override fun loadCraftingRecipes(outputId: String, vararg results: Any) {
-		if (outputId == recipeID && hasElvenKnowledge()) {
+		if (outputId == RECIPE_ID) {
 			for (recipe in BotaniaAPI.elvenTradeRecipes) {
 				if (recipe == null || !AlfheimAPI.isRetradeable(recipe.output))
 					continue
@@ -111,27 +81,27 @@ class RecipeHandlerTradePortal: TemplateRecipeHandler() {
 	}
 	
 	override fun loadCraftingRecipes(result: ItemStack?) {
-		if (hasElvenKnowledge()) {
-			for (recipe in BotaniaAPI.elvenTradeRecipes) {
-				if (recipe == null || !AlfheimAPI.isRetradeable(recipe.output))
-					continue
-				
-				val crecipe = CachedTradePortalRecipe(recipe)
-				if (crecipe.contains(crecipe.outputs, result))
-					arecipes.add(crecipe)
-			}
+		for (recipe in BotaniaAPI.elvenTradeRecipes) {
+			if (recipe == null || !AlfheimAPI.isRetradeable(recipe.output))
+				continue
+			
+			val crecipe = CachedTradePortalRecipe(recipe)
+			if (crecipe.contains(crecipe.outputs, result))
+				arecipes.add(crecipe)
 		}
 	}
 	
 	override fun loadUsageRecipes(ingredient: ItemStack?) {
-		if (hasElvenKnowledge()) {
-			for (recipe in BotaniaAPI.elvenTradeRecipes) {
-				if (recipe == null || !AlfheimAPI.isRetradeable(recipe.output))
-					continue
-				
-				if (NEIServerUtils.areStacksSameTypeCrafting(recipe.output, ingredient))
-					arecipes.add(CachedTradePortalRecipe(recipe))
-			}
+		for (recipe in BotaniaAPI.elvenTradeRecipes) {
+			if (recipe == null || !AlfheimAPI.isRetradeable(recipe.output))
+				continue
+			
+			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.output, ingredient))
+				arecipes.add(CachedTradePortalRecipe(recipe))
 		}
+	}
+	
+	companion object {
+		const val RECIPE_ID = "alfheim.tradeportal"
 	}
 }

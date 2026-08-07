@@ -14,6 +14,7 @@ import alfheim.common.entity.boss.ai.flugel.*
 import alfheim.common.item.*
 import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.item.relic.ItemFlugelSoul
+import alfheim.common.item.relic.LeashingHandler.leashedTo
 import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.registry.GameRegistry
@@ -338,6 +339,15 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 		}
 	}
 	
+	override fun entityDropItem(stack: ItemStack?, yOffset: Float): EntityItem? {
+		val result = super.entityDropItem(stack, yOffset)
+		result?.apply {
+			val (x, y, z) = source
+			setPosition(x.D, y.D + yOffset, z.D)
+		}
+		return result
+	}
+	
 	@Suppress("UNCHECKED_CAST")
 	override fun onLivingUpdate() {
 		super.onLivingUpdate()
@@ -346,6 +356,11 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			if (ridingEntity.riddenByEntity != null)
 				ridingEntity.riddenByEntity = null
 			ridingEntity = null
+		}
+		
+		leashedTo?.let {
+			leashedTo = null
+			ASJUtilities.say(it, "alfheimmisc.flugel.unleash")
 		}
 		
 		if (!worldObj.isRemote && worldObj.difficultySetting == EnumDifficulty.PEACEFUL) setDead()
@@ -444,6 +459,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			
 			// no GOD-mode allowed
 			player.capabilities.disableDamage = false
+			player.invulnerable = false
 			
 			// remove player
 			val baubles = PlayerHandler.getPlayerBaubles(player)
@@ -452,7 +468,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			
 			if (tiara?.item === ModItems.flightTiara && tiara.meta == 1 && wasHere)
 				ItemNBTHelper.setInt(tiara, TAG_TIME_LEFT, 1200)
-			else if (AlfheimConfigHandler.enableElvenStory && player.race == EnumRace.HUMAN)
+			else if (AlfheimConfigHandler.enableElvenStory && player.race != EnumRace.HUMAN && wasHere)
 				ElvenFlightHelper[player] = ElvenFlightHelper.max
 			else {
 				if (!worldObj.isRemote) {
@@ -465,17 +481,20 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 						if (bed == null) true
 						else Vector3.pointDistanceSpace(bed.posX.D, bed.posY.D, bed.posZ.D, sx, sy, sz) <= RANGE + 3
 					
-					if (isTooNear(player.getBedLocation(player.dimension))) {
-						if (isTooNear(player.worldObj.spawnPoint)) {
-							val v = Vector3(Math.random() * 100 + RANGE, 0, 0).rotateOY(Math.random() * 360)
-							val newPosY = ASJUtilities.getTopLevel(worldObj, v.x.mfloor(), v.z.mfloor())
-							player.setPositionAndUpdate(v.x, newPosY.D, v.z)
+					player.mountEntity(null)
+					
+					val bed = player.getBedLocation(player.dimension)
+					if (isTooNear(bed)) {
+						val spawn = player.worldObj.spawnPoint
+						
+						if (isTooNear(spawn)) {
+							val v = Vector3(Math.random() * 100 + RANGE + 5, 0, 0).rotateOY(Math.random() * 360).add(sx, sy, sz)
+							v.y = worldObj.getTopSolidOrLiquidBlock(v.x.mfloor(), v.z.mfloor()).D
+							player.setPositionAndUpdate(v.x, v.y, v.z)
 						} else {
-							val bed = player.worldObj.spawnPoint
-							player.setPositionAndUpdate(bed.posX.D, bed.posY.D, bed.posZ.D)
+							player.setPositionAndUpdate(spawn.posX.D, spawn.posY.D, spawn.posZ.D)
 						}
 					} else {
-						val bed = player.getBedLocation(player.dimension)
 						player.setPositionAndUpdate(bed.posX.D, bed.posY.D, bed.posZ.D)
 					}
 					
@@ -550,6 +569,13 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			Botania.proxy.wispFX(worldObj, partPos.x, partPos.y, partPos.z, r, g, b, 0.25f + Math.random().F * 0.1f, -0.075f - Math.random().F * 0.015f)
 			Botania.proxy.wispFX(worldObj, partPos.x, partPos.y, partPos.z, r, g, b, 0.4f, mot.x.F, mot.y.F, mot.z.F)
 		}
+	}
+	
+	fun attackTarget(target: Entity, source: DamageSource, damage: Float): Boolean {
+		if (target is EntityPlayer) target.capabilities.disableDamage = false
+		target.invulnerable = false
+		
+		return target.attackEntityFrom(source, damage)
 	}
 	
 	/*	================================	AI and Data STUFF	================================	*/
@@ -812,7 +838,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			else        -> 10f
 		} / if (shadow) 2 else 1
 		
-		mop.entityHit.attackEntityFrom(if (shadow) DamageSourceSpell.shadow(this) else DamageSource.causeMobDamage(this), damage)
+		attackTarget(mop.entityHit, if (shadow) DamageSourceSpell.shadow(this) else DamageSource.causeMobDamage(this), damage)
 	}
 	
 	/*	================================	HEALTHBAR STUFF	================================	*/
@@ -901,7 +927,11 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			}
 			
 			if (!isTruePlayer(player)) {
-				if (!world.isRemote) ASJUtilities.say(player, "alfheimmisc.flugel.fakeplayer")
+				return false
+			}
+			
+			if (PlayerHandler.getPlayerBaubles(player)[0]?.let { it.item === ModItems.flightTiara && it.meta == 1 } != true && !(AlfheimConfigHandler.enableElvenStory && player.race != EnumRace.HUMAN)) {
+				if (!world.isRemote) ASJUtilities.say(player, "alfheimmisc.flugel.notallowed")
 				return false
 			}
 			
@@ -1026,7 +1056,6 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 		
 		fun checkArena(world: World, sx: Int, sy: Int, sz: Int, destroy: Boolean): Boolean {
 			var proper = true
-			Botania.proxy.setWispFXDepthTest(false)
 			
 			for (i in 0.bidiRange(RANGE))
 				for (j in 0.bidiRange(RANGE))
@@ -1047,12 +1076,14 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 								for (stack in items) EntityItem(world, x + 0.5, y + 0.5, z + 0.5, stack).spawn()
 								if (ConfigHandler.blockBreakParticles) world.playAuxSFX(2001, x, y, z, block.id + (world.getBlockMetadata(x, y, z) shl 12))
 								world.setBlockToAir(x, y, z)
-							} else
+							} else {
+								Botania.proxy.setWispFXDepthTest(false)
 								Botania.proxy.wispFX(world, x + 0.5, y + 0.5, z + 0.5, 1f, 0f, 0f, 0.5f, 0f, 10f)
+								Botania.proxy.setWispFXDepthTest(true)
+							}
 						}
 					}
 			
-			Botania.proxy.setWispFXDepthTest(true)
 			return proper
 		}
 		

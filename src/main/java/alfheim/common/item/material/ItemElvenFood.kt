@@ -45,57 +45,71 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 	@SideOnly(Side.CLIENT)
 	override fun registerIcons(reg: IIconRegister) {
 		icons = entries.map { IconHelper.forName(reg, it.name, "materials/food") }
+		iconCC = IconHelper.forName(reg, "cc", "materials/food")
 	}
 	
 	override fun getIconFromDamage(meta: Int) = icons.safeGet(meta)
 	
 	// #### ItemFood ####
 	
+	override fun getMaxItemUseDuration(stack: ItemStack) = when (entries.getOrNull(stack.meta)) {
+		DreamCherry,
+		Nectar       -> 8
+		Lembas       -> 64
+		else         -> super.getMaxItemUseDuration(stack)
+	}
+	
 	// foodLevel
 	override fun func_150905_g(stack: ItemStack): Int {
 		return when (entries.getOrNull(stack.meta)) {
-			Lembas                        -> 20
-			RedGrapes, WhiteGrapes        -> 2
-			Nectar                        -> 1
-			RedWine, WhiteWine, Champagne -> 3
-			JellyBottle                   -> 3
-			JellyBread                    -> 6
-			JellyCod                      -> 9
+			Lembas                 -> 20
+			RedGrapes, WhiteGrapes -> 2
+			Nectar                 -> 1
+			RedWine,
+			WhiteWine,
+			Champagne,
+			Beer                   -> 3
+			JellyBottle            -> 3
+			JellyBread             -> 6
+			JellyCod               -> 9
 			DreamCherry,
 			TreeBerryBarrier,
 			TreeBerryCalico,
 			TreeBerryCircuit,
 			TreeBerryLightning,
 			TreeBerryNether,
-			TreeBerrySealing              -> 2
+			TreeBerrySealing       -> 2
 			
-			null                          -> 0
+			null                   -> 0
 		}
 	}
 	
 	// foodSaturationLevel
 	override fun func_150906_h(stack: ItemStack): Float {
 		return when (entries.getOrNull(stack.meta)) {
-			Lembas                        -> 5f
-			RedGrapes, WhiteGrapes        -> 0.3f
-			Nectar                        -> 0.15f
-			RedWine, WhiteWine, Champagne -> 0.1f
-			JellyBottle                   -> 0.5f
-			JellyBread                    -> 0.8f
-			JellyCod                      -> 1.2f
+			Lembas                 -> 5f
+			RedGrapes, WhiteGrapes -> 0.3f
+			Nectar                 -> 0.15f
+			RedWine,
+			WhiteWine,
+			Champagne,
+			Beer                   -> 0.1f
+			JellyBottle            -> 0.5f
+			JellyBread             -> 0.8f
+			JellyCod               -> 1.2f
 			DreamCherry,
 			TreeBerryBarrier,
 			TreeBerryCalico,
 			TreeBerryCircuit,
 			TreeBerryLightning,
 			TreeBerryNether,
-			TreeBerrySealing              -> 0.3f
+			TreeBerrySealing       -> 0.3f
 			
-			null                          -> 0f
+			null                   -> 0f
 		}
 	}
 	
-	val drinkables = arrayOf(RedWine.I, WhiteWine.I, Champagne.I, JellyBottle.I)
+	val drinkables = arrayOf(RedWine.I, WhiteWine.I, Champagne.I, Beer.I, JellyBottle.I)
 	
 	fun isAlwaysEdible(stack: ItemStack) = stack.meta in drinkables || stack.meta in TreeBerryBarrier.I..TreeBerrySealing.I
 	
@@ -111,7 +125,7 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 	override fun onEaten(stack: ItemStack, world: World?, player: EntityPlayer): ItemStack {
 		if (!world!!.isRemote) {
 			ElvenFoodMetas.entries[stack.meta].potion?.let {
-				if (it == Potion.regeneration.id) {
+				if (it == Potion.regeneration.id || it == AlfheimConfigHandler.potionIDBeer) {
 					if (!player.isPotionActive(it))
 						player.addPotionEffect(PotionEffect(it, 2400, 0))
 					else {
@@ -130,6 +144,9 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 				
 				player.addPotionEffect(PotionEffectU(id, 7200, amp))
 			}
+			
+			if (isCC(stack) && !ItemNBTHelper.getBoolean(stack, TAG_NO_MEME, false))
+				player.playSoundAtEntity("${ModInfo.MODID}:ccj", 10f, 1f)
 		}
 		
 		val ret = super.onEaten(stack, world, player)
@@ -139,14 +156,12 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 	
 	// #### Item ####
 	
-	override fun hasContainerItem(stack: ItemStack) = true
+	override fun hasContainerItem(stack: ItemStack) = getContainerItem(stack) != null
 	
-	override fun getContainerItem(stack: ItemStack): ItemStack? {
-		return when (entries.getOrNull(stack.meta)) {
-			RedWine, WhiteWine, Champagne -> ElvenResourcesMetas.Jug.stack
-			JellyBottle                   -> ItemStack(ModItems.vial, 1, 1)
-			else                          -> null
-		}
+	override fun getContainerItem(stack: ItemStack) = when (entries.getOrNull(stack.meta)) {
+		RedWine, WhiteWine, Champagne, Beer -> ElvenResourcesMetas.Jug.stack
+		JellyBottle                         -> ItemStack(ModItems.vial, 1, 1)
+		else                                -> null
 	}
 	
 	override fun getSubItems(item: Item?, tab: CreativeTabs?, list: MutableList<Any?>) =
@@ -154,6 +169,19 @@ class ItemElvenFood: ItemFood(0, 0f, false) {
 	
 	override fun getItemStackLimit(stack: ItemStack) =
 		if (stack.meta in drinkables) 1 else super.getItemStackLimit(stack)
+	
+	// #### Meme ####
+	
+	lateinit var iconCC: IIcon
+	
+	override fun getIcon(stack: ItemStack, pass: Int) = if (isCC(stack)) iconCC else super.getIcon(stack, pass)
+	
+	override fun getIconIndex(stack: ItemStack) = if (isCC(stack)) iconCC else super.getIconIndex(stack)
+	
+	companion object {
+		const val TAG_NO_MEME = "nomeme"
+		fun isCC(stack: ItemStack) = stack.meta == Beer.I && stack.displayName.trim().equals("Cerveza Cristal", ignoreCase = true)
+	}
 }
 
 enum class ElvenFoodMetas(val potion: Int? = null) {
@@ -175,6 +203,7 @@ enum class ElvenFoodMetas(val potion: Int? = null) {
 	TreeBerryLightning(AlfheimConfigHandler.potionIDWtfBerry3),
 	TreeBerryNether(AlfheimConfigHandler.potionIDWtfBerry4),
 	TreeBerrySealing(AlfheimConfigHandler.potionIDWtfBerry5),
+	Beer(AlfheimConfigHandler.potionIDBeer),
 	;
 	
 	val I get() = ordinal

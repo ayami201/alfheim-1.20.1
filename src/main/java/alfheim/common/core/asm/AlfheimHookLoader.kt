@@ -6,6 +6,7 @@ import alexsocol.patcher.asm.worker.InterfaceAppenderWorker.registerAdditionalIn
 import alfheim.api.ModInfo
 import alfheim.common.core.asm.transformer.AlfheimClassTransformer
 import alfheim.common.core.handler.AlfheimConfigHandler
+import com.KAIIIAK.classManipulators.HookReplacerWorker.registerGroupRegistry
 import com.KAIIIAK.classManipulators.HookReplacerWorker.registerHookReplacerContainer
 import com.KAIIIAK.superwrapper.SuperWrapperTransformer
 import cpw.mods.fml.relauncher.FMLRelaunchLog
@@ -66,7 +67,11 @@ class AlfheimHookLoader: HookLoader() {
 		
 		SuperWrapperTransformer.registerSuperWrapperContainer("alfheim.common.core.asm.superwrapper.SuperWrapperHandler")
 		
+		registerGroupRegistry("alfheim.common.core.asm.hook.replacer.HookReplacerHandler")
+		registerGroupRegistry("alfheim.common.core.asm.hook.replacer.HookReplacerHandlerKt")
+		
 		registerHookReplacerContainer("alfheim.common.compat.TransformableHookReplacerHandlerKt")
+		registerHookReplacerContainer("alfheim.common.core.asm.hook.extender.ManaSpreaderExtender")
 		registerHookReplacerContainer("alfheim.common.core.asm.hook.replacer.HookReplacerHandler")
 		registerHookReplacerContainer("alfheim.common.core.asm.hook.replacer.HookReplacerHandlerKt")
 		
@@ -75,7 +80,8 @@ class AlfheimHookLoader: HookLoader() {
 	
 	fun registerAdditionalInterfaces() {
 		registerAdditionalInterface("net/minecraft/entity/monster/EntityCreeper", "alfheim/common/core/helper/IElementalEntity")
-		registerAdditionalInterface("net/minecraft/entity/monster/EntitySkeleton", "alfheim/common/core/helper/IElementalEntity")
+		registerAdditionalInterface("net/minecraft/entity/monster/EntitySkeleton", "alfheim/api/entity/IMuspelheimEntity")
+		registerAdditionalInterface("net/minecraft/entity/monster/EntitySkeleton", "alfheim/api/entity/INiflheimEntity")
 		registerAdditionalInterface("thaumcraft/common/entities/golems/EntityGolemBase", "alfheim/common/core/helper/IElementalEntity")
 		registerAdditionalInterface("thaumcraft/common/entities/monster/EntityWisp", "alfheim/common/core/helper/IElementalEntity")
 		registerAdditionalInterface("vazkii/botania/common/item/equipment/bauble/ItemAuraRing", "vazkii/botania/api/mana/IManaItem")

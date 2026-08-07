@@ -27,7 +27,7 @@ class BlockManaFluid: BlockFluidClassic(ManaFluid, Material.water) {
 		setHardness(2000.0f)
 		setLightLevel(ManaFluid.luminosity / 15f)
 		setLightOpacity(2)
-		setQuantaPerBlock(13)
+		setQuantaPerBlock(16)
 	}
 	
 	override fun setBlockName(name: String): Block {

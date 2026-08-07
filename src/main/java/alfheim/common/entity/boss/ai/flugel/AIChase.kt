@@ -50,9 +50,9 @@ class AIChase(flugel: EntityFlugel, task: AITask): AIBase(flugel, task) {
 		flugel.checkCollision()
 		if (flugel.aiTaskTimer % 10 == 0) {
 			val name = if (lowest)
-				flugel.playersDamage.minByOrNull { it.value }?.key ?: "Notch"
+				flugel.playersDamage.minByOrNull { it.value }?.key ?: ""
 			else
-				flugel.playersDamage.maxByOrNull { it.value }?.key ?: "Notch"
+				flugel.playersDamage.maxByOrNull { it.value }?.key ?: ""
 			
 			val target = flugel.worldObj.getPlayerEntityByName(name)
 			
@@ -61,7 +61,6 @@ class AIChase(flugel: EntityFlugel, task: AITask): AIBase(flugel, task) {
 				flugel.motionX = mot.x
 				flugel.motionY = mot.y
 				flugel.motionZ = mot.z
-				
 			} else {
 				flugel.playersDamage.remove(name)
 			}

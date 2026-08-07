@@ -2,6 +2,7 @@ package alfheim.common.core.handler
 
 import alexsocol.asjlib.*
 import alexsocol.patcher.event.*
+import alexsocol.patcher.handler.PlayerReachDistanceHandler
 import alfheim.api.ModInfo
 import alfheim.api.entity.EnumRace.*
 import alfheim.api.entity.race
@@ -99,7 +100,7 @@ object ESMHandler {
 		
 		val equipped = player.currentEquippedItem ?: return
 		
-		val mop = ToolCommons.raytraceFromEntity(event.world, player, true, (player as? EntityPlayerMP)?.theItemInWorldManager?.blockReachDistance ?: 4.5) ?: return
+		val mop = ToolCommons.raytraceFromEntity(event.world, player, true, PlayerReachDistanceHandler.getReachDistance(player)) ?: return
 		
 		if (mop.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return
 		

@@ -10,12 +10,13 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
 import alfheim.common.lexicon.AlfheimLexiconData
+import com.KAIIIAK.classManipulators.HookReplacer
+import com.KAIIIAK.classManipulators.HookReplacer.Replacer.*
 import gloomyfolken.hooklib.asm.*
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.client.renderer.*
-import net.minecraft.client.renderer.entity.RenderItem
+import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.client.renderer.texture.*
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
@@ -25,9 +26,7 @@ import net.minecraft.util.*
 import net.minecraft.world.World
 import vazkii.botania.api.lexicon.LexiconEntry
 import vazkii.botania.api.mana.BurstProperties
-import vazkii.botania.client.core.handler.HUDHandler
 import vazkii.botania.client.core.proxy.ClientProxy
-import vazkii.botania.client.lib.LibResources
 import vazkii.botania.client.model.ModelSpreader
 import vazkii.botania.client.render.block.RenderSpreader
 import vazkii.botania.client.render.tile.RenderTileSpreader
@@ -39,12 +38,10 @@ import vazkii.botania.common.entity.EntityManaBurst
 @Suppress("NAME_SHADOWING", "unused", "FunctionName")
 object ManaSpreaderExtender {
 	
-	val UBER_MAX_MANA get() = AlfheimConfigHandler.uberSpreaderCapacity
-	val UBER_MANA_PER_SHOT get() = AlfheimConfigHandler.uberSpreaderSpeed
-	
 	lateinit var iconGolden: IIcon
 	
-	var staticUber = false
+	var staticLebe = false
+	var staticMauf = false
 	
 	// ######## BlockSpreader
 	
@@ -55,33 +52,39 @@ object ManaSpreaderExtender {
 	}
 	
 	@JvmStatic
-	@Hook(returnCondition = ReturnCondition.ALWAYS)
-	fun getIcon(spreader: BlockSpreader, side: Int, meta: Int): IIcon = when (meta) {
+	@Hook(returnCondition = ReturnCondition.ON_NOT_NULL)
+	fun getIcon(spreader: BlockSpreader, side: Int, meta: Int): IIcon? = when (meta) {
 		4    -> if (isGolden()) iconGolden else ModBlocks.dreamwood.getIcon(side, 0)
-		2, 3 -> ModBlocks.dreamwood.getIcon(side, 0)
-		else -> ModBlocks.livingwood.getIcon(side, 0)
+//		5    -> BlockListAB.lebethron.getIcon(side, 0) TODO back
+		else -> null
 	}
 	
 	@JvmStatic
 	@Hook(injectOnExit = true)
 	fun getSubBlocks(spreader: BlockSpreader, item: Item?, tabs: CreativeTabs?, list: MutableList<Any>) {
 		list.add(ItemStack(item, 1, 4))
+//		list.add(ItemStack(item, 1, 5)) TODO back
 	}
 	
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ON_NOT_NULL)
 	fun getEntry(spreader: BlockSpreader, world: World, x: Int, y: Int, z: Int, player: EntityPlayer, lexicon: ItemStack): LexiconEntry? {
-		return if (world.getBlockMetadata(x, y, z) == 4) AlfheimLexiconData.uberSpreader else null
+		return when (world.getBlockMetadata(x, y, z)) {
+			4 -> AlfheimLexiconData.uberSpreader
+//			5 -> RecipeListAB.lebethronSpreader TODO back
+			else -> null
+		}
 	}
 	
 	// ######## TileSpreader
 	
-	var burstPropHook = false
+	var burstPropTile: TileSpreader? = null
 	
 	@JvmStatic
 	@Hook
 	fun getBurst(tile: TileSpreader, fake: Boolean): EntityManaBurst? {
-		if (isUBER_SPREADER(tile)) burstPropHook = true
+		if (isLebe(tile) || isMauf(tile))
+			burstPropTile = tile
 		
 		return null
 	}
@@ -89,69 +92,58 @@ object ManaSpreaderExtender {
 	@JvmStatic
 	@Hook(injectOnExit = true, targetMethod = "<init>")
 	fun `BurstProperties$init`(bp: BurstProperties, maxMana: Int, ticksBeforeManaLoss: Int, manaLossPerTick: Float, gravity: Float, motionModifier: Float, color: Int) {
-		if (burstPropHook) {
-			bp.maxMana = UBER_MANA_PER_SHOT
+		if (burstPropTile == null) return
+		
+		if (isMauf(burstPropTile!!)) {
+			bp.maxMana = AlfheimConfigHandler.spreaderSpeedMauf
 			bp.color = 0xFFD400
 			bp.ticksBeforeManaLoss = 180
 			bp.manaLossPerTick = 32f
 			bp.motionModifier = 3f
-			
-			burstPropHook = false
+		} else {
+			bp.maxMana = AlfheimConfigHandler.spreaderSpeedLebe
+			bp.color = 0xcdd419
+			bp.ticksBeforeManaLoss = 35
+			bp.manaLossPerTick = AlfheimConfigHandler.spreaderSpeedLebe / 4.5f
+			bp.motionModifier = 2.5f
 		}
+		
+		burstPropTile = null
 	}
 	
 	@JvmStatic
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
-	fun getMaxMana(tile: TileSpreader) = if (isUBER_SPREADER(tile)) UBER_MAX_MANA else if (tile.isULTRA_SPREADER) TileSpreader.ULTRA_MAX_MANA else TileSpreader.MAX_MANA
+	fun getMaxMana(tile: TileSpreader) = when {
+		isLebe(tile)          -> AlfheimConfigHandler.spreaderCapacityLebe
+		isMauf(tile)          -> AlfheimConfigHandler.spreaderCapacityMauf
+		tile.isULTRA_SPREADER -> TileSpreader.ULTRA_MAX_MANA
+		else                  -> TileSpreader.MAX_MANA
+	}
 	
-	fun isUBER_SPREADER(tile: TileSpreader) = if (tile.worldObj == null) staticUber else tile.getBlockMetadata() == 4
+//	fun isLebe(tile: TileSpreader) = if (tile.worldObj == null) staticLebe else tile.getBlockMetadata() == 5 TODO back
+	fun isLebe(tile: TileSpreader) = false
+	fun isMauf(tile: TileSpreader) = if (tile.worldObj == null) staticMauf else tile.getBlockMetadata() == 4
 	
 	@JvmStatic
-	@Hook(returnCondition = ReturnCondition.ALWAYS)
+	@HookReplacer(removePop = true)
 	fun renderHUD(tile: TileSpreader, mc: Minecraft, res: ScaledResolution) {
-		val name = StatCollector.translateToLocal(ItemStack(ModBlocks.spreader, 1, tile.getBlockMetadata()).unlocalizedName.replace("tile.".toRegex(), "tile." + LibResources.PREFIX_MOD) + ".name")
-		val color = if (isUBER_SPREADER(tile)) 0xFFD400 else if (tile.isRedstone) 0xFF0000 else if (tile.isDreamwood) 0xFF00AE else 0x00FF00
-		HUDHandler.drawSimpleManaHUD(color, tile.knownMana, tile.maxMana, name, res)
-		val lens: ItemStack? = tile[0]
-		if (lens != null) {
-			AngelicaCompat.renderHUD1()
-			val lensName = lens.displayName
-			val width = 16 + mc.fontRenderer.getStringWidth(lensName) / 2
-			val x = res.scaledWidth / 2 - width
-			val y = res.scaledHeight / 2 + 50
-			mc.fontRenderer.drawStringWithShadow(lensName, x + 20, y + 5, color)
-			RenderHelper.enableGUIStandardItemLighting()
-			RenderItem.getInstance().renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, lens, x, y)
-			RenderHelper.disableStandardItemLighting()
-			AngelicaCompat.renderHUD2()
-		}
-		if (tile.receiver != null) {
-			val receiverTile = tile.receiver as TileEntity
-			val recieverStack = ItemStack(tile.worldObj.getBlock(receiverTile.xCoord, receiverTile.yCoord, receiverTile.zCoord), 1, receiverTile.getBlockMetadata())
-			AngelicaCompat.renderHUD1()
-			
-			@Suppress("UNNECESSARY_SAFE_CALL")
-			if (recieverStack?.item != null) {
-				val stackName = recieverStack.displayName
-				val width = 16 + mc.fontRenderer.getStringWidth(stackName) / 2
-				val x = res.scaledWidth / 2 - width
-				val y = res.scaledHeight / 2 + 30
-				mc.fontRenderer.drawStringWithShadow(stackName, x + 20, y + 5, color)
-				RenderHelper.enableGUIStandardItemLighting()
-				RenderItem.getInstance().renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, recieverStack, x, y)
-				RenderHelper.disableStandardItemLighting()
-			}
-			AngelicaCompat.renderHUD2()
-		}
-		AngelicaCompat.glColor4f(1f, 1f, 1f, 1f)
+		startFROM()
+		ILOAD("4")
+		startTO()
+		getHudColor(tile, ILOAD("4"))
+		stop()
 	}
+	
+	@JvmStatic
+	fun getHudColor(tile: TileSpreader, prev: Int) = if (isLebe(tile)) 0xCDD419 else if (isMauf(tile)) 0xFFD400 else prev
 	
 	// ######## RenderSpreader
 	
 	@JvmStatic
 	@Hook
 	fun renderInventoryBlock(render: RenderSpreader, block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
-		staticUber = metadata == 4
+		staticMauf = metadata == 4
+//		staticLebe = metadata == 5 TODO back
 	}
 	
 	// ######## RenderTileSpreader
@@ -160,33 +152,31 @@ object ManaSpreaderExtender {
 	var modelHook = false
 	
 	@JvmStatic
-	@Hook
-	fun renderTileEntityAt(render: RenderTileSpreader, tile: TileEntity, d0: Double, d1: Double, d2: Double, ticks: Float) {
-		if (isUBER_SPREADER(tile as? TileSpreader ?: return)) {
-			textureHook = true
-			modelHook = !isGolden()
-		}
+	@HookReplacer(removePop = true)
+	fun renderTileEntityAt(render: RenderTileSpreader, tile: TileEntity, x: Double, y: Double, z: Double, ticks: Float) {
+		startFROM()
+		ALOAD<ResourceLocation>("10")
+		startTO()
+		selectTexture(tile, ALOAD("10"))
+		stop()
 	}
 	
 	@JvmStatic
-	@Hook(returnCondition = ReturnCondition.ON_TRUE)
-	fun bindTexture(tm: TextureManager, loc: ResourceLocation?): Boolean {
-		if (textureHook) {
-			textureHook = false
-			tm.bindTexture(
-				if (isGolden()) {
-					if (ClientProxy.dootDoot) LibResourceLocations.uberSpreaderHalloweenGolden
-					else LibResourceLocations.uberSpreaderGolden
-				} else {
-					if (ClientProxy.dootDoot) LibResourceLocations.uberSpreaderHalloween
-					else LibResourceLocations.uberSpreader
-				}
-			)
-			
-			return true
-		}
+	fun selectTexture(tile: TileEntity, prev: ResourceLocation): ResourceLocation = when {
+		isMauf(tile as TileSpreader) -> if (isGolden())
+			if (ClientProxy.dootDoot) LibResourceLocations.spreaderMaufHalloweenGolden else LibResourceLocations.spreaderMaufGolden
+		else
+			if (ClientProxy.dootDoot) LibResourceLocations.spreaderMaufHalloween else LibResourceLocations.spreaderMauf
 		
-		return false
+		isLebe(tile)                 -> if (ClientProxy.dootDoot) LibResourceLocations.spreaderLebeHalloween else LibResourceLocations.spreaderLebe
+		else                         -> prev
+	}
+	
+	@JvmStatic
+	@Hook(targetMethod = "renderTileEntityAt")
+	fun switchModel(render: RenderTileSpreader, tile: TileEntity, x: Double, y: Double, z: Double, ticks: Float) {
+		if (isMauf(tile as? TileSpreader ?: return))
+			modelHook = !isGolden()
 	}
 	
 	// ######## ModelSpreader
@@ -194,22 +184,21 @@ object ManaSpreaderExtender {
 	@JvmStatic
 	@Hook(injectOnExit = true)
 	fun render(model: ModelSpreader) {
-		if (modelHook) {
-			mc.renderEngine.bindTexture(LibResourceLocations.uberSpreaderFrame)
-			
-			var s = 1.15f
-			val t = s - 1
-			AngelicaCompat.glTranslatef(0f, -t, 0f)
-			glScalef(s)
-			ModelSpreaderFrame.render()
-			s = 1 / s
-			glScalef(s)
-			AngelicaCompat.glTranslatef(0f, t, 0f)
-			
-			modelHook = false
-			
-			mc.renderEngine.bindTexture(if (ClientProxy.dootDoot) LibResourceLocations.uberSpreaderHalloween else LibResourceLocations.uberSpreader)
-		}
+		if (!modelHook) return
+		modelHook = false
+
+		mc.renderEngine.bindTexture(LibResourceLocations.spreaderMaufFrame)
+		var s = 1.15f
+		val t = s - 1
+		AngelicaCompat.glTranslatef(0f, -t, 0f)
+		glScalef(s)
+		ModelSpreaderFrame.render()
+		s = 1 / s
+		glScalef(s)
+		AngelicaCompat.glTranslatef(0f, t, 0f)
+
+		// core has same texture so no need to check
+		mc.renderEngine.bindTexture(LibResourceLocations.spreaderMauf)
 	}
 	
 	fun isGolden(): Boolean {

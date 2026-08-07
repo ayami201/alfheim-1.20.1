@@ -36,7 +36,7 @@ object RenderTileAnomalyHarvester: TileEntitySpecialRenderer() {
 			}
 			
 			glTranslatef(0f, -1f, 0f)
-			mc.renderEngine.bindTexture(LibResourceLocations.uberSpreaderFrame)
+			mc.renderEngine.bindTexture(LibResourceLocations.spreaderMaufFrame)
 			ModelSpreaderFrame.render()
 		} else {
 			when (meta) {

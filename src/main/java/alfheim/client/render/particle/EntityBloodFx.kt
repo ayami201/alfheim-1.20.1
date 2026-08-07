@@ -46,7 +46,7 @@ open class EntityBloodFx(world: World, x: Double, y: Double, z: Double, size: Fl
 	
 	fun postRender() {
 		if (isDead) return
-		Tessellator.instance.setBrightness(getBrightnessForRender(0f))
+		
 		val x = (prevPosX + (posX - prevPosX) * f0 - interpPosX)
 		val y = (prevPosY + (posY - prevPosY) * f0 - interpPosY)
 		val z = (prevPosZ + (posZ - prevPosZ) * f0 - interpPosZ)

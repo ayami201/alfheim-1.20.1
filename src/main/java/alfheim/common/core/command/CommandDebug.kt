@@ -62,7 +62,7 @@ object CommandDebug: CommandBase() {
 						if (args[2] == "get") gotObj = RagnarokHandler.finished else if (args[2] == "set") RagnarokHandler.finished = args[3].toBoolean()
 					}
 					"blockedPowers" -> {
-						if (args[2] == "get") gotObj = RagnarokHandler.blockedPowers
+						if (args[2] == "get") gotObj = RagnarokHandler.blockedPowers.contentToString()
 					}
 					"func" -> {
 						gotObj = ASJReflectionHelper.invoke<RagnarokHandler, Any>(RagnarokHandler, emptyArray(), arrayOf<Any>(args[2], emptyArray<Class<*>>()))

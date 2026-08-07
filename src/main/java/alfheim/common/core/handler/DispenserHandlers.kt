@@ -35,13 +35,11 @@ object BifrostFlowerDispenserHandler: IBehaviorDispenseItem {
 		val y = block.yInt + facing.offsetY
 		val z = block.zInt + facing.offsetZ
 		
-		if (block.world.getBlock(x, y, z) === ModBlocks.flower) {
-			block.world.setBlock(x, y, z, AlfheimBlocks.rainbowGrass, 2, 3)
-			block.world.playSoundEffect(x.D, y.D, z.D, "botania:enchanterEnchant", 1f, 1f)
-			stack.stackSize--
-			return stack
-		}
+		if (block.world.getBlock(x, y, z) !== ModBlocks.flower) return stack
 		
+		block.world.setBlock(x, y, z, AlfheimBlocks.rainbowGrass, 2, 3)
+		block.world.playSoundEffect(x.D, y.D, z.D, "botania:enchanterEnchant", 1f, 1f)
+		stack.stackSize--
 		return stack
 	}
 }

@@ -72,10 +72,7 @@ object ChunkLoadingHandler: LoadingCallback {
 		if (e.phase != TickEvent.Phase.END) return
 		
 		ticketsStore.forEach { (_, alfheimTicketsPerDim) ->
-			val iTicket = alfheimTicketsPerDim.iterator()
-			
-			while (iTicket.hasNext()) {
-				val ticket = iTicket.next()
+			alfheimTicketsPerDim.iterator().onEach { ticket ->
 				val toRemove = mutableSetOf<ChunkCoordIntPair>()
 				
 				for (key in ticket.requestedChunkTimers.keys) {
@@ -90,8 +87,11 @@ object ChunkLoadingHandler: LoadingCallback {
 					val tagList = nbt.getTagList(TAG_CHUNKS, 11)
 					tagList.tagList.removeAll {
 						if (it !is NBTTagIntArray) return@removeAll false
-						it.func_150302_c()[0] == key.chunkXPos && it.func_150302_c()[1] == key.chunkZPos
+						
+						val (x, z) = it.func_150302_c()
+						x == key.chunkXPos && z == key.chunkZPos
 					}
+					
 					nbt.setTag(TAG_CHUNKS, tagList)
 				}
 				
@@ -99,7 +99,7 @@ object ChunkLoadingHandler: LoadingCallback {
 				
 				if (ticket.ticket.chunkList.isEmpty()) {
 					releaseTicket(ticket.ticket)
-					iTicket.remove()
+					remove()
 				}
 			}
 		}
@@ -111,10 +111,16 @@ object ChunkLoadingHandler: LoadingCallback {
 	}
 	
 	override fun ticketsLoaded(tickets: MutableList<Ticket>, world: World) {
+		val forDim = ticketsStore.computeIfAbsent(world.provider.dimensionId) { LinkedHashSet() }
+		
 		tickets.forEach { ticket ->
+			forDim.add(AlfheimTicket(ticket, linkedMapOf()))
+			
 			ticket.modData.getTagList(TAG_CHUNKS, 11).tagList.forEach {
-				if (it is NBTTagIntArray)
-					requestChunkLoad(world, it.func_150302_c()[0], it.func_150302_c()[1])
+				if (it !is NBTTagIntArray) return@forEach
+				
+				val (x, z) = it.func_150302_c()
+				requestChunkLoad(world, x, z)
 			}
 		}
 	}

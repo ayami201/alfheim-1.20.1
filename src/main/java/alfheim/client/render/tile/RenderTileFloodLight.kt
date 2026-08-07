@@ -82,7 +82,7 @@ object RenderTileFloodLight: TileEntitySpecialRenderer() {
 			
 			val dest = pos.copy().add(i, j, k)
 			if (tp != null) dest.add(Vector3(tp.x, 0, tp.z).sub(pos.x, 0, pos.z))
-			val hit = world.func_147447_a(pos.toVec3(), dest.toVec3(), false, false, target == null)?.hitVec ?: dest.toVec3()
+			val hit = world.func_147447_a(pos.toVec3(), dest.toVec3(), false, true, target == null)?.hitVec ?: dest.toVec3()
 			
 			tes.addVertex(hit.xCoord, hit.yCoord, hit.zCoord)
 		}

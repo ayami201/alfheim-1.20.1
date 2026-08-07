@@ -64,8 +64,11 @@ class EntitySubspace: EntityThrowableCopy {
 	
 	constructor(world: World, thrower: EntityLivingBase): super(world, thrower)
 	
+	init {
+		setSize(0f, 0f)
+	}
+	
 	override fun onUpdate() {
-		
 		motionX = 0.0
 		motionY = 0.0
 		motionZ = 0.0
@@ -119,7 +122,6 @@ class EntitySubspace: EntityThrowableCopy {
 	}
 	
 	override fun entityInit() {
-		setSize(0f, 0f)
 		dataWatcher.addObject(24, 0)
 		dataWatcher.addObject(25, 0)
 		dataWatcher.addObject(26, 0)
@@ -150,9 +152,7 @@ class EntitySubspace: EntityThrowableCopy {
 		cmp.setInteger(TAG_TYPE, type)
 	}
 	
-	override fun onImpact(result: MovingObjectPosition) {
-	
-	}
+	override fun onImpact(result: MovingObjectPosition) = Unit
 	
 	companion object {
 		

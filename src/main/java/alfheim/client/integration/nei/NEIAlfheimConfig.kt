@@ -13,6 +13,11 @@ import vazkii.botania.common.block.ModBlocks
 class NEIAlfheimConfig: IConfigureNEI {
 	
 	override fun loadConfig() {
+		// TODO back
+//		API.registerRecipeHandler(RecipeHandlerAdvancedPlate())
+//		API.registerUsageHandler(RecipeHandlerAdvancedPlate())
+//		API.registerRecipeHandler(RecipeHandlerAlphirine())
+//		API.registerUsageHandler(RecipeHandlerAlphirine())
 		API.registerRecipeHandler(RecipeHandlerManaInfuser())
 		API.registerUsageHandler(RecipeHandlerManaInfuser())
 		API.registerRecipeHandler(RecipeHandlerTradePortal())
@@ -22,11 +27,13 @@ class NEIAlfheimConfig: IConfigureNEI {
 		
 		API.hideItem(ItemStack(ModBlocks.manaFlame))
 		API.hideItem(ItemStack(ModBlocks.gaiaHead))
+//		API.hideItem(ItemStack(BlockListAB.antigravitation)) TODO back
 		API.hideItem(ItemStack(AlfheimBlocks.flugelHeadBlock))
 		API.hideItem(ItemStack(AlfheimBlocks.flugelHead2Block))
 		API.hideItem(ItemStack(AlfheimBlocks.grapesRed[1]))
 		API.hideItem(ItemStack(AlfheimBlocks.grapesRed[2]))
 		API.hideItem(ItemStack(AlfheimBlocks.grapesRedPlanted))
+		API.hideItem(ItemStack(AlfheimBlocks.kudzuVine))
 		API.hideItem(ItemStack(AlfheimBlocks.powerStone, 1, 0))
 		API.hideItem(ItemStack(AlfheimBlocks.rainbowFlame))
 		API.hideItem(ItemStack(AlfheimBlocks.starBlock))

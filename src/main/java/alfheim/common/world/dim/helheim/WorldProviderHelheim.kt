@@ -66,11 +66,7 @@ class WorldProviderHelheim: WE_WorldProvider() {
 	override fun getDefaultBiome() = BiomeHelheim
 	
 	override fun generateLightBrightnessTable() {
-		val modifier = 0.0f
-		for (steps in 0..15) {
-			val var3 = 1.0f - steps / 15.0f
-			lightBrightnessTable[steps] = ((0.0f + var3) / (var3 * 3.0f + 1.0f) * (1.0f - modifier) + modifier) * 3
-		}
+		lightBrightnessTable.fill(0.75f)
 	}
 	
 	override fun getRandomizedSpawnPoint(): ChunkCoordinates {

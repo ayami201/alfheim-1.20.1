@@ -49,15 +49,6 @@ class WorldProviderNiflheim: WorldProvider() {
 			null
 	}
 	
-	override fun generateLightBrightnessTable() {
-		val f = 0.05f
-		
-		for (i in 0..15) {
-			val f1 = 1f - i.F / 15f
-			lightBrightnessTable[i] = (1f - f1) / (f1 * 3f + 1f) * (1f - f) + f
-		}
-	}
-	
 	override fun canBlockFreeze(x: Int, y: Int, z: Int, byWater: Boolean): Boolean {
 		val f = ChunkProviderNiflheim.f(x)
 		if (f in z.bidiRange(6)) {

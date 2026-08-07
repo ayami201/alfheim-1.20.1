@@ -9,6 +9,7 @@ import alfheim.common.item.equipment.tool.ItemResonator
 import cpw.mods.fml.relauncher.*
 import net.minecraft.block.Block
 import net.minecraft.entity.*
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -114,13 +115,19 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 	fun explode(host: EntityPlayer, x: Int, y: Int, z: Int): Boolean {
 		var attacked = false
 		getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, boundingBox(0.5)).forEach {
+			val prev = it.hurtResistantTime
+			it.hurtResistantTime = 0
+			
 			if (it.attackEntityFrom(damageResonance, 5f)) {
 				attacked = true
 				it.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDBleeding, 50))
 				
-				if (mode == 2)
-					it.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 3000, 3))
+				if (mode == 2) {
+					it.addPotionEffect(PotionEffectU(Potion.moveSlowdown.id, 600, 3))
+					it.addPotionEffect(PotionEffectU(Potion.weakness.id, 600, 1))
+				}
 			}
+			it.hurtResistantTime = prev
 		}
 		
 		if (attacked)
@@ -216,11 +223,17 @@ class EntityResonance(world: World, var host: EntityPlayer?, x: Int, y: Int, z: 
 				if (block.removedByPlayer(world, player, x, y, z, true)) {
 					block.onBlockDestroyedByPlayer(world, x, y, z, meta)
 					
-					if (!dispose || !HookReplacerHandler.isDisposable(block, meta)) {
-						val prev = player.foodStats.foodExhaustionLevel
-						block.harvestBlock(world, player, x, y, z, meta)
-						player.foodStats.foodExhaustionLevel = prev
-					}
+					val prev = player.foodStats.foodExhaustionLevel
+					block.captureDrops(true)
+					block.harvestBlock(world, player, x, y, z, meta)
+					val drops = block.captureDrops(false)
+					player.foodStats.foodExhaustionLevel = prev
+					
+					if (!world.isRemote && world.gameRules.getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots)
+						drops.forEach {
+							if (dispose && HookReplacerHandler.isDisposable(it.block, it.meta)) return@forEach
+							EntityItem(world, x + 0.5, y + 0.5, z + 0.5, it).apply { delayBeforeCanPickup = 10 }.spawn()
+						}
 				}
 				
 				ToolCommons.damageItem(stack, 1, player, ItemResonator.MANA_PER_DAMAGE)

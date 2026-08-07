@@ -16,12 +16,10 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.*
-import net.minecraft.inventory.*
 import net.minecraft.item.*
 import net.minecraft.util.*
 import net.minecraft.world.World
 import vazkii.botania.api.lexicon.ILexiconable
-import java.util.*
 
 class BlockItemDisplay: BlockContainerMod(Material.wood), ILexiconable, IFuelHandler {
 	
@@ -47,7 +45,8 @@ class BlockItemDisplay: BlockContainerMod(Material.wood), ILexiconable, IFuelHan
 	override fun hasComparatorInputOverride() = true
 	
 	override fun getComparatorInputOverride(world: World, x: Int, y: Int, z: Int, direction: Int): Int {
-		return Container.calcRedstoneFromInventory(world.getTileEntity(x, y, z) as? TileItemDisplay)
+		val tile = world.getTileEntity(x, y, z) as? TileItemDisplay ?: return 0
+		return if (tile.item != null) 15 else 0
 	}
 	
 	override fun shouldRegisterInNameSet() = false
@@ -73,48 +72,36 @@ class BlockItemDisplay: BlockContainerMod(Material.wood), ILexiconable, IFuelHan
 	override fun getIcon(side: Int, meta: Int) =
 		if (side == 1 || side == 0) icons[meta % TYPES] else sideIcons[meta % TYPES]
 	
-	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, meta: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		if (world.isRemote || player == null) return true
+	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+		if (world.isRemote) return true
 		
-		val tileEntity = world.getTileEntity(x, y, z)
+		val tile = world.getTileEntity(x, y, z) as? TileItemDisplay ?: return false
 		
-		if (tileEntity is TileItemDisplay) {
-			if (tileEntity[0] != null) {
-				dropItemsAtEntity(world, x, y, z, player)
-				return true
-			}
+		val stack = tile[0]?.copy()
+		if (stack != null) {
+			if (!player.inventory.addItemStackToInventory(stack))
+				player.dropPlayerItemWithRandomChoice(stack, false)
+			else if (player is EntityPlayerMP)
+				player.sendContainerToPlayer(player.inventoryContainer)
 			
-			if (player.currentEquippedItem != null) {
-				val item = player.currentEquippedItem.copy()
-				item.stackSize = 1
-				tileEntity[0] = item
-				
-				--player.currentEquippedItem.stackSize
-				if (player.currentEquippedItem.stackSize == 0) {
-					player.setCurrentItemOrArmor(0, null)
-				}
-				
-				if (player is EntityPlayerMP)
-					player.sendContainerToPlayer(player.inventoryContainer)
-			}
+			tile[0] = null
+			return true
+		}
+		
+		if (player.heldItem != null) {
+			val item = player.heldItem.copy()
+			item.stackSize = 1
+			tile[0] = item
+			
+			--player.heldItem.stackSize
+			if (player.heldItem.stackSize == 0)
+				player.setCurrentItemOrArmor(0, null)
+			
+			if (player is EntityPlayerMP)
+				player.sendContainerToPlayer(player.inventoryContainer)
 		}
 		
 		return true
-	}
-	
-	fun dropItemsAtEntity(world: World, x: Int, y: Int, z: Int, entity: Entity) {
-		Random()
-		val tileEntity = world.getTileEntity(x, y, z)
-		if (tileEntity is IInventory) {
-			for (i in 0 until tileEntity.sizeInventory) {
-				val item = tileEntity[i]
-				if (item != null && item.stackSize > 0) {
-					val entityItem = EntityItem(world, entity.posX, entity.posY + (entity.eyeHeight / 2f).D, entity.posZ, item.copy())
-					entityItem.spawn()
-					tileEntity[i] = null
-				}
-			}
-		}
 	}
 	
 	override fun getPickBlock(target: MovingObjectPosition?, world: World, x: Int, y: Int, z: Int, player: EntityPlayer): ItemStack {
@@ -129,20 +116,17 @@ class BlockItemDisplay: BlockContainerMod(Material.wood), ILexiconable, IFuelHan
 	override fun renderAsNormalBlock(): Boolean = false
 	
 	override fun breakBlock(world: World, x: Int, y: Int, z: Int, block: Block, meta: Int) {
-		val tileEntity = world.getTileEntity(x, y, z)
-		if (tileEntity is IInventory) {
-			for (i in 0 until tileEntity.sizeInventory) {
-				val item = tileEntity[i]
-				if (item != null && item.stackSize > 0) {
-					EntityItem(world, x.D, y.D, z.D, item.copy()).spawn()
-				}
-			}
+		val tile = world.getTileEntity(x, y, z)
+		
+		if (tile is TileItemDisplay && tile[0] != null) {
+			EntityItem(world, x.D, y.D, z.D, tile[0]).spawn()
+			tile[0] = null
 		}
+		
 		super.breakBlock(world, x, y, z, block, meta)
 	}
 	
-	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) =
-		AlfheimLexiconData.itemDisplay
+	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, stack: ItemStack?) = AlfheimLexiconData.itemDisplay
 	
 	override fun getBurnTime(fuel: ItemStack) = if (fuel.item === this.toItem()) 150 else 0
 	

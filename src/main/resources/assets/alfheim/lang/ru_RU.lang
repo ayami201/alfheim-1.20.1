@@ -164,6 +164,7 @@ tile.Icicle2.name=Сосульки
 tile.Icicle3.name=Сосульки
 tile.alfheim:IcyGeyser.name=Ледяной гейзер
 tile.ItemFrame.name=Рамка
+tile.alfheim:KudzuVine.name=Лоза кудзу
 tile.alfheim:leaves0.name=Дубовые листья
 tile.botania:lightRelay2.name=Переключаемый люминайзер
 tile.botania:lightRelay3.name=Люминайзер-развилка
@@ -473,6 +474,7 @@ item.alfheim:ElvenFood.TreeBerryCircuit.name=Фрукт схемодрева
 item.alfheim:ElvenFood.TreeBerryLightning.name=Фрукт грозового дерева
 item.alfheim:ElvenFood.TreeBerryNether.name=Фрукт адского дерева
 item.alfheim:ElvenFood.TreeBerrySealing.name=Фрукт уплотнённого дерева
+item.alfheim:ElvenFood.Beer.name=Пиво
 item.alfheim:ElvoriumIngot.name=Слиток эльвория
 item.ElvoriumLeggings.name=Поножи из эльвория
 item.alfheim:ElvoriumNugget.name=Самородок эльвория
@@ -528,6 +530,25 @@ item.alfheim:InfusedCandy.name=Наполненная конфета
 item.alfheim:InterdimensionalGatewayCore.name=Межпространственное связующее ядро
 item.botania:InvisibilityCloak.name=Плащ невидимости
 item.alfheim:Jug.name=Кувшин
+item.alfheim:KudzuSeed.name=Семена кудзу
+item.alfheim:KudzuSeed.mutation.AGGRESSIVE=Агрессивная
+item.alfheim:KudzuSeed.mutation.BLUESPACE=Эндер
+item.alfheim:KudzuSeed.mutation.CANNIBAL=Каннибал
+item.alfheim:KudzuSeed.mutation.EXPLOSIVE=Взрывная
+item.alfheim:KudzuSeed.mutation.FIERY=Огненная
+item.alfheim:KudzuSeed.mutation.FIREPROOF=Огнеупорная
+item.alfheim:KudzuSeed.mutation.FLOWERING=Цветущая
+item.alfheim:KudzuSeed.mutation.GLASSY=Стеклянная
+item.alfheim:KudzuSeed.mutation.GLIMMERING=Мерцающая
+item.alfheim:KudzuSeed.mutation.GLOWING=Светящаяся
+item.alfheim:KudzuSeed.mutation.HARDENED=Закаленная
+item.alfheim:KudzuSeed.mutation.METALLIC=Металлическая
+item.alfheim:KudzuSeed.mutation.PLASTIC=Пластиковая
+item.alfheim:KudzuSeed.mutation.SPREADING=Распространяющаяся
+item.alfheim:KudzuSeed.mutation.THORNY=Колючая
+item.alfheim:KudzuSeed.mutation.TOXIC=Токсичная
+item.alfheim:KudzuSeed.mutation.WOODEN=Деревянная
+item.alfheim:KudzuSprout.name=Побег кудзу
 item.botania:lensDaisy.name=Линза маны: Очищение
 item.botania:lensDaisy.short=Очищение
 item.botania:lensLinkback.name=Линза маны: Обратная связь
@@ -660,7 +681,7 @@ item.alfheim:ThunderwoodTwig.name=Грозовая ветвь
 item.alfheim:Triquetrum.name=Трикветрум формирователя мира
 item.Triquetrum.blocks=Выделено блоков: %s
 item.Triquetrum.rotation=Поворот на %s градусов против часовой стрелки
-item.Triquetrum.tooLarge=Выделенная область слишком большая. Максимальная длина главной диагонали - %s
+item.Triquetrum.tooLarge=Выделенная область слишком большая. Максимальный объём - %s
 item.botania:WarBanner.name=Боевое знамя
 item.alfheim:WisdomBottle.name=Вода из Источника Мимира
 item.alfheim:WolfBloodPotion.name=Зелье волчьей крови
@@ -760,6 +781,8 @@ alfheim.nei.tradeportal=Обмен с Мидгардом
 
 alfheim.potion.beast=Внутренний зверь
 alfheim.potion.beast.postfix=Зелье животного начала
+alfheim.potion.beer=Пиво
+alfheim.potion.beer.postfix=Концентрат пива
 alfheim.potion.berserk=Берсерк
 alfheim.potion.berserk.postfix=Зелье ярости
 alfheim.potion.bleeding=Кровотечение
@@ -843,14 +866,14 @@ alfheim.potion.WTFBerry5.postfix=Компот из уплотнённого фр
 
 alfheimmisc.flugel.alreadyhere=Я уже здесь.
 alfheimmisc.flugel.badArena=Как бы Вы ни старались, ритуал не активируется. Вам кажется, что Вы допустили ошибку в подготовке территории. Чтобы убедиться в этом, проверьте территорию на наличие препятствий.
-alfheimmisc.flugel.fakeplayer=Только настоящие игроки могут призвать Флюгеля.
 alfheimmisc.flugel.inactive=У маяка обязан быть хотя бы один активированный уровень.
 alfheimmisc.flugel.interuptor=Как смеешь ты вмешиваться в нашу битву? Убирайся!
 alfheimmisc.flugel.needsCatalysts=Как бы Вы ни старались, ритуал не активируется. Возможно, Вы допустили ошибку в расположении или конфигурации пилонов.
-alfheimmisc.flugel.notallowed=Глупый смертный! Ты даже не можешь летать без помощи! Ты слишком слаб, чтобы сражаться со мной! Уходи, пока я не передумала и не убила тебя.
+alfheimmisc.flugel.notallowed=Глупый смертный! Ты даже не можешь летать без помощи! Ты слишком слаб, чтобы сражаться со мной!
 alfheimmisc.flugel.peacefulNoob=Вы пытаетесь активировать ритуал, но миролюбивая атмосфера Вашего мира мешает Вам. Возможно, Вам стоит что-то с этим сделать.
 alfheimmisc.flugel.tooweak.false=Вы пытаетесь активировать ритуал, но душа выпадает из Ваших дрожащих рук. Вы думаете, что прежде чем призывать такое могущественное существо, Вам следует попробовать себя в каком-нибудь менее опасном сражении.
 alfheimmisc.flugel.tooweak.true=Вы пытаетесь активировать ритуал, но горн выпадает из Ваших дрожащих рук. Вы думаете, что прежде чем призывать такое могущественное существо, Вам следует попробовать себя в каком-нибудь менее опасном сражении.
+alfheimmisc.flugel.unleash=Эти оковы меня не удержат!
 alfheimmisc.flugel.used=Когда вы пытаетесь активировать ритуал, энергия в него не поступает так, как раньше. Возможно, он просто изношен и ничего не поделаешь.
 
 alfheimmisc.gaia.wrongitem=Похоже, эта жертва не приводит ни к какому эффекту в этом мире...
@@ -935,6 +958,8 @@ alfheimmisc.autocraft.NOT_ENOUGH_SLOTS=В целевом инвентаре ме
 alfheimmisc.autocraft.WAITING=Подайте пульс сигнала красного камня для повторной попытки получить ингредиенты
 alfheimmisc.autocraft.request=Запрошенный предмет
 alfheimmisc.autocraft.waiting=Ожидание предмета
+alfheimmisc.blockcold=Этот блок поможет вам охладиться в жарких местах
+alfheimmisc.blockwarm=Этот блок поможет вам согреться в ледяных местах
 alfheimmisc.craftResult=Количество создаваемых предметов: %s
 alfheimmisc.craftStrategy.true=Стратегия: По одному
 alfheimmisc.craftStrategy.false=Стратегия: Все разом
@@ -944,11 +969,16 @@ alfheimmisc.curtainCollide.false=Размещенные блоки будут п
 alfheimmisc.curtainCollide.true=Размещенные блоки не будут проходимыми
 alfheimmisc.hatstand=Подставка для шляп
 alfheimmisc.invalidDodge=Неверный пакет уклонения.
+alfheimmisc.kudzu.mutations=Это %s лоза кудзу.
+alfheimmisc.kudzu.nomutations=Это обычная лоза кудзу.
 alfheimmisc.mmoDisabled=§4Недоступно: режим MMO отключён
 alfheimmisc.mount.unavailable=Призыв невозможен в этом измерении!
 alfheimmisc.newentry=Вы открыли новое знание в своём лексиконе!
 alfheimmisc.nowayout=Прости, но я тебя не выпущу - твоя душа слишком истощена и мне она уже не интересна.
+alfheimmisc.portalfail=Вы чувствуете странное сопротивление со стороны самого мира, препятствующее вашей телепортации
 alfheimmisc.quandex=Материальный квандекс в руках!
+alfheimmisc.quandex.req.nomana=Недостаточно маны для запроса предметов
+alfheimmisc.quandex.res.nomana=Недостаточно маны для передачи запрошенных предметов
 alfheimmisc.resonator.mode0=Поля резонатора автоматически взорвутся через 2 секунды.
 alfheimmisc.resonator.mode1=Поля резонатора взорвутся только после того, как вы ударите по одному из них.
 alfheimmisc.resonator.mode2=Поля резонатора будут работать как ловушки матрицы.
@@ -1194,6 +1224,11 @@ item.AkashicRecords.poem1=Хранилище бесформенной матер
 item.AkashicRecords.poem2=Эфирное пространство мыслей,
 item.AkashicRecords.poem3=Источник заветного прозрения.
 
+item.autoPocketWardrobe.poem0=Владельца спешно защитит
+item.autoPocketWardrobe.poem1=Умелый кубик шестигранный,
+item.autoPocketWardrobe.poem2=Для повседневных дел хранит
+item.autoPocketWardrobe.poem3=Одежду гардероб карманный.
+
 item.Daolos.poem0=Неистовство морских пучин
 item.Daolos.poem1=Топор сей мигом укротит,
 item.Daolos.poem2=И даже абсолютный штиль
@@ -1214,13 +1249,18 @@ item.FlugelSoul.poem1=В пространстве движение,
 item.FlugelSoul.poem2=Лишь суть ангела смерти
 item.FlugelSoul.poem3=Даёт власть перемещения.
 
+item.freyrSlingshot.poem0=Плодородием и солнечным теплом
+item.freyrSlingshot.poem1=Ван миролюбивый земли наполняет,
+item.freyrSlingshot.poem2=Жизненной силой и процветанием
+item.freyrSlingshot.poem3=Растения и животных благословляет.
+
 item.Gjallarhorn.poem0=Едва коснётся рук достойных
 item.Gjallarhorn.poem1=Волшебный рог стража богов,
 item.Gjallarhorn.poem2=Пронзит его звук даже горы,
 item.Gjallarhorn.poem3=Предвещая гибель всех миров.
 
 item.Gleipnir.poem0=Невозможной прочностью обладают
-item.Gleipnir.poem1=Золоченые оковы волка ужасного,
+item.Gleipnir.poem1=Золочёные оковы волка ужасного,
 item.Gleipnir.poem2=Гладкие, словно лента из шёлка,
 item.Gleipnir.poem3=Навеки сдержат монстра опасного.
 
@@ -1233,6 +1273,11 @@ item.HeimdallRing.poem0=Во всём Асгарде не сыскать
 item.HeimdallRing.poem1=Надёжнее стража для Бифроста,
 item.HeimdallRing.poem2=Средь всех миров светлейший ас
 item.HeimdallRing.poem3=Мгновенно разглядит угрозу.
+
+item.hornPlenty.poem0=Могучий рог гул издаёт,
+item.hornPlenty.poem1=Удачей на охоте наделяет,
+item.hornPlenty.poem2=Едва ушей коснувшись, звук
+item.hornPlenty.poem3=Добычу редкую приумножает.
 
 item.infiniteFruit.poem0=Плод запретного сада
 item.infiniteFruit.poem1=От голода вечно спасает,
@@ -1264,13 +1309,13 @@ item.NjordRing.poem1=Злой памяти на асов он не держит,
 item.NjordRing.poem2=Но пред того властитель всех морей
 item.NjordRing.poem3=Великой щедростью одарит и надеждой.
 
-item.odinRing.poem0=Мудрый Всеотец свою милость проявляя,
+item.odinRing.poem0=Мудрый Всеотец, свою милость проявляя,
 item.odinRing.poem1=Дарами жизни и божественности наделяет,
 item.odinRing.poem2=С препятствием смерти в одной лишь руке
 item.odinRing.poem3=Святую Троицу они олицетворяют.
 
 item.SifRing.poem0=Богиня чистая и благородная
-item.SifRing.poem1=Сухую почву жизнью наделяет,
+item.SifRing.poem1=Сухую почву жизнью наполняет,
 item.SifRing.poem2=И вид её волос прекрасных
 item.SifRing.poem3=Богатство флоры представляет.
 
@@ -1278,6 +1323,16 @@ item.SpearSubspace.poem0=Копьё героя легендарного
 item.SpearSubspace.poem1=Лучами света армии испепеляет,
 item.SpearSubspace.poem2=Энергию беря из подпространства,
 item.SpearSubspace.poem3=Границы мироздания уничтожает.
+
+item.sphereNavigation.poem0=Бывает трудно отыскать
+item.sphereNavigation.poem1=И явно что, и что сокрыто,
+item.sphereNavigation.poem2=Но шар загадочный поможет,
+item.sphereNavigation.poem3=И будет вскоре всё добыто.
+
+item.talismanHiddenRiches.poem0=Ключ королю судьбой дарован
+item.talismanHiddenRiches.poem1=Несметные богатства защищать,
+item.talismanHiddenRiches.poem2=Но только скромному владельцу
+item.talismanHiddenRiches.poem3=Зига инвентаря удастся избежать.
 
 item.TankMask.poem0=Пеленой ужаса неподдельного
 item.TankMask.poem1=Взгляд маски сей одолевает,
@@ -1462,9 +1517,7 @@ spell.waterbreathing.mtinfo=Название: waterbreathing | Длительн�
 spell.wellolife.mtinfo=Название: wellolife | Урон (лечение): %s | Длительность: %s | Эффективность: %s
 spell.windblades.mtinfo=Название: windblades | Урон: %s | Длительность (жизни): %s | Эффективность (скорость): %s
 
-################################################################################################################################
-########################################################___IRIDESCENCE___#######################################################
-################################################################################################################################
+########################################################___РАДУЖНОСТЬ___########################################################
 
 death.attack.lackOfFaith=%1$s не пережил кризис веры
 misc.alfheim.lackOfFaith=&cСнятие этого ожерелья может навредить Вашему здоровью.&r

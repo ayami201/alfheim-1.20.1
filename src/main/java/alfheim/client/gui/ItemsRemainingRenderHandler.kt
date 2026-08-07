@@ -52,18 +52,6 @@ object ItemsRemainingRenderHandler {
 		glEnable(GL_RESCALE_NORMAL)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 		
-		glColor4f(1f, 1f, 1f, alpha)
-		RenderHelper.enableGUIStandardItemLighting()
-		val xp = x + (16f * (1f - alpha)).I
-		glTranslatef(xp.F, y.F, 0f)
-		glScalef(alpha, 1f, 1f)
-		RenderItem.getInstance().renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, stack, 0, 0)
-		glScalef(1f / alpha, 1f, 1f)
-		glTranslatef((-xp).F, (-y).F, 0f)
-		RenderHelper.disableStandardItemLighting()
-		glColor4f(1f, 1f, 1f, 1f)
-		glEnable(GL_BLEND)
-		
 		var text = ""
 		
 		if (customString == null) {
@@ -86,6 +74,18 @@ object ItemsRemainingRenderHandler {
 		
 		val color = 0x00FFFFFF or ((alpha * 0xFF).I shl 24)
 		mc.fontRenderer.drawStringWithShadow(text, x + 20, y + 6, color)
+		
+		glColor4f(1f, 1f, 1f, alpha)
+		RenderHelper.enableGUIStandardItemLighting()
+		val xp = x + (16f * (1f - alpha)).I
+		glTranslatef(xp.F, y.F, 0f)
+		glScalef(alpha, 1f, 1f)
+		RenderItem.getInstance().renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, stack, 0, 0)
+		glScalef(1f / alpha, 1f, 1f)
+		glTranslatef((-xp).F, (-y).F, 0f)
+		RenderHelper.disableStandardItemLighting()
+		glColor4f(1f, 1f, 1f, 1f)
+		glEnable(GL_BLEND)
 		
 		glDisable(GL_BLEND)
 		glEnable(GL_ALPHA_TEST)

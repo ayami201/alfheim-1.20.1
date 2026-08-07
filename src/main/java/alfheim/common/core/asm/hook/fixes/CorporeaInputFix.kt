@@ -1,5 +1,6 @@
 package alfheim.common.core.asm.hook.fixes
 
+import alfheim.common.item.ItemCorporeaRat
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageCorporeaRequest
 import codechicken.nei.*
@@ -17,7 +18,14 @@ object CorporeaInputFix {
 	@Hook(returnCondition = ReturnCondition.ALWAYS)
 	fun keyTyped(neiih: NEIInputHandler, gui: GuiContainer?, c: Char, i: Int): Boolean {
 		val mc = Minecraft.getMinecraft()
-		if (TileCorporeaIndex.InputHandler.getNearbyIndexes(mc.thePlayer).isEmpty()) return false
+		
+		// old code:
+//		if(TileCorporeaIndex.InputHandler.getNearbyIndexes(mc.thePlayer).isEmpty()) return false
+		
+		// new code:
+		val hasIndex = TileCorporeaIndex.InputHandler.getNearbyIndexes(mc.thePlayer).isNotEmpty()
+		val hasQuandex = mc.thePlayer.heldItem?.item is ItemCorporeaRat
+		if (!hasIndex && !hasQuandex) return false
 		
 		val bind = NEIClientConfig.getKeyBinding(NEIBotaniaConfig.CORPOREA_KEY)
 		
@@ -46,7 +54,7 @@ object CorporeaInputFix {
 //		mc.thePlayer.sendChatMessage(full)
 		
 		// new code:
-		NetworkService.sendToServer(MessageCorporeaRequest(stack, count))
+		NetworkService.sendToServer(MessageCorporeaRequest(stack, count, !hasIndex))
 		
 		return true
 	}

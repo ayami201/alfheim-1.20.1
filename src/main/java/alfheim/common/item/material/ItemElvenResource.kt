@@ -9,12 +9,14 @@ import alfheim.client.core.helper.*
 import alfheim.common.block.*
 import alfheim.common.block.colored.rainbow.BlockRainbowGrass
 import alfheim.common.block.tile.*
+import alfheim.common.block.tile.TileKudzuVine.Companion.EnumMutation
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.core.helper.ElementalDamage
 import alfheim.common.entity.EntityElementalSlime
+import alfheim.common.entity.boss.EntityFlugel
 import alfheim.common.item.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.Companion.of
@@ -306,6 +308,10 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 				if (sub.isNotEmpty())
 					addStringToTooltip(tooltip, "tile.Anomaly.$sub.name")
 			}
+			KudzuSeed.I -> {
+				val mutations = if (ItemNBTHelper.verifyExistance(stack, TAG_MUTATIONS)) ItemNBTHelper.getIntArray(stack, TAG_MUTATIONS) else return
+				mutations.forEach { addStringToTooltip(tooltip, "item.alfheim:KudzuSeed.mutation.${EnumMutation.entries[it].name}") }
+			}
 		}
 	}
 	
@@ -313,7 +319,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	
 	override fun getItemStackLimit(stack: ItemStack) = if (stack.meta in singles) 1 else 64
 	
-	override fun onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, par8: Float, par9: Float, par10: Float): Boolean {
+	override fun onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
 		val block = world.getBlock(x, y, z)
 		// Fabulous manapool
 		if (block === ModBlocks.pool && world.getBlockMetadata(x, y, z) == 0 && stack.meta == RainbowDust.I) {
@@ -336,8 +342,9 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 			return true
 		} else
 		// Burying petal
-		if (side == 1 && block.isAir(world, x, y + 1, z) && AlfheimBlocks.rainbowGrass.canBlockStay(world, x, y + 1, z) && stack.meta == RainbowPetal.I) {
-			world.setBlock(x, y + 1, z, AlfheimBlocks.rainbowGrass, BlockRainbowGrass.BURIED, 3)
+		if (side == 1 && world.getBlock(x, y + 1, z).isAir(world, x, y + 1, z) && AlfheimBlocks.rainbowGrass.canBlockStay(world, x, y + 1, z) && stack.meta == RainbowPetal.I) {
+			if (!world.setBlock(x, y + 1, z, AlfheimBlocks.rainbowGrass, BlockRainbowGrass.BURIED, 3)) return false
+			
 			stack.stackSize--
 			return true
 		} else
@@ -357,6 +364,16 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 				tile.writeCustomNBT(this)
 			})
 			return true
+		} else
+		// plant Kudzu
+		if (stack.meta == KudzuSeed.I && side == 1 && world.getBlock(x, y + 1, z).isReplaceable(world, x, y + 1, z)) {
+			if (ASJUtilities.isServer && EntityFlugel.isTruePlayer(player)) {
+				if (!world.setBlock(x, y + 1, z, AlfheimBlocks.kudzuVine, world.rand.nextInt(BlockKudzuVine.ICON_VARS), 3)) return false
+				(world.getTileEntity(x, y + 1, z) as? TileKudzuVine)?.startup(ItemNBTHelper.getIntArray(stack, TAG_MUTATIONS), player.commandSenderName)
+			}
+			
+			stack.stackSize--
+			return true
 		}
 		return false
 	}
@@ -365,11 +382,11 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		if (stack.meta != RainbowDust.I ||
 		    sheep !is EntitySheep ||
 		    sheep.sheared || 
-		    ASJSuperWrapperHandler.getFlag(sheep, 6))
+		    ASJSuperWrapperHandler.getFlag(sheep, AlfheimConfigHandler.flagIdSheepRainbow))
 			return false
 		
 		sheep.fleeceColor = 0
-		ASJSuperWrapperHandler.setFlag(sheep, 6, true)
+		ASJSuperWrapperHandler.setFlag(sheep, AlfheimConfigHandler.flagIdSheepRainbow, true)
 		--stack.stackSize
 		
 		return true
@@ -409,6 +426,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		const val TAG_RAINBOW = "rainbow"
 		const val TAG_STENCIL = "stencil"
 		const val TAG_USAGES = "usages"
+		const val TAG_MUTATIONS = "mutations"
 		
 		private val ItemStack.element get() = ElementalDamage.valueOf(ItemNBTHelper.getString(this, TAG_ELEMENT, ElementalDamage.COMMON.name))
 		
@@ -467,6 +485,8 @@ enum class ElvenResourcesMetas {
 	SaveIvy,
 	ElementalSlimeBall,
 	Stencil,
+	KudzuSeed,
+	KudzuSprout,
 	;
 	
 	val I get() = ordinal

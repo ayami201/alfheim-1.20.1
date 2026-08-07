@@ -1,7 +1,6 @@
 package alfheim.common.item
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.math.Vector3
 import alfheim.common.block.tile.corporea.TileCorporeaRat
 import cpw.mods.fml.common.eventhandler.*
 import net.minecraft.entity.player.EntityPlayer
@@ -16,8 +15,6 @@ import vazkii.botania.api.mana.ManaItemHandler
 import vazkii.botania.api.wand.ICoordBoundItem
 import vazkii.botania.common.achievement.ModAchievements
 import vazkii.botania.common.block.tile.corporea.TileCorporeaIndex
-import kotlin.collections.sumOf
-import kotlin.math.min
 
 class ItemCorporeaRat: ItemMod("CorporeaRat"), ICoordBoundItem {
 	
@@ -51,6 +48,8 @@ class ItemCorporeaRat: ItemMod("CorporeaRat"), ICoordBoundItem {
 		const val TAG_X = "toX"
 		const val TAG_Y = "toY"
 		const val TAG_Z = "toZ"
+		
+		const val REQUEST_COST = 100
 		
 		init {
 			CorporeaHelper.registerAutoCompleteController(this)
@@ -87,17 +86,12 @@ class ItemCorporeaRat: ItemMod("CorporeaRat"), ICoordBoundItem {
 			if (name == "this")
 				name = stack.displayName.lowercase().trim { it <= ' ' }
 			
-			count = min(CorporeaHelper.requestItem(name, -1, spark, true, false).sumOf { it.stackSize }, count)
-			
-			val vecDst = Vector3.fromEntity(event.player).mul(event.player.worldObj.provider.movementFactor)
-			val vecSrc = Vector3(x, y, z).mul(world.provider.movementFactor)
-			val distance = Vector3.vecDistance(vecDst, vecSrc)
-			val cost = (count + 1) * distance * if (world.provider.dimensionId != event.player.dimension) 2 else 1
-			
-			if (!ManaItemHandler.requestManaExactForTool(stack, event.player, (cost).I, true))
+			if (!ManaItemHandler.requestManaExactForTool(stack, event.player, REQUEST_COST, true)) {
+				ASJUtilities.say(event.player, "alfheimmisc.quandex.req.nomana")
 				return
+			}
 			
-			rat.queueRequest(name, count, event.player.commandSenderName)
+			rat.saveRequesterName(name, count, event.player.commandSenderName)
 			rat.doCorporeaRequest(name, count, spark)
 			event.player.addChatMessage(ChatComponentTranslation("botaniamisc.requestMsg", count, WordUtils.capitalizeFully(name), CorporeaHelper.lastRequestMatches, CorporeaHelper.lastRequestExtractions).setChatStyle(ChatStyle().setColor(EnumChatFormatting.LIGHT_PURPLE)))
 			

@@ -37,9 +37,12 @@ class EntityJellyfish(world: World): EntityWaterMob(world), IElementalEntity, IA
 	
 	override val elements = EnumSet.of(ElementalDamage.WATER)!!
 	
+	init {
+		setSize(0.95f, 0.95f)
+	}
+	
 	override fun entityInit() {
 		super.entityInit()
-		setSize(0.95f, 0.95f)
 		rotationVelocity = 1f / (rand.nextFloat() + 1f) * 0.2f
 	}
 	

@@ -452,7 +452,7 @@ alfheim.page.akashic0=&1Akashic Records&0 allows one to teleport to their person
 
 alfheim.entry.stories=Token of Banter
 alfheim.tagline.stories=Yet knowledge can be bought
-alfheim.page.stories0=Centuries have passed since the inhabitants of &4Alfheim&0 and &4Midgard&0 established close trade relations. Midgard adventurers, researchers and sages, like &6Mastrei&0, sought to learn all elven secrets in order to improve their own technologies, to become rich and famous. The most zealous of them was alchemist &6Tywin&0, who invented &1Token of Banter&0 - a symbol of knowledge accumulated over decades of his life.
+alfheim.page.stories0=Centuries have passed since the inhabitants of &4Alfheim&0 and &4Midgard&0 established close trade relations. Midgard adventurers, researchers and sages, like &6Mastray&0, sought to learn all elven secrets in order to improve their own technologies, to become rich and famous. The most zealous of them was alchemist &6Tywin&0, who invented &1Token of Banter&0 - a symbol of knowledge accumulated over decades of his life.
 alfheim.page.stories1=He managed to negotiate with the elven elders on mutually beneficial exchange of information: &6Tywin&0 provides a piece of his alchemical research, sealed in a coin, and the elves - the secrets and teachings of his people. So, why would the wisest elders need the knowledge of the Midgard alchemist?
 alfheim.page.stories2=Everything is simpler than it might seem at first glance. Elves have always sought to rise above other sentient beings, and the straight road to this is knowledge, not only their own, but also foreign to them before. So, through the centuries, there was an exchange of accumulated knowledge between the worlds of humans and elves.
 alfheim.page.stories3=Until something unimaginable happened on one rather ordinary day: a student of &6Tywin&0 betrayed his mentor, distributing &1Tokens of banter&0 over &4Midgard&0. As a result of this foolish act they were all lost over time.
@@ -850,7 +850,7 @@ alfheim.page.aniTorch3=It's fallen and it can't get up
 
 alfheim.entry.astrolab=Worldshaper's Astrolabe
 alfheim.tagline.astrolab=A tool to help create planes
-alfheim.page.astrolab0=The &1Worldshaper's Astrolabe&0 is a handy tool to place down blocks, a lot of them, really quick.<br>To start off, sneak-rightclick the astrolabe on a block in the world. This will set the block that will be placed.<br>Sneak-rightclicking with the astrolabe on the air will change how many blocks will get placed.
+alfheim.page.astrolab0=The &1Worldshaper's Astrolabe&0 is a handy tool to place down blocks, a lot of them, really quick.<br>To start off, sneak-leftclick the astrolabe on a block in the world. This will set the block that will be placed.<br>Sneak-rightclicking with the astrolabe on the air will change how many blocks will get placed.
 alfheim.page.astrolab1=When looking at a block with the astrolabe in hand, a quick preview will show up, of what blocks will be placed upon right-click.<br>To create the wall or floor displayed, alongside &4Mana&0, the respective blocks will be taken from the user's inventory, or items that can provide blocks to items such as the &1Rod of the Shifting Crust&0. (e.g. &1Rod of the Depths&0, &1Hand of Ender&0).
 alfheim.page.astrolab2=Builds walls, creates worlds
 
@@ -1287,3 +1287,24 @@ alfheim.page.fenrirGlove1=Odinsbane
 alfheim.entry.tunedSaplings=Saplings attunement
 alfheim.tagline.tunedSaplings=To grow rare trees
 alfheim.page.tunedSaplings0=Ever wondered how all those weird trees could grow in the nature but never on your gardens? Ever wanted some of those adorning your house? With the power of &1Mana tuning&0 you can now grow trees of all weird shapes from regular saplings, fertilized with a little touch of &4magic&0.
+
+alfheim.entry.kudzu=Kudzu
+alfheim.tagline.kudzu=Dangerous source of resources
+alfheim.page.kudzu0=&oSome plants reach for sunlight. Others for mana. But there are organisms whose roots reach much further... to the very fabric of reality.&r<br>&1Kudzu vine&0 is an unusual form of flora, capable of taking root almost anywhere. Instead of growing slowly, it rapidly spreads its shoots, gradually occupying more and more territory.
+alfheim.page.kudzu1=Each new section of the vine inherits properties of the parent plant, but the influence of environmental &4mana&0 often causes spontaneous mutations. Some transform the vine into an extremely dangerous organism, while others make it a useful source of resources. It's impossible to predict in advance what the next shoot will become.
+alfheim.page.kudzu2=As long as at least one section of the vine remains alive, the organism is considered a single entity. Only by completely destroying the entire colony can a new seed, incorporating the accumulated mutations, be acquired. Seeds can be germinated almost anywhere, but they will remain just as unpredictable.
+alfheim.page.kudzu3=Chaotic evil
+
+alfheim.entry.beer=Brewing
+alfheim.tagline.beer=The elves actually have it
+alfheim.page.beer0=One night, a human and two elves were spending the night by the fire, sharing stories of their worlds and sampling elven beer. During their cultural exchange, one of elves was deeply impressed by the delight with which guest from Midgard was enjoying the new drink. Looking at his completely drunk fellow, the elf decided to tell the human a story of the inventor of the beer he had come to love so much:
+alfheim.page.beer1=&oOnce upon a time, in the eastern plains of Alfheim, there lived an apprentice of meadbrewer. He was diligent in his studies and never questioned his mentor's word. But fate played a cruel joke on him... No matter how many times he tried his master's mead, no matter how hard he tried to get used to its bitter taste, the time-tested recipe only evoked nausea and disgust.&0
+alfheim.page.beer2=&oAnd one day, the student's patience ran out. He firmly resolved to leave his mentor until he had created his own drink, one whose taste would not only satisfy him but also surprise his teacher. Years of failed experiments passed before one unfortunate accident helped achieve the desired result...&0
+alfheim.page.beer3=&oOne early morning the student, busy shearing his kudzu vine, accidentally dropped a sprout into a nearby barrel of soaked wheat. Instantly, the room was filled with a pleasant herbal aroma. Inspired by the experience, the student decided to try a few drops of the resulting liquid, but immediately spat it out, coughing from the bitterness.&0
+alfheim.page.beer4=&oBut there was something unique and promising about this flavor. It seemed like all it took was a couple of combinations of conditions and new ingredients to test.&0<br>At this point the elf interrupted his story, looked hard at his now sobering brother once more, and, omitting a few details, continued:
+alfheim.page.beer5=&oSeveral kudzu sprouts and a handful of wheat are placed in a barrel, then the whole thing is covered with water, brought to a boil, after which a drop of nectar is added to soften the flavor, and finally, the drink is stabilized for a while by chilling it from the top. This is the only successful recipe for the new drink, which the meadbrewer's apprentice called beer.&0
+alfheim.page.beer6=&oSatisfied with the result, the student hurried back to his mentor to share his experience and delight him. But that's a whole other story...&0
+
+alfheim.entry.growthStop=Growth inhibition
+alfheim.tagline.growthStop=Stops the growth of creatures
+alfheim.page.growthStop0=No dandelions or gold required

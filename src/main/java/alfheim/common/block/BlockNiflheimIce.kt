@@ -32,6 +32,7 @@ class BlockNiflheimIce: BlockMod(material), ILexiconable {
 		setBlockUnbreakable()
 		setHarvestLevel("pickaxe", 2)
 		setLightOpacity(0)
+		setResistance(6000000F)
 		setStepSound(soundTypeGlass)
 		tickRandomly = true
 		slipperiness = 0.98f

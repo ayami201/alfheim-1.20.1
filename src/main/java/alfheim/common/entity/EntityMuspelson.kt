@@ -2,6 +2,7 @@ package alfheim.common.entity
 
 import alexsocol.asjlib.*
 import alfheim.api.entity.*
+import alfheim.common.core.handler.HELLISH_VACATION
 import alfheim.common.core.helper.ElementalDamage
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.*
@@ -140,7 +141,7 @@ class EntityMuspelson(world: World): EntityMob(world), IMuspelheimEntity, IAlfhe
 		
 		if (item == Items.coal) item = AlfheimItems.elvenResource
 		
-		val stack = if (ASJUtilities.chance(5)) // 5%
+		val stack = if (ASJUtilities.chance(1) && !HELLISH_VACATION) // 1%
 			ItemStack(AlfheimItems.eventResource, 1, EventResourcesMetas.VolcanoRelic)
 		else
 			ItemStack(item, size, meta)

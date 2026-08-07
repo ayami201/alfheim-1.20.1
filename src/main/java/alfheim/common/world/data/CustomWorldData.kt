@@ -113,6 +113,7 @@ class CustomWorldData(datakey: String): WorldSavedData(datakey) {
 		
 		val datakeys = mapOf(
 			-1 to "MuspelheimData",
+//			0 to "MidgardData", // DON'T - will wipe player relics NBT
 			AlfheimConfigHandler.dimensionIDAlfheim to "AlfheimData",
 			AlfheimConfigHandler.dimensionIDNiflheim to "NiflheimData",
 							)
