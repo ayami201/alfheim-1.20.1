@@ -35,6 +35,7 @@ class BlockAlfStorage: BlockModMeta(Material.iron, 6, ModInfo.MODID, "alfStorage
 			in 1..3 -> AlfheimLexiconData.essences
 			4       -> LexiconData.gaiaRitualHardmode
 			5       -> LexiconData.pool
+//			6       -> RecipeListAB.advandedAgglomerationPlate TODO back
 			else    -> null
 		}
 	

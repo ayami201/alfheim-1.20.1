@@ -8,6 +8,7 @@ import alexsocol.asjlib.ItemNBTHelper.getNBT
 import alexsocol.asjlib.ItemNBTHelper.setInt
 import alexsocol.asjlib.ItemNBTHelper.setIntArray
 import alexsocol.asjlib.ItemNBTHelper.setList
+import alfheim.client.gui.ItemsRemainingRenderHandler
 import alfheim.common.item.ItemMod
 import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
@@ -26,7 +27,6 @@ import net.minecraftforge.common.util.*
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import vazkii.botania.api.item.*
 import vazkii.botania.api.mana.*
-import vazkii.botania.client.core.handler.ItemsRemainingRenderHandler
 import vazkii.botania.common.block.BlockCamo
 
 class ItemRodSuperExchange: ItemMod("RodSuperExchange"), IManaUsingItem, IWireframeCoordinateListProvider {

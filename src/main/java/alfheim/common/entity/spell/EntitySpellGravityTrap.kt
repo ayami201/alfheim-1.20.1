@@ -61,7 +61,7 @@ class EntitySpellGravityTrap @JvmOverloads constructor(world: World, var caster:
 		if (worldObj.rand.nextBoolean()) {
 			val p = Vector3().rand().sub(0.5).normalize().mul(Math.random() * 4).add(this)
 			val m = Vector3.fromEntity(this).sub(p).mul(0.05)
-			VisualEffectHandler.sendPacket(VisualEffects.GRAVITY, dimension, p.x, p.y, p.z, m.x, m.y, m.z)
+			VisualEffectHandler.sendPacket(VisualEffects.SMOKE, dimension, p.x, p.y, p.z, m.x, m.y, m.z)
 		}
 	}
 	

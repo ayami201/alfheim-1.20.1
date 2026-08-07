@@ -297,7 +297,7 @@ object EventHandler {
 	fun onBlockBreak(e: BlockEvent.BreakEvent) {
 		val stack = e.player.heldItem ?: return
 		if (stack.item === AlfheimItems.flugelSoul && stack.meta != 0xFACE17) e.isCanceled = true
-		if (stack.item === ModItems.twigWand || stack.item === AlfheimItems.carver) e.isCanceled = true
+		if (stack.item === ModItems.twigWand || stack.item === AlfheimItems.carver || stack.item === AlfheimItems.astrolabe) e.isCanceled = true
 	}
 	
 	@SubscribeEvent

@@ -384,7 +384,7 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 			
 			override fun visitLdcInsn(cst: Any?) {
 				if (cst == Integer.MAX_VALUE)
-					super.visitLdcInsn(20)
+					super.visitLdcInsn(21)
 				else
 					super.visitLdcInsn(cst)
 			}

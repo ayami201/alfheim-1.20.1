@@ -57,7 +57,7 @@ class ItemColorSeeds: ItemIridescent("irisSeeds"), IFlowerComponent, IFloatingFl
 		var pz: Double
 		val velMul = 0.025f
 		
-		for (i in 0..49) {
+		repeat(50) {
 			px = (Math.random() - 0.5) * 3
 			py = Math.random() - 0.5 + 1
 			pz = (Math.random() - 0.5) * 3

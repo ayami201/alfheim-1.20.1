@@ -303,7 +303,7 @@ object KeyBindingHandlerClient {
 	}
 	
 	fun safeKeyDown(key: KeyBinding): Boolean {
-		return try {
+		return if (key.keyCode == 0) false else try {
 			if (key inln KeyBinding.keybindArray) return false
 			
 			Keyboard.isKeyDown(key.keyCode)

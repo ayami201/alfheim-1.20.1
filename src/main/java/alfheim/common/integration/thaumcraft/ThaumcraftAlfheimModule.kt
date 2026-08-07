@@ -27,6 +27,7 @@ import net.minecraft.item.*
 import net.minecraft.item.crafting.*
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
+import net.minecraftforge.oredict.OreDictionary
 import net.minecraftforge.oredict.OreDictionary.registerOre
 import net.minecraftforge.oredict.ShapedOreRecipe
 import thaumcraft.api.ThaumcraftApi.*
@@ -537,6 +538,9 @@ object ThaumcraftAlfheimModule {
 	fun registerOreDict() {
 		registerOreDict("")
 		registerOreDict("Alfheim")
+		
+		registerOre("clusterElvenElementium", ItemStack(ConfigItems.itemNugget, 1, AlfheimConfigHandler.elementiumClusterMeta))
+		registerOre("ingotCinnabar", ItemStack(ConfigItems.itemResource, 1, 3))
 		
 		AlfheimAPI.addOreWeightAlfheim("oreCinnabarAlfheim", 4275)
 		AlfheimAPI.addOreWeightAlfheim("oreInfusedAirAlfheim", 1548)

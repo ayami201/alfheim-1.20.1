@@ -47,6 +47,7 @@ import vazkii.botania.client.render.item.RenderLens
 import vazkii.botania.client.render.tile.RenderTileFloatingFlower
 import vazkii.botania.common.block.tile.TileFloatingFlower
 import vazkii.botania.common.core.handler.ConfigHandler
+import kotlin.jvm.java
 
 object ClientProxy : CommonProxy() {
 	
@@ -162,7 +163,6 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlugel::class.java, RenderEntityFlugel)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrozenViking::class.java, RenderEntityFrozenViking)
 		RenderingRegistry.registerEntityRenderingHandler(EntityGleipnir::class.java, RenderEntityGleipnir)
-		RenderingRegistry.registerEntityRenderingHandler(EntityGrieferCreeper::class.java, RenderEntityGrieferCreeper)
 		RenderingRegistry.registerEntityRenderingHandler(EntityPrimalMark::class.java, RenderEntityPrimalMark)
 		RenderingRegistry.registerEntityRenderingHandler(EntityIcicle::class.java, RenderEntityIcicle)
 		RenderingRegistry.registerEntityRenderingHandler(EntityItemImmortal::class.java, RenderEntityItemImmortal)
@@ -191,7 +191,7 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrowableItem::class.java, RenderEntityThrownItem)
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrym::class.java, RenderEntityThrym)
 		RenderingRegistry.registerEntityRenderingHandler(EntityElvenChakram::class.java, RenderEntityElvenChakram)
-		RenderingRegistry.registerEntityRenderingHandler(EntityVoidCreeper::class.java, RenderEntityGrieferCreeper)
+		RenderingRegistry.registerEntityRenderingHandler(EntityVoidCreeper::class.java, RenderEntityManaCreeper)
 		RenderingRegistry.registerEntityRenderingHandler(EntityWarBanner::class.java, RenderEntityWarBanner)
 		RenderingRegistry.registerEntityRenderingHandler(FakeLightning::class.java, RenderFakeLightning)
 		

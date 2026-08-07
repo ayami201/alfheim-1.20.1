@@ -2,7 +2,6 @@ package alfheim.common.lexicon.page
 
 import alexsocol.asjlib.*
 import alfheim.api.crafting.recipe.RecipeManaInfuser
-import alfheim.api.lib.LibResourceLocations
 import alfheim.common.block.AlfheimBlocks
 import cpw.mods.fml.relauncher.*
 import net.minecraft.client.gui.GuiScreen
@@ -15,6 +14,7 @@ import vazkii.botania.api.lexicon.*
 import vazkii.botania.client.core.handler.*
 import vazkii.botania.common.block.tile.mana.TilePool
 import vazkii.botania.common.core.handler.ConfigHandler
+import vazkii.botania.common.lexicon.page.PagePetalRecipe
 import vazkii.botania.common.lexicon.page.PageRecipe
 
 class PageManaInfuserRecipe(unlocalizedName: String, private val recipe: RecipeManaInfuser): PageRecipe(unlocalizedName) {
@@ -24,7 +24,7 @@ class PageManaInfuserRecipe(unlocalizedName: String, private val recipe: RecipeM
 	override fun onPageAdded(entry: LexiconEntry?, index: Int) = LexiconRecipeMappings.map(recipe.output, entry!!, index)
 	
 	override fun renderScreen(gui: IGuiLexiconEntry, mx: Int, my: Int) {
-		mc.renderEngine.bindTexture(LibResourceLocations.petalOverlay)
+		mc.renderEngine.bindTexture(PagePetalRecipe.petalOverlay)
 		
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)

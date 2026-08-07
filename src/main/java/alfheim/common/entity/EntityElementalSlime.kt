@@ -1,18 +1,19 @@
 package alfheim.common.entity
 
 import alexsocol.asjlib.*
-import alfheim.api.entity.IAlfheimMob
+import alfheim.api.entity.*
 import alfheim.common.core.helper.*
-import alfheim.common.item.AlfheimItems
+import alfheim.common.item.*
 import alfheim.common.item.material.*
-import net.minecraft.client.particle.EntityBreakingFX
-import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.monster.EntitySlime
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.client.particle.*
+import net.minecraft.entity.item.*
+import net.minecraft.entity.monster.*
+import net.minecraft.item.*
+import net.minecraft.nbt.*
 import net.minecraft.util.*
-import net.minecraft.world.World
-import java.awt.Color
+import net.minecraft.world.*
+import vazkii.botania.common.block.subtile.generating.*
+import java.awt.*
 import java.util.*
 
 class EntityElementalSlime(world: World): EntitySlime(world), IElementalEntity, IAlfheimMob {
@@ -27,16 +28,19 @@ class EntityElementalSlime(world: World): EntitySlime(world), IElementalEntity, 
 		dataWatcher.addObject(2, element.ordinal)
 	}
 	
-	override fun getCanSpawnHere() =
-		worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox)
-	
 	override fun createInstance(): EntitySlime {
 		val instance = EntityElementalSlime(worldObj)
 		instance.elements = elements.clone()
+		
+		if (getEntityData().getBoolean(SubTileNarslimmus.TAG_WORLD_SPAWNED))
+			instance.getEntityData().setBoolean(SubTileNarslimmus.TAG_WORLD_SPAWNED, true)
+		
 		return instance
 	}
 	
 	override fun dropFewItems(resentlyHit: Boolean, looting: Int) {
+		if (slimeSize != 1) return
+		
 		var count = rand.nextInt(3)
 		
 		if (looting > 0)
@@ -85,15 +89,12 @@ class EntityElementalSlime(world: World): EntitySlime(world), IElementalEntity, 
 	
 	override fun getPickedResult(target: MovingObjectPosition?) = super<IAlfheimMob>.getPickedResult(target)
 	
-	override fun entityDropItem(stack: ItemStack, height: Float): EntityItem {
-		val element = elements.first()
-		return super.entityDropItem(
-			if (stack.item === AlfheimItems.elvenResource && stack.meta == ElvenResourcesMetas.ElementalSlimeBall.I)
-				ItemElvenResource.ballForElement(element, stack.stackSize)
-			else
-				stack, 
-			height)
-	}
+	override fun entityDropItem(stack: ItemStack, height: Float): EntityItem? = super.entityDropItem(
+		if (stack.item === AlfheimItems.elvenResource && stack.meta == ElvenResourcesMetas.ElementalSlimeBall.I)
+			ItemElvenResource.ballForElement(elements.first(), stack.stackSize)
+		else
+			stack, 
+		height)
 	
 	companion object {
 		const val TAG_ELEMENT = "element"

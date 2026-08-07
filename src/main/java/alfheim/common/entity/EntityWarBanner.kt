@@ -15,9 +15,11 @@ class EntityWarBanner(world: World): Entity(world) {
 		if (ticksExisted > 150) setDead()
 	}
 	
-	override fun entityInit() {
+	init {
 		setSize(1.5f, 3.25f)
 	}
+	
+	override fun entityInit() = Unit
 	
 	override fun readEntityFromNBT(nbt: NBTTagCompound) {
 		type = nbt.getBoolean(TAG_TYPE)

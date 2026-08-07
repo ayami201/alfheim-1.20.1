@@ -16,6 +16,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
 import alfheim.common.core.helper.ElementalDamage
 import alfheim.common.crafting.recipe.*
+import alfheim.common.crafting.recipe.tuner.IncantationEquipmentElementalTuning
 import alfheim.common.entity.EntityElementalSlime
 import alfheim.common.integration.thaumcraft.ThaumcraftSuffusionRecipes
 import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
@@ -67,6 +68,7 @@ object AlfheimLexiconData {
 	lateinit var armilla: LexiconEntry
 	lateinit var aurora: LexiconEntry
 	lateinit var barrierSapling: LexiconEntry
+	lateinit var beer: LexiconEntry
 	lateinit var beltRation: LexiconEntry
 	lateinit var calicoSapling: LexiconEntry
 	lateinit var carver: LexiconEntry
@@ -117,6 +119,7 @@ object AlfheimLexiconData {
 	lateinit var gjallarhorn: LexiconEntry
 	lateinit var gleipnir: LexiconEntry
 	lateinit var goddessCharm: LexiconEntry
+	lateinit var growthStop: LexiconEntry
 	lateinit var gungnir: LexiconEntry
 	lateinit var hyperBucket: LexiconEntry
 	lateinit var infuser: LexiconEntry
@@ -124,6 +127,7 @@ object AlfheimLexiconData {
 	lateinit var itemDisplay: LexiconEntry
 	lateinit var ivySave: LexiconEntry
 	lateinit var kindling: LexiconEntry
+	lateinit var kudzu: LexiconEntry
 	lateinit var lamp: LexiconEntry
 	lateinit var legends: LexiconEntry
 	lateinit var lembas: LexiconEntry
@@ -268,6 +272,7 @@ object AlfheimLexiconData {
 		armilla = AlfheimLexiconEntry("armilla", pickCategory(mysticalItems))
 		aurora = AlfheimLexiconEntry("aurora", pickCategory(miscellaneous))
 		barrierSapling = AlfheimLexiconEntry("barrierSapling", categoryDendrology)
+		beer = AlfheimLexiconEntry("beer", categoryAlfheim)
 		beltRation = AlfheimLexiconEntry("ration", pickCategory(baubles))
 		calicoSapling = AlfheimLexiconEntry("calicoSapling", categoryDendrology)
 		carver = AlfheimLexiconEntry("carver", pickCategory(mysticalItems))
@@ -316,12 +321,14 @@ object AlfheimLexiconData {
 		frozenStar = AlfheimLexiconEntry("starBlock", pickCategory(miscellaneous))
 		gaiaButton = AlfheimLexiconEntry("gaiaButton", pickCategory(naturalApparatus))
 		goddessCharm = AlfheimLexiconEntry("goddessCharm", pickCategory(baubles))
+		growthStop = AlfheimLexiconEntry("growthStop", pickCategory(miscellaneous))
 		hyperBucket = AlfheimLexiconEntry("hyperBuk", pickCategory(mysticalItems))
 		infuser = AlfheimLexiconEntry("infuser", pickCategory(categoryBasics))
 		irisSapling = AlfheimLexiconEntry("irisSapling", categoryDendrology)
 		itemDisplay = AlfheimLexiconEntry("itemDisplay", pickCategory(miscellaneous))
 		ivySave = AlfheimLexiconEntry("ivySave", pickCategory(miscellaneous))
 		kindling = AlfheimLexiconEntry("kindling", pickCategory(naturalApparatus))
+		kudzu = AlfheimLexiconEntry("kudzu", pickCategory(alfomancy))
 		lamp = AlfheimLexiconEntry("lamp", pickCategory(miscellaneous))
 		legends = AlfheimLexiconEntry("legends", categoryAlfheim)
 		lembas = AlfheimLexiconEntry("lembas", categoryAlfheim)
@@ -503,6 +510,10 @@ object AlfheimLexiconData {
 		
 		beltRation.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeRationBelt))
 		
+		beer.setLexiconPages(*Array(7) { PageText("$it") }).icon = Beer.stack
+		beer.addExtraDisplayedRecipe(Beer.stack)
+		LexiconRecipeMappings.map(Beer.stack, beer, 0)
+		
 		carver.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeCarver), PageText("2"), PageCraftingRecipe("3", AlfheimRecipes.recipeStencil))
 		LexiconRecipeMappings.map(ItemStack(AlfheimFluffBlocks.composite), carver, 0)
 		
@@ -664,6 +675,8 @@ object AlfheimLexiconData {
 		
 		goddessCharm.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeGoddessCharm))
 		
+		growthStop.setLexiconPages(PageTuningRecipe("0", AlfheimRecipes.tuningGrowthStop, ItemStack(Items.spawn_egg), "")).icon = ItemStack(Items.spawn_egg)
+		
 		hyperBucket.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeHyperBucket))
 		
 		irisSapling.setLexiconPages(PageText("0"),
@@ -722,6 +735,13 @@ object AlfheimLexiconData {
 		ivySave.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeSaveIvy))
 		
 		kindling.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeKindling))
+		
+		kudzu.setLexiconPages(PageText("0"), PageText("1"), PageText("2"), PageTreeCrafting("3", AlfheimRecipes.recipeKudzu)).icon = KudzuSeed.stack
+		kudzu.addExtraDisplayedRecipe(KudzuSeed.stack)
+		kudzu.addExtraDisplayedRecipe(KudzuSprout.stack)
+		LexiconRecipeMappings.map(KudzuSeed.stack, kudzu, 0)
+		LexiconRecipeMappings.map(KudzuSprout.stack, kudzu, 0)
+		LexiconRecipeMappings.map(ItemStack(AlfheimBlocks.kudzuVine), kudzu, 0)
 		
 		lamp.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeLamp))
 		
@@ -881,13 +901,13 @@ object AlfheimLexiconData {
 		
 		val slimePages = arrayListOf(
 			PageText("0"),
-			PageTuningRecipe("1", AlfheimRecipes.tuningSlimeSize, ItemStack(Items.spawn_egg, 1, 55)),
-			PageTuningRecipe("2", AlfheimRecipes.tuningMagmaSize, ItemStack(Items.spawn_egg, 1, 62)),
-			PageTuningRecipe("3", AlfheimRecipes.tuningElementalSlimeSize, ItemSpawnEgg.forEntity<EntityElementalSlime>()!!)
+			PageTuningRecipe("1", AlfheimRecipes.tuningSlimeSize, ItemStack(Items.spawn_egg, 1, 55), ItemStack(Items.spawn_egg, 1, 55)),
+			PageTuningRecipe("2", AlfheimRecipes.tuningMagmaSize, ItemStack(Items.spawn_egg, 1, 62), ItemStack(Items.spawn_egg, 1, 62)),
+			PageTuningRecipe("3", AlfheimRecipes.tuningElementalSlimeSize, ItemSpawnEgg.forEntity<EntityElementalSlime>()!!, ItemSpawnEgg.forEntity<EntityElementalSlime>()!!)
 		)
 		
-		if (AlfheimRecipes.tuningTaintSize != null) slimePages += PageTuningRecipe("4", AlfheimRecipes.tuningTaintSize!!, ItemStack(ConfigItems.itemSpawnerEgg, 1, 15))
-		if (AlfheimRecipes.tuningGelatSize != null) slimePages += PageTuningRecipe("5", AlfheimRecipes.tuningGelatSize!!, ItemStack(TinkerTools.titleIcon))
+		if (AlfheimRecipes.tuningTaintSize != null) slimePages += PageTuningRecipe("4", AlfheimRecipes.tuningTaintSize!!, ItemStack(ConfigItems.itemSpawnerEgg, 1, 15), ItemStack(ConfigItems.itemSpawnerEgg, 1, 15))
+		if (AlfheimRecipes.tuningGelatSize != null) slimePages += PageTuningRecipe("5", AlfheimRecipes.tuningGelatSize!!, ItemStack(TinkerTools.titleIcon), ItemStack(TinkerTools.titleIcon))
 		
 		slimes.setLexiconPages(*slimePages.toTypedArray()).setIcon(Items.slime_ball)
 		
@@ -1407,6 +1427,7 @@ object AlfheimLexiconData {
 		anyavil.knowledgeType = elvenKnowledge
 		armilla.knowledgeType = elvenKnowledge
 		astrolabe.knowledgeType = elvenKnowledge
+		beer.knowledgeType = elvenKnowledge
 		beltRation.knowledgeType = elvenKnowledge
 		chakramEnder.knowledgeType = elvenKnowledge
 		chakramThunder.knowledgeType = elvenKnowledge
@@ -1437,9 +1458,11 @@ object AlfheimLexiconData {
 		flugel.knowledgeType = elvenKnowledge
 		fracturedSpace.knowledgeType = elvenKnowledge
 		gaiaButton.knowledgeType = elvenKnowledge
+		growthStop.knowledgeType = elvenKnowledge
 		hyperBucket.knowledgeType = elvenKnowledge
 		infuser.knowledgeType = elvenKnowledge
 		ivySave.knowledgeType = elvenKnowledge
+		kudzu.knowledgeType = elvenKnowledge
 		lamp.knowledgeType = elvenKnowledge
 		legends.knowledgeType = elvenKnowledge
 		lembas.knowledgeType = elvenKnowledge

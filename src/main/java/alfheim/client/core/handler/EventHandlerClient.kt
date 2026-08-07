@@ -17,7 +17,7 @@ import alfheim.client.render.particle.*
 import alfheim.client.render.world.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
-import alfheim.common.crafting.recipe.RecipeSaveIvy
+import alfheim.common.crafting.recipe.workbench.RecipeSaveIvy
 import alfheim.common.item.equipment.bauble.ItemElvenDisguise
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageKeyBindS
@@ -289,7 +289,7 @@ object EventHandlerClient {
 		FenrirVisualEffectsRenderer.renderAll(e.partialTicks)
 		renderParticles(e.partialTicks.D)
 		
-		glAlphaFunc(GL_GREATER, 0.003921569f)
+		glAlphaFunc(GL_GREATER, 0.1f)
 	}
 	
 	fun renderParticles(ticks: Double) {

@@ -37,10 +37,13 @@ class EntityFireSpirit(world: World): EntityLiving(world), IMuspelheimEntity {
 		get() = dataWatcher.getWatchedObject(12).`object` as ChunkCoordinates
 		set(pos) = dataWatcher.updateObject(12, pos)
 	
+	init {
+		setSize(0f, 0f)
+	}
+	
 	override fun entityInit() {
 		super.entityInit()
 		noClip = true
-		setSize(0f, 0f)
 		dataWatcher.addObject(12, ChunkCoordinates())
 	}
 	

@@ -55,11 +55,18 @@ class ItemResonator: ItemPickaxe(AlfheimAPI.elvoriumToolMaterial), IManaUsingIte
 	}
 	
 	override fun onUpdate(stack: ItemStack, world: World, player: Entity?, par4: Int, par5: Boolean) {
-		if (!world.isRemote && player is EntityPlayer && stack.getItemDamage() > 0 && ManaItemHandler.requestManaExactForTool(stack, player, MANA_PER_DAMAGE * 2, true))
+		if (world.isRemote) return
+		
+		if (stack.cooldown > 0) stack.cooldown--
+		
+		if (player is EntityPlayer && stack.getItemDamage() > 0 && ManaItemHandler.requestManaExactForTool(stack, player, MANA_PER_DAMAGE * 2, true))
 			stack.setItemDamage(stack.getItemDamage() - 1)
 	}
 	
 	override fun onLeftClickEntity(resonator: ItemStack, player: EntityPlayer, entity: Entity): Boolean {
+		if (resonator.cooldown > 0) return false
+		resonator.cooldown = 20
+		
 		val (x, y, z) = Vector3.fromEntityCenter(entity).mf()
 		EntityResonance(entity.worldObj, player, x, y, z, resonator.mode, resonator.target, ItemTerraPick.isTipped(resonator), resonator.persistent, resonator.dilated, 1).spawn(resonator.limit)
 		

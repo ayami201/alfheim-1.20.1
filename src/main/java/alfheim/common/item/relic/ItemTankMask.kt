@@ -6,12 +6,12 @@ import alfheim.client.core.helper.IconHelper
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.core.handler.*
 import alfheim.common.core.util.*
+import alfheim.common.integration.ModdedDimensionsIntegration
 import alfheim.common.item.AlfheimItems
 import alfheim.common.network.*
 import alfheim.common.network.packet.*
 import baubles.api.*
 import baubles.common.lib.PlayerHandler
-import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.eventhandler.*
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.texture.*
@@ -164,14 +164,7 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 		const val TAG_ACTIVATED = "activated"
 		const val MAX_COOLDOWN = 12000
 		
-		val dimdoors = Loader.isModLoaded("dimdoors")
-		
-		val limboIDs
-			get() =
-				if (dimdoors)
-					arrayOf(DDProperties.instance().LimboDimensionID, AlfheimConfigHandler.dimensionIDHelheim)
-				else
-					arrayOf(AlfheimConfigHandler.dimensionIDHelheim)
+		val limboIDs by lazy { listOfNotNull(AlfheimConfigHandler.dimensionIDHelheim, ModdedDimensionsIntegration.limboID) }
 		
 		var EntityPlayer.limboCounter
 			get() = if (worldObj.isRemote) CardinalSystemClient.PlayerSegmentClient.limbo else CardinalSystem.forPlayer(this).limbo
@@ -234,7 +227,7 @@ class ItemTankMask: ItemRelicBauble("TankMask"), IBaubleRender, IManaUsingItem {
 			val player = e.entityLiving as? EntityPlayerMP ?: return
 			
 			if (!player.capabilities.isCreativeMode && player.isEntityAlive && player.ticksExisted % 20 == 0 && player.limboCounter >= MAX_CORRUPTION && player.dimension !in limboIDs) {
-				if (dimdoors && player.rng.nextBoolean()) {
+				if (ModdedDimensionsIntegration.limboID != null && player.rng.nextBoolean()) {
 					DDTeleporter.teleportEntity(player, LimboProvider.getLimboSkySpawn(player, DDProperties.instance()), false)
 				} else {
 					sendToHelheim(player)

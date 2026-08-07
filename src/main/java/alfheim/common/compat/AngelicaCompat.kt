@@ -98,16 +98,6 @@ object AngelicaCompat {
 		GL11.glDisable(GL11.GL_DEPTH_TEST)
 	}
 	
-	fun renderHUD1() {
-		GL11.glEnable(GL11.GL_BLEND)
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
-	}
-	
-	fun renderHUD2() {
-		GL11.glDisable(GL11.GL_LIGHTING)
-		GL11.glDisable(GL11.GL_BLEND)
-	}
-	
 	fun glTranslatef(x: Float, y: Float, z: Float) {
 		GL11.glTranslatef(x, y, z)
 	}

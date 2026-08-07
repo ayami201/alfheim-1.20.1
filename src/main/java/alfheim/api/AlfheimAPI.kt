@@ -59,6 +59,8 @@ object AlfheimAPI {
 	
 	val tunerIncantations = LinkedHashMultimap.create<String, TunerIncantation<Any>>()!!
 	
+	val barrelRecipes = ArrayList<RecipeBarrel>()
+	
 	/** Map of anomaly data  */
 	val anomalies = HashMap<String, AnomalyData>()
 	

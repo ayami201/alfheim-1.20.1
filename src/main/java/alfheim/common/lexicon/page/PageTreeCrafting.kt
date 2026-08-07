@@ -1,16 +1,17 @@
 package alfheim.common.lexicon.page
 
-import alexsocol.asjlib.mc
-import alfheim.api.crafting.recipe.RecipeTreeCrafting
-import alfheim.common.block.AlfheimBlocks
+import alexsocol.asjlib.*
+import alexsocol.asjlib.render.*
+import alfheim.api.crafting.recipe.*
+import alfheim.common.block.*
 import cpw.mods.fml.relauncher.*
-import net.minecraft.item.ItemStack
-import net.minecraft.util.StatCollector
-import org.lwjgl.opengl.GL11
-import vazkii.botania.api.internal.IGuiLexiconEntry
-import vazkii.botania.client.core.handler.HUDHandler
-import vazkii.botania.common.block.tile.mana.TilePool
-import vazkii.botania.common.lexicon.page.PagePetalRecipe
+import net.minecraft.item.*
+import net.minecraft.util.*
+import org.lwjgl.opengl.GL11.*
+import vazkii.botania.api.internal.*
+import vazkii.botania.client.core.handler.*
+import vazkii.botania.common.block.tile.mana.*
+import vazkii.botania.common.lexicon.page.*
 
 class PageTreeCrafting: PagePetalRecipe<RecipeTreeCrafting> {
 	
@@ -20,11 +21,22 @@ class PageTreeCrafting: PagePetalRecipe<RecipeTreeCrafting> {
 	
 	override fun getMiddleStack() = ItemStack(AlfheimBlocks.treeCrafterBlockRB)
 	
+	override fun renderRecipe(gui: IGuiLexiconEntry, mx: Int, my: Int) {
+		super.renderRecipe(gui, mx, my)
+		
+		val core = recipes[recipeAt].core
+		if (core.block === AlfheimBlocks.irisSapling) return
+		
+		glPushMatrix()
+		glTranslatef(0f, 0f, 16f)
+		renderItem(gui, gui.left + 65.0, gui.top + 44.0, core, false)
+		glPopMatrix()
+	}
+	
 	@SideOnly(Side.CLIENT)
 	override fun renderManaBar(gui: IGuiLexiconEntry, recipe: RecipeTreeCrafting, mx: Int, my: Int) {
 		val font = mc.fontRenderer
-		GL11.glEnable(GL11.GL_BLEND)
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+		ASJRenderHelper.setBlend()
 		val manaUsage = StatCollector.translateToLocal("botaniamisc.manaUsage")
 		font.drawString(manaUsage, gui.left + gui.width / 2 - font.getStringWidth(manaUsage) / 2, gui.top + 110, 1711276032)
 		var ratio = 10
@@ -40,6 +52,6 @@ class PageTreeCrafting: PagePetalRecipe<RecipeTreeCrafting> {
 		font.drawString(stopStr, x + 50 - font.getStringWidth(stopStr) / 2, y + 15, -1728053248)
 		font.drawString(ratioString, x + 50 - font.getStringWidth(ratioString) / 2, y + 5, -1728053248)
 		font.unicodeFlag = unicode
-		GL11.glDisable(GL11.GL_BLEND)
+		ASJRenderHelper.discard()
 	}
 }

@@ -1,6 +1,7 @@
 package alfheim.common.item.equipment.tool.terrasteel
 
 import alexsocol.asjlib.*
+import alfheim.common.block.BlockKudzuVine
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.item.equipment.tool.manasteel.ItemManasteelHoe
 import alfheim.common.item.relic.*
@@ -10,6 +11,8 @@ import cpw.mods.fml.common.eventhandler.Event
 import cpw.mods.fml.common.registry.GameRegistry
 import ic2.core.crop.TileEntityCrop
 import net.minecraft.block.*
+import net.minecraft.block.material.Material
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.ai.attributes.AttributeModifier
 import net.minecraft.entity.item.EntityItem
@@ -246,7 +249,10 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 		
 		val world = player.worldObj
 		val block = world.getBlock(x, y, z)
-		if (block !is BlockCrops) return false
+		if (block !is BlockCrops) {
+			ToolCommons.removeBlocksInIteration(player, stack, world, x, y, z, -1, -1, -1, 2, 2, 2, block, MATERIALS, EnchantmentHelper.getSilkTouchModifier(player), EnchantmentHelper.getFortuneModifier(player), false)
+			return false
+		}
 		
 		val range = getExtraRange(stack, player)
 		for (i in x.bidiRange(range))
@@ -301,8 +307,11 @@ class ItemTerraHoe: ItemManasteelHoe(BotaniaAPI.terrasteelToolMaterial, "Terrast
 		return multimap
 	}
 	
+	override fun func_150893_a(stack: ItemStack?, block: Block) = if (block.material inl MATERIALS) theToolMaterial.efficiencyOnProperMaterial else 1f
+	
 	companion object {
 		const val MANA_PER_ACTION = 300
 		val IC2Loaded = Loader.isModLoaded("IC2")
+		val MATERIALS = arrayOf(Material.vine, Material.leaves, Material.plants, BlockKudzuVine.material)
 	}
 }

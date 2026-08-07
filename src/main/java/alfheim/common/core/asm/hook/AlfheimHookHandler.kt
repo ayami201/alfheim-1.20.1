@@ -1,23 +1,23 @@
 package alfheim.common.core.asm.hook
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.command.CommandDimTP
-import alexsocol.asjlib.math.Vector3
-import alfheim.AlfheimCore
+import alexsocol.asjlib.command.*
+import alexsocol.asjlib.math.*
+import alfheim.*
 import alfheim.api.*
-import alfheim.api.block.IHourglassTrigger
+import alfheim.api.block.*
 import alfheim.api.boss.*
 import alfheim.api.entity.*
-import alfheim.api.event.AttackEntityEventPost
-import alfheim.api.item.equipment.bauble.IManaDiscountBauble
-import alfheim.api.lib.LibResourceLocations
-import alfheim.api.spell.SpellBase
-import alfheim.client.core.handler.CardinalSystemClient
-import alfheim.client.render.entity.RenderEntityFloatingIsland
+import alfheim.api.event.*
+import alfheim.api.item.equipment.bauble.*
+import alfheim.api.lib.*
+import alfheim.api.spell.*
+import alfheim.client.core.handler.*
+import alfheim.client.render.entity.*
 import alfheim.common.block.*
-import alfheim.common.block.alt.BlockAltLeaves
+import alfheim.common.block.alt.*
 import alfheim.common.block.tile.*
-import alfheim.common.compat.AngelicaCompat
+import alfheim.common.compat.*
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDAlfheim
 import alfheim.common.core.handler.AlfheimConfigHandler.dimensionIDDomains
@@ -33,119 +33,122 @@ import alfheim.common.core.handler.ragnarok.RagnarokHandler.ragnarok
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.summer
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.summerTicks
 import alfheim.common.core.handler.ragnarok.RagnarokHandler.winter
-import alfheim.common.core.util.DamageSourceSpell
-import alfheim.common.crafting.crafter
+import alfheim.common.core.util.*
+import alfheim.common.crafting.*
 import alfheim.common.crafting.recipe.*
+import alfheim.common.crafting.recipe.workbench.*
 import alfheim.common.entity.*
-import alfheim.common.entity.ai.EntityAICreeperAvoidPooka
-import alfheim.common.entity.boss.EntityFlugel
+import alfheim.common.entity.ai.*
+import alfheim.common.entity.boss.*
 import alfheim.common.floatingisland.*
+import alfheim.common.integration.*
 import alfheim.common.item.*
-import alfheim.common.item.equipment.armor.ItemSnowArmor
-import alfheim.common.item.equipment.bauble.ItemPendant
-import alfheim.common.item.equipment.bauble.ItemPendant.Companion.EnumPrimalWorldType.MUSPELHEIM
-import alfheim.common.item.equipment.bauble.faith.ItemRagnarokEmblem
-import alfheim.common.item.material.ElvenResourcesMetas
-import alfheim.common.item.relic.ItemMjolnir
-import alfheim.common.item.rod.ItemRodClicker
-import alfheim.common.spell.earth.SpellGoldRush
+import alfheim.common.item.equipment.armor.*
+import alfheim.common.item.equipment.bauble.*
+import alfheim.common.item.equipment.bauble.ItemPendant.Companion.EnumPrimalWorldType.*
+import alfheim.common.item.equipment.bauble.faith.*
+import alfheim.common.item.material.*
+import alfheim.common.item.relic.*
+import alfheim.common.item.rod.*
+import alfheim.common.spell.earth.*
 import alfheim.common.world.data.CustomWorldData.Companion.customData
-import alfheim.common.world.dim.niflheim.biome.BiomeNiflheim
-import alfheim.common.world.mobspawn.MobSpawnHandler
-import baubles.common.lib.PlayerHandler
-import cofh.asmhooks.HooksCore
-import com.google.common.collect.Multimap
-import com.meteor.extrabotany.api.hugetools.HugeItemRenderer
-import com.meteor.extrabotany.client.render.item.GunRenderer
+import alfheim.common.world.dim.niflheim.biome.*
+import alfheim.common.world.mobspawn.*
+import baubles.common.lib.*
+import cofh.asmhooks.*
+import com.google.common.collect.*
+import com.meteor.extrabotany.api.hugetools.*
+import com.meteor.extrabotany.client.render.item.*
 import cpw.mods.fml.relauncher.*
-import cpw.mods.fml.relauncher.Side.CLIENT
+import cpw.mods.fml.relauncher.Side.*
 import gloomyfolken.hooklib.asm.*
 import gloomyfolken.hooklib.asm.Hook.ReturnValue
 import gloomyfolken.hooklib.asm.ReturnCondition.*
 import net.minecraft.block.*
-import net.minecraft.block.material.Material
+import net.minecraft.block.material.*
 import net.minecraft.client.gui.*
-import net.minecraft.client.model.ModelOcelot
-import net.minecraft.client.multiplayer.WorldClient
-import net.minecraft.client.particle.EntityFX
+import net.minecraft.client.model.*
+import net.minecraft.client.multiplayer.*
+import net.minecraft.client.particle.*
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.entity.*
 import net.minecraft.client.renderer.texture.*
-import net.minecraft.command.ICommandSender
-import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.command.*
+import net.minecraft.creativetab.*
 import net.minecraft.enchantment.*
 import net.minecraft.entity.*
-import net.minecraft.entity.ai.EntityAIAvoidEntity
-import net.minecraft.entity.ai.attributes.AttributeModifier
-import net.minecraft.entity.boss.EntityDragon
+import net.minecraft.entity.ai.*
+import net.minecraft.entity.ai.attributes.*
+import net.minecraft.entity.boss.*
 import net.minecraft.entity.item.*
-import net.minecraft.entity.monster.EntityCreeper
+import net.minecraft.entity.monster.*
 import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.*
 import net.minecraft.entity.projectile.*
 import net.minecraft.init.*
 import net.minecraft.inventory.*
 import net.minecraft.item.*
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.network.play.server.S12PacketEntityVelocity
-import net.minecraft.pathfinding.PathEntity
+import net.minecraft.nbt.*
+import net.minecraft.network.play.server.*
+import net.minecraft.pathfinding.*
 import net.minecraft.potion.*
-import net.minecraft.server.MinecraftServer
-import net.minecraft.server.management.ServerConfigurationManager
+import net.minecraft.server.*
+import net.minecraft.server.management.*
 import net.minecraft.tileentity.*
 import net.minecraft.util.*
 import net.minecraft.world.*
-import net.minecraft.world.biome.BiomeGenBase
-import net.minecraft.world.gen.feature.WorldGenFire
+import net.minecraft.world.biome.*
+import net.minecraft.world.gen.feature.*
 import net.minecraft.world.gen.structure.*
-import net.minecraftforge.client.IItemRenderer.ItemRenderType
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
-import net.minecraftforge.fluids.IFluidBlock
-import net.minecraftforge.oredict.OreDictionary
-import thaumcraft.api.aspects.AspectList
-import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager
-import travellersgear.api.TravellersGearAPI
-import vazkii.botania.api.BotaniaAPI
-import vazkii.botania.api.boss.IBotaniaBoss
+import net.minecraftforge.client.IItemRenderer.*
+import net.minecraftforge.common.*
+import net.minecraftforge.common.util.*
+import net.minecraftforge.event.entity.living.LivingEvent.*
+import net.minecraftforge.fluids.*
+import net.minecraftforge.oredict.*
+import thaumcraft.api.aspects.*
+import thaumcraft.common.lib.crafting.*
+import travellersgear.api.*
+import vazkii.botania.api.*
+import vazkii.botania.api.boss.*
 import vazkii.botania.api.internal.*
 import vazkii.botania.api.item.*
 import vazkii.botania.api.lexicon.*
 import vazkii.botania.api.mana.*
 import vazkii.botania.api.recipe.*
-import vazkii.botania.api.subtile.SubTileEntity
+import vazkii.botania.api.subtile.*
 import vazkii.botania.client.core.handler.*
 import vazkii.botania.client.core.helper.IconHelper
-import vazkii.botania.client.core.proxy.ClientProxy
+import vazkii.botania.client.core.proxy.*
 import vazkii.botania.client.fx.*
 import vazkii.botania.client.gui.lexicon.*
-import vazkii.botania.client.integration.nei.recipe.RecipeHandlerPetalApothecary
-import vazkii.botania.client.lib.LibResources
+import vazkii.botania.client.integration.nei.recipe.*
+import vazkii.botania.client.lib.*
 import vazkii.botania.client.render.tile.*
-import vazkii.botania.common.Botania
-import vazkii.botania.common.achievement.ModAchievements
+import vazkii.botania.common.*
+import vazkii.botania.common.achievement.*
 import vazkii.botania.common.block.*
 import vazkii.botania.common.block.decor.*
-import vazkii.botania.common.block.decor.walls.BlockModWall
+import vazkii.botania.common.block.decor.walls.*
 import vazkii.botania.common.block.mana.*
-import vazkii.botania.common.block.subtile.generating.SubTileDaybloom
+import vazkii.botania.common.block.subtile.generating.*
 import vazkii.botania.common.block.tile.*
 import vazkii.botania.common.block.tile.mana.*
-import vazkii.botania.common.core.BotaniaCreativeTab
-import vazkii.botania.common.core.handler.SheddingHandler
-import vazkii.botania.common.core.proxy.CommonProxy
+import vazkii.botania.common.core.*
+import vazkii.botania.common.core.handler.*
+import vazkii.botania.common.core.proxy.*
 import vazkii.botania.common.crafting.recipe.*
 import vazkii.botania.common.entity.*
 import vazkii.botania.common.item.*
-import vazkii.botania.common.item.block.ItemBlockSpecialFlower
-import vazkii.botania.common.item.equipment.bauble.ItemBauble
-import vazkii.botania.common.item.lens.LensFirework
-import vazkii.botania.common.item.material.ItemManaResource
+import vazkii.botania.common.item.block.*
+import vazkii.botania.common.item.equipment.bauble.*
+import vazkii.botania.common.item.lens.*
+import vazkii.botania.common.item.material.*
+import vazkii.botania.common.item.material.ItemDye
 import vazkii.botania.common.item.relic.*
 import vazkii.botania.common.item.rod.*
-import vazkii.botania.common.lib.LibBlockNames
-import java.awt.Color
+import vazkii.botania.common.lib.*
+import java.awt.*
 import java.util.*
 import java.util.regex.*
 import kotlin.math.*
@@ -258,6 +261,12 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
 	fun transferPlayerToDimension(scm: ServerConfigurationManager, player: EntityPlayerMP, dimTo: Int, teleporter: Teleporter?): Boolean {
+		val blocked = tryTransfer(dimTo, player)
+		if (blocked && ASJUtilities.isServer) ASJUtilities.say(player, "alfheimmisc.portalfail")
+		return blocked
+	}
+	
+	private fun tryTransfer(dimTo: Int, player: EntityPlayerMP): Boolean {
 		val let = false
 		val block = true
 		
@@ -266,16 +275,28 @@ object AlfheimHookHandler {
 			return let
 		}
 		
-		if (player.capabilities.isCreativeMode) return let
+//		if (player.capabilities.isCreativeMode) return let
 		
 		if (dimTo == dimensionIDHelheim) return let
 		if (dimTo == dimensionIDDomains) return block // only with TileDomainLobby
 		
 		val dimFrom = player.dimension
 		return when (dimFrom) {
-			dimensionIDDomains  -> dimTo != (player.persistentData.getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE).getOrNull(3) ?: dimTo)
-			dimensionIDAlfheim  -> dimTo != 0 && dimTo != dimensionIDNiflheim
-			dimensionIDNiflheim -> dimTo != dimensionIDAlfheim
+			dimensionIDDomains  -> if (dimTo != (player.persistentData.getIntArray(TileDomainLobby.TAG_DOMAIN_ENTRANCE).getOrNull(3) ?: dimTo)) block else let
+			dimensionIDAlfheim  ->
+				if (dimTo == 0 || dimTo == dimensionIDNiflheim)
+					let
+				else {
+					if (ModdedDimensionsIntegration.canLeaveAlfheimTo(dimTo))
+						let
+					else if (AlfheimConfigHandler.enableElvenStory)
+						block
+					else if (AlfheimConfigHandler.overrideDimensionalRestrictions)
+						let
+					else
+						block
+				}
+			dimensionIDNiflheim -> if (dimTo != dimensionIDAlfheim) block else let
 			dimensionIDHelheim  -> block // no way out except TileRainbowManaFlame#exitPlayer
 			else                -> let
 		}
@@ -1556,21 +1577,18 @@ object AlfheimHookHandler {
 	@SideOnly(CLIENT)
 	@JvmStatic
 	@Hook(injectOnExit = true, returnCondition = ALWAYS)
-	fun isInvisibleToPlayer(player: EntityPlayer, thePlayer: EntityPlayer?, @ReturnValue result: Boolean): Boolean {
-		if (result && AlfheimConfigHandler.enableMMO && CardinalSystemClient.PlayerSegmentClient.party?.isMember(player) == true)
-			return false
-		
-		return result
-	}
+	fun isInvisibleToPlayer(player: EntityPlayer, thePlayer: EntityPlayer?, @ReturnValue result: Boolean) = isInvisibleToPlayer(player as Entity, thePlayer, result)
 	
 	@SideOnly(CLIENT)
 	@JvmStatic
-	@Hook(createMethod = true, returnCondition = ALWAYS)
-	fun isInvisibleToPlayer(entity: EntityLivingBase, thePlayer: EntityPlayer?): Boolean {
-		if (AlfheimConfigHandler.enableMMO && CardinalSystemClient.PlayerSegmentClient.party?.isMember(entity) == true)
+	@Hook(injectOnExit = true, returnCondition = ALWAYS)
+	fun isInvisibleToPlayer(entity: Entity, thePlayer: EntityPlayer?, @ReturnValue result: Boolean): Boolean {
+		if (entity !is EntityLivingBase) return result
+		
+		if (result && AlfheimConfigHandler.enableMMO && CardinalSystemClient.PlayerSegmentClient.party?.isMember(entity) == true)
 			return false
 		
-		return entity.isInvisible
+		return result
 	}
 	
 	@SideOnly(CLIENT)
@@ -2265,4 +2283,51 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(createMethod = true, returnCondition = ALWAYS)
 	fun getColor(type: IFloatingFlower.IslandType) = 0xFFFFFF
+	
+	@JvmStatic
+	@Hook(createMethod = true, returnCondition = ALWAYS)
+	fun immuneToMuspel(thiz: EntitySkeleton) = thiz.skeletonType == 1
+	
+	@JvmStatic
+	@Hook(createMethod = true, returnCondition = ALWAYS)
+	fun immuneToNifl(thiz: EntitySkeleton) = thiz.skeletonType == 0
+	
+	
+	@JvmStatic
+	@Hook(injectOnExit = true)
+	fun onLivingUpdate(thiz: EntityAgeable) {
+		if (thiz.ageLocked)
+			thiz.growingAge = thiz.ageLockedValue
+	}
+	
+	const val TAG_AGE_LOCK = "${ModInfo.MODID}:ageLock"
+	var EntityAgeable.ageLocked
+		get() = entityData.getBoolean(TAG_AGE_LOCK)
+		set(value) = entityData.setBoolean(TAG_AGE_LOCK, value)
+	
+	const val TAG_AGE_LOCK_VALUE = "${ModInfo.MODID}:ageLockValue"
+	var EntityAgeable.ageLockedValue
+		get() = entityData.getInteger(TAG_AGE_LOCK_VALUE)
+		set(value) = entityData.setInteger(TAG_AGE_LOCK_VALUE, value)
+	
+	@JvmStatic
+	@Hook(returnCondition = ON_TRUE)
+	fun addGrowth(thiz: EntityAgeable, seconds: Int) = thiz.ageLocked
+	
+	
+	@JvmStatic
+	@Hook(returnCondition = ALWAYS, injectOnExit = true)
+	fun getClosestVulnerablePlayerToEntity(world: World, entity: Entity, distance: Double, @ReturnValue result: EntityPlayer?): EntityPlayer? {
+		if (result?.isPotionActive(AlfheimConfigHandler.potionIDWtfBerry5) == true) return null
+		return result
+	}
+	
+	@JvmStatic
+	@Hook(injectOnExit = true)
+	fun createInstance(thiz: EntitySlime, @ReturnValue result: EntitySlime): EntitySlime {
+		if (thiz.getEntityData().getBoolean(SubTileNarslimmus.TAG_WORLD_SPAWNED))
+			result.getEntityData().setBoolean(SubTileNarslimmus.TAG_WORLD_SPAWNED, true)
+		
+		return result
+	}
 }

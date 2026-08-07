@@ -12,9 +12,10 @@ import vazkii.botania.client.core.handler.HUDHandler
 import vazkii.botania.client.integration.nei.recipe.RecipeHandlerPetalApothecary
 import vazkii.botania.common.block.tile.mana.TilePool
 
+// Can't be an object!
 class RecipeHandlerManaInfuser: RecipeHandlerPetalApothecary() {
 	
-	@Suppress("RedundantInnerClassModifier") // пососи хуй блядина тупорылая
+	@Suppress("RedundantInnerClassModifier") // idiotic dumbass
 	inner class CachedManaInfuserRecipe(recipe: RecipeManaInfuser?): CachedPetalApothecaryRecipe(recipe, false) {
 		
 		var manaUsage: Int = 0
@@ -25,7 +26,6 @@ class RecipeHandlerManaInfuser: RecipeHandlerPetalApothecary() {
 				inputs.add(PositionedStack(ItemStack(AlfheimBlocks.manaInfuser), 73, 55))
 			}
 		}
-		
 	}
 	
 	override fun getRecipeName() = StatCollector.translateToLocal("alfheim.nei.manainfusion")!!

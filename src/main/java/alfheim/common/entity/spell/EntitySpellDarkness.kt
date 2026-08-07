@@ -36,7 +36,7 @@ class EntitySpellDarkness(world: World?, val caster: EntityLivingBase?): Entity(
 		if (ticksExisted % 5 == 0)
 			for (player in worldObj.playerEntities)
 				if (player is EntityPlayerMP && player !== caster && !CardinalSystem.PartySystem.sameParty(player, caster))
-					NetworkService.sendTo(MessageVisualEffect(VisualEffectHandlerClient.VisualEffects.SMOKE.ordinal, posX, posY, posZ), player)
+					NetworkService.sendTo(MessageVisualEffect(VisualEffectHandlerClient.VisualEffects.SMOKESCREEN.ordinal, posX, posY, posZ), player)
 		
 		val l = getEntitiesWithinAABB(worldObj, EntityLivingBase::class.java, getBoundingBox(posX, posY, posZ).expand(SpellDarkness.radius))
 		l.removeAll { Vector3.entityDistance(caster, it) > SpellDarkness.radius }

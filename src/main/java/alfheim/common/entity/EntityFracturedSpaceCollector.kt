@@ -31,9 +31,11 @@ class EntityFracturedSpaceCollector(world: World): Entity(world) {
 		ownerUUID = player?.uniqueID
 	}
 	
-	override fun entityInit() {
+	init {
 		setSize(0f, 0f)
 	}
+	
+	override fun entityInit() = Unit
 	
 	override fun onUpdate() {
 		motionX = 0.0

@@ -31,6 +31,7 @@ class BlockRedFlame: BlockFire(), ILexiconable {
 		setCreativeTab(null)
 		setLightLevel(1f)
 		setLightOpacity(0)
+		setResistance(6000000F)
 	}
 	
 	override fun setBlockName(name: String): Block {
@@ -77,8 +78,13 @@ class BlockRedFlame: BlockFire(), ILexiconable {
 	
 	override fun updateTick(world: World, x: Int, y: Int, z: Int, rand: Random) {
 		if (!world.gameRules.getGameRuleBooleanValue("doFireTick") || world.getBlockMetadata(x, y, z) == 2) return
-		if (!canPlaceBlockAt(world, x, y, z) || (world.rand.nextInt(100) == 0 && !world.getBlock(x, y - 1, z).isFireSource(world, x, y - 1, z, ForgeDirection.UP)))
+		if (!canPlaceBlockAt(world, x, y, z) || world.rand.nextInt(100) == 0 && !world.getBlock(x, y - 1, z).isFireSource(world, x, y - 1, z, ForgeDirection.UP))
 			world.setBlockToAir(x, y, z)
+	}
+	
+	override fun randomDisplayTick(world: World, x: Int, y: Int, z: Int, random: Random) {
+		if (random.nextInt(24) == 0) 
+			world.playSound(x + 0.5, y + 0.5, z + 0.5, "fire.fire", 1.0f + random.nextFloat(), random.nextFloat() * 0.7f + 0.3f, false)
 	}
 	
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, lexicon: ItemStack) = AlfheimLexiconData.ruling

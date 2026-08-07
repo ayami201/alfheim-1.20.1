@@ -4,6 +4,7 @@ import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.api.event.PlayerInteractAdequateEvent
 import alfheim.api.lib.LibResourceLocations
+import alfheim.client.gui.ItemsRemainingRenderHandler
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.item.ItemIridescent
@@ -19,7 +20,6 @@ import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 import vazkii.botania.api.item.*
 import vazkii.botania.api.mana.*
-import vazkii.botania.client.core.handler.ItemsRemainingRenderHandler
 import vazkii.botania.common.Botania
 import vazkii.botania.common.core.helper.Vector3
 import java.awt.Color

@@ -38,9 +38,12 @@ class EntitySubspaceSpear: EntityThrowableCopy {
 	
 	constructor(world: World, thrower: EntityLivingBase): super(world, thrower)
 	
+	init {
+		setSize(0f, 0f)
+	}
+	
 	override fun entityInit() {
 		super.entityInit()
-		setSize(0f, 0f)
 		dataWatcher.addObject(26, 0)
 		dataWatcher.addObject(27, 0f)
 		dataWatcher.setObjectWatched(27)

@@ -1,16 +1,16 @@
 package alfheim.common.item
 
-import alexsocol.asjlib.ASJUtilities
-import alfheim.api.ModInfo
+import alexsocol.asjlib.*
+import alfheim.api.*
 import alfheim.api.entity.*
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.world.World
-import net.minecraftforge.oredict.OreDictionary
-import java.awt.Toolkit
-import java.awt.datatransfer.StringSelection
+import net.minecraft.entity.player.*
+import net.minecraft.item.*
+import net.minecraft.world.*
+import net.minecraftforge.oredict.*
+import java.awt.*
+import java.awt.datatransfer.*
 import java.util.*
-import kotlin.math.sqrt
+import kotlin.math.*
 
 @Suppress("KotlinConstantConditions", "ControlFlowWithEmptyBody")
 class TheRodOfTheDebug: ItemMod("TheRodOfTheDebug") {

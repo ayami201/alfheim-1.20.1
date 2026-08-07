@@ -5,7 +5,6 @@ import alfheim.api.entity.*
 import alfheim.common.core.handler.*
 import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.entity.boss.EntityDedMoroz
-import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.common.world.dim.alfheim.biome.*
 import alfheim.common.world.dim.alfheim.customgens.NiflheimLocationGenerator
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
@@ -51,7 +50,7 @@ class EntitySnowSprite(world: World): EntityFlyingCreature(world), INiflheimEnti
 	override fun doesEntityNotTriggerPressurePlate() = true
 	override fun getDropItem() = Items.snowball!!
 	override fun dropFewItems(hit: Boolean, looting: Int) {
-		entityDropItem(if (rng.nextInt(20) == 0) ElvenResourcesMetas.IffesalDust.stack else ItemStack(dropItem, looting + 1), 0f)
+		entityDropItem(ItemStack(dropItem, looting + 1), 0f)
 	}
 	
 	private val immuneTo = arrayOf(DamageSource.inWall.damageType, DamageSource.drown.damageType, DamageSource.fall.damageType)
@@ -153,7 +152,7 @@ object SpriteKillHandler {
 			
 			ASJUtilities.say(killer, "alfheimmisc.ded.awakening")
 			
-			regions[pointer] = 0
+			regions[pointer] = max(0, kills - 16)
 		} else {
 			regions[pointer] = kills
 		}

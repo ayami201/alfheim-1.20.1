@@ -50,6 +50,7 @@ import vazkii.botania.common.core.handler.*
 import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower
 import vazkii.botania.common.lib.LibBlockNames
+import kotlin.jvm.java
 
 object AlfheimRegistry {
 	
@@ -76,8 +77,8 @@ object AlfheimRegistry {
 	}
 	
 	private fun registerSpawns() {
-		addAllSpawn(EntityElementalSlime::class.java, AlfheimConfigHandler.elementalSlime, AlfheimConfigHandler.elementalSlimeBiomeBlackList)
-		addAllSpawn(EntityVoidCreeper::class.java, AlfheimConfigHandler.voidCreeper, AlfheimConfigHandler.voidCreeperBiomeBlackList)
+		addAllSpawn(EntityElementalSlime::class.java, AlfheimConfigHandler.elementalSlimeRates, AlfheimConfigHandler.elementalSlimeBiomeBlackList)
+		addAllSpawn(EntityVoidCreeper::class.java, AlfheimConfigHandler.voidCreeperRates, AlfheimConfigHandler.voidCreeperBiomeBlackList)
 		
 		if (HELLISH_VACATION) {
 			arrayOf(BiomeBeach, BiomeSandbank, BiomeGenBase.jungle, BiomeGenBase.jungleEdge, BiomeGenBase.jungleHills, BiomeGenBase.beach).forEach {
@@ -95,6 +96,7 @@ object AlfheimRegistry {
 	
 	private fun registerPotions() {
 		PotionBeastWithin
+		PotionBeer
 		PotionBerserk
 		PotionBleeding
 		PotionButterShield
@@ -150,7 +152,6 @@ object AlfheimRegistry {
 		registerEntity(EntityFenrir::class.java, "Fenrir", nextEntityID)
 		registerEntity(EntityFlugel::class.java, "Flugel", nextEntityID)
 		registerEntity(EntityFrozenViking::class.java, "FrozenViking", nextEntityID, 0x26DBFF, 0x2D86B3)
-		registerEntity(EntityGrieferCreeper::class.java, "GrieferCreeper", nextEntityID, 0xFFFFFF, 0)
 		registerEntity(EntityJellyfish::class.java, "Jellyfish", nextEntityID, 0xFFFFFF, -1)
 		registerEntity(EntityLolicorn::class.java, "Lolicorn", nextEntityID)
 		registerEntity(EntityMuspelson::class.java, "Muspelson", nextEntityID, 0x3E1900, 0xD05D14)
@@ -162,6 +163,9 @@ object AlfheimRegistry {
 		registerEntity(EntityThrym::class.java, "Thrym", nextEntityID)
 		registerEntity(EntityVoidCreeper::class.java, "VoidCreeper", nextEntityID, 0xcc11d3, 0xfb9bff)
 		
+		// TODO back
+//		registerEntity(EntityAlphirinePortal::class.java, "AlphirinePortal", nextEntityID)
+//		registerEntity(EntityAdvancedSpark::class.java, "AdvancedSpark", nextEntityID)
 		registerEntity(EntityBlackBolt::class.java, "BlackBolt", nextEntityID)
 		registerEntity(EntityCharge::class.java, "Charge", nextEntityID)
 		registerEntity(EntityEarthquake::class.java, "Earthquake", nextEntityID)
@@ -178,15 +182,19 @@ object AlfheimRegistry {
 		registerEntity(EntityItemImmortal::class.java, "ImmortalItem", nextEntityID)
 		registerEntity(EntityItemImmortalRelic::class.java, "ImmortalRelicItem", nextEntityID)
 		registerEntity(EntityLightningMark::class.java, "LightningMark", nextEntityID)
+//		registerEntity(EntityManaVine::class.java, "ManaVineBall", nextEntityID)
 		registerEntity(EntityMeteor::class.java, "Meteor", nextEntityID)
 		registerEntity(EntityMuspelheimSun::class.java, "MuspelheimSun", nextEntityID)
 		registerEntity(EntityMuspelheimSunSlash::class.java, "MuspelheimSunSlash", nextEntityID)
+//		registerEntity(EntityNebulaBlaze::class.java, "NebulaBlaze", nextEntityID)
 		registerEntity(EntityPrimalBossChunkAttack::class.java, "ChunkAttack", nextEntityID)
 		registerEntity(EntityPrimalMark::class.java, "PrimalMark", nextEntityID)
 		registerEntity(EntityResonance::class.java, "Resonance", nextEntityID)
 		registerEntity(EntityRift::class.java, "Rift", nextEntityID)
+//		registerEntity(EntitySeedshot::class.java, "EntitySeedshot", nextEntityID)
 		registerEntity(EntitySit::class.java, "Sit", nextEntityID)
 		registerEntity(EntitySniceBall::class.java, "SniceBall", nextEntityID)
+//		registerEntity(EntitySpaceSwordBurst::class.java, "SpaceSwordBurst", nextEntityID)
 		registerEntity(EntityThrowableItem::class.java, "ThrownItem", nextEntityID)
 		registerEntity(EntityThrownPotion::class.java, "ThrownPotion", nextEntityID)
 		registerEntity(EntityTornado::class.java, "Tornado", nextEntityID)
@@ -256,6 +264,7 @@ object AlfheimRegistry {
 		registerTile<TileGaiaButton>()
 		registerTile<TileItemFrame>()
 		registerTile<TileIcyGeyser>()
+		registerTile<TileKudzuVine>()
 		registerTile<TileManaAccelerator>()
 		registerTile<TileManaInfuser>()
 		registerTile<TileManaReflector>()

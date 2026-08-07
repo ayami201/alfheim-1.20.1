@@ -18,7 +18,9 @@ object ElvenFlightHelper {
 	private val FLIGHT = RangedAttribute("${ModInfo.MODID}.flight", max, 0.0, max).apply { setShouldWatch(true) }
 	
 	fun register(player: EntityPlayer) {
-		player.getAttributeMap().registerAttribute(FLIGHT)
+		try {
+			player.getAttributeMap().registerAttribute(FLIGHT)
+		} catch (_: IllegalArgumentException) {} // заебёшь кривокорявое говнище
 	}
 	
 	fun ensureExistence(player: EntityPlayer) {

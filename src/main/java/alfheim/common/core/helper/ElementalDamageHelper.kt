@@ -10,7 +10,7 @@ import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.SheerColdHandler.cold
 import alfheim.common.core.helper.ElementalDamage.*
 import alfheim.common.core.helper.ElementalDamageBridge.*
-import alfheim.common.crafting.recipe.IncantationEquipmentElementalTuning
+import alfheim.common.crafting.recipe.tuner.IncantationEquipmentElementalTuning
 import baubles.common.lib.PlayerHandler
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.relauncher.*
@@ -155,15 +155,15 @@ object ElementalDamageHandler {
 		val stack = attacker.heldItem ?: return null to 0
 		
 		val item = stack.item
-		val element: ElementalDamage
+		val element: ElementalDamage?
 		val attunementLevel: Int
 		
 		if (item is IElementalItem) {
 			element = item.getElement(stack)
 			attunementLevel = item.getElementLevel(stack)
 		} else {
-			val name = ItemNBTHelper.getString(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT, COMMON.name)
-			element = ElementalDamage.valueOf(name)
+			val name = ItemNBTHelper.getString(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT, "")
+			element = if (name.isEmpty()) null else ElementalDamage.valueOf(name)
 			val level = ItemNBTHelper.getInt(stack, IncantationEquipmentElementalTuning.TAG_ELEMENT_LEVEL, 0)
 			attunementLevel = if (level == 4) 5 else level
 		}

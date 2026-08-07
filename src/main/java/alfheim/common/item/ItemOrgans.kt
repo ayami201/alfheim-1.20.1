@@ -169,7 +169,7 @@ class ItemOrgans: ItemMod("Organs") {
 	
 	companion object {
 		
-		const val EJECT_FREQUENCY = 300
+		const val EJECT_FREQUENCY = 600
 		const val MAX_DECAY_TIME = 100
 		const val MAX_PROGRESS = 8
 		const val PROGRESS_RANGE = 4
@@ -181,20 +181,20 @@ class ItemOrgans: ItemMod("Organs") {
 		val nervesDamage = DamageSource("organs.nerves").setDamageBypassesArmor().setDamageIsAbsolute().setTo(ElementalDamage.PSYCHIC)
 		
 		var EntityPlayer.heart: Int
-			get() = entityData.getIntegerDef("${ModInfo.MODID}:organs.heart")
-			set(value) = entityData.setInteger("${ModInfo.MODID}:organs.heart", value)
+			get() = entityData.getIntegerDef("${ModInfo.MODID}.organs.heart")
+			set(value) = entityData.setInteger("${ModInfo.MODID}.organs.heart", value)
 		
 		var EntityPlayer.lungs: Int
-			get() = entityData.getIntegerDef("${ModInfo.MODID}:organs.lungs")
-			set(value) = entityData.setInteger("${ModInfo.MODID}:organs.lungs", value)
+			get() = entityData.getIntegerDef("${ModInfo.MODID}.organs.lungs")
+			set(value) = entityData.setInteger("${ModInfo.MODID}.organs.lungs", value)
 		
 		var EntityPlayer.liver: Int
-			get() = entityData.getIntegerDef("${ModInfo.MODID}:organs.liver")
-			set(value) = entityData.setInteger("${ModInfo.MODID}:organs.liver", value)
+			get() = entityData.getIntegerDef("${ModInfo.MODID}.organs.liver")
+			set(value) = entityData.setInteger("${ModInfo.MODID}.organs.liver", value)
 		
 		var EntityPlayer.nerves: Int
-			get() = entityData.getIntegerDef("${ModInfo.MODID}:organs.nerves")
-			set(value) = entityData.setInteger("${ModInfo.MODID}:organs.nerves", value)
+			get() = entityData.getIntegerDef("${ModInfo.MODID}.organs.nerves")
+			set(value) = entityData.setInteger("${ModInfo.MODID}.organs.nerves", value)
 		
 		private fun NBTTagCompound.getIntegerDef(key: String) = if (hasKey(key)) getInteger(key) else -1
 		

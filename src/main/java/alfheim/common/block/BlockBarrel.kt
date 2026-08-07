@@ -1,25 +1,22 @@
 package alfheim.common.block
 
-import alexsocol.asjlib.*
-import alfheim.api.lib.LibRenderIDs
-import alfheim.common.block.base.BlockContainerMod
-import alfheim.common.block.tile.TileBarrel
-import alfheim.common.item.material.*
-import alfheim.common.lexicon.AlfheimLexiconData
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.entity.Entity
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
-import net.minecraft.util.AxisAlignedBB
+import alfheim.api.lib.*
+import alfheim.common.block.base.*
+import alfheim.common.block.tile.*
+import alfheim.common.lexicon.*
+import net.minecraft.block.material.*
+import net.minecraft.client.renderer.texture.*
+import net.minecraft.entity.*
+import net.minecraft.entity.player.*
+import net.minecraft.init.*
+import net.minecraft.item.*
+import net.minecraft.util.*
 import net.minecraft.world.*
-import net.minecraftforge.event.entity.living.LivingFallEvent
-import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent
-import vazkii.botania.api.lexicon.ILexiconable
+import vazkii.botania.api.internal.*
+import vazkii.botania.api.lexicon.*
+import vazkii.botania.api.mana.*
 
-class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable {
+class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable, IManaTrigger {
 	
 	init {
 		setBlockName("barrel")
@@ -29,18 +26,21 @@ class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable {
 	}
 	
 	override fun onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-		val ret = onBlockActivated2(world, x, y, z, player)
+		if (world.isRemote) return true
 		
-		if (ret && !world.isRemote)
-			world.getTileEntity(x, y, z)?.let { ASJUtilities.dispatchTEToNearbyPlayers(it) }
+		val tile = world.getTileEntity(x, y, z) as? TileBarrel ?: return false
+		val did = onBlockActivated(tile, player)
+		if (!did) return false
 		
-		world.notifyBlocksOfNeighborChange(x, y, z, this)
+		player.swingItem()
+		tile.sync()
+		if (player is EntityPlayerMP)
+			player.sendContainerToPlayer(player.inventoryContainer)
 		
-		return ret
+		return true
 	}
 	
-	fun onBlockActivated2(world: World, x: Int, y: Int, z: Int, player: EntityPlayer): Boolean {
-		val tile = world.getTileEntity(x, y, z) as? TileBarrel ?: return false
+	fun onBlockActivated(tile: TileBarrel, player: EntityPlayer): Boolean {
 		val stack = player.heldItem
 		
 		if (stack == null) {
@@ -52,77 +52,25 @@ class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable {
 			return false
 		}
 		
-		if (!tile.closed) {
-			when (tile.wineStage) {
-				0                           -> { // nothing
-					if (stack.item is ItemElvenFood && stack.meta == ElvenFoodMetas.WhiteGrapes.I || stack.meta == ElvenFoodMetas.RedGrapes.I) {
-						tile.wineStage = TileBarrel.WINE_STAGE_GRAPE
-						tile.wineType = stack.meta
-						tile.wineLevel++
-						stack.stackSize--
-					}
-				}
-				
-				TileBarrel.WINE_STAGE_GRAPE -> {
-					if (stack.item is ItemElvenFood && tile.wineType == stack.meta && tile.wineLevel < TileBarrel.MAX_WINE_LEVEL) {
-						tile.wineLevel++
-						stack.stackSize--
-					}
-				}
-				
-				TileBarrel.WINE_STAGE_MASH  -> {
-					if (stack.item is ItemElvenFood && stack.meta == ElvenFoodMetas.Nectar.I) {
-						tile.wineStage = TileBarrel.WINE_STAGE_LIQUID
-						tile.timer = TileBarrel.FERMENTATION_TIME
-						tile.dark = world.getBlockLightValue(x, y, z) <= 4
-						stack.stackSize--
-					}
-				}
-				
-				TileBarrel.WINE_STAGE_READY -> {
-					if (stack.item is ItemElvenResource && stack.meta == ElvenResourcesMetas.Jug.I && tile.wineLevel >= 4) run give@ {
-						--stack.stackSize
-						
-						val jug = when (tile.wineType) {
-							TileBarrel.WINE_TYPE_RED   -> ElvenFoodMetas.RedWine.stack
-							TileBarrel.WINE_TYPE_WHITE -> ElvenFoodMetas.WhiteWine.stack
-							TileBarrel.WINE_TYPE_CHAMP -> ElvenFoodMetas.Champagne.stack
-							else                       -> return@give
-						}
-						if (player.inventory.addItemStackToInventory(jug))
-							player.dropPlayerItemWithRandomChoice(jug, true)
-						
-						tile.wineLevel -= 4
-						
-						if (tile.wineLevel == 0)
-							tile.reset()
-					}
-				}
-				
-				else                        -> return false
-			}
-			
-			return true
-		}
-		
-		return false
+		return if (!tile.closed) tile.recipe?.onInteractedWith(tile, player, stack) ?: tile.selectRecipeMatchingFirstInput(player, stack) else false
+	}
+	
+	override fun onBlockPlacedBy(world: World, x: Int, y: Int, z: Int, placer: EntityLivingBase?, stack: ItemStack?) {
+		if (stack?.hasDisplayName() != true) return
+		val tile = world.getTileEntity(x, y, z) as? TileBarrel ?: return
+		tile.name = stack.displayName.trim()
 	}
 	
 	override fun hasComparatorInputOverride() = true
 	
 	override fun getComparatorInputOverride(world: World, x: Int, y: Int, z: Int, side: Int): Int {
 		val tile = world.getTileEntity(x, y, z) as? TileBarrel ?: return 0
-		
-		var signal = 15
-		if ((tile.wineStage == 0 || tile.wineStage == TileBarrel.WINE_STAGE_GRAPE && tile.wineLevel < TileBarrel.MAX_WINE_LEVEL) && !tile.closed) signal = 0
-		if (tile.wineStage == TileBarrel.WINE_STAGE_GRAPE && tile.wineLevel == TileBarrel.MAX_WINE_LEVEL && !tile.closed) signal = 1
-		if (tile.wineStage == TileBarrel.WINE_STAGE_MASH && !tile.closed) signal = 2
-		if (tile.wineStage == TileBarrel.WINE_STAGE_LIQUID && !tile.closed) signal = 3
-		if (tile.wineStage == TileBarrel.WINE_STAGE_LIQUID && tile.closed) signal = 4
-		if (tile.wineStage == TileBarrel.WINE_STAGE_READY) signal = 5
-		if (tile.wineStage == TileBarrel.WINE_STAGE_READY && !tile.closed) signal = 6
-		
-		return signal
+		return tile.recipe?.getComparatorValue(tile) ?: 0
+	}
+	
+	override fun onBurstCollision(burst: IManaBurst, world: World, x: Int, y: Int, z: Int) {
+		val tile = world.getTileEntity(x, y, z) as? TileBarrel ?: return
+		tile.recipe?.onBurstCollision(tile, burst)
 	}
 	
 	override fun createNewTileEntity(world: World, meta: Int) = TileBarrel()
@@ -164,31 +112,4 @@ class BlockBarrel: BlockContainerMod(Material.wood), ILexiconable {
 	}
 	
 	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.winery
-	
-	companion object {
-		
-		init {
-			eventForge()
-		}
-		
-		@SubscribeEvent
-		fun onEntityFall(e: LivingFallEvent) {
-			onSomeoneFall(e.entity)
-		}
-		
-		@SubscribeEvent
-		fun onPlayerFall(e: PlayerFlyableFallEvent) {
-			onSomeoneFall(e.entity)
-		}
-		
-		fun onSomeoneFall(entity: Entity) {
-			val tile = entity.worldObj.getTileEntity(entity) as? TileBarrel ?: return
-			
-			if (tile.closed || tile.wineStage != TileBarrel.WINE_STAGE_GRAPE || tile.wineLevel != TileBarrel.MAX_WINE_LEVEL) return
-			if (++tile.stomps != 8) return
-			tile.wineStage = TileBarrel.WINE_STAGE_MASH
-			ASJUtilities.dispatchTEToNearbyPlayers(tile)
-			tile.worldObj.notifyBlocksOfNeighborChange(tile.xCoord, tile.yCoord, tile.zCoord, tile.getBlockType())
-		}
-	}
 }

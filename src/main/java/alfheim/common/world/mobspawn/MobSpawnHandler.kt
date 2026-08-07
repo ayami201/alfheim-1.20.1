@@ -41,6 +41,7 @@ object MobSpawnHandler {
 	private val despawnRadiusSoft = maxChunks * 8 + despawnChunks * 16
 	val registeredMobs = HashMap<Int, HashSet<MobData>>()
 	val mobNames = HashMap<Int, HashSet<String>>()
+	private val failedMobs = HashSet<String>() // to avoid constant console spam
 	
 	init {
 		eventFML().eventForge()
@@ -143,7 +144,15 @@ object MobSpawnHandler {
 		val (name, _, min, max, spawnCheck) = registeredMobs[world.provider.dimensionId]!!.toMutableList().run {
 			shuffle()
 			firstOrNull { data ->
-				val mob = EntityList.createEntityByName(data.name, world) as? EntityLiving ?: return@firstOrNull false
+				if (failedMobs.contains(data.name)) return@firstOrNull false
+				val mob = EntityList.createEntityByName(data.name, world) as? EntityLiving
+				
+				if (mob == null) {
+					failedMobs.add(data.name)
+					ASJUtilities.error("Entity '${data.name}' has failed to spawn. It will no longer try to spawn")
+					return@firstOrNull false
+				}
+				
 				val (x, _, z) = Vector3().rand().mul(6).add(5, 0, 5).add(chunk.chunkXPos * 16, 0, chunk.chunkZPos * 16)
 				val y = world.getTopSolidOrLiquidBlock(x.mfloor(), z.mfloor()).D
 				

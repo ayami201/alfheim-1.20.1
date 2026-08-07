@@ -366,6 +366,7 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(rpc)
 		addBlock(Blocks.furnace, 8)
 		addBlock(ModBlocks.spreader, 4)
+//		addBlock(ModBlocks.spreader, 5) TODO back
 		addBlock(manaReflector)
 		addBlock(anyavil)
 		addBlock(worldTree)

@@ -32,7 +32,7 @@ repositories {
 }
 
 group = "main"
-version = "65"
+version = "66-dev"
 archivesBaseName = "Alfheim"
 
 minecraft {
@@ -53,7 +53,7 @@ sourceCompatibility = targetCompatibility = '1.8'
 
 jar {
 	duplicatesStrategy = DuplicatesStrategy.INCLUDE
-		
+	
 	manifest {
 		attributes 'FMLAT': 'alfheim_at.cfg'
 

@@ -46,7 +46,7 @@ open class ItemElvoriumHelmet(name: String): ItemElvoriumArmor(0, name), IAncien
 	}
 	
 	override fun hasAncientWill(stack: ItemStack?, will: Int): Boolean {
-		return hasAncientWill_(stack, will)
+		return Companion.hasAncientWill(stack, will)
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -67,13 +67,13 @@ open class ItemElvoriumHelmet(name: String): ItemElvoriumArmor(0, name), IAncien
 			eventForge()
 		}
 		
-		fun hasAncientWill_(stack: ItemStack?, will: Int): Boolean {
+		fun hasAncientWill(stack: ItemStack?, will: Int): Boolean {
 			return ItemNBTHelper.getBoolean(stack, TAG_ANCIENT_WILL + will, false)
 		}
 		
 		fun hasAnyWill(stack: ItemStack): Boolean {
 			for (i in 0..6)
-				if (hasAncientWill_(stack, i))
+				if (hasAncientWill(stack, i))
 					return true
 			
 			return false
@@ -89,25 +89,25 @@ open class ItemElvoriumHelmet(name: String): ItemElvoriumArmor(0, name), IAncien
 			val crit = attacker.fallDistance > 0f && !attacker.onGround && !attacker.isOnLadder && !attacker.isInWater && !attacker.isPotionActive(Potion.blindness) && attacker.ridingEntity == null
 			
 			if (crit && stack.item is ItemElvoriumHelmet) {
-				if (hasAncientWill_(stack, 0))
+				if (hasAncientWill(stack, 0))
 					e.entityLiving.addPotionEffect(PotionEffect(Potion.weakness.id, 20, 1))
 				
-				if (hasAncientWill_(stack, 1))
+				if (hasAncientWill(stack, 1))
 					e.ammount *= 1f + (1f - attacker.health / attacker.maxHealth) * 0.5f
 				
-				if (hasAncientWill_(stack, 2))
+				if (hasAncientWill(stack, 2))
 					attacker.heal(e.ammount * 0.25f)
 				
-				if (hasAncientWill_(stack, 3))
+				if (hasAncientWill(stack, 3))
 					e.entityLiving.addPotionEffect(PotionEffect(Potion.moveSlowdown.id, 60, 1))
 				
-				if (hasAncientWill_(stack, 4))
+				if (hasAncientWill(stack, 4))
 					e.source.setDamageBypassesArmor()
 				
-				if (hasAncientWill_(stack, 5))
+				if (hasAncientWill(stack, 5))
 					e.entityLiving.addPotionEffect(PotionEffect(Potion.wither.id, 60, 1))
 				
-				if (hasAncientWill_(stack, 6)) {
+				if (hasAncientWill(stack, 6)) {
 					e.entityLiving.addPotionEffect(PotionEffect(Potion.blindness.id, 60, 1))
 					e.entityLiving.addPotionEffect(PotionEffect(AlfheimConfigHandler.potionIDEternity, 60, PotionEternity.STUN or PotionEternity.IRREMOVABLE))
 				}

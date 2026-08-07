@@ -55,7 +55,7 @@ object TinkersConstructAlfheimConfig {
 			
 			addPartCastingMaterial(materialIDs[id], it.name)
 			TConstructRegistry.getTableCasting().addCastingRecipe(ItemStack(TinkersConstructAlfheimModule.naturalBucket, 1, id), FluidStack(it, 1000), ItemStack(Items.bucket), true, 50)
-			FluidContainerRegistry.registerFluidContainer(it, ItemStack(TinkersConstructAlfheimModule.naturalBucket, 1, id))
+			FluidContainerRegistry.registerFluidContainer(it, ItemStack(TinkersConstructAlfheimModule.naturalBucket, 1, id), FluidContainerRegistry.EMPTY_BUCKET)
 		}
 		
 		// Building materials

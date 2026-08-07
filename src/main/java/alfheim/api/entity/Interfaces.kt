@@ -13,10 +13,11 @@ interface IAncientWolf
 
 interface IMuspelheimEntity: IElementalEntity {
 	override val elements get() = EnumSet.of(ElementalDamage.FIRE)!!
+	fun immuneToMuspel() = true
 	
 	companion object {
 		fun checkProtection(entity: Entity, manacost: Int): Boolean {
-			if (entity is IMuspelheimEntity) return true
+			if (entity is IMuspelheimEntity && entity.immuneToMuspel()) return true
 			if (entity is EntityPlayer && (entity.capabilities.isCreativeMode || ItemPendant.canProtect(entity, EnumPrimalWorldType.MUSPELHEIM, manacost))) return true
 			return EntityList.getEntityString(entity) in AlfheimConfigHandler.mobBlacklistHot
 		}
@@ -25,10 +26,11 @@ interface IMuspelheimEntity: IElementalEntity {
 
 interface INiflheimEntity: IElementalEntity {
 	override val elements get() = EnumSet.of(ElementalDamage.ICE)!!
+	fun immuneToNifl() = true
 	
 	companion object {
 		fun checkProtection(entity: Entity, manacost: Int): Boolean {
-			if (entity is INiflheimEntity) return true
+			if (entity is INiflheimEntity && entity.immuneToNifl()) return true
 			if (entity is EntityPlayer && (entity.capabilities.isCreativeMode || ItemPendant.canProtect(entity, EnumPrimalWorldType.NIFLHEIM, manacost))) return true
 			return EntityList.getEntityString(entity) in AlfheimConfigHandler.mobBlacklistCold
 		}

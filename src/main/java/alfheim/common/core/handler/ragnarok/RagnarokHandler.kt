@@ -1,6 +1,5 @@
 package alfheim.common.core.handler.ragnarok
 
-import Reika.ChromatiCraft.Registry.ExtraChromaIDs
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alexsocol.patcher.event.*
@@ -16,6 +15,15 @@ import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
 import alfheim.common.entity.*
 import alfheim.common.entity.boss.*
 import alfheim.common.entity.boss.primal.EntityPrimalBoss
+import alfheim.common.integration.ModdedDimensionsIntegration.aetherID
+import alfheim.common.integration.ModdedDimensionsIntegration.atumID
+import alfheim.common.integration.ModdedDimensionsIntegration.betweenlandsID
+import alfheim.common.integration.ModdedDimensionsIntegration.chromaID
+import alfheim.common.integration.ModdedDimensionsIntegration.deepDarkID
+import alfheim.common.integration.ModdedDimensionsIntegration.erebusID
+import alfheim.common.integration.ModdedDimensionsIntegration.hoannaID
+import alfheim.common.integration.ModdedDimensionsIntegration.outerLandsID
+import alfheim.common.integration.ModdedDimensionsIntegration.twilightForestID
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.equipment.bauble.*
 import alfheim.common.item.equipment.bauble.ItemPendant.Companion.EnumPrimalWorldType.NIFLHEIM
@@ -28,9 +36,6 @@ import alfheim.common.potion.PotionEternity
 import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim
 import alfheim.common.world.dim.domains.gen.*
 import baubles.common.lib.PlayerHandler
-import com.rwtema.extrautils.ExtraUtils
-import com.teammetallurgy.atum.handler.AtumConfig
-import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.gameevent.*
 import cpw.mods.fml.relauncher.*
@@ -50,19 +55,11 @@ import net.minecraftforge.client.event.EntityViewRenderEvent
 import net.minecraftforge.common.IPlantable
 import net.minecraftforge.event.entity.living.*
 import org.lwjgl.opengl.GL11.*
-import twilightforest.TwilightForestMod
-import vazkii.botania.common.Botania
 import vazkii.botania.common.block.ModBlocks
 import vazkii.botania.common.block.tile.TileSpecialFlower
 import java.io.*
 import java.util.*
 import kotlin.math.*
-import com.gildedgames.the_aether.AetherConfig as AetherIConfig
-import ec3.utils.cfg.Config as EC3Config
-import erebus.core.handler.configs.ConfigHandler as ErebusConfig
-import net.aetherteam.aether.AetherConfig as AetherIIConfig
-import thaumcraft.common.config.Config as ThaumcraftConfig
-import thebetweenlands.utils.confighandler.ConfigHandler as BetweenlandsConfig
 
 object RagnarokHandler {
 	
@@ -761,17 +758,6 @@ object RagnarokHandler {
 		
 		companion object {
 			
-			val aether1ID = if (Loader.isModLoaded("aether_legacy")) AetherIConfig.getAetherDimensionID() else null
-			val aether2ID = if (Loader.isModLoaded("aether")) AetherIIConfig.AetherDimensionID else null
-			val atumID = if (Loader.isModLoaded("atum")) AtumConfig.DIMENSION_ID else null
-			val betweenlandsID = if (Loader.isModLoaded("thebetweenlands")) BetweenlandsConfig.DIMENSION_ID else null
-			val chromaID = if (Loader.isModLoaded("ChromatiCraft")) ExtraChromaIDs.DIMID.value else null
-			val deepDarkID = if (Loader.isModLoaded("ExtraUtilities")) ExtraUtils.underdarkDimID else null
-			val erebusID = if (Loader.isModLoaded("erebus")) ErebusConfig.INSTANCE.erebusDimensionID else null
-			val hoannaID = if (Loader.isModLoaded("EssentialCraftIII") || Loader.isModLoaded("essentialcraft")) EC3Config.dimensionID else null
-			val outerLandsID = if (Botania.thaumcraftLoaded) ThaumcraftConfig.dimensionOuterId else null
-			val twillightForestID = if (AlfheimCore.TwilightForestLoaded) TwilightForestMod.dimensionID else null
-			
 			fun getWorldAffectionLevel(world: World): WorldAffectionLevel {
 				val dimensionId = world.provider.dimensionId
 				
@@ -788,15 +774,15 @@ object RagnarokHandler {
 					AlfheimConfigHandler.dimensionIDHelheim -> NONE
 					AlfheimConfigHandler.dimensionIDNiflheim -> GINNUNGAGAP
 					// integration
-					aether1ID, aether2ID -> ALL
+					aetherID -> ALL
 					atumID -> ALL
 					betweenlandsID -> ALL
 					chromaID -> ALL
 					deepDarkID   -> GINNUNGAGAP
 					erebusID     -> GINNUNGAGAP
 					hoannaID    -> ALL
-					outerLandsID -> NONE
-					twillightForestID -> ALL
+					outerLandsID     -> NONE
+					twilightForestID -> ALL
 					// configured
 					in AlfheimConfigHandler.worldDestroyConfig.keys -> entries[AlfheimConfigHandler.worldDestroyConfig[dimensionId]!!]
 					// all other

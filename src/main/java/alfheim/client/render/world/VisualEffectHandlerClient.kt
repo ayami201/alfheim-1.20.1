@@ -66,7 +66,6 @@ object VisualEffectHandlerClient {
 			FIRESTAR           -> spawnFirestar(d[0], d[1], d[2], d[3], d[4] == 1.0)
 			FIREWORK           -> spawnFirework(d[0], d[1], d[2], d[3].I)
 			GAIA_SOUL          -> spawnGaiaSoul(d[0], d[1], d[2])
-			GRAVITY            -> spawnGravity(d[0], d[1], d[2], d[3], d[4], d[5])
 			GUNGNIR            -> spawnGungnir(d[0].I, d[1].I)
 			HEAL               -> spawnBurst(d[0], d[1], d[2], 0f, 1f, 0f)
 			HORN               -> horn(d[0], d[1], d[2])
@@ -87,7 +86,8 @@ object VisualEffectHandlerClient {
 			QUADH              -> quadHurt()
 			SEAROD             -> (AlfheimItems.rodInterdiction as ItemRodInterdiction).particleRing(mc.theWorld, d[0], d[1], d[2], d[3].I, d[4].F, d[5].F, d[6].F)
 			SHADOW             -> spawnBurst(d[0], d[1], d[2], 0.75f, 0.75f, 0.75f)
-			SMOKE              -> spawnSmoke(d[0], d[1], d[2])
+			SMOKE              -> spawnSmoke(d[0], d[1], d[2], d[3], d[4], d[5])
+			SMOKESCREEN        -> spawnSmokescreen(d[0], d[1], d[2])
 			SNICE_MARK         -> spawnSniceMark(d[0], d[1], d[2])
 			SPARKLE            -> spawnSparkle(d[0], d[1], d[2], d[3], d[4], d[5], d[6].F)
 			SPLASH             -> spawnSplash(d[0], d[1], d[2])
@@ -307,10 +307,6 @@ object VisualEffectHandlerClient {
 		(mc.theWorld.getTileEntity(x.I, y.I, z.I) as? TileManaInfuser)?.soulParticlesTime = 20
 	}
 	
-	fun spawnGravity(x: Double, y: Double, z: Double, x2: Double, y2: Double, z2: Double) {
-		mc.theWorld.spawnParticle("smoke", x, y, z, x2, y2, z2)
-	}
-	
 	fun spawnGungnir(shooterID: Int, targetID: Int) {
 		val player = mc.theWorld.getEntityByID(shooterID) as? EntityPlayer ?: return
 		val target = mc.theWorld.getEntityByID(targetID)
@@ -432,7 +428,11 @@ object VisualEffectHandlerClient {
 		}
 	}
 	
-	fun spawnSmoke(x: Double, y: Double, z: Double) {
+	fun spawnSmoke(x: Double, y: Double, z: Double, x2: Double, y2: Double, z2: Double) {
+		mc.theWorld.spawnParticle("smoke", x, y, z, x2, y2, z2)
+	}
+	
+	fun spawnSmokescreen(x: Double, y: Double, z: Double) {
 		for (i in 0..511) {
 			v.rand().sub(0.5).normalize().mul((1 - exp(-Math.random() * 5)) * SpellSmokeScreen.radius)
 			Botania.proxy.wispFX(mc.theWorld, x + v.x, y + v.y, z + v.z, 0.1f, 0.1f, 0.1f, (Math.random() * 4 + 8).F, (Math.random() * -0.075).F, 10f)
@@ -513,7 +513,7 @@ object VisualEffectHandlerClient {
 	}
 	
 	enum class VisualEffects {
-		ACID, /*AQUABIND,*/ AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CHALK, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, ENDER, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FIRESTAR, FIREWORK, GAIA_SOUL, GRAVITY, GUNGNIR, HEAL, HORN, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SNICE_MARK, SPARKLE, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
+		ACID, /*AQUABIND,*/ AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CHALK, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, ENDER, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FIRESTAR, FIREWORK, GAIA_SOUL, GUNGNIR, HEAL, HORN, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SMOKESCREEN, SNICE_MARK, SPARKLE, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
 	}
 	
 	fun onDeath(target: EntityLivingBase) {

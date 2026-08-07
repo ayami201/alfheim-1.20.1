@@ -16,9 +16,7 @@ object LibResourceLocationsActual {
 		LibResourceLocations.halo = ResourceLocationIL(LibResources.MISC_HALO)
 		LibResourceLocations.lexica = ResourceLocationIL(LibResources.MODEL_LEXICA)
 		LibResourceLocations.manaInfuserOverlay = ResourceLocationIL(LibResources.GUI_MANA_INFUSION_OVERLAY)
-		LibResourceLocations.petalOverlay = ResourceLocationIL(LibResources.GUI_PETAL_OVERLAY)
 		LibResourceLocations.pixie = ResourceLocationIL(LibResources.MODEL_PIXIE)
-		LibResourceLocations.spreader = ResourceLocationIL(LibResources.MODEL_SPREADER)
 		
 		LibResourceLocations.godCloak = Array(ItemPriestEmblem.TYPES) {
 			ResourceLocationIL(ModInfo.MODID, "textures/model/armor/cloak/God$it.png")

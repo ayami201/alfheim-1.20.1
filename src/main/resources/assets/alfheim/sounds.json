@@ -5,6 +5,12 @@
 			"calm"
 		]
 	},
+	"ccj": {
+		"category": "player",
+		"sounds": [
+			"ccj"
+		]
+	},
 	"ea": {
 		"category": "master",
 		"sounds": [

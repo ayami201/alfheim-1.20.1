@@ -95,6 +95,7 @@ object AlfheimBlocks {
 	val itemFrame: Block
 	val helheimBlock: Block
 	val kindling: Block
+	val kudzuVine: Block
 	val livingcobble: Block
 	val livingwoodFunnel: Block
 	val lootbox: Block
@@ -284,6 +285,7 @@ object AlfheimBlocks {
 		itemFrame = BlockItemFrame().WIP()
 		helheimBlock = BlockPattern(ModInfo.MODID, Material.rock, "HelheimBlock", AlfheimTab, hardness = -1f, harvLvl = Int.MAX_VALUE, resistance = Float.MAX_VALUE)
 		kindling = BlockKindling()
+		kudzuVine = BlockKudzuVine()
 		livingcobble = BlockLivingCobble()
 		lootbox = BlockLootbox()
 		livingwoodFunnel = BlockFunnel()
