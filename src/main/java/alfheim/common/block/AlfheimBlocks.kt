@@ -101,6 +101,7 @@ object AlfheimBlocks {
 	val lootbox: Block
 	val manaAccelerator: Block
 	val manaFluidBlock: Block
+	val manaIce: Block
 	val manaInfuser: Block
 	val manaReflector: Block
 	val manaTuner: Block
@@ -126,7 +127,10 @@ object AlfheimBlocks {
 	val rainbowWood: Block
 	val realityAnchor: Block
 	val redFlame: Block
+	val redstoneAttractor: Block
 	val redstoneRelay: Block
+	val redStringObserver: Block
+	val redStringWatcher: Block
 	val rift: Block
 	val rpc: Block
 	val sadOakLeaves: Block
@@ -291,6 +295,7 @@ object AlfheimBlocks {
 		livingwoodFunnel = BlockFunnel()
 		manaAccelerator = BlockManaAccelerator()
 		manaFluidBlock = BlockManaFluid()
+		manaIce = BlockManaIce()
 		manaInfuser = BlockManaInfuser()
 		manaReflector = BlockManaReflector()
 		manaTuner = BlockManaTuner()
@@ -318,7 +323,10 @@ object AlfheimBlocks {
 		rainbowWood = BlockRainbowWood()
 		realityAnchor = BlockRealityAnchor()
 		redFlame = BlockRedFlame()
+		redstoneAttractor = BlockRedstoneAttractor()
 		redstoneRelay = BlockRedstoneRelay()
+		redStringObserver = BlockRedStringObserver()
+		redStringWatcher = BlockRedStringWatcher()
 		rift = BlockRift()
 		rpc = BlockRealmPowerCollector()
 		sadOakLeaves = BlockSadOakLeaves()

@@ -2,6 +2,7 @@ package alfheim.common.core.util
 
 import alexsocol.asjlib.*
 import alfheim.AlfheimCore
+import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.AlfheimBlocks.airyVirus
 import alfheim.common.block.AlfheimBlocks.alfStorage
 import alfheim.common.block.AlfheimBlocks.alfheimPortal
@@ -104,6 +105,9 @@ import alfheim.common.block.AlfheimBlocks.rainbowTallFlower
 import alfheim.common.block.AlfheimBlocks.rainbowTallGrass
 import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimBlocks.realityAnchor
+import alfheim.common.block.AlfheimBlocks.redStringObserver
+import alfheim.common.block.AlfheimBlocks.redStringWatcher
+import alfheim.common.block.AlfheimBlocks.redstoneAttractor
 import alfheim.common.block.AlfheimBlocks.redstoneRelay
 import alfheim.common.block.AlfheimBlocks.rpc
 import alfheim.common.block.AlfheimBlocks.schemaAnnihilator
@@ -357,7 +361,6 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(corporeaInjector)
 		addBlock(corporeaRatBase)
 		addBlock(corporeaSparkBase)
-		addBlock(redstoneRelay)
 		addBlock(enderActuator)
 		addBlock(bottomlessChest)
 		addBlock(alfheimPortal)
@@ -365,6 +368,10 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(realityAnchor)
 		addBlock(rpc)
 		addBlock(Blocks.furnace, 8)
+		addBlock(redStringObserver)
+		addBlock(redStringWatcher)
+		addBlock(redstoneAttractor)
+		addBlock(redstoneRelay)
 		addBlock(ModBlocks.spreader, 4)
 //		addBlock(ModBlocks.spreader, 5) TODO back
 		addBlock(manaReflector)

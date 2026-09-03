@@ -79,7 +79,6 @@ object RagnarokHandler {
 	var summer = false
 		set(value) {
 			field = value
-			BlockSnowGrass.meltDelay = if (value) 1 else 20
 			BiomeAlfheim.alfheimBiomes.forEach { it.temperature = if (value) 1.5f else if (AlfheimCore.winter) -0.25f else 0.5f }
 		}
 	var summerTicks = 0

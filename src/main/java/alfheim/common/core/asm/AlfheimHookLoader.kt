@@ -5,7 +5,7 @@ import alexsocol.patcher.asm.ASJHookLoader
 import alexsocol.patcher.asm.worker.InterfaceAppenderWorker.registerAdditionalInterface
 import alfheim.api.ModInfo
 import alfheim.common.core.asm.transformer.AlfheimClassTransformer
-import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.handler.AlfheimPreConfigHandler
 import com.KAIIIAK.classManipulators.HookReplacerWorker.registerGroupRegistry
 import com.KAIIIAK.classManipulators.HookReplacerWorker.registerHookReplacerContainer
 import com.KAIIIAK.superwrapper.SuperWrapperTransformer
@@ -24,7 +24,7 @@ import java.io.File
 class AlfheimHookLoader: HookLoader() {
 	
 	init {
-		AlfheimConfigHandler.loadConfig(File("config/Alfheim/Alfheim.cfg"))
+		AlfheimPreConfigHandler.loadPreConfig(File("config/Alfheim/core.cfg"))
 		
 		System.setProperty("forge.forceDisplayStencil", "true")
 	}
@@ -35,7 +35,7 @@ class AlfheimHookLoader: HookLoader() {
 		FMLRelaunchLog.info("[${ModInfo.MODID.uppercase()}] Loaded coremod. Registering hooks...")
 		
 		registerHookContainer("alfheim.common.core.asm.hook.AlfheimHookHandler")
-		if (AlfheimConfigHandler.hpHooks) registerHookContainer("alfheim.common.core.asm.hook.AlfheimHPHooks")
+		if (AlfheimPreConfigHandler.hpHooks) registerHookContainer("alfheim.common.core.asm.hook.AlfheimHPHooks")
 		registerHookContainer("alfheim.common.core.asm.hook.Botania18AndUpBackport")
 		registerHookContainer("alfheim.common.core.asm.hook.ElementalDamageAdapter")
 		

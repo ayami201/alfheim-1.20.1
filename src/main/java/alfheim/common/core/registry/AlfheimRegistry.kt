@@ -150,10 +150,10 @@ object AlfheimRegistry {
 		registerEntity(EntityElf::class.java, "Elf", nextEntityID, 0x1A660A, 0x4D3422)
 		registerEntity(EntityFireSpirit::class.java, "FireSpirit", nextEntityID)
 		registerEntity(EntityFenrir::class.java, "Fenrir", nextEntityID)
+		registerEntity(EntityFlowerBud::class.java, "FlowerBud", nextEntityID)
 		registerEntity(EntityFlugel::class.java, "Flugel", nextEntityID)
 		registerEntity(EntityFrozenViking::class.java, "FrozenViking", nextEntityID, 0x26DBFF, 0x2D86B3)
 		registerEntity(EntityJellyfish::class.java, "Jellyfish", nextEntityID, 0xFFFFFF, -1)
-		registerEntity(EntityLolicorn::class.java, "Lolicorn", nextEntityID)
 		registerEntity(EntityMuspelson::class.java, "Muspelson", nextEntityID, 0x3E1900, 0xD05D14)
 		registerEntity(EntityAlfheimPixie::class.java, "Pixie", nextEntityID, 0xFF76D6, 0xFFE3FF)
 		registerEntity(EntityRollingMelon::class.java, "RollingMelon", nextEntityID, 0xBECB25, 0x5B751A)
@@ -161,7 +161,11 @@ object AlfheimRegistry {
 		registerEntity(EntitySnowSprite::class.java, "SnowSprite", nextEntityID, 0xEEFFFF, 0xE3F3F3)
 		registerEntity(EntitySurtr::class.java, "Surtr", nextEntityID)
 		registerEntity(EntityThrym::class.java, "Thrym", nextEntityID)
+		registerEntity(EntityVenusHumanTrap::class.java, "VenusHumanTrap", nextEntityID)
 		registerEntity(EntityVoidCreeper::class.java, "VoidCreeper", nextEntityID, 0xcc11d3, 0xfb9bff)
+		
+		if (AlfheimConfigHandler.mountEnabled)
+			registerEntity(EntityLolicorn::class.java, "Lolicorn", nextEntityID)
 		
 		// TODO back
 //		registerEntity(EntityAlphirinePortal::class.java, "AlphirinePortal", nextEntityID)
@@ -273,6 +277,8 @@ object AlfheimRegistry {
 		registerTile<TileRaceSelector>()
 		registerTile<TileRealityAnchor>()
 		registerTile<TileRedstoneRelay>()
+		registerTile<TileRedStringObserver>()
+		registerTile<TileRedStringWatcher>()
 		registerTile<TileRift>()
 		registerTile<TileSecretGlass>()
 		registerTile<TileSpire>()

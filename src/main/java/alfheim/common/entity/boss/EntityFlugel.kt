@@ -2,6 +2,7 @@ package alfheim.common.entity.boss
 
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.api.ModInfo
 import alfheim.api.boss.IBotaniaBossWithName
 import alfheim.api.entity.*
 import alfheim.common.achievement.AlfheimAchievements
@@ -334,7 +335,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 		
 		if (ConfigHandler.relicsEnabled && !hard) {
 			val relic = ItemStack(AlfheimItems.flugelSoul)
-			if (worldObj.getPlayerEntityByName(summoner) != null) worldObj.getPlayerEntityByName(summoner)?.addStat(AlfheimAchievements.flugelSoul, 1)
+			worldObj.getPlayerEntityByName(summoner)?.triggerAchievement(AlfheimAchievements.flugelSoul)
 			entityDropItem(relic, 1f)
 		}
 	}
@@ -363,7 +364,11 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			ASJUtilities.say(it, "alfheimmisc.flugel.unleash")
 		}
 		
-		if (!worldObj.isRemote && worldObj.difficultySetting == EnumDifficulty.PEACEFUL) setDead()
+		if (!worldObj.isRemote && worldObj.difficultySetting == EnumDifficulty.PEACEFUL) {
+			setDead()
+			if (!isHardMode && !isUltraMode)
+				worldObj.getPlayerEntityByName(summoner)?.triggerAchievement(AlfheimAchievements.softlock)
+		}
 		
 		val (sx, sy, sz) = source
 		if (!worldObj.isRemote) {
@@ -918,6 +923,8 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 		const val STAGE_MAGIC = 2       // 60%   hp
 		const val STAGE_DEATHRAY = 3    // 12.5% hp
 		
+		const val TAG_EYE_USED = "${ModInfo.MODID}.used"
+		
 		fun spawn(player: EntityPlayer, stack: ItemStack, world: World, x: Int, y: Int, z: Int, hard: Boolean, ultra: Boolean): Boolean {
 			val beacon = world.getTileEntity(x, y, z) as? TileEntityBeacon ?: return false
 			
@@ -940,7 +947,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 				return false
 			}
 			
-			if (!hard && !ultra && player.hasAchievement(AlfheimAchievements.flugelSoul)) {
+			if (!hard && !ultra && (ItemNBTHelper.getBoolean(stack, TAG_EYE_USED, false) || player.hasAchievement(AlfheimAchievements.flugelSoul))) {
 				if (!world.isRemote) ASJUtilities.say(player, "alfheimmisc.flugel.used")
 				return false
 			}
@@ -977,6 +984,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			var crds: ChunkCoordinates? = null
 			
 			if (stack.item === ModItems.flugelEye) {
+				ItemNBTHelper.setBoolean(stack, TAG_EYE_USED, true)
 				crds = (ModItems.flugelEye as ItemFlugelEye).getBinding(stack)
 			} else if (stack.item === AlfheimItems.flugelSoul) {
 				crds = ItemFlugelSoul.getFirstCoords(stack)
@@ -1021,6 +1029,7 @@ class EntityFlugel(world: World): EntityCreature(world), IBotaniaBossWithName, I
 			
 			e.playSoundAtEntity("mob.enderdragon.growl", 10f, 0.1f)
 			e.spawn()
+			
 			return true
 		}
 		

@@ -209,20 +209,32 @@ fun asSlimeBall(stack: ItemStack): Item {
 @HookReplacer(removePop = true)
 fun onUpdate(tile: SubTileNarslimmus) {
 	startFROM()
-	ALOAD<EntitySlime>("3").getEntityData().getBoolean(SubTileNarslimmus.TAG_WORLD_SPAWNED)
+	ALOAD<EntitySlime>("3").entityData.getBoolean(SubTileNarslimmus.TAG_WORLD_SPAWNED)
 	startTO()
 	canEat(ALOAD("3"))
 	stop()
 }
 
-fun canEat(slime: EntitySlime) = slime.getEntityData().getBoolean(SubTileNarslimmus.TAG_WORLD_SPAWNED) && slime.slimeSize <= 4
+fun canEat(slime: EntitySlime) = slime.entityData.getBoolean(SubTileNarslimmus.TAG_WORLD_SPAWNED) && slime.slimeSize <= 4
 
-@HookReplacer(removePop = true)
-fun craft(tile: TileCraftCrate, fullCheck: Boolean): Boolean {
+@HookReplacer.CreateHRG(name = "craftyCrateUnclog")
+@HookReplacer(targetMethod = "craft", removePop = true, mandatoryGroups = ["craftyCrateUnclog"])
+fun craftVanilla(tile: TileCraftCrate, fullCheck: Boolean): Boolean {
 	startFROM()
 	tile.setInventorySlotContents(9, ALOAD<IRecipe>("5").getCraftingResult(ALOAD("2")))
 	startTO()
 	combineOrEject(tile, ALOAD<IRecipe>("5").getCraftingResult(ALOAD("2")))
+	stop()
+	
+	return false
+}
+
+@HookReplacer(targetMethod = "craft", removePop = true, mandatoryGroups = ["craftyCrateUnclog"])
+fun craftGTNH(tile: TileCraftCrate, fullCheck: Boolean): Boolean {
+	startFROM()
+	tile.setInventorySlotContents(9, ALOAD("3"))
+	startTO()
+	combineOrEject(tile, ALOAD("3"))
 	stop()
 	
 	return false

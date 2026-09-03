@@ -40,7 +40,7 @@ class WorldGenIridescence: IWorldGenerator {
 			val type = ASJUtilities.randInBounds(3, 8, rand)
 			ModItems.grassSeeds.onItemUse(ItemStack(ModItems.grassSeeds, 1, type), null, world, x, y, z, 1, 0f, 0f, 0f)
 		} else {
-			val color = ASJUtilities.randInBounds(0, ItemIridescent.TYPES + 1, rand)
+			val color = ASJUtilities.randInBounds(0, ItemIridescent.TYPES - 1, rand)
 			
 			ItemColorSeeds.worldGen = true
 			success = AlfheimItems.irisSeeds.onItemUse(ItemStack(AlfheimItems.irisSeeds, 1, color), null, world, x, y, z, 1, 0f, 0f, 0f)

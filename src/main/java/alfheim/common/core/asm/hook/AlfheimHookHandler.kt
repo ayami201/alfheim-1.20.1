@@ -675,7 +675,7 @@ object AlfheimHookHandler {
 	@SideOnly(CLIENT)
 	@JvmStatic
 	@Hook(createMethod = true, returnCondition = ALWAYS)
-	fun getNameColor(gaia: EntityDoppleganger) = AlfheimConfigHandler.gaiaNameColor
+	fun getNameColor(gaia: EntityDoppleganger) = AlfheimPreConfigHandler.gaiaNameColor
 	
 	@JvmStatic
 	@Hook(returnCondition = ON_TRUE)
@@ -1885,7 +1885,7 @@ object AlfheimHookHandler {
 	@JvmStatic
 	@Hook(returnCondition = ON_NOT_NULL)
 	fun getEntityCollisionBoxes(static: HooksCore?, world: World, entity: Entity?, bb: AxisAlignedBB?): List<Any?>? {
-		return if (AlfheimConfigHandler.overrideCoFHCollisionCheck) world.getCollidingBoundingBoxes(entity, bb) else null
+		return if (AlfheimPreConfigHandler.overrideCoFHCollisionCheck) world.getCollidingBoundingBoxes(entity, bb) else null
 	}
 	
 	@JvmStatic

@@ -91,31 +91,26 @@ class EntityDedMoroz(world: World): EntityMob(world), IBotaniaBossWithName, INif
 		return if (noLoot) 0 else super.getExperiencePoints(player)
 	}
 	
-	override fun getDropItem() = if (noLoot) null else
-		when (rng.nextInt(30)) {
-			in 0..2   -> AlfheimItems.snowSword
-			in 3..5   -> AlfheimItems.snowHelmet
-			in 6..8   -> AlfheimItems.snowChest
-			in 9..11  -> AlfheimItems.snowLeggings
-			in 12..14 -> AlfheimItems.snowBoots
-			18        -> AlfheimItems.eventResource
-			else      -> AlfheimItems.elvenResource
+	override fun getDropItem() = if (noLoot) null else {
+		when (val rand = rng.nextInt(30)) {
+			in 0..14   -> getEquipmentInSlot(rand / 3)?.item
+			18         -> AlfheimItems.eventResource
+			else       -> AlfheimItems.elvenResource
 		}
+	}
 	
 	override fun dropFewItems(gotHit: Boolean, looting: Int) {
 		if (noLoot || !gotHit) return
 		
-		val item = dropItem!!
-		val size = 1 + when (item) {
-			AlfheimItems.elvenResource -> looting * 2
-			else                       -> 0
-		}
+		val item = dropItem ?: return
+		val size = 1 + if (item == AlfheimItems.elvenResource) looting * 2 else 0
 		
 		val meta = when (item) {
 			AlfheimItems.elvenResource        -> ElvenResourcesMetas.IffesalDust.I
 			AlfheimItems.eventResource        -> EventResourcesMetas.SnowRelic
-			else                              -> (item.maxDamage - 1) / (looting + 1)
+			else                              -> lastActiveItems.find { it?.item == item }?.itemDamage ?: return
 		}
+		
 		entityDropItem(ItemStack(item, size, meta), 0f)
 	}
 	

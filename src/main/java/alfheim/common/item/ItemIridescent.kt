@@ -19,46 +19,49 @@ open class ItemIridescent(name: String): ItemMod(name) {
 	
 	companion object {
 		
-		const val TYPES = 16
+		const val TYPES = 18
+		
+		const val MAX_COLORED_META = 15
+		const val RAINBOW = 16
+		const val AURORA = 17
 		
 		fun rainbowColor() = Color.HSBtoRGB(Botania.proxy.worldElapsedTicks * 2 % 360 / 360F, 1F, 1F)
 		
-		fun colorFromItemStack(stack: ItemStack): Int {
-			if (stack.meta == 1000) {
-				return 0x63CC2F
-			}
+		fun colorFromItemStack(stack: ItemStack) = colorFromMeta(stack.meta)
+		
+		fun colorFromMeta(meta: Int): Int {
+			if (meta == 1000)
+				return 0x63CC2F // overgrowth
 			
-			if (stack.meta == TYPES) {
+			if (meta == RAINBOW)
 				return rainbowColor()
-			}
-			if (stack.meta >= EntitySheep.fleeceColorTable.size)
+			
+			if (meta >= EntitySheep.fleeceColorTable.size)
 				return 0xFFFFFF
 			
-			val color = EntitySheep.fleeceColorTable[stack.meta]
+			val color = EntitySheep.fleeceColorTable[meta]
 			return Color(color[0], color[1], color[2]).rgb
 		}
 		
 		fun dirtFromMeta(meta: Int): Block {
 			return when (meta) {
-				in 0..15 -> AlfheimBlocks.irisDirt
-				16       -> AlfheimBlocks.rainbowDirt
-				17       -> AlfheimBlocks.auroraDirt
-				else     -> Blocks.air
+				in 0..MAX_COLORED_META -> AlfheimBlocks.irisDirt
+				RAINBOW                -> AlfheimBlocks.rainbowDirt
+				AURORA                 -> AlfheimBlocks.auroraDirt
+				else                   -> Blocks.air
 			}
 		}
 		
 		fun dirtStack(meta: Int): ItemStack {
 			val block = when (meta) {
-				in 0..15 -> AlfheimBlocks.irisDirt
-				16       -> AlfheimBlocks.rainbowDirt
-				17       -> AlfheimBlocks.auroraDirt
-				else     -> Blocks.air
+				in 0..MAX_COLORED_META -> AlfheimBlocks.irisDirt
+				RAINBOW                -> AlfheimBlocks.rainbowDirt
+				AURORA                 -> AlfheimBlocks.auroraDirt
+				else                   -> Blocks.air
 			}
 			
 			return ItemStack(block, 1, if (meta > 15) 0 else meta)
 		}
-		
-		fun isRainbow(meta: Int) = meta == TYPES
 	}
 	
 	init {
@@ -81,17 +84,9 @@ open class ItemIridescent(name: String): ItemMod(name) {
 	override fun getColorFromItemStack(stack: ItemStack, pass: Int): Int =
 		if (pass > 0) 0xFFFFFF else colorFromItemStack(stack)
 	
-	fun addStringToTooltip(s: String, tooltip: MutableList<Any?>?) {
-		tooltip!!.add(s.replace("&".toRegex(), "\u00a7"))
+	override fun addInformation(stack: ItemStack, player: EntityPlayer?, tooltip: MutableList<Any?>, adv: Boolean) {
+		if (stack.meta >= TYPES) return
+		
+		tooltip += ("${EnumChatFormatting.GRAY}${StatCollector.translateToLocal("misc.${ModInfo.MODID}.color." + stack.meta)}")
 	}
-	
-	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, tooltip: MutableList<Any?>?, adv: Boolean) {
-		if (stack == null) return
-		addStringToTooltip("&7" + StatCollector.translateToLocal("misc.${ModInfo.MODID}.color." + stack.meta) + "&r", tooltip)
-	}
-	
-	override fun getUnlocalizedName(stack: ItemStack?) =
-		if (stack != null) getUnlocalizedNameLazy(stack)!! else ""
-	
-	internal fun getUnlocalizedNameLazy(par1ItemStack: ItemStack) = super.getUnlocalizedName(par1ItemStack)
 }

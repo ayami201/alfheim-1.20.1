@@ -102,10 +102,14 @@ class EntityFenrir(world: World): EntityCreature(world), IBotaniaBossWithName, I
 	
 	override fun onLivingUpdate() {
 		super.onLivingUpdate()
+
+		val src = Vector3(source)
+		val (sx, sy, sz) = src.mf()
+		val (x, y, z) = src.add(0.5)
 		
-		val (x, y, z) = Vector3(source).add(0.5)
-		val (sx, sy, sz) = Vector3(source).mf()
-		
+		if (!FenrirDomain.boundBox.copy().offset(sx, sy, sz - 31).intersectsWith(boundingBox))
+			setPositionAndUpdate(x, y + 1, z)
+
 		if (ASJUtilities.isClient && !isDead && !worldObj.isRecordPlaying(sx, sy, sz))
 			worldObj.playRecord(AlfheimItems.discFenrir as ItemRecord, sx, sy, sz)
 		
@@ -494,7 +498,7 @@ class EntityFenrir(world: World): EntityCreature(world), IBotaniaBossWithName, I
 		
 		fun summon(world: World, x: Int, y: Int, z: Int) {
 			val fenrir = EntityFenrir(world)
-			fenrir.setPositionAndRotation(x + 0.5, y + 0.5, z + 0.5 + 31, 0f, 0f)
+			fenrir.setPositionAndRotation(x + 0.5, y + 1.0, z + 0.5 + 31, 180f, 0f)
 			fenrir.source = ChunkCoordinates(x, y, z)
 			fenrir.forceSpawn = true
 			fenrir.spawn()

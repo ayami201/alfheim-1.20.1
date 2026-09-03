@@ -78,7 +78,8 @@ object ClientProxy : CommonProxy() {
 		}
 		
 		ClientRegistry.registerKeyBinding(keyAkashic)
-		ClientRegistry.registerKeyBinding(keyLolicorn)
+		if (AlfheimConfigHandler.mountEnabled)
+			ClientRegistry.registerKeyBinding(keyLolicorn)
 		
 		MinecraftForgeClient.registerItemRenderer(AlfheimItems.akashicRecords, RenderItemAkashicRecords)
 		MinecraftForgeClient.registerItemRenderer(AlfheimBlocks.anomaly.toItem(), RenderItemAnomaly)
@@ -160,6 +161,7 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFenrirDome::class.java, RenderEntityFenrirDome)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFenrirSlash::class.java, RenderEntityFenrirSlash)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFloatingIsland::class.java, RenderEntityFloatingIsland)
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlowerBud::class.java, RenderEntityFlowerBud)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlugel::class.java, RenderEntityFlugel)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrozenViking::class.java, RenderEntityFrozenViking)
 		RenderingRegistry.registerEntityRenderingHandler(EntityGleipnir::class.java, RenderEntityGleipnir)
@@ -168,7 +170,6 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityItemImmortal::class.java, RenderEntityItemImmortal)
 		RenderingRegistry.registerEntityRenderingHandler(EntityLightningMark::class.java, RenderEntityLightningMark)
 		RenderingRegistry.registerEntityRenderingHandler(EntityJellyfish::class.java, RenderEntityJellyfish)
-		RenderingRegistry.registerEntityRenderingHandler(EntityLolicorn::class.java, RenderEntityLolicorn)
 		RenderingRegistry.registerEntityRenderingHandler(EntityMjolnir::class.java, RenderEntityMjolnir)
 		RenderingRegistry.registerEntityRenderingHandler(EntityMuspelheimSun::class.java, RenderEntityMuspelheimSun)
 		RenderingRegistry.registerEntityRenderingHandler(EntityMuspelheimSunSlash::class.java, RenderEntityMuspelheimSunSlash)
@@ -190,6 +191,7 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrownPotion::class.java, RenderEntityThrownPotion)
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrowableItem::class.java, RenderEntityThrownItem)
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrym::class.java, RenderEntityThrym)
+		RenderingRegistry.registerEntityRenderingHandler(EntityVenusHumanTrap::class.java, RenderEntityVenusHumanTrap)
 		RenderingRegistry.registerEntityRenderingHandler(EntityElvenChakram::class.java, RenderEntityElvenChakram)
 		RenderingRegistry.registerEntityRenderingHandler(EntityVoidCreeper::class.java, RenderEntityManaCreeper)
 		RenderingRegistry.registerEntityRenderingHandler(EntityWarBanner::class.java, RenderEntityWarBanner)
@@ -198,6 +200,9 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerBlockHandler(RenderBlockColoredDoubleGrass)
 		RenderingRegistry.registerBlockHandler(MultipassRenderer)
 		RenderingRegistry.registerBlockHandler(RenderBlockHopper)
+		
+		if (AlfheimConfigHandler.mountEnabled)
+			RenderingRegistry.registerEntityRenderingHandler(EntityLolicorn::class.java, RenderEntityLolicorn)
 		
 		if (!AlfheimConfigHandler.minimalGraphics) {
 			MinecraftForgeClient.registerItemRenderer(AlfheimItems.mjolnir, RenderItemMjolnir)
