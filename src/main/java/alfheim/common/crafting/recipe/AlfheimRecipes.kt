@@ -4,11 +4,11 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.ASJUtilities.TAG_ASJIGNORENBT
 import alexsocol.asjlib.ASJUtilities.addOreDictRecipe
 import alexsocol.asjlib.ASJUtilities.addShapelessOreDictRecipe
-import alfheim.AlfheimCore
+import alfheim.*
 import alfheim.api.*
 import alfheim.api.AlfheimAPI.addInfuserRecipe
 import alfheim.api.crafting.recipe.*
-import alfheim.api.lib.LibOreDict
+import alfheim.api.lib.*
 import alfheim.api.lib.LibOreDict.ALT_TYPES
 import alfheim.api.lib.LibOreDict.ARUNE
 import alfheim.api.lib.LibOreDict.COAL_NETHERWOOD
@@ -43,7 +43,7 @@ import alfheim.api.lib.LibOreDict.SPLINTERS_THUNDERWOOD
 import alfheim.api.lib.LibOreDict.TWIG_NETHERWOOD
 import alfheim.api.lib.LibOreDict.TWIG_THUNDERWOOD
 import alfheim.api.lib.LibOreDict.WOOD
-import alfheim.common.achievement.AlfheimAchievements
+import alfheim.common.achievement.*
 import alfheim.common.block.AlfheimBlocks.airyVirus
 import alfheim.common.block.AlfheimBlocks.alfStorage
 import alfheim.common.block.AlfheimBlocks.alfheimPortal
@@ -110,6 +110,8 @@ import alfheim.common.block.AlfheimBlocks.lightningWood
 import alfheim.common.block.AlfheimBlocks.livingcobble
 import alfheim.common.block.AlfheimBlocks.livingwoodFunnel
 import alfheim.common.block.AlfheimBlocks.manaAccelerator
+import alfheim.common.block.AlfheimBlocks.manaFluidBlock
+import alfheim.common.block.AlfheimBlocks.manaIce
 import alfheim.common.block.AlfheimBlocks.manaInfuser
 import alfheim.common.block.AlfheimBlocks.manaReflector
 import alfheim.common.block.AlfheimBlocks.manaTuner
@@ -128,6 +130,9 @@ import alfheim.common.block.AlfheimBlocks.rainbowSlab
 import alfheim.common.block.AlfheimBlocks.rainbowStairs
 import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimBlocks.realityAnchor
+import alfheim.common.block.AlfheimBlocks.redStringObserver
+import alfheim.common.block.AlfheimBlocks.redStringWatcher
+import alfheim.common.block.AlfheimBlocks.redstoneAttractor
 import alfheim.common.block.AlfheimBlocks.redstoneRelay
 import alfheim.common.block.AlfheimBlocks.rpc
 import alfheim.common.block.AlfheimBlocks.sealingPlanks
@@ -195,42 +200,24 @@ import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteSlab
 import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
 import alfheim.common.block.AlfheimFluffBlocks.table
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
-import alfheim.common.block.BlockNiflheim.NiflheimBlockMetas
-import alfheim.common.block.tile.TileAnomaly
-import alfheim.common.core.asm.hook.AlfheimHookHandler
+import alfheim.common.block.BlockNiflheim.*
+import alfheim.common.block.tile.*
+import alfheim.common.core.asm.hook.*
 import alfheim.common.core.asm.hook.AlfheimHookHandler.ageLocked
 import alfheim.common.core.asm.hook.AlfheimHookHandler.ageLockedValue
+import alfheim.common.core.asm.hook.extender.*
 import alfheim.common.core.asm.hook.extender.ItemLensExtender.EnumAlfheimLens.*
-import alfheim.common.core.asm.hook.extender.ItemTwigWandExtender
-import alfheim.common.core.handler.AlfheimConfigHandler
-import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge.ABYSS_TRUTH
+import alfheim.common.core.handler.*
+import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge.*
 import alfheim.common.core.handler.HilarityHandler.AttributionNameChecker.getCurrentNickname
 import alfheim.common.core.helper.*
-import alfheim.common.crafting.recipe.barrel.RecipeBeer
-import alfheim.common.crafting.recipe.barrel.RecipeWine
-import alfheim.common.crafting.recipe.barrel.RecipeWineWhite
-import alfheim.common.crafting.recipe.tuner.IncantationElementalSlimeGrowth
-import alfheim.common.crafting.recipe.tuner.IncantationEquipmentElementalTuning
-import alfheim.common.crafting.recipe.tuner.IncantationThaumWandOvercharge
-import alfheim.common.crafting.recipe.workbench.RecipeAesirCloak
-import alfheim.common.crafting.recipe.workbench.RecipeCleanRelic
-import alfheim.common.crafting.recipe.workbench.RecipeClearLoki
-import alfheim.common.crafting.recipe.workbench.RecipeElvenWeed
-import alfheim.common.crafting.recipe.workbench.RecipeHelmRevealingAlfheim
-import alfheim.common.crafting.recipe.workbench.RecipeLensPurification
-import alfheim.common.crafting.recipe.workbench.RecipeLensSplit
-import alfheim.common.crafting.recipe.workbench.RecipeLootInterceptor
-import alfheim.common.crafting.recipe.workbench.RecipeLootInterceptorClear
-import alfheim.common.crafting.recipe.workbench.RecipeRainbowLensDye
-import alfheim.common.crafting.recipe.workbench.RecipeResonatorTipping
-import alfheim.common.crafting.recipe.workbench.RecipeRingDyes
-import alfheim.common.crafting.recipe.workbench.RecipeSaveIvy
-import alfheim.common.crafting.recipe.workbench.RecipeSpecialFloatingFlower
-import alfheim.common.crafting.recipe.workbench.RecipeStencil
-import alfheim.common.crafting.recipe.workbench.RecipeThrowablePotion
-import alfheim.common.entity.EntityElementalSlime
-import alfheim.common.integration.thaumcraft.ThaumcraftSuffusionRecipes
-import alfheim.common.integration.tinkersconstruct.TinkersConstructAlfheimConfig
+import alfheim.common.crafting.recipe.barrel.*
+import alfheim.common.crafting.recipe.tuner.*
+import alfheim.common.crafting.recipe.workbench.*
+import alfheim.common.entity.*
+import alfheim.common.integration.thaumcraft.*
+import alfheim.common.integration.tinkersconstruct.*
+import alfheim.common.item.*
 import alfheim.common.item.AlfheimItems.akashicRecords
 import alfheim.common.item.AlfheimItems.armilla
 import alfheim.common.item.AlfheimItems.astrolabe
@@ -345,38 +332,38 @@ import alfheim.common.item.block.*
 import alfheim.common.item.equipment.tool.ItemResonator.Companion.dilated
 import alfheim.common.item.equipment.tool.ItemResonator.Companion.persistent
 import alfheim.common.item.equipment.tool.ItemResonator.Companion.unlimited
+import alfheim.common.item.material.*
 import alfheim.common.item.material.ElvenFoodMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
-import alfheim.common.item.material.ItemElvenResource
 import cpw.mods.fml.common.registry.GameRegistry.*
-import net.minecraft.block.Block
-import net.minecraft.enchantment.Enchantment
+import net.minecraft.block.*
+import net.minecraft.enchantment.*
 import net.minecraft.entity.*
-import net.minecraft.entity.item.EntityItem
+import net.minecraft.entity.item.*
 import net.minecraft.entity.monster.*
-import net.minecraft.entity.passive.EntityOcelot
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.passive.*
+import net.minecraft.entity.player.*
+import net.minecraft.init.*
 import net.minecraft.init.Blocks.*
-import net.minecraft.init.Items
 import net.minecraft.init.Items.*
 import net.minecraft.item.*
 import net.minecraft.item.crafting.*
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.*
 import net.minecraftforge.oredict.*
-import net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE
-import tconstruct.world.TinkerWorld
-import tconstruct.world.entity.BlueSlime
-import thaumcraft.common.config.ConfigItems
-import thaumcraft.common.entities.monster.EntityThaumicSlime
-import vazkii.botania.api.BotaniaAPI
-import vazkii.botania.api.item.IBurstViewerBauble
+import net.minecraftforge.oredict.OreDictionary.*
+import tconstruct.world.*
+import tconstruct.world.entity.*
+import thaumcraft.common.config.*
+import thaumcraft.common.entities.monster.*
+import vazkii.botania.api.*
+import vazkii.botania.api.item.*
 import vazkii.botania.api.recipe.*
-import vazkii.botania.common.Botania
+import vazkii.botania.common.*
 import vazkii.botania.common.block.ModBlocks.*
 import vazkii.botania.common.block.ModFluffBlocks.*
-import vazkii.botania.common.block.tile.mana.TilePool
+import vazkii.botania.common.block.tile.mana.*
 import vazkii.botania.common.crafting.*
-import vazkii.botania.common.item.ModItems
+import vazkii.botania.common.item.*
 import vazkii.botania.common.item.ModItems.*
 import vazkii.botania.common.lib.LibOreDict.*
 import net.minecraft.init.Items.dye as justDye
@@ -542,7 +529,10 @@ object AlfheimRecipes {
 	lateinit var recipeRealityAnchor: IRecipe
 	lateinit var recipesRealmCore: List<IRecipe>
 	lateinit var recipesRealmFrame: List<IRecipe>
+	lateinit var recipeRedstoneAttractor: IRecipe
 	lateinit var recipesRedstoneRoot: List<IRecipe>
+	lateinit var recipeRedStringObserver: IRecipe
+	lateinit var recipeRedStringWatcher: IRecipe
 	lateinit var recipeRelicCleaner: IRecipe
 	lateinit var recipeResonator: IRecipe
 	lateinit var recipeRingFeedFlower: IRecipe
@@ -2485,9 +2475,29 @@ object AlfheimRecipes {
 		for (i in 0..5)
 			addShapelessOreDictRecipe(ItemStack(manaResource, 4, 5), ItemStack(ancientWill, 1, i))
 		
+		addOreDictRecipe(ItemStack(redstoneAttractor),
+			"R", "L",
+			'L', LIVING_ROCK,
+			'R', REDSTONE_DUST)
+		recipeRedstoneAttractor = BotaniaAPI.getLatestAddedRecipe()
+		
 		val grasses = Array(16) { ItemStack(irisGrass, 1, it) } + Array(2) { ItemStack(rainbowGrass, 1, it) }
 		grasses.forEach { addShapelessOreDictRecipe(ItemStack(manaResource, 1, 6), "dustRedstone", it) }
 		recipesRedstoneRoot = BotaniaAPI.getLatestAddedRecipes(18)
+		
+		addOreDictRecipe(ItemStack(redStringObserver),
+			"LLL", "LRS", "LLL",
+			'L', LIVING_ROCK,
+			'S', RED_STRING,
+			'R', repeater)
+		recipeRedStringObserver = BotaniaAPI.getLatestAddedRecipe()
+		
+		addOreDictRecipe(ItemStack(redStringWatcher),
+			"LLL", "LRS", "LLL",
+			'L', LIVING_ROCK,
+			'S', RED_STRING,
+			'R', redstone_torch)
+		recipeRedStringWatcher = BotaniaAPI.getLatestAddedRecipe()
 		
 		addShapelessOreDictRecipe(ItemStack(manaRingGod, 1, WILDCARD_VALUE), MAUFTRIUM_INGOT, manaStoneGreater)
 		recipeManaRingGod = BotaniaAPI.getLatestAddedRecipe()
@@ -2706,7 +2716,8 @@ object AlfheimRecipes {
 													 RUNE[15] // PRIDE
 		)
 		
-		recipeKudzu = AlfheimAPI.addTreeRecipe(666_666,
+		recipeKudzu = AlfheimAPI.addTreeRecipe(
+			666_666,
 			ItemStack(kudzuVine, 1, 15).also { ItemNBTHelper.initNBT(it) },
 			"${ModInfo.MODID}:KudzuVine",
 			ItemStack(cellBlock).also { ItemNBTHelper.setBoolean(it, TAG_ASJIGNORENBT, true) },
@@ -2849,6 +2860,11 @@ object AlfheimRecipes {
 		BotaniaAPI.registerPureDaisyRecipe("cobblestone", livingcobble, 0)
 		BotaniaAPI.registerPureDaisyRecipe("endstone", cobblestone, 0)
 		BotaniaAPI.registerPureDaisyRecipe(IRIS_DIRT, dirt, 0)
+		BotaniaAPI.pureDaisyRecipes.add(RecipePureDaisyMeta(manaFluidBlock, 0, manaIce, 0))
+		
+		// fix for only source block
+		BotaniaAPI.pureDaisyRecipes.removeAll { it.input === water && it.output === snow }
+		BotaniaAPI.pureDaisyRecipes.add(RecipePureDaisyMeta(water, 0, snow, 0))
 		
 		recipeIrisSapling = RecipePureDaisyExclusion("treeSapling", irisSapling, 0)
 		BotaniaAPI.pureDaisyRecipes.add(recipeIrisSapling)
@@ -2859,6 +2875,7 @@ object AlfheimRecipes {
 		
 		recipesPastoralSeeds = (Array(16) { ItemStack(irisGrass, 1, it) } + Array(2) { ItemStack(rainbowGrass, 1, it) })
 			.mapIndexed { id, it -> BotaniaAPI.registerManaInfusionRecipe(ItemStack(irisSeeds, 1, id), it, 2500) }
+		addShapelessRecipe(ItemStack(irisSeeds, 1, ItemColorSeeds.SNOW), ItemStack(grassSeeds), ItemStack(snowball))
 		
 		recipeRedstoneRelay = BotaniaAPI.registerManaInfusionRecipe(ItemStack(redstoneRelay), ItemStack(redstone_block), 15000)
 		

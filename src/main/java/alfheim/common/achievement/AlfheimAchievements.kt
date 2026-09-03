@@ -27,6 +27,7 @@ object AlfheimAchievements {
 	val infuser: Achievement // build up infuser
 	val midgardsormr: Achievement // maximize
 	val slime: Achievement // anime girls' worst nightmare
+	val softlock: Achievement // despawn first Flugel
 	val wingedHussar: Achievement // become winged hussar
 	
 	// relics
@@ -70,6 +71,7 @@ object AlfheimAchievements {
 		infuser = AlfheimAchievement("infuser", 1, -2, AlfheimBlocks.manaInfuser, alfheim)
 		midgardsormr = AlfheimAchievement("midgardsormr", -2, 2, ItemStack(AlfheimBlocks.snakeBody, 1, 1), null).setSpecial()
 		slime = AlfheimAchievement("slime", -1, 3, Items.slime_ball, null).setSpecial()
+		softlock = AlfheimAchievement("softlock", -2, 4, AlfheimBlocks.barrier, null).setSpecial()
 		wingedHussar = AlfheimAchievement("wingedHussars", -1, -3, AlfheimItems.elvoriumHelmet, infuser).setSpecial()
 		
 		flugelSoul = AlfheimAchievement("flugelSoul", 4, 0, AlfheimItems.flugelSoul, flugelKill)

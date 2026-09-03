@@ -80,13 +80,15 @@ object KeyBindingHandlerClient {
 		if (Keyboard.isKeyDown(Keyboard.KEY_F4))
 			mc.entityRenderer.camRoll = 0f
 		
-		if (safeKeyDown(ClientProxy.keyLolicorn)) {
-			if (!toggleCorn) {
-				toggleCorn = true
-				NetworkService.sendToServer(MessageKeyBindS(CORN.ordinal, false, 0))
+		if (AlfheimConfigHandler.mountEnabled) {
+			if (safeKeyDown(ClientProxy.keyLolicorn)) {
+				if (!toggleCorn) {
+					toggleCorn = true
+					NetworkService.sendToServer(MessageKeyBindS(CORN.ordinal, false, 0))
+				}
+			} else if (toggleCorn) {
+				toggleCorn = false
 			}
-		} else if (toggleCorn) {
-			toggleCorn = false
 		}
 		
 		if (safeKeyDown(ClientProxy.keyAkashic)) {

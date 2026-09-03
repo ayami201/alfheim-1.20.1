@@ -20,6 +20,7 @@ import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event.*
 import net.minecraft.server.*
 import vazkii.botania.common.*
+import java.io.File
 
 @Suppress("UNUSED_PARAMETER")
 @Mod(modid = MODID, dependencies = "required-after:Botania", useMetadata = true, guiFactory = "$MODID.client.gui.GUIFactory", modLanguageAdapter = KotlinAdapter.className)
@@ -73,6 +74,8 @@ object AlfheimCore {
 	
 	@EventHandler
 	fun preInit(e: FMLPreInitializationEvent) {
+		AlfheimConfigHandler.loadConfig(File("config/Alfheim/mod.cfg"))
+		
 //		abProxy.preInit(e)
 		
 		MineTweakerLoaded = Loader.isModLoaded("MineTweaker3")

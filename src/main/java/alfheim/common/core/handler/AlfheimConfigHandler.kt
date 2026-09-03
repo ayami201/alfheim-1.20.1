@@ -1,16 +1,15 @@
 package alfheim.common.core.handler
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.extendables.ASJConfigHandler
-import alexsocol.asjlib.math.Vector3
-import alfheim.api.ModInfo
+import alexsocol.asjlib.extendables.*
+import alexsocol.asjlib.math.*
+import alfheim.api.*
 import net.minecraftforge.common.config.Configuration.*
 import java.io.*
 import kotlin.math.*
 
 object AlfheimConfigHandler: ASJConfigHandler() {
 	
-	const val CATEGORY_PRELOAD = CATEGORY_GENERAL + CATEGORY_SPLITTER + "preload"
 	const val CATEGORY_BALANCE = CATEGORY_GENERAL + CATEGORY_SPLITTER + "balance"
 	const val CATEGORY_INTEGRATION = CATEGORY_GENERAL + CATEGORY_SPLITTER + "integration"
 	const val CATEGORY_INT_TC = CATEGORY_INTEGRATION + CATEGORY_SPLITTER + "thaumcraft"
@@ -32,30 +31,20 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	const val CATEGORY_HUD = CATEGORY_MMO + CATEGORY_SPLITTER + "hud"
 	
 	var enableElvenStory: Boolean
-		get() = _enableElvenStory
+		get() = AlfheimPreConfigHandler.enableElvenStory
 		set(value) {
-			_enableElvenStory = value
-			config.get(CATEGORY_PRELOAD, "enableElvenStory", value, "Set this to true to enable ESM").set(value)
-			config.save()
+			AlfheimPreConfigHandler.enableElvenStory = value
+			AlfheimPreConfigHandler.preconfig.get(CATEGORY_GENERAL, "enableElvenStory", value, "Set this to true to enable ESM").set(value)
+			AlfheimPreConfigHandler.preconfig.save()
 		}
 	
 	var enableMMO: Boolean
-		get() = _enableMMO
+		get() = AlfheimPreConfigHandler.enableMMO
 		set(value) {
-			_enableMMO = value
-			config.get(CATEGORY_PRELOAD, "enableMMO", value, "Set this to true to enable MMO mode (requires ESM)").set(value)
-			config.save()
+			AlfheimPreConfigHandler.enableMMO = value
+			AlfheimPreConfigHandler.preconfig.get(CATEGORY_GENERAL, "enableMMO", value, "Set this to true to enable MMO mode (requires ESM)").set(value)
+			AlfheimPreConfigHandler.preconfig.save()
 		}
-	
-	private var _enableElvenStory = false
-	private var _enableMMO = false
-	
-	// PRELOAD
-	var elementiumClusterMeta = 22
-	var gaiaBarOffset = 1
-	var gaiaNameColor = 0x00D5FF
-	var hpHooks = true
-	var overrideCoFHCollisionCheck = true
 	
 	// DIMENSION
 	// - ALFHEIM
@@ -148,6 +137,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var moonbowVelocity = 0.5f
 	var mountAlfheimOnly = false
 	var mountCost = 1000
+	var mountEnabled = true
 	var mountLife = 600
 	var multibaubleBlacklist = emptyArray<String>()
 	var multibaubleCount = 6
@@ -163,6 +153,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var triquetrumMaxVolume = 400000
 	var triquetrumTiles = true
 	var uberBlaster = true
+	var yggdrasilFruitMinSpawnDelay = 20 * 60 * 60 * 24
 	
 	// OTHER
 	var alfheimSleepExtraCheck = true
@@ -300,7 +291,6 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	var targetUI = true
 	
 	override fun addCategories() {
-		addCategory(CATEGORY_PRELOAD, "Alfheim coremod and preload settings")
 		addCategory(CATEGORY_BALANCE, "Balance settings")
 		addCategory(CATEGORY_ALFHEIM, "Alfheim dimension settings")
 		addCategory(CATEGORY_NIFLHEIM, "Niflheim dimension settings")
@@ -318,15 +308,6 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 	}
 	
 	override fun readProperties() {
-		_enableElvenStory = loadProp(CATEGORY_PRELOAD, "enableElvenStory", _enableElvenStory, true, "Set this to false to disable ESM and MMO")
-		_enableMMO = _enableElvenStory && loadProp(CATEGORY_PRELOAD, "enableMMO", _enableMMO, true, "Set this to false to disable MMO")
-		
-		elementiumClusterMeta = loadProp(CATEGORY_PRELOAD, "elementiumClusterMeta", elementiumClusterMeta, true, "Effective only if Thaumcraft is installed. Change this if some other mod adds own clusters (max value is 63); also please, edit and spread modified .lang files")
-		gaiaBarOffset = loadProp(CATEGORY_PRELOAD, "gaiaBarOffset", gaiaBarOffset, true, "Gaia hp and bg boss bar variant (from default texture pairs)")
-		gaiaNameColor = loadProp(CATEGORY_PRELOAD, "gaiaNameColor", gaiaNameColor, false, "Gaia name color on boss bar")
-		hpHooks = loadProp(CATEGORY_PRELOAD, "hpHooks", hpHooks, true, "Toggles hooks to vanilla health system. Set this to false if you have any issues with other systems")
-		overrideCoFHCollisionCheck = loadProp(CATEGORY_PRELOAD, "overrideCoFHCollisionCheck", overrideCoFHCollisionCheck, false, "Set this to false to disable override of CoFHCore hook to entity collisions. This will make small entities to fall through floating islands")
-		
 		dimensionIDAlfheim = loadProp(CATEGORY_ALFHEIM, "dimensionIDAlfheim", dimensionIDAlfheim, true, "Dimension ID for Alfheim")
 		enableAlfheimRespawn = loadProp(CATEGORY_ALFHEIM, "enableAlfheimRespawn", enableAlfheimRespawn, false, "Set this to false to disable respawning in Alfheim")
 		floatingIslandCountMax = loadProp(CATEGORY_ALFHEIM, "floatingIslandCountMax", floatingIslandCountMax, false, "Max count of floating islands in world", 1)
@@ -405,6 +386,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		moonbowVelocity = loadProp(CATEGORY_BALANCE, "moonbowVelocity", moonbowVelocity.D, false, "Phoebus Catastrophe charge speed").F
 		mountAlfheimOnly = loadProp(CATEGORY_BALANCE, "mountAlfheimOnly", mountAlfheimOnly, false, "Set this to false to make mounts summonable only in Alfheim")
 		mountCost = loadProp(CATEGORY_BALANCE, "mountCost", mountCost, false, "How much mana mount consumes on summoning (not teleporting)")
+		mountEnabled = loadProp(CATEGORY_BALANCE, "mountEnabled", mountEnabled, true, "Are mounts available at all")
 		mountLife = loadProp(CATEGORY_BALANCE, "mountLife", mountLife, false, "How many ticks mount can stay unmounted")
 		multibaubleBlacklist = loadProp(CATEGORY_BALANCE, "multibaubleBlacklist", multibaubleBlacklist, false, "Blacklist for Ring of Elven King [modid:name]", false)
 		multibaubleCount = loadProp(CATEGORY_BALANCE, "multibaubleCount", multibaubleCount, false, "How many bauble box slots will be activated by Ring of Elven King")
@@ -421,6 +403,7 @@ object AlfheimConfigHandler: ASJConfigHandler() {
 		triquetrumMaxVolume = loadProp(CATEGORY_BALANCE, "triquetrumMaxVolume", triquetrumMaxVolume, false, "Change this to limit triquetrum volume of operation")
 		triquetrumTiles = loadProp(CATEGORY_BALANCE, "triquetrumTiles", triquetrumTiles, false, "Set this to false to forbid triquetrum to move tiles")
 		uberBlaster = loadProp(CATEGORY_BALANCE, "uberBlaster", uberBlaster, false, "Set this to false to nerf blasters")
+		yggdrasilFruitMinSpawnDelay = loadProp(CATEGORY_BALANCE, "yggdrasilFruitMinSpawnDelay", yggdrasilFruitMinSpawnDelay, false, "Minimal delay from yggdrasil fruit to appear (max delay will be x3 more)")
 		
 		alfheimSleepExtraCheck = loadProp(CATEGORY_GENERAL, "alfheimSleepExtraCheck", alfheimSleepExtraCheck, false, "Set this to false if you are skipping whole day while sleeping")
 		authTimeout = loadProp(CATEGORY_GENERAL, "authTimeout", authTimeout, false, "Time limit for client to send authentication credentials", 100, 600)

@@ -740,7 +740,7 @@ alfheim.tagline.soulSword=As good as Muramasa's blade
 alfheim.page.soulSword0=Terra Blade is an excellent weapon, sharp and durable, but it has a big drawback... It limits the natural gift of living beings for self-development. Fortunately, the divine essence can radically transform the main material of a Terra Blade - terrasteel, giving birth to a weapon of infinite potential.
 alfheim.page.soulSword1=The fusion of terrasteel - a metal symbolizing the original Midgard, and Gaia Spirit Ingot - the essence of great power, gives rise to a blade that absorbs the souls of the victims and is strengthened by them.
 alfheim.page.soulSword2=Creating &1Soul Sword&0
-alfheim.page.soulSword3=To repair it you can simply Sneak-rightclick it in the air with some &1Gaia Spirit&0 in your inventory.
+alfheim.page.soulSword3=&1Gaia Spirits&0 are used for repair.
 
 alfheim.entry.gjallarhorn=Gjallarhorn
 alfheim.tagline.gjallarhorn=Heralds victory (or end?)
@@ -1308,3 +1308,18 @@ alfheim.page.beer6=&oSatisfied with the result, the student hurried back to his 
 alfheim.entry.growthStop=Growth inhibition
 alfheim.tagline.growthStop=Stops the growth of creatures
 alfheim.page.growthStop0=No dandelions or gold required
+
+alfheim.entry.redStringObserver=Red Stringed Observer
+alfheim.tagline.redStringObserver=Detects block updates
+alfheim.page.redStringObserver0=The &1Red Stringed Observer&0 can be bound to any block and will send it a strong signal whenever a block update occurs near the observer. It will react only to major updates thou, like appearance, disappearance or change of a block, as well as changes in fluid flows; and will ignore small ones, like door opening or closing, crops growth, etc.
+alfheim.page.redStringObserver1=The &1Red Stringed Observer&0.
+
+alfheim.entry.redStringWatcher=Red Stringed Watcher
+alfheim.tagline.redStringWatcher=Detects block changes
+alfheim.page.redStringWatcher0=The &1Red Stringed Watcher&0 can be bound to any block and will detect if its id or metadata has changed, sending strong signal to all sides except face. Rightclicking with the &1Wand of the Forest&0 will make watcher to output signal only from back side.
+alfheim.page.redStringWatcher1=The &1Red Stringed Watcher&0.
+
+alfheim.entry.redstoneAttractor=Redstone Attractor
+alfheim.tagline.redstoneAttractor=Redirects redstone wire
+alfheim.page.redstoneAttractor0=&1Redstone Attractor&0 serves a simple purpose: it redirects any redstone wire towards itself.
+alfheim.page.redstoneAttractor1=Useless (c) GedeonGrays

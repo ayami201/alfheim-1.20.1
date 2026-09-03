@@ -74,7 +74,7 @@ fun applyColor(tile: TileEntity) {
 	GL11.glPushMatrix()
 	GL11.glTranslatef(0.5f, 1.4f, 0.5f)
 	
-	val rgb = if (tile.islandType === ItemColorSeeds.islandTypes.last())
+	val rgb = if (tile.islandType === ItemColorSeeds.irisIslandTypes.last())
 		BlockAuroraDirt.getBlockColor(tile.xCoord, tile.yCoord, tile.zCoord)
 	else
 		tile.islandType.color

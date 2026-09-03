@@ -32,7 +32,6 @@ object RenderEntityFenrirSlash: Render() {
 		glTranslatef(-2f, 0f, 0f)
 		glRotatef(entity.roll, 1f, 0f, 0f)
 		glScalef(2f, entity.height / 4f, 2f)
-		ASJRenderHelper.drawGuideArrows()
 		
 		mc.renderEngine.bindTexture(getEntityTexture(entity))
 		model.renderAll()

@@ -1,6 +1,7 @@
 package alfheim.common.block.tile
 
 import alexsocol.asjlib.*
+import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.core.asm.hook.AlfheimHookHandler
 import alfheim.common.core.handler.*
 import alfheim.common.item.relic.ItemTankMask.Companion.limboCounter
@@ -42,8 +43,10 @@ open class TileRainbowManaFlame: TileManaFlame() {
 	fun exitPlayer(player: EntityPlayer) {
 		if (ASJUtilities.isClient || player !is EntityPlayerMP) return
 		
-		if (CardinalSystem.CommonSystem.cantLostHearts(player))
+		if (CardinalSystem.CommonSystem.cantLostHearts(player)) {
+			player.triggerAchievement(AlfheimAchievements.softlock)
 			return ASJUtilities.say(player, "alfheimmisc.nowayout")
+		}
 		
 		player.limboCounter = 0
 		

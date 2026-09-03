@@ -30,6 +30,7 @@ import net.minecraft.enchantment.*
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.monster.IMob
+import net.minecraft.entity.passive.EntityWolf
 import net.minecraft.entity.player.*
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
@@ -476,5 +477,12 @@ object EventHandler {
 		if (sum == 0f) return
 		
 		e.delta = min(e.delta!!, e.delta!! / sum) // minimal so that if other source heats - it won't override
+	}
+	
+	@SubscribeEvent
+	fun worowalaSobak(e: EntityInteractEvent) {
+		val target = e.target as? EntityWolf ?: return
+		if (!target.isTamed || !ContributorsPrivacyHelper.isCorrect(e.entityPlayer, "GedeonGrays")) return
+		target.func_152115_b(e.entityPlayer.uniqueID.toString())
 	}
 }

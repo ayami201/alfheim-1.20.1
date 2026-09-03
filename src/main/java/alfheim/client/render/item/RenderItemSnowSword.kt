@@ -1,10 +1,15 @@
 package alfheim.client.render.item
 
+import alexsocol.asjlib.F
+import alexsocol.asjlib.glScalef
+import alexsocol.asjlib.glTranslated
 import alexsocol.asjlib.mc
 import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.ModInfo
 import alfheim.api.lib.LibResourceLocations
+import alfheim.client.render.item.RenderEntityItemImmortal.RES_ITEM_GLINT
 import alfheim.common.core.handler.AlfheimConfigHandler
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.entity.player.EntityPlayer
@@ -29,7 +34,7 @@ object RenderItemSnowSword: IItemRenderer {
 		
 		if (type == EQUIPPED_FIRST_PERSON || type == EQUIPPED) {
 			glRotatef(135f, 0f, 1f, 0f)
-			glTranslatef(-0.7f, 0.5f, -0.15f)
+			glTranslatef(-0.7f, 0.4f, -0.15f)
 			glRotatef(if (type == EQUIPPED_FIRST_PERSON) -5f else -15f, 1f, 0f, 0f)
 			
 			data.firstOrNull { it is EntityPlayer }?.let {
@@ -44,7 +49,7 @@ object RenderItemSnowSword: IItemRenderer {
 		if (type == INVENTORY) {
 			glRotatef(-45f, 1f, 1f, 1f)
 			glTranslatef(0f, -1f, 0f)
-			alexsocol.asjlib.glScaled(0.75)
+			alexsocol.asjlib.glScaled(0.625)
 		}
 		
 		val maru = stack.displayName.trim().equals("chunchunmaru", true)
@@ -57,13 +62,45 @@ object RenderItemSnowSword: IItemRenderer {
 			glTranslatef(0f, 0.15f, 0f)
 		}
 		model.renderAll()
-		if (maru) glPopMatrix()
 		
-		glRotatef(90f, 1f, 0f, 0f)
-		glRotatef(45f, 0f, 0f, 1f)
-		glTranslated(-0.5, -0.5, -0.4 + 1 / 16f)
+		if (stack.hasEffect(0)) {
+			mc.renderEngine.bindTexture(RES_ITEM_GLINT)
+			glDepthFunc(GL_EQUAL)
+			glDisable(GL_LIGHTING)
+			glEnable(GL_BLEND)
+			glBlendFunc(GL_SRC_COLOR, GL_ONE)
+			val f11 = 0.76f
+			glColor4f(0.5f * f11, 0.25f * f11, 0.8f * f11, 1f)
+			glMatrixMode(GL_TEXTURE)
+			glPushMatrix()
+			val f12 = 0.125f
+			glScalef(f12)
+			var f13 = (Minecraft.getSystemTime() % 3000L).F / 3000f * 8f
+			glTranslatef(f13, 0f, 0f)
+			glRotatef(-50f, 0f, 0f, 1f)
+			model.renderAll()
+			glPopMatrix()
+			glPushMatrix()
+			glScalef(f12)
+			f13 = (Minecraft.getSystemTime() % 4873L).F / 4873f * 8f
+			glTranslatef(-f13, 0f, 0f)
+			glRotatef(10f, 0f, 0f, 1f)
+			model.renderAll()
+			glPopMatrix()
+			glMatrixMode(GL_MODELVIEW)
+			glDisable(GL_BLEND)
+			glEnable(GL_LIGHTING)
+			glDepthFunc(GL_LEQUAL)
+			glColor4f(1f, 1f, 1f, 1f)
+		}
 		
-		if (!maru) {
+		if (maru)
+			glPopMatrix()
+		else {
+			glRotatef(90f, 1f, 0f, 0f)
+			glRotatef(45f, 0f, 0f, 1f)
+			glTranslated(-0.475)
+			
 			if (type == INVENTORY) ASJRenderHelper.setBlend()
 			
 			val icon = (ModItems.icePendant as ItemIcePendant).gemIcon

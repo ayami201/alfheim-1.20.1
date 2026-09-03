@@ -11,6 +11,7 @@ import alfheim.api.spell.SpellBase
 import alfheim.client.core.handler.CardinalSystemClient.PlayerSegmentClient
 import alfheim.common.achievement.AlfheimAchievements
 import alfheim.common.block.*
+import alfheim.common.block.AlfheimBlocks.redStringObserver
 import alfheim.common.block.tile.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
@@ -157,7 +158,10 @@ object AlfheimLexiconData {
 	lateinit var rainbowFlora: LexiconEntry
 	lateinit var flowerRattlerose: LexiconEntry
 	lateinit var reality: LexiconEntry
+	lateinit var redstoneAttractor: LexiconEntry
 	lateinit var redstoneRelay: LexiconEntry
+	lateinit var redStringObserver: LexiconEntry
+	lateinit var redStringWatcher: LexiconEntry
 	lateinit var resonator: LexiconEntry
 	lateinit var ringsAura: LexiconEntry
 	lateinit var ringAnomaly: LexiconEntry
@@ -353,7 +357,10 @@ object AlfheimLexiconData {
 		pylons = AlfheimLexiconEntry("pylons", pickCategory(naturalApparatus))
 		rainbowFlora = AlfheimLexiconEntry("rainbowFlora", pickCategory(miscellaneous))
 		reality = AlfheimLexiconEntry("reality", pickCategory(mysticalItems))
-		redstoneRelay = AlfheimLexiconEntry("redstoneRelay", pickCategory(enderArtefacts))
+		redstoneAttractor = AlfheimLexiconEntry("redstoneAttractor", pickCategory(miscellaneous))
+		redstoneRelay = AlfheimLexiconEntry("redstoneRelay", pickCategory(miscellaneous))
+		redStringObserver = AlfheimLexiconEntry("redStringObserver", pickCategory(enderArtefacts))
+		redStringWatcher = AlfheimLexiconEntry("redStringWatcher", pickCategory(enderArtefacts))
 		resonator = AlfheimLexiconEntry("resonator", pickCategory(mysticalItems))
 		ringsAura = AlfheimLexiconEntry("auraAlf", pickCategory(baubles))
 		ringAnomaly = AlfheimLexiconEntry("anomaRing", pickCategory(baubles))
@@ -839,7 +846,13 @@ object AlfheimLexiconData {
 		
 		reality.setLexiconPages(PageText("0"), PageText("1"), PageCraftingRecipe("2", AlfheimRecipes.recipeSword))
 		
+		redstoneAttractor.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeRedstoneAttractor))
+		
 		redstoneRelay.setLexiconPages(PageText("0"), PageText("1"), PageManaInfusionRecipe("2", AlfheimRecipes.recipeRedstoneRelay))
+		
+		redStringObserver.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeRedStringObserver))
+		
+		redStringWatcher.setLexiconPages(PageText("0"), PageCraftingRecipe("1", AlfheimRecipes.recipeRedStringWatcher))
 		
 		resonator.setLexiconPages(
 			*Array(5) { PageText("$it") },

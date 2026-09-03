@@ -1,31 +1,31 @@
 package alfheim.common.item.rod
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.render.ASJRenderHelper
-import alfheim.api.ModInfo
+import alexsocol.asjlib.render.*
+import alfheim.api.*
 import alfheim.common.item.*
-import alfheim.common.item.rod.RedstoneSignal.EnumRedstoneType
-import alfheim.common.network.NetworkService
-import alfheim.common.network.packet.MessageRedstoneSignalsSync
-import cpw.mods.fml.common.FMLCommonHandler
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.gameevent.TickEvent
-import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent
-import net.minecraft.block.Block
-import net.minecraft.client.renderer.Tessellator
-import net.minecraft.client.renderer.entity.RenderManager
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
+import alfheim.common.item.rod.RedstoneSignal.*
+import alfheim.common.network.*
+import alfheim.common.network.packet.*
+import cpw.mods.fml.common.*
+import cpw.mods.fml.common.eventhandler.*
+import cpw.mods.fml.common.gameevent.*
+import cpw.mods.fml.common.gameevent.TickEvent.*
+import net.minecraft.block.*
+import net.minecraft.client.renderer.*
+import net.minecraft.client.renderer.entity.*
+import net.minecraft.entity.player.*
+import net.minecraft.init.*
+import net.minecraft.item.*
 import net.minecraft.nbt.*
 import net.minecraft.util.*
 import net.minecraft.world.*
-import net.minecraftforge.client.event.RenderWorldLastEvent
-import net.minecraftforge.common.DimensionManager
-import net.minecraftforge.common.util.Constants
+import net.minecraftforge.client.event.*
+import net.minecraftforge.common.*
+import net.minecraftforge.common.util.*
 import org.lwjgl.opengl.GL11.*
-import vazkii.botania.common.item.equipment.bauble.ItemMonocle
-import java.awt.Color
+import vazkii.botania.common.item.equipment.bauble.*
+import java.awt.*
 
 // improved version of redstone activator from RandomThings mod
 // a lot of shit is going here don't ask me
@@ -222,18 +222,17 @@ open class RedstoneSignalHandler(datakey: String = ID): WorldSavedData(datakey) 
 	
 	@Synchronized
 	open fun tick() {
-		val i = redstoneSignals.iterator()
-		while (i.hasNext()) {
-			val rs = i.next()
-			
+		// CMEs are amazing (c) Vazkii
+		redstoneSignals.toMutableSet().forEach { rs ->
 			val (dim, x, y, z) = rs
-			val world = DimensionManager.getWorld(dim) ?: continue
-			if (!world.blockExists(x, y, z)) continue
-			if (!rs.tick()) continue
-			i.remove()
+			val world = DimensionManager.getWorld(dim) ?: return@forEach
+			if (!world.blockExists(x, y, z)) return@forEach
+			if (!rs.tick()) return@forEach
+			
+			redstoneSignals.remove(rs)
 			updatePosition(world, x, y, z)
 		}
-
+		
 		NetworkService.sendToAll(MessageRedstoneSignalsSync(redstoneSignals))
 	}
 	
@@ -285,7 +284,7 @@ open class RedstoneSignalHandler(datakey: String = ID): WorldSavedData(datakey) 
 		
 		@SubscribeEvent
 		fun tick(e: WorldTickEvent) {
-			if (e.phase == TickEvent.Phase.END && !e.world.isRemote && e.world.provider.dimensionId == 0)
+			if (e.phase == Phase.END && !e.world.isRemote && e.world.provider.dimensionId == 0)
 				get().tick()
 		}
 	}

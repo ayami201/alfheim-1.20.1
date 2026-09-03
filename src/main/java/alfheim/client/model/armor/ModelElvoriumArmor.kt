@@ -21,18 +21,17 @@ class ModelElvoriumArmor(
 	
 	override fun pre(entity: Entity) {
 		mc.renderEngine.bindTexture(LibResourceLocations.elvoriumArmor)
-		if (entity is EntityPlayer && ContributorsPrivacyHelper.isCorrect(entity.commandSenderName, "GedeonGrays")) {
+		if (entity is EntityPlayer && AlfheimConfigHandler.fancies && ContributorsPrivacyHelper.isCorrect(entity.commandSenderName, "GedeonGrays")) {
 			glEnable(GL_BLEND)
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-			if (ContributorsPrivacyHelper.isCorrect(mc.thePlayer.commandSenderName, "GedeonGrays") && !AlfheimConfigHandler.fancies) return
 			ShaderHelper.useShader(ShaderHelper.halo)
 		}
 	}
 	
 	override fun post(entity: Entity) {
-		if (entity is EntityPlayer && ContributorsPrivacyHelper.isCorrect(entity.commandSenderName, "GedeonGrays")) {
-			glDisable(GL_BLEND)
+		if (entity is EntityPlayer && AlfheimConfigHandler.fancies && ContributorsPrivacyHelper.isCorrect(entity.commandSenderName, "GedeonGrays")) {
 			ShaderHelper.releaseShader()
+			glDisable(GL_BLEND)
 		}
 	}
 	

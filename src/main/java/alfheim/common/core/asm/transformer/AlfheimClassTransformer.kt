@@ -4,7 +4,7 @@ import alexsocol.patcher.asm.ASJHookLoader.Companion.OBF
 import alexsocol.patcher.asm.transformer.ASJAbstractClassTransformer
 import alfheim.api.ModInfo
 import alfheim.common.core.asm.hook.extender.ItemLensExtender
-import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.core.handler.AlfheimPreConfigHandler
 import gloomyfolken.hooklib.asm.HookLogger.Log4JLogger
 import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.*
@@ -174,7 +174,7 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 				if (opcode == RETURN) {
 					visitVarInsn(ALOAD, 0)
 					visitFieldInsn(GETFIELD, "thaumcraft/common/items/ItemNugget", "icon", if (OBF) "[Lrf;" else "[Lnet/minecraft/util/IIcon;")
-					visitIntInsn(BIPUSH, AlfheimConfigHandler.elementiumClusterMeta)
+					visitIntInsn(BIPUSH, AlfheimPreConfigHandler.elementiumClusterMeta)
 					visitVarInsn(ALOAD, 1)
 					visitLdcInsn("thaumcraft:clusterelementium")
 					visitMethodInsn(INVOKEINTERFACE, if (OBF) "rg" else "net/minecraft/client/renderer/texture/IIconRegister", if (OBF) "a" else "registerIcon", if (OBF) "(Ljava/lang/String;)Lrf;" else "(Ljava/lang/String;)Lnet/minecraft/util/IIcon;", true)
@@ -196,7 +196,7 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 					visitInsn(DUP)
 					visitVarInsn(ALOAD, 0)
 					visitInsn(ICONST_1)
-					visitIntInsn(BIPUSH, AlfheimConfigHandler.elementiumClusterMeta)
+					visitIntInsn(BIPUSH, AlfheimPreConfigHandler.elementiumClusterMeta)
 					visitMethodInsn(INVOKESPECIAL, if (OBF) "add" else "net/minecraft/item/ItemStack", "<init>", if (OBF) "(Ladb;II)V" else "(Lnet/minecraft/item/Item;II)V", false)
 					visitMethodInsn(INVOKEINTERFACE, "java/util/List", "add", "(Ljava/lang/Object;)Z", true)
 					visitInsn(POP)
@@ -344,7 +344,7 @@ class AlfheimClassTransformer: ASJAbstractClassTransformer() {
 			
 			override fun visitInsn(opcode: Int) {
 				if (opcode == ICONST_0 && --inject == 0)
-					super.visitIntInsn(BIPUSH, AlfheimConfigHandler.gaiaBarOffset * 22)
+					super.visitIntInsn(BIPUSH, AlfheimPreConfigHandler.gaiaBarOffset * 22)
 				else
 					super.visitInsn(opcode)
 			}

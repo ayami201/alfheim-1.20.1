@@ -13,6 +13,7 @@ import alfheim.common.block.tile.TileKudzuVine.Companion.EnumMutation.*
 import alfheim.common.block.tile.TileKudzuVine.Companion.KudzuBrood
 import alfheim.common.core.handler.*
 import alfheim.common.core.util.*
+import alfheim.common.entity.EntityFlowerBud
 import alfheim.common.item.material.*
 import alfheim.common.lexicon.*
 import alfheim.common.potion.*
@@ -57,9 +58,8 @@ class BlockKudzuVine: BlockContainerMod(material), IShearable, ILexiconable {
 	}
 	
 	override fun getCollisionBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB? {
-		return if (world.getBlockMetadata(x, y, z).stage > 0 && (world.getTileEntity(x, y, z) as? TileKudzuVine)?.hasMutation(WOODEN) == true)
-			super.getCollisionBoundingBoxFromPool(world, x, y, z)
-		else null
+		if (getBlocksMovement(world, x, y, z)) return null
+		return super.getCollisionBoundingBoxFromPool(world, x, y, z)
 	}
 	
 	override fun getFlammability(world: IBlockAccess, x: Int, y: Int, z: Int, face: ForgeDirection?): Int {
@@ -77,6 +77,8 @@ class BlockKudzuVine: BlockContainerMod(material), IShearable, ILexiconable {
 	}
 	
 	override fun onEntityCollidedWithBlock(world: World, x: Int, y: Int, z: Int, entity: Entity) {
+		if (entity is IKudzuIgnoredEntity) return
+		
 		val tile = world.getTileEntity(x, y, z) as? TileKudzuVine ?: return
 		if (tile.hasMutation(HARDENED)) entity.setInWeb()
 		
@@ -265,11 +267,17 @@ class BlockKudzuVine: BlockContainerMod(material), IShearable, ILexiconable {
 			
 			if (stage < LAST_STAGE) world.setBlockMetadataWithNotify(x, y, z, (stage + 1) * STAGES + meta.iconVar, 3)
 			
-			if (parent.hasMutation(CANNIBAL)) run {
-				val new = world.getTileEntity(x, y, z) as? TileKudzuVine ?: return@run
-				if (new.hasMutation(CANNIBAL)) return@run
+			val new = world.getTileEntity(x, y, z) as? TileKudzuVine ?: return true // should not happen
+			
+			if (new.hasMutation(FLOWERING) && getEntitiesWithinAABB(new.worldObj, EntityFlowerBud::class.java, new.boundingBox(5)).isEmpty() && ASJUtilities.chance(10))
+				EntityFlowerBud(new.worldObj).apply {
+					var (x, y, z) = Vector3.fromTileEntity(new).mf()
+					while (world.getBlock(x, y - 1, z) === this@BlockKudzuVine) --y 
+					setPosition(x + 0.5, y.D, z + 0.5)
+				}.spawn()
+			
+			if (parent.hasMutation(CANNIBAL) && !new.hasMutation(CANNIBAL))
 				new.mutations = parent.mutations
-			}
 			
 			return true
 		}
@@ -319,9 +327,8 @@ class BlockKudzuVine: BlockContainerMod(material), IShearable, ILexiconable {
 			world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, "mob.endermen.portal", 1f, world.rand.nextFloat() * 0.1f + 0.9f)
 		}
 		
-		if (!ASJUtilities.chance(AlfheimConfigHandler.kudzuMutatability)) return true
-		
-		EnumMutation.entries.filter { !new.hasMutation(it) }.randomOrNull()?.let { new.setMutation(it, true) }
+		if (ASJUtilities.chance(AlfheimConfigHandler.kudzuMutatability))
+			EnumMutation.entries.filter { !new.hasMutation(it) }.randomOrNull()?.let { new.setMutation(it, true) }
 		
 		return true
 	}
@@ -362,8 +369,13 @@ class BlockKudzuVine: BlockContainerMod(material), IShearable, ILexiconable {
 		return true
 	}
 	
+	// FUCKING STUPID MCP DIE BITCH | that is get__NOT__BlocksMovement
+	override fun getBlocksMovement(world: IBlockAccess, x: Int, y: Int, z: Int) =
+		world.getBlockMetadata(x, y, z).stage == 0 || (world.getTileEntity(x, y, z) as? TileKudzuVine)?.hasMutation(WOODEN) != true
+	
 	override fun createNewTileEntity(world: World?, meta: Int) = TileKudzuVine()
 	override fun isOpaqueCube() = false
+	override fun renderAsNormalBlock() = false
 	override fun isLadder(world: IBlockAccess?, x: Int, y: Int, z: Int, entity: EntityLivingBase?) = true
 	override fun getItemDropped(meta: Int, random: Random?, fortune: Int) = null
 	override fun quantityDropped(random: Random?) = 0
@@ -481,3 +493,5 @@ class SheepAIEatKudzu(private val sheep: EntitySheep): EntityAIBase() {
 		eatingTimer = 0
 	}
 }
+
+interface IKudzuIgnoredEntity

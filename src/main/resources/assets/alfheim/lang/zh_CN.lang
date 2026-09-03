@@ -1729,20 +1729,6 @@ alfheim.potion.manaVoid=魔源风暴
 
 #######################################################___Configuration___######################################################
 
-general.preload=提前加载
-elementiumClusterMeta=源质钢元数据集群
-enableElvenStory=ESM模式
-enableMMO=MMO模式
-gaiaBarOffset=盖亚boss血条
-gaiaNameColor=盖亚名称颜色
-hpHooks=Health Hooks
-maxParticles=粒子数量
-modularFilename=模块文件名
-modularThread=分离模块线程
-modularUpdate=模块更新
-modularUpdateConfirm=更新确认
-primaryClassTransformer=主要类转换器
-
 general.alfheim=艾尔夫海姆
 destroyPortal=传送门损毁
 dimensionIDAlfheim=艾尔夫海姆维度ID

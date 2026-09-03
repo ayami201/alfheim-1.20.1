@@ -35,7 +35,7 @@ object ContributorsPrivacyHelper {
 		} catch (e: Throwable) {
 			ASJUtilities.error("Failed to register contributors, using default parameters")
 			// default username:password pairs just in case
-			register("AlexSocol", "FAD66A8AE739A30F66325679CB4CFF0B21428912D1DDBE45EA1692AB87DC1822")
+			register("AlexSocol", "3A2DC92A7ACA6F8E94B834F6B0CF85AA0E73A01B3061EADEF061810BB1A96BD2")
 			register("GedeonGrays", "B2612EA4C009B2C3FDDCAA7D6C1FFB8DD6C9C7ECFFD785DCD1A08BB41CAD47C0")
 			register("KAIIIAK", "D761FAABD0C7F4042189C0CE308FDAD79566B198416BFDE23361EBA8DCB0BB96")
 		}

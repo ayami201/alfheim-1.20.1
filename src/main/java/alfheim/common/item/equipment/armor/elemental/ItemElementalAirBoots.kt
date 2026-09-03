@@ -58,7 +58,7 @@ class ItemElementalAirBoots: ElementalArmor(3, "ElementalAirBoots"), IElementalI
 				return
 			}
 			
-			event.distance -= ManaItemHandler.requestMana((event.entityLiving as EntityPlayer).getCurrentArmor(0), event.entityLiving as EntityPlayer, (event.distance * ONEBLOCKCOST).I, true)
+			event.distance -= ManaItemHandler.requestMana(boots, event.entityLiving as EntityPlayer, (event.distance * ONEBLOCKCOST).I, true)
 		}
 	}
 }

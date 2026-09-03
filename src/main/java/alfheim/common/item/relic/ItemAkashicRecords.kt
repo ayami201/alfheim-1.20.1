@@ -14,6 +14,8 @@ import alfheim.common.network.packet.Message0dS
 import alfheim.common.world.data.CustomWorldData.Companion.customData
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.PlayerEvent
+import cpw.mods.fml.relauncher.Side
+import cpw.mods.fml.relauncher.SideOnly
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.entity.*
 import net.minecraft.entity.player.EntityPlayer
@@ -236,6 +238,7 @@ class ItemAkashicRecords: ItemRelic("AkashicRecords") {
 			MinecraftServer.getServer().worldServerForDimension(0).customData.markDirty()
 		}
 		
+		@SideOnly(Side.CLIENT)
 		@SubscribeEvent
 		fun onWheel(e: MouseEvent) {
 			val i = Mouse.getEventDWheel()

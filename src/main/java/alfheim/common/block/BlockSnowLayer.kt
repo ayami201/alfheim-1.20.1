@@ -14,9 +14,10 @@ import net.minecraft.init.*
 import net.minecraft.item.ItemStack
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.*
+import vazkii.botania.api.item.IHornHarvestable
 import java.util.*
 
-class BlockSnowLayer: BlockMod(Material.snow) {
+class BlockSnowLayer: BlockMod(Material.snow), IHornHarvestable {
 	
 	init {
 		setBlockBounds(0f, 0f, 0f, 1f, 0.125f, 1f)
@@ -111,4 +112,11 @@ class BlockSnowLayer: BlockMod(Material.snow) {
 		
 		return false
 	}
+	
+	override fun canHornHarvest(world: World?, x: Int, y: Int, z: Int, stack: ItemStack?, hornType: IHornHarvestable.EnumHornType) =
+		hornType == IHornHarvestable.EnumHornType.COVERING
+	
+	override fun hasSpecialHornHarvest(world: World?, x: Int, y: Int, z: Int, stack: ItemStack?, hornType: IHornHarvestable.EnumHornType?) = false
+	
+	override fun harvestByHorn(world: World?, x: Int, y: Int, z: Int, stack: ItemStack?, hornType: IHornHarvestable.EnumHornType?) = Unit
 }

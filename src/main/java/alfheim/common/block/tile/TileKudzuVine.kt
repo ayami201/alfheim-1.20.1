@@ -78,22 +78,22 @@ class TileKudzuVine: ASJTile() {
 		private const val TAG_MUTATIONS = "mutations"
 		
 		enum class EnumMutation(val color: Int) {
-			AGGRESSIVE (0x333333), // explode adjusting blocks before spreading    DONE
-			EXPLOSIVE  (0xff0000), // explode on break and pass                    DONE
-			TOXIC      (0xFF00FF), // poisons passers and eaters                   DONE
-			FIERY      (0xFF3F34), // sets passers and breakers on fire            DONE
-			HARDENED   (0x997700), // hardness x4 + sets in web                    DONE
-			GLASSY     (0x8888FF), // drops gems                                   DONE
-			METALLIC   (0x444444), // drops blunt metals                           DONE
-			FIREPROOF  (0xff8888), // no burning                                   DONE
-			THORNY     (0x666666), // damages passers and breakers                 DONE
-			FLOWERING  (0x0A480D), // 10% to spawn plantera on grow                PARTIALLY TODO
-			GLIMMERING (0x888800), // drops precious metals                        DONE
-			SPREADING  (0xff8080), // spread radius++                              DONE
-			CANNIBAL   (0xff7700), // replace other kudzu                          DONE
-			WOODEN     (0x442200), // drops wood                                   DONE
-			PLASTIC    (0x222288), // drops some shit                              DONE
-			BLUESPACE  (0x3333ff), // can go through blocks                        DONE
+			AGGRESSIVE (0x333333), // explode adjusting blocks before spreading
+			EXPLOSIVE  (0xff0000), // explode on break and pass
+			TOXIC      (0xFF00FF), // poisons passers and eaters
+			FIERY      (0xFF3F34), // sets passers and breakers on fire
+			HARDENED   (0x997700), // hardness x4 + sets in web
+			GLASSY     (0x8888FF), // drops gems
+			METALLIC   (0x444444), // drops blunt metals
+			FIREPROOF  (0xff8888), // no burning
+			THORNY     (0x666666), // damages passers and breakers
+			FLOWERING  (0x0A480D), // 10% to spawn plantera on grow
+			GLIMMERING (0x888800), // drops precious metals
+			SPREADING  (0xff8080), // spread radius++
+			CANNIBAL   (0xff7700), // replace other kudzu
+			WOODEN     (0x442200), // drops wood
+			PLASTIC    (0x222288), // drops some shit
+			BLUESPACE  (0x3333ff), // can go through blocks
 		}
 		
 		class KudzuBrood(val data: IntArray, private val cd: CustomWorldData) {

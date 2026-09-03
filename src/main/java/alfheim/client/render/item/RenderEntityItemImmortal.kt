@@ -20,7 +20,7 @@ import java.util.*
 @SideOnly(Side.CLIENT)
 object RenderEntityItemImmortal: Render() {
 	
-	private val RES_ITEM_GLINT = ResourceLocation("textures/misc/enchanted_item_glint.png")
+	val RES_ITEM_GLINT = ResourceLocation("textures/misc/enchanted_item_glint.png")
 	private val renderBlocksRi = RenderBlocks()
 	private val random = Random()
 	

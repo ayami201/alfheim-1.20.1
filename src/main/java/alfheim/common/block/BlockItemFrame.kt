@@ -9,6 +9,7 @@ import alfheim.common.item.block.ItemBlockItemFrame
 import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.*
 import net.minecraft.item.ItemStack
@@ -204,6 +205,7 @@ class BlockItemFrame: BlockContainerMod(Material.wood) {
 		return frame.item ?: empty
 	}
 	
+	override fun registerBlockIcons(reg: IIconRegister) = Unit
 	override fun getIcon(side: Int, meta: Int) = RenderTileItemFrame.icon
 	override fun quantityDropped(meta: Int, fortune: Int, random: Random?) = 0
 	override fun getRenderType() = -1

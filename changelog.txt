@@ -1,5 +1,19 @@
 Innovations:
- 
+ New enemies spawned by flowering kudzu mutation
+ Red Stringed Observer and Watcher blocks to detect block changes/updates
+ WIP redstone attractor block to redirect redstone
+ Frozen Mana block
+ Snowy seeds to spread snowy grass
+ Softlock achievement
+ Split config into two files for core and fml mods
+ Config to entirely disable mounts
+ Config to balance yggdrasil fruit respawn rate
+ Katana now has slight bend
 
 Fixes:
- 
+ Conflict with GTNH Botania fork
+ Pure daisy now requires water source blocks to make snow
+ Several Flugels per single player could be spawned with several eyes
+ Server error with Akashic Records
+ CMEs from redstone rod/relay
+ Fenrir sometimes falling through floor due to server desync

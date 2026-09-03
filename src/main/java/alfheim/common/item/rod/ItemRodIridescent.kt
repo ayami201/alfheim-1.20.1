@@ -167,12 +167,12 @@ class ItemRodIridescent(name: String = "rodColorfulSkyDirt"): ItemIridescent(nam
 			world.setBlock(x + xl, y, z + zl, dirtFromMeta(stack.meta), stack.meta, 1 or 2)
 			tile.recieveMana(-COST)
 			for (i in 0..6)
-				Botania.proxy.sparkleFX(world, x + xl + Math.random(), y + Math.random(), z + zl + Math.random(),
-										r, g, b, 1F, 5)
+				Botania.proxy.sparkleFX(world, x + xl + Math.random(), y + Math.random(), z + zl + Math.random(), r, g, b, 1F, 5)
+			
 			when (stack.meta) {
-				17    -> world.playAuxSFX(2001, x + xl, y, z + zl, AlfheimBlocks.auroraDirt.id)
-				TYPES -> world.playAuxSFX(2001, x + xl, y, z + zl, AlfheimBlocks.rainbowDirt.id)
-				else  -> world.playAuxSFX(2001, x + xl, y, z + zl, AlfheimBlocks.irisDirt.id + (stack.meta shl 12))
+				RAINBOW -> world.playAuxSFX(2001, x + xl, y, z + zl, AlfheimBlocks.rainbowDirt.id)
+				AURORA  -> world.playAuxSFX(2001, x + xl, y, z + zl, AlfheimBlocks.auroraDirt.id)
+				else    -> world.playAuxSFX(2001, x + xl, y, z + zl, AlfheimBlocks.irisDirt.id + (stack.meta shl 12))
 			}
 		}
 	}

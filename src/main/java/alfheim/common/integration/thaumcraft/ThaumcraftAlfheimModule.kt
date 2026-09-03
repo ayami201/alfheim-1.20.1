@@ -3,48 +3,47 @@ package alfheim.common.integration.thaumcraft
 import alexsocol.asjlib.*
 import alexsocol.asjlib.ASJUtilities.register
 import alfheim.api.*
-import alfheim.api.event.AlfheimModeChangedEvent
+import alfheim.api.event.*
 import alfheim.api.lib.LibOreDict.ELEMENTIUM_ORE
 import alfheim.api.lib.LibOreDict.ELVORIUM_NUGGET
 import alfheim.api.lib.LibOreDict.IFFESAL_DUST
 import alfheim.api.lib.LibOreDict.INFUSED_DREAM_TWIG
 import alfheim.api.lib.LibOreDict.MAUFTRIUM_NUGGET
-import alfheim.client.render.block.RenderBlockAlfheimThaumOre
-import alfheim.common.block.AlfheimBlocks
-import alfheim.common.block.compat.thaumcraft.BlockAlfheimThaumOre
-import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.client.render.block.*
+import alfheim.common.block.*
+import alfheim.common.block.compat.thaumcraft.*
+import alfheim.common.core.handler.*
 import alfheim.common.item.compat.thaumcraft.*
-import alfheim.common.item.material.ElvenResourcesMetas
-import alfheim.common.lexicon.AlfheimLexiconData
+import alfheim.common.item.material.*
+import alfheim.common.lexicon.*
 import cpw.mods.fml.client.registry.RenderingRegistry.*
-import cpw.mods.fml.common.Loader
+import cpw.mods.fml.common.*
 import cpw.mods.fml.common.eventhandler.*
 import cpw.mods.fml.common.registry.GameRegistry.*
-import net.minecraft.block.Block
-import net.minecraft.client.gui.GuiScreen
-import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.block.*
+import net.minecraft.client.gui.*
+import net.minecraft.creativetab.*
 import net.minecraft.item.*
 import net.minecraft.item.crafting.*
-import net.minecraft.util.ResourceLocation
-import net.minecraftforge.event.entity.player.ItemTooltipEvent
-import net.minecraftforge.oredict.OreDictionary
-import net.minecraftforge.oredict.OreDictionary.registerOre
-import net.minecraftforge.oredict.ShapedOreRecipe
+import net.minecraft.util.*
+import net.minecraftforge.event.entity.player.*
+import net.minecraftforge.oredict.*
+import net.minecraftforge.oredict.OreDictionary.*
 import thaumcraft.api.ThaumcraftApi.*
 import thaumcraft.api.aspects.*
 import thaumcraft.api.crafting.*
 import thaumcraft.api.research.*
 import thaumcraft.api.wands.*
-import thaumcraft.common.blocks.BlockCustomOreItem
+import thaumcraft.common.blocks.*
 import thaumcraft.common.config.*
-import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager
-import thaumcraft.common.lib.utils.CropUtils
-import thaumcraft.common.lib.utils.Utils.addSpecialMiningResult
-import vazkii.botania.api.lexicon.LexiconRecipeMappings
-import vazkii.botania.common.Botania
-import vazkii.botania.common.block.ModBlocks
-import vazkii.botania.common.item.ModItems
-import vazkii.botania.common.lexicon.page.PageText
+import thaumcraft.common.lib.crafting.*
+import thaumcraft.common.lib.utils.*
+import thaumcraft.common.lib.utils.Utils.*
+import vazkii.botania.api.lexicon.*
+import vazkii.botania.common.*
+import vazkii.botania.common.block.*
+import vazkii.botania.common.item.*
+import vazkii.botania.common.lexicon.page.*
 import vazkii.botania.common.lib.LibOreDict.*
 
 @Suppress("ConstPropertyName")
@@ -171,7 +170,7 @@ object ThaumcraftAlfheimModule {
 		}
 		
 		addSpecialMiningResult(ItemStack(alfheimThaumOre, 1, 0), ItemStack(ConfigItems.itemNugget, 1, 21), 0.9f)
-		addSpecialMiningResult(ItemStack(AlfheimBlocks.elvenOre, 1, 1), ItemStack(ConfigItems.itemNugget, 1, AlfheimConfigHandler.elementiumClusterMeta), 1f)
+		addSpecialMiningResult(ItemStack(AlfheimBlocks.elvenOre, 1, 1), ItemStack(ConfigItems.itemNugget, 1, AlfheimPreConfigHandler.elementiumClusterMeta), 1f)
 		
 		CropUtils.addClickableCrop(ItemStack(AlfheimBlocks.grapesRed[2]), 32767)
 		CropUtils.addClickableCrop(ItemStack(AlfheimBlocks.grapesRedPlanted), 4)
@@ -313,7 +312,7 @@ object ThaumcraftAlfheimModule {
 		)
 		
 		ConfigResearch.recipes[pureElementiumRecipe] = addCrucibleRecipe(pureElementiumResearch,
-																		 ItemStack(ConfigItems.itemNugget, 1, AlfheimConfigHandler.elementiumClusterMeta),
+																		 ItemStack(ConfigItems.itemNugget, 1, AlfheimPreConfigHandler.elementiumClusterMeta),
 																		 ELEMENTIUM_ORE,
 																		 AspectList()
 																			 .merge(Aspect.METAL, 1)
@@ -345,7 +344,7 @@ object ThaumcraftAlfheimModule {
 					1f
 		)
 		
-		addSmelting(ItemStack(ConfigItems.itemNugget, 1, AlfheimConfigHandler.elementiumClusterMeta),
+		addSmelting(ItemStack(ConfigItems.itemNugget, 1, AlfheimPreConfigHandler.elementiumClusterMeta),
 					ItemStack(ModItems.manaResource, 2, 7), // Elementium
 					1f
 		)
@@ -354,7 +353,7 @@ object ThaumcraftAlfheimModule {
 						 ItemStack(ModItems.manaResource, 0, 19)        // from ore
 		)
 		
-		addSmeltingBonus(ItemStack(ConfigItems.itemNugget, 1, AlfheimConfigHandler.elementiumClusterMeta),
+		addSmeltingBonus(ItemStack(ConfigItems.itemNugget, 1, AlfheimPreConfigHandler.elementiumClusterMeta),
 						 ItemStack(ModItems.manaResource, 0, 19)        // from cluster
 		)
 	}
@@ -514,7 +513,7 @@ object ThaumcraftAlfheimModule {
 		
 		ResearchItem(pureElementiumResearch, CATEGORY,
 		             AspectList().add(Aspect.METAL, 3).add(Aspect.ORDER, 2).add(Aspect.MAGIC, 1),
-		             -4, 2, 1, ItemStack(ConfigItems.itemNugget, 1, AlfheimConfigHandler.elementiumClusterMeta))
+		             -4, 2, 1, ItemStack(ConfigItems.itemNugget, 1, AlfheimPreConfigHandler.elementiumClusterMeta))
 			
 			.setPages(ResearchPage("tc.research_page.$pureElementiumResearch.1"),
 					  ResearchPage(ConfigResearch.recipes[pureElementiumRecipe] as CrucibleRecipe))
@@ -539,7 +538,7 @@ object ThaumcraftAlfheimModule {
 		registerOreDict("")
 		registerOreDict("Alfheim")
 		
-		registerOre("clusterElvenElementium", ItemStack(ConfigItems.itemNugget, 1, AlfheimConfigHandler.elementiumClusterMeta))
+		registerOre("clusterElvenElementium", ItemStack(ConfigItems.itemNugget, 1, AlfheimPreConfigHandler.elementiumClusterMeta))
 		registerOre("ingotCinnabar", ItemStack(ConfigItems.itemResource, 1, 3))
 		
 		AlfheimAPI.addOreWeightAlfheim("oreCinnabarAlfheim", 4275)
