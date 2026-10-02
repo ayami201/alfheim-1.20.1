@@ -1,0 +1,237 @@
+{
+	"_comment": "Звук 1.7.10 по имени → событие 1.20.1 с теми же файлами и категория автора. Собирает tools/legacy_sounds.py, руками не правится",
+	"sounds": {
+		"ambient.cave.cave": {
+			"event": "minecraft:ambient.cave",
+			"category": "ambient"
+		},
+		"ambient.weather.thunder": {
+			"event": "minecraft:entity.lightning_bolt.thunder",
+			"category": "weather"
+		},
+		"botania:blackLotus": {
+			"event": "botania:black_lotus",
+			"category": "block"
+		},
+		"botania:dash": {
+			"event": "botania:dash",
+			"category": "player"
+		},
+		"botania:ding": {
+			"event": "botania:ding",
+			"category": "block"
+		},
+		"botania:enchanterBlock": {
+			"event": "botania:enchanter_form",
+			"category": "block"
+		},
+		"botania:enchanterEnchant": {
+			"event": "botania:enchanter_enchant",
+			"category": "block"
+		},
+		"botania:endoflame": {
+			"event": "botania:endoflame",
+			"category": "block"
+		},
+		"botania:holyCloak": {
+			"event": "botania:holy_cloak",
+			"category": "player"
+		},
+		"botania:missile": {
+			"event": "botania:missile",
+			"category": "player"
+		},
+		"botania:runeAltarCraft": {
+			"event": "botania:rune_altar_craft",
+			"category": "block"
+		},
+		"botania:runeAltarStart": {
+			"event": "botania:rune_altar_start",
+			"category": "block"
+		},
+		"botania:terraBlade": {
+			"event": "botania:terrablade",
+			"category": "player"
+		},
+		"botania:terrasteelCraft": {
+			"event": "botania:terrasteel_craft",
+			"category": "block"
+		},
+		"creeper.primed": {
+			"event": "minecraft:entity.creeper.primed",
+			"category": "hostile"
+		},
+		"dig.grass": {
+			"event": "minecraft:block.grass.break",
+			"category": "block"
+		},
+		"fire.fire": {
+			"event": "minecraft:block.fire.ambient",
+			"category": "block"
+		},
+		"fire.ignite": {
+			"event": "minecraft:item.flintandsteel.use",
+			"category": "block"
+		},
+		"game.potion.smash": {
+			"event": "minecraft:entity.splash_potion.break",
+			"category": "neutral"
+		},
+		"liquid.lavapop": {
+			"event": "minecraft:block.lava.pop",
+			"category": "block"
+		},
+		"mob.blaze.breathe": {
+			"event": "minecraft:entity.blaze.ambient",
+			"category": "hostile"
+		},
+		"mob.blaze.death": {
+			"event": "minecraft:entity.blaze.death",
+			"category": "hostile"
+		},
+		"mob.cat.hiss": {
+			"event": "minecraft:entity.cat.hiss",
+			"category": "neutral"
+		},
+		"mob.cat.meow": {
+			"event": "minecraft:entity.cat.ambient",
+			"category": "neutral"
+		},
+		"mob.enderdragon.growl": {
+			"event": "minecraft:entity.ender_dragon.growl",
+			"category": "hostile"
+		},
+		"mob.endermen.portal": {
+			"event": "minecraft:entity.enderman.teleport",
+			"category": "hostile"
+		},
+		"mob.endermen.scream": {
+			"event": "minecraft:entity.enderman.scream",
+			"category": "hostile"
+		},
+		"mob.ghast.scream": {
+			"event": "minecraft:entity.ghast.hurt",
+			"category": "hostile"
+		},
+		"mob.horse.angry": {
+			"event": "minecraft:entity.horse.angry",
+			"category": "neutral"
+		},
+		"mob.horse.breathe": {
+			"event": "minecraft:entity.horse.breathe",
+			"category": "neutral"
+		},
+		"mob.horse.gallop": {
+			"event": "minecraft:entity.horse.gallop",
+			"category": "neutral"
+		},
+		"mob.horse.idle": {
+			"event": "minecraft:entity.horse.ambient",
+			"category": "neutral"
+		},
+		"mob.horse.land": {
+			"event": "minecraft:entity.horse.land",
+			"category": "neutral"
+		},
+		"mob.horse.soft": {
+			"event": "minecraft:entity.horse.step",
+			"category": "neutral"
+		},
+		"mob.horse.wood": {
+			"event": "minecraft:entity.horse.step_wood",
+			"category": "neutral"
+		},
+		"mob.irongolem.throw": {
+			"event": "minecraft:entity.iron_golem.attack",
+			"category": "neutral"
+		},
+		"mob.irongolem.walk": {
+			"event": "minecraft:entity.iron_golem.step",
+			"category": "neutral"
+		},
+		"mob.wither.hurt": {
+			"event": "minecraft:entity.wither.hurt",
+			"category": "hostile"
+		},
+		"mob.wither.idle": {
+			"event": "minecraft:entity.wither.ambient",
+			"category": "hostile"
+		},
+		"mob.wither.spawn": {
+			"event": "minecraft:entity.wither.spawn",
+			"category": "hostile"
+		},
+		"mob.wolf.growl": {
+			"event": "minecraft:entity.wolf.growl",
+			"category": "neutral"
+		},
+		"mob.wolf.shake": {
+			"event": "minecraft:entity.wolf.shake",
+			"category": "neutral"
+		},
+		"mob.wolf.step": {
+			"event": "minecraft:entity.wolf.step",
+			"category": "neutral"
+		},
+		"mob.zombie.death": {
+			"event": "minecraft:entity.zombie.death",
+			"category": "hostile"
+		},
+		"mob.zombie.hurt": {
+			"event": "minecraft:entity.zombie.hurt",
+			"category": "hostile"
+		},
+		"mob.zombie.remedy": {
+			"event": "minecraft:entity.zombie_villager.cure",
+			"category": "hostile"
+		},
+		"mob.zombie.say": {
+			"event": "minecraft:entity.zombie.ambient",
+			"category": "hostile"
+		},
+		"mob.zombie.step": {
+			"event": "minecraft:entity.zombie.step",
+			"category": "hostile"
+		},
+		"random.anvil_land": {
+			"event": "minecraft:block.anvil.land",
+			"category": "block"
+		},
+		"random.bow": {
+			"event": "minecraft:entity.arrow.shoot",
+			"category": "neutral"
+		},
+		"random.burp": {
+			"event": "minecraft:entity.player.burp",
+			"category": "player"
+		},
+		"random.click": {
+			"event": "minecraft:block.stone_button.click_on",
+			"category": "block"
+		},
+		"random.eat": {
+			"event": "minecraft:entity.generic.eat",
+			"category": "player"
+		},
+		"random.explode": {
+			"event": "minecraft:entity.generic.explode",
+			"category": "block"
+		},
+		"random.fizz": {
+			"event": "minecraft:block.fire.extinguish",
+			"category": "block"
+		},
+		"random.orb": {
+			"event": "minecraft:entity.experience_orb.pickup",
+			"category": "player"
+		},
+		"random.pop": {
+			"event": "minecraft:entity.item.pickup",
+			"category": "player"
+		},
+		"step.grass": {
+			"event": "minecraft:block.grass.step",
+			"category": "neutral"
+		}
+	}
+}
