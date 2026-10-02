@@ -4,27 +4,32 @@ package alfheim
 //import alexsocol.patcher.*
 //import alexsocol.patcher.asm.worker.InterfaceAppenderWorker.registerAdditionalInterface
 import alfheim.api.ModInfo.MODID
+import alfheim.client.core.proxy.ClientProxy
 //import alfheim.common.core.command.*
-//import alfheim.common.core.handler.*
+import alfheim.common.core.handler.*
 //import alfheim.common.core.handler.ragnarok.*
-//import alfheim.common.core.proxy.*
-//import alfheim.common.core.util.*
+import alfheim.common.core.proxy.*
+import alfheim.common.core.util.*
 //import alfheim.common.integration.minetweaker.*
 //import alfheim.common.integration.thaumcraft.*
 //import alfheim.common.integration.tinkersconstruct.*
 //import alfheim.common.integration.travellersgear.*
 //import alfheim.common.integration.waila.*
-//import alfheim.common.network.*
+import alfheim.common.network.*
+import alfheim.port.registry.AlfheimRegisters
 import net.minecraft.world.level.storage.LevelResource
 import net.minecraftforge.event.server.ServerStartingEvent
 import net.minecraftforge.eventbus.api.EventPriority
+import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.*
+import net.minecraftforge.forgespi.language.IModInfo
 import net.minecraftforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.forge.*
 //import vazkii.botania.common.*
-//import java.io.File
+import java.io.File
+import java.util.function.Supplier
 
 @Suppress("UNUSED_PARAMETER")
 // PORT: dependencies и useMetadata → META-INF/mods.toml; modLanguageAdapter → modLoader="kotlinforforge" там же; guiFactory (экран настроек) — КТ-1
@@ -32,16 +37,15 @@ import thedarkcolour.kotlinforforge.forge.*
 @Mod(MODID)
 object AlfheimCore {
 	
-	// PORT: КТ-1 — прокси автора; сторона выбирается через DistExecutor (SPEC, Р-11)
+	// PORT: @KotlinProxy → DistExecutor (SPEC, Р-11): клиентский класс загружается только на клиенте
 //	@KotlinProxy(clientSide = "$MODID.client.core.proxy.ClientProxy", serverSide = "$MODID.common.core.proxy.CommonProxy")
-//	lateinit var proxy: CommonProxy
+	val proxy: CommonProxy = DistExecutor.unsafeRunForDist({ Supplier { ClientProxy } }, { Supplier { CommonProxy() } })
 	
 //	@KotlinProxy(clientSide = "ab.client.core.proxy.ClientProxy", serverSide = "ab.common.core.proxy.CommonProxy")
 //	lateinit var abProxy: ab.common.core.proxy.CommonProxy
 	
-	// PORT: КТ-1 — нужен InfoLoader; в 1.20.1 сведения о моде — IModInfo из ModList, а не ModMetadata
-//	@Metadata(MODID)
-//	lateinit var meta: ModMetadata
+	// PORT: @Metadata ModMetadata → IModInfo из ModList
+	val meta: IModInfo get() = ModList.get().getModContainerById(MODID).get().modInfo
 	
 	// PORT: папка мира сервера; LevelResource.ROOT даёт путь с «.» на конце, normalize() его убирает
 	val save: String get() = ServerLifecycleHooks.getCurrentServer().getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().toString()
@@ -53,25 +57,27 @@ object AlfheimCore {
 	var TravellersGearLoaded = false
 	var TwilightForestLoaded = false
 	
-	// PORT: КТ-1 — TimeHandler; ветки RagnarokHandler — КТ-8
-//	val jingleTheBells: Boolean
-//	
-//	// do not reassign this unless you know what you are doing
-//	var winter: Boolean
-//		get() {
-//			return when {
+	val jingleTheBells: Boolean
+	
+	// do not reassign this unless you know what you are doing
+	var winter: Boolean
+		get() {
+			return when {
+				// PORT: КТ-8 — RagnarokHandler
 //				RagnarokHandler.winter -> true
 //				RagnarokHandler.summer -> false
-//				else                   -> field
-//			}
-//		}
+				else                   -> field
+			}
+		}
 	
 	init {
-		// PORT: КТ-1 — AlfheimTab, TimeHandler
-//		AlfheimTab
-//		
-//		jingleTheBells = (TimeHandler.month == 12 && TimeHandler.day >= 16 || TimeHandler.month == 1 && TimeHandler.day <= 8)
-//		winter = TimeHandler.month in arrayOf(1, 2, 12, 13)
+		// PORT: реестры мода — на шину мода до события регистрации (DeferredRegister, SPEC, Р-5)
+		AlfheimRegisters.register(MOD_BUS)
+		
+		AlfheimTab
+		
+		jingleTheBells = (TimeHandler.month == 12 && TimeHandler.day >= 16 || TimeHandler.month == 1 && TimeHandler.day <= 8)
+		winter = TimeHandler.month in arrayOf(1, 2, 12, 13)
 		
 		// PORT: в 1.20.1 нет событий FML 1.7.10 (@EventHandler). preInit вызывается из конструктора мода:
 		// регистрация и конфиг в 1.20.1 возможны только здесь. Остальные — подписки на события Forge,
@@ -94,8 +100,10 @@ object AlfheimCore {
 	
 	// PORT: было @EventHandler fun preInit(e: FMLPreInitializationEvent); вызывается из init, см. выше
 	fun preInit() {
-		// PORT: КТ-1 — AlfheimConfigHandler
-//		AlfheimConfigHandler.loadConfig(File("config/Alfheim/mod.cfg"))
+		// PORT: core.cfg автор читал в coremod (AlfheimHookLoader), до загрузки модов. Coremod в 1.20.1 нет,
+		// поэтому файл читается здесь, первым. Файлы конфига — .toml (alfheim.port.config.Configuration)
+		AlfheimPreConfigHandler.loadPreConfig(File("config/Alfheim/core.cfg"))
+		AlfheimConfigHandler.loadConfig(File("config/Alfheim/mod.cfg"))
 		
 //		abProxy.preInit(e)
 		
@@ -113,14 +121,11 @@ object AlfheimCore {
 		// PORT: id модов в 1.20.1 пишутся строчными буквами
 		stupidMode = ModList.get().isLoaded("avaritia")
 		
-		// PORT: КТ-1 — AlfheimConfigHandler, InfoLoader
-//		if (AlfheimConfigHandler.notifications) InfoLoader.start()
+		if (AlfheimConfigHandler.notifications) InfoLoader.start()
 		
-		// PORT: КТ-1 — сеть
-//		NetworkService
+		NetworkService
 		
-		// PORT: КТ-1 — прокси
-//		proxy.preInit()
+		proxy.preInit()
 		// PORT: выпало — Thaumcraft отсутствует на 1.20.1 (SPEC, п. 7)
 //		if (Botania.thaumcraftLoaded) ThaumcraftAlfheimModule.preInit()
 	}
@@ -129,19 +134,18 @@ object AlfheimCore {
 	fun init(e: FMLCommonSetupEvent) {
 //		abProxy.init(e)
 		
-		// PORT: КТ-1 — прокси
-//		proxy.init()
-//		proxy.initializeAndRegisterHandlers()
+		proxy.init()
+		proxy.initializeAndRegisterHandlers()
 	}
 	
 	// PORT: было @EventHandler, FMLPostInitializationEvent
 	fun postInit(e: InterModProcessEvent) {
 //		abProxy.postInit(e)
 		
-		// PORT: КТ-1 — прокси. Клавиши и рендер в 1.20.1 регистрируются в своих событиях, это решается при переносе прокси
-//		proxy.registerKeyBinds()
-//		proxy.registerRenderThings()
-//		proxy.postInit()
+		// PORT: клавиши и рендер в 1.20.1 регистрируются в своих событиях; здесь остаётся то, что не регистрация (ClientProxy)
+		proxy.registerKeyBinds()
+		proxy.registerRenderThings()
+		proxy.postInit()
 		// PORT: выпало — MineTweaker отсутствует на 1.20.1 (SPEC, п. 7)
 //		if (MineTweakerLoaded) MinetweakerAlfheimConfig.loadConfig()
 		// PORT: выпало — Thaumcraft отсутствует на 1.20.1 (SPEC, п. 7)
@@ -165,9 +169,9 @@ object AlfheimCore {
 	
 	// PORT: было @EventHandler, FMLServerStartingEvent
 	fun starting(e: ServerStartingEvent) {
-		// PORT: КТ-1 — AlfheimConfigHandler; Elven Story — КТ-7
+		// PORT: КТ-7 — Elven Story
 //		if (AlfheimConfigHandler.enableElvenStory) AlfheimConfigHandler.initWorldCoordsForElvenStory(save)
-//		AlfheimConfigHandler.syncConfig()
+		AlfheimConfigHandler.syncConfig()
 		// PORT: КТ-7 — команды; в 1.20.1 они регистрируются в RegisterCommandsEvent
 //		e.registerServerCommand(CommandAlfheim)
 //		e.registerServerCommand(CommandDebug)

@@ -1,0 +1,103 @@
+package alfheim.common.network.packet
+
+// PORT: импорты 1.7.10 заменены на 1.20.1; импорты кода, который ещё не перенесён, закомментированы до его КТ
+//import alexsocol.asjlib.*
+//import alexsocol.asjlib.math.Vector3
+import alexsocol.asjlib.network.ASJPacket
+import alfheim.api.network.AlfheimPacket
+//import alfheim.common.item.AlfheimItems
+//import alfheim.common.item.equipment.bauble.*
+//import alfheim.common.item.relic.ItemAkashicRecords
+import alfheim.common.network.M0ds
+//import baubles.common.lib.PlayerHandler
+import net.minecraft.server.level.ServerPlayer as EntityPlayerMP
+//import vazkii.botania.common.item.equipment.bauble.ItemTravelBelt
+
+class Message0dS(ty: M0ds, var type: Int = ty.ordinal): AlfheimPacket<Message0dS>() {
+	
+	override fun handleServer(player: EntityPlayerMP) {
+		when (M0ds.entries[type]) {
+			M0ds.AKASHIK_SCROLL_UP   -> scrollAkasha(player, true)
+			M0ds.AKASHIK_SCROLL_DOWN -> scrollAkasha(player, false)
+			M0ds.DODGE               -> dodge(player)
+			M0ds.HEIMBLINK           -> blink(player)
+			M0ds.JUMP                -> jump(player)
+		}
+	}
+	
+	// PORT: КТ-4 — тела функций ниже ждут свои предметы (ItemAkashicRecords, ItemDodgeRing, ItemCloudPendant,
+	// ItemPriestCloak) и Curios вместо Baubles
+	fun scrollAkasha(player: EntityPlayerMP, up: Boolean) {
+		/*
+		if (!player.isSneaking) return
+		
+		val stack = player.heldItem ?: return
+		if (stack.item !== AlfheimItems.akashicRecords) return
+		ItemNBTHelper.setInt(stack, ItemAkashicRecords.TAG_SCROLL, ItemNBTHelper.getInt(stack, ItemAkashicRecords.TAG_SCROLL, 0) + if (up) -1 else 1)
+		*/
+	}
+
+	private fun dodge(player: EntityPlayerMP) {
+		/*
+		player.playSoundAtEntity("botania:dash", 1f, 1f)
+
+		val baublesInv = PlayerHandler.getPlayerBaubles(player)
+		var ringStack: ItemStack? = baublesInv[1]
+
+		if (ringStack == null || ringStack.item !is ItemDodgeRing) {
+			ringStack = baublesInv[2]
+			if (ringStack == null || ringStack.item !is ItemDodgeRing) {
+				player.playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToFallback("alfheimmisc.invalidDodge"))
+				return
+			}
+		}
+
+		if (ItemNBTHelper.getInt(ringStack, ItemDodgeRing.TAG_DODGE_COOLDOWN, 0) > 0) {
+			player.playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToFallback("alfheimmisc.invalidDodge"))
+			return
+		}
+
+		player.addExhaustion(0.3f)
+		ItemNBTHelper.setInt(ringStack, ItemDodgeRing.TAG_DODGE_COOLDOWN, ItemDodgeRing.MAX_CD)
+		*/
+	}
+
+	private fun jump(player: EntityPlayerMP) {
+		/*
+		val baublesInv = PlayerHandler.getPlayerBaubles(player)
+		val amuletStack = baublesInv[0]
+
+		if (amuletStack != null && amuletStack.item is ItemCloudPendant) {
+			player.addExhaustion(0.3f)
+			player.fallDistance = 0f
+
+			val belt = baublesInv[3]
+
+			if (belt != null && belt.item is ItemTravelBelt) {
+				val fall = (belt.item as ItemTravelBelt).fallBuffer
+				player.fallDistance = -fall * (amuletStack.item as ItemCloudPendant).maxAllowedJumps
+			}
+		}
+		*/
+	}
+
+	// PORT: IMessage → ASJPacket: интерфейса сообщения в 1.20.1 нет
+	fun blink(player: EntityPlayerMP): ASJPacket? {
+		/*
+		if (ItemPriestCloak.getCloak(4, player) != null) {
+			val look = player.lookVec
+			val dist = 6.0
+			val (x, y, z) = Vector3.fromEntity(player).add(Vector3(look).mul(dist))
+
+			if (!player.worldObj.getBlock(x.I, y.I, z.I).isNormalCube && !player.worldObj.getBlock(x.I, y.I + 1, z.I).isNormalCube) {
+				player.playerNetServerHandler.setPlayerLocation(x, y, z, player.rotationYaw, player.rotationPitch)
+				// ctx.serverHandler.func_184342_d() captureCurrentPosition ???
+				player.worldObj.playSoundEffect(x, y, z, "mob.endermen.portal", 1f, 1f)
+				player.playSound("mob.endermen.portal", 1f, 1f)
+			}
+		}
+		*/
+
+		return null
+	}
+}

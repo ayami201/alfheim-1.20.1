@@ -1,0 +1,345 @@
+{
+	"calm": {
+		"category": "player",
+		"sounds": [
+			"alfheim:calm"
+		]
+	},
+	"ccj": {
+		"category": "player",
+		"sounds": [
+			"alfheim:ccj"
+		]
+	},
+	"ea": {
+		"category": "master",
+		"sounds": [
+			"alfheim:ea"
+		]
+	},
+	"fenrir.attack": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:fenrir/attack"
+		]
+	},
+	"fenrir.howl": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:fenrir/howl"
+		]
+	},
+	"fenrir.hrrr": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:fenrir/hrrr"
+		]
+	},
+	"fenrir.hurt": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:fenrir/hurt"
+		]
+	},
+	"glass": {
+		"category": "player",
+		"sounds": [
+			"alfheim:glass"
+		]
+	},
+	"horn.bhorn": {
+		"category": "player",
+		"sounds": [
+			"alfheim:horn/bhorn"
+		]
+	},
+	"horn.ehorn": {
+		"category": "player",
+		"sounds": [
+			"alfheim:horn/ehorn"
+		]
+	},
+	"horn.ghorn": {
+		"category": "player",
+		"sounds": [
+			"alfheim:horn/ghorn"
+		]
+	},
+	"niflportal": {
+		"category": "block",
+		"sounds": [
+			"alfheim:niflportal"
+		]
+	},
+	"oiia": {
+		"category": "neutral",
+		"sounds": [
+			"alfheim:oiia"
+		]
+	},
+	"organ.heart": {
+		"category": "player",
+		"sounds": [
+			"alfheim:organs/heart"
+		]
+	},
+	"organ.liver": {
+		"category": "player",
+		"sounds": [
+			"alfheim:organs/liver"
+		]
+	},
+	"organ.lungs": {
+		"category": "player",
+		"sounds": [
+			"alfheim:organs/lungs"
+		]
+	},
+	"organ.nerves": {
+		"category": "player",
+		"sounds": [
+			"alfheim:organs/nerves"
+		]
+	},
+	"quad": {
+		"category": "player",
+		"sounds": [
+			"alfheim:quad"
+		]
+	},
+	"quadh": {
+		"category": "player",
+		"sounds": [
+			"alfheim:quadh"
+		]
+	},
+	"redexp": {
+		"category": "player",
+		"sounds": [
+			"alfheim:redexp"
+		]
+	},
+	"resonator.blast": {
+		"category": "player",
+		"sounds": [
+			"alfheim:resonator_blast"
+		]
+	},
+	"resonator.fire": {
+		"category": "player",
+		"sounds": [
+			"alfheim:resonator_fire"
+		]
+	},
+	"surtr.fireball.form": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/fireball/form"
+		]
+	},
+	"surtr.fireball.hit": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/fireball/hit"
+		]
+	},
+	"surtr.fireball.shot": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/fireball/shot"
+		]
+	},
+	"surtr.sun.exist": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/sun/exist"
+		]
+	},
+	"surtr.sun.form": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/sun/form"
+		]
+	},
+	"surtr.sun.shot": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/sun/shot"
+		]
+	},
+	"surtr.sword.charge": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/sword/charge"
+		]
+	},
+	"surtr.sword.hit": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/sword/hit"
+		]
+	},
+	"surtr.sword.rotate": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/sword/rotate"
+		]
+	},
+	"surtr.sword.strike": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/sword/strike"
+		]
+	},
+	"surtr.wall.exist": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/wall/exist"
+		]
+	},
+	"surtr.wall.form": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/wall/form"
+		]
+	},
+	"surtr.chunk": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/chunk"
+		]
+	},
+	"surtr.death": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/death"
+		]
+	},
+	"surtr.hurt": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/hurt"
+		]
+	},
+	"surtr.laugh": {
+		"category": "master",
+		"sounds": [
+			"alfheim:surtr/laugh"
+		]
+	},
+	"surtr.summon": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/summon"
+		]
+	},
+	"surtr.whirlwind": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:surtr/whirlwind"
+		]
+	},
+	"thrym.axe.rotate": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/axe/rotate"
+		]
+	},
+	"thrym.axe.hit": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/axe/hit"
+		]
+	},
+	"thrym.axe.strike": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/axe/strike"
+		]
+	},
+	"thrym.axe.swing": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/axe/swing"
+		]
+	},
+	"thrym.icicle.form": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/icicle/form"
+		]
+	},
+	"thrym.icicle.hit": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/icicle/hit"
+		]
+	},
+	"thrym.icicle.shot": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/icicle/shot"
+		]
+	},
+	"thrym.shield.break": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/shield/break"
+		]
+	},
+	"thrym.shield.form": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/shield/form"
+		]
+	},
+	"thrym.shield.teleport": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/shield/teleport"
+		]
+	},
+	"thrym.death": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/death"
+		]
+	},
+	"thrym.hurt": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/hurt"
+		]
+	},
+	"thrym.suction": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/suction"
+		]
+	},
+	"thrym.summon": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/summon"
+		]
+	},
+	"thrym.whirlwind": {
+		"category": "hostile",
+		"sounds": [
+			"alfheim:thrym/whirlwind"
+		]
+	},
+	"warbanner": {
+		"category": "player",
+		"sounds": [
+			"alfheim:warbanner"
+		]
+	},
+	"wind": {
+		"category": "player",
+		"sounds": [
+			"alfheim:wind1",
+			"alfheim:wind2"
+		]
+	}
+}

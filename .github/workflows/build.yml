@@ -1,4 +1,4 @@
-# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, GameTest-ы на сервере, сверка описи и врезок.
+# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, GameTest-ы на сервере, сверка описи, врезок, переводов, звуков и настроек.
 # jar из артефакта «alfheim-jar» владелец ставит в свою сборку для проверки по чек-листу PR.
 name: Build
 
@@ -33,6 +33,10 @@ jobs:
       - name: Сверка врезок (HOOKS.md)
         run: python3 tools/check_hooks.py
 
+      # Переводы .json собраны из .lang автора скриптом: ключей столько же, кроме удалённых
+      - name: Сверка переводов
+        run: python3 tools/convert_lang.py --check
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -44,11 +48,19 @@ jobs:
       - name: Сборка
         run: ./gradlew build
 
+      # Таблица звуков 1.7.10 → 1.20.1 собрана скриптом из sounds.json Mojang и Botania, руками не правится
+      - name: Сверка таблицы звуков
+        run: python3 tools/legacy_sounds.py --check
+
       - name: GameTest-ы на сервере
         run: ./gradlew runGameTestServer
 
       - name: Лог сервера
         run: python3 tools/check_server_log.py run/logs/latest.log
+
+      # Файлы настроек создал сервер выше: все опции автора, кроме удалённых, со значениями автора
+      - name: Сверка настроек с автором
+        run: python3 tools/check_config.py run/config/Alfheim
 
       - name: jar мода
         uses: actions/upload-artifact@v4

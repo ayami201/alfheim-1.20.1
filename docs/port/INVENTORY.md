@@ -34,19 +34,19 @@ python3 tools/check_inventory.py
 | КТ | Файлов | Строк | ждёт | перенесено | выпало | WIP — стадия 2 |
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
-| КТ-1 | 33 | 5 661 | 33 |  |  |  |
+| КТ-1 | 32 | 5 652 | 2 | 30 |  |  |
 | КТ-2 | 222 | 19 082 | 222 |  |  |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
-| КТ-6 | 106 | 12 499 | 106 |  |  |  |
+| КТ-6 | 107 | 12 508 | 107 |  |  |  |
 | КТ-7 | 139 | 10 888 | 139 |  |  |  |
 | КТ-8 | 95 | 13 066 | 95 |  |  |  |
 | КТ-9 | 19 | 2 559 | 19 |  |  |  |
-| КТ-10 | 22 | 1 769 | 22 |  |  |  |
+| КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
-| — | 72 | 4 504 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **1079** | **2** | **60** | **12** |
+| — | 70 | 4 498 |  |  | 58 | 12 |
+| **всего** | **1153** | **124 643** | **1051** | **32** | **58** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -110,13 +110,13 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `HugeItemRenderer.java` | 3 | — | выпало (ExtraBotany: нет в сборке, SPEC п. 7) | заглушка API; врезки правили рендер её предметов 1.7.10 |
+| `HugeItemRenderer.java` | 3 | КТ-10 | ждёт | заглушка API ExtraBotany 1.7.10; врезки правили рендер её предметов. В 1.20.1 — проверка с ExtraBotany: Reburn (SPEC п. 7) |
 
 ### `legacy/src/api/java/com/meteor/extrabotany/client/render/item/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `GunRenderer.java` | 3 | — | выпало (ExtraBotany: нет в сборке, SPEC п. 7) | заглушка API; врезки правили рендер её предметов 1.7.10 |
+| `GunRenderer.java` | 3 | КТ-10 | ждёт | заглушка API ExtraBotany 1.7.10; врезки правили рендер её предметов. В 1.20.1 — проверка с ExtraBotany: Reburn (SPEC п. 7) |
 
 ### `legacy/src/api/java/com/rwtema/extrautils/`
 
@@ -219,7 +219,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimAPI.kt` | 377 | КТ-1 | ждёт |  |
+| `AlfheimAPI.kt` | 377 | КТ-1 | перенесено | → `src/main/java/alfheim/api/AlfheimAPI.kt`; работают редкости, «розовость», топливо, веса руд; остальное закомментировано до КТ своих механик |
 | `ModInfo.kt` | 6 | КТ-0 | перенесено | → `src/main/java/alfheim/api/ModInfo.kt` |
 | `package-info.java` | 4 | — | выпало (аннотация `@API` FML 1.7.10, в 1.20.1 аналога нет) |  |
 
@@ -263,9 +263,9 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `AlfheimModeChangedEvent.kt` | 5 | КТ-7 | ждёт |  |
-| `AttackEntityEventPost.kt` | 8 | КТ-1 | ждёт |  |
+| `AttackEntityEventPost.kt` | 8 | КТ-1 | перенесено | → `src/main/java/alfheim/api/event/AttackEntityEventPost.kt` |
 | `PlayerChangedRaceEvent.kt` | 7 | КТ-7 | ждёт |  |
-| `PlayerInteractAdequateEvent.kt` | 32 | КТ-1 | ждёт |  |
+| `PlayerInteractAdequateEvent.kt` | 32 | КТ-1 | перенесено | → `src/main/java/alfheim/api/event/PlayerInteractAdequateEvent.kt` |
 | `SpellCastEvent.kt` | 13 | КТ-7 | ждёт |  |
 | `TimeStopCheckEvent.kt` | 18 | КТ-7 | ждёт |  |
 
@@ -297,14 +297,14 @@ python3 tools/check_inventory.py
 |---|---:|---|---|---|
 | `LibOreDict.kt` | 71 | КТ-2 | ждёт |  |
 | `LibRenderIDs.kt` | 33 | КТ-2 | ждёт |  |
-| `LibResourceLocations.kt` | 318 | КТ-1 | ждёт |  |
+| `LibResourceLocations.kt` | 318 | КТ-1 | перенесено | → `src/main/java/alfheim/api/lib/LibResourceLocations.kt`; пути через `legacyPath`; анимированные текстуры (`ResourceLocationAnimated`) — в КТ своих моделей |
 | `LibShaderIDs.kt` | 14 | КТ-2 | ждёт |  |
 
 ### `legacy/src/main/java/alfheim/api/network/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimPacket.kt` | 19 | КТ-1 | ждёт |  |
+| `AlfheimPacket.kt` | 19 | КТ-1 | перенесено | → `src/main/java/alfheim/api/network/AlfheimPacket.kt` |
 
 ### `legacy/src/main/java/alfheim/api/spell/`
 
@@ -331,7 +331,7 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `CardinalSystemClient.kt` | 153 | КТ-7 | ждёт |  |
-| `EventHandlerClient.kt` | 325 | КТ-1 | ждёт | общий обработчик: растёт по КТ вместе с механиками |
+| `EventHandlerClient.kt` | 325 | КТ-1 | перенесено | → `src/main/java/alfheim/client/core/handler/EventHandlerClient.kt`; общий обработчик: подписан на шину, его методы раскомментирует КТ своей механики |
 | `HUDCorporeaRat.kt` | 47 | КТ-3 | ждёт |  |
 | `KeyBindingHandlerClient.kt` | 353 | КТ-7 | ждёт |  |
 
@@ -346,7 +346,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `ClientProxy.kt` | 447 | КТ-1 | ждёт |  |
+| `ClientProxy.kt` | 447 | КТ-1 | перенесено | → `src/main/java/alfheim/client/core/proxy/ClientProxy.kt`; регистрация рендера — в КТ своих вещей, режимы и клавиши — КТ-7 |
 
 ### `legacy/src/main/java/alfheim/client/core/util/`
 
@@ -359,10 +359,10 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `GUIBanner.kt` | 66 | КТ-8 | ждёт | сезонные события |
-| `GUIConfig.kt` | 9 | КТ-1 | ждёт |  |
+| `GUIConfig.kt` | 9 | КТ-1 | ждёт | экран настроек: в Forge 1.20.1 встроенного нет — вопрос к владельцу (TASKS.md) |
 | `GUIDeathTimer.kt` | 77 | КТ-7 | ждёт |  |
 | `GUIEditGaiaButton.kt` | 43 | КТ-3 | ждёт |  |
-| `GUIFactory.kt` | 12 | КТ-1 | ждёт |  |
+| `GUIFactory.kt` | 12 | КТ-1 | ждёт | см. `GUIConfig.kt` |
 | `GUIParty.kt` | 693 | КТ-7 | ждёт |  |
 | `GUIRace.kt` | 64 | КТ-7 | ждёт |  |
 | `GUIScreenOverlay.kt` | 74 | КТ-6 | ждёт | холод Нифльхейма |
@@ -390,7 +390,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `LibResourceLocationsActual.kt` | 29 | КТ-1 | ждёт |  |
+| `LibResourceLocationsActual.kt` | 29 | КТ-1 | перенесено | → `src/main/java/alfheim/client/lib/LibResourceLocationsActual.kt`; старый пилон — КТ-3, lexica — КТ-7, плащи — КТ-4 |
 
 ### `legacy/src/main/java/alfheim/client/model/armor/`
 
@@ -604,12 +604,12 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `AstrolabePreviewHandler.kt` | 74 | КТ-4 | ждёт |  |
-| `DummyRenderHandler.kt` | 9 | КТ-1 | ждёт |  |
+| `DummyRenderHandler.kt` | 9 | КТ-6 | ждёт | нужен только мирам Хельхейма, Нифльхейма и доменов; в 1.20.1 небо и погоду рисует `DimensionSpecialEffects`, переносится с ними |
 | `FenrirVisualEffectsRenderer.kt` | 56 | КТ-8 | ждёт |  |
 | `SkyRendererAlfheim.kt` | 358 | КТ-6 | ждёт |  |
 | `SkyRendererDomains.kt` | 80 | КТ-6 | ждёт |  |
 | `SpellVisualizations.kt` | 182 | КТ-7 | ждёт |  |
-| `VisualEffectHandlerClient.kt` | 544 | КТ-1 | ждёт |  |
+| `VisualEffectHandlerClient.kt` | 544 | КТ-1 | перенесено | → `src/main/java/alfheim/client/render/world/VisualEffectHandlerClient.kt`; список эффектов работает, сами эффекты закомментированы до КТ тех, кто их шлёт |
 | `WeatherRendererAlfheim.kt` | 144 | КТ-6 | ждёт |  |
 | `WeatherRendererNiflheim.kt` | 98 | КТ-6 | ждёт |  |
 
@@ -1078,22 +1078,22 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `AlfheimAchievementHandler.kt` | 83 | КТ-10 | ждёт | достижения → advancements |
-| `AlfheimConfigHandler.kt` | 613 | КТ-1 | ждёт |  |
-| `AlfheimPreConfigHandler.kt` | 25 | КТ-1 | ждёт |  |
+| `AlfheimConfigHandler.kt` | 613 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/AlfheimConfigHandler.kt`; удалённые опции — MAPPING.md |
+| `AlfheimPreConfigHandler.kt` | 25 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/AlfheimPreConfigHandler.kt` |
 | `CardinalSystem.kt` | 1173 | КТ-7 | ждёт |  |
 | `ChunkLoadingHandler.kt` | 129 | КТ-6 | ждёт |  |
 | `DispenserHandlers.kt` | 174 | КТ-2 | ждёт |  |
 | `ESMHandlers.kt` | 391 | КТ-7 | ждёт |  |
-| `EventHandler.kt` | 488 | КТ-1 | ждёт | общий обработчик: растёт по КТ вместе с механиками |
+| `EventHandler.kt` | 488 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/EventHandler.kt`; общий обработчик: работают новости при входе и две особенности участников, остальное раскомментирует КТ своей механики |
 | `EventHandlerSummer.kt` | 38 | КТ-8 | ждёт | сезонные события |
 | `EventHandlerWinter.kt` | 22 | КТ-8 | ждёт | сезонные события |
 | `HilarityHandler.kt` | 222 | КТ-4 | ждёт | обращается к sessionserver Mojang (SPEC п. 8) |
 | `KeyBindingHandler.kt` | 91 | КТ-7 | ждёт |  |
 | `SheerColdHandler.kt` | 225 | КТ-6 | ждёт |  |
 | `SoulRestructuringHandler.kt` | 146 | КТ-3 | ждёт |  |
-| `TimeHandler.kt` | 20 | КТ-1 | ждёт |  |
+| `TimeHandler.kt` | 20 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/TimeHandler.kt`; без правок |
 | `TradingGiftsHandler.kt` | 135 | КТ-3 | ждёт |  |
-| `VisualEffectHandler.kt` | 22 | КТ-1 | ждёт |  |
+| `VisualEffectHandler.kt` | 22 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/VisualEffectHandler.kt` |
 | `WorkInProgressItemsHandler.kt` | 33 | КТ-2 | ждёт | метка [WIP] для вещей автора |
 
 ### `legacy/src/main/java/alfheim/common/core/handler/ragnarok/`
@@ -1107,7 +1107,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `ContributorsPrivacyHelper.kt` | 151 | КТ-1 | ждёт | обращается к Bitbucket автора (SPEC п. 8) |
+| `ContributorsPrivacyHelper.kt` | 151 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/helper/ContributorsPrivacyHelper.kt`; обращается к Bitbucket автора (SPEC п. 8) |
 | `CorporeaAdvancedHelper.kt` | 109 | КТ-3 | ждёт |  |
 | `DiceDropsHelper.kt` | 70 | КТ-4 | ждёт |  |
 | `ElementalDamageHelper.kt` | 319 | КТ-4 | ждёт |  |
@@ -1118,21 +1118,21 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `CommonProxy.kt` | 110 | КТ-1 | ждёт |  |
+| `CommonProxy.kt` | 110 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/proxy/CommonProxy.kt`; вызовы будущих КТ закомментированы с номером КТ |
 
 ### `legacy/src/main/java/alfheim/common/core/registry/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimRegistry.kt` | 611 | КТ-1 | ждёт |  |
+| `AlfheimRegistry.kt` | 611 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/registry/AlfheimRegistry.kt`; работают веса руд для цветов, остальное раскомментирует КТ своих вещей |
 
 ### `legacy/src/main/java/alfheim/common/core/util/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimTab.kt` | 785 | КТ-1 | ждёт |  |
+| `AlfheimTab.kt` | 785 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/util/AlfheimTab.kt`; строки списка вкладки ждут КТ своих вещей |
 | `DamageSourceSpell.kt` | 149 | КТ-7 | ждёт |  |
-| `InfoLoader.kt` | 82 | КТ-1 | ждёт | обращается к Bitbucket автора (SPEC п. 8) |
+| `InfoLoader.kt` | 82 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/util/InfoLoader.kt`; обращается к Bitbucket автора (SPEC п. 8) |
 
 ### `legacy/src/main/java/alfheim/common/crafting/`
 
@@ -1746,20 +1746,20 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `Data.kt` | 15 | КТ-1 | ждёт |  |
-| `NetworkService.kt` | 118 | КТ-1 | ждёт |  |
+| `Data.kt` | 15 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/Data.kt` |
+| `NetworkService.kt` | 118 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/NetworkService.kt` |
 
 ### `legacy/src/main/java/alfheim/common/network/packet/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `Message0dC.kt` | 23 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `Message0dS.kt` | 93 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `Message1d.kt` | 80 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `Message1l.kt` | 14 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `Message2d.kt` | 70 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `Message3d.kt` | 42 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `MessageContributor.kt` | 80 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
+| `Message0dC.kt` | 23 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message0dC.kt`; ветки обработки по КТ механик закомментированы |
+| `Message0dS.kt` | 93 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message0dS.kt`; ветки обработки по КТ механик закомментированы |
+| `Message1d.kt` | 80 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message1d.kt`; ветки обработки по КТ механик закомментированы |
+| `Message1l.kt` | 14 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message1l.kt`; ветка SEED — КТ-5 |
+| `Message2d.kt` | 70 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message2d.kt`; ветки обработки по КТ механик закомментированы |
+| `Message3d.kt` | 42 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message3d.kt`; ветки обработки по КТ механик закомментированы |
+| `MessageContributor.kt` | 80 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/MessageContributor.kt` |
 | `MessageCorporeaRequest.kt` | 22 | КТ-3 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageDisguise.kt` | 55 | КТ-4 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageEffect.kt` | 55 | КТ-2 | ждёт | канал — КТ-1, пакет — вместе с механикой |
@@ -1769,7 +1769,7 @@ python3 tools/check_inventory.py
 | `MessageHotSpellC.kt` | 20 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageHotSpellS.kt` | 12 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageKeyBindS.kt` | 24 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `MessageNI.kt` | 69 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
+| `MessageNI.kt` | 69 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/MessageNI.kt`; BLIZZARD — КТ-8, HEARTLOSS — КТ-7 |
 | `MessageOrgans.kt` | 18 | КТ-8 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageParty.kt` | 22 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageRaceInfo.kt` | 11 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
@@ -1781,7 +1781,7 @@ python3 tools/check_inventory.py
 | `MessageTileItem.kt` | 15 | КТ-3 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageTimeStop.kt` | 23 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageUpdateGaiaButton.kt` | 15 | КТ-3 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `MessageVisualEffect.kt` | 21 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
+| `MessageVisualEffect.kt` | 21 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/MessageVisualEffect.kt` |
 
 ### `legacy/src/main/java/alfheim/common/potion/`
 
@@ -2098,18 +2098,18 @@ python3 tools/check_inventory.py
 | Папка | Файлов | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `alfheim/dialogs/common/` | 1 | — | WIP — стадия 2 | диалоги эльфов; вызов диалогов отключён автором (SPEC п. 6) |
-| `alfheim/lang/` | 3 | КТ-1 | ждёт | `.lang` → `.json` скриптом (en_US, ru_RU, zh_CN) |
+| `alfheim/lang/` | 3 | КТ-1 | перенесено | `.lang` остаются здесь, `src/main/resources/assets/alfheim/lang/*.json` собирает `tools/convert_lang.py` |
 | `alfheim/loot/` | 3 | КТ-6 | ждёт | награды лутбоксов летающих островов (`BlockLootbox`) |
 | `alfheim/model/` (только файлы папки) | 37 | по владельцу | ждёт | OBJ-модели; каждая — в КТ своего блока, предмета или существа (SPEC Р-13) |
 | `alfheim/model/unused/` | 1 | — | WIP — стадия 2 | `SpireOld.obj`, в коде не используется |
 | `alfheim/schemas/` | 767 | КТ-6 | ждёт | постройки (вместе с `fi/`, `flowers/`, `niflheim/`, `yggdrasil/`), без изменений (SPEC Р-10) |
 | `alfheim/shaders/` | 11 | по владельцу | ждёт | шейдеры автора; каждый — в КТ эффекта, который его использует (SPEC Р-13) |
-| `alfheim/sounds/` (только файлы папки) | 14 | по владельцу | ждёт | звуки; каждый — в КТ своей вещи или существа |
-| `alfheim/sounds/fenrir/` | 4 | КТ-8 | ждёт | Фенрир |
-| `alfheim/sounds/horn/` | 3 | КТ-4 | ждёт | Гьяллархорн |
-| `alfheim/sounds/organs/` | 4 | КТ-8 | ждёт | Флюгель |
-| `alfheim/sounds/surtr/` | 18 | КТ-8 | ждёт | Сурт |
-| `alfheim/sounds/thrym/` | 15 | КТ-8 | ждёт | Трим |
+| `alfheim/sounds/` (только файлы папки) | 14 | КТ-1 | перенесено | → `src/main/resources/assets/alfheim/sounds/`; `resonatorBlast.ogg`, `resonatorFire.ogg` → `resonator_blast.ogg`, `resonator_fire.ogg` (путь — строчными) |
+| `alfheim/sounds/fenrir/` | 4 | КТ-1 | перенесено | Фенрир; все звуки — вместе с `sounds.json` |
+| `alfheim/sounds/horn/` | 3 | КТ-1 | перенесено | Гьяллархорн |
+| `alfheim/sounds/organs/` | 4 | КТ-1 | перенесено | Флюгель |
+| `alfheim/sounds/surtr/` | 18 | КТ-1 | перенесено | Сурт |
+| `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
 | `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком |
@@ -2134,7 +2134,7 @@ python3 tools/check_inventory.py
 | `alfheim/textures/model/block/` | 56 | КТ-3 | ждёт | модели блоков с блок-сущностью |
 | `alfheim/textures/model/entity/` | 116 | КТ-5 | ждёт | существа; боссы — КТ-8, крылья и облики рас — КТ-7 |
 | `alfheim/textures/model/item/` | 10 | КТ-4 | ждёт | модели оружия |
-| `botania/lang/` | 3 | КТ-1 | ждёт | строки Alfheim в пространстве имён Botania |
+| `botania/lang/` | 3 | КТ-1 | перенесено | строки лексикона Alfheim в пространстве имён Botania; `.json` собирает `tools/convert_lang.py` |
 | `botania/sounds/music/` | 6 | КТ-8 | ждёт | 6 треков без указания происхождения: решение владельца в КТ-10 (SPEC п. 8) |
 | `botania/textures/blocks/` | 24 | КТ-3 | ждёт | световые реле, кварц, `alt/` — расширители Botania |
 | `botania/textures/gui/` | 1 | КТ-9 | ждёт | категория лексикона |
@@ -2143,10 +2143,10 @@ python3 tools/check_inventory.py
 | `minecraft/shaders/` | 4 | КТ-7 | ждёт | пост-шейдер `depth`; прямых ссылок в коде не найдено — уточнить при переносе |
 | `minecraft/textures/blocks/` | 6 | КТ-3 | ждёт | печь из живого камня (`FurnaceExtender`), кварц |
 | `minecraft/textures/entity/banner/` | 18 | — | выпало (Et Futurum: мод отсутствует на 1.20.1) | узоры знамён для Et Futurum (`EFHandlerBanners`) |
-| `minecraft/textures/gui/` | 4 | КТ-1 | ждёт | фоны вкладок творческого режима; `tab_NTC.png` — вкладка Thaumcraft, выпадает |
+| `minecraft/textures/gui/` | 4 | КТ-1 | перенесено | `tab_Alfheim.png` → `src/main/resources/assets/alfheim/textures/gui/container/creative_inventory/tab_alfheim.png`; `tab_Alfheim_Alternate.png`, `tab_AlfheimModular.png` код автора не использует — остаются здесь; `tab_NTC.png` — вкладка Thaumcraft, выпадает |
 | `thaumcraft/` | 29 | — | выпало (Thaumcraft: мод отсутствует на 1.20.1) |  |
 | `tinker/` | 61 | КТ-10 | ждёт | Tinkers' Construct 3 |
-| `alfheim/sounds.json` | 1 | КТ-1 | ждёт | звуковые события; растёт по КТ |
+| `alfheim/sounds.json` | 1 | КТ-1 | перенесено | → `src/main/resources/assets/alfheim/sounds.json`; 57 событий целиком (в JSON нет комментариев), пути звуков — с приставкой `alfheim:`; события регистрирует `alfheim.port.registry.AlfheimSounds` |
 | `botania/sounds.json` | 1 | КТ-8 | ждёт | музыка боссов |
 | **всего** | **2344** | | | |
 
@@ -2157,8 +2157,29 @@ python3 tools/check_inventory.py
 | `mcmod.info` | КТ-0 | перенесено | содержимое → `src/main/resources/META-INF/mods.toml` |
 | `credits.txt` | КТ-0 | перенесено | → `src/main/resources/credits.txt` |
 | `alfheim_logo.png` | КТ-0 | перенесено | → `src/main/resources/alfheim_logo.png` |
-| `alfheim_at.cfg` | КТ-1 | ждёт | access transformer 1.7.10; в 1.20.1 нужные строки пишутся заново в `META-INF/accesstransformer.cfg` по мере надобности |
+| `alfheim_at.cfg` | по владельцу | ждёт | access transformer 1.7.10 (открывает закрытые поля и методы игры). Строку переносит КТ кода, которому она нужна: в 1.20.1 правило пишется заново в `META-INF/accesstransformer.cfg` с именем 1.20.1 или заменяется публичным методом |
 
 Остальное в `legacy/` (сборка 1.7.10, `libs/`, `news/`, `release/`, служебные txt,
 `legacy/asjcore/`) — эталон для сверки, в порт не переносится. Части ASJCore
-переносятся по мере надобности (SPEC, Р-3) и отмечаются в примечании файла, которому понадобились.
+переносятся по мере надобности (SPEC, Р-3), список — ниже.
+
+## ASJCore
+
+Файлы библиотеки автора, перенесённые из `legacy/asjcore/src/main/java/` в
+`src/main/java/` с тем же путём (SPEC, Р-3). Перенос и правка — разными
+коммитами, как у файлов Alfheim. Функции, которые порту ещё не понадобились,
+закомментированы блоками `/* PORT: по мере надобности … */`: их включает КТ,
+которой они нужны, сверив смысл с 1.20.1.
+
+| Файл | Строк | КТ | Работает | Примечание |
+|---|---:|---|---|---|
+| `alexsocol/asjlib/extendables/ASJConfigHandler.kt` | 98 | КТ-1 | всё | поверх `alfheim.port.config.Configuration` |
+| `alexsocol/asjlib/extendables/ASJPreConfigHandler.kt` | 83 | КТ-1 | всё | то же |
+| `alexsocol/asjlib/ASJUtilities.kt` | 914 | КТ-1 | лог, сторона (`isServer`/`isClient`), `chance`, `randInBounds`, поиск в коллекциях, `say` | |
+| `alexsocol/asjlib/Extensions.kt` | 358 | КТ-1 | функции Kotlin, `clamp`/`mfloor`/`mceil`, `eventForge`/`eventFML`, `ItemStack.cooldown`, `toItem`/`toBlock`/`ItemStack.block` | `meta`, числовые `id`, `PotionEffectU`, базовые классы блоков (`extendables`) — в КТ-2 вместе с блоками: у них меняется смысл metadata |
+| `alexsocol/asjlib/ExtensionsClient.kt` | 17 | КТ-1 | `mc` | |
+| `alexsocol/asjlib/ArrayExt.kt` | 88 | КТ-1 | всё | без правок |
+| `alexsocol/asjlib/ItemNBTHelper.kt` | 149 | КТ-1 | всё | |
+| `alexsocol/asjlib/math/Vector3.kt` | 391 | КТ-1 | всё, кроме `glVertex` | |
+| `alexsocol/asjlib/math/Quaternion.kt` | 94 | КТ-1 | всё | без правок |
+| `alexsocol/asjlib/network/ASJPacket.kt` | 143 | КТ-1 | всё | работу coremod `ASJPacketCompleter` (запись и чтение полей пакета) делает отражение |
