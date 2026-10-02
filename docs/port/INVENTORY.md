@@ -2104,12 +2104,12 @@ python3 tools/check_inventory.py
 | `alfheim/model/unused/` | 1 | — | WIP — стадия 2 | `SpireOld.obj`, в коде не используется |
 | `alfheim/schemas/` | 767 | КТ-6 | ждёт | постройки (вместе с `fi/`, `flowers/`, `niflheim/`, `yggdrasil/`), без изменений (SPEC Р-10) |
 | `alfheim/shaders/` | 11 | по владельцу | ждёт | шейдеры автора; каждый — в КТ эффекта, который его использует (SPEC Р-13) |
-| `alfheim/sounds/` (только файлы папки) | 14 | по владельцу | ждёт | звуки; каждый — в КТ своей вещи или существа |
-| `alfheim/sounds/fenrir/` | 4 | КТ-8 | ждёт | Фенрир |
-| `alfheim/sounds/horn/` | 3 | КТ-4 | ждёт | Гьяллархорн |
-| `alfheim/sounds/organs/` | 4 | КТ-8 | ждёт | Флюгель |
-| `alfheim/sounds/surtr/` | 18 | КТ-8 | ждёт | Сурт |
-| `alfheim/sounds/thrym/` | 15 | КТ-8 | ждёт | Трим |
+| `alfheim/sounds/` (только файлы папки) | 14 | КТ-1 | перенесено | → `src/main/resources/assets/alfheim/sounds/`; `resonatorBlast.ogg`, `resonatorFire.ogg` → `resonator_blast.ogg`, `resonator_fire.ogg` (путь — строчными) |
+| `alfheim/sounds/fenrir/` | 4 | КТ-1 | перенесено | Фенрир; все звуки — вместе с `sounds.json` |
+| `alfheim/sounds/horn/` | 3 | КТ-1 | перенесено | Гьяллархорн |
+| `alfheim/sounds/organs/` | 4 | КТ-1 | перенесено | Флюгель |
+| `alfheim/sounds/surtr/` | 18 | КТ-1 | перенесено | Сурт |
+| `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
 | `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком |
@@ -2146,7 +2146,7 @@ python3 tools/check_inventory.py
 | `minecraft/textures/gui/` | 4 | КТ-1 | перенесено | `tab_Alfheim.png` → `src/main/resources/assets/alfheim/textures/gui/container/creative_inventory/tab_alfheim.png`; `tab_Alfheim_Alternate.png`, `tab_AlfheimModular.png` код автора не использует — остаются здесь; `tab_NTC.png` — вкладка Thaumcraft, выпадает |
 | `thaumcraft/` | 29 | — | выпало (Thaumcraft: мод отсутствует на 1.20.1) |  |
 | `tinker/` | 61 | КТ-10 | ждёт | Tinkers' Construct 3 |
-| `alfheim/sounds.json` | 1 | КТ-1 | ждёт | звуковые события; растёт по КТ |
+| `alfheim/sounds.json` | 1 | КТ-1 | перенесено | → `src/main/resources/assets/alfheim/sounds.json`; 57 событий целиком (в JSON нет комментариев), пути звуков — с приставкой `alfheim:`; события регистрирует `alfheim.port.registry.AlfheimSounds` |
 | `botania/sounds.json` | 1 | КТ-8 | ждёт | музыка боссов |
 | **всего** | **2344** | | | |
 

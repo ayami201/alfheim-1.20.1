@@ -63,6 +63,8 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `ResourceLocationAnimated` (ASJCore) | переносится вместе с первой моделью, которой он нужен | строки автора с ним закомментированы с номером КТ |
 | `EnumHelper.addRarity(name, EnumChatFormatting, displayName)` | `Rarity.create(name, ChatFormatting)` (Forge) | ✓ отображаемого имени у редкости в 1.20.1 нет; у автора оно нигде не выводилось |
 | `MinecraftForge.MC_VERSION` | `MCPVersion.getMCVersion()` | ✓ |
+| `sounds.json`: звук без приставки (`"fenrir/attack"`) | `"alfheim:fenrir/attack"` | ✓ 1.7.10 искал такой звук в пространстве имён файла, 1.20.1 — в `minecraft` |
+| звук по имени (`"alfheim:quad"`), категория из `sounds.json` | событие `AlfheimSounds.events["quad"]`, категория `AlfheimSounds.source("quad")` | ✓ события регистрируются по `sounds.json`; поле `category` 1.20.1 не читает, громкость выбирает код через `SoundSource` |
 
 ## Мир, блоки, блок-сущности
 
