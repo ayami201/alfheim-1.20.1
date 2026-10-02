@@ -25,6 +25,31 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | metadata = разные вещи | отдельные блоки/предметы `<имя>_<вариант>` | имена вариантов — из кода и lang автора |
 | metadata = состояние | свойство BlockState | поворот, рост, «включён» |
 | любое старое имя + meta | запись в `src/main/resources/alfheim/legacy_ids.json` | один источник для построек, lang, лексикона, тестов |
+| `GameRegistry.registerBlock` / `registerItem` и др. в preInit | `DeferredRegister` из `alfheim.port.registry.AlfheimRegisters` | ✓ реестры регистрируются на шине мода в конструкторе |
+| `CreativeTabs("Name")` | `CreativeModeTab` из `AlfheimRegisters.CREATIVE_MODE_TABS`, id — имя в snake_case | ✓ `setNoTitle` → `hideTitle`, `backgroundImageName` → `withBackgroundLocation` (путь строчными), `hasSearchBar` → `withSearchBar`, `displayAllReleventItems` → `displayItems` |
+| `setCreativeTab(AlfheimTab)` | ничего | в 1.20.1 вещь не знает своей вкладки: список вещей — в `AlfheimTab.displayAllReleventItems` |
+
+## legacy_ids.json
+
+Файл `src/main/resources/alfheim/legacy_ids.json`, читает `alfheim.port.registry.LegacyIds`,
+сверяет GameTest `PortRegistryTest`. Заполняется в той КТ, где появляется вещь.
+
+| Раздел | Ключ | Значение |
+|---|---|---|
+| `blocks`, `items`, `entities` | старое имя в реестре 1.7.10, `modid:name` | новый id; если вещь различалась metadata — объект `{"0": …, "1": …}`, ключ `"*"` — любая metadata |
+| | | к id блока можно дописать свойства состояния: `"alfheim:alt_wood[axis=y]"` |
+| `lang` | старый ключ перевода | новый ключ (`block.alfheim.<id>`, `item.alfheim.<id>`); применяет `tools/convert_lang.py` |
+
+Пример: `"blocks": {"alfheim:altWood1": {"0": "alfheim:alt_wood1_…", "*": "…"}}`.
+
+## Переводы
+
+| Было | Стало | Примечание |
+|---|---|---|
+| `assets/<ns>/lang/en_US.lang` | `assets/<ns>/lang/en_us.json` | ✓ собирает `tools/convert_lang.py` из `.lang` в `legacy/`; руками `.json` не правится |
+| значения с `%d`, `%.1f` | как есть | ✓ и 1.7.10, и 1.20.1 при загрузке заменяют их на `%s` |
+| ключи удалённых вещей | не переносятся | ✓ список с причинами — `REMOVED` в `tools/convert_lang.py` |
+| `StatCollector.translateToLocal` | `I18n.get` (клиент) / `Component.translatable` | ключи те же, пока их не переименует `legacy_ids.json` |
 
 ## Мир, блоки, блок-сущности
 

@@ -34,7 +34,7 @@ python3 tools/check_inventory.py
 | КТ | Файлов | Строк | ждёт | перенесено | выпало | WIP — стадия 2 |
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
-| КТ-1 | 33 | 5 661 | 16 | 17 |  |  |
+| КТ-1 | 33 | 5 661 | 15 | 18 |  |  |
 | КТ-2 | 222 | 19 082 | 222 |  |  |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 70 | 4 498 |  |  | 58 | 12 |
-| **всего** | **1153** | **124 643** | **1064** | **19** | **58** | **12** |
+| **всего** | **1153** | **124 643** | **1063** | **20** | **58** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -1130,7 +1130,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimTab.kt` | 785 | КТ-1 | ждёт |  |
+| `AlfheimTab.kt` | 785 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/util/AlfheimTab.kt`; строки списка вкладки ждут КТ своих вещей |
 | `DamageSourceSpell.kt` | 149 | КТ-7 | ждёт |  |
 | `InfoLoader.kt` | 82 | КТ-1 | ждёт | обращается к Bitbucket автора (SPEC п. 8) |
 
@@ -2098,7 +2098,7 @@ python3 tools/check_inventory.py
 | Папка | Файлов | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `alfheim/dialogs/common/` | 1 | — | WIP — стадия 2 | диалоги эльфов; вызов диалогов отключён автором (SPEC п. 6) |
-| `alfheim/lang/` | 3 | КТ-1 | ждёт | `.lang` → `.json` скриптом (en_US, ru_RU, zh_CN) |
+| `alfheim/lang/` | 3 | КТ-1 | перенесено | `.lang` остаются здесь, `src/main/resources/assets/alfheim/lang/*.json` собирает `tools/convert_lang.py` |
 | `alfheim/loot/` | 3 | КТ-6 | ждёт | награды лутбоксов летающих островов (`BlockLootbox`) |
 | `alfheim/model/` (только файлы папки) | 37 | по владельцу | ждёт | OBJ-модели; каждая — в КТ своего блока, предмета или существа (SPEC Р-13) |
 | `alfheim/model/unused/` | 1 | — | WIP — стадия 2 | `SpireOld.obj`, в коде не используется |
@@ -2134,7 +2134,7 @@ python3 tools/check_inventory.py
 | `alfheim/textures/model/block/` | 56 | КТ-3 | ждёт | модели блоков с блок-сущностью |
 | `alfheim/textures/model/entity/` | 116 | КТ-5 | ждёт | существа; боссы — КТ-8, крылья и облики рас — КТ-7 |
 | `alfheim/textures/model/item/` | 10 | КТ-4 | ждёт | модели оружия |
-| `botania/lang/` | 3 | КТ-1 | ждёт | строки Alfheim в пространстве имён Botania |
+| `botania/lang/` | 3 | КТ-1 | перенесено | строки лексикона Alfheim в пространстве имён Botania; `.json` собирает `tools/convert_lang.py` |
 | `botania/sounds/music/` | 6 | КТ-8 | ждёт | 6 треков без указания происхождения: решение владельца в КТ-10 (SPEC п. 8) |
 | `botania/textures/blocks/` | 24 | КТ-3 | ждёт | световые реле, кварц, `alt/` — расширители Botania |
 | `botania/textures/gui/` | 1 | КТ-9 | ждёт | категория лексикона |
@@ -2143,7 +2143,7 @@ python3 tools/check_inventory.py
 | `minecraft/shaders/` | 4 | КТ-7 | ждёт | пост-шейдер `depth`; прямых ссылок в коде не найдено — уточнить при переносе |
 | `minecraft/textures/blocks/` | 6 | КТ-3 | ждёт | печь из живого камня (`FurnaceExtender`), кварц |
 | `minecraft/textures/entity/banner/` | 18 | — | выпало (Et Futurum: мод отсутствует на 1.20.1) | узоры знамён для Et Futurum (`EFHandlerBanners`) |
-| `minecraft/textures/gui/` | 4 | КТ-1 | ждёт | фоны вкладок творческого режима; `tab_NTC.png` — вкладка Thaumcraft, выпадает |
+| `minecraft/textures/gui/` | 4 | КТ-1 | перенесено | `tab_Alfheim.png` → `src/main/resources/assets/alfheim/textures/gui/container/creative_inventory/tab_alfheim.png`; `tab_Alfheim_Alternate.png`, `tab_AlfheimModular.png` код автора не использует — остаются здесь; `tab_NTC.png` — вкладка Thaumcraft, выпадает |
 | `thaumcraft/` | 29 | — | выпало (Thaumcraft: мод отсутствует на 1.20.1) |  |
 | `tinker/` | 61 | КТ-10 | ждёт | Tinkers' Construct 3 |
 | `alfheim/sounds.json` | 1 | КТ-1 | ждёт | звуковые события; растёт по КТ |

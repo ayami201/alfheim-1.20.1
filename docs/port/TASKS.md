@@ -12,11 +12,11 @@
 - [ ] ASJCore: `ASJUtilities`, `Extensions`, `ItemNBTHelper`, `math` — то, что нужно КТ-1 и КТ-2
 - [ ] Прослойка `alfheim.port.legacy` — минимум для КТ-2 (SPEC, Р-4)
 - [x] Сеть: канал `SimpleChannel` и регистрация пакетов автора (SPEC, Р-11) — `NetworkService`, `ASJPacket`, `AlfheimPacket`, 9 общих пакетов (ветки механик ждут свои КТ), `ContributorsPrivacyHelper`; GameTest `PortNetworkTest`
-- [ ] Регистрация: DeferredRegister, правило имён, `src/main/resources/alfheim/legacy_ids.json` (SPEC, Р-5)
-- [ ] Вкладка творческого режима `AlfheimTab`
+- [x] Регистрация: DeferredRegister, правило имён, `src/main/resources/alfheim/legacy_ids.json` (SPEC, Р-5) — `alfheim.port.registry` (`AlfheimRegisters`, `LegacyIds`); файл пока пуст, его заполняют КТ вместе с вещами
+- [x] Вкладка творческого режима `AlfheimTab` — зарегистрирована рядом с вкладкой Botania; строки списка ждут КТ своих вещей (пустую вкладку игра не показывает)
 - [ ] `core/util`, `core/helper`, нужное из `api/`, прокси, общие обработчики событий — без частей, которым нужны механики следующих КТ
-- [ ] Переводы `.lang` → `.json` (en_us, ru_ru, zh_cn и строки Alfheim для Botania) скриптом; сверка числа ключей в CI
-- [ ] GameTest регистрации
+- [x] Переводы `.lang` → `.json` (en_us, ru_ru, zh_cn и строки Alfheim для Botania) скриптом; сверка числа ключей в CI — `tools/convert_lang.py`: en_us 1 748 = 1 790 − 42, ru_ru 1 911 = 1 981 − 70, zh_cn 1 688 = 1 730 − 42, лексикон 1 117 / 1 117 / 1 077 без удалений
+- [x] GameTest регистрации — `PortRegistryTest`: вкладка, записи `legacy_ids.json`, правило имён
 - [ ] Опыт: клиент без экрана в облаке (Xvfb + программный OpenGL), не больше одной сессии
 - [ ] PR «КТ-1 готова»
 
@@ -40,7 +40,7 @@
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ./gradlew build
 ./gradlew runGameTestServer && python3 tools/check_server_log.py && python3 tools/check_config.py
-python3 tools/check_inventory.py && python3 tools/check_hooks.py
+python3 tools/check_inventory.py && python3 tools/check_hooks.py && python3 tools/convert_lang.py --check
 ```
 
 ## Найдено
@@ -80,6 +80,10 @@ python3 tools/check_inventory.py && python3 tools/check_hooks.py
 - 02.10.2026 — `NetworkService.kt` — версия протокола канала равна версии мода: клиент и сервер с разными версиями порта не соединятся (в 1.7.10 версии сверял FML). Пакеты, которые ходят в обе стороны (`MessageContributor`, `MessageNI`), регистрируются второй раз без привязки к стороне.
 - 02.10.2026 — пакеты — ветка `M0dc.MTSPELL` выпала вместе с MineTweaker: её шлёт только `CommandMTSpellInfo`. Ветка `M1d.RLCM` ждёт стадию 2: её шлют только диалоги эльфов (WIP, SPEC п. 6). Ветка `M1l.SEED` (зерно мира на клиенте) — КТ-5: в 1.20.1 зерна нет в данных клиентского мира.
 - 02.10.2026 — `ContributorsPrivacyHelper.kt` — `HexBinaryAdapter` из JAXB (в Java 17 его нет) заменён на `HexFormat`, запись та же: заглавные буквы.
+
+- 02.10.2026 — `AlfheimTab.kt` — вкладка регистрируется через DeferredRegister и стоит сразу за вкладкой Botania, как в 1.7.10 по порядку регистрации. Опция `searchTabAlfheim` (строка поиска) в 1.20.1 действует после перезапуска игры: строка задаётся при регистрации вкладки. `getSubBlocks` / `getSubItems` (все варианты вещи) в 1.20.1 нет: как выдавать варианты, решит КТ-2 вместе с первыми такими вещами.
+- 02.10.2026 — `tab_Alfheim.png` — путь ресурса в 1.20.1 — только строчные буквы: фон вкладки — `alfheim:textures/gui/container/creative_inventory/tab_alfheim.png`. Два других фона автора (`tab_Alfheim_Alternate.png`, `tab_AlfheimModular.png`) его код не использует, они остались в `legacy/`.
+- 02.10.2026 — переводы — не перенесены ключи вещей, которых в порту нет: руды и аспект Thaumcraft, меню Travellers Gear, подписи удалённых настроек (42 ключа в en_us и zh_cn, 70 в ru_ru — в русском файле больше подписей настроек). В ru_ru у автора на 191 ключ больше, чем в en_us: они перенесены как есть. Строки лексикона Alfheim (1 117 ключей) лежат в пространстве имён Botania, как у автора.
 
 ## Журнал решений
 
