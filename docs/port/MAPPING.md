@@ -71,8 +71,8 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | Было | Стало | Примечание |
 |---|---|---|
 | `World` | `Level` | |
-| `world.isRemote` | `level.isClientSide` | |
-| `world.getBlock(x, y, z)`, `setBlock`, `getTileEntity`, `isAirBlock` | прослойка `alfheim.port.legacy` | только где смысл тот же (SPEC, Р-4) |
+| `world.isRemote` | `level.isClientSide` или `isRemote` прослойки | ✓ |
+| `world.getBlock(x, y, z)`, `setBlock`, `getTileEntity`, `isAirBlock` | прослойка `alfheim.port.legacy` | ✓ только где смысл тот же (SPEC, Р-4); список — раздел «Прослойка `alfheim.port.legacy`» |
 | `world.getBlockMetadata(x, y, z)` | свойство BlockState | без прослойки: смысл у каждого блока свой |
 | `Block.registerBlockIcons` / `getIcon` / `IIcon` | модели и состояния блоков через datagen | метод удаляется |
 | `Block.onBlockActivated` | `use` | |
@@ -85,6 +85,26 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `readFromNBT` / `writeToNBT` | `load` / `saveAdditional` | |
 | `getDescriptionPacket` / `onDataPacket` | `getUpdatePacket` / `getUpdateTag` / `onDataPacket` | |
 | `AxisAlignedBB`, `MathHelper`, `MovingObjectPosition` | `AABB`, `Mth`, `HitResult` | |
+
+## Прослойка `alfheim.port.legacy`
+
+Функции с сигнатурами 1.7.10 поверх 1.20.1 (SPEC, Р-4). Код автора с ними остаётся как был, нужен только импорт
+`alfheim.port.legacy.*`. Проверяет GameTest `PortLegacyTest`.
+
+| Вызов 1.7.10 | Что делает в 1.20.1 | Примечание |
+|---|---|---|
+| `getBlock(x, y, z)`, `getTileEntity(x, y, z)`, `isAirBlock(x, y, z)` | `getBlockState(pos).block`, `getBlockEntity(pos)`, `getBlockState(pos).isAir` | у `BlockGetter` (IBlockAccess 1.7.10) |
+| `setBlock(x, y, z, block)` | `setBlock(pos, block.defaultBlockState(), 3)` | metadata 0 — состояние по умолчанию |
+| `setBlock(x, y, z, block, meta, flags)` | `setBlock(x, y, z, state, flags)` прослойки | состояние вместо metadata выбирает вызывающий код; младшие флаги 1, 2, 4 те же |
+| `setBlockToAir(x, y, z)` | `setBlock(pos, AIR, 3)` | |
+| `notifyBlocksOfNeighborChange(x, y, z, block)`, `scheduleBlockUpdate(x, y, z, block, delay)` | `updateNeighborsAt`, `scheduleTick` | |
+| `spawnEntityInWorld(entity)`, `isRemote` | `addFreshEntity(entity)`, `isClientSide` | |
+| `playSoundEffect(x, y, z, name, volume, pitch)`, `playSoundAtEntity(entity, name, volume, pitch)` | `playSound(null, x, y, z, событие, категория, volume, pitch)` | как в 1.7.10: на сервере — всем рядом, на клиенте — ничего |
+| `playSound(x, y, z, name, volume, pitch, distanceDelay)` | `playLocalSound(...)` | звук только на этом клиенте |
+| имя звука ванилы или Botania | событие из `alfheim/legacy_sounds.json` | таблицу собирает `tools/legacy_sounds.py`: событие 1.20.1 с теми же аудиофайлами и категория из sounds.json 1.7.10; ничьи решены в `OVERRIDES` скрипта. Звука нет в таблице — запустить скрипт |
+| `spawnParticle(name, x, y, z, vx, vy, vz)` | `addParticle(тип, ...)` | только частицы без параметров (`LegacyParticles`); `reddust`, `mobSpell`, `iconcrack_…`, `blockcrack_…` — на месте вызова |
+| `Block.toItem()`, `Item.toBlock()`, `ItemStack.block` (ASJCore) | `asItem()` (воздух → `null`), `Block.byItem` | ✓ |
+| `Block.soundTypeStone`, `soundTypeWood`, `soundTypeGrass`, `soundTypeGravel`, `soundTypeCloth`, `soundTypeGlass`, `soundTypeSnow`, `soundTypeSand`, `soundTypeMetal` | `SoundType.STONE`, `WOOD`, `GRASS`, `GRAVEL`, `WOOL`, `GLASS`, `SNOW`, `SAND`, `METAL` | в свойствах блока (`BlockBehaviour.Properties.sound`) |
 
 ## Предметы, сущности, эффекты
 

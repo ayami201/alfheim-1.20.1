@@ -9,12 +9,12 @@
 ## КТ-1 — Фундамент
 
 - [x] Конфиг: `AlfheimConfigHandler`, `AlfheimPreConfigHandler` → ForgeConfigSpec (SPEC, Р-12); опции, потерявшие смысл, — в MAPPING.md; сверка опций с автором скриптом в CI — `config/Alfheim/core.toml`, `mod.toml`, `client.toml`; 205 опций автора: 57 удалены, 13 в клиентском файле, 135 в файлах сервера со значениями автора (`python3 tools/check_config.py`)
-- [ ] ASJCore: `ASJUtilities`, `Extensions`, `ItemNBTHelper`, `math` — то, что нужно КТ-1 и КТ-2
-- [ ] Прослойка `alfheim.port.legacy` — минимум для КТ-2 (SPEC, Р-4)
+- [x] ASJCore: `ASJUtilities`, `Extensions`, `ItemNBTHelper`, `math` — то, что нужно КТ-1 и КТ-2 — функции Kotlin, математика, `Vector3`, NBT, сторона, лог, сообщения в чат, `toItem`/`toBlock`; `meta`, числовые id и базовые классы блоков ASJCore переносит КТ-2 вместе с блоками (смысл metadata меняется); GameTest `PortAsjTest`
+- [x] Прослойка `alfheim.port.legacy` — минимум для КТ-2 (SPEC, Р-4) — блоки по координатам, звуки по имени 1.7.10 (`legacy_sounds.json`: 58 звуков ванилы и Botania из кода автора, собирает `tools/legacy_sounds.py`), частицы без параметров; GameTest `PortLegacyTest`
 - [x] Сеть: канал `SimpleChannel` и регистрация пакетов автора (SPEC, Р-11) — `NetworkService`, `ASJPacket`, `AlfheimPacket`, 9 общих пакетов (ветки механик ждут свои КТ), `ContributorsPrivacyHelper`; GameTest `PortNetworkTest`
 - [x] Регистрация: DeferredRegister, правило имён, `src/main/resources/alfheim/legacy_ids.json` (SPEC, Р-5) — `alfheim.port.registry` (`AlfheimRegisters`, `LegacyIds`); файл пока пуст, его заполняют КТ вместе с вещами
 - [x] Вкладка творческого режима `AlfheimTab` — зарегистрирована рядом с вкладкой Botania; строки списка ждут КТ своих вещей (пустую вкладку игра не показывает)
-- [ ] `core/util`, `core/helper`, нужное из `api/`, прокси, общие обработчики событий — без частей, которым нужны механики следующих КТ
+- [x] `core/util`, `core/helper`, нужное из `api/`, прокси, общие обработчики событий — без частей, которым нужны механики следующих КТ — `AlfheimAPI`, `LibResourceLocations`, визуальные эффекты, `InfoLoader`, `TimeHandler`, прокси, `AlfheimRegistry`, `EventHandler`, `EventHandlerClient`; звуковые события автора (57) — `AlfheimSounds`; GameTest-ы `PortProxyTest`, `PortRegistryTest.soundEventsRegistered`. Экран настроек (`GUIConfig`, `GUIFactory`) ждёт ответа владельца
 - [x] Переводы `.lang` → `.json` (en_us, ru_ru, zh_cn и строки Alfheim для Botania) скриптом; сверка числа ключей в CI — `tools/convert_lang.py`: en_us 1 748 = 1 790 − 42, ru_ru 1 911 = 1 981 − 70, zh_cn 1 688 = 1 730 − 42, лексикон 1 117 / 1 117 / 1 077 без удалений
 - [x] GameTest регистрации — `PortRegistryTest`: вкладка, записи `legacy_ids.json`, правило имён
 - [ ] Опыт: клиент без экрана в облаке (Xvfb + программный OpenGL), не больше одной сессии
@@ -103,6 +103,9 @@ python3 tools/check_inventory.py && python3 tools/check_hooks.py && python3 tool
 - 02.10.2026 — `sounds.json` — в 1.7.10 звук без приставки (`"fenrir/attack"`) искался в пространстве имён файла, в 1.20.1 — в `minecraft`: путям добавлена приставка `alfheim:`. Поле `category` 1.20.1 не читает (громкость выбирает код при проигрывании); оно оставлено, по нему `AlfheimSounds.source` выбирает ту же категорию, что у автора.
 - 02.10.2026 — звуки — у звуков `assets/alfheim/sounds/` в `credits.txt` нет источников (`oiia.ogg` — звук из интернет-мема). Переносятся с модом, решение — вместе с музыкой в КТ-10 (SPEC п. 8).
 
+- 02.10.2026 — звуки ванилы и Botania — автор проигрывает их по имени 1.7.10 (`random.fizz`, `botania:enchanterBlock`). Прослойка берёт событие 1.20.1, которое играет те же аудиофайлы, и категорию из sounds.json 1.7.10 (`legacy_sounds.json`, `tools/legacy_sounds.py`). Звук тот же; может отличаться только подпись (субтитр). Где те же файлы играют несколько событий, выбрано по смыслу у автора: `random.click` — щелчок кнопки, `random.bow` — выстрел из лука, `random.pop` — подбор предмета, `random.fizz` — шипение огня, `random.explode` — обычный взрыв, `dig.grass` — ломание травы, `mob.zombie.step` — шаги зомби, `botania:enchanterBlock` — сборка зачарователя.
+- 02.10.2026 — `BlockLootbox.kt` — звук `ambient.cave.cave` в 1.20.1 — событие `ambient.cave`: в нём 19 вариантов вместо 13, шесть новых добавила игра. Лутбокс будет иногда играть и их.
+
 ## Журнал решений
 
 | Дата | Решение | Почему | Как откатить |
@@ -120,6 +123,7 @@ python3 tools/check_inventory.py && python3 tools/check_hooks.py && python3 tool
 | 02.10.2026 | Коммит `move:` с кодом — исключение из правила «сборка зелёная после каждого коммита» (CLAUDE.md) | Перенос и правка — разные коммиты (правило 3), а код 1.7.10 на 1.20.1 не компилируется | Вернуть прежнюю строку в CLAUDE.md |
 | 02.10.2026 | `gradle/wrapper/gradle-wrapper.jar` — исключение из правила «новые jar-файлы не попадают в git» (CLAUDE.md) | Без него не работает `./gradlew` | Удалить файл и собирать установленным `gradle` |
 | 02.10.2026 | Все звуки автора (57 событий, 58 файлов) переносятся в КТ-1, а не в КТ своих вещей | `sounds.json` нельзя перенести частями: в JSON нет комментариев. Без файлов клиент пишет предупреждение на каждый звук. Событие, которое никто не проигрывает, в игре ничего не меняет | Вернуть строки звуков в описи к их КТ |
+| 02.10.2026 | Звук ванилы или Botania по имени 1.7.10 → событие 1.20.1 с теми же аудиофайлами, категория — из sounds.json 1.7.10 | Игрок слышит тот же звук с тем же ползунком громкости; таблица собирается скриптом из файлов Mojang и Botania, а не вручную | Править `OVERRIDES` в `tools/legacy_sounds.py` и пересобрать таблицу |
 | 02.10.2026 | Формат отчётов: в PR и документах — изменения чек-листом, итоговые решения, найденное и проверка; без раздела «Ждёт меня», вопросов и переписки (CLAUDE.md, «Отчёт») | Документы и PR читают люди, которые не видели переписки | Вернуть прежний раздел «Отчёт» в CLAUDE.md |
 
 ## Вопросы к владельцу

@@ -2157,7 +2157,7 @@ python3 tools/check_inventory.py
 | `mcmod.info` | КТ-0 | перенесено | содержимое → `src/main/resources/META-INF/mods.toml` |
 | `credits.txt` | КТ-0 | перенесено | → `src/main/resources/credits.txt` |
 | `alfheim_logo.png` | КТ-0 | перенесено | → `src/main/resources/alfheim_logo.png` |
-| `alfheim_at.cfg` | КТ-1 | ждёт | access transformer 1.7.10; в 1.20.1 нужные строки пишутся заново в `META-INF/accesstransformer.cfg` по мере надобности |
+| `alfheim_at.cfg` | по владельцу | ждёт | access transformer 1.7.10 (открывает закрытые поля и методы игры). Строку переносит КТ кода, которому она нужна: в 1.20.1 правило пишется заново в `META-INF/accesstransformer.cfg` с именем 1.20.1 или заменяется публичным методом |
 
 Остальное в `legacy/` (сборка 1.7.10, `libs/`, `news/`, `release/`, служебные txt,
 `legacy/asjcore/`) — эталон для сверки, в порт не переносится. Части ASJCore
@@ -2175,8 +2175,8 @@ python3 tools/check_inventory.py
 |---|---:|---|---|---|
 | `alexsocol/asjlib/extendables/ASJConfigHandler.kt` | 98 | КТ-1 | всё | поверх `alfheim.port.config.Configuration` |
 | `alexsocol/asjlib/extendables/ASJPreConfigHandler.kt` | 83 | КТ-1 | всё | то же |
-| `alexsocol/asjlib/ASJUtilities.kt` | 914 | КТ-1 | лог, сторона (`isServer`/`isClient`), `chance`, `randInBounds`, поиск в коллекциях | |
-| `alexsocol/asjlib/Extensions.kt` | 358 | КТ-1 | функции Kotlin, `clamp`/`mfloor`/`mceil`, `eventForge`/`eventFML`, `ItemStack.cooldown` | |
+| `alexsocol/asjlib/ASJUtilities.kt` | 914 | КТ-1 | лог, сторона (`isServer`/`isClient`), `chance`, `randInBounds`, поиск в коллекциях, `say` | |
+| `alexsocol/asjlib/Extensions.kt` | 358 | КТ-1 | функции Kotlin, `clamp`/`mfloor`/`mceil`, `eventForge`/`eventFML`, `ItemStack.cooldown`, `toItem`/`toBlock`/`ItemStack.block` | `meta`, числовые `id`, `PotionEffectU`, базовые классы блоков (`extendables`) — в КТ-2 вместе с блоками: у них меняется смысл metadata |
 | `alexsocol/asjlib/ExtensionsClient.kt` | 17 | КТ-1 | `mc` | |
 | `alexsocol/asjlib/ArrayExt.kt` | 88 | КТ-1 | всё | без правок |
 | `alexsocol/asjlib/ItemNBTHelper.kt` | 149 | КТ-1 | всё | |
