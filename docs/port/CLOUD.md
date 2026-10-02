@@ -28,10 +28,10 @@ repo.spongepowered.org
 
 Зачем: по умолчанию облако пускает только в общие хранилища пакетов, а
 Minecraft, Forge, Botania, Curios и Kotlin for Forge лежат на своих серверах.
-Для КТ-10 позже понадобятся JEI, Jade, Tinkers' Construct, Twilight Forest и
-Aether. JEI лежит на `maven.blamejared.com`, он уже в списке. Tinkers — на
-`dvs1.progwml6.com`. Для остальных добавится `api.modrinth.com` или
-`cursemaven.com` — агент скажет, какой.
+Для КТ-10 позже понадобятся JEI, Jade, Tinkers' Construct, Twilight Forest,
+Aether и ExtraBotany: Reburn. JEI лежит на `maven.blamejared.com`, он уже в
+списке. Tinkers — на `dvs1.progwml6.com`. Для остальных добавится
+`api.modrinth.com` или `cursemaven.com` — агент скажет, какой.
 
 **Setup script:**
 
