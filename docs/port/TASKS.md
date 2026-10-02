@@ -2,26 +2,52 @@
 
 Живой файл: агент обновляет его в каждой сессии, владелец читает его первым.
 
-**Текущая КТ:** КТ-0 — Каркас ([ROADMAP.md](ROADMAP.md)). **Статус:** не начата.
+**Текущая КТ:** КТ-0 — Каркас ([ROADMAP.md](ROADMAP.md)). **Статус:** выполнена, ждёт
+приёмки владельцем (PR «КТ-0 готова»). Следующая — КТ-1 «Фундамент», начинать после
+слияния PR.
 
 ## КТ-0 — Каркас
 
-- [ ] Перенести дерево автора в `legacy/` одним коммитом (только `git mv`)
-- [ ] Снимок ASJCore → `legacy/asjcore/`, хэш → `legacy/asjcore/SNAPSHOT.md`
-- [ ] Сборка Forge 1.20.1-47.4.23: Java 17, Kotlin 2.2.21, KFF 4.12.0, Botania 456, Patchouli 85, Curios 5.14.1, Mixin
-- [ ] `AlfheimCore.kt` и `api/ModInfo.kt`: перенос + правка
-- [ ] `mods.toml` с авторством
-- [ ] `.gitignore` под новую раскладку
-- [ ] CI: `build` + `runGameTestServer`
-- [ ] `INVENTORY.md` — сверка числом с `legacy/src/main/java`
-- [ ] `HOOKS.md` — сверка числом с `@Hook` в `legacy`
-- [ ] `README.md` порта
-- [ ] PR в `port/1.20.1` с отчётом
+- [x] Перенести дерево автора в `legacy/` одним коммитом (только `git mv`) — `f6ad8c4`, 3 538 файлов, все R100
+- [x] Снимок ASJCore → `legacy/asjcore/`, хэш → `legacy/asjcore/SNAPSHOT.md` — коммит `7265f5dc` («1.7.0.2 Release»)
+- [x] Сборка Forge 1.20.1-47.4.23: Java 17, Kotlin 2.2.21, KFF 4.12.0, Botania 456, Patchouli 85, Curios 5.14.1, Mixin
+- [x] `AlfheimCore.kt` и `api/ModInfo.kt`: перенос + правка (`ModInfo.kt` переносится без правок)
+- [x] `mods.toml` с авторством
+- [x] `.gitignore` под новую раскладку
+- [x] CI: `build` + `runGameTestServer` (+ сверка описи и врезок, проверка лога сервера)
+- [x] `INVENTORY.md` — сверка числом с `legacy/src/main/java`: 1 153 из 1 153, `python3 tools/check_inventory.py`
+- [x] `HOOKS.md` — сверка числом с `@Hook` в `legacy`: 428 строк с `@Hook` разобраны, `python3 tools/check_hooks.py`
+- [x] `README.md` порта
+- [x] PR в `port/1.20.1` с отчётом
+
+## Как проверять (для любой сессии)
+
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+./gradlew build
+./gradlew runGameTestServer && python3 tools/check_server_log.py
+python3 tools/check_inventory.py && python3 tools/check_hooks.py
+```
 
 ## Найдено
 
 Отступления от оригинала (`// PORT:`, `// PORT-FIX:`), расхождения в
 поведении, всё, что пригодится на стадии 2. Формат: дата — где — что — почему.
+
+- 02.10.2026 — `AlfheimCore.kt` — `preInit` автора вызывается из конструктора мода (`init {}`), `init` — на `FMLCommonSetupEvent`, `postInit` — на `InterModProcessEvent`, `starting` — на `ServerStartingEvent`. `construct` и `postPostInit` закомментированы целиком: в них только Thaumcraft — в 1.20.1 нет событий FML 1.7.10, а регистрация и конфиг возможны только в конструкторе. Соответствие — в MAPPING.md.
+- 02.10.2026 — `AlfheimCore.kt` — флаги `MineTweakerLoaded`, `TravellersGearLoaded` всегда `false` (моды выпали, SPEC п. 7); `NEILoaded`, `TiCLoaded`, `TwilightForestLoaded` пока `false`, проверка вернётся в КТ-10 вместе с интеграциями — чтобы код, перенесённый раньше, не шёл в непортированные ветки интеграций.
+- 02.10.2026 — `AlfheimCore.kt` — `stupidMode` включается, если загружен мод с id `avaritia` (у автора — `Avaritia`). В 1.20.1 есть только неофициальные порты Avaritia; если в сборке её нет, режим выключен, как у автора без Avaritia.
+- 02.10.2026 — `mods.toml` — `authors="AlexSocol, ChatGPT"`: так в `authorList` оригинального `mcmod.info`. Поле `credits` — `credits.txt` автора целиком, подставляется при сборке.
+- 02.10.2026 — `alfheim.mixins.json` — без строки `"refmap"`: пока миксинов нет, карта ссылок не создаётся, и Mixin писал в лог предупреждение. С первым миксином строку вернуть (написано в HOOKS.md).
+- 02.10.2026 — HOOKS.md — число 428 из ROADMAP — это строки с `@Hook` (`grep`). Врезок `@Hook` 388, `@HookReplacer` 32, `@HookField` 3; ещё 4 — пометки параметров `@Hook.ReturnValue`, 1 — объявление группы `@HookReplacer.CreateHRG`. Кроме них учтены 4 `@SuperWrapper`, 20 преобразований трансформера в 19 классах, 11 добавленных интерфейсов и 7 закомментированных автором `@Hook`.
+- 02.10.2026 — опись и врезки — у автора есть интеграции, которых нет в SPEC п. 7: ExtraBotany (2 врезки в её рендер), Dimensional Doors (`ItemTankMask`, телепорт в Лимб), IC2 (`ItemTerraHoe`, грядки), Avaritia (`stupidMode`), Witchery (исправление чужого рендера в трансформере; части `ModdedDimensionsIntegration` выпадают и так). Пока помечены «ждёт» или «выпало (мод отсутствует на 1.20.1)» там, где цель — класс несуществующего мода; вопрос — ниже.
+- 02.10.2026 — опись — 19 врезок `ElementalDamageAdapter` и 2 интерфейса нацелены на классы Thaumcraft (жезлы, големы, виспы и др.) — выпадают вместе с Thaumcraft.
+- 02.10.2026 — опись — узоры знамён `assets/minecraft/textures/entity/banner` (18 флагов) — часть интеграции с Et Futurum, выпадают вместе с ней. В 1.20.1 знамёна есть в ванили: узоры можно вернуть как ванильные на стадии 2.
+- 02.10.2026 — опись — папки автора `unused` (27 текстур блоков, 23 текстуры предметов, 1 модель) в игре не используются: «WIP — стадия 2».
+- 02.10.2026 — опись — пост-шейдер `assets/minecraft/shaders` (`depth`, `sobel`): прямых ссылок в коде не найдено, отнесён к КТ-7 до выяснения.
+- 02.10.2026 — опись — сущности `EntityFenrirDome`, `EntityFenrirSlash`, `EntityTornado` зарегистрированы, но используются только незарегистрированным WIP `EntityFenrirNew`. По SPEC п. 6 переносятся как зарегистрированные (КТ-8).
+- 02.10.2026 — `gradle/wrapper/gradle-wrapper.jar` — единственный новый jar в git: без него не работает `./gradlew`, которого требует CLAUDE.md. Это стандартная обёртка Gradle 8.14.3; CI сверяет её с контрольными суммами Gradle (`gradle/actions/setup-gradle`).
+- 02.10.2026 — правила — `move:`-коммит файла кода в `src/` ломает компиляцию до следующего `port:`-коммита: код 1.7.10 не собирается на 1.20.1. В КТ-0 обошлось: файлы перенесены и поправлены до появления сборки. Вопрос — ниже.
 
 ## Журнал решений
 
@@ -29,7 +55,17 @@
 |---|---|---|---|
 | 02.10.2026 | Первая редакция ТЗ, контрольных точек и правил порта | Старт проекта | — |
 | 02.10.2026 | Список «выпадает заранее» (SPEC, п. 7) утверждён владельцем; Tinkers' Construct, Twilight Forest и Aether остаются | Все три будут в сборке владельца | Вернуть Tinkers в список п. 7 |
+| 02.10.2026 | Снимок ASJCore — коммит `7265f5dc` («1.7.0.2 Release») | Его исходники совпадают с `libs/src/1.7.10-ASJCore-1.7.0.2-deobf-sources.jar` с точностью до концов строк; подробности — `legacy/asjcore/SNAPSHOT.md` | Взять другой коммит и пересоздать папку |
+| 02.10.2026 | Обёртка Gradle 8.14.3 (в MDK — 8.8) | Та же версия, что установлена в облаке: облако и CI собирают одинаково; ForgeGradle 6 с ней работает | `distributionUrl` в `gradle/wrapper/gradle-wrapper.properties` |
+| 02.10.2026 | Версия мода `67-port.N`, N — номер последней принятой КТ | По jar видно, от какого релиза автора идёт порт и до какой КТ он дошёл | `mod_version` в `gradle.properties` |
+| 02.10.2026 | GameTest-ы — в отдельном наборе исходников `src/gametest` | Тесты запускаются в CI, но не попадают в jar для игроков | Перенести в `src/main` и убрать `sourceSets.gametest` из `build.gradle` |
+| 02.10.2026 | Опись и врезки сверяются скриптами `tools/check_inventory.py` и `tools/check_hooks.py` в CI | Сверка числом (ROADMAP, КТ-0) повторяется на каждом PR, а не один раз | Убрать шаги из `.github/workflows/build.yml` |
+| 02.10.2026 | Скрипты порта — в `tools/` | Не код мода и не документ; КТ-1 добавит туда скрипт переводов | Перенести в `docs/port/tools/` |
 
 ## Вопросы к владельцу
 
-Пока нет.
+Работу не блокируют: всё, что от них зависит, относится к КТ-4 и КТ-10.
+
+1. **Интеграции не из списка SPEC п. 7.** У автора есть код для ExtraBotany, Dimensional Doors, IC2, Avaritia и Witchery. Есть ли они в сборке? Если нет — можно ли считать их выпавшими, как моды п. 7? Что зависит: 2 врезки в рендер ExtraBotany (КТ-10), телепорт в Лимб у `ItemTankMask` и грядки IC2 у `ItemTerraHoe` (КТ-4), при Avaritia рецепт улучшенного распределителя маны требует блоки вместо слитков (`stupidMode`, КТ-2), исправление рендера Witchery (уже «выпало»).
+2. **Правило «сборка зелёная после каждого коммита» и правило 3.** Коммит `move:` с файлом кода всегда ломает компиляцию: в `src/` оказывается код 1.7.10. Следующий за ним `port:` чинит. Предлагаю уточнить в CLAUDE.md: «`./gradlew build` проходит после каждого коммита, кроме `move:`; за `move:` сразу идёт его `port:`, PR зелёный целиком».
+3. **`gradle-wrapper.jar` в git.** Это новый jar, но без него не работает `./gradlew`. Оставляем как исключение из правила «новые jar-файлы не попадают в git»?
