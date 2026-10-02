@@ -9,6 +9,8 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundSource
 import com.google.gson.JsonParser
+import vazkii.botania.api.BotaniaRegistries
+import net.minecraftforge.common.CreativeModeTabRegistry
 import net.minecraftforge.gametest.GameTestHolder
 import net.minecraftforge.gametest.PrefixGameTestTemplate
 
@@ -26,6 +28,10 @@ object PortRegistryTest {
 		val id = ResourceLocation(MODID, "alfheim")
 		helper.assertTrue(BuiltInRegistries.CREATIVE_MODE_TAB.containsKey(id), "Creative tab $id is not registered")
 		helper.assertTrue(AlfheimTab.tab.isPresent && BuiltInRegistries.CREATIVE_MODE_TAB.getKey(AlfheimTab.tab.get()) == id, "AlfheimTab.tab is not $id")
+		// как в 1.7.10: сразу за вкладкой Botania
+		val sorted = CreativeModeTabRegistry.getSortedCreativeModeTabs()
+		val botania = sorted.indexOf(BuiltInRegistries.CREATIVE_MODE_TAB.get(BotaniaRegistries.BOTANIA_TAB_KEY))
+		helper.assertTrue(botania >= 0 && sorted.indexOf(AlfheimTab.tab.get()) == botania + 1, "Alfheim tab is not right after the Botania tab")
 		helper.succeed()
 	}
 	

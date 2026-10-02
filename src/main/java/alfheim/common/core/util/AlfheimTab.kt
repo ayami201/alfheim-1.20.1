@@ -359,8 +359,8 @@ object AlfheimTab {
 			.withBackgroundLocation(ResourceLocation(ModInfo.MODID, "textures/gui/container/creative_inventory/tab_alfheim.png"))
 			.hideTitle()
 			.apply { if (hasSearchBar()) withSearchBar() }
-			// PORT: в 1.7.10 вкладка шла сразу за вкладкой Botania — в порядке регистрации
-			.withTabsAfter(BotaniaRegistries.BOTANIA_TAB_KEY)
+			// PORT: в 1.7.10 вкладка шла сразу за вкладкой Botania — в порядке регистрации; в 1.20.1 — «Botania перед ней»
+			.withTabsBefore(BotaniaRegistries.BOTANIA_TAB_KEY)
 			.displayItems { _, output -> ArrayList<Any?>().also { displayAllReleventItems(it) }.forEach { output.accept(it as ItemStack) } }
 			.build()
 	}
