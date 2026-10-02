@@ -1,4 +1,5 @@
-# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, GameTest-ы на сервере, сверка описи, врезок, переводов, звуков и настроек.
+# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, генерация данных, GameTest-ы на сервере, сверка описи, врезок, переводов,
+# звуков и настроек.
 # jar из артефакта «alfheim-jar» владелец ставит в свою сборку для проверки по чек-листу PR.
 name: Build
 
@@ -47,6 +48,15 @@ jobs:
 
       - name: Сборка
         run: ./gradlew build
+
+      # Модели, лут, теги и legacy_ids.json строит генерация данных (SPEC, Р-9): построенное с нуля совпадает
+      # с тем, что в git, — ничего не правлено руками, ничего не забыто и не осталось лишнего
+      - name: Сверка генерации данных
+        run: |
+          rm -rf src/generated/resources
+          ./gradlew runData
+          git status --porcelain src/generated
+          test -z "$(git status --porcelain src/generated)"
 
       # Таблица звуков 1.7.10 → 1.20.1 собрана скриптом из sounds.json Mojang и Botania, руками не правится
       - name: Сверка таблицы звуков

@@ -1,0 +1,77 @@
+{
+  "_comment": [
+    "Соответствие имён Alfheim 1.7.10 и 1.20.1 (SPEC, Р-5). Файл строит генерация данных (alfheim.port.data.LegacyIdsProvider)",
+    "по блокам и предметам, зарегистрированным в порту; руками не правится. Из него читают все: загрузчик построек,",
+    "перевод ключей lang (tools/convert_lang.py), лексикон, тесты паритета. Формат — docs/port/MAPPING.md, раздел «legacy_ids.json»."
+  ],
+  "blocks": {
+    "alfheim:ElvenSand": "alfheim:elven_sand",
+    "alfheim:ElvenSandstone": {
+      "0": "alfheim:elven_sandstone0",
+      "1": "alfheim:elven_sandstone1",
+      "2": "alfheim:elven_sandstone2",
+      "3": "alfheim:elven_sandstone3",
+      "4": "alfheim:elven_sandstone4"
+    },
+    "alfheim:LivingCobble": {
+      "0": "alfheim:living_cobble0",
+      "1": "alfheim:living_cobble1",
+      "2": "alfheim:living_cobble2",
+      "3": "alfheim:living_cobble3"
+    },
+    "alfheim:ManaIce": "alfheim:mana_ice",
+    "alfheim:alfStorage": {
+      "0": "alfheim:alf_storage0",
+      "1": "alfheim:alf_storage1",
+      "2": "alfheim:alf_storage2",
+      "3": "alfheim:alf_storage3",
+      "4": "alfheim:alf_storage4",
+      "5": "alfheim:alf_storage5"
+    }
+  },
+  "entities": {},
+  "items": {
+    "alfheim:ElvenSand": "alfheim:elven_sand",
+    "alfheim:ElvenSandstone": {
+      "0": "alfheim:elven_sandstone0",
+      "1": "alfheim:elven_sandstone1",
+      "2": "alfheim:elven_sandstone2",
+      "3": "alfheim:elven_sandstone3",
+      "4": "alfheim:elven_sandstone4"
+    },
+    "alfheim:LivingCobble": {
+      "0": "alfheim:living_cobble0",
+      "1": "alfheim:living_cobble1",
+      "2": "alfheim:living_cobble2",
+      "3": "alfheim:living_cobble3"
+    },
+    "alfheim:ManaIce": "alfheim:mana_ice",
+    "alfheim:alfStorage": {
+      "0": "alfheim:alf_storage0",
+      "1": "alfheim:alf_storage1",
+      "2": "alfheim:alf_storage2",
+      "3": "alfheim:alf_storage3",
+      "4": "alfheim:alf_storage4",
+      "5": "alfheim:alf_storage5"
+    }
+  },
+  "lang": {
+    "tile.ElvenSandstone0.name": "block.alfheim.elven_sandstone0",
+    "tile.ElvenSandstone1.name": "block.alfheim.elven_sandstone1",
+    "tile.ElvenSandstone2.name": "block.alfheim.elven_sandstone2",
+    "tile.ElvenSandstone3.name": "block.alfheim.elven_sandstone3",
+    "tile.ElvenSandstone4.name": "block.alfheim.elven_sandstone4",
+    "tile.LivingCobble0.name": "block.alfheim.living_cobble0",
+    "tile.LivingCobble1.name": "block.alfheim.living_cobble1",
+    "tile.LivingCobble2.name": "block.alfheim.living_cobble2",
+    "tile.LivingCobble3.name": "block.alfheim.living_cobble3",
+    "tile.alfStorage0.name": "block.alfheim.alf_storage0",
+    "tile.alfStorage1.name": "block.alfheim.alf_storage1",
+    "tile.alfStorage2.name": "block.alfheim.alf_storage2",
+    "tile.alfStorage3.name": "block.alfheim.alf_storage3",
+    "tile.alfStorage4.name": "block.alfheim.alf_storage4",
+    "tile.alfStorage5.name": "block.alfheim.alf_storage5",
+    "tile.alfheim:ElvenSand.name": "block.alfheim.elven_sand",
+    "tile.alfheim:ManaIce.name": "block.alfheim.mana_ice"
+  }
+}

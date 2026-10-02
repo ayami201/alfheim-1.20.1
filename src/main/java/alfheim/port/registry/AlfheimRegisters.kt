@@ -1,6 +1,11 @@
 package alfheim.port.registry
 
 import alfheim.api.ModInfo.MODID
+import alfheim.common.block.*
+import alfheim.port.client.AlfheimModels
+import alfheim.port.data.AlfheimData
+import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.fml.DistExecutor
 import net.minecraft.core.registries.Registries
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.registries.*
@@ -24,6 +29,17 @@ object AlfheimRegisters {
 	fun register(bus: IEventBus) {
 		// звуковые события автора — все сразу, по sounds.json
 		AlfheimSounds
+		
+		// блоки и предметы автора создаются в событии регистрации; в 1.7.10 — в preInit (CommonProxy)
+		LegacyRegistration.onBlocks {
+			AlfheimBlocks
+			AlfheimFluffBlocks
+		}
+		LegacyRegistration.register(bus)
+		// модели, лут, теги и legacy_ids.json — генерация данных (./gradlew runData)
+		AlfheimData.register(bus)
+		// модели блоков, которые 1.7.10 выбирал в коде, — только на клиенте
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT) { Runnable { AlfheimModels.register(bus) } }
 		
 		for (register in listOf(BLOCKS, ITEMS, BLOCK_ENTITY_TYPES, ENTITY_TYPES, MOB_EFFECTS, SOUND_EVENTS, CREATIVE_MODE_TABS))
 			register.register(bus)
