@@ -32,7 +32,7 @@ import java.io.File
 import java.util.function.Supplier
 
 @Suppress("UNUSED_PARAMETER")
-// PORT: dependencies и useMetadata → META-INF/mods.toml; modLanguageAdapter → modLoader="kotlinforforge" там же; guiFactory (экран настроек) — КТ-10: в Forge 1.20.1 встроенного экрана нет, пишется свой
+// PORT: dependencies и useMetadata → META-INF/mods.toml; modLanguageAdapter → modLoader="kotlinforforge" там же; guiFactory (экран настроек) не переносится: в Forge 1.20.1 встроенного экрана нет, настройки в игре показывает мод Configured
 //@Mod(modid = MODID, dependencies = "required-after:Botania", useMetadata = true, guiFactory = "$MODID.client.gui.GUIFactory", modLanguageAdapter = KotlinAdapter.className)
 @Mod(MODID)
 object AlfheimCore {
