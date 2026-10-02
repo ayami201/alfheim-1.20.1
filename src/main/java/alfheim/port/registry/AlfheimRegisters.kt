@@ -25,6 +25,9 @@ object AlfheimRegisters {
 		// звуковые события автора — все сразу, по sounds.json
 		AlfheimSounds
 		
+		// блоки и предметы автора создаются в событии регистрации
+		LegacyRegistration.register(bus)
+		
 		for (register in listOf(BLOCKS, ITEMS, BLOCK_ENTITY_TYPES, ENTITY_TYPES, MOB_EFFECTS, SOUND_EVENTS, CREATIVE_MODE_TABS))
 			register.register(bus)
 	}
