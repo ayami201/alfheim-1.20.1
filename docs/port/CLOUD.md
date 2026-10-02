@@ -120,3 +120,28 @@ Sonnet 5.5). ТЗ написано так, что подходит и Fable, и 
   public key … Host not in allowlist: api.minecraftservices.com` (тестовому серверу
   вход Mojang не нужен). Домен добавлять не нужно. `tools/check_server_log.py`
   проверяет, что ошибок от `alfheim` нет.
+- **Сетевые ошибки автора в логе сервера.** Мод автора при запуске обращается к его
+  Bitbucket (SPEC п. 8). Новостей для 1.20.1 там нет: `Unable to load news & version …
+  FileNotFoundException …/news/1.20.1.xml` — ожидаемая запись. `tools/check_server_log.py`
+  считает такие записи известными и не валит проверку.
+
+## 6. Клиент без экрана
+
+Проверено в сессии КТ-1 (02.10.2026). В облаке есть виртуальный экран Xvfb и
+программный OpenGL (Mesa llvmpipe, OpenGL 4.5 Core). Клиент с модом доходит до меню
+примерно за 25 секунд, новый мир загружается и рисуется примерно за 40 секунд. Звука
+нет: в облаке нет звуковой карты, игра сама выключает звук.
+
+Запуск (в фоне, лог — `run/logs/latest.log`):
+
+```bash
+LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe xvfb-run -n 99 \
+  -s "-screen 0 1280x720x24 +extension GLX +render -noreset" ./gradlew runClient
+```
+
+- **Снимок экрана:** `XAUTHORITY=$(ls /tmp/xvfb-run.*/Xauthority) DISPLAY=:99 import -window root shot.png`
+  (ImageMagick уже установлен). Без `XAUTHORITY` виртуальный экран отвечает «Authorization required».
+- **Клики и клавиши:** расширение XTEST через `python-xlib`:
+  `pip install --target <папка> python-xlib`, затем `Xlib.ext.xtest.fake_input`.
+  Окно игры — 854×480 в центре экрана 1280×720; координаты кнопок видны на снимке.
+- `run/` в git не попадает: мир, `options.txt` и снимки остаются только в облаке.
