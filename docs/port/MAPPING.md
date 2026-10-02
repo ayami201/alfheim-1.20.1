@@ -49,7 +49,20 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `assets/<ns>/lang/en_US.lang` | `assets/<ns>/lang/en_us.json` | ✓ собирает `tools/convert_lang.py` из `.lang` в `legacy/`; руками `.json` не правится |
 | значения с `%d`, `%.1f` | как есть | ✓ и 1.7.10, и 1.20.1 при загрузке заменяют их на `%s` |
 | ключи удалённых вещей | не переносятся | ✓ список с причинами — `REMOVED` в `tools/convert_lang.py` |
-| `StatCollector.translateToLocal` | `I18n.get` (клиент) / `Component.translatable` | ключи те же, пока их не переименует `legacy_ids.json` |
+| `StatCollector.translateToLocal` / `translateToLocalFormatted` | `alfheim.port.legacy.StatCollector` там, где автору нужен готовый текст на этой стороне; `Component.translatable` — для текста, который уходит игроку | ✓ прослойка поверх `Language.getInstance()`: на сервере — английский, как в 1.7.10; при ошибке формата — «Format error: …». Ключи те же, пока их не переименует `legacy_ids.json` |
+
+## Ресурсы
+
+| Было | Стало | Примечание |
+|---|---|---|
+| путь ресурса автора: `textures/model/item/AkashicRecordsCube.png` | `legacyPath(path)` из `alfheim.port.legacy`: `textures/model/item/akashic_records_cube.png` | ✓ в 1.20.1 в пути только строчные буквы, цифры и `_-./`. Каждая часть пути — в snake_case, как имена в реестре, расширение — строчными. Файлы из `legacy/` переносятся под этими именами |
+| `ResourceLocationIL(…)` (LibResourceLocations) | как есть | ✓ конструктор сам применяет `legacyPath` |
+| `ResourceLocation(modid, path)` с путём автора | `ResourceLocation(modid, legacyPath(path))` | ✓ |
+| ванильные `textures/blocks/…`, `textures/items/…` | `textures/block/…`, `textures/item/…` | ✓ |
+| `vazkii.botania.client.lib.LibResources` | `vazkii.botania.client.lib.ResourcesLib` | ✓ константы — полные пути `botania:…`; «розовый» пилон 1.7.10 — `MODEL_PYLON_GAIA` |
+| `ResourceLocationAnimated` (ASJCore) | переносится вместе с первой моделью, которой он нужен | строки автора с ним закомментированы с номером КТ |
+| `EnumHelper.addRarity(name, EnumChatFormatting, displayName)` | `Rarity.create(name, ChatFormatting)` (Forge) | ✓ отображаемого имени у редкости в 1.20.1 нет; у автора оно нигде не выводилось |
+| `MinecraftForge.MC_VERSION` | `MCPVersion.getMCVersion()` | ✓ |
 
 ## Мир, блоки, блок-сущности
 
@@ -131,7 +144,6 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `ClientRegistry.registerKeyBinding` | `RegisterKeyMappingsEvent` | |
 | Ore Dictionary | теги | |
 | достижения (`Achievement`) | advancements через datagen | |
-| `StatCollector.translateToLocal` | `I18n.get` (клиент) / `Component.translatable` | |
 | `ChatComponentText`, `EnumChatFormatting` | `Component.literal`, `ChatFormatting` | |
 
 ## Рендер

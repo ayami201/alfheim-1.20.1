@@ -34,19 +34,19 @@ python3 tools/check_inventory.py
 | КТ | Файлов | Строк | ждёт | перенесено | выпало | WIP — стадия 2 |
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
-| КТ-1 | 33 | 5 661 | 15 | 18 |  |  |
+| КТ-1 | 32 | 5 652 | 7 | 25 |  |  |
 | КТ-2 | 222 | 19 082 | 222 |  |  |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
-| КТ-6 | 106 | 12 499 | 106 |  |  |  |
+| КТ-6 | 107 | 12 508 | 107 |  |  |  |
 | КТ-7 | 139 | 10 888 | 139 |  |  |  |
 | КТ-8 | 95 | 13 066 | 95 |  |  |  |
 | КТ-9 | 19 | 2 559 | 19 |  |  |  |
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 70 | 4 498 |  |  | 58 | 12 |
-| **всего** | **1153** | **124 643** | **1063** | **20** | **58** | **12** |
+| **всего** | **1153** | **124 643** | **1056** | **27** | **58** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -219,7 +219,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimAPI.kt` | 377 | КТ-1 | ждёт |  |
+| `AlfheimAPI.kt` | 377 | КТ-1 | перенесено | → `src/main/java/alfheim/api/AlfheimAPI.kt`; работают редкости, «розовость», топливо, веса руд; остальное закомментировано до КТ своих механик |
 | `ModInfo.kt` | 6 | КТ-0 | перенесено | → `src/main/java/alfheim/api/ModInfo.kt` |
 | `package-info.java` | 4 | — | выпало (аннотация `@API` FML 1.7.10, в 1.20.1 аналога нет) |  |
 
@@ -297,7 +297,7 @@ python3 tools/check_inventory.py
 |---|---:|---|---|---|
 | `LibOreDict.kt` | 71 | КТ-2 | ждёт |  |
 | `LibRenderIDs.kt` | 33 | КТ-2 | ждёт |  |
-| `LibResourceLocations.kt` | 318 | КТ-1 | ждёт |  |
+| `LibResourceLocations.kt` | 318 | КТ-1 | перенесено | → `src/main/java/alfheim/api/lib/LibResourceLocations.kt`; пути через `legacyPath`; анимированные текстуры (`ResourceLocationAnimated`) — в КТ своих моделей |
 | `LibShaderIDs.kt` | 14 | КТ-2 | ждёт |  |
 
 ### `legacy/src/main/java/alfheim/api/network/`
@@ -390,7 +390,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `LibResourceLocationsActual.kt` | 29 | КТ-1 | ждёт |  |
+| `LibResourceLocationsActual.kt` | 29 | КТ-1 | перенесено | → `src/main/java/alfheim/client/lib/LibResourceLocationsActual.kt`; старый пилон — КТ-3, lexica — КТ-7, плащи — КТ-4 |
 
 ### `legacy/src/main/java/alfheim/client/model/armor/`
 
@@ -604,12 +604,12 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `AstrolabePreviewHandler.kt` | 74 | КТ-4 | ждёт |  |
-| `DummyRenderHandler.kt` | 9 | КТ-1 | ждёт |  |
+| `DummyRenderHandler.kt` | 9 | КТ-6 | ждёт | нужен только мирам Хельхейма, Нифльхейма и доменов; в 1.20.1 небо и погоду рисует `DimensionSpecialEffects`, переносится с ними |
 | `FenrirVisualEffectsRenderer.kt` | 56 | КТ-8 | ждёт |  |
 | `SkyRendererAlfheim.kt` | 358 | КТ-6 | ждёт |  |
 | `SkyRendererDomains.kt` | 80 | КТ-6 | ждёт |  |
 | `SpellVisualizations.kt` | 182 | КТ-7 | ждёт |  |
-| `VisualEffectHandlerClient.kt` | 544 | КТ-1 | ждёт |  |
+| `VisualEffectHandlerClient.kt` | 544 | КТ-1 | перенесено | → `src/main/java/alfheim/client/render/world/VisualEffectHandlerClient.kt`; список эффектов работает, сами эффекты закомментированы до КТ тех, кто их шлёт |
 | `WeatherRendererAlfheim.kt` | 144 | КТ-6 | ждёт |  |
 | `WeatherRendererNiflheim.kt` | 98 | КТ-6 | ждёт |  |
 
@@ -1091,9 +1091,9 @@ python3 tools/check_inventory.py
 | `KeyBindingHandler.kt` | 91 | КТ-7 | ждёт |  |
 | `SheerColdHandler.kt` | 225 | КТ-6 | ждёт |  |
 | `SoulRestructuringHandler.kt` | 146 | КТ-3 | ждёт |  |
-| `TimeHandler.kt` | 20 | КТ-1 | ждёт |  |
+| `TimeHandler.kt` | 20 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/TimeHandler.kt`; без правок |
 | `TradingGiftsHandler.kt` | 135 | КТ-3 | ждёт |  |
-| `VisualEffectHandler.kt` | 22 | КТ-1 | ждёт |  |
+| `VisualEffectHandler.kt` | 22 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/VisualEffectHandler.kt` |
 | `WorkInProgressItemsHandler.kt` | 33 | КТ-2 | ждёт | метка [WIP] для вещей автора |
 
 ### `legacy/src/main/java/alfheim/common/core/handler/ragnarok/`
@@ -1132,7 +1132,7 @@ python3 tools/check_inventory.py
 |---|---:|---|---|---|
 | `AlfheimTab.kt` | 785 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/util/AlfheimTab.kt`; строки списка вкладки ждут КТ своих вещей |
 | `DamageSourceSpell.kt` | 149 | КТ-7 | ждёт |  |
-| `InfoLoader.kt` | 82 | КТ-1 | ждёт | обращается к Bitbucket автора (SPEC п. 8) |
+| `InfoLoader.kt` | 82 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/util/InfoLoader.kt`; обращается к Bitbucket автора (SPEC п. 8) |
 
 ### `legacy/src/main/java/alfheim/common/crafting/`
 
