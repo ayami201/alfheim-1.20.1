@@ -1,34 +1,27 @@
 package alfheim.common.block
 
-import alexsocol.asjlib.ASJUtilities
+// PORT: импорты 1.7.10 заменены на 1.20.1
 import alexsocol.asjlib.extendables.block.BlockModMeta
 import alfheim.api.ModInfo
-import alfheim.client.core.helper.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.util.AlfheimTab
-import alfheim.common.lexicon.AlfheimLexiconData
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.util.IIcon
-import net.minecraft.world.*
-import net.minecraftforge.client.event.TextureStitchEvent
-import net.minecraftforge.common.MinecraftForge
-import vazkii.botania.api.lexicon.ILexiconable
-import vazkii.botania.common.lexicon.LexiconData
+import alfheim.port.legacy.*
+import net.minecraft.world.level.BlockGetter as IBlockAccess
 
-class BlockAlfStorage: BlockModMeta(Material.iron, 6, ModInfo.MODID, "alfStorage", AlfheimTab, 5f, resist = 60f), ILexiconable {
+// PORT: вариант metadata — отдельный блок (BlockModMeta); КТ-9 — лексикон (ILexiconable)
+class BlockAlfStorage(meta: Int): BlockModMeta(Material.iron, 6, ModInfo.MODID, "alfStorage", AlfheimTab, 5f, resist = 60f, meta = meta)/*, ILexiconable*/ {
 	
+	// PORT: анимированная текстура (InterpolatedIconHelper) — alf_storage4.png.mcmeta с interpolate, её рисует 1.20.1
+	/*
 	init {
 		if (ASJUtilities.isClient)
 			MinecraftForge.EVENT_BUS.register(this)
 	}
+	*/
 	
 	override fun isBeaconBase(worldObj: IBlockAccess?, x: Int, y: Int, z: Int, beaconX: Int, beaconY: Int, beaconZ: Int) = true
 	
+	/* PORT: КТ-9 — лексикон
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) =
 		when (world.getBlockMetadata(x, y, z)) {
 			0       -> AlfheimLexiconData.elvorium
@@ -38,11 +31,15 @@ class BlockAlfStorage: BlockModMeta(Material.iron, 6, ModInfo.MODID, "alfStorage
 //			6       -> RecipeListAB.advandedAgglomerationPlate TODO back
 			else    -> null
 		}
+	*/
 	
 	fun isInterpolated(meta: Int) = meta == 4
 	
 	fun hasNewTexture(meta: Int) = AlfheimConfigHandler.newStorageTexture && (meta == 1 || meta == 2 || meta == 3)
 	
+	// PORT: иконки → модели (alfheim.port.data): у вариантов 1–3 две модели, со старой и новой текстурой; нужную по
+	// hasNewTexture выбирает клиент при сборке моделей (alfheim.port.client.AlfheimModels)
+	/*
 	@Suppress("UNCHECKED_CAST")
 	@SideOnly(Side.CLIENT)
 	override fun registerBlockIcons(reg: IIconRegister) {
@@ -64,4 +61,5 @@ class BlockAlfStorage: BlockModMeta(Material.iron, 6, ModInfo.MODID, "alfStorage
 				icons[it] = InterpolatedIconHelper.forBlock(event.map, this, it)
 		}
 	}
+	*/
 }

@@ -2,6 +2,10 @@ package alfheim.common.core.util
 
 // PORT: импорты 1.20.1 — первыми; импорты автора закомментированы до КТ, в которых появятся их блоки и предметы
 import alfheim.api.ModInfo
+import alfheim.common.block.AlfheimBlocks.alfStorage
+import alfheim.common.block.AlfheimBlocks.elvenSand
+import alfheim.common.block.AlfheimBlocks.livingcobble
+import alfheim.common.block.AlfheimFluffBlocks.elvenSandstone
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.port.registry.AlfheimRegisters
 import net.minecraft.network.chat.Component
@@ -15,7 +19,6 @@ import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.AlfheimBlocks.airyVirus
-import alfheim.common.block.AlfheimBlocks.alfStorage
 import alfheim.common.block.AlfheimBlocks.alfheimPortal
 import alfheim.common.block.AlfheimBlocks.alfheimPylon
 import alfheim.common.block.AlfheimBlocks.altLeaves
@@ -60,7 +63,6 @@ import alfheim.common.block.AlfheimBlocks.corporeaRatBase
 import alfheim.common.block.AlfheimBlocks.corporeaSparkBase
 import alfheim.common.block.AlfheimBlocks.dreamSapling
 import alfheim.common.block.AlfheimBlocks.elvenOre
-import alfheim.common.block.AlfheimBlocks.elvenSand
 import alfheim.common.block.AlfheimBlocks.enderActuator
 import alfheim.common.block.AlfheimBlocks.gaiaButton
 import alfheim.common.block.AlfheimBlocks.grapesRed
@@ -89,7 +91,6 @@ import alfheim.common.block.AlfheimBlocks.lightningSapling
 import alfheim.common.block.AlfheimBlocks.lightningSlabs
 import alfheim.common.block.AlfheimBlocks.lightningStairs
 import alfheim.common.block.AlfheimBlocks.lightningWood
-import alfheim.common.block.AlfheimBlocks.livingcobble
 import alfheim.common.block.AlfheimBlocks.livingwoodFunnel
 import alfheim.common.block.AlfheimBlocks.manaAccelerator
 import alfheim.common.block.AlfheimBlocks.manaInfuser
@@ -159,7 +160,6 @@ import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanks
 import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanksSlab
 import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanksStairs
 import alfheim.common.block.AlfheimFluffBlocks.dwarfTrapDoor
-import alfheim.common.block.AlfheimFluffBlocks.elvenSandstone
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneSlab
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneSlab2
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneStairs
@@ -440,7 +440,9 @@ object AlfheimTab {
 		addBlock(amplifier)
 		addBlock(irisLamp)
 		addBlock(kindling)
+		*/
 		addBlock(alfStorage)
+		/* PORT: КТ-2
 		addBlock(softStorage)
 		*/
 		/* PORT: КТ-3
@@ -750,7 +752,9 @@ object AlfheimTab {
 		
 		addBlock(livingMountain)
 		addBlock(livingMountainSlab)
+		*/
 		addBlock(livingcobble)
+		/* PORT: КТ-2
 		addBlock(livingcobbleStairs)
 		addBlock(livingcobbleStairs1)
 		addBlock(livingcobbleStairs2)
@@ -759,9 +763,11 @@ object AlfheimTab {
 		addBlock(livingcobbleSlab2)
 		addBlock(livingcobbleWall)
 		addBlock(livingrockBrickWall)
+		*/
 		
 		addBlock(elvenSand)
 		addBlock(elvenSandstone)
+		/* PORT: КТ-2
 		elvenSandstoneStairs.forEach { addBlock(it) }
 		addBlock(elvenSandstoneSlab)
 		addBlock(elvenSandstoneSlab2)
@@ -882,6 +888,11 @@ object AlfheimTab {
 	fun addBlock(block: Block) {
 		addStack(ItemStack(block))
 //		block.getSubBlocks(block.toItem(), this, list)
+	}
+	
+	// PORT: блок с вариантами metadata — массив блоков (SPEC, Р-5); getSubBlocks выдавал все варианты по порядку
+	fun addBlock(blocks: Array<Block>) {
+		blocks.forEach { addBlock(it) }
 	}
 	
 	fun addItem(item: Item) {

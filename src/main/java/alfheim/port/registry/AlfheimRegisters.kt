@@ -1,6 +1,7 @@
 package alfheim.port.registry
 
 import alfheim.api.ModInfo.MODID
+import alfheim.common.block.*
 import net.minecraft.core.registries.Registries
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.registries.*
@@ -25,7 +26,11 @@ object AlfheimRegisters {
 		// звуковые события автора — все сразу, по sounds.json
 		AlfheimSounds
 		
-		// блоки и предметы автора создаются в событии регистрации
+		// блоки и предметы автора создаются в событии регистрации; в 1.7.10 — в preInit (CommonProxy)
+		LegacyRegistration.onBlocks {
+			AlfheimBlocks
+			AlfheimFluffBlocks
+		}
 		LegacyRegistration.register(bus)
 		
 		for (register in listOf(BLOCKS, ITEMS, BLOCK_ENTITY_TYPES, ENTITY_TYPES, MOB_EFFECTS, SOUND_EVENTS, CREATIVE_MODE_TABS))

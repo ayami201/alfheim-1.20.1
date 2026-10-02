@@ -1,17 +1,16 @@
 package alfheim.common.block
 
+// PORT: импорты 1.7.10 заменены на 1.20.1
 import alexsocol.asjlib.extendables.block.BlockModMeta
 import alfheim.api.ModInfo
 import alfheim.common.core.util.AlfheimTab
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.*
-import net.minecraft.util.IIcon
+import alfheim.port.legacy.*
 
-class BlockElvenSandstone: BlockModMeta(Material.rock, 5, ModInfo.MODID, "ElvenSandstone", AlfheimTab) {
+// PORT: вариант metadata — отдельный блок (BlockModMeta)
+class BlockElvenSandstone(meta: Int): BlockModMeta(Material.rock, 5, ModInfo.MODID, "ElvenSandstone", AlfheimTab, meta = meta) {
 	
+	// PORT: иконки → модели (alfheim.port.data): грани каждого варианта — как в getIcon ниже
+	/*
 	lateinit var sides: Array<IIcon>
 	lateinit var top: IIcon
 	lateinit var bottom: IIcon
@@ -48,6 +47,7 @@ class BlockElvenSandstone: BlockModMeta(Material.rock, 5, ModInfo.MODID, "ElvenS
 		top = reg.registerIcon("${ModInfo.MODID}:decor/ElvenSandstoneTop")
 		bottom = reg.registerIcon("${ModInfo.MODID}:decor/ElvenSandstoneBottom")
 	}
+	*/
 	
 	val names = arrayOf("Normal", "Carved", "Smooth")
 }

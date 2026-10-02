@@ -1,12 +1,14 @@
 package alfheim.common.item.block
 
-import alfheim.api.ModInfo
-import alfheim.common.block.base.BlockLeavesMod
-import net.minecraft.block.Block
-import net.minecraft.item.*
+// PORT: импорты 1.7.10 заменены на 1.20.1
+import net.minecraft.world.item.*
+import net.minecraft.world.level.block.Block
 
-open class ItemBlockLeavesMod(block: Block): ItemBlock(block) {
+// PORT: ключ перевода предмета-блока в 1.20.1 — ключ блока (block.alfheim.<id>); старые ключи «tile.alfheim:…»
+// переименованы по legacy_ids.json. Бит опадания листвы — свойство состояния листвы (её базовый класс — КТ-2)
+open class ItemBlockLeavesMod(block: Block): BlockItem(block, Properties()) {
 	
+	/*
 	override fun setUnlocalizedName(name: String): ItemBlock? {
 		(this as Item).unlocalizedName = name
 		return this
@@ -21,4 +23,5 @@ open class ItemBlockLeavesMod(block: Block): ItemBlock(block) {
 		getUnlocalizedNameInefficiently_(stack).replace("tile.", "tile.${ModInfo.MODID}:")
 	
 	fun getUnlocalizedNameInefficiently_(stack: ItemStack) = super.getUnlocalizedNameInefficiently(stack)!!
+	*/
 }

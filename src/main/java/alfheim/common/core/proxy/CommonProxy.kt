@@ -37,7 +37,7 @@ open class CommonProxy {
 		// PORT: КТ-4 — материалы инструментов в AlfheimAPI
 //		AlfheimAPI.RUNEAXE.setRepairItem(ItemStack(ModItems.manaResource, 1, 7)) // Elementium
 		
-		// PORT: КТ-9 — лексикон; КТ-2 — блоки и предметы
+		// PORT: КТ-9 — лексикон; блоки и предметы создаются в событии регистрации (alfheim.port.registry.AlfheimRegisters)
 //		AlfheimLexiconData.preInit()
 //		AlfheimBlocks
 //		AlfheimItems
@@ -59,7 +59,7 @@ open class CommonProxy {
 	open fun registerKeyBinds() = Unit
 	
 	fun init() {
-		// PORT: КТ-2 — Ore Dictionary → теги, рецепты
+		// PORT: Ore Dictionary → теги: их строит генерация данных по regOreDict (alfheim.port.data); КТ-2 — рецепты
 //		AlfheimBlocks.regOreDict()
 //		AlfheimItems.regOreDict()
 //		
