@@ -1,18 +1,16 @@
 package alfheim.common.block
 
+// PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
 import alexsocol.asjlib.extendables.block.BlockModMeta
-import alexsocol.asjlib.safeGet
 import alfheim.api.ModInfo
-import alfheim.client.core.helper.IconHelper
 import alfheim.common.core.util.AlfheimTab
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.world.IBlockAccess
-import kotlin.math.abs
+import alfheim.port.legacy.*
 
 class BlockLivingMountain: BlockModMeta(Material.rock, 1, ModInfo.MODID, "LivingMountain", AlfheimTab, 5f) {
 	
+	// PORT: иконки → 4 модели (decor/LivingMountain1–4, alfheim.port.data.AlfheimBlockStates); по координатам грань
+	// выбирает модель клиента (alfheim.port.client.AlfheimModels) по той же формуле; в руке — LivingMountain1
+	/*
 	override fun registerBlockIcons(reg: IIconRegister) {
 		icons = Array(4) { IconHelper.forBlock(reg, this, it + 1, "decor") }
 	}
@@ -27,4 +25,5 @@ class BlockLivingMountain: BlockModMeta(Material.rock, 1, ModInfo.MODID, "Living
 			4, 5 -> icons.safeGet(abs(z % 2) + abs(y % 2) * 2)
 			else -> icons[0]
 		}
+	*/
 }

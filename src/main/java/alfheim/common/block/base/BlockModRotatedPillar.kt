@@ -1,26 +1,32 @@
 package alfheim.common.block.base
 
-import alexsocol.asjlib.toItem
-import alfheim.client.core.helper.*
-import alfheim.common.item.block.ItemIridescentBlockMod
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.Block
-import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.util.*
-import net.minecraft.world.World
-import net.minecraftforge.client.event.TextureStitchEvent
-import vazkii.botania.api.lexicon.ILexiconable
-import java.util.*
+// PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
+import alfheim.port.legacy.*
+import net.minecraft.core.Direction
+import net.minecraft.world.item.context.BlockPlaceContext
+import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.RotatedPillarBlock.AXIS
+import net.minecraft.world.level.block.state.*
 
-abstract class BlockModRotatedPillar(mat: Material): BlockMod(mat), ILexiconable {
+// PORT: КТ-9 — лексикон (ILexiconable)
+abstract class BlockModRotatedPillar(mat: Material): BlockMod(mat)/*, ILexiconable*/ {
 	
-	protected var iconTop: IIcon? = null
-	protected var iconSide: IIcon? = null
+	// PORT: иконки → модель столба (alfheim.port.data.AlfheimBlockStates): торцы — iconTop, бока — iconSide
+//	protected var iconTop: IIcon? = null
+//	protected var iconSide: IIcon? = null
+	
+	// PORT: поворот в metadata (meta and 12: 0 — вверх, 4 — вдоль X, 8 — вдоль Z) → свойство состояния axis, как у
+	// RotatedPillarBlock 1.20.1. Номер варианта (meta and 3) — отдельный блок (SPEC, Р-5)
+	init {
+		registerDefaultState(defaultBlockState().setValue(AXIS, Direction.Axis.Y))
+	}
+	
+	override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+		builder.add(AXIS)
+	}
+	
+	@Deprecated("Deprecated in Java")
+	override fun rotate(state: BlockState, rotation: Rotation): BlockState = RotatedPillarBlock.rotatePillar(state, rotation)
 	
 	override fun setBlockName(name: String): Block {
 		register(name)
@@ -28,9 +34,13 @@ abstract class BlockModRotatedPillar(mat: Material): BlockMod(mat), ILexiconable
 	}
 	
 	open fun register(name: String) {
-		GameRegistry.registerBlock(this, ItemIridescentBlockMod::class.java, name)
+		// PORT: КТ-2 — ItemIridescentBlockMod переносится с цветными деревьями; блоки этой партии переопределяют register
+//		GameRegistry.registerBlock(this, ItemIridescentBlockMod::class.java, name)
+		throw IllegalStateException("ItemIridescentBlockMod is not ported yet: $name")
 	}
 	
+	// PORT: лут (alfheim.port.data.AlfheimBlockLoot) — сам блок, один
+	/*
 	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = this.toItem()
 	
 	@SideOnly(Side.CLIENT)
@@ -40,9 +50,11 @@ abstract class BlockModRotatedPillar(mat: Material): BlockMod(mat), ILexiconable
 	}
 	
 	override fun quantityDropped(random: Random) = 1
+	*/
 	
 	override fun shouldRegisterInNameSet() = false
 	
+	/* PORT: лут и модель столба — генерация данных (alfheim.port.data)
 	override fun damageDropped(meta: Int) = meta and 3
 	
 	override fun getRenderType() = 31
@@ -54,7 +66,12 @@ abstract class BlockModRotatedPillar(mat: Material): BlockMod(mat), ILexiconable
 	open fun getTopIcon(meta: Int) = iconTop
 	
 	override fun createStackedBlock(meta: Int) = ItemStack(this, 1, meta and 3)
+	*/
 	
+	// PORT: onBlockPlaced → getStateForPlacement: ось — по стороне, на которую ставят. Предмета с поворотом
+	// (meta and 0b1100 == 0b1100) в 1.20.1 нет: поворот — состояние блока
+	override fun getStateForPlacement(context: BlockPlaceContext): BlockState? = defaultBlockState().setValue(AXIS, context.clickedFace.axis)
+	/*
 	override fun onBlockPlaced(world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float, meta: Int): Int {
 		if (meta and 0b1100 == 0b1100) return meta
 		
@@ -89,4 +106,5 @@ abstract class BlockModRotatedPillar(mat: Material): BlockMod(mat), ILexiconable
 		val meta = world.getBlockMetadata(x, y, z)
 		return ItemStack(this, 1, meta and 3)
 	}
+	*/
 }

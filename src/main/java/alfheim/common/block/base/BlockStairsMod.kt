@@ -1,23 +1,24 @@
 package alfheim.common.block.base
 
+// PORT: импорты 1.20.1; BlockStairs 1.7.10 — Stairs1710 (MAPPING.md, «Блоки и предметы»)
 import alfheim.common.core.util.AlfheimTab
-import alfheim.common.item.block.ItemIridescentBlockMod
-import cpw.mods.fml.common.registry.GameRegistry
-import net.minecraft.block.*
-import net.minecraft.world.World
-import vazkii.botania.api.lexicon.ILexiconable
+import alfheim.port.legacy.*
+import net.minecraft.world.level.block.Block
 
-abstract class BlockStairsMod(val source: Block, val meta: Int, val name: String): BlockStairs(source, meta), ILexiconable {
+// PORT: КТ-9 — лексикон (ILexiconable)
+abstract class BlockStairsMod(val source: Block, val meta: Int, val name: String): Stairs1710(source, meta)/*, ILexiconable*/ {
 	
 	init {
 		setCreativeTab(AlfheimTab)
 		setBlockName(name)
 		setStepSound(source.stepSound)
-		useNeighborBrightness = true
+		// PORT: useNeighborBrightness — свет неполных блоков 1.20.1 считает сама
+//		useNeighborBrightness = true
 	}
 	
-	override fun getBlockHardness(world: World, x: Int, y: Int, z: Int) =
-		source.getBlockHardness(world, x, y, z)
+	// PORT: твёрдость блока-источника — у Stairs1710 с создания, как BlockStairs 1.7.10
+//	override fun getBlockHardness(world: World, x: Int, y: Int, z: Int) =
+//		source.getBlockHardness(world, x, y, z)
 	
 	override fun setBlockName(par1Str: String): Block {
 		register()
@@ -25,7 +26,9 @@ abstract class BlockStairsMod(val source: Block, val meta: Int, val name: String
 	}
 	
 	open fun register() {
-		GameRegistry.registerBlock(this, ItemIridescentBlockMod::class.java, name)
+		// PORT: КТ-2 — ItemIridescentBlockMod переносится с цветными деревьями; блоки этой партии переопределяют register
+//		GameRegistry.registerBlock(this, ItemIridescentBlockMod::class.java, name)
+		throw IllegalStateException("ItemIridescentBlockMod is not ported yet: $name")
 	}
 	
 }

@@ -1,16 +1,13 @@
 package alfheim.common.block
 
+// PORT: импорты 1.20.1; BlockTrapDoor 1.7.10 — TrapDoor1710 (MAPPING.md, «Блоки и предметы»)
 import alexsocol.asjlib.I
-import alfheim.client.core.helper.IconHelper
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.ItemBlockLeavesMod
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.*
-import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
+import alfheim.port.legacy.*
+import net.minecraft.world.level.block.Block
 
-open class BlockModTrapDoor(material: Material, val name: String): BlockTrapDoor(material) {
+open class BlockModTrapDoor(material: Material, val name: String): TrapDoor1710(material) {
 	
 	var originalLight: Int = 0
 	
@@ -32,8 +29,11 @@ open class BlockModTrapDoor(material: Material, val name: String): BlockTrapDoor
 		return super.setLightLevel(level)
 	}
 	
+	// PORT: иконка → модель люка (alfheim.port.data.AlfheimBlockStates): текстура — по имени блока
+	/*
 	@SideOnly(Side.CLIENT)
 	override fun registerBlockIcons(reg: IIconRegister) {
 		blockIcon = IconHelper.forBlock(reg, this)
 	}
+	*/
 }

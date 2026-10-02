@@ -5,7 +5,49 @@ import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks.alfStorage
 import alfheim.common.block.AlfheimBlocks.elvenSand
 import alfheim.common.block.AlfheimBlocks.livingcobble
+import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
+import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFenceGate
+import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFence
+import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFenceGate
+import alfheim.common.block.AlfheimFluffBlocks.dwarfLantern
+import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanks
+import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanksSlab
+import alfheim.common.block.AlfheimFluffBlocks.dwarfPlanksStairs
+import alfheim.common.block.AlfheimFluffBlocks.dwarfTrapDoor
 import alfheim.common.block.AlfheimFluffBlocks.elvenSandstone
+import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneSlab
+import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneSlab2
+import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneStairs
+import alfheim.common.block.AlfheimFluffBlocks.elvenSandstoneWalls
+import alfheim.common.block.AlfheimFluffBlocks.livingMountain
+import alfheim.common.block.AlfheimFluffBlocks.livingMountainSlab
+import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab
+import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab1
+import alfheim.common.block.AlfheimFluffBlocks.livingcobbleSlab2
+import alfheim.common.block.AlfheimFluffBlocks.livingcobbleStairs
+import alfheim.common.block.AlfheimFluffBlocks.livingcobbleStairs1
+import alfheim.common.block.AlfheimFluffBlocks.livingcobbleStairs2
+import alfheim.common.block.AlfheimFluffBlocks.livingcobbleWall
+import alfheim.common.block.AlfheimFluffBlocks.livingrockBrickWall
+import alfheim.common.block.AlfheimFluffBlocks.livingrockDark
+import alfheim.common.block.AlfheimFluffBlocks.livingrockDarkSlabs
+import alfheim.common.block.AlfheimFluffBlocks.livingrockDarkStairs
+import alfheim.common.block.AlfheimFluffBlocks.livingrockDarkWalls
+import alfheim.common.block.AlfheimFluffBlocks.livingwoodBarkFence
+import alfheim.common.block.AlfheimFluffBlocks.livingwoodBarkFenceGate
+import alfheim.common.block.AlfheimFluffBlocks.livingwoodFence
+import alfheim.common.block.AlfheimFluffBlocks.livingwoodFenceGate
+import alfheim.common.block.AlfheimFluffBlocks.roofTile
+import alfheim.common.block.AlfheimFluffBlocks.roofTileSlabs
+import alfheim.common.block.AlfheimFluffBlocks.roofTileStairs
+import alfheim.common.block.AlfheimFluffBlocks.shrineGlass
+import alfheim.common.block.AlfheimFluffBlocks.shrineLight
+import alfheim.common.block.AlfheimFluffBlocks.shrinePanel
+import alfheim.common.block.AlfheimFluffBlocks.shrinePillar
+import alfheim.common.block.AlfheimFluffBlocks.shrineRock
+import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteSlab
+import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
+import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.port.registry.AlfheimRegisters
 import net.minecraft.network.chat.Component
@@ -719,7 +761,6 @@ object AlfheimTab {
 		list.removeAt(list.size - 5)
 		*/
 		
-		/* PORT: КТ-2
 		addBlock(dwarfLantern)
 		
 		addBlock(shrinePillar)
@@ -735,13 +776,16 @@ object AlfheimTab {
 		livingrockDarkStairs.forEach { addBlock(it) }
 		livingrockDarkSlabs.forEach { addBlock(it) }
 		livingrockDarkWalls.forEach { addBlock(it) }
+		/* PORT: КТ-2
 		addBlock(shimmerQuartz)
 		addBlock(shimmerQuartzStairs)
 		addBlock(shimmerQuartzSlab)
+		*/
 		addBlock(shrineLight)
 		addBlock(shrineGlass)
 		addBlock(shrinePanel)
 		
+		/* PORT: КТ-2
 		addBlock(niflheimBlock)
 		addBlock(stalactite)
 		addBlock(stalagmite)
@@ -749,12 +793,11 @@ object AlfheimTab {
 		addBlock(nidhoggTooth)
 		
 		addBlock(elvenOre)
+		*/
 		
 		addBlock(livingMountain)
 		addBlock(livingMountainSlab)
-		*/
 		addBlock(livingcobble)
-		/* PORT: КТ-2
 		addBlock(livingcobbleStairs)
 		addBlock(livingcobbleStairs1)
 		addBlock(livingcobbleStairs2)
@@ -763,11 +806,9 @@ object AlfheimTab {
 		addBlock(livingcobbleSlab2)
 		addBlock(livingcobbleWall)
 		addBlock(livingrockBrickWall)
-		*/
 		
 		addBlock(elvenSand)
 		addBlock(elvenSandstone)
-		/* PORT: КТ-2
 		elvenSandstoneStairs.forEach { addBlock(it) }
 		addBlock(elvenSandstoneSlab)
 		addBlock(elvenSandstoneSlab2)
@@ -788,7 +829,6 @@ object AlfheimTab {
 		addBlock(dreamwoodFence)
 		addBlock(dreamwoodBarkFenceGate)
 		addBlock(dreamwoodFenceGate)
-		*/
 		
 		/* PORT: КТ-3
 		addBlock(gaiaButton)

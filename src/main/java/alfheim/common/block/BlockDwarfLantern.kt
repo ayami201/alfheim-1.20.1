@@ -1,19 +1,14 @@
 package alfheim.common.block
 
-import alexsocol.asjlib.ASJUtilities
-import alfheim.client.core.helper.*
+// PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
 import alfheim.common.block.base.BlockMod
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.util.IIcon
-import net.minecraftforge.client.event.TextureStitchEvent
-import net.minecraftforge.common.MinecraftForge
+import alfheim.port.legacy.*
 
 class BlockDwarfLantern: BlockMod(Material.rock) {
 	
-	lateinit var iconSide: IIcon
+	// PORT: иконки → модель (alfheim.port.data.AlfheimBlockStates): верх и низ — decor/DwarfLanternTop, бока —
+	// decor/DwarfLantern, плавная анимация (InterpolatedIconHelper → "interpolate" в .mcmeta)
+//	lateinit var iconSide: IIcon
 	
 	init {
 		setBlockName("DwarfLantern")
@@ -23,10 +18,13 @@ class BlockDwarfLantern: BlockMod(Material.rock) {
 		setResistance(10000f)
 		setStepSound(soundTypeStone)
 		
-		if (ASJUtilities.isClient)
-			MinecraftForge.EVENT_BUS.register(this)
+		// PORT: анимированную текстуру 1.20.1 рисует сама по .mcmeta; подписка на TextureStitchEvent не нужна
+//		if (ASJUtilities.isClient)
+//			MinecraftForge.EVENT_BUS.register(this)
 	}
 	
+	// PORT: metadata 1 (все грани — верх) у автора не ставится: предмета с ней нет, в постройках — только 0
+	/*
 	override fun registerBlockIcons(reg: IIconRegister) {
 		blockIcon = IconHelper.forBlock(reg, this, "Top", "decor")
 	}
@@ -41,4 +39,5 @@ class BlockDwarfLantern: BlockMod(Material.rock) {
 	override fun getIcon(side: Int, meta: Int) = (if (meta != 1) {
 		if (side < 2) blockIcon else iconSide
 	} else blockIcon)!!
+	*/
 }
