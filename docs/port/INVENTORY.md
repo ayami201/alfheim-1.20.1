@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 222 | 19 082 | 222 |  |  |  |
+| КТ-2 | 222 | 19 082 | 212 | 10 |  |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -629,13 +629,13 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimBlocks.kt` | 830 | КТ-2 | ждёт | список блоков; блоки других КТ добавляются вместе с ними |
-| `AlfheimFluffBlocks.kt` | 282 | КТ-2 | ждёт |  |
+| `AlfheimBlocks.kt` | 830 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/AlfheimBlocks.kt`; блоки, которых ещё нет, закомментированы с `// PORT: КТ-n` и включаются вместе со своей КТ |
+| `AlfheimFluffBlocks.kt` | 282 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/AlfheimFluffBlocks.kt`; то же |
 | `BlockAiryVirus.kt` | 61 | КТ-2 | ждёт |  |
 | `BlockAlfheimPortal.kt` | 80 | КТ-6 | ждёт | портал в Альфхейм |
 | `BlockAlfheimPylon.kt` | 61 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockAlfheimSlabs.kt` | 90 | КТ-2 | ждёт |  |
-| `BlockAlfStorage.kt` | 67 | КТ-2 | ждёт |  |
+| `BlockAlfStorage.kt` | 67 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockAlfStorage.kt` |
 | `BlockAmplifier.kt` | 25 | КТ-2 | ждёт |  |
 | `BlockAnimatedTorch.kt` | 83 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockAnomaly.kt` | 123 | КТ-3 | ждёт | с блок-сущностью |
@@ -655,8 +655,8 @@ python3 tools/check_inventory.py
 | `BlockDreamSapling.kt` | 87 | КТ-2 | ждёт |  |
 | `BlockDwarfLantern.kt` | 44 | КТ-2 | ждёт |  |
 | `BlockElvenOre.kt` | 58 | КТ-2 | ждёт |  |
-| `BlockElvenSand.kt` | 18 | КТ-2 | ждёт |  |
-| `BlockElvenSandstone.kt` | 53 | КТ-2 | ждёт |  |
+| `BlockElvenSand.kt` | 18 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockElvenSand.kt` |
+| `BlockElvenSandstone.kt` | 53 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockElvenSandstone.kt` |
 | `BlockEnderActuator.kt` | 58 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockFloodLight.kt` | 28 | КТ-3 | ждёт | WIP автора (`.WIP()`): переносится как есть, с меткой [WIP] (SPEC п. 6) |
 | `BlockFunnel.kt` | 229 | КТ-3 | ждёт | с блок-сущностью |
@@ -673,10 +673,10 @@ python3 tools/check_inventory.py
 | `BlockItemFrame.kt` | 277 | КТ-3 | ждёт | WIP автора (`.WIP()`): переносится как есть, с меткой [WIP] (SPEC п. 6) |
 | `BlockKindling.kt` | 57 | КТ-2 | ждёт |  |
 | `BlockKudzuVine.kt` | 497 | КТ-3 | ждёт | с блок-сущностью |
-| `BlockLivingCobble.kt` | 39 | КТ-2 | ждёт |  |
+| `BlockLivingCobble.kt` | 39 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockLivingCobble.kt` |
 | `BlockLivingMountain.kt` | 30 | КТ-2 | ждёт |  |
 | `BlockLootbox.kt` | 260 | КТ-6 | ждёт | летающие острова |
-| `BlockManaIce.kt` | 20 | КТ-2 | ждёт |  |
+| `BlockManaIce.kt` | 20 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockManaIce.kt` |
 | `BlockModTrapDoor.kt` | 39 | КТ-2 | ждёт |  |
 | `BlockNidhoggTooth.kt` | 53 | КТ-2 | ждёт |  |
 | `BlockNiflheim.kt` | 112 | КТ-2 | ждёт |  |
@@ -684,7 +684,7 @@ python3 tools/check_inventory.py
 | `BlockNiflheimPortal.kt` | 160 | КТ-6 | ждёт | портал в Нифльхейм |
 | `BlockOnyx.kt` | 11 | КТ-2 | ждёт | WIP автора (`.WIP()`): переносится как есть, с меткой [WIP] (SPEC п. 6) |
 | `BlockPaneMeta.kt` | 46 | КТ-2 | ждёт |  |
-| `BlockPatternLexicon.kt` | 63 | КТ-2 | ждёт |  |
+| `BlockPatternLexicon.kt` | 63 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockPatternLexicon.kt` |
 | `BlockPowerStone.kt` | 56 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockRaceSelector.kt` | 167 | КТ-7 | ждёт | выбор расы |
 | `BlockRealityAnchor.kt` | 18 | КТ-3 | ждёт | с блок-сущностью |
@@ -729,7 +729,7 @@ python3 tools/check_inventory.py
 |---|---:|---|---|---|
 | `BlockContainerMod.kt` | 55 | КТ-2 | ждёт |  |
 | `BlockLeavesMod.kt` | 209 | КТ-2 | ждёт |  |
-| `BlockMod.kt` | 49 | КТ-2 | ждёт |  |
+| `BlockMod.kt` | 49 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockMod.kt` |
 | `BlockModRotatedPillar.kt` | 92 | КТ-2 | ждёт |  |
 | `BlockRainbowManaFlame.kt` | 85 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockSlabMod.kt` | 53 | КТ-2 | ждёт |  |
@@ -1489,7 +1489,7 @@ python3 tools/check_inventory.py
 | `ItemBlockGrapeRed.kt` | 27 | КТ-2 | ждёт |  |
 | `ItemBlockGrapeWhite.kt` | 45 | КТ-2 | ждёт |  |
 | `ItemBlockItemFrame.kt` | 76 | КТ-3 | ждёт | WIP автора (`.WIP()`): переносится как есть, с меткой [WIP] (SPEC п. 6) |
-| `ItemBlockLeavesMod.kt` | 24 | КТ-2 | ждёт |  |
+| `ItemBlockLeavesMod.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/block/ItemBlockLeavesMod.kt` |
 | `ItemBlockManaReflector.kt` | 94 | КТ-3 | ждёт |  |
 | `ItemBlockMetaSapling.kt` | 12 | КТ-2 | ждёт |  |
 | `ItemBlockNidhoggTooth.kt` | 33 | КТ-2 | ждёт |  |
@@ -2112,8 +2112,8 @@ python3 tools/check_inventory.py
 | `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
-| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком |
-| `alfheim/textures/blocks/decor/` | 83 | КТ-2 | ждёт |  |
+| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 17 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
+| `alfheim/textures/blocks/decor/` | 83 | КТ-2 | ждёт | перенесено 5 (`ElvenSandstone*`) |
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
 | `alfheim/textures/environment/` | 1 | КТ-6 | ждёт | небо миров |
@@ -2175,7 +2175,7 @@ python3 tools/check_inventory.py
 |---|---:|---|---|---|
 | `alexsocol/asjlib/extendables/ASJConfigHandler.kt` | 98 | КТ-1 | всё | поверх `alfheim.port.config.Configuration` |
 | `alexsocol/asjlib/extendables/ASJPreConfigHandler.kt` | 83 | КТ-1 | всё | то же |
-| `alexsocol/asjlib/ASJUtilities.kt` | 914 | КТ-1 | лог, сторона (`isServer`/`isClient`), `chance`, `randInBounds`, поиск в коллекциях, `say` | |
+| `alexsocol/asjlib/ASJUtilities.kt` | 914 | КТ-1 | лог, сторона (`isServer`/`isClient`), `chance`, `randInBounds`, поиск в коллекциях, `say`, `soundFromMaterial` (КТ-2) | |
 | `alexsocol/asjlib/Extensions.kt` | 358 | КТ-1 | функции Kotlin, `clamp`/`mfloor`/`mceil`, `eventForge`/`eventFML`, `ItemStack.cooldown`, `toItem`/`toBlock`/`ItemStack.block` | `meta`, числовые `id`, `PotionEffectU`, базовые классы блоков (`extendables`) — в КТ-2 вместе с блоками: у них меняется смысл metadata |
 | `alexsocol/asjlib/ExtensionsClient.kt` | 17 | КТ-1 | `mc` | |
 | `alexsocol/asjlib/ArrayExt.kt` | 88 | КТ-1 | всё | без правок |
@@ -2183,3 +2183,5 @@ python3 tools/check_inventory.py
 | `alexsocol/asjlib/math/Vector3.kt` | 391 | КТ-1 | всё, кроме `glVertex` | |
 | `alexsocol/asjlib/math/Quaternion.kt` | 94 | КТ-1 | всё | без правок |
 | `alexsocol/asjlib/network/ASJPacket.kt` | 143 | КТ-1 | всё | работу coremod `ASJPacketCompleter` (запись и чтение полей пакета) делает отражение |
+| `alexsocol/asjlib/extendables/block/BlockModMeta.kt` | 46 | КТ-2 | всё | вариант metadata — отдельный блок с номером `meta`; иконки — модели генерации данных |
+| `alexsocol/asjlib/extendables/ItemBlockMetaName.kt` | 17 | КТ-2 | всё | номер варианта — в id блока и в ключе перевода |
