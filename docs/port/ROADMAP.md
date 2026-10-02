@@ -193,7 +193,8 @@
 
 ## КТ-10. Совместимость и полная сборка
 
-**Объём.** JEI вместо NEI, Jade вместо WAILA (Р-15). Части
+**Объём.** JEI вместо NEI, Jade вместо WAILA, материалы и особенности автора в
+Tinkers' Construct 3 (Р-15, SPEC п. 7). Части
 `ModdedDimensionsIntegration` и `TwilightForestLoaded` для Twilight Forest и
 Aether (SPEC, п. 7). Достижения (advancements). Оставшиеся строки HOOKS.md.
 Вопросы владельцу о чужих материалах и обращениях в сеть (SPEC, п. 8).
