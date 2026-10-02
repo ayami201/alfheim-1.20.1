@@ -37,16 +37,16 @@ python3 tools/check_inventory.py
 | КТ-1 | 33 | 5 661 | 33 |  |  |  |
 | КТ-2 | 222 | 19 082 | 222 |  |  |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
-| КТ-4 | 182 | 24 625 | 182 |  |  |  |
+| КТ-4 | 177 | 24 578 | 177 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
 | КТ-6 | 106 | 12 499 | 106 |  |  |  |
 | КТ-7 | 139 | 10 888 | 139 |  |  |  |
 | КТ-8 | 95 | 13 066 | 95 |  |  |  |
 | КТ-9 | 19 | 2 559 | 19 |  |  |  |
-| КТ-10 | 24 | 1 775 | 24 |  |  |  |
+| КТ-10 | 22 | 1 769 | 22 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
-| — | 65 | 4 451 |  |  | 53 | 12 |
-| **всего** | **1153** | **124 643** | **1086** | **2** | **53** | **12** |
+| — | 72 | 4 504 |  |  | 60 | 12 |
+| **всего** | **1153** | **124 643** | **1079** | **2** | **60** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -110,13 +110,13 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `HugeItemRenderer.java` | 3 | КТ-10 | ждёт | заглушка ExtraBotany: врезки в её рендер; ExtraBotany нет в SPEC п. 7 — вопрос владельцу |
+| `HugeItemRenderer.java` | 3 | — | выпало (ExtraBotany: нет в сборке, SPEC п. 7) | заглушка API; врезки правили рендер её предметов 1.7.10 |
 
 ### `legacy/src/api/java/com/meteor/extrabotany/client/render/item/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `GunRenderer.java` | 3 | КТ-10 | ждёт | заглушка ExtraBotany: врезки в её рендер; ExtraBotany нет в SPEC п. 7 — вопрос владельцу |
+| `GunRenderer.java` | 3 | — | выпало (ExtraBotany: нет в сборке, SPEC п. 7) | заглушка API; врезки правили рендер её предметов 1.7.10 |
 
 ### `legacy/src/api/java/com/rwtema/extrautils/`
 
@@ -152,7 +152,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `TileEntityCrop.java` | 10 | КТ-4 | ждёт | заглушка IC2: нужна `ItemTerraHoe`; IC2 нет в SPEC п. 7 — вопрос владельцу |
+| `TileEntityCrop.java` | 10 | — | выпало (IC2: мод отсутствует на 1.20.1, SPEC п. 7) | заглушка API; грядки IC2 для `ItemTerraHoe` |
 
 ### `legacy/src/api/java/lumien/randomthings/Configuration/`
 
@@ -176,25 +176,25 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `DDProperties.java` | 9 | КТ-4 | ждёт | заглушка Dimensional Doors: нужна `ItemTankMask`; DimDoors нет в SPEC п. 7 — вопрос владельцу |
+| `DDProperties.java` | 9 | — | выпало (Dimensional Doors: нет в сборке, SPEC п. 7) | заглушка API; Лимб для `ItemTankMask` |
 
 ### `legacy/src/api/java/org/dimdev/dimdoors/core/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `DDTeleporter.java` | 11 | КТ-4 | ждёт | заглушка Dimensional Doors: нужна `ItemTankMask`; DimDoors нет в SPEC п. 7 — вопрос владельцу |
+| `DDTeleporter.java` | 11 | — | выпало (Dimensional Doors: нет в сборке, SPEC п. 7) | заглушка API; Лимб для `ItemTankMask` |
 
 ### `legacy/src/api/java/org/dimdev/dimdoors/util/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `Point4D.java` | 5 | КТ-4 | ждёт | заглушка Dimensional Doors: нужна `ItemTankMask`; DimDoors нет в SPEC п. 7 — вопрос владельцу |
+| `Point4D.java` | 5 | — | выпало (Dimensional Doors: нет в сборке, SPEC п. 7) | заглушка API; Лимб для `ItemTankMask` |
 
 ### `legacy/src/api/java/org/dimdev/dimdoors/world/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `LimboProvider.java` | 12 | КТ-4 | ждёт | заглушка Dimensional Doors: нужна `ItemTankMask`; DimDoors нет в SPEC п. 7 — вопрос владельцу |
+| `LimboProvider.java` | 12 | — | выпало (Dimensional Doors: нет в сборке, SPEC п. 7) | заглушка API; Лимб для `ItemTankMask` |
 
 ### `legacy/src/api/java/thebetweenlands/utils/confighandler/`
 
@@ -1641,7 +1641,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `ItemTerraHoe.kt` | 317 | КТ-4 | ждёт |  |
+| `ItemTerraHoe.kt` | 317 | КТ-4 | ждёт | часть с грядками IC2 выпадает (SPEC п. 7); у автора без IC2 она не работает |
 
 ### `legacy/src/main/java/alfheim/common/item/interaction/thaumcraft/`
 
@@ -1694,7 +1694,7 @@ python3 tools/check_inventory.py
 | `ItemNjordRing.kt` | 93 | КТ-4 | ждёт |  |
 | `ItemSifRing.kt` | 97 | КТ-4 | ждёт |  |
 | `ItemSpearSubspace.kt` | 180 | КТ-4 | ждёт |  |
-| `ItemTankMask.kt` | 269 | КТ-4 | ждёт |  |
+| `ItemTankMask.kt` | 269 | КТ-4 | ждёт | ветка с Лимбом Dimensional Doors выпадает (SPEC п. 7); у автора без DimDoors маска всегда отправляет в Хельхейм |
 
 ### `legacy/src/main/java/alfheim/common/item/rod/`
 

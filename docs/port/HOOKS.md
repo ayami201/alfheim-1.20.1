@@ -63,9 +63,9 @@ python3 tools/check_hooks.py
 | КТ-7 | 16 | 16 |  |  |  |  |
 | КТ-8 | 44 | 44 |  |  |  |  |
 | КТ-9 | 5 | 5 |  |  |  |  |
-| КТ-10 | 5 | 5 |  |  |  |  |
-| — | 50 |  |  |  | 43 | 7 |
-| **всего** | **465** | **415** | **0** | **0** | **43** | **7** |
+| КТ-10 | 3 | 3 |  |  |  |  |
+| — | 52 |  |  |  | 45 | 7 |
+| **всего** | **465** | **413** | **0** | **0** | **45** | **7** |
 
 Сводку пересчитывает `tools/check_hooks.py --summary`.
 
@@ -241,8 +241,8 @@ python3 tools/check_hooks.py
 | H-163 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:2029` | `ItemOdinRing#fillModifiers` | в начале, возвращает свой результат | оба | КТ-4 |  | ждёт |  |
 | H-164 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:2037` | `ItemAesirRing#fillModifiers` | в начале, возвращает свой результат | оба | КТ-4 |  | ждёт |  |
 | H-165 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:2045` | `EntityPlayer#attackTargetEntityWithCurrentItem` | в конце, добавляет код | оба | КТ-1 |  | ждёт | событие `AttackEntityEventPost` |
-| H-166 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:2051` | `HugeItemRenderer#renderItem` | в начале, добавляет код | оба | КТ-10 |  | ждёт | ExtraBotany нет в SPEC п. 7 — вопрос владельцу |
-| H-167 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:2058` | `GunRenderer#renderItem` | в начале, добавляет код | оба | КТ-10 |  | ждёт | ExtraBotany нет в SPEC п. 7 — вопрос владельцу |
+| H-166 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:2051` | `HugeItemRenderer#renderItem` | в начале, добавляет код | оба | — |  | выпало (ExtraBotany: нет в сборке, SPEC п. 7) | правка рендера предметов ExtraBotany 1.7.10 |
+| H-167 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:2058` | `GunRenderer#renderItem` | в начале, добавляет код | оба | — |  | выпало (ExtraBotany: нет в сборке, SPEC п. 7) | правка рендера предметов ExtraBotany 1.7.10 |
 | H-168 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:2065` | `ItemGravityRod#setEntityMotionFromVector` | в конце, добавляет код | оба | КТ-4 |  | ждёт |  |
 | H-169 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:2071` | `RenderPlayer#getColorMultiplier` | создаёт метод, возвращает свой результат | оба | КТ-7 |  | ждёт | облик участника команды автора (SPEC п. 8) |
 | H-170 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:2081` | `EntityWolf#getCollarColor` | в начале, возвращает свой результат | оба | КТ-2 |  | ждёт | цвет ошейника волка |
