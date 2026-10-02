@@ -2,25 +2,11 @@
 
 package alexsocol.asjlib
 
-import alexsocol.asjlib.math.Vector3
-import alexsocol.patcher.asm.hook.ASJSuperWrapperHandler
-import cpw.mods.fml.common.FMLCommonHandler
-import net.minecraft.block.Block
-import net.minecraft.client.entity.EntityClientPlayerMP
-import net.minecraft.command.IEntitySelector
-import net.minecraft.entity.*
-import net.minecraft.entity.player.*
-import net.minecraft.inventory.IInventory
-import net.minecraft.item.*
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.potion.PotionEffect
-import net.minecraft.server.MinecraftServer
-import net.minecraft.stats.Achievement
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.*
-import net.minecraft.world.World
+// PORT: импорты 1.7.10 заменены на 1.20.1. Функции, которые порту ещё не понадобились, закомментированы блоками
+// «PORT: по мере надобности»: их переносит КТ, которой они нужны, и сверяет смысл с 1.20.1
+import net.minecraft.util.Mth
+import net.minecraft.world.item.ItemStack
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.oredict.OreDictionary
 import java.util.*
 import kotlin.math.*
 
@@ -110,14 +96,16 @@ inline fun try_(try_: () -> Unit) {
 /** Free fall acceleration */
 const val g = 0.08 * 0.9800000190734863
 
-fun Int.clamp(min: Int, max: Int) = MathHelper.clamp_int(this, min, max)
-fun Float.clamp(min: Float, max: Float) = MathHelper.clamp_float(this, min, max)
-fun Double.clamp(min: Double, max: Double) = MathHelper.clamp_double(this, min, max)
-fun Double.mfloor() = MathHelper.floor_double(this)
-fun Float.mfloor() = MathHelper.floor_float(this)
-fun Double.mceil() = MathHelper.ceiling_double_int(this)
-fun Float.mceil() = MathHelper.ceiling_float_int(this)
+// PORT: MathHelper → Mth, те же формулы
+fun Int.clamp(min: Int, max: Int) = Mth.clamp(this, min, max)
+fun Float.clamp(min: Float, max: Float) = Mth.clamp(this, min, max)
+fun Double.clamp(min: Double, max: Double) = Mth.clamp(this, min, max)
+fun Double.mfloor() = Mth.floor(this)
+fun Float.mfloor() = Mth.floor(this)
+fun Double.mceil() = Mth.ceil(this)
+fun Float.mceil() = Mth.ceil(this)
 
+/* PORT: по мере надобности — DataWatcher, AxisAlignedBB, ChunkCoordinates, Vec3, metadata, IInventory, OreDictionary
 fun DataWatcher.getWatchableObjectChunkCoordinates(id: Int): ChunkCoordinates {
 	return getWatchedObject(id).`object` as ChunkCoordinates? ?: ChunkCoordinates()
 }
@@ -241,17 +229,21 @@ val Item.id get() = Item.getIdFromItem(this)
 val ItemStack.block get() = item.toBlock()
 
 fun PotionEffectU(id: Int, time: Int, lvl: Int = 0, ambient: Boolean = false) = PotionEffect(id, time, lvl, ambient).apply { curativeItems.clear() }
+*/
 
 fun <T> T.eventForge(): T {
 	MinecraftForge.EVENT_BUS.register(this)
 	return this
 }
 
+// PORT: события шины FML 1.7.10 (тики, вход игрока, клавиши) в 1.20.1 идут по шине Forge. Повторная регистрация
+// того же объекта шина Forge пропускает, поэтому .eventForge().eventFML() подписывает обработчик один раз
 fun <T> T.eventFML(): T {
-	FMLCommonHandler.instance().bus().register(this)
+	MinecraftForge.EVENT_BUS.register(this)
 	return this
 }
 
+/* PORT: по мере надобности — World, Entity, подсказки предметов
 fun World.isBlockDirectlyGettingPowered(x: Int, y: Int, z: Int) = getBlockPowerInput(x, y, z) > 0
 
 fun World.getBlock(e: Entity, x: Int = 0, y: Int = 0, z: Int = 0): Block {
@@ -334,6 +326,7 @@ fun EntityLivingBase.teleportTo(x: Double, y: Double, z: Double): Boolean {
 		true
 	}
 }
+*/
 
 private const val TAG_COOLDOWN = "cooldown"
 
@@ -343,6 +336,7 @@ var ItemStack.cooldown
 
 fun String.trimAtMostLength(maxLength: Int, postfix: String = "...") = if (this.length > maxLength) "${this.take(maxLength)}$postfix" else this
 
+/* PORT: по мере надобности — ChunkCoordinates, ASJSuperWrapperHandler
 fun NBTTagCompound.setChunkCoords(tag: String, coords: ChunkCoordinates) {
 	val (x, y, z) = coords
 	setIntArray(tag, intArrayOf(x, y, z))
@@ -357,3 +351,4 @@ fun NBTTagCompound.getChunkCoords(tag: String): ChunkCoordinates {
 
 val MinecraftServer.isMultiPlayer // WTF
 	get() = ASJSuperWrapperHandler.isMultiPlayer(this)
+*/

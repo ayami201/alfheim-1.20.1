@@ -5,7 +5,7 @@ package alfheim
 //import alexsocol.patcher.asm.worker.InterfaceAppenderWorker.registerAdditionalInterface
 import alfheim.api.ModInfo.MODID
 //import alfheim.common.core.command.*
-//import alfheim.common.core.handler.*
+import alfheim.common.core.handler.*
 //import alfheim.common.core.handler.ragnarok.*
 //import alfheim.common.core.proxy.*
 //import alfheim.common.core.util.*
@@ -24,7 +24,7 @@ import net.minecraftforge.fml.event.lifecycle.*
 import net.minecraftforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.forge.*
 //import vazkii.botania.common.*
-//import java.io.File
+import java.io.File
 
 @Suppress("UNUSED_PARAMETER")
 // PORT: dependencies и useMetadata → META-INF/mods.toml; modLanguageAdapter → modLoader="kotlinforforge" там же; guiFactory (экран настроек) — КТ-1
@@ -94,8 +94,10 @@ object AlfheimCore {
 	
 	// PORT: было @EventHandler fun preInit(e: FMLPreInitializationEvent); вызывается из init, см. выше
 	fun preInit() {
-		// PORT: КТ-1 — AlfheimConfigHandler
-//		AlfheimConfigHandler.loadConfig(File("config/Alfheim/mod.cfg"))
+		// PORT: core.cfg автор читал в coremod (AlfheimHookLoader), до загрузки модов. Coremod в 1.20.1 нет,
+		// поэтому файл читается здесь, первым. Файлы конфига — .toml (alfheim.port.config.Configuration)
+		AlfheimPreConfigHandler.loadPreConfig(File("config/Alfheim/core.cfg"))
+		AlfheimConfigHandler.loadConfig(File("config/Alfheim/mod.cfg"))
 		
 //		abProxy.preInit(e)
 		
@@ -165,9 +167,9 @@ object AlfheimCore {
 	
 	// PORT: было @EventHandler, FMLServerStartingEvent
 	fun starting(e: ServerStartingEvent) {
-		// PORT: КТ-1 — AlfheimConfigHandler; Elven Story — КТ-7
+		// PORT: КТ-7 — Elven Story
 //		if (AlfheimConfigHandler.enableElvenStory) AlfheimConfigHandler.initWorldCoordsForElvenStory(save)
-//		AlfheimConfigHandler.syncConfig()
+		AlfheimConfigHandler.syncConfig()
 		// PORT: КТ-7 — команды; в 1.20.1 они регистрируются в RegisterCommandsEvent
 //		e.registerServerCommand(CommandAlfheim)
 //		e.registerServerCommand(CommandDebug)

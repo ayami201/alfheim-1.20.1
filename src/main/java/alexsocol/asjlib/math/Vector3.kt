@@ -1,11 +1,15 @@
 package alexsocol.asjlib.math
 
 import alexsocol.asjlib.*
-import cpw.mods.fml.relauncher.*
-import net.minecraft.entity.Entity
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.*
-import org.lwjgl.util.vector.*
+// PORT: Vec3 → net.minecraft.world.phys.Vec3, ChunkCoordinates → BlockPos, TileEntity → BlockEntity,
+// AxisAlignedBB → AABB, векторы LWJGL 2 → JOML. Имена полей 1.7.10 — частные свойства внизу класса
+import net.minecraft.core.BlockPos
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.phys.*
+import net.minecraftforge.api.distmarker.*
+import org.joml.Vector3f
+import org.joml.Vector4f
 import java.io.Serializable
 import java.math.*
 import kotlin.math.*
@@ -49,11 +53,11 @@ class Vector3: Serializable {
 		set(vec)
 	}
 	
-	constructor(chunk: ChunkCoordinates) {
+	constructor(chunk: BlockPos) {
 		set(chunk)
 	}
 	
-	fun toVec3() = Vec3.createVectorHelper(x, y, z)!!
+	fun toVec3() = Vec3(x, y, z)
 	
 	fun copy() = Vector3(this)
 	
@@ -87,14 +91,14 @@ class Vector3: Serializable {
 		return this
 	}
 	
-	fun set(te: TileEntity): Vector3 {
+	fun set(te: BlockEntity): Vector3 {
 		x = te.xCoord.D
 		y = te.yCoord.D
 		z = te.zCoord.D
 		return this
 	}
 	
-	fun set(chunk: ChunkCoordinates): Vector3 {
+	fun set(chunk: BlockPos): Vector3 {
 		x = chunk.posX.D
 		y = chunk.posY.D
 		z = chunk.posZ.D
@@ -150,7 +154,7 @@ class Vector3: Serializable {
 		return this
 	}
 	
-	fun add(te: TileEntity): Vector3 {
+	fun add(te: BlockEntity): Vector3 {
 		x += te.xCoord.D
 		y += te.yCoord.D
 		z += te.zCoord.D
@@ -179,7 +183,7 @@ class Vector3: Serializable {
 		return this
 	}
 	
-	fun sub(te: TileEntity): Vector3 {
+	fun sub(te: BlockEntity): Vector3 {
 		x -= te.xCoord.D
 		y -= te.yCoord.D
 		z -= te.zCoord.D
@@ -254,19 +258,21 @@ class Vector3: Serializable {
 	/** in RAD */
 	fun angle(vec: Vector3) = acos(copy().normalize().dotProduct(vec.copy().normalize()))
 	
-	fun isInside(aabb: AxisAlignedBB) = x >= aabb.minX && y >= aabb.maxY && z >= aabb.minZ && x < aabb.maxX && y < aabb.maxY && z < aabb.maxZ
+	fun isInside(aabb: AABB) = x >= aabb.minX && y >= aabb.maxY && z >= aabb.minZ && x < aabb.maxX && y < aabb.maxY && z < aabb.maxZ
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	fun vector3f() = Vector3f(x.F, y.F, z.F)
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	fun vector4f() = Vector4f(x.F, y.F, z.F, 1f)
 	
+	/* PORT: по мере надобности — glVertex фиксированного конвейера в 1.20.1 нет, вершины идут через VertexConsumer (КТ-7)
 	@SideOnly(Side.CLIENT)
 	fun glVertex(xOff: Number = 0, yOff: Number = 0, zOff: Number = 0): Vector3 {
 		org.lwjgl.opengl.GL11.glVertex3d(x + xOff.D, y + yOff.D, z + zOff.D)
 		return this
 	}
+	*/
 	
 	fun negate(): Vector3 {
 		x = -x
@@ -367,17 +373,17 @@ class Vector3: Serializable {
 		
 		fun fromEntityCenter(e: Entity) = Vector3(e.posX, e.posYp - e.yOffset + e.height / 2, e.posZ)
 		
-		fun fromTileEntity(e: TileEntity) = Vector3(e.xCoord.D, e.yCoord.D, e.zCoord.D)
+		fun fromTileEntity(e: BlockEntity) = Vector3(e.xCoord.D, e.yCoord.D, e.zCoord.D)
 		
-		fun fromTileEntityCenter(e: TileEntity) = Vector3(e.xCoord + 0.5, e.yCoord + 0.5, e.zCoord + 0.5)
+		fun fromTileEntityCenter(e: BlockEntity) = Vector3(e.xCoord + 0.5, e.yCoord + 0.5, e.zCoord + 0.5)
 		
 		fun vecDistance(v1: Vector3, v2: Vector3) = sqrt((v1.x - v2.x).pow(2) + (v1.y - v2.y).pow(2) + (v1.z - v2.z).pow(2))
 		
 		fun vecEntityDistance(v: Vector3, e: Entity) = sqrt((v.x - e.posX).pow(2) + (v.y - e.posYp).pow(2) + (v.z - e.posZ).pow(2))
 		
-		fun vecTileDistance(v: Vector3, te: TileEntity) = sqrt((v.x - te.xCoord + 0.5).pow(2) + (v.y - te.yCoord + 0.5).pow(2) + (v.z - te.zCoord + 0.5).pow(2))
+		fun vecTileDistance(v: Vector3, te: BlockEntity) = sqrt((v.x - te.xCoord + 0.5).pow(2) + (v.y - te.yCoord + 0.5).pow(2) + (v.z - te.zCoord + 0.5).pow(2))
 		
-		fun entityTileDistance(e: Entity, te: TileEntity) = sqrt((e.posX - te.xCoord + 0.5).pow(2) + (e.posYp - te.yCoord + 0.5).pow(2) + (e.posZ - te.zCoord + 0.5).pow(2))
+		fun entityTileDistance(e: Entity, te: BlockEntity) = sqrt((e.posX - te.xCoord + 0.5).pow(2) + (e.posYp - te.yCoord + 0.5).pow(2) + (e.posZ - te.zCoord + 0.5).pow(2))
 		
 		fun entityDistance(e1: Entity, e2: Entity) = sqrt((e1.posX - e2.posX).pow(2) + (e1.posYp - e2.posYp).pow(2) + (e1.posZ - e2.posZ).pow(2))
 		
@@ -387,6 +393,27 @@ class Vector3: Serializable {
 		
 		fun pointDistanceSpace(x1: Number, y1: Number, z1: Number, x2: Number, y2: Number, z2: Number) = sqrt((x1.D - x2.D).pow(2) + (y1.D - y2.D).pow(2) + (z1.D - z2.D).pow(2))
 		
-		private val Entity.posYp get() = posY - if (worldObj.isRemote && mc.thePlayer === this) 1.62 else 0.0
+		// PORT: в 1.7.10 у своего игрока на клиенте posY — уровень глаз, posYp приводил его к ногам. В 1.20.1 y у всех
+		// сущностей — уровень ног, поправка не нужна
+		private val Entity.posYp get() = y
+		
+		// PORT: имена полей 1.7.10 → 1.20.1, смысл тот же
+		private val Entity.posX get() = x
+		private val Entity.posZ get() = z
+		private val Entity.height get() = bbHeight
+		private val BlockEntity.xCoord get() = blockPos.x
+		private val BlockEntity.yCoord get() = blockPos.y
+		private val BlockEntity.zCoord get() = blockPos.z
+		private val BlockPos.posX get() = x
+		private val BlockPos.posY get() = y
+		private val BlockPos.posZ get() = z
+		private val Vec3.xCoord get() = x
+		private val Vec3.yCoord get() = y
+		private val Vec3.zCoord get() = z
+		
+		// PORT: в 1.7.10 yOffset своего игрока на клиенте — 1.62, у остальных сущностей низ хитбокса — posY - yOffset.
+		// В 1.20.1 низ хитбокса — y, поэтому 0, а у своего игрока 1.62 оставлено: fromEntityCenter автора вычитает его
+		// вдобавок к posYp и даёт для своего игрока точку на 1.62 ниже центра — так в оригинале
+		private val Entity.yOffset get() = if (level().isClientSide && mc.player === this) 1.62 else 0.0
 	}
 }

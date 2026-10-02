@@ -1,10 +1,10 @@
 package alexsocol.asjlib.extendables
 
-import cpw.mods.fml.client.event.ConfigChangedEvent
-import cpw.mods.fml.common.FMLCommonHandler
-import cpw.mods.fml.common.event.FMLConstructionEvent
-import cpw.mods.fml.common.eventhandler.*
-import net.minecraftforge.common.config.Configuration
+// PORT: Configuration 1.7.10 → прослойка alfheim.port.config.Configuration поверх ForgeConfigSpec (SPEC, Р-12)
+import alfheim.port.config.Configuration
+import net.minecraftforge.eventbus.api.EventPriority
+import net.minecraftforge.fml.event.config.ModConfigEvent
+import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import java.io.File
 
 abstract class ASJConfigHandler {
@@ -20,18 +20,21 @@ abstract class ASJConfigHandler {
 		config.load()
 		addCategories()
 		syncConfig()
+		// PORT: ForgeConfigSpec описывает все опции до чтения файла. Проход выше только объявил опции;
+		// build() читает файл, второй проход берёт из него значения
+		config.build()
+		syncConfig()
 	}
 	
 	/**
 	 * Call this if you have config GUI for your mod
 	 */
 	fun registerChangeHandler(modid: String) {
-		FMLCommonHandler.instance().bus().register(object {
-			@SubscribeEvent(priority = EventPriority.HIGHEST)
-			fun onConfigChanged(e: ConfigChangedEvent.OnConfigChangedEvent) {
-				if (e.modID == modid) syncConfig()
-			}
-		})
+		// PORT: OnConfigChangedEvent (экран настроек 1.7.10) → ModConfigEvent.Reloading на шине мода. Forge шлёт его,
+		// когда файл настроек изменили во время игры: вручную или экраном настроек другого мода (например, Configured)
+		MOD_BUS.addListener(EventPriority.HIGHEST, false, ModConfigEvent.Reloading::class.java) { e ->
+			if (e.config.modId == modid && config.isOwnFile(e.config.fileName)) syncConfig()
+		}
 	}
 	
 	fun addCategory(cat: String, comment: String) {

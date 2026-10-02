@@ -1,35 +1,11 @@
 package alexsocol.asjlib
 
-import alexsocol.asjlib.math.Vector3
-import cpw.mods.fml.common.*
-import cpw.mods.fml.common.registry.*
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.Block
-import net.minecraft.block.material.Material
-import net.minecraft.block.material.Material.*
-import net.minecraft.client.Minecraft
-import net.minecraft.command.ICommandSender
-import net.minecraft.entity.*
-import net.minecraft.entity.player.*
-import net.minecraft.init.Blocks
-import net.minecraft.inventory.IInventory
-import net.minecraft.item.*
-import net.minecraft.item.crafting.*
-import net.minecraft.nbt.*
-import net.minecraft.potion.Potion
-import net.minecraft.server.MinecraftServer
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.*
-import net.minecraft.world.*
-import net.minecraft.world.biome.BiomeGenBase
-import net.minecraft.world.gen.feature.WorldGenMinable
-import net.minecraftforge.common.DimensionManager
-import net.minecraftforge.event.entity.living.*
-import net.minecraftforge.oredict.*
-import org.apache.logging.log4j.Level
-import java.text.DecimalFormat
+// PORT: импорты 1.7.10 заменены на 1.20.1. Функции, которые порту ещё не понадобились, закомментированы блоками
+// «PORT: по мере надобности»: их переносит КТ, которой они нужны, и сверяет смысл с 1.20.1
+import net.minecraftforge.fml.LogicalSide
+import net.minecraftforge.fml.util.thread.EffectiveSide
+import org.apache.logging.log4j.*
 import java.util.*
-import kotlin.math.*
 
 /**
  * Small utility lib to help with some tricks. Feel free to use it in your mods.
@@ -38,6 +14,7 @@ import kotlin.math.*
 @Suppress("unused", "MemberVisibilityCanBePrivate", "UNCHECKED_CAST")
 object ASJUtilities {
 	
+	/* PORT: по мере надобности — реестры, телепорт, предметы и инвентари, рецепты, взгляд и прицел, сущности
 	/**
 	 * Returns the name of the block
 	 * @param block Block to get name from
@@ -629,6 +606,7 @@ object ASJUtilities {
 		array[z and 0xF shl 4 or (x and 0xF)] = (biome.biomeID and 0xFF).toByte()
 		chunk.biomeArray = array
 	}
+	*/
 	
 	/**
 	 * @return random value in range [[min], [max]] (inclusive)
@@ -642,6 +620,7 @@ object ASJUtilities {
 	@JvmStatic
 	fun chance(percent: Number) = if (percent.D <= 0.0) false else if (percent.D >= 100.0) true else Math.random() * 100 < percent.D
 	
+	/* PORT: по мере надобности — StatCollector (переводы)
 	/**
 	 * @return String which tolds you to hold shift-key
 	 */
@@ -659,6 +638,7 @@ object ASJUtilities {
 	 */
 	@JvmStatic
 	fun creativeOnly() = StatCollector.translateToLocal("tooltip.creativeonly")!!
+	*/
 	
 	/**
 	 * @return map key for specified value if persist (null if none)
@@ -692,6 +672,7 @@ object ASJUtilities {
 		return id
 	}
 	
+	/* PORT: по мере надобности — измерения, генерация мира, материалы блоков, сообщения в чат
 	/**
 	 * Registers dimension
 	 * @param keepLoaded Keep spawn chunks loaded
@@ -806,6 +787,7 @@ object ASJUtilities {
 	
 	@JvmStatic
 	fun worldInfoForLog(world: World?) = "${time(world)} ${if (world?.isRemote == true) "[C]" else "[S]"}"
+	*/
 	
 	@JvmStatic
 	fun trace(message: String) {
@@ -838,12 +820,14 @@ object ASJUtilities {
 	}
 	
 	private fun moddedLog(level: Level, message: String, e: Throwable? = null) {
-		val modid = Loader.instance().activeModContainer()?.modId?.uppercase() ?: "UNKNOWN SOURCE"
+		// PORT: в 1.7.10 имя в логе — мод, которому принадлежит пакет на стеке вызова; в порту ASJCore — часть Alfheim,
+		// поэтому имя всегда ALFHEIM. FMLRelaunchLog → логгер Log4j с этим именем
+		val modid = "ALFHEIM"
 		
 		if (e == null)
-			FMLRelaunchLog.log(modid, level, message)
+			LogManager.getLogger(modid).log(level, message)
 		else
-			FMLRelaunchLog.log(modid, level, e, message)
+			LogManager.getLogger(modid).log(level, message, e)
 	}
 	
 	@JvmStatic
@@ -853,6 +837,7 @@ object ASJUtilities {
 		for (i in 2 until stes.size) log("\tat ${stes[i]}")
 	}
 	
+	/* PORT: по мере надобности — сообщения в чат
 	@JvmStatic
 	fun say(sender: ICommandSender?, message: String, vararg format: Any) {
 		sender ?: return
@@ -875,15 +860,18 @@ object ASJUtilities {
 		MinecraftServer.getServer().configurationManager.playerEntityList.forEach { if ((it as EntityPlayer).commandSenderName in ops) say(it, message) }
 		log(message)
 	}
+	*/
 	
+	// PORT: сторона определяется по потоку, как в 1.7.10: FMLCommonHandler.effectiveSide → EffectiveSide
 	@JvmStatic
 	val isServer: Boolean
-		get() = FMLCommonHandler.instance().effectiveSide == Side.SERVER
+		get() = EffectiveSide.get() == LogicalSide.SERVER
 	
 	@JvmStatic
 	val isClient
-		get() = FMLCommonHandler.instance().effectiveSide == Side.CLIENT
+		get() = EffectiveSide.get() == LogicalSide.CLIENT
 	
+	/* PORT: по мере надобности — NBT
 	@JvmStatic
 	fun toString(nbt: NBTTagCompound): String {
 		val sb = StringBuilder("{\n")
@@ -912,4 +900,5 @@ object ASJUtilities {
 		sb.append("]")
 		return "$sb"
 	}
+	*/
 }

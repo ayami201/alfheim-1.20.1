@@ -1,7 +1,8 @@
 package alexsocol.asjlib.extendables
 
-import alexsocol.asjlib.preconfig.PreConfiguration
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin
+// PORT: PreConfiguration (копия Configuration 1.7.10 для coremod) → прослойка alfheim.port.config.Configuration
+// поверх ForgeConfigSpec (SPEC, Р-12). Coremod в 1.20.1 нет, файл читается из конструктора мода
+import alfheim.port.config.Configuration as PreConfiguration
 import java.io.File
 
 abstract class ASJPreConfigHandler {
@@ -16,6 +17,9 @@ abstract class ASJPreConfigHandler {
 		preconfig = PreConfiguration(cfg)
 		preconfig.load()
 		addCategories()
+		syncConfig()
+		// PORT: как в ASJConfigHandler.loadConfig — второй проход читает значения из файла
+		preconfig.build()
 		syncConfig()
 	}
 	
