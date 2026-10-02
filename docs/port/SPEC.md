@@ -167,7 +167,9 @@ NBT игрока, переходит в Capabilities Forge. `WorldSavedData` →
 **Р-12. Конфиг.** `ForgeConfigSpec`. Имена опций и значения по умолчанию — как
 у автора, разделение на файлы — как у автора (`AlfheimPreConfigHandler` /
 `AlfheimConfigHandler`, плюс клиентский для HUD и графики). Опции, потерявшие
-смысл, удаляются (п. 4) со списком в MAPPING.md.
+смысл, удаляются (п. 4) со списком в MAPPING.md. Экран настроек автора
+(`GUIConfig`, `GUIFactory`) не переносится: в Forge 1.20.1 встроенного экрана
+нет, настройки в игре показывает мод Configured.
 
 **Р-13. Рендер.**
 - Блоки с простым рендером → JSON-модели. Сложные → BakedModel или BlockEntityRenderer.
