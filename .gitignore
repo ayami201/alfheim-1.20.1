@@ -1,15 +1,37 @@
-# Just to disable ALL unnecessary files and folders
+# Раскладка порта: код порта в src/, исходники автора в legacy/ (SPEC, Р-2).
+# Пути в корне привязаны через «/», чтобы не задеть одноимённые папки в legacy/.
 
-/*
-/*/
-!/gradle/
-!/libs/
-!/src/
-!/.gitignore
-!/build.gradle
-!/changelog.txt
-!/gradlew
-!/gradlew.bat
-!/setup.bat
-!/CLAUDE.md
-!/docs/
+# Gradle и сборка
+/.gradle/
+/build/
+/.kotlin/
+
+# запуски игры
+/run/
+/run-data/
+/logs/
+
+# кэш Python от скриптов tools/
+__pycache__/
+
+# IDE
+/bin/
+/out/
+/eclipse/
+*.launch
+.settings
+.metadata
+.classpath
+.project
+*.ipr
+*.iws
+*.iml
+.idea
+
+# Файлы из Forge MDK
+forge*changelog.txt
+
+# Новые jar-файлы в git не попадают (CLAUDE.md, раздел «Git»).
+# Исключение — стандартная обёртка Gradle. jar-файлы автора в legacy/ уже в git.
+*.jar
+!/gradle/wrapper/gradle-wrapper.jar

@@ -54,6 +54,26 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `Potion` / `PotionEffect` | `MobEffect` / `MobEffectInstance` | номера зелий из конфига удаляются |
 | `DamageSource` автора | тип урона (`damage_type` в датапаке) + `DamageSource` | с 1.19.4 типы урона — данные |
 
+## Класс мода и жизненный цикл
+
+Выбрано в КТ-0 при переносе `AlfheimCore.kt`.
+
+| Было | Стало | Примечание |
+|---|---|---|
+| `@Mod(modid, dependencies, useMetadata, guiFactory, modLanguageAdapter)` | `@Mod(MODID)` на `object` + `META-INF/mods.toml` | ✓ зависимости и описание — в `mods.toml`, язык — `modLoader="kotlinforforge"`; экран настроек (`guiFactory`) — КТ-1 |
+| `@EventHandler` + `FMLConstructionEvent`, `FMLPreInitializationEvent` | вызов из `init {}` объекта мода | ✓ регистрация (DeferredRegister) и конфиг в 1.20.1 возможны только в конструкторе мода |
+| `@EventHandler` + `FMLInitializationEvent` | `FMLCommonSetupEvent` на шине мода | ✓ идёт параллельно с другими модами: непотокобезопасное — в `event.enqueueWork {}` |
+| `@EventHandler` + `FMLPostInitializationEvent` | `InterModProcessEvent` на шине мода | ✓ последнее событие загрузки, когда все моды прошли setup |
+| `@EventHandler` + `FMLLoadCompleteEvent` | `FMLLoadCompleteEvent` на шине мода | |
+| `@EventHandler` + `FMLServerStartingEvent` | `ServerStartingEvent` на шине Forge | ✓ |
+| `event.registerServerCommand(...)` | `RegisterCommandsEvent` на шине Forge | команды регистрируются до `ServerStartingEvent` |
+| подписка методов `@EventHandler` | `MOD_BUS` / `FORGE_BUS` из `thedarkcolour.kotlinforforge.forge`, `addListener(EventPriority.NORMAL, false, Event::class.java, ::метод)` | ✓ форма с явным классом события; имена методов автора сохраняются |
+| `@KotlinProxy` (ASJ) | `DistExecutor` | классы прокси автора сохраняются (SPEC, Р-11) |
+| `@Metadata ModMetadata` | `ModList.get().getModContainerById(MODID).get().modInfo` (`IModInfo`) | версия — `ArtifactVersion`, имя — `displayName` |
+| `Loader.isModLoaded("Mod")` | `ModList.get().isLoaded("mod")` | ✓ id модов в 1.20.1 — строчными |
+| `MinecraftServer.getServer()` | `ServerLifecycleHooks.getCurrentServer()` | ✓ |
+| `saveHandler.worldDirectory` | `server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize()` | ✓ `ROOT` даёт путь с «.» на конце |
+
 ## События, сеть, конфиг, команды
 
 | Было | Стало | Примечание |
@@ -61,7 +81,6 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `eventForge()` / `eventFML()` (asjlib) | `MinecraftForge.EVENT_BUS.register(...)` | события жизненного цикла мода — на шине мода |
 | `cpw.mods.fml…SubscribeEvent` | `net.minecraftforge.eventbus.api.SubscribeEvent` | |
 | `SimpleNetworkWrapper`, `IMessage` | `SimpleChannel`, encoder / decoder / handler | порядок полей — как у автора |
-| `@KotlinProxy` (ASJ) | `DistExecutor` | классы прокси автора сохраняются |
 | `Configuration` | `ForgeConfigSpec` | SPEC, Р-12 |
 | `CommandBase` | Brigadier, `RegisterCommandsEvent` | имена и аргументы — как у автора |
 | `ClientRegistry.registerKeyBinding` | `RegisterKeyMappingsEvent` | |

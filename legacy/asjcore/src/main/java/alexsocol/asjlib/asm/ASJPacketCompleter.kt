@@ -1,0 +1,125 @@
+package alexsocol.asjlib.asm
+
+import alexsocol.patcher.asm.transformer.ASJAbstractClassTransformer
+import com.google.common.collect.Lists
+import org.objectweb.asm.*
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.tree.*
+
+class ASJPacketCompleter: ASJAbstractClassTransformer() {
+	
+	private val ASJPacketClasses = hashSetOf("alexsocol/asjlib/network/ASJPacket")
+	
+	override fun transform(transformedName: String, basicClass: ByteArray): ByteArray {
+		val cr = ClassReader(basicClass)
+		
+		if (!isASJPacket(cr.className, cr.superName)) return basicClass
+		
+		try {
+			val cn = ClassNode()
+			cr.accept(cn, 0)
+			
+			logger.debug("Expanding ASJPacket $transformedName")
+			val fs = BooleanArray(5) // <init>, fromBytes, toBytes, fromCustomBytes, toCustomBytes
+			for (mt in cn.methods) {
+				when (mt.name) {
+					"<init>" if mt.desc == "()V"                                   -> fs[0] = true
+					"fromBytes" if mt.desc == "(Lio/netty/buffer/ByteBuf;)V"       -> fs[1] = true
+					"toBytes" if mt.desc == "(Lio/netty/buffer/ByteBuf;)V"         -> fs[2] = true
+					"fromCustomBytes" if mt.desc == "(Lio/netty/buffer/ByteBuf;)V" -> fs[3] = true
+					"toCustomBytes" if mt.desc == "(Lio/netty/buffer/ByteBuf;)V"   -> fs[4] = true
+				}
+			}
+			
+			if (!fs[0]) makeConstructor(cn)
+			if (!fs[1]) makeFromBytes(cn, fs[3])
+			if (!fs[2]) makeToBytes(cn, fs[4])
+			
+			val cw = ClassWriter(ClassWriter.COMPUTE_FRAMES or ClassWriter.COMPUTE_MAXS)
+			cn.accept(cw)
+			
+			return cw.toByteArray()
+		} catch (e: Throwable) {
+			logger.error("Something went wrong while transforming class $transformedName. Ignore if everything is OK (this is NOT ASJCore error):", e)
+		}
+		
+		return basicClass
+	}
+	
+	// Transformation order is guaranteed to be from the deepest superclass (java/lang/Object) to its subclasses
+	private fun isASJPacket(className: String, superName: String): Boolean {
+		if (ASJPacketClasses.contains(superName)) {
+			ASJPacketClasses.add(className)
+			return true
+		}
+		
+		return false
+	}
+	
+	private fun makeConstructor(cl: ClassNode) {
+		val mv = cl.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null)
+		mv.visitCode()
+		mv.visitVarInsn(ALOAD, 0)
+		mv.visitMethodInsn(INVOKESPECIAL, cl.superName, "<init>", "()V", false)
+		mv.visitInsn(RETURN)
+		mv.visitEnd()
+	}
+	
+	private fun makeFromBytes(cl: ClassNode, callCustom: Boolean) {
+		val mv = cl.visitMethod(ACC_PUBLIC, "fromBytes", "(Lio/netty/buffer/ByteBuf;)V", null, null)
+		mv.visitCode()
+		
+		if (callCustom) {
+			mv.visitVarInsn(ALOAD, 0)
+			mv.visitVarInsn(ALOAD, 1)
+			mv.visitMethodInsn(INVOKEVIRTUAL, cl.name, "fromCustomBytes", "(Lio/netty/buffer/ByteBuf;)V", false)
+		}
+		
+		for (fn in getFileds(cl)) {
+			if (!descriptors.contains(fn.desc)) continue
+			mv.visitVarInsn(ALOAD, 0)
+			mv.visitVarInsn(ALOAD, 1)
+			mv.visitMethodInsn(INVOKESTATIC, "alexsocol/asjlib/network/ASJPacket", "read" + fn.desc.replace("/".toRegex(), "").replace(";".toRegex(), ""), "(Lio/netty/buffer/ByteBuf;)" + fn.desc, false)
+			mv.visitFieldInsn(PUTFIELD, cl.name, fn.name, fn.desc)
+		}
+		
+		mv.visitInsn(RETURN)
+		mv.visitEnd()
+	}
+	
+	private fun makeToBytes(cl: ClassNode, callCustom: Boolean) {
+		val mv = cl.visitMethod(ACC_PUBLIC, "toBytes", "(Lio/netty/buffer/ByteBuf;)V", null, null)
+		mv.visitCode()
+		
+		if (callCustom) {
+			mv.visitVarInsn(ALOAD, 0)
+			mv.visitVarInsn(ALOAD, 1)
+			mv.visitMethodInsn(INVOKEVIRTUAL, cl.name, "toCustomBytes", "(Lio/netty/buffer/ByteBuf;)V", false)
+		}
+		
+		for (fn in getFileds(cl)) {
+			if (!descriptors.contains(fn.desc)) continue
+			mv.visitVarInsn(ALOAD, 1)
+			mv.visitVarInsn(ALOAD, 0)
+			mv.visitFieldInsn(GETFIELD, cl.name, fn.name, fn.desc)
+			mv.visitMethodInsn(INVOKESTATIC, "alexsocol/asjlib/network/ASJPacket", "write", "(Lio/netty/buffer/ByteBuf;" + fn.desc + ")V", false)
+		}
+		
+		mv.visitInsn(RETURN)
+		mv.visitEnd()
+	}
+	
+	private fun getFileds(cl: ClassNode): List<FieldNode> {
+		val fns = ArrayList<FieldNode>()
+		for (fn in cl.fields) {
+			if (fn.access and ACC_STATIC > 0 || fn.access and ACC_FINAL > 0) continue
+			fns.add(fn)
+		}
+		
+		return fns
+	}
+	
+	companion object {
+		val descriptors: List<String> = Lists.newArrayList("Z", "B", "C", "D", "F", "I", "J", "S", "Ljava/lang/String;", "Lnet/minecraft/item/ItemStack;", "Lnet/minecraft/nbt/NBTTagCompound;")
+	}
+}

@@ -103,3 +103,19 @@ Sonnet 5.5). ТЗ написано так, что подходит и Fable, и 
 - **Первая сборка в новой сессии долгая.** ForgeGradle распаковывает и
   подготавливает Minecraft 5–10 минут. Это ожидание, а не зависание.
 - **Машина облака:** 4 ядра, 16 ГБ памяти, 30 ГБ диска.
+
+Проверено в сессии КТ-0 (02.10.2026):
+
+- **Java.** По умолчанию `java` — 21. Перед сборкой:
+  `export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64`.
+- **Обёртка Gradle работает.** `./gradlew` скачал Gradle 8.14.3 через прокси облака.
+  Обёртка закреплена на 8.14.3 — той же версии, что установлена в облаке
+  (`/opt/gradle`), поэтому запасной путь `gradle build` собирает так же.
+- **429 Too Many Requests от Maven Central** при первой сборке: облако упирается в
+  ограничение частоты запросов. Это не запрет. Повторить сборку с
+  `--max-workers=2`: уже скачанное Gradle не качает заново.
+- **В логе `runGameTestServer` две ошибки не от мода:** `Failed to load properties
+  from file: server.properties` (первый запуск сервера) и `Failed to request yggdrasil
+  public key … Host not in allowlist: api.minecraftservices.com` (тестовому серверу
+  вход Mojang не нужен). Домен добавлять не нужно. `tools/check_server_log.py`
+  проверяет, что ошибок от `alfheim` нет.

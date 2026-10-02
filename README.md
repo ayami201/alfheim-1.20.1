@@ -1,10 +1,70 @@
-Greetings to all players and those who just passed by in the Alfheim repository!
+# Alfheim для Minecraft 1.20.1 Forge
 
-Alfheim is an addon to the [Botania](http://botaniamod.net/) mod written for [Minecraft](https://minecraft.net/) **1.7.10**. It adds one of the worlds of the [Scandinavian mythology](https://en.wikipedia.org/wiki/�lfheimr), the prerequisites for which were in the Botania mod.
+Перенос мода **Alfheim** с Minecraft 1.7.10 на Minecraft 1.20.1 (Forge 47.4).
+Alfheim — аддон к [Botania](https://botaniamod.net/): измерение Альфхейм и миры
+скандинавской мифологии, эльфы, расы с крыльями, магия, боссы, Рагнарёк.
 
-Alfheim is licensed under [NCCPL](LICENSE.txt) 
+**Автор оригинала — AlexSocol.** Участники и авторы вклада перечислены в
+[`credits.txt`](src/main/resources/credits.txt). Оригинал:
+https://bitbucket.org/AlexSocol/alfheim (релиз 67, коммит `fd34c141`). Его исходники
+лежат в этом репозитории в [`legacy/`](legacy/) без изменений, ветка `master` —
+зеркало репозитория автора.
 
-Join official [Discord server](https://discord.gg/dqQXZHq).
+## Лицензия и разрешение автора
 
-If you want to get in-dev version for whatever reason you just need to download "**Development**" branch (from *Downloads* in the left sidebar), extract archive wherever you want and launch **setup.bat**, entering **4** when asked (or just enter *gradlew build* in command line). .jar file will be placed in */build/libs/*
-Don't forget to install latest versions of JDK**8**. 
+Код, текстуры, модели и прочие материалы Alfheim — работа AlexSocol и участников,
+лицензия **NCCPL 1.0** ([`LICENSE.txt`](LICENSE.txt)). Она же действует для
+порта. Библиотека автора ASJCore (её части переносятся в порт по мере надобности)
+лицензирована так же.
+
+AlexSocol разрешил этот перенос 02.10.2026 при двух условиях: исходники порта
+открыты и лицензия сохранена. Порт делается для небольшой сборки.
+
+Лицензия требует указывать, что изменено. Поэтому каждый файл автора сначала
+переносится из `legacy/` в `src/` отдельным коммитом без изменений, а правки идут
+следующим коммитом: `git log --follow` и `git blame` показывают, какие строки
+написал автор, а какие изменены при переносе. Каждое отступление от поведения
+оригинала помечено в коде комментарием `// PORT:` или `// PORT-FIX:`.
+
+## Что это за порт
+
+Перенос, а не переделка: логика, числа, баланс и имена остаются авторскими,
+меняется только то, чего требует новая версия игры. Незаконченное автором (WIP)
+переносится как есть или остаётся в `legacy/` до следующей стадии.
+
+Состояние — [`docs/port/TASKS.md`](docs/port/TASKS.md). Техническое задание —
+[`docs/port/SPEC.md`](docs/port/SPEC.md), этапы — [`docs/port/ROADMAP.md`](docs/port/ROADMAP.md),
+опись исходников автора — [`docs/port/INVENTORY.md`](docs/port/INVENTORY.md),
+врезки в чужой код — [`docs/port/HOOKS.md`](docs/port/HOOKS.md).
+
+Пока это каркас (контрольная точка 0): мод загружается вместе с зависимостями, но
+содержимого в нём ещё нет.
+
+## Зависимости
+
+| Мод | Версия |
+|---|---|
+| Minecraft / Forge | 1.20.1 / 47.4.23 |
+| Botania | 1.20.1-456-FORGE |
+| Patchouli | 1.20.1-85-FORGE |
+| Curios | 5.14.1+1.20.1 |
+| Kotlin for Forge | 4.12.0 |
+
+## Сборка
+
+Нужна Java 17.
+
+```bash
+./gradlew build               # jar — в build/libs/
+./gradlew runGameTestServer   # сервер с модом и автотестами; код выхода 0 — тесты прошли
+```
+
+Готовый jar каждой проверки лежит в GitHub Actions: вкладка **Actions** → запуск →
+артефакт `alfheim-jar`.
+
+## Раскладка
+
+- `src/main` — порт; `src/gametest` — автотесты GameTest (в jar не попадают).
+- `legacy/` — исходники автора для 1.7.10 (эталон для сверки) и снимок ASJCore
+  в `legacy/asjcore/`. Не компилируются.
+- `docs/port/` — документы порта; `tools/` — скрипты проверки.
