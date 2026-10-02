@@ -18,6 +18,9 @@ import java.util.function.Supplier
 /** Свойства 1.7.10 блока-источника: блок порта или блок Botania ([Botania1710]) */
 fun legacyProps(block: Block): BlockProps = (block as? LegacyBlock)?.legacy ?: Botania1710.props(block)
 
+/** Звук блока 1.7.10 (`Block.stepSound`) — у блока порта или блока Botania ([legacyProps]) */
+val Block.stepSound: SoundType? get() = legacyProps(this).stepSound
+
 /** `net.minecraft.block.BlockStairs` 1.7.10: материал, твёрдость, взрывоустойчивость и звук — от блока-источника */
 open class Stairs1710(val legacySource: Block, @Suppress("UNUSED_PARAMETER") meta: Int): StairBlock(Supplier { legacySource.defaultBlockState() }, legacyProps(legacySource).material.properties()), LegacyBlock {
 
