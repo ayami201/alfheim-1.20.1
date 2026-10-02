@@ -54,18 +54,18 @@ object AlfheimCore {
 	var TravellersGearLoaded = false
 	var TwilightForestLoaded = false
 	
-	// PORT: КТ-1 — TimeHandler; ветки RagnarokHandler — КТ-8
-//	val jingleTheBells: Boolean
-//	
-//	// do not reassign this unless you know what you are doing
-//	var winter: Boolean
-//		get() {
-//			return when {
+	val jingleTheBells: Boolean
+	
+	// do not reassign this unless you know what you are doing
+	var winter: Boolean
+		get() {
+			return when {
+				// PORT: КТ-8 — RagnarokHandler
 //				RagnarokHandler.winter -> true
 //				RagnarokHandler.summer -> false
-//				else                   -> field
-//			}
-//		}
+				else                   -> field
+			}
+		}
 	
 	init {
 		// PORT: реестры мода — на шину мода до события регистрации (DeferredRegister, SPEC, Р-5)
@@ -73,9 +73,8 @@ object AlfheimCore {
 		
 		AlfheimTab
 		
-		// PORT: КТ-1 — TimeHandler
-//		jingleTheBells = (TimeHandler.month == 12 && TimeHandler.day >= 16 || TimeHandler.month == 1 && TimeHandler.day <= 8)
-//		winter = TimeHandler.month in arrayOf(1, 2, 12, 13)
+		jingleTheBells = (TimeHandler.month == 12 && TimeHandler.day >= 16 || TimeHandler.month == 1 && TimeHandler.day <= 8)
+		winter = TimeHandler.month in arrayOf(1, 2, 12, 13)
 		
 		// PORT: в 1.20.1 нет событий FML 1.7.10 (@EventHandler). preInit вызывается из конструктора мода:
 		// регистрация и конфиг в 1.20.1 возможны только здесь. Остальные — подписки на события Forge,
