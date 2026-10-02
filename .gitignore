@@ -11,6 +11,9 @@
 /run-data/
 /logs/
 
+# кэш Python от скриптов tools/
+__pycache__/
+
 # IDE
 /bin/
 /out/
