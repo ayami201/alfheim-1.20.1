@@ -1,4 +1,4 @@
-# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, GameTest-ы на сервере, сверка описи и врезок.
+# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, GameTest-ы на сервере, сверка описи, врезок и настроек.
 # jar из артефакта «alfheim-jar» владелец ставит в свою сборку для проверки по чек-листу PR.
 name: Build
 
@@ -49,6 +49,10 @@ jobs:
 
       - name: Лог сервера
         run: python3 tools/check_server_log.py run/logs/latest.log
+
+      # Файлы настроек создал сервер выше: все опции автора, кроме удалённых, со значениями автора
+      - name: Сверка настроек с автором
+        run: python3 tools/check_config.py run/config/Alfheim
 
       - name: jar мода
         uses: actions/upload-artifact@v4
