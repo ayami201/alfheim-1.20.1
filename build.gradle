@@ -23,6 +23,22 @@ base {
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 kotlin.jvmToolchain(17)
 
+// GameTest-ы порта — отдельный набор исходников src/gametest: в CI и в запусках из Gradle
+// они загружаются вместе с модом, в jar для игроков не попадают.
+sourceSets {
+    gametest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+configurations {
+    gametestImplementation.extendsFrom implementation
+    gametestCompileOnly.extendsFrom compileOnly
+    gametestRuntimeOnly.extendsFrom runtimeOnly
+}
+// build проверяет, что тесты компилируются; запускает их runGameTestServer
+tasks.named('check') { dependsOn 'gametestClasses' }
+
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
@@ -45,6 +61,7 @@ minecraft {
             mods {
                 "${mod_id}" {
                     source sourceSets.main
+                    source sourceSets.gametest
                 }
             }
         }
