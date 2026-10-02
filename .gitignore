@@ -9,6 +9,9 @@
 # запуски игры
 /run/
 /run-data/
+
+# кэш генерации данных: в нём время запуска; CI сверяет сами файлы (SPEC, Р-9)
+/src/generated/resources/.cache/
 /logs/
 
 # кэш Python от скриптов tools/
