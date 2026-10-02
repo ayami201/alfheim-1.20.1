@@ -91,6 +91,11 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `onItemRightClick` / `onItemUse` / `onUpdate` / `addInformation` | `use` / `useOn` / `inventoryTick` / `appendHoverText` | |
 | `stack.stackTagCompound`, `NBTTagCompound` | `stack.getTag()` / `getOrCreateTag()`, `CompoundTag` | `ItemNBTHelper` автора сохраняется поверх |
 | `EntityPlayer`, `EntityLivingBase` | `Player`, `LivingEntity` | |
+| `isSneaking`, `heldItem`, `riddenByEntity` | `isShiftKeyDown`, `mainHandItem` (пустой стек вместо `null`), `firstPassenger` | ✓ |
+| `mountEntity(entity)` | `startRiding(entity, true)` | ✓ 1.7.10 сажал без проверок, кроме кольца из всадников; `force = true` — так же |
+| `EntityTameable.isTamed`, `func_152115_b(uuidString)` | `isTame`, `setOwnerUUID(uuid)` | ✓ |
+| `Items.stick`, `Blocks.grass` и др. | `Items.STICK`, `Blocks.GRASS_BLOCK` и др. | поля ванилы в 1.20.1 — заглавными; имя проверять по смыслу |
+| `World` в сигнатурах автора | `import net.minecraft.world.level.Level as World` | ✓ |
 | `entityInit` + `DataWatcher` | `defineSynchedData` + `SynchedEntityData` | |
 | `readEntityFromNBT` / `writeEntityToNBT` | `readAdditionalSaveData` / `addAdditionalSaveData` | |
 | `onUpdate` (сущность) | `tick` | |
@@ -115,7 +120,7 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `@EventHandler` + `FMLServerStartingEvent` | `ServerStartingEvent` на шине Forge | ✓ |
 | `event.registerServerCommand(...)` | `RegisterCommandsEvent` на шине Forge | команды регистрируются до `ServerStartingEvent` |
 | подписка методов `@EventHandler` | `MOD_BUS` / `FORGE_BUS` из `thedarkcolour.kotlinforforge.forge`, `addListener(EventPriority.NORMAL, false, Event::class.java, ::метод)` | ✓ форма с явным классом события; имена методов автора сохраняются |
-| `@KotlinProxy` (ASJ) | `DistExecutor` | классы прокси автора сохраняются (SPEC, Р-11) |
+| `@KotlinProxy` (ASJ) | `DistExecutor.unsafeRunForDist({ Supplier { ClientProxy } }, { Supplier { CommonProxy() } })` | ✓ классы прокси автора сохраняются (SPEC, Р-11); на сервере `ClientProxy` не загружается (`PortProxyTest`) |
 | `@Metadata ModMetadata` | `ModList.get().getModContainerById(MODID).get().modInfo` (`IModInfo`) | версия — `ArtifactVersion`, имя — `displayName` |
 | `Loader.isModLoaded("Mod")` | `ModList.get().isLoaded("mod")` | ✓ id модов в 1.20.1 — строчными |
 | `MinecraftServer.getServer()` | `ServerLifecycleHooks.getCurrentServer()` | ✓ |
@@ -145,6 +150,10 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | Ore Dictionary | теги | |
 | достижения (`Achievement`) | advancements через datagen | |
 | `ChatComponentText`, `EnumChatFormatting` | `Component.literal`, `ChatFormatting` | |
+| `ChatComponentTranslation`, `IChatComponent.Serializer.func_150699_a` | `Component.translatable`, `Component.Serializer.fromJson` | ✓ |
+| `ICommandSender`, `addChatMessage` | `CommandSource`, `sendSystemMessage` | ✓ `ASJUtilities.say`; имя отправителя — `Nameable.name` или «Server» |
+| `EntityInteractEvent` `.entityPlayer`, `.target` | `PlayerInteractEvent.EntityInteract` `.entity`, `.target` | ✓ событие приходит для каждой руки: проверка предмета в главной руке повторяется, второй вызов ничего не меняет |
+| объект без методов `@SubscribeEvent` на шине | как есть | ✓ шина Forge 1.20.1 принимает его молча — общий обработчик подписывается, даже если его методы ещё ждут свою КТ |
 
 ## Рендер
 
@@ -158,6 +167,8 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `bindTileEntitySpecialRenderer` | `EntityRenderersEvent.RegisterRenderers` (`registerBlockEntityRenderer`) | |
 | `ASJShaderHelper` + шейдеры автора | core shaders через `RegisterShadersEvent` + свой `RenderType` | |
 | `setGlow` (asjlib) | полная яркость, `LightTexture.FULL_BRIGHT` | |
+| `mc.gameSettings.particleSetting` | `mc.options.particles().get().id` | ✓ номера те же: 0 — все, 1 — меньше, 2 — минимум |
+| `mc.effectRenderer.addEffect(частица)` | `mc.particleEngine.createParticle(данные, x, y, z, vx, vy, vz)` | без ограничителя частиц ванилы, как `addEffect`; `level.addParticle` ограничивает ещё раз |
 
 ## Миры
 

@@ -34,7 +34,7 @@ python3 tools/check_inventory.py
 | КТ | Файлов | Строк | ждёт | перенесено | выпало | WIP — стадия 2 |
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
-| КТ-1 | 32 | 5 652 | 7 | 25 |  |  |
+| КТ-1 | 32 | 5 652 | 2 | 30 |  |  |
 | КТ-2 | 222 | 19 082 | 222 |  |  |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 70 | 4 498 |  |  | 58 | 12 |
-| **всего** | **1153** | **124 643** | **1056** | **27** | **58** | **12** |
+| **всего** | **1153** | **124 643** | **1051** | **32** | **58** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -331,7 +331,7 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `CardinalSystemClient.kt` | 153 | КТ-7 | ждёт |  |
-| `EventHandlerClient.kt` | 325 | КТ-1 | ждёт | общий обработчик: растёт по КТ вместе с механиками |
+| `EventHandlerClient.kt` | 325 | КТ-1 | перенесено | → `src/main/java/alfheim/client/core/handler/EventHandlerClient.kt`; общий обработчик: подписан на шину, его методы раскомментирует КТ своей механики |
 | `HUDCorporeaRat.kt` | 47 | КТ-3 | ждёт |  |
 | `KeyBindingHandlerClient.kt` | 353 | КТ-7 | ждёт |  |
 
@@ -346,7 +346,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `ClientProxy.kt` | 447 | КТ-1 | ждёт |  |
+| `ClientProxy.kt` | 447 | КТ-1 | перенесено | → `src/main/java/alfheim/client/core/proxy/ClientProxy.kt`; регистрация рендера — в КТ своих вещей, режимы и клавиши — КТ-7 |
 
 ### `legacy/src/main/java/alfheim/client/core/util/`
 
@@ -1084,7 +1084,7 @@ python3 tools/check_inventory.py
 | `ChunkLoadingHandler.kt` | 129 | КТ-6 | ждёт |  |
 | `DispenserHandlers.kt` | 174 | КТ-2 | ждёт |  |
 | `ESMHandlers.kt` | 391 | КТ-7 | ждёт |  |
-| `EventHandler.kt` | 488 | КТ-1 | ждёт | общий обработчик: растёт по КТ вместе с механиками |
+| `EventHandler.kt` | 488 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/EventHandler.kt`; общий обработчик: работают новости при входе и две особенности участников, остальное раскомментирует КТ своей механики |
 | `EventHandlerSummer.kt` | 38 | КТ-8 | ждёт | сезонные события |
 | `EventHandlerWinter.kt` | 22 | КТ-8 | ждёт | сезонные события |
 | `HilarityHandler.kt` | 222 | КТ-4 | ждёт | обращается к sessionserver Mojang (SPEC п. 8) |
@@ -1118,13 +1118,13 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `CommonProxy.kt` | 110 | КТ-1 | ждёт |  |
+| `CommonProxy.kt` | 110 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/proxy/CommonProxy.kt`; вызовы будущих КТ закомментированы с номером КТ |
 
 ### `legacy/src/main/java/alfheim/common/core/registry/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimRegistry.kt` | 611 | КТ-1 | ждёт |  |
+| `AlfheimRegistry.kt` | 611 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/registry/AlfheimRegistry.kt`; работают веса руд для цветов, остальное раскомментирует КТ своих вещей |
 
 ### `legacy/src/main/java/alfheim/common/core/util/`
 
