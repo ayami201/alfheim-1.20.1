@@ -1,4 +1,4 @@
-# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, GameTest-ы на сервере, сверка описи, врезок и настроек.
+# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, GameTest-ы на сервере, сверка описи, врезок, переводов и настроек.
 # jar из артефакта «alfheim-jar» владелец ставит в свою сборку для проверки по чек-листу PR.
 name: Build
 
@@ -32,6 +32,10 @@ jobs:
 
       - name: Сверка врезок (HOOKS.md)
         run: python3 tools/check_hooks.py
+
+      # Переводы .json собраны из .lang автора скриптом: ключей столько же, кроме удалённых
+      - name: Сверка переводов
+        run: python3 tools/convert_lang.py --check
 
       - uses: actions/setup-java@v4
         with:
