@@ -1,0 +1,66 @@
+# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, GameTest-ы на сервере, сверка описи и врезок.
+# jar из артефакта «alfheim-jar» владелец ставит в свою сборку для проверки по чек-листу PR.
+name: Build
+
+on:
+  push:
+    branches: [ 'port/1.20.1' ]
+  pull_request:
+    branches: [ 'port/1.20.1' ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      # Коммит автора, от которого идёт порт: с ним сверяются опись и врезки
+      - name: Точка отсчёта fd34c141
+        run: git fetch --no-tags --depth=1 origin fd34c141cb9d4466735a0e034d6a2fb2401cc177
+
+      - name: Сверка описи (INVENTORY.md)
+        run: python3 tools/check_inventory.py
+
+      - name: Сверка врезок (HOOKS.md)
+        run: python3 tools/check_hooks.py
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Проверяет обёртку Gradle (gradle-wrapper.jar) по контрольным суммам Gradle и кэширует зависимости
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Сборка
+        run: ./gradlew build
+
+      - name: GameTest-ы на сервере
+        run: ./gradlew runGameTestServer
+
+      - name: Лог сервера
+        run: python3 tools/check_server_log.py run/logs/latest.log
+
+      - name: jar мода
+        uses: actions/upload-artifact@v4
+        with:
+          name: alfheim-jar
+          path: build/libs/*.jar
+          if-no-files-found: error
+
+      - name: Логи сервера
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-logs
+          path: run/logs/
+          if-no-files-found: ignore
