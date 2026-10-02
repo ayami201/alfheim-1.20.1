@@ -7,12 +7,14 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundSource
+import com.google.gson.JsonParser
 import net.minecraftforge.gametest.GameTestHolder
 import net.minecraftforge.gametest.PrefixGameTestTemplate
 
 /**
  * КТ-1: регистрация. Реестры мода на месте, вкладка зарегистрирована, у каждой записи legacy_ids.json
- * есть вещь в реестре 1.20.1, имена строятся по правилу SPEC, Р-5.
+ * есть вещь в реестре 1.20.1, имена строятся по правилу SPEC, Р-5, звуковые события автора зарегистрированы.
  */
 @GameTestHolder(MODID)
 @PrefixGameTestTemplate(false)
@@ -44,6 +46,30 @@ object PortRegistryTest {
 		for ((old, metas) in LegacyIds.entities) for ((meta, target) in metas)
 			if (!BuiltInRegistries.ENTITY_TYPE.containsKey(target.id)) missing += "entity $old:$meta -> ${target.id}"
 		helper.assertTrue(missing.isEmpty(), "legacy_ids.json points to things that are not registered: $missing")
+		helper.succeed()
+	}
+	
+	/** Каждое событие sounds.json есть в реестре, у каждого звука есть файл, категория — как у автора */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun soundEventsRegistered(helper: GameTestHelper) {
+		val json = AlfheimSounds::class.java.getResourceAsStream("/assets/$MODID/sounds.json")!!.reader().use { JsonParser.parseReader(it).asJsonObject }
+		val problems = ArrayList<String>()
+		for ((name, entry) in json.entrySet()) {
+			if (!BuiltInRegistries.SOUND_EVENT.containsKey(ResourceLocation(MODID, name))) problems += "event $name is not registered"
+			for (sound in entry.asJsonObject.getAsJsonArray("sounds")) {
+				val location = ResourceLocation(sound.asString)
+				if (location.namespace != MODID || AlfheimSounds::class.java.getResource("/assets/$MODID/sounds/${location.path}.ogg") == null)
+					problems += "sound ${sound.asString} of $name has no file"
+			}
+		}
+		helper.assertTrue(problems.isEmpty(), problems.toString())
+		helper.assertTrue(json.size() == 57 && AlfheimSounds.events.size == 57, "events: ${json.size()} in sounds.json, ${AlfheimSounds.events.size} registered")
+		
+		// категории 1.7.10 из sounds.json → SoundSource
+		val categories = mapOf("fenrir.attack" to SoundSource.HOSTILE, "niflportal" to SoundSource.BLOCKS, "calm" to SoundSource.PLAYERS, "ea" to SoundSource.MASTER, "oiia" to SoundSource.NEUTRAL)
+		for ((name, source) in categories)
+			helper.assertTrue(AlfheimSounds.source(name) == source, "source($name) = ${AlfheimSounds.source(name)}, expected $source")
 		helper.succeed()
 	}
 	
