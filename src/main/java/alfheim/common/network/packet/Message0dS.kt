@@ -1,18 +1,17 @@
 package alfheim.common.network.packet
 
-import alexsocol.asjlib.*
-import alexsocol.asjlib.math.Vector3
+// PORT: импорты 1.7.10 заменены на 1.20.1; импорты кода, который ещё не перенесён, закомментированы до его КТ
+//import alexsocol.asjlib.*
+//import alexsocol.asjlib.math.Vector3
+import alexsocol.asjlib.network.ASJPacket
 import alfheim.api.network.AlfheimPacket
-import alfheim.common.item.AlfheimItems
-import alfheim.common.item.equipment.bauble.*
-import alfheim.common.item.relic.ItemAkashicRecords
+//import alfheim.common.item.AlfheimItems
+//import alfheim.common.item.equipment.bauble.*
+//import alfheim.common.item.relic.ItemAkashicRecords
 import alfheim.common.network.M0ds
-import baubles.common.lib.PlayerHandler
-import cpw.mods.fml.common.network.simpleimpl.IMessage
-import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.item.ItemStack
-import net.minecraft.util.StatCollector
-import vazkii.botania.common.item.equipment.bauble.ItemTravelBelt
+//import baubles.common.lib.PlayerHandler
+import net.minecraft.server.level.ServerPlayer as EntityPlayerMP
+//import vazkii.botania.common.item.equipment.bauble.ItemTravelBelt
 
 class Message0dS(ty: M0ds, var type: Int = ty.ordinal): AlfheimPacket<Message0dS>() {
 	
@@ -26,15 +25,20 @@ class Message0dS(ty: M0ds, var type: Int = ty.ordinal): AlfheimPacket<Message0dS
 		}
 	}
 	
+	// PORT: КТ-4 — тела функций ниже ждут свои предметы (ItemAkashicRecords, ItemDodgeRing, ItemCloudPendant,
+	// ItemPriestCloak) и Curios вместо Baubles
 	fun scrollAkasha(player: EntityPlayerMP, up: Boolean) {
+		/*
 		if (!player.isSneaking) return
 		
 		val stack = player.heldItem ?: return
 		if (stack.item !== AlfheimItems.akashicRecords) return
 		ItemNBTHelper.setInt(stack, ItemAkashicRecords.TAG_SCROLL, ItemNBTHelper.getInt(stack, ItemAkashicRecords.TAG_SCROLL, 0) + if (up) -1 else 1)
+		*/
 	}
 
 	private fun dodge(player: EntityPlayerMP) {
+		/*
 		player.playSoundAtEntity("botania:dash", 1f, 1f)
 
 		val baublesInv = PlayerHandler.getPlayerBaubles(player)
@@ -55,9 +59,11 @@ class Message0dS(ty: M0ds, var type: Int = ty.ordinal): AlfheimPacket<Message0dS
 
 		player.addExhaustion(0.3f)
 		ItemNBTHelper.setInt(ringStack, ItemDodgeRing.TAG_DODGE_COOLDOWN, ItemDodgeRing.MAX_CD)
+		*/
 	}
 
 	private fun jump(player: EntityPlayerMP) {
+		/*
 		val baublesInv = PlayerHandler.getPlayerBaubles(player)
 		val amuletStack = baublesInv[0]
 
@@ -72,9 +78,12 @@ class Message0dS(ty: M0ds, var type: Int = ty.ordinal): AlfheimPacket<Message0dS
 				player.fallDistance = -fall * (amuletStack.item as ItemCloudPendant).maxAllowedJumps
 			}
 		}
+		*/
 	}
 
-	fun blink(player: EntityPlayerMP): IMessage? {
+	// PORT: IMessage → ASJPacket: интерфейса сообщения в 1.20.1 нет
+	fun blink(player: EntityPlayerMP): ASJPacket? {
+		/*
 		if (ItemPriestCloak.getCloak(4, player) != null) {
 			val look = player.lookVec
 			val dist = 6.0
@@ -87,6 +96,7 @@ class Message0dS(ty: M0ds, var type: Int = ty.ordinal): AlfheimPacket<Message0dS
 				player.playSound("mob.endermen.portal", 1f, 1f)
 			}
 		}
+		*/
 
 		return null
 	}

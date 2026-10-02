@@ -4,15 +4,19 @@ import alexsocol.asjlib.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageContributor
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.gameevent.*
-import net.minecraft.entity.player.*
-import net.minecraft.server.MinecraftServer
+// PORT: события FML 1.7.10 → события Forge; EntityPlayer → Player, EntityPlayerMP → ServerPlayer;
+// MinecraftServer.getServer() → ServerLifecycleHooks; kickPlayerFromServer → disconnect
+import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.player.Player as EntityPlayer
+import net.minecraft.server.level.ServerPlayer as EntityPlayerMP
+import net.minecraftforge.event.TickEvent
+import net.minecraftforge.event.entity.player.PlayerEvent
+import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.server.ServerLifecycleHooks
 import java.net.URL
 import java.nio.charset.Charset
 import java.security.*
 import java.util.*
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter
 
 object ContributorsPrivacyHelper {
 	
@@ -66,7 +70,7 @@ object ContributorsPrivacyHelper {
 	private fun register(contributor: String, passwordHash: String) {
 		authCredits[contributor] = passwordHash
 		
-		if (MinecraftServer.getServer()?.isMultiPlayer != true)
+		if (ServerLifecycleHooks.getCurrentServer()?.isMultiPlayer != true)
 			contributors[contributor] = contributor // no power on server if no response
 	}
 	
@@ -74,7 +78,7 @@ object ContributorsPrivacyHelper {
 	
 	fun getPassHash(login: String) = authCredits[login]
 	
-	fun isCorrect(user: EntityPlayer, contributor: String) = isCorrect(user.commandSenderName, contributor)
+	fun isCorrect(user: EntityPlayer, contributor: String) = isCorrect(user.gameProfile.name, contributor)
 	
 	fun isCorrect(user: String, contributor: String) = contributors[contributor] == user
 	
@@ -89,7 +93,7 @@ object ContributorsPrivacyHelper {
 			val time = it - 1
 			
 			if (time < 0)
-				player.playerNetServerHandler.kickPlayerFromServer("Authentication request timed out")
+				player.connection.disconnect(Component.literal("Authentication request timed out"))
 			else
 				authTimeout[player] = time
 		}
@@ -97,21 +101,21 @@ object ContributorsPrivacyHelper {
 	
 	@SubscribeEvent
 	fun onPlayerLogin(e: PlayerEvent.PlayerLoggedInEvent) {
-		val player = e.player as? EntityPlayerMP ?: return
+		val player = e.entity as? EntityPlayerMP ?: return
 		
-		if (MinecraftServer.getServer()?.isMultiPlayer == false) return
+		if (ServerLifecycleHooks.getCurrentServer()?.isMultiPlayer == false) return
 
 		NetworkService.sendTo(MessageContributor(isRequest = true), player)
 		
-		if (isRegistered(player.commandSenderName))
+		if (isRegistered(player.gameProfile.name))
 			authTimeout[player] = AlfheimConfigHandler.authTimeout
 	}
 	
 	@SubscribeEvent
 	fun onPlayerLogout(e: PlayerEvent.PlayerLoggedOutEvent) {
-		if (MinecraftServer.getServer()?.isMultiPlayer == false) return
+		if (ServerLifecycleHooks.getCurrentServer()?.isMultiPlayer == false) return
 
-		contributors.values.removeAll { it == e.player.commandSenderName }
+		contributors.values.removeAll { it == e.entity.gameProfile.name }
 	}
 }
 
@@ -121,7 +125,8 @@ object HashHelper {
 		if (str != null)
 			try {
 				val md = MessageDigest.getInstance("SHA-256")
-				return HexBinaryAdapter().marshal(md.digest(salt(str, salt).toByteArray(Charset.forName("UTF-8"))))
+				// PORT: JAXB (HexBinaryAdapter) убран из Java 11; HexFormat даёт ту же запись заглавными буквами
+				return HexFormat.of().withUpperCase().formatHex(md.digest(salt(str, salt).toByteArray(Charset.forName("UTF-8"))))
 			} catch (e: NoSuchAlgorithmException) {
 				ASJUtilities.error("Hashing error:", e)
 			}

@@ -3,8 +3,10 @@ package alfheim.common.network.packet
 import alfheim.api.network.AlfheimPacket
 import alfheim.common.core.helper.*
 import alfheim.common.network.NetworkService
-import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.server.MinecraftServer
+// PORT: EntityPlayerMP → ServerPlayer; MinecraftServer.getServer() → ServerLifecycleHooks; kickPlayerFromServer → disconnect
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer as EntityPlayerMP
+import net.minecraftforge.server.ServerLifecycleHooks
 import org.apache.commons.io.FileUtils
 import java.io.File
 
@@ -25,7 +27,7 @@ class MessageContributor(var key: String = "", var value: String = key, var isRe
 
 	override fun handleServer(player: EntityPlayerMP) {
 		// we are on server
-		val username = player.commandSenderName
+		val username = player.gameProfile.name
 		val passMatch = ContributorsPrivacyHelper.getPassHash(key)?.let { if (it.isBlank()) true else it == HashHelper.hash(value) } ?: false
 
 		// are you the person you are saying you are ?
@@ -34,7 +36,7 @@ class MessageContributor(var key: String = "", var value: String = key, var isRe
 			ContributorsPrivacyHelper.authTimeout.remove(player)
 
 			if (key != username) {
-				player.playerNetServerHandler.kickPlayerFromServer("Invalid login provided, it must be equal to your username")
+				player.connection.disconnect(Component.literal("Invalid login provided, it must be equal to your username"))
 				return
 			}
 
@@ -43,7 +45,7 @@ class MessageContributor(var key: String = "", var value: String = key, var isRe
 				// --> proceed
 			} else {
 				// no, you not. Get out!
-				player.playerNetServerHandler.kickPlayerFromServer("Incorrect Alfhiem credentials for your contributor username")
+				player.connection.disconnect(Component.literal("Incorrect Alfhiem credentials for your contributor username"))
 				return
 			}
 		} else {
@@ -58,7 +60,7 @@ class MessageContributor(var key: String = "", var value: String = key, var isRe
 				// --> proceed
 			} else {
 				// incorrect password for identity
-				player.playerNetServerHandler.kickPlayerFromServer("Incorrect Alfheim contributor credentials")
+				player.connection.disconnect(Component.literal("Incorrect Alfheim contributor credentials"))
 				return
 			}
 		}
@@ -69,7 +71,7 @@ class MessageContributor(var key: String = "", var value: String = key, var isRe
 		ContributorsPrivacyHelper.contributors[key] = username
 
 		// tell everyone about new alias
-		MinecraftServer.getServer()?.configurationManager?.playerEntityList?.forEach {
+		ServerLifecycleHooks.getCurrentServer()?.playerList?.players?.forEach {
 			if (it is EntityPlayerMP)
 				NetworkService.sendTo(MessageContributor(key, username), it)
 		}

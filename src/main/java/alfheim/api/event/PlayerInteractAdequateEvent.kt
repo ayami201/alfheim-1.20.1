@@ -1,8 +1,9 @@
 package alfheim.api.event
 
-import cpw.mods.fml.common.eventhandler.Event
-import net.minecraft.entity.Entity
-import net.minecraft.entity.player.EntityPlayer
+// PORT: EntityPlayer → Player; Event FML → Event шины Forge (конструктор без аргументов дописывает она, как FML в 1.7.10)
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player as EntityPlayer
+import net.minecraftforge.eventbus.api.Event
 
 /**
  * Adequate interaction event

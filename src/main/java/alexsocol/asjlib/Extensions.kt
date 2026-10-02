@@ -4,6 +4,7 @@ package alexsocol.asjlib
 
 // PORT: импорты 1.7.10 заменены на 1.20.1. Функции, которые порту ещё не понадобились, закомментированы блоками
 // «PORT: по мере надобности»: их переносит КТ, которой они нужны, и сверяет смысл с 1.20.1
+import net.minecraft.server.MinecraftServer
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 import net.minecraftforge.common.MinecraftForge
@@ -336,7 +337,7 @@ var ItemStack.cooldown
 
 fun String.trimAtMostLength(maxLength: Int, postfix: String = "...") = if (this.length > maxLength) "${this.take(maxLength)}$postfix" else this
 
-/* PORT: по мере надобности — ChunkCoordinates, ASJSuperWrapperHandler
+/* PORT: по мере надобности — ChunkCoordinates
 fun NBTTagCompound.setChunkCoords(tag: String, coords: ChunkCoordinates) {
 	val (x, y, z) = coords
 	setIntArray(tag, intArrayOf(x, y, z))
@@ -349,6 +350,9 @@ fun NBTTagCompound.getChunkCoords(tag: String): ChunkCoordinates {
 	return ChunkCoordinates(x, y, z)
 }
 
-val MinecraftServer.isMultiPlayer // WTF
-	get() = ASJSuperWrapperHandler.isMultiPlayer(this)
 */
+
+// PORT: ASJ дописывал isMultiPlayer врезками: у встроенного сервера — открыт ли он для сети (LAN), у выделенного —
+// !isSinglePlayer, то есть всегда. В 1.20.1 то же самое даёт isPublished
+val MinecraftServer.isMultiPlayer // WTF
+	get() = isPublished

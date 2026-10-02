@@ -14,7 +14,7 @@ import alfheim.common.core.handler.*
 //import alfheim.common.integration.tinkersconstruct.*
 //import alfheim.common.integration.travellersgear.*
 //import alfheim.common.integration.waila.*
-//import alfheim.common.network.*
+import alfheim.common.network.*
 import net.minecraft.world.level.storage.LevelResource
 import net.minecraftforge.event.server.ServerStartingEvent
 import net.minecraftforge.eventbus.api.EventPriority
@@ -118,8 +118,7 @@ object AlfheimCore {
 		// PORT: КТ-1 — AlfheimConfigHandler, InfoLoader
 //		if (AlfheimConfigHandler.notifications) InfoLoader.start()
 		
-		// PORT: КТ-1 — сеть
-//		NetworkService
+		NetworkService
 		
 		// PORT: КТ-1 — прокси
 //		proxy.preInit()
