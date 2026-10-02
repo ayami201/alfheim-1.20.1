@@ -34,7 +34,7 @@ python3 tools/check_inventory.py
 | КТ | Файлов | Строк | ждёт | перенесено | выпало | WIP — стадия 2 |
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
-| КТ-1 | 33 | 5 661 | 31 | 2 |  |  |
+| КТ-1 | 33 | 5 661 | 16 | 17 |  |  |
 | КТ-2 | 222 | 19 082 | 222 |  |  |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 70 | 4 498 |  |  | 58 | 12 |
-| **всего** | **1153** | **124 643** | **1079** | **4** | **58** | **12** |
+| **всего** | **1153** | **124 643** | **1064** | **19** | **58** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -263,9 +263,9 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `AlfheimModeChangedEvent.kt` | 5 | КТ-7 | ждёт |  |
-| `AttackEntityEventPost.kt` | 8 | КТ-1 | ждёт |  |
+| `AttackEntityEventPost.kt` | 8 | КТ-1 | перенесено | → `src/main/java/alfheim/api/event/AttackEntityEventPost.kt` |
 | `PlayerChangedRaceEvent.kt` | 7 | КТ-7 | ждёт |  |
-| `PlayerInteractAdequateEvent.kt` | 32 | КТ-1 | ждёт |  |
+| `PlayerInteractAdequateEvent.kt` | 32 | КТ-1 | перенесено | → `src/main/java/alfheim/api/event/PlayerInteractAdequateEvent.kt` |
 | `SpellCastEvent.kt` | 13 | КТ-7 | ждёт |  |
 | `TimeStopCheckEvent.kt` | 18 | КТ-7 | ждёт |  |
 
@@ -304,7 +304,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimPacket.kt` | 19 | КТ-1 | ждёт |  |
+| `AlfheimPacket.kt` | 19 | КТ-1 | перенесено | → `src/main/java/alfheim/api/network/AlfheimPacket.kt` |
 
 ### `legacy/src/main/java/alfheim/api/spell/`
 
@@ -1107,7 +1107,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `ContributorsPrivacyHelper.kt` | 151 | КТ-1 | ждёт | обращается к Bitbucket автора (SPEC п. 8) |
+| `ContributorsPrivacyHelper.kt` | 151 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/helper/ContributorsPrivacyHelper.kt`; обращается к Bitbucket автора (SPEC п. 8) |
 | `CorporeaAdvancedHelper.kt` | 109 | КТ-3 | ждёт |  |
 | `DiceDropsHelper.kt` | 70 | КТ-4 | ждёт |  |
 | `ElementalDamageHelper.kt` | 319 | КТ-4 | ждёт |  |
@@ -1746,20 +1746,20 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `Data.kt` | 15 | КТ-1 | ждёт |  |
-| `NetworkService.kt` | 118 | КТ-1 | ждёт |  |
+| `Data.kt` | 15 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/Data.kt` |
+| `NetworkService.kt` | 118 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/NetworkService.kt` |
 
 ### `legacy/src/main/java/alfheim/common/network/packet/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `Message0dC.kt` | 23 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `Message0dS.kt` | 93 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `Message1d.kt` | 80 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `Message1l.kt` | 14 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `Message2d.kt` | 70 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `Message3d.kt` | 42 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `MessageContributor.kt` | 80 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
+| `Message0dC.kt` | 23 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message0dC.kt`; ветки обработки по КТ механик закомментированы |
+| `Message0dS.kt` | 93 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message0dS.kt`; ветки обработки по КТ механик закомментированы |
+| `Message1d.kt` | 80 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message1d.kt`; ветки обработки по КТ механик закомментированы |
+| `Message1l.kt` | 14 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message1l.kt`; ветка SEED — КТ-5 |
+| `Message2d.kt` | 70 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message2d.kt`; ветки обработки по КТ механик закомментированы |
+| `Message3d.kt` | 42 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/Message3d.kt`; ветки обработки по КТ механик закомментированы |
+| `MessageContributor.kt` | 80 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/MessageContributor.kt` |
 | `MessageCorporeaRequest.kt` | 22 | КТ-3 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageDisguise.kt` | 55 | КТ-4 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageEffect.kt` | 55 | КТ-2 | ждёт | канал — КТ-1, пакет — вместе с механикой |
@@ -1769,7 +1769,7 @@ python3 tools/check_inventory.py
 | `MessageHotSpellC.kt` | 20 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageHotSpellS.kt` | 12 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageKeyBindS.kt` | 24 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `MessageNI.kt` | 69 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
+| `MessageNI.kt` | 69 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/MessageNI.kt`; BLIZZARD — КТ-8, HEARTLOSS — КТ-7 |
 | `MessageOrgans.kt` | 18 | КТ-8 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageParty.kt` | 22 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageRaceInfo.kt` | 11 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
@@ -1781,7 +1781,7 @@ python3 tools/check_inventory.py
 | `MessageTileItem.kt` | 15 | КТ-3 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageTimeStop.kt` | 23 | КТ-7 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageUpdateGaiaButton.kt` | 15 | КТ-3 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `MessageVisualEffect.kt` | 21 | КТ-1 | ждёт | канал — КТ-1, пакет — вместе с механикой |
+| `MessageVisualEffect.kt` | 21 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/MessageVisualEffect.kt` |
 
 ### `legacy/src/main/java/alfheim/common/potion/`
 
@@ -2182,3 +2182,4 @@ python3 tools/check_inventory.py
 | `alexsocol/asjlib/ItemNBTHelper.kt` | 149 | КТ-1 | всё | |
 | `alexsocol/asjlib/math/Vector3.kt` | 391 | КТ-1 | всё, кроме `glVertex` | |
 | `alexsocol/asjlib/math/Quaternion.kt` | 94 | КТ-1 | всё | без правок |
+| `alexsocol/asjlib/network/ASJPacket.kt` | 143 | КТ-1 | всё | работу coremod `ASJPacketCompleter` (запись и чтение полей пакета) делает отражение |

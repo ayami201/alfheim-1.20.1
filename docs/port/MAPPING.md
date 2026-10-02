@@ -8,6 +8,15 @@
 при первом использовании их сверяют с исходниками 1.20.1, Forge 47.4.23 или
 Botania 456 и ставят ✓. Если оказалось иначе — строку исправляют.
 
+## Общие приёмы
+
+| Приём | Когда | Пример |
+|---|---|---|
+| Тип подключается под именем 1.7.10 | класс в 1.20.1 только переименован, а строк автора с ним много | `import net.minecraft.world.entity.player.Player as EntityPlayer`, `import net.minecraft.server.level.ServerPlayer as EntityPlayerMP` — с пометкой `// PORT:` у импорта |
+| Имена полей 1.7.10 — частными свойствами внизу класса | поле только переименовано, смысл тот же | `private val Entity.posX get() = x` в `Vector3` |
+| Ветка, которой нужна механика другой КТ, — `Unit` и закомментированный код автора под ней | `when` по перечислению должен остаться полным | ветки пакетов `Message1d`, `Message2d` |
+| Блок `/* PORT: по мере надобности … */` | функция библиотеки ASJCore ещё не нужна порту | `Extensions.kt`, `ASJUtilities.kt` |
+
 ## Имена и metadata
 
 | Было | Стало | Примечание |
@@ -80,7 +89,18 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 |---|---|---|
 | `eventForge()` / `eventFML()` (asjlib) | `MinecraftForge.EVENT_BUS.register(...)` | события жизненного цикла мода — на шине мода |
 | `cpw.mods.fml…SubscribeEvent` | `net.minecraftforge.eventbus.api.SubscribeEvent` | |
-| `SimpleNetworkWrapper`, `IMessage` | `SimpleChannel`, encoder / decoder / handler | порядок полей — как у автора |
+| `SimpleNetworkWrapper`, `IMessage` | `SimpleChannel`; `ASJPacket.toBytes` / `fromBytes` / `create`, обработчик `AlfheimPacket.onMessage` | ✓ поля пишет `ASJPacket`, как coremod `ASJPacketCompleter`: свои поля класса пакета, не static и не final, в порядке объявления, после `toCustomBytes`. Обработка — в основном потоке (`enqueueWork`) |
+| регистрация пакета для обеих сторон (`Side.CLIENT` и `Side.SERVER`) | второй раз — без привязки к направлению | ✓ в `SimpleChannel` класс пакета — ключ кодека |
+| `sendToDimension(packet, dimId)` | `sendToDim(packet, ResourceKey<Level>)`, `PacketDistributor.DIMENSION` | ✓ номеров измерений нет |
+| `NetworkRegistry.TargetPoint(dim, x, y, z, range)` | `alfheim.port.legacy.TargetPoint(level.dimension(), x, y, z, range)` | ✓ радиус как у автора; в Forge он в квадрате, переводит `toForge()` |
+| `cpw.mods.fml.relauncher.Side` | `net.minecraftforge.fml.LogicalSide` | ✓ те же `CLIENT` / `SERVER`; `@SideOnly` → `@OnlyIn(Dist.…)` |
+| `player.playerNetServerHandler.kickPlayerFromServer(text)` | `player.connection.disconnect(Component.literal(text))` | ✓ |
+| `commandSenderName` игрока | `gameProfile.name` | ✓ |
+| `MinecraftServer.getServer().configurationManager.playerEntityList` | `ServerLifecycleHooks.getCurrentServer().playerList.players` | ✓ |
+| `PlayerEvent.PlayerLoggedInEvent` / `PlayerLoggedOutEvent` (FML) `.player` | `PlayerEvent.PlayerLoggedInEvent` / `PlayerLoggedOutEvent` (Forge) `.entity` | ✓ |
+| `TickEvent` (FML) | `net.minecraftforge.event.TickEvent` | ✓ на шине Forge |
+| своё событие без конструктора без аргументов | как есть | ✓ шина Forge дописывает его сама, как FML 1.7.10 (`PortNetworkTest.eventsAcceptListeners`) |
+| `javax.xml.bind…HexBinaryAdapter().marshal(bytes)` | `HexFormat.of().withUpperCase().formatHex(bytes)` | ✓ JAXB убран из Java 11 |
 | `Configuration` | `ForgeConfigSpec` через прослойку `alfheim.port.config.Configuration` | ✓ SPEC, Р-12; подробности — раздел «Файлы конфига» |
 | `CommandBase` | Brigadier, `RegisterCommandsEvent` | имена и аргументы — как у автора |
 | `ClientRegistry.registerKeyBinding` | `RegisterKeyMappingsEvent` | |

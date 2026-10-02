@@ -11,7 +11,7 @@
 - [x] Конфиг: `AlfheimConfigHandler`, `AlfheimPreConfigHandler` → ForgeConfigSpec (SPEC, Р-12); опции, потерявшие смысл, — в MAPPING.md; сверка опций с автором скриптом в CI — `config/Alfheim/core.toml`, `mod.toml`, `client.toml`; 205 опций автора: 57 удалены, 13 в клиентском файле, 135 в файлах сервера со значениями автора (`python3 tools/check_config.py`)
 - [ ] ASJCore: `ASJUtilities`, `Extensions`, `ItemNBTHelper`, `math` — то, что нужно КТ-1 и КТ-2
 - [ ] Прослойка `alfheim.port.legacy` — минимум для КТ-2 (SPEC, Р-4)
-- [ ] Сеть: канал `SimpleChannel` и регистрация пакетов автора (SPEC, Р-11)
+- [x] Сеть: канал `SimpleChannel` и регистрация пакетов автора (SPEC, Р-11) — `NetworkService`, `ASJPacket`, `AlfheimPacket`, 9 общих пакетов (ветки механик ждут свои КТ), `ContributorsPrivacyHelper`; GameTest `PortNetworkTest`
 - [ ] Регистрация: DeferredRegister, правило имён, `src/main/resources/alfheim/legacy_ids.json` (SPEC, Р-5)
 - [ ] Вкладка творческого режима `AlfheimTab`
 - [ ] `core/util`, `core/helper`, нужное из `api/`, прокси, общие обработчики событий — без частей, которым нужны механики следующих КТ
@@ -74,6 +74,12 @@ python3 tools/check_inventory.py && python3 tools/check_hooks.py
 - 02.10.2026 — `Vector3.kt` — ошибки автора перенесены как есть: `fromEntityCenter` для своего игрока на клиенте даёт точку на 1.62 ниже центра (posYp и yOffset вычитаются дважды); `isInside` сравнивает `y` с `maxY` вместо `minY`; `vecTileDistance`, `entityTileDistance` считают `x - xCoord + 0.5` вместо `x - (xCoord + 0.5)`.
 - 02.10.2026 — позиции сущностей — в 1.7.10 `posY` предметов, сфер опыта, падающих блоков, TNT, лодок и вагонеток был в центре хитбокса (`yOffset = height / 2`), в 1.20.1 `y` у всех — низ хитбокса. `Vector3.fromEntity` для них ниже на полвысоты (у предмета — на 0.125). Свой игрок на клиенте: в 1.7.10 `posY` — уровень глаз, в 1.20.1 — ног; это учитывается при переносе каждого места, где читается `posY` своего игрока.
 - 02.10.2026 — `ItemNBTHelper.kt` — тег зачарований `"ench"` → `"Enchantments"`: `setCompound` по-прежнему не затирает зачарования.
+
+- 02.10.2026 — `ASJPacket.kt` — поля пакетов автора в 1.7.10 записывал coremod ASJCore (`ASJPacketCompleter`), он же дописывал конструктор без аргументов. В порту то же делает `ASJPacket` отражением: те же поля в том же порядке; пакет для чтения создаётся без конструктора, как раньше. Проверяет `PortNetworkTest`.
+- 02.10.2026 — `AlfheimPacket.kt` — пакеты обрабатываются в основном потоке (`enqueueWork`), у автора — прямо в сетевом. Из сетевого потока 1.20.1 нельзя трогать мир и игрока. Для игрока разница — не больше одного тика.
+- 02.10.2026 — `NetworkService.kt` — версия протокола канала равна версии мода: клиент и сервер с разными версиями порта не соединятся (в 1.7.10 версии сверял FML). Пакеты, которые ходят в обе стороны (`MessageContributor`, `MessageNI`), регистрируются второй раз без привязки к стороне.
+- 02.10.2026 — пакеты — ветка `M0dc.MTSPELL` выпала вместе с MineTweaker: её шлёт только `CommandMTSpellInfo`. Ветка `M1d.RLCM` ждёт стадию 2: её шлют только диалоги эльфов (WIP, SPEC п. 6). Ветка `M1l.SEED` (зерно мира на клиенте) — КТ-5: в 1.20.1 зерна нет в данных клиентского мира.
+- 02.10.2026 — `ContributorsPrivacyHelper.kt` — `HexBinaryAdapter` из JAXB (в Java 17 его нет) заменён на `HexFormat`, запись та же: заглавные буквы.
 
 ## Журнал решений
 
