@@ -10,13 +10,18 @@ src/main/resources/assets/<…>/lang/<en_us|ru_ru|zh_cn>.json.
 1.20.1 при загрузке сами заменяют на %s.
 
 Ключи:
-- переименовываются по разделу "lang" файла src/main/resources/alfheim/legacy_ids.json (SPEC, Р-5);
+- переименовываются по разделу "lang" файла src/generated/resources/alfheim/legacy_ids.json (SPEC, Р-5;
+  его строит генерация данных);
 - не переносятся ключи из REMOVED ниже — вещей, которых в порту нет.
+
+Имена вещей: у каждого блока и предмета из legacy_ids.json есть имя на английском и русском (ROADMAP, КТ-2),
+кроме тех, у которых его не было и у автора (NO_NAME_IN_ORIGINAL ниже).
 
 Запуск из корня репозитория:
     python3 tools/convert_lang.py           записать .json
     python3 tools/convert_lang.py --check   сверить .json с .lang (CI): число ключей = ключи автора
-                                            минус удалённые, переименования применены, файлы не правлены руками
+                                            минус удалённые, переименования применены, файлы не правлены руками,
+                                            у каждой вещи есть имя
 """
 import fnmatch
 import json
@@ -27,7 +32,7 @@ NAMESPACES = ["alfheim", "botania"]
 LANGS = ["en_US", "ru_RU", "zh_CN"]
 SRC = "legacy/src/main/resources/assets/%s/lang/%s.lang"
 DST = "src/main/resources/assets/%s/lang/%s.json"
-LEGACY_IDS = "src/main/resources/alfheim/legacy_ids.json"
+LEGACY_IDS = "src/generated/resources/alfheim/legacy_ids.json"
 
 # Ключи, которые не переносятся: шаблон fnmatch → причина
 REMOVED = [
@@ -47,6 +52,13 @@ REMOVED = [
     ("elementiumClusterMeta", "подпись удалённой настройки (MAPPING.md)"),
     ("overrideCoFHCollisionCheck", "подпись удалённой настройки (MAPPING.md)"),
 ]
+
+# Языки, на которых у каждой вещи должно быть имя (ROADMAP, КТ-2)
+NAMED_LANGS = ["en_us", "ru_ru"]
+
+# Ключи имён, которых нет у автора: ключ → язык → почему
+NO_NAME_IN_ORIGINAL = {
+}
 
 
 def parse_lang(path):
@@ -86,6 +98,38 @@ def dump(data):
     return json.dumps(data, ensure_ascii=False, indent="\t") + "\n"
 
 
+def name_keys():
+    """Ключ имени каждого блока и предмета из legacy_ids.json: block.<ns>.<id> или item.<ns>.<id>"""
+    with open(LEGACY_IDS, encoding="utf-8") as f:
+        ids = json.load(f)
+
+    def new_ids(section):
+        out = []
+        for value in ids[section].values():
+            for new in (value.values() if isinstance(value, dict) else [value]):
+                out.append(new.split("[")[0])
+        return out
+
+    blocks = set(new_ids("blocks"))
+    keys = set()
+    for new in blocks:
+        keys.add("block." + new.replace(":", "."))
+    for new in new_ids("items"):
+        keys.add(("block." if new in blocks else "item.") + new.replace(":", "."))
+    return sorted(keys)
+
+
+def check_names():
+    errors = []
+    for lang in NAMED_LANGS:
+        with open(DST % ("alfheim", lang), encoding="utf-8") as f:
+            names = json.load(f)
+        for key in name_keys():
+            if key not in names and lang not in NO_NAME_IN_ORIGINAL.get(key, {}):
+                errors.append("%s: нет имени %s" % (lang, key))
+    return errors
+
+
 def main():
     check = "--check" in sys.argv
     with open(LEGACY_IDS, encoding="utf-8") as f:
@@ -113,6 +157,8 @@ def main():
                 with open(dst, "w", encoding="utf-8") as f:
                     f.write(text)
             print("%-45s у автора %4d, удалено %3d, переименовано %3d, в .json %4d" % (dst, len(entries), len(removed), len(renamed), len(out)))
+    if check:
+        errors += check_names()
     if errors:
         print("\nОШИБКИ (%d):" % len(errors))
         for e in errors:
