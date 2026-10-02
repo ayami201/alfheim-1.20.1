@@ -1,4 +1,4 @@
-# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, GameTest-ы на сервере, сверка описи, врезок, переводов и настроек.
+# CI порта (ROADMAP, КТ-0; SPEC, Р-16): сборка, GameTest-ы на сервере, сверка описи, врезок, переводов, звуков и настроек.
 # jar из артефакта «alfheim-jar» владелец ставит в свою сборку для проверки по чек-листу PR.
 name: Build
 
@@ -47,6 +47,10 @@ jobs:
 
       - name: Сборка
         run: ./gradlew build
+
+      # Таблица звуков 1.7.10 → 1.20.1 собрана скриптом из sounds.json Mojang и Botania, руками не правится
+      - name: Сверка таблицы звуков
+        run: python3 tools/legacy_sounds.py --check
 
       - name: GameTest-ы на сервере
         run: ./gradlew runGameTestServer
