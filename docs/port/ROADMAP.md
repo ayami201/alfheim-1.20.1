@@ -201,8 +201,7 @@ Tinkers' Construct 3 (Р-15, SPEC п. 7). Части
 `ModdedDimensionsIntegration` и `TwilightForestLoaded` для Twilight Forest и
 Aether (SPEC, п. 7). Проверка с ExtraBotany: Reburn и врезки автора в рендер
 ExtraBotany (SPEC, п. 7). Достижения (advancements). Оставшиеся строки HOOKS.md.
-Экран настроек мода, как у автора (**Mods** → **Alfheim** → **Config**), — свой
-экран порта; мод Configured необязателен (SPEC, Р-12).
+Настройки мода видны и меняются в игре через мод Configured (SPEC, Р-12).
 Вопросы владельцу о чужих материалах и обращениях в сеть (SPEC, п. 8).
 Проверка в полной сборке владельца (Connector, Embeddium, Oculus).
 
