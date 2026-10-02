@@ -2,6 +2,38 @@ package alexsocol.asjlib
 
 // PORT: импорты 1.7.10 заменены на 1.20.1. Функции, которые порту ещё не понадобились, закомментированы блоками
 // «PORT: по мере надобности»: их переносит КТ, которой они нужны, и сверяет смысл с 1.20.1
+import alfheim.port.legacy.Block1710
+import alfheim.port.legacy.Material
+import alfheim.port.legacy.Material.Companion.air
+import alfheim.port.legacy.Material.Companion.anvil
+import alfheim.port.legacy.Material.Companion.cactus
+import alfheim.port.legacy.Material.Companion.cake
+import alfheim.port.legacy.Material.Companion.carpet
+import alfheim.port.legacy.Material.Companion.circuits
+import alfheim.port.legacy.Material.Companion.clay
+import alfheim.port.legacy.Material.Companion.cloth
+import alfheim.port.legacy.Material.Companion.coral
+import alfheim.port.legacy.Material.Companion.craftedSnow
+import alfheim.port.legacy.Material.Companion.dragonEgg
+import alfheim.port.legacy.Material.Companion.glass
+import alfheim.port.legacy.Material.Companion.gourd
+import alfheim.port.legacy.Material.Companion.grass
+import alfheim.port.legacy.Material.Companion.ground
+import alfheim.port.legacy.Material.Companion.ice
+import alfheim.port.legacy.Material.Companion.iron
+import alfheim.port.legacy.Material.Companion.leaves
+import alfheim.port.legacy.Material.Companion.packedIce
+import alfheim.port.legacy.Material.Companion.plants
+import alfheim.port.legacy.Material.Companion.portal
+import alfheim.port.legacy.Material.Companion.redstoneLight
+import alfheim.port.legacy.Material.Companion.rock
+import alfheim.port.legacy.Material.Companion.sand
+import alfheim.port.legacy.Material.Companion.snow
+import alfheim.port.legacy.Material.Companion.sponge
+import alfheim.port.legacy.Material.Companion.tnt
+import alfheim.port.legacy.Material.Companion.vine
+import alfheim.port.legacy.Material.Companion.web
+import alfheim.port.legacy.Material.Companion.wood
 import alfheim.port.legacy.StatCollector
 import net.minecraft.commands.CommandSource as ICommandSender
 import net.minecraft.network.chat.Component
@@ -751,21 +783,24 @@ object ASJUtilities {
 	fun isBlockReplaceable(block: Block): Boolean {
 		return block === Blocks.air || block === Blocks.snow_layer || block.material in replaceableMaterials
 	}
+	*/
 	
 	@JvmStatic
 	fun soundFromMaterial(mat: Material) = when (mat) {
-		anvil                                      -> Block.soundTypeAnvil
-		air, cake, carpet, cloth, sponge, tnt, web -> Block.soundTypeCloth
-		glass, ice, packedIce, portal              -> Block.soundTypeGlass
-		cactus, coral, grass, leaves, plants, vine -> Block.soundTypeGrass
-		ground, clay                               -> Block.soundTypeGravel
-		iron                                       -> Block.soundTypeMetal
-		sand                                       -> Block.soundTypeSand
-		craftedSnow, snow                          -> Block.soundTypeSnow
-		circuits, dragonEgg, redstoneLight, rock   -> Block.soundTypeStone
-		gourd, wood                                -> Block.soundTypeWood
+		anvil                                      -> Block1710.soundTypeAnvil
+		air, cake, carpet, cloth, sponge, tnt, web -> Block1710.soundTypeCloth
+		glass, ice, packedIce, portal              -> Block1710.soundTypeGlass
+		cactus, coral, grass, leaves, plants, vine -> Block1710.soundTypeGrass
+		ground, clay                               -> Block1710.soundTypeGravel
+		iron                                       -> Block1710.soundTypeMetal
+		sand                                       -> Block1710.soundTypeSand
+		craftedSnow, snow                          -> Block1710.soundTypeSnow
+		circuits, dragonEgg, redstoneLight, rock   -> Block1710.soundTypeStone
+		gourd, wood                                -> Block1710.soundTypeWood
 		else                                       -> null
 	}
+	
+	/* PORT: по мере надобности — сообщения в чат
 	
 	private val format = DecimalFormat("000")
 	private fun time(world: World?) = "[${format.format(world?.let { it.totalWorldTime % 1000 } ?: 0)}]"
