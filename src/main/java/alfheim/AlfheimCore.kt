@@ -8,13 +8,14 @@ import alfheim.api.ModInfo.MODID
 import alfheim.common.core.handler.*
 //import alfheim.common.core.handler.ragnarok.*
 //import alfheim.common.core.proxy.*
-//import alfheim.common.core.util.*
+import alfheim.common.core.util.*
 //import alfheim.common.integration.minetweaker.*
 //import alfheim.common.integration.thaumcraft.*
 //import alfheim.common.integration.tinkersconstruct.*
 //import alfheim.common.integration.travellersgear.*
 //import alfheim.common.integration.waila.*
 import alfheim.common.network.*
+import alfheim.port.registry.AlfheimRegisters
 import net.minecraft.world.level.storage.LevelResource
 import net.minecraftforge.event.server.ServerStartingEvent
 import net.minecraftforge.eventbus.api.EventPriority
@@ -67,9 +68,12 @@ object AlfheimCore {
 //		}
 	
 	init {
-		// PORT: КТ-1 — AlfheimTab, TimeHandler
-//		AlfheimTab
-//		
+		// PORT: реестры мода — на шину мода до события регистрации (DeferredRegister, SPEC, Р-5)
+		AlfheimRegisters.register(MOD_BUS)
+		
+		AlfheimTab
+		
+		// PORT: КТ-1 — TimeHandler
 //		jingleTheBells = (TimeHandler.month == 12 && TimeHandler.day >= 16 || TimeHandler.month == 1 && TimeHandler.day <= 8)
 //		winter = TimeHandler.month in arrayOf(1, 2, 12, 13)
 		

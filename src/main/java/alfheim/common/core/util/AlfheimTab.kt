@@ -1,5 +1,16 @@
 package alfheim.common.core.util
 
+// PORT: импорты 1.20.1 — первыми; импорты автора закомментированы до КТ, в которых появятся их блоки и предметы
+import alfheim.api.ModInfo
+import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.port.registry.AlfheimRegisters
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.*
+import net.minecraft.world.level.block.Block
+import net.minecraftforge.registries.RegistryObject
+import vazkii.botania.api.BotaniaRegistries
+/*
 import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 import alfheim.common.block.AlfheimBlocks
@@ -332,28 +343,55 @@ import net.minecraft.item.*
 import vazkii.botania.common.block.ModBlocks
 import vazkii.botania.common.item.ModItems
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower
+*/
 
 @Suppress("MemberVisibilityCanBePrivate", "DuplicatedCode")
-object AlfheimTab: CreativeTabs("Alfheim") {
+// PORT: CreativeTabs → вкладка CreativeModeTab из реестра (tab ниже), id alfheim:alfheim. Свойства вкладки 1.7.10
+// задаёт её builder: значок — getTabIconItem, фон — backgroundImageName, без заголовка — setNoTitle,
+// поиск — hasSearchBar, содержимое — displayAllReleventItems в том же порядке
+object AlfheimTab {
+	
+	val tab: RegistryObject<CreativeModeTab> = AlfheimRegisters.CREATIVE_MODE_TABS.register("alfheim") {
+		CreativeModeTab.builder()
+			.title(Component.translatable("itemGroup.Alfheim"))
+			.icon { getTabIconItem() }
+			// PORT: путь текстуры в 1.20.1 — только строчными: tab_Alfheim.png → alfheim:…/tab_alfheim.png
+			.withBackgroundLocation(ResourceLocation(ModInfo.MODID, "textures/gui/container/creative_inventory/tab_alfheim.png"))
+			.hideTitle()
+			.apply { if (hasSearchBar()) withSearchBar() }
+			// PORT: в 1.7.10 вкладка шла сразу за вкладкой Botania — в порядке регистрации
+			.withTabsAfter(BotaniaRegistries.BOTANIA_TAB_KEY)
+			.displayItems { _, output -> ArrayList<Any?>().also { displayAllReleventItems(it) }.forEach { output.accept(it as ItemStack) } }
+			.build()
+	}
 	
 	val subtiles = HashSet<String>()
 	
-	override fun getTabIconItem() = alfheimPortal.toItem()
+	// PORT: КТ-6 — значок вкладки — портал (alfheimPortal). Пока его нет, значок пуст; пустую вкладку игра не показывает
+	fun getTabIconItem() = ItemStack.EMPTY
+//	override fun getTabIconItem() = alfheimPortal.toItem()
 	
 	lateinit var list: MutableList<Any?>
 	
+	// PORT: фон и «без заголовка» задаёт builder вкладки (tab выше)
+	/*
 	init {
 		backgroundImageName = "Alfheim.png"
 		setNoTitle()
 	}
+	*/
 	
-	override fun hasSearchBar() = AlfheimConfigHandler.searchTabAlfheim
+	// PORT: в 1.20.1 строка поиска задаётся при регистрации вкладки, поэтому опция действует после перезапуска игры
+	fun hasSearchBar() = AlfheimConfigHandler.searchTabAlfheim
 	
-	override fun displayAllReleventItems(list: MutableList<Any?>) {
+	fun displayAllReleventItems(list: MutableList<Any?>) {
 		this.list = list
 		
+		/* PORT: КТ-4
 		`DEV-NULL`?.let { addItem(it) }
+		*/
 		
+		/* PORT: КТ-3
 		addBlock(manaInfuser)
 		addBlock(manaTuner)
 		addBlock(anomalyHarvester)
@@ -363,14 +401,26 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(corporeaSparkBase)
 		addBlock(enderActuator)
 		addBlock(bottomlessChest)
+		*/
+		/* PORT: КТ-6
 		addBlock(alfheimPortal)
+		*/
+		/* PORT: КТ-3
 		addBlock(tradePortal)
 		addBlock(realityAnchor)
+		*/
+		/* PORT: КТ-2
 		addBlock(rpc)
+		*/
+		/* PORT: КТ-3
 		addBlock(Blocks.furnace, 8)
 		addBlock(redStringObserver)
 		addBlock(redStringWatcher)
+		*/
+		/* PORT: КТ-2
 		addBlock(redstoneAttractor)
+		*/
+		/* PORT: КТ-3
 		addBlock(redstoneRelay)
 		addBlock(ModBlocks.spreader, 4)
 //		addBlock(ModBlocks.spreader, 5) TODO back
@@ -385,13 +435,19 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(ModBlocks.lightRelay, 2)
 		addBlock(ModBlocks.lightRelay, 3)
 		addBlock(livingwoodFunnel)
+		*/
+		/* PORT: КТ-2
 		addBlock(amplifier)
 		addBlock(irisLamp)
 		addBlock(kindling)
 		addBlock(alfStorage)
 		addBlock(softStorage)
+		*/
+		/* PORT: КТ-3
 		addBlock(barrel)
+		*/
 		
+		/* PORT: КТ-2
 		if (AlfheimCore.winter) {
 			addBlock(snowGrass)
 			addBlock(snowLayer)
@@ -401,9 +457,17 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(AlfheimItems.eventResource)
 		addItem(elvenFood)
 		addItem(wiltedLotus)
+		*/
+		/* PORT: КТ-4
 		addItem(ModItems.ancientWill, 6)
+		*/
+		/* PORT: КТ-2
 		addItem(deathSeed)
+		*/
+		/* PORT: КТ-4
 		addItem(warBanner)
+		*/
+		/* PORT: КТ-8
 		addItem(flugelHead)
 		addItem(discFlugel)
 		addItem(discFlugelUltra)
@@ -411,7 +475,9 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(discSurtr)
 		addItem(discFenrir)
 		addItem(fenrirLoot)
+		*/
 		
+		/* PORT: КТ-4
 		addItem(priestCloak)
 		addItem(aesirCloak)
 		addItem(balanceCloak)
@@ -459,12 +525,22 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(goddesCharm)
 		
 		addItem(astrolabe)
+		*/
+		/* PORT: КТ-2
 		addItem(triquetrum)
 		addItem(armilla)
+		*/
+		/* PORT: КТ-4
 		addItem(enlighter)
 		addItem(lootInterceptor)
+		*/
+		/* PORT: КТ-2
 		addItem(hyperBucket)
+		*/
+		/* PORT: КТ-4
 		addItem(manaMirrorImba)
+		*/
+		/* PORT: КТ-3
 		addItem(invisibleFlameLens)
 		
 		(22..(21 + AlfheimClassTransformer.moreLenses)).forEach {
@@ -472,10 +548,14 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		}
 		
 		addItem(ModItems.lens, 5000)
+		*/
 		
+		/* PORT: КТ-2
 		addItem(soulHorn)
 		addItem(soulHorn, 1)
+		*/
 		
+		/* PORT: КТ-4
 		addItem(rodMuspelheim)
 		addItem(rodNiflheim)
 		addItem(rodLightning)
@@ -489,8 +569,14 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(rodRedstone)
 		addItem(rodSuperExchange)
 		addItem(rodGrass)
+		*/
+		/* PORT: КТ-2
 		addItem(chalk)
+		*/
+		/* PORT: КТ-3
 		addItem(corporeaRat)
+		*/
+		/* PORT: КТ-4
 		addItem(livingrockPickaxe)
 		addItem(terraHoe)
 		addItem(resonator)
@@ -545,7 +631,9 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addItem(trisDagger)
 		addItem(thrymAxe)
 		addItem(surtrSword)
+		*/
 		
+		/* PORT: КТ-2
 		addBlock(lightningWood)
 		addBlock(netherWood)
 		addBlock(circuitWood)
@@ -598,26 +686,38 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		
 		addBlock(grapesRed[0])
 		addBlock(grapesWhite)
+		*/
 		
+		/* PORT: КТ-3
 		subtiles.mapTo(list) {
 			ItemBlockSpecialFlower.ofType(it)
 		}
 		
 		addBlock(rainbowFlowerFloating)
+		*/
 		
+		/* PORT: КТ-7
 		if (AlfheimConfigHandler.enableMMO) addItem(paperBreak)
 		if (AlfheimConfigHandler.enableMMO) addItem(peacePipe)
+		*/
 		
+		/* PORT: КТ-5
 		addItem(spawnEgg)
+		*/
+		/* PORT: КТ-2
 		addItem(splashPotion)
 		addItem(fireGrenade)
 		
 		addBlock(airyVirus)
 		addBlock(snakeObject)
+		*/
 		
+		/* PORT: КТ-3
 		addBlock(powerStone)
 		list.removeAt(list.size - 5)
+		*/
 		
+		/* PORT: КТ-2
 		addBlock(dwarfLantern)
 		
 		addBlock(shrinePillar)
@@ -682,7 +782,9 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(dreamwoodFence)
 		addBlock(dreamwoodBarkFenceGate)
 		addBlock(dreamwoodFenceGate)
+		*/
 		
+		/* PORT: КТ-3
 		addBlock(gaiaButton)
 		
 		addBlock(floodLight)
@@ -693,7 +795,9 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		addBlock(doubleBlock)
 		addBlock(composite)
 		addItem(carver)
+		*/
 		
+		/* PORT: КТ-2
 		addBlock(irisDirt)
 		addBlock(rainbowDirt)
 		addBlock(auroraDirt)
@@ -739,42 +843,59 @@ object AlfheimTab: CreativeTabs("Alfheim") {
 		
 		addBlock(irisSapling)
 		addItem(irisSeeds)
+		*/
+		/* PORT: КТ-3
 		addItem(starPlacer)
 		addItem(starPlacer2)
+		*/
 		
+		/* PORT: КТ-4
 		addItem(coatOfArms)
+		*/
 		
+		/* PORT: КТ-6
 		addBlock(schemaController)
 		addBlock(schemaFiller)
 		addBlock(schemaMarker)
 		addBlock(schemaGenerator)
 		addBlock(schemaAnnihilator)
+		*/
 		
+		/* PORT: КТ-4
 		if (ASJUtilities.isClient) {
 			if (ContributorsPrivacyHelper.isCorrect(mc.thePlayer?.commandSenderName ?: "null", "AlexSocol"))
 				addItem(royalStaff)
 		}
 		
 		addItem(gaiaSlayer)
+		*/
+		/* PORT: КТ-6
 		addItem(floatingIslandGenerator)
+		*/
 		
 		additionalDisplays.forEach { it.invoke() }
 	}
 	
+	// PORT: КТ-2 — getSubBlocks / getSubItems выдавали все варианты вещи (metadata, NBT). В 1.20.1 metadata стала
+	// отдельными вещами (SPEC, Р-5), а своих вариантов у вещи в списке вкладки нет: как выдавать варианты, решает
+	// КТ-2 вместе с первыми такими вещами. Пока — одна вещь
 	fun addBlock(block: Block) {
-		block.getSubBlocks(block.toItem(), this, list)
+		addStack(ItemStack(block))
+//		block.getSubBlocks(block.toItem(), this, list)
 	}
 	
 	fun addItem(item: Item) {
-		item.getSubItems(item, this, list)
+		addStack(ItemStack(item))
+//		item.getSubItems(item, this, list)
 	}
 	
+	// PORT: КТ-2 — вещь по старому имени и metadata найдёт legacy_ids.json (SPEC, Р-5), когда в нём будут записи
 	fun addBlock(block: Block, meta: Int) {
-		addStack(ItemStack(block, 1, meta))
+//		addStack(ItemStack(block, 1, meta))
 	}
 	
 	fun addItem(item: Item, meta: Int) {
-		addStack(ItemStack(item, 1, meta))
+//		addStack(ItemStack(item, 1, meta))
 	}
 	
 	fun addStack(stack: ItemStack) {
