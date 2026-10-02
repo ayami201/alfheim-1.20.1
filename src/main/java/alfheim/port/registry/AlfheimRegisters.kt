@@ -22,6 +22,9 @@ object AlfheimRegisters {
 	
 	/** Все реестры — на шину мода; вызывается из конструктора мода, до события регистрации */
 	fun register(bus: IEventBus) {
+		// звуковые события автора — все сразу, по sounds.json
+		AlfheimSounds
+		
 		for (register in listOf(BLOCKS, ITEMS, BLOCK_ENTITY_TYPES, ENTITY_TYPES, MOB_EFFECTS, SOUND_EVENTS, CREATIVE_MODE_TABS))
 			register.register(bus)
 	}
