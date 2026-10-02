@@ -2,74 +2,81 @@
 
 package alfheim.common.core.handler
 
+// PORT: импорты 1.7.10 заменены на 1.20.1; импорты кода, который ещё не перенесён, закомментированы до его КТ
 import alexsocol.asjlib.*
-import alexsocol.asjlib.math.Vector3
-import alexsocol.patcher.event.*
-import alfheim.api.entity.*
-import alfheim.client.render.world.VisualEffectHandlerClient
-import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
-import alfheim.common.achievement.AlfheimAchievements
-import alfheim.common.core.handler.ragnarok.RagnarokHandler
+//import alexsocol.asjlib.math.Vector3
+//import alexsocol.patcher.event.*
+//import alfheim.api.entity.*
+//import alfheim.client.render.world.VisualEffectHandlerClient
+//import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
+//import alfheim.common.achievement.AlfheimAchievements
+//import alfheim.common.core.handler.ragnarok.RagnarokHandler
 import alfheim.common.core.helper.*
 import alfheim.common.core.util.*
-import alfheim.common.entity.EntityLolicorn
-import alfheim.common.entity.boss.EntityFlugel
-import alfheim.common.entity.item.EntityItemImmortalRelic
-import alfheim.common.item.AlfheimItems
-import alfheim.common.item.equipment.tool.ItemSoulSword
-import alfheim.common.item.relic.ItemTankMask
-import alfheim.common.network.*
-import alfheim.common.network.packet.*
-import alfheim.common.spell.darkness.SpellDecay
-import cpw.mods.fml.common.IFuelHandler
-import cpw.mods.fml.common.eventhandler.*
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
-import cpw.mods.fml.common.gameevent.TickEvent.*
-import cpw.mods.fml.common.registry.GameRegistry
-import net.minecraft.enchantment.*
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.monster.IMob
-import net.minecraft.entity.passive.EntityWolf
-import net.minecraft.entity.player.*
-import net.minecraft.init.Items
-import net.minecraft.item.ItemStack
-import net.minecraft.potion.*
-import net.minecraft.server.MinecraftServer
-import net.minecraft.util.*
-import net.minecraft.world.storage.DerivedWorldInfo
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.event.FuelBurnTimeEvent
-import net.minecraftforge.event.entity.EntityJoinWorldEvent
-import net.minecraftforge.event.entity.living.*
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
+//import alfheim.common.entity.EntityLolicorn
+//import alfheim.common.entity.boss.EntityFlugel
+//import alfheim.common.entity.item.EntityItemImmortalRelic
+//import alfheim.common.item.AlfheimItems
+//import alfheim.common.item.equipment.tool.ItemSoulSword
+//import alfheim.common.item.relic.ItemTankMask
+//import alfheim.common.network.*
+//import alfheim.common.network.packet.*
+//import alfheim.common.spell.darkness.SpellDecay
+//import cpw.mods.fml.common.IFuelHandler
+import net.minecraftforge.eventbus.api.*
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent
+//import cpw.mods.fml.common.gameevent.TickEvent.*
+//import cpw.mods.fml.common.registry.GameRegistry
+//import net.minecraft.enchantment.*
+//import net.minecraft.entity.EntityLivingBase
+//import net.minecraft.entity.item.EntityItem
+//import net.minecraft.entity.monster.IMob
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.animal.Wolf as EntityWolf
+import net.minecraft.server.level.ServerPlayer as EntityPlayerMP
+import net.minecraft.world.entity.player.Player as EntityPlayer
+import net.minecraft.world.item.Items
+//import net.minecraft.item.ItemStack
+//import net.minecraft.potion.*
+//import net.minecraft.server.MinecraftServer
+import net.minecraft.network.chat.Component
+//import net.minecraft.world.storage.DerivedWorldInfo
+//import net.minecraftforge.common.MinecraftForge
+//import net.minecraftforge.event.FuelBurnTimeEvent
+//import net.minecraftforge.event.entity.EntityJoinWorldEvent
+//import net.minecraftforge.event.entity.living.*
+//import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
 import net.minecraftforge.event.entity.player.*
-import net.minecraftforge.event.world.BlockEvent
-import ru.vamig.worldengine.WE_Biome
-import vazkii.botania.api.item.IRelic
-import vazkii.botania.api.recipe.ElvenPortalUpdateEvent
-import vazkii.botania.common.block.tile.TileAlfPortal
-import vazkii.botania.common.block.tile.string.TileRedStringFertilizer
-import vazkii.botania.common.entity.EntityDoppleganger
-import vazkii.botania.common.item.ModItems
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract as EntityInteractEvent
+//import net.minecraftforge.event.world.BlockEvent
+//import ru.vamig.worldengine.WE_Biome
+//import vazkii.botania.api.item.IRelic
+//import vazkii.botania.api.recipe.ElvenPortalUpdateEvent
+//import vazkii.botania.common.block.tile.TileAlfPortal
+//import vazkii.botania.common.block.tile.string.TileRedStringFertilizer
+//import vazkii.botania.common.entity.EntityDoppleganger
+//import vazkii.botania.common.item.ModItems
 import kotlin.math.*
 
 object EventHandler {
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	fun onPlayerLoggedIn(e: PlayerLoggedInEvent) {
-		val player = e.player as EntityPlayerMP
+		// PORT: событие FML → событие Forge, игрок — e.entity (MAPPING.md)
+		val player = e.entity as EntityPlayerMP
 		
 		if (InfoLoader.doneChecking && !InfoLoader.triedToWarnPlayer) {
 			InfoLoader.triedToWarnPlayer = true
 			for (s in InfoLoader.info) {
 				if (s.startsWith($$"$json"))
-					player.addChatMessage(IChatComponent.Serializer.func_150699_a(s.replace($$"$json", "")))
+					// PORT: IChatComponent.Serializer → Component.Serializer, addChatMessage → sendSystemMessage
+					player.sendSystemMessage(Component.Serializer.fromJson(s.replace($$"$json", ""))!!)
 				else
 					ASJUtilities.say(player, s)
 			}
 		}
 		
+		/* PORT: КТ-7 — режимы ESM и MMO, CardinalSystem, первый вход в Альфхейм
 		NetworkService.sendTo(Message2d(M2d.MODES, (if (AlfheimConfigHandler.enableElvenStory) 1 else 0).D, (if (AlfheimConfigHandler.enableMMO) 1 else 0).D), player)
 		CardinalSystem.transfer(player)
 		if (AlfheimConfigHandler.enableElvenStory) {
@@ -91,8 +98,10 @@ object EventHandler {
 			if (AlfheimConfigHandler.enableMMO)
 				NetworkService.sendTo(Message1d(M1d.DEATH_TIMER, AlfheimConfigHandler.deathScreenAddTime.D), player)
 		}
+		*/
 	}
 	
+	/* PORT: КТ-8 — Gaia Guardian (fixGaiaAbuse); КТ-6 — мобы в биомах WorldEngine; КТ-5 — зерно мира на клиенте (M1l.SEED)
 	@SubscribeEvent
 	fun onEntityJoinWorld(e: EntityJoinWorldEvent) {
 		if (e.entity is EntityDoppleganger)
@@ -113,7 +122,9 @@ object EventHandler {
 				e.playersWhoAttacked.add(it.commandSenderName)
 		}
 	}
+	*/
 	
+	/* PORT: КТ-6 — миры: порталы в Альфхейме и Нифльхейме
 	@SubscribeEvent
 	fun onNetherPortalActivation(e: NetherPortalActivationEvent) {
 		if (e.worldObj.provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim ||
@@ -124,7 +135,9 @@ object EventHandler {
 	fun onAlfPortalUpdate(e: ElvenPortalUpdateEvent) {
 		if (e.portalTile.worldObj.provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim && (e.portalTile as TileAlfPortal).ticksOpen >= 0) (e.portalTile as TileAlfPortal).ticksOpen = 0
 	}
+	*/
 	
+	/* PORT: КТ-8 — голова Флюгеля
 	val beheadItems = arrayOf(ModItems.elementiumAxe, AlfheimItems.wireAxe)
 	
 	@SubscribeEvent
@@ -137,7 +150,9 @@ object EventHandler {
 		head.delayBeforeCanPickup = 10
 		event.drops.add(head)
 	}
+	*/
 	
+	/* PORT: КТ-2 — топливо: IFuelHandler у блоков и предметов КТ-2; в 1.20.1 событие FurnaceFuelBurnTimeEvent
 	@Suppress("DEPRECATION") // stfu not providing alternative
 	@SubscribeEvent(priority = EventPriority.HIGHEST) // highest priority for other mods to change values
 	fun onFuelValueCheck(e: FuelBurnTimeEvent) {
@@ -149,7 +164,9 @@ object EventHandler {
 			e.result = Event.Result.ALLOW
 		}
 	}
+	*/
 	
+	/* PORT: КТ-2 — зелья (берсерк, маг, ниндзя — без MMO); КТ-7 — MMO: группы, заклинания, экран смерти
 	// ################################### POTIONS & STUFF ####################################
 	// not decentralized because of importance of the order
 	
@@ -287,20 +304,26 @@ object EventHandler {
 		
 		RagnarokHandler.consumePriestEmblem(e.source.entity as? EntityPlayer ?: return, e.entityLiving, e.source !is ItemSoulSword.DamageSourceSoulSword)
 	}
+	*/
 	
+	/* PORT: КТ-5 — EntityLolicorn
 	@SubscribeEvent
 	fun onServerTick(e: ServerTickEvent) {
 		if (e.phase == Phase.START)
 			EntityLolicorn.tick()
 	}
+	*/
 	
+	/* PORT: КТ-4 — предметы
 	@SubscribeEvent
 	fun onBlockBreak(e: BlockEvent.BreakEvent) {
 		val stack = e.player.heldItem ?: return
 		if (stack.item === AlfheimItems.flugelSoul && stack.meta != 0xFACE17) e.isCanceled = true
 		if (stack.item === ModItems.twigWand || stack.item === AlfheimItems.carver || stack.item === AlfheimItems.astrolabe) e.isCanceled = true
 	}
+	*/
 	
+	/* PORT: КТ-7 — MMO: экран смерти и группы; КТ-7 — ESM: пука
 	@SubscribeEvent
 	fun onLivingUpdate(e: LivingUpdateEvent) {
 		if (!AlfheimConfigHandler.enableMMO) return
@@ -338,7 +361,9 @@ object EventHandler {
 			seg.lastPos = pos
 		}
 	}
+	*/
 	
+	/* PORT: КТ-4 — реликвии
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	fun onRelicItemAppear(e: EntityJoinWorldEvent) {
 		val entity = e.entity as? EntityItem ?: return
@@ -360,7 +385,9 @@ object EventHandler {
 			delayBeforeCanPickup = 40
 		}.spawn()
 	}
+	*/
 	
+	/* PORT: КТ-2 — зелья: события LivingPotionEvent ASJCore → MobEffectEvent Forge, пакет MessageEffect
 	@SubscribeEvent
 	fun onNewPotionEffect(e: LivingPotionEvent.Add.Post) {
 		if (ASJUtilities.isServer) NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, e.effect.potionID, e.effect.duration, e.effect.amplifier, false, 1))
@@ -389,6 +416,7 @@ object EventHandler {
 	fun onFinishedPotionEffect(e: LivingPotionEvent.Remove.Post) {
 		if (ASJUtilities.isServer) NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, e.effect.potionID, e.effect.duration, e.effect.amplifier, false, -1))
 	}
+	*/
 	
 //	@SubscribeEvent
 //	fun onEntityUpdate(e: EntityUpdateEvent) {
@@ -397,11 +425,13 @@ object EventHandler {
 	
 	@SubscribeEvent
 	fun onInteract(e: EntityInteractEvent) {
-		if (!e.entityPlayer.isSneaking && e.entityPlayer.heldItem?.item === Items.stick && ContributorsPrivacyHelper.contributors.values.contains(e.entityPlayer.commandSenderName))
+		// PORT: Items.stick → Items.STICK
+		if (!e.entityPlayer.isSneaking && e.entityPlayer.heldItem?.item === Items.STICK && ContributorsPrivacyHelper.contributors.values.contains(e.entityPlayer.commandSenderName))
 			if (e.target !== e.entityPlayer.riddenByEntity)
 				e.entityPlayer.mountEntity(e.target)
 	}
 	
+	/* PORT: КТ-6 — сон в Альфхейме
 	@SubscribeEvent
 	fun onPlayerWakeUp(e: ServerWakeUpEvent) { // because there is some bug in sleeping
 		if (AlfheimConfigHandler.alfheimSleepExtraCheck && e.world.provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim && e.world.worldInfo is DerivedWorldInfo && e.world.gameRules.getGameRuleBooleanValue("doDaylightCycle")) {
@@ -409,7 +439,9 @@ object EventHandler {
 			(e.world.worldInfo as DerivedWorldInfo).theWorldInfo.worldTime = i - i % 24000L
 		}
 	}
+	*/
 	
+	/* PORT: КТ-3 — красная нить Botania
 	// Red String Nutrifier (Fertilizer) fix
 	@SubscribeEvent
 	fun onBonemeal(e: BonemealEvent) {
@@ -428,7 +460,9 @@ object EventHandler {
 			return
 		}
 	}
+	*/
 	
+	/* PORT: КТ-8 — Gaia Guardian
 	@SubscribeEvent
 	fun replaceGaiaDropsInAlfheim(e: LivingDropsEvent) {
 		if (e.entityLiving !is EntityDoppleganger) return
@@ -444,7 +478,9 @@ object EventHandler {
 			}
 		}
 	}
+	*/
 	
+	/* PORT: КТ-6 — холод и жар (SheerColdHandler)
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	fun applyHeatAndCold(e: SheerColdHandler.SheerColdTickEvent) {
 		val entity = e.entityLiving
@@ -478,11 +514,23 @@ object EventHandler {
 		
 		e.delta = min(e.delta!!, e.delta!! / sum) // minimal so that if other source heats - it won't override
 	}
+	*/
 	
 	@SubscribeEvent
 	fun worowalaSobak(e: EntityInteractEvent) {
 		val target = e.target as? EntityWolf ?: return
 		if (!target.isTamed || !ContributorsPrivacyHelper.isCorrect(e.entityPlayer, "GedeonGrays")) return
-		target.func_152115_b(e.entityPlayer.uniqueID.toString())
+		// PORT: func_152115_b (владелец по строке UUID) → setOwnerUUID
+		target.setOwnerUUID(e.entityPlayer.uuid)
 	}
+	
+	// PORT: имена 1.7.10 у событий и сущностей, смысл тот же (MAPPING.md, «Общие приёмы»)
+	private val PlayerInteractEvent.entityPlayer: EntityPlayer get() = entity
+	private val Entity.isSneaking get() = isShiftKeyDown
+	private val EntityPlayer.heldItem get() = mainHandItem.takeUnless { it.isEmpty }
+	private val EntityPlayer.commandSenderName: String get() = gameProfile.name
+	private val Entity.riddenByEntity get() = firstPassenger
+	private val EntityWolf.isTamed get() = isTame
+	// PORT: mountEntity 1.7.10 сажает без проверок, кроме кольца из всадников; startRiding с force — так же
+	private fun Entity.mountEntity(entity: Entity) = startRiding(entity, true)
 }

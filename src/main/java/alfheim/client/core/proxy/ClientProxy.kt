@@ -1,52 +1,53 @@
 package alfheim.client.core.proxy
 
+// PORT: импорты 1.7.10 заменены на 1.20.1; импорты кода, который ещё не перенесён, закомментированы до его КТ
 import alexsocol.asjlib.*
-import alexsocol.asjlib.render.*
+//import alexsocol.asjlib.render.*
 import alfheim.AlfheimCore
-import alfheim.api.ModInfo
-import alfheim.api.event.AlfheimModeChangedEvent
-import alfheim.api.item.DoubleBoundItemRender
-import alfheim.api.lib.*
+//import alfheim.api.ModInfo
+//import alfheim.api.event.AlfheimModeChangedEvent
+//import alfheim.api.item.DoubleBoundItemRender
+//import alfheim.api.lib.*
 import alfheim.client.core.handler.*
-import alfheim.client.core.handler.CardinalSystemClient.TimeStopSystemClient
-import alfheim.client.core.util.AlfheimBotaniaModifiersClient
-import alfheim.client.gui.*
+//import alfheim.client.core.handler.CardinalSystemClient.TimeStopSystemClient
+//import alfheim.client.core.util.AlfheimBotaniaModifiersClient
+//import alfheim.client.gui.*
 import alfheim.client.lib.LibResourceLocationsActual
-import alfheim.client.render.block.*
-import alfheim.client.render.entity.*
-import alfheim.client.render.item.*
-import alfheim.client.render.particle.*
-import alfheim.client.render.tile.*
-import alfheim.common.block.*
-import alfheim.common.block.tile.*
+//import alfheim.client.render.block.*
+//import alfheim.client.render.entity.*
+//import alfheim.client.render.item.*
+//import alfheim.client.render.particle.*
+//import alfheim.client.render.tile.*
+//import alfheim.common.block.*
+//import alfheim.common.block.tile.*
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.proxy.CommonProxy
-import alfheim.common.crafting.recipe.AlfheimRecipes
-import alfheim.common.entity.*
-import alfheim.common.entity.boss.*
-import alfheim.common.entity.boss.primal.*
-import alfheim.common.entity.item.EntityItemImmortal
-import alfheim.common.entity.spell.*
-import alfheim.common.floatingisland.EntityFloatingIsland
-import alfheim.common.integration.ThermalFoundationIntegration
-import alfheim.common.integration.travellersgear.TGHandlerBotaniaRenderer
-import alfheim.common.item.AlfheimItems
-import alfheim.common.lexicon.AlfheimLexiconData
-import cpw.mods.fml.client.registry.*
-import net.minecraft.client.renderer.OpenGlHelper
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher
-import net.minecraft.client.settings.KeyBinding
-import net.minecraft.world.World
-import net.minecraftforge.client.MinecraftForgeClient
+//import alfheim.common.crafting.recipe.AlfheimRecipes
+//import alfheim.common.entity.*
+//import alfheim.common.entity.boss.*
+//import alfheim.common.entity.boss.primal.*
+//import alfheim.common.entity.item.EntityItemImmortal
+//import alfheim.common.entity.spell.*
+//import alfheim.common.floatingisland.EntityFloatingIsland
+//import alfheim.common.integration.ThermalFoundationIntegration
+//import alfheim.common.integration.travellersgear.TGHandlerBotaniaRenderer
+//import alfheim.common.item.AlfheimItems
+//import alfheim.common.lexicon.AlfheimLexiconData
+//import cpw.mods.fml.client.registry.*
+//import net.minecraft.client.renderer.OpenGlHelper
+//import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher
+//import net.minecraft.client.settings.KeyBinding
+import net.minecraft.world.level.Level as World
+//import net.minecraftforge.client.MinecraftForgeClient
 import net.minecraftforge.common.MinecraftForge
-import org.lwjgl.input.Keyboard
-import vazkii.botania.client.core.helper.ShaderHelper
+//import org.lwjgl.input.Keyboard
+//import vazkii.botania.client.core.helper.ShaderHelper
 import vazkii.botania.client.core.proxy.ClientProxy
-import vazkii.botania.client.fx.FXSparkle
-import vazkii.botania.client.render.item.RenderLens
-import vazkii.botania.client.render.tile.RenderTileFloatingFlower
-import vazkii.botania.common.block.tile.TileFloatingFlower
-import vazkii.botania.common.core.handler.ConfigHandler
+//import vazkii.botania.client.fx.FXSparkle
+//import vazkii.botania.client.render.item.RenderLens
+//import vazkii.botania.client.render.tile.RenderTileFloatingFlower
+//import vazkii.botania.common.block.tile.TileFloatingFlower
+//import vazkii.botania.common.core.handler.ConfigHandler
 import kotlin.jvm.java
 
 object ClientProxy : CommonProxy() {
@@ -59,6 +60,9 @@ object ClientProxy : CommonProxy() {
 	override fun registerRenderThings() {
 		ClientProxy.jingleTheBells = AlfheimCore.jingleTheBells
 		
+		/* PORT: рендер, шейдеры и клавиши переносятся в КТ своих блоков, предметов и существ (по описи), клавиши — в КТ-7
+		   (KeyBindingHandlerClient). В 1.20.1 это события RegisterKeyMappingsEvent, EntityRenderersEvent.RegisterRenderers,
+		   RegisterShadersEvent и IClientItemExtensions вместо регистрации в postInit (MAPPING.md, «Рендер»)
 		@Suppress("UnusedExpression") // STFU
 		LibRenderIDs
 		
@@ -209,81 +213,96 @@ object ClientProxy : CommonProxy() {
 			MinecraftForgeClient.registerItemRenderer(AlfheimItems.snowSword, RenderItemSnowSword)
 			ClientRegistry.bindTileEntitySpecialRenderer(TileTreeBerry::class.java, RenderTileTreeBerry)
 		}
+		*/
 	}
 	
 	override fun registerKeyBinds() {
-		if (AlfheimConfigHandler.enableElvenStory) addESMKeyBinds()
-		if (AlfheimConfigHandler.enableMMO) addMMOKeyBinds()
+		// PORT: КТ-7 — клавиши режимов ESM и MMO
+//		if (AlfheimConfigHandler.enableElvenStory) addESMKeyBinds()
+//		if (AlfheimConfigHandler.enableMMO) addMMOKeyBinds()
 	}
 	
 	override fun initializeAndRegisterHandlers() {
 		super.initializeAndRegisterHandlers()
 		EventHandlerClient
-		ItemsRemainingRenderHandler
-		
-		HUDCorporeaRat.eventForge()
-		
-		if (ConfigHandler.boundBlockWireframe) DoubleBoundItemRender
-		if (AlfheimCore.TravellersGearLoaded) TGHandlerBotaniaRenderer
-		if (ThermalFoundationIntegration.loaded) ThermalFoundationIntegration.eventForge()
-		if (AlfheimConfigHandler.enableElvenStory) enableESMGUIs()
-		if (AlfheimConfigHandler.enableMMO) enableMMOGUIs()
-		
-		GUIScreenOverlay.eventForge()
-		GUISheerCold.eventForge()
-		GUIBanner.eventForge().eventFML()
-		
-		RenderPostShaders.allowShaders = !AlfheimConfigHandler.minimalGraphics && OpenGlHelper.shadersSupported
+		// PORT: КТ-4 — ItemsRemainingRenderHandler, DoubleBoundItemRender; КТ-3 — HUDCorporeaRat
+//		ItemsRemainingRenderHandler
+//		
+//		HUDCorporeaRat.eventForge()
+//		
+//		if (ConfigHandler.boundBlockWireframe) DoubleBoundItemRender
+		// PORT: выпало — Travellers Gear и Thermal Foundation отсутствуют на 1.20.1 (SPEC, п. 7)
+//		if (AlfheimCore.TravellersGearLoaded) TGHandlerBotaniaRenderer
+//		if (ThermalFoundationIntegration.loaded) ThermalFoundationIntegration.eventForge()
+		// PORT: КТ-7 — интерфейсы ESM и MMO; КТ-6 — GUIScreenOverlay, GUISheerCold; КТ-8 — GUIBanner;
+		// КТ-7 — пост-шейдеры (RenderPostShaders из ASJCore)
+//		if (AlfheimConfigHandler.enableElvenStory) enableESMGUIs()
+//		if (AlfheimConfigHandler.enableMMO) enableMMOGUIs()
+//		
+//		GUIScreenOverlay.eventForge()
+//		GUISheerCold.eventForge()
+//		GUIBanner.eventForge().eventFML()
+//		
+//		RenderPostShaders.allowShaders = !AlfheimConfigHandler.minimalGraphics && OpenGlHelper.shadersSupported
 	}
 	
 	override fun postInit() {
 		super.postInit()
-		AlfheimBotaniaModifiersClient.postInit()
+		// PORT: КТ-3
+//		AlfheimBotaniaModifiersClient.postInit()
 	}
 	
 	override fun bloodFX(world: World, x: Double, y: Double, z: Double, lifetime: Int, size: Float, gravity: Float) {
-		if (mc.renderViewEntity == null || mc.effectRenderer == null || !doParticle()) return
-		mc.effectRenderer.addEffect(EntityBloodFx(world, x, y, z, size, lifetime, gravity))
+		// PORT: КТ-2 — частица EntityBloodFx
+//		if (mc.renderViewEntity == null || mc.effectRenderer == null || !doParticle()) return
+//		mc.effectRenderer.addEffect(EntityBloodFx(world, x, y, z, size, lifetime, gravity))
 	}
 	
 	override fun featherFX(world: World, x: Double, y: Double, z: Double, color: Int, size: Float, lifetime: Float, distance: Float, must: Boolean, motionX: Double, motionY: Double, motionZ: Double) {
-		if (mc.renderViewEntity == null || mc.effectRenderer == null) return
-		val particle = EntityFeatherFx(world, x, y, z, color, size, lifetime)
-		particle.setMotion(motionX, motionY, motionZ)
-		
-		if (!must) {
-			if (!doParticle()) return
-			val distanceX: Double = mc.renderViewEntity.posX - particle.posX
-			val distanceY: Double = mc.renderViewEntity.posY - particle.posY
-			val distanceZ: Double = mc.renderViewEntity.posZ - particle.posZ
-			if (distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ > distance * distance) {
-				return
-			}
-		}
-		
-		mc.effectRenderer.addEffect(particle)
+		// PORT: КТ-7 — частица EntityFeatherFx (крылья)
+//		if (mc.renderViewEntity == null || mc.effectRenderer == null) return
+//		val particle = EntityFeatherFx(world, x, y, z, color, size, lifetime)
+//		particle.setMotion(motionX, motionY, motionZ)
+//		
+//		if (!must) {
+//			if (!doParticle()) return
+//			val distanceX: Double = mc.renderViewEntity.posX - particle.posX
+//			val distanceY: Double = mc.renderViewEntity.posY - particle.posY
+//			val distanceZ: Double = mc.renderViewEntity.posZ - particle.posZ
+//			if (distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ > distance * distance) {
+//				return
+//			}
+//		}
+//		
+//		mc.effectRenderer.addEffect(particle)
 	}
 	
 	override fun sparkleFX(world: World, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float, size: Float, ageMultiplier: Int, motionX: Double, motionY: Double, motionZ: Double, fake: Boolean, noclip: Boolean) {
-		if (!doParticle() && !fake) return
-		val sparkle = FXSparkle(world, x, y, z, size, r, g, b, ageMultiplier)
-		sparkle.setMotion(motionX, motionY, motionZ)
-		sparkle.fake = fake
-		sparkle.noClip = noclip
-//		if (ClientProxy.noclipEnabled) sparkle.noClip = true
-//		if (ClientProxy.corruptSparkle) sparkle.corrupt = true
-		mc.effectRenderer.addEffect(sparkle)
+		// PORT: КТ-8 — первый, кто вызывает (EntityPrimalBoss); FXSparkle Botania 1.7.10 → SparkleParticleData Botania 1.20.1
+//		if (!doParticle() && !fake) return
+//		val sparkle = FXSparkle(world, x, y, z, size, r, g, b, ageMultiplier)
+//		sparkle.setMotion(motionX, motionY, motionZ)
+//		sparkle.fake = fake
+//		sparkle.noClip = noclip
+////		if (ClientProxy.noclipEnabled) sparkle.noClip = true
+////		if (ClientProxy.corruptSparkle) sparkle.corrupt = true
+//		mc.effectRenderer.addEffect(sparkle)
 	}
 	
 	override fun voxelFX(world: World, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float) {
-		if (!doParticle()) return
-		val voxel = EntityVoxelFX(world, x, y, z, r, g, b)
-		
-		mc.effectRenderer.addEffect(voxel)
+		// PORT: КТ-2 — частица EntityVoxelFX
+//		if (!doParticle()) return
+//		val voxel = EntityVoxelFX(world, x, y, z, r, g, b)
+//		
+//		mc.effectRenderer.addEffect(voxel)
 	}
 	
-	override fun doParticle() = if (!ConfigHandler.useVanillaParticleLimiter) true else Math.random() < 1f - 0.4f * mc.gameSettings.particleSetting
+	// PORT: опции Botania useVanillaParticleLimiter в 1.20.1 нет: частицы Botania там всегда ограничены настройкой игры, как при
+	// её значении по умолчанию (true). particleSetting 1.7.10 — номер ParticleStatus: 0 — все, 1 — меньше, 2 — минимум
+	override fun doParticle() = Math.random() < 1f - 0.4f * mc.options.particles().get().id
+//	override fun doParticle() = if (!ConfigHandler.useVanillaParticleLimiter) true else Math.random() < 1f - 0.4f * mc.gameSettings.particleSetting
 	
+	/* PORT: КТ-7 — переключение режимов ESM и MMO, их интерфейсы и клавиши (KeyBindingHandlerClient)
 	fun toggelModes(b: Boolean, esm: Boolean, mmo: Boolean, esmOld: Boolean, mmoOld: Boolean) {
 		MinecraftForge.EVENT_BUS.post(AlfheimModeChangedEvent(esm, mmo, esmOld, mmoOld))
 		
@@ -444,4 +463,5 @@ object ClientProxy : CommonProxy() {
 		KeyBinding.keybindArray.remove(key)
 		mc.gameSettings.keyBindings = mc.gameSettings.keyBindings.filter { it !== key }.toTypedArray()
 	}
+	*/
 }

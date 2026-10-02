@@ -4,10 +4,11 @@ package alfheim
 //import alexsocol.patcher.*
 //import alexsocol.patcher.asm.worker.InterfaceAppenderWorker.registerAdditionalInterface
 import alfheim.api.ModInfo.MODID
+import alfheim.client.core.proxy.ClientProxy
 //import alfheim.common.core.command.*
 import alfheim.common.core.handler.*
 //import alfheim.common.core.handler.ragnarok.*
-//import alfheim.common.core.proxy.*
+import alfheim.common.core.proxy.*
 import alfheim.common.core.util.*
 //import alfheim.common.integration.minetweaker.*
 //import alfheim.common.integration.thaumcraft.*
@@ -19,6 +20,7 @@ import alfheim.port.registry.AlfheimRegisters
 import net.minecraft.world.level.storage.LevelResource
 import net.minecraftforge.event.server.ServerStartingEvent
 import net.minecraftforge.eventbus.api.EventPriority
+import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.*
@@ -27,6 +29,7 @@ import net.minecraftforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.forge.*
 //import vazkii.botania.common.*
 import java.io.File
+import java.util.function.Supplier
 
 @Suppress("UNUSED_PARAMETER")
 // PORT: dependencies и useMetadata → META-INF/mods.toml; modLanguageAdapter → modLoader="kotlinforforge" там же; guiFactory (экран настроек) — КТ-1
@@ -34,9 +37,9 @@ import java.io.File
 @Mod(MODID)
 object AlfheimCore {
 	
-	// PORT: КТ-1 — прокси автора; сторона выбирается через DistExecutor (SPEC, Р-11)
+	// PORT: @KotlinProxy → DistExecutor (SPEC, Р-11): клиентский класс загружается только на клиенте
 //	@KotlinProxy(clientSide = "$MODID.client.core.proxy.ClientProxy", serverSide = "$MODID.common.core.proxy.CommonProxy")
-//	lateinit var proxy: CommonProxy
+	val proxy: CommonProxy = DistExecutor.unsafeRunForDist({ Supplier { ClientProxy } }, { Supplier { CommonProxy() } })
 	
 //	@KotlinProxy(clientSide = "ab.client.core.proxy.ClientProxy", serverSide = "ab.common.core.proxy.CommonProxy")
 //	lateinit var abProxy: ab.common.core.proxy.CommonProxy
@@ -122,8 +125,7 @@ object AlfheimCore {
 		
 		NetworkService
 		
-		// PORT: КТ-1 — прокси
-//		proxy.preInit()
+		proxy.preInit()
 		// PORT: выпало — Thaumcraft отсутствует на 1.20.1 (SPEC, п. 7)
 //		if (Botania.thaumcraftLoaded) ThaumcraftAlfheimModule.preInit()
 	}
@@ -132,19 +134,18 @@ object AlfheimCore {
 	fun init(e: FMLCommonSetupEvent) {
 //		abProxy.init(e)
 		
-		// PORT: КТ-1 — прокси
-//		proxy.init()
-//		proxy.initializeAndRegisterHandlers()
+		proxy.init()
+		proxy.initializeAndRegisterHandlers()
 	}
 	
 	// PORT: было @EventHandler, FMLPostInitializationEvent
 	fun postInit(e: InterModProcessEvent) {
 //		abProxy.postInit(e)
 		
-		// PORT: КТ-1 — прокси. Клавиши и рендер в 1.20.1 регистрируются в своих событиях, это решается при переносе прокси
-//		proxy.registerKeyBinds()
-//		proxy.registerRenderThings()
-//		proxy.postInit()
+		// PORT: клавиши и рендер в 1.20.1 регистрируются в своих событиях; здесь остаётся то, что не регистрация (ClientProxy)
+		proxy.registerKeyBinds()
+		proxy.registerRenderThings()
+		proxy.postInit()
 		// PORT: выпало — MineTweaker отсутствует на 1.20.1 (SPEC, п. 7)
 //		if (MineTweakerLoaded) MinetweakerAlfheimConfig.loadConfig()
 		// PORT: выпало — Thaumcraft отсутствует на 1.20.1 (SPEC, п. 7)

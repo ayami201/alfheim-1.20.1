@@ -2,6 +2,11 @@ package alexsocol.asjlib
 
 // PORT: импорты 1.7.10 заменены на 1.20.1. Функции, которые порту ещё не понадобились, закомментированы блоками
 // «PORT: по мере надобности»: их переносит КТ, которой они нужны, и сверяет смысл с 1.20.1
+import alfheim.port.legacy.StatCollector
+import net.minecraft.commands.CommandSource as ICommandSender
+import net.minecraft.network.chat.Component
+import net.minecraft.server.MinecraftServer
+import net.minecraft.world.Nameable
 import net.minecraftforge.fml.LogicalSide
 import net.minecraftforge.fml.util.thread.EffectiveSide
 import org.apache.logging.log4j.*
@@ -837,15 +842,23 @@ object ASJUtilities {
 		for (i in 2 until stes.size) log("\tat ${stes[i]}")
 	}
 	
-	/* PORT: по мере надобности — сообщения в чат
+	// PORT: ICommandSender → CommandSource, ChatComponentTranslation → Component.translatable, addChatMessage → sendSystemMessage
 	@JvmStatic
 	fun say(sender: ICommandSender?, message: String, vararg format: Any) {
 		sender ?: return
 		
-		sender.addChatMessage(ChatComponentTranslation(message, *format))
+		sender.sendSystemMessage(Component.translatable(message, *format))
 		log("[${sender.commandSenderName}!] ${StatCollector.translateToLocalFormatted(message, *format)}")
 	}
 	
+	/** Имя отправителя, как `ICommandSender.getCommandSenderName` 1.7.10: у сущности — имя, у сервера — «Server» */
+	private val ICommandSender.commandSenderName get() = when (this) {
+		is Nameable        -> name.string
+		is MinecraftServer -> "Server"
+		else               -> javaClass.simpleName
+	}
+	
+	/* PORT: по мере надобности — сообщения в чат
 	@JvmStatic
 	fun sayToAllOnline(message: String, vararg format: Any) {
 		if (isClient) return

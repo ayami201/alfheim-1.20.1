@@ -1,55 +1,58 @@
 package alfheim.client.core.handler
 
+// PORT: импорты 1.7.10 заменены на 1.20.1; импорты кода, который ещё не перенесён, закомментированы до его КТ
 import alexsocol.asjlib.*
-import alexsocol.asjlib.math.*
-import alexsocol.asjlib.render.*
-import alexsocol.patcher.event.*
-import alfheim.api.*
-import alfheim.api.entity.*
-import alfheim.api.lib.*
-import alfheim.client.core.handler.CardinalSystemClient.PlayerSegmentClient
-import alfheim.client.core.handler.CardinalSystemClient.SpellCastingSystemClient
-import alfheim.client.core.handler.CardinalSystemClient.TimeStopSystemClient
-import alfheim.client.gui.ItemsRemainingRenderHandler
-import alfheim.client.render.entity.*
-import alfheim.client.render.item.*
-import alfheim.client.render.particle.*
-import alfheim.client.render.world.*
-import alfheim.common.core.handler.*
-import alfheim.common.core.helper.*
-import alfheim.common.crafting.recipe.workbench.*
-import alfheim.common.item.equipment.bauble.*
-import alfheim.common.network.*
-import alfheim.common.network.packet.*
-import baubles.common.lib.*
-import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type
-import cpw.mods.fml.common.eventhandler.*
-import cpw.mods.fml.common.gameevent.TickEvent.*
-import cpw.mods.fml.common.network.FMLNetworkEvent.*
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.material.*
-import net.minecraft.client.entity.*
-import net.minecraft.client.renderer.*
-import net.minecraft.entity.boss.*
-import net.minecraft.entity.player.*
-import net.minecraft.init.*
-import net.minecraftforge.client.event.*
-import net.minecraftforge.client.event.RenderGameOverlayEvent.*
-import net.minecraftforge.event.entity.living.LivingEvent.*
-import net.minecraftforge.event.entity.player.*
-import org.lwjgl.opengl.GL11.*
-import vazkii.botania.client.core.handler.*
-import vazkii.botania.common.*
-import vazkii.botania.common.item.*
-import vazkii.botania.common.item.equipment.bauble.*
+//import alexsocol.asjlib.math.*
+//import alexsocol.asjlib.render.*
+//import alexsocol.patcher.event.*
+//import alfheim.api.*
+//import alfheim.api.entity.*
+//import alfheim.api.lib.*
+//import alfheim.client.core.handler.CardinalSystemClient.PlayerSegmentClient
+//import alfheim.client.core.handler.CardinalSystemClient.SpellCastingSystemClient
+//import alfheim.client.core.handler.CardinalSystemClient.TimeStopSystemClient
+//import alfheim.client.gui.ItemsRemainingRenderHandler
+//import alfheim.client.render.entity.*
+//import alfheim.client.render.item.*
+//import alfheim.client.render.particle.*
+//import alfheim.client.render.world.*
+//import alfheim.common.core.handler.*
+//import alfheim.common.core.helper.*
+//import alfheim.common.crafting.recipe.workbench.*
+//import alfheim.common.item.equipment.bauble.*
+//import alfheim.common.network.*
+//import alfheim.common.network.packet.*
+//import baubles.common.lib.*
+//import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type
+//import cpw.mods.fml.common.eventhandler.*
+//import cpw.mods.fml.common.gameevent.TickEvent.*
+//import cpw.mods.fml.common.network.FMLNetworkEvent.*
+//import cpw.mods.fml.relauncher.*
+//import net.minecraft.block.material.*
+//import net.minecraft.client.entity.*
+//import net.minecraft.client.renderer.*
+//import net.minecraft.entity.boss.*
+//import net.minecraft.entity.player.*
+//import net.minecraft.init.*
+//import net.minecraftforge.client.event.*
+//import net.minecraftforge.client.event.RenderGameOverlayEvent.*
+//import net.minecraftforge.event.entity.living.LivingEvent.*
+//import net.minecraftforge.event.entity.player.*
+//import org.lwjgl.opengl.GL11.*
+//import vazkii.botania.client.core.handler.*
+//import vazkii.botania.common.*
+//import vazkii.botania.common.item.*
+//import vazkii.botania.common.item.equipment.bauble.*
 
 object EventHandlerClient {
 	
 	init {
 		eventForge().eventFML()
-		AstrolabePreviewHandler.eventForge()
+		// PORT: КТ-4 — астролябия
+//		AstrolabePreviewHandler.eventForge()
 	}
 	
+	/* PORT: КТ-7 — MMO: полоса босса, группа, остановка времени
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onDrawScreenPre(event: RenderGameOverlayEvent.Pre) {
@@ -69,7 +72,9 @@ object EventHandlerClient {
 	fun onEntityUpdate(e: EntityUpdateEvent) {
 		if (ASJUtilities.isClient && TimeStopSystemClient.affected(e.entity)) e.isCanceled = true
 	}
+	*/
 	
+	/* PORT: КТ-7 — остановка времени; КТ-6 — искры над травой Альфхейма ночью
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onEntityUpdate(e: LivingUpdateEvent) {
@@ -87,7 +92,9 @@ object EventHandlerClient {
 			Botania.proxy.sparkleFX(world, x, y, z, Math.random().F * 0.1f, Math.random().F + 0.5f, Math.random().F * 0.25f, Math.random().F * 0.25F + 0.5F, 3)
 		}
 	}
+	*/
 	
+	/* PORT: КТ-7 — цель MMO, частицы крыльев
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onClientTick(e: ClientTickEvent) {
@@ -104,7 +111,9 @@ object EventHandlerClient {
 		
 		RenderWings.spawnQueuedParticles()
 	}
+	*/
 	
+	/* PORT: рендер игрока: КТ-7 — облики рас, крылья, особенности участников, экран смерти MMO; КТ-4 — ItemElvenDisguise, RenderBooba; КТ-8 — голова Флюгеля, левая рука
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onPlayerPreRender(e: RenderPlayerEvent.Pre) {
@@ -169,7 +178,9 @@ object EventHandlerClient {
 		RenderWings.render(e.entityPlayer)
 		RenderContributors.render(e, e.entityPlayer)
 	}
+	*/
 	
+	/* PORT: КТ-7 — клавиши, заклинания, цель MMO, раса после смерти; КТ-4 — ItemsRemainingRenderHandler
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onPlayerTick(e: PlayerTickEvent) {
@@ -254,7 +265,9 @@ object EventHandlerClient {
 		if (AlfheimConfigHandler.enableElvenStory)
 			e.entityPlayer.raceID = e.original.raceID
 	}
+	*/
 	
+	/* PORT: КТ-7 — MMO: линза льда, туман в воде и лаве под эффектом noclip
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onFOV(e: FOVUpdateEvent) {
@@ -278,7 +291,9 @@ object EventHandlerClient {
 		e.density = 0.05f
 		e.isCanceled = true
 	}
+	*/
 	
+	/* PORT: рендер мира: КТ-7 — MMO, перья; КТ-8 — Фенрир; КТ-2 — частицы крови и вокселей
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun onRenderWorldLastEvent(e: RenderWorldLastEvent) {
@@ -310,7 +325,9 @@ object EventHandlerClient {
 		glDepthMask(true)
 		mc.entityRenderer.disableLightmap(ticks)
 	}
+	*/
 	
+	/* PORT: подсказки: КТ-3 — осколок Лапуты Botania под моноклем; КТ-2 — рецепт RecipeSaveIvy
 	@Suppress("UNCHECKED_CAST")
 	@SubscribeEvent
 	fun drawTooltip(e: ItemTooltipEvent) {
@@ -322,4 +339,5 @@ object EventHandlerClient {
 		if (ItemNBTHelper.getBoolean(stack, RecipeSaveIvy.TAG_SAVE, false))
 			addStringToTooltip(e.toolTip as MutableList<Any?>, "alfheimmisc.saveIvy", (14 + stack.meta).toString())
 	}
+	*/
 }

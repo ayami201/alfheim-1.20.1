@@ -1,81 +1,88 @@
 package alfheim.common.core.registry
 
-import alexsocol.asjlib.ASJUtilities.registerEntity
-import alexsocol.asjlib.eventForge
+// PORT: импорты 1.7.10 заменены на 1.20.1; импорты кода, который ещё не перенесён, закомментированы до его КТ
+//import alexsocol.asjlib.ASJUtilities.registerEntity
+//import alexsocol.asjlib.eventForge
 import alfheim.api.*
-import alfheim.api.AlfheimAPI.addPink
-import alfheim.api.AlfheimAPI.registerAnomaly
-import alfheim.api.block.tile.SubTileAnomalyBase.EnumAnomalyRarity.*
-import alfheim.api.entity.IAlfheimMob
-import alfheim.common.block.*
-import alfheim.common.block.tile.*
-import alfheim.common.block.tile.TileChair.Companion.EntitySit
-import alfheim.common.block.tile.corporea.*
-import alfheim.common.block.tile.sub.anomaly.*
+//import alfheim.api.AlfheimAPI.addPink
+//import alfheim.api.AlfheimAPI.registerAnomaly
+//import alfheim.api.block.tile.SubTileAnomalyBase.EnumAnomalyRarity.*
+//import alfheim.api.entity.IAlfheimMob
+//import alfheim.common.block.*
+//import alfheim.common.block.tile.*
+//import alfheim.common.block.tile.TileChair.Companion.EntitySit
+//import alfheim.common.block.tile.corporea.*
+//import alfheim.common.block.tile.sub.anomaly.*
 import alfheim.common.core.handler.*
-import alfheim.common.entity.*
-import alfheim.common.entity.boss.*
-import alfheim.common.entity.boss.primal.*
-import alfheim.common.entity.item.*
-import alfheim.common.entity.spell.*
-import alfheim.common.floatingisland.EntityFloatingIsland
-import alfheim.common.item.*
-import alfheim.common.item.material.*
-import alfheim.common.item.material.ElvenResourcesMetas.ElementalSlimeBall
-import alfheim.common.potion.*
-import alfheim.common.potion.berries.*
-import alfheim.common.spell.darkness.*
-import alfheim.common.spell.earth.*
-import alfheim.common.spell.fire.*
-import alfheim.common.spell.illusion.*
-import alfheim.common.spell.nature.*
-import alfheim.common.spell.sound.*
-import alfheim.common.spell.tech.*
-import alfheim.common.spell.water.*
-import alfheim.common.spell.wind.*
-import alfheim.common.world.dim.alfheim.biome.*
-import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim.Companion.addEntry
-import cpw.mods.fml.common.registry.EntityRegistry
-import cpw.mods.fml.common.registry.GameRegistry.registerTileEntity
-import net.minecraft.entity.*
-import net.minecraft.entity.monster.EntitySlime
-import net.minecraft.init.*
-import net.minecraft.item.ItemStack
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.world.biome.BiomeGenBase
-import vazkii.botania.api.BotaniaAPI
-import vazkii.botania.common.Botania
-import vazkii.botania.common.block.*
-import vazkii.botania.common.core.handler.*
-import vazkii.botania.common.item.ModItems
-import vazkii.botania.common.item.block.ItemBlockSpecialFlower
-import vazkii.botania.common.lib.LibBlockNames
+//import alfheim.common.entity.*
+//import alfheim.common.entity.boss.*
+//import alfheim.common.entity.boss.primal.*
+//import alfheim.common.entity.item.*
+//import alfheim.common.entity.spell.*
+//import alfheim.common.floatingisland.EntityFloatingIsland
+//import alfheim.common.item.*
+//import alfheim.common.item.material.*
+//import alfheim.common.item.material.ElvenResourcesMetas.ElementalSlimeBall
+//import alfheim.common.potion.*
+//import alfheim.common.potion.berries.*
+//import alfheim.common.spell.darkness.*
+//import alfheim.common.spell.earth.*
+//import alfheim.common.spell.fire.*
+//import alfheim.common.spell.illusion.*
+//import alfheim.common.spell.nature.*
+//import alfheim.common.spell.sound.*
+//import alfheim.common.spell.tech.*
+//import alfheim.common.spell.water.*
+//import alfheim.common.spell.wind.*
+//import alfheim.common.world.dim.alfheim.biome.*
+//import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim.Companion.addEntry
+//import cpw.mods.fml.common.registry.EntityRegistry
+//import cpw.mods.fml.common.registry.GameRegistry.registerTileEntity
+//import net.minecraft.entity.*
+//import net.minecraft.entity.monster.EntitySlime
+//import net.minecraft.init.*
+//import net.minecraft.item.ItemStack
+//import net.minecraft.tileentity.TileEntity
+//import net.minecraft.world.biome.BiomeGenBase
+//import vazkii.botania.api.BotaniaAPI
+//import vazkii.botania.common.Botania
+//import vazkii.botania.common.block.*
+//import vazkii.botania.common.core.handler.*
+//import vazkii.botania.common.item.ModItems
+//import vazkii.botania.common.item.block.ItemBlockSpecialFlower
+//import vazkii.botania.common.lib.LibBlockNames
 import kotlin.jvm.java
 
 object AlfheimRegistry {
 	
 	fun preInit() {
-		registerPotions()
-		registerEntities()
-		registerTileEntities()
+		// PORT: КТ-2 — зелья; существа и блок-сущности — в КТ каждого (по описи)
+//		registerPotions()
+//		registerEntities()
+//		registerTileEntities()
 	}
 	
 	fun init() {
-		registerSheddings()
-		registerSpells()
-		loadAllPinkStuff()
+		// PORT: КТ-5 — сброс предметов существами (shedding); КТ-7 — заклинания; КТ-4 — «розовость» (её читает getPinkness)
+//		registerSheddings()
+//		registerSpells()
+//		loadAllPinkStuff()
 	}
 	
 	fun postInit() {
-		if (AlfheimConfigHandler.looniumOverseed)
-			BotaniaAPI.looniumBlacklist.remove(ModItems.overgrowthSeed)
+		// PORT: КТ-3 — Loonium; в Botania 1.20.1 его чёрный список — тег botania:loonium_blacklist
+//		if (AlfheimConfigHandler.looniumOverseed)
+//			BotaniaAPI.looniumBlacklist.remove(ModItems.overgrowthSeed)
 		
-		registerSpawns()
+		// PORT: КТ-5 — спавн существ
+//		registerSpawns()
 		registerFlowerOres()
 		
-		AnomalyHarvesterBehaviors
+		// PORT: КТ-3
+//		AnomalyHarvesterBehaviors
 	}
 	
+	/* PORT: КТ-5 — спавн существ: в 1.20.1 через Forge biome modifiers (MAPPING.md, «Миры»)
 	private fun registerSpawns() {
 		addAllSpawn(EntityElementalSlime::class.java, AlfheimConfigHandler.elementalSlimeRates, AlfheimConfigHandler.elementalSlimeBiomeBlackList)
 		addAllSpawn(EntityVoidCreeper::class.java, AlfheimConfigHandler.voidCreeperRates, AlfheimConfigHandler.voidCreeperBiomeBlackList)
@@ -93,7 +100,9 @@ object AlfheimRegistry {
 		val (w, n, x) = data
 		EntityRegistry.addSpawn(clazz, w, n, x, type, *BiomeGenBase.getBiomeGenArray().filter { it != null && it.biomeID !in blacklist }.toTypedArray())
 	}
+	*/
 	
+	/* PORT: КТ-2 — зелья: MobEffect через DeferredRegister, номера зелий из конфига удалены (MAPPING.md)
 	private fun registerPotions() {
 		PotionBeastWithin
 		PotionBeer
@@ -139,7 +148,9 @@ object AlfheimRegistry {
 		PotionWTFBerry4.eventForge() // nether
 		PotionWTFBerry5.eventForge() // sealing
 	}
+	*/
 	
+	/* PORT: существа — в КТ каждого (по описи): EntityType через DeferredRegister, яйца — ForgeSpawnEggItem (MAPPING.md)
 	var nextEntityID = 0
 		get() = field++
 	
@@ -241,7 +252,9 @@ object AlfheimRegistry {
 		ItemSpawnEgg.addMapping(entityClass, color1, color2)
 		registerEntity(entityClass, name, id)
 	}
+	*/
 	
+	/* PORT: блок-сущности — в КТ каждой (по описи), BlockEntityType через DeferredRegister; аномалии — КТ-3
 	private fun registerTileEntities() {
 		registerTile<TileAlfheimPortal>()
 		registerTile<TileAlfheimPylon>()
@@ -319,7 +332,9 @@ object AlfheimRegistry {
 		registerAnomaly<SubTileSpeedUp>("SpeedUp", EPIC, 4, 0x20E020)
 		registerAnomaly<SubTileWarp>("Warp", RARE, 6, 0x6020E0)
 	}
+	*/
 	
+	/* PORT: КТ-7 — заклинания
 	private fun registerSpells() {
 		SpellAcidMyst
 		SpellAport
@@ -395,7 +410,9 @@ object AlfheimRegistry {
 		SpellWhisper
 		SpellWindBlades
 	}
+	*/
 	
+	/* PORT: КТ-4 — «розовость» читает только getPinkness (КТ-4); вещи с metadata — отдельные вещи 1.20.1 (SPEC, Р-5)
 	private fun loadAllPinkStuff() {
 		addPink(ItemStack(Blocks.wool, 1, 6), 1)
 		addPink(ItemStack(Blocks.red_flower, 1, 7), 1)
@@ -530,6 +547,7 @@ object AlfheimRegistry {
 		addPink(ItemStack(AlfheimItems.trisDagger), 36)
 		addPink(ItemStack(AlfheimItems.wireAxe), 81)
 	}
+	*/
 	
 	private fun registerFlowerOres() {
 		AlfheimConfigHandler.enderOreWeights.forEach {
@@ -592,6 +610,7 @@ object AlfheimRegistry {
 //		AlfheimAPI.addOreWeightEnd("oreHeeEndPowder", 200)
 	}
 	
+	/* PORT: КТ-5 — сброс предметов существами. В Botania 1.20.1 нет SheddingHandler, решается вместе с существами
 	fun registerSheddings() {
 		val slimePattern = SheddingHandler.patterns.find { it.EntityClass === EntitySlime::class.java }
 		registerShedding(EntityElementalSlime::class.java, ElementalSlimeBall.stack, slimePattern?.rate ?: 21000, slimePattern?.rate ?: 40)
@@ -608,4 +627,5 @@ object AlfheimRegistry {
 	fun registerShedding(targetClass: Class<out Entity>, stack: ItemStack, rate: Int, size: Int) {
 		SheddingHandler.defaultPatterns += SheddingHandler.ShedPattern(targetClass, stack, rate, size)
 	}
+	*/
 }
