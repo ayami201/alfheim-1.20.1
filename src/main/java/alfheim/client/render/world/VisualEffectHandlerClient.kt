@@ -1,5 +1,9 @@
 package alfheim.client.render.world
 
+// PORT: импорты 1.20.1 — первыми; импорты автора закомментированы до КТ эффектов, которым они нужны
+import alexsocol.asjlib.*
+import alexsocol.asjlib.math.Vector3
+/*
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.AlfheimCore
@@ -31,16 +35,27 @@ import vazkii.botania.common.entity.EntityManaBurst
 import java.awt.Color
 import kotlin.math.*
 import vazkii.botania.common.core.helper.Vector3 as Bector3
+*/
 
 object VisualEffectHandlerClient {
 	
 	val activeEmblems = HashMap<Int, Boolean>()
 	val v = Vector3()
-	val b = Bector3()
+	// PORT: Vector3 из Botania 1.7.10 в Botania 1.20.1 нет; понадобится эффектам — решит их КТ
+//	val b = Bector3()
 	
 	fun select(s: VisualEffects, d: DoubleArray) {
-		if (mc.theWorld == null) return
+		if (mc.level == null) return
 		
+		// PORT: эффекты включаются вместе с механиками, которые их шлют (КТ — по отправителям в INVENTORY.md):
+		// КТ-2 — CHALK, POTION, QUAD, QUADH;
+		// КТ-3 — CREATION, FIREWORK, GAIA_SOUL, ICONCRACK, LIGHTNING, MANABURST, MANAVOID, SMOKE, WISP;
+		// КТ-4 — BIFROST, BIFROST_DONE, EMBLEM_ACTIVATION, FALLING, GUNGNIR, MOON, SEAROD, SPARKLE, SPLASH, WIRE;
+		// КТ-6 — ENDER, MIST;
+		// КТ-7 — ACID, AQUASTREAM_HIT, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EXPL, FEATHER,
+		//        FIRESTAR, HEAL, HORN, MANA, NOTE, NVISION, PURE, PURE_AREA, SHADOW, SMOKESCREEN, THROW, TREMORS, UPHEAL;
+		// КТ-8 — FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, PRIMAL_BOSS_ATTACK, SNICE_MARK, SURTRWALL, THRYM_DOME, WHIRL
+		/*
 		when (s) {
 			ACID               -> spawnAcid(d[0], d[1], d[2])
 //			AQUABIND           -> spawnAquaBind(d[0], d[1], d[2])
@@ -100,8 +115,11 @@ object VisualEffectHandlerClient {
 			WISP               -> spawnWisp(d[0], d[1], d[2], d[3].F, d[4].F, d[5].F, d[6].F, d[7].F, d[8].F, d[9].F, d[10].F, d.getOrNull(11) == null)
 			WHIRL              -> spawnWhirl(d[0], d[1], d[2], d[3].I)
 		}
+		*/
 	}
 	
+	// PORT: функции эффектов включаются вместе со своими ветками select (выше)
+	/*
 	fun activateEmblem(eID: Double, active: Double) {
 		activeEmblems[eID.I] = active != 0.0
 	}
@@ -512,10 +530,14 @@ object VisualEffectHandlerClient {
 		return vec
 	}
 	
+	*/
+	
 	enum class VisualEffects {
 		ACID, /*AQUABIND,*/ AQUASTREAM_HIT, BIFROST, BIFROST_DONE, CHALK, CREATION, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EMBLEM_ACTIVATION, ENDER, EXPL, FALLING, FEATHER, FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, FIRESTAR, FIREWORK, GAIA_SOUL, GUNGNIR, HEAL, HORN, ICONCRACK, LIGHTNING, MANA, MANABURST, MANAVOID, MIST, MOON, NOTE, NVISION, POTION, PRIMAL_BOSS_ATTACK, PURE, PURE_AREA, QUAD, QUADH, SEAROD, SHADOW, SMOKE, SMOKESCREEN, SNICE_MARK, SPARKLE, SPLASH, SURTRWALL, THROW, THRYM_DOME, TREMORS, UPHEAL, WIRE, WISP, WHIRL;
 	}
 	
+	// PORT: КТ-7 — таймер смерти режима MMO (GUIDeathTimer)
+	/*
 	fun onDeath(target: EntityLivingBase) {
 		if (!AlfheimConfigHandler.enableMMO) return
 		target.hurtTime = 0
@@ -541,4 +563,5 @@ object VisualEffectHandlerClient {
 		if (target is EntityPlayer) c = target.race.rgbColor
 		Botania.proxy.wispFX(target.worldObj, target.posX, target.posY - if (mc.thePlayer === target) 1.5 else 0.0, target.posZ, (c shr 16 and 0xFF) / 255f, (c shr 8 and 0xFF) / 255f, (c and 0xFF) / 255f, (Math.random() * 0.5).F, (Math.random() * 0.015 - 0.0075).F, (Math.random() * 0.025).F, (Math.random() * 0.015 - 0.0075).F, 2f)
 	}
+	*/
 }

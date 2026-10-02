@@ -1,10 +1,12 @@
 package alfheim.api.lib
 
 import alexsocol.asjlib.*
-import alexsocol.asjlib.render.ResourceLocationAnimated
-import alexsocol.patcher.asm.ASJHookLoader
+// PORT: импорты 1.7.10 заменены на 1.20.1. Пути ресурсов переводит legacyPath (MAPPING.md, «Ресурсы»);
+// ResourceLocationAnimated (ASJCore) переносится вместе с первым, кому он нужен
+//import alexsocol.asjlib.render.ResourceLocationAnimated
 import alfheim.api.ModInfo
-import net.minecraft.util.ResourceLocation
+import alfheim.port.legacy.legacyPath
+import net.minecraft.resources.ResourceLocation
 
 object LibResourceLocations {
 	
@@ -33,8 +35,9 @@ object LibResourceLocations {
 	val cloakFenrir = ResourceLocationIL(ModInfo.MODID, "textures/model/armor/cloak/Fenrir.png")
 	val cloakFenrirGlow = ResourceLocationIL(ModInfo.MODID, "textures/model/armor/cloak/Fenrir_glow.png")
 	val corrupt = ResourceLocationIL(ModInfo.MODID, "textures/misc/Corrupt.png")
-	val creationPylon = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/block/CreationPylon.png")
-	val creationPylonOld = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/block/CreationPylonOld.png")
+	// PORT: КТ-3 — ResourceLocationAnimated, пилоны
+//	val creationPylon = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/block/CreationPylon.png")
+//	val creationPylonOld = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/block/CreationPylonOld.png")
 	val cross = ResourceLocationIL(ModInfo.MODID, "textures/misc/crosshair.png")
 	val deathTimer = ResourceLocationIL(ModInfo.MODID, "textures/gui/DeathTimer.png")
 	val deathTimerBG = ResourceLocationIL(ModInfo.MODID, "textures/gui/DeathTimerBack.png")
@@ -79,9 +82,11 @@ object LibResourceLocations {
 	val health = ResourceLocationIL(ModInfo.MODID, "textures/gui/health.png")
 	val heating = ResourceLocationIL(ModInfo.MODID, "textures/misc/heating.png")
 	val hotSpells = ResourceLocationIL(ModInfo.MODID, "textures/gui/HotSpells.png")
-	val ice = ResourceLocation("textures/blocks/ice.png")
+	// PORT: текстуры ванилы в 1.20.1 лежат в textures/block
+	val ice = ResourceLocation("textures/block/ice.png")
 	val iceLens = ResourceLocationIL(ModInfo.MODID, "textures/misc/IceLens.png")
-	val jellyfish = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/Jellyfish.png")
+	// PORT: КТ-5 — ResourceLocationAnimated, медуза
+//	val jellyfish = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/Jellyfish.png")
 	val jibril = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Jibril.png")
 	val jibrilDark = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/JibrilDark.png")
 	var lexica = ResourceLocationIL("botania", "textures/model/lexica.png")
@@ -107,17 +112,20 @@ object LibResourceLocations {
 	val miniIslandOvergrowth = ResourceLocationIL(ModInfo.MODID, "textures/model/block/miniIslandOvergrowth.png")
 	val mjolnir = ResourceLocationIL(ModInfo.MODID, "textures/model/item/Mjolnir.png")
 	val mjolnirKitty = ResourceLocationIL(ModInfo.MODID, "textures/model/item/KittyHammer.png")
-	val muspelson = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/Muspelson.png")
-	val nifleice = ResourceLocation(ModInfo.MODID, "textures/blocks/NiflheimIce.png")
+	// PORT: КТ-8 — ResourceLocationAnimated, муспельсон
+//	val muspelson = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/Muspelson.png")
+	val nifleice = ResourceLocation(ModInfo.MODID, legacyPath("textures/blocks/NiflheimIce.png"))
 	val palette = ResourceLocationIL(ModInfo.MODID, "textures/misc/pal.png")
 	var pixie = ResourceLocationIL("botania", "textures/model/pixie.png")
 	val poolBlue = ResourceLocationIL(ModInfo.MODID, "textures/blocks/PoolBlue.png")
 	val poolPink = ResourceLocationIL(ModInfo.MODID, "textures/blocks/PoolPink.png")
 	val rationBelt = ResourceLocationIL(ModInfo.MODID, "textures/model/armor/rationBelt.png")
-	val resonance1 = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/Resonance1.png")
-	val resonance2 = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/Resonance2.png")
+	// PORT: КТ-4 — ResourceLocationAnimated, EntityResonance
+//	val resonance1 = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/Resonance1.png")
+//	val resonance2 = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/Resonance2.png")
 	val rollingMelon = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/WaterMelon.png")
-	val rollingMelonLava = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/LavaMelon.png")
+	// PORT: КТ-8 — ResourceLocationAnimated, лавовый арбуз
+//	val rollingMelonLava = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/LavaMelon.png")
 	val rook = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Rook.png")
 	val roricorn = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Roricorn.png")
 	val sandstormWeather = ResourceLocationIL(ModInfo.MODID, "textures/environment/sandstorm.png")
@@ -125,7 +133,8 @@ object LibResourceLocations {
 	val slashSun = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/slash_sun.png")
 	val slashWind = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/slash_wind.png")
 	val sleipnir = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Sleipnir.png")
-	val snow = ResourceLocation("textures/blocks/snow.png")
+	// PORT: текстуры ванилы в 1.20.1 лежат в textures/block
+	val snow = ResourceLocation("textures/block/snow.png")
 	val snowKatana = ResourceLocationIL(ModInfo.MODID, "textures/model/item/Katana.png")
 	val snowSword = ResourceLocationIL(ModInfo.MODID, "textures/model/item/SnowKatana.png")
 	val spearSubspace = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/subspace/spearsubspace.png")
@@ -142,8 +151,9 @@ object LibResourceLocations {
 	val spreaderMaufHalloween = ResourceLocationIL(ModInfo.MODID, "textures/model/block/spreaderMaufHalloween.png")
 	val spreaderMaufHalloweenGolden = ResourceLocationIL(ModInfo.MODID, "textures/model/block/spreaderMaufGoldenHalloween.png")
 	val sprite = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/SnowSprite.png")
-	val subspace = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/subspace/subspace.png")
-	val suffuserOverlay = ResourceLocation(ModInfo.MODID, "textures/gui/SuffuserOverlay.png")
+	// PORT: КТ-4 — ResourceLocationAnimated, EntitySubspace
+//	val subspace = ResourceLocationAnimated.local(ModInfo.MODID, "textures/model/entity/subspace/subspace.png")
+	val suffuserOverlay = ResourceLocation(ModInfo.MODID, legacyPath("textures/gui/SuffuserOverlay.png"))
 	val surtr = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Surtr.png")
 	val surtrGlow = ResourceLocationIL(ModInfo.MODID, "textures/model/entity/Surtr_glow.png")
 	val surtrSword = ResourceLocationIL(ModInfo.MODID, "textures/model/item/SurtrSword.png")
@@ -205,7 +215,9 @@ object LibResourceLocations {
 	)
 	
 	val affinities = arrayOf(
-		ResourceLocation("Omg dat's weird"),
+		// PORT: заглушка автора без текстуры; путь с пробелом и апострофом 1.20.1 не принимает и падает — заглушка
+		// осталась заглушкой, путь допустимый
+		ResourceLocation("omg_dats_weird"),
 		ResourceLocationIL(ModInfo.MODID, "textures/gui/spells/affinities/SALAMANDER.png"),
 		ResourceLocationIL(ModInfo.MODID, "textures/gui/spells/affinities/SYLPH.png"),
 		ResourceLocationIL(ModInfo.MODID, "textures/gui/spells/affinities/CAITSITH.png"),
@@ -287,8 +299,9 @@ object LibResourceLocations {
 	// WTF
 	class ResourceLocationIL: ResourceLocation {
 		
-		constructor(name: String): super(name)
-		constructor(modid: String, name: String): super(modid, name)
+		// PORT: путь автора → путь 1.20.1 (legacyPath): строчные буквы и snake_case
+		constructor(name: String): super(legacyPath(name))
+		constructor(modid: String, name: String): super(modid, legacyPath(name))
 		
 		init {
 			if (ASJUtilities.isClient) init(this)
@@ -298,7 +311,11 @@ object LibResourceLocations {
 			
 			val initLater = HashSet<ResourceLocationIL>()
 			
+			// PORT: в среде разработки 1.7.10 текстуры загружались заранее, чтобы пропавшая текстура сразу была видна
+			// в логе. Текстуры переносятся по КТ, ранняя загрузка засыпала бы лог ошибками; в 1.20.1 текстура
+			// загружается при первом использовании. Для игрока разницы нет: в игре автора загрузка была выключена
 			fun init(rl: ResourceLocationIL) {
+				/*
 				if (ASJHookLoader.OBF) return
 				
 				if (mc.renderEngine == null) {
@@ -312,6 +329,7 @@ object LibResourceLocations {
 					initLater.forEach(mc.renderEngine::bindTexture)
 					initLater.clear()
 				}
+				*/
 			}
 		}
 	}

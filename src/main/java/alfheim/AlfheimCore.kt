@@ -22,6 +22,7 @@ import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.*
+import net.minecraftforge.forgespi.language.IModInfo
 import net.minecraftforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.forge.*
 //import vazkii.botania.common.*
@@ -40,9 +41,8 @@ object AlfheimCore {
 //	@KotlinProxy(clientSide = "ab.client.core.proxy.ClientProxy", serverSide = "ab.common.core.proxy.CommonProxy")
 //	lateinit var abProxy: ab.common.core.proxy.CommonProxy
 	
-	// PORT: КТ-1 — нужен InfoLoader; в 1.20.1 сведения о моде — IModInfo из ModList, а не ModMetadata
-//	@Metadata(MODID)
-//	lateinit var meta: ModMetadata
+	// PORT: @Metadata ModMetadata → IModInfo из ModList
+	val meta: IModInfo get() = ModList.get().getModContainerById(MODID).get().modInfo
 	
 	// PORT: папка мира сервера; LevelResource.ROOT даёт путь с «.» на конце, normalize() его убирает
 	val save: String get() = ServerLifecycleHooks.getCurrentServer().getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().toString()
@@ -119,8 +119,7 @@ object AlfheimCore {
 		// PORT: id модов в 1.20.1 пишутся строчными буквами
 		stupidMode = ModList.get().isLoaded("avaritia")
 		
-		// PORT: КТ-1 — AlfheimConfigHandler, InfoLoader
-//		if (AlfheimConfigHandler.notifications) InfoLoader.start()
+		if (AlfheimConfigHandler.notifications) InfoLoader.start()
 		
 		NetworkService
 		

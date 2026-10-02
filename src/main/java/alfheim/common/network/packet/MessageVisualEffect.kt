@@ -1,8 +1,7 @@
 package alfheim.common.network.packet
 
 import alfheim.api.network.AlfheimPacket
-// PORT: КТ-1 — VisualEffectHandlerClient переносится отдельным шагом этой КТ
-//import alfheim.client.render.world.VisualEffectHandlerClient
+import alfheim.client.render.world.VisualEffectHandlerClient
 import io.netty.buffer.ByteBuf
 
 class MessageVisualEffect(var type: Int, vararg var data: Double): AlfheimPacket<MessageVisualEffect>() {
@@ -17,6 +16,6 @@ class MessageVisualEffect(var type: Int, vararg var data: Double): AlfheimPacket
 	}
 
 	override fun handleClient() {
-//		VisualEffectHandlerClient.select(VisualEffectHandlerClient.VisualEffects.entries[type], data)
+		VisualEffectHandlerClient.select(VisualEffectHandlerClient.VisualEffects.entries[type], data)
 	}
 }

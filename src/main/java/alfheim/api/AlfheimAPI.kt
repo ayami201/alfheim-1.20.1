@@ -1,5 +1,9 @@
 package alfheim.api
 
+// PORT: импорты 1.20.1 — первыми; импорты автора закомментированы до КТ, которым они нужны
+import net.minecraft.ChatFormatting
+import net.minecraft.world.item.*
+/*
 import alexsocol.asjlib.ASJUtilities
 import alfheim.api.block.tile.SubTileAnomalyBase
 import alfheim.api.crafting.recipe.*
@@ -17,10 +21,13 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.common.util.EnumHelper
 import vazkii.botania.api.recipe.RecipeElvenTrade
+*/
 
 @Suppress("unused")
 object AlfheimAPI {
 	
+	// PORT: КТ-4 — материалы брони и инструментов: в 1.20.1 это интерфейсы ArmorMaterial и Tier, а не EnumHelper
+	/*
 	val elvoriumArmor = EnumHelper.addArmorMaterial("ALFHEIM_ELVORIUM", 50, intArrayOf(5, 8, 7, 4), 30)!!
 	val elementalArmor = EnumHelper.addArmorMaterial("ALFHEIM_ELEMENTAL", 20, intArrayOf(2, 9, 5, 2), 20)!!
 	val fenrirArmor = EnumHelper.addArmorMaterial("ALFHEIM_FENRIR", 32, intArrayOf(3, 7, 6, 2), 15)!!
@@ -38,25 +45,35 @@ object AlfheimAPI {
 	val SOUL = EnumHelper.addToolMaterial("ALFHEIM_SOUL", -1, -1, -1f, -1f, -1)!! // ragnarok sword
 	val SURTR = EnumHelper.addToolMaterial("ALFHEIM_SURTR", 0, 1, 0f, 4f, 0)!!
 	val THRYM = EnumHelper.addToolMaterial("ALFHEIM_THRYM", 0, 1, 0f, 4f, 0)!!
+	*/
 	
-	val mauftriumRarity = EnumHelper.addRarity("ALFHEIM_MAUFTRIUM", EnumChatFormatting.GOLD, "Mauftrium")!!
-	val ragnarokRarity = EnumHelper.addRarity("ALFHEIM_RAGNAROK", EnumChatFormatting.DARK_RED, "Ragnarok")!!
+	// PORT: EnumHelper.addRarity → Rarity.create Forge; у редкости 1.20.1 нет отображаемого имени («Mauftrium», «Ragnarok»)
+	val mauftriumRarity = Rarity.create("ALFHEIM_MAUFTRIUM", ChatFormatting.GOLD)!!
+	val ragnarokRarity = Rarity.create("ALFHEIM_RAGNAROK", ChatFormatting.DARK_RED)!!
 	
 	/** List of [RecipeElvenTrade] outputs banned for re-trading in Alfheim trade portal */
 	val bannedRetrades = ArrayList<ItemStack>()
 	
+	// PORT: КТ-3 — RecipeManaInfuser
+	/*
 	/** List of recipes for mana infuser */
 	val manaInfuserRecipes = ArrayList<RecipeManaInfuser>()
+	*/
 	
 	/** List of all pink items with their relative pinkness */
 	val pinkness = HashMap<ItemStack, Int>()
 	
+	// PORT: КТ-7 — SpellBase, EnumRace
+	/*
 	/** List of all spells for all races */
 	val spells = HashSet<SpellBase>()
 	
 	/** Map of elven spells associated with their race (affinity), sorted by name  */
 	val spellMapping = HashMap<EnumRace, HashSet<SpellBase>>()
+	*/
 	
+	// PORT: КТ-3 — TunerIncantation, RecipeBarrel, аномалии
+	/*
 	val tunerIncantations = LinkedHashMultimap.create<String, TunerIncantation<Any>>()!!
 	
 	val barrelRecipes = ArrayList<RecipeBarrel>()
@@ -66,6 +83,7 @@ object AlfheimAPI {
 	
 	/** Map of anomaly behaviors for use in [Anomaly Harvester][alfheim.common.block.tile.TileAnomalyHarvester] */
 	val anomalyBehaviors = HashMap<String, AnomalyBehavior>()
+	*/
 	
 	/** Petronia fuels map */
 	val fuelMap = HashMap<String, Pair<Int, Int>>()
@@ -76,6 +94,8 @@ object AlfheimAPI {
 	/** Ores for Orechid Alfarem */
 	val oreWeightsAlfheim = HashMap<String, Int>()
 	
+	// PORT: КТ-6 — Domain; блоки холода и тепла для SheerColdHandler (у блоков 1.20.1 нет отдельных «горящих» вариантов)
+	/*
 	/** Map of domains */
 	val domains = LinkedHashMap<String, Domain>()
 	
@@ -84,12 +104,18 @@ object AlfheimAPI {
 	
 	/** Set of blocks that can reduce entity's sheer cold value */
 	val warmBlocks = mutableSetOf(Blocks.fire, Blocks.lava, Blocks.flowing_lava, Blocks.lit_furnace, Blocks.torch, Blocks.lit_pumpkin, Blocks.brewing_stand)
+	*/
 	
+	// PORT: КТ-3 — RecipeTreeCrafting; КТ-2 — IIridescentSaplingVariant, ThrowableCollidingItem
+	/*
 	val treeRecipes: MutableList<RecipeTreeCrafting> = ArrayList()
 	val treeVariants: MutableList<IIridescentSaplingVariant> = ArrayList()
 	val collidingItemHashMap: MutableMap<String, ThrowableCollidingItem> = LinkedHashMap()
 	val fallbackTcl = ThrowableCollidingItem("${ModInfo.MODID}_fallback", ItemStack(Items.blaze_rod)) { _, _ -> }
+	*/
 	
+	// PORT: КТ-3 — RecipeManaInfuser, обменный портал; сравнение стаков (ASJUtilities.isItemStackEqualCrafting) — там же
+	/*
 	fun addInfuserRecipe(rec: RecipeManaInfuser?): RecipeManaInfuser? {
 		if (rec != null) manaInfuserRecipes.add(rec)
 		return rec
@@ -124,15 +150,22 @@ object AlfheimAPI {
 	fun isRetradeable(output: ItemStack) =
 		bannedRetrades.none { ASJUtilities.isItemStackEqualCrafting(output, it) }
 	
+	*/
+	
 	/** Map a [pink] stack to it's pinkness [weight]. Also can override old values  */
 	fun addPink(pink: ItemStack, weight: Int) =
 		pinkness.put(pink, weight)
 	
+	// PORT: КТ-4 — сравнение стаков (ASJUtilities.isItemStackEqualCrafting) переносится вместе с тем, кто читает «розовость»
+	/*
 	fun getPinkness(item: ItemStack) =
 		pinkness.keys
 			.firstOrNull { ASJUtilities.isItemStackEqualCrafting(it, item) }
 			?.let { pinkness[it]!! } ?: 0
+	*/
 	
+	// PORT: КТ-7 — заклинания; КТ-3 — настройки тюнера, аномалии
+	/*
 	/**
 	 * Registers spell for some race by affinity
 	 *
@@ -203,6 +236,7 @@ object AlfheimAPI {
 	}
 	
 	fun getAnomaly(name: String) = anomalies[name] ?: fallbackAnomalyData
+	*/
 	
 	fun registerFuel(name: String, burnTime: Int, manaPerTick: Int) {
 		fuelMap[name] = burnTime to manaPerTick
@@ -232,6 +266,8 @@ object AlfheimAPI {
 		oreWeightsAlfheim[ore] = weight
 	}
 	
+	// PORT: КТ-3 — дерево-крафтер; КТ-2 — варианты радужных саженцев, метательные предметы; КТ-3 — аномалии
+	/*
 	/**
 	 * Adds a tree crafting recipe to the registry.
 	 *
@@ -374,4 +410,5 @@ object AlfheimAPI {
 	data class AnomalyBehavior(val costPerBlock: Int, val costPerApplication: Int, val effect: ((TileEntity) -> Int))
 	
 	data class AnomalyData(val subtileClass: Class<out SubTileAnomalyBase>, val rarity: SubTileAnomalyBase.EnumAnomalyRarity, val strip: Int, val color: Int)
+	*/
 }

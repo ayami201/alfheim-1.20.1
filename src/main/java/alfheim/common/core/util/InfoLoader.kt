@@ -3,8 +3,9 @@ package alfheim.common.core.util
 import alexsocol.asjlib.ASJUtilities
 import alfheim.AlfheimCore
 import alfheim.api.ModInfo
-import net.minecraft.util.StatCollector
-import net.minecraftforge.common.MinecraftForge
+// PORT: StatCollector → прослойка порта; MinecraftForge.MC_VERSION → MCPVersion
+import alfheim.port.legacy.StatCollector
+import net.minecraftforge.versions.mcp.MCPVersion
 import org.w3c.dom.Node
 import java.net.URL
 import javax.xml.parsers.DocumentBuilderFactory
@@ -46,11 +47,12 @@ object InfoLoader {
 		
 		override fun run() {
 			try {
-				val root = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(URL("https://bitbucket.org/AlexSocol/alfheim/raw/" + (if (ModInfo.DEV) "development" else "master") + "/news/" + MinecraftForge.MC_VERSION + ".xml").openStream()).documentElement
+				val root = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(URL("https://bitbucket.org/AlexSocol/alfheim/raw/" + (if (ModInfo.DEV) "development" else "master") + "/news/" + MCPVersion.getMCVersion() + ".xml").openStream()).documentElement
 				val latest = getVersionValText(root, "LATEST")
 				
 				val onlineVersion = latest.split("-").let { it.getOrNull(1) ?: it.getOrNull(0) ?: "0" }.toInt()
-				var localVersion = AlfheimCore.meta.version.replace("\\D".toRegex(), "").toInt()
+				// PORT: версия порта — «67-port.N»; номер релиза автора — до «-port»
+				var localVersion = AlfheimCore.meta.version.toString().substringBefore("-port").replace("\\D".toRegex(), "").toInt()
 				
 				if (onlineVersion > localVersion)
 					info.add(StatCollector.translateToLocalFormatted("alfheimmisc.update", localVersion, onlineVersion))
