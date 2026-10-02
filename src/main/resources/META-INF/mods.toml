@@ -1,0 +1,64 @@
+# Описание мода для Forge. Заменяет mcmod.info автора (legacy/src/main/resources/mcmod.info).
+# Поля автора перенесены как есть: имя, описание, authorList, логотип, credits.txt.
+modLoader="kotlinforforge" #mandatory
+# Kotlin for Forge 4.x: язык мода — Kotlin (SPEC, Р-1)
+loaderVersion="${kff_version_range}" #mandatory
+license="${mod_license}"
+issueTrackerURL="https://github.com/ayami201/alfheim-1.20.1/issues" #optional
+
+[[mods]] #mandatory
+modId="${mod_id}" #mandatory
+version="${mod_version}" #mandatory
+displayName="${mod_name}" #mandatory
+# Оригинал автора
+displayURL="https://bitbucket.org/AlexSocol/alfheim" #optional
+logoFile="alfheim_logo.png" #optional
+# Участники — credits.txt автора целиком, подставляется при сборке (build.gradle)
+credits='''${credits_txt}''' #optional
+authors="${mod_authors}" #optional
+description='''${mod_description}
+
+This is a port of Alfheim by AlexSocol (Minecraft 1.7.10, release 67) to Minecraft 1.20.1 Forge, made with the author's permission. The code was changed to work on 1.20.1; every change from the original is marked in the port sources.
+Original: https://bitbucket.org/AlexSocol/alfheim
+Port sources: https://github.com/ayami201/alfheim-1.20.1
+License: NCCPL 1.0, see LICENSE.txt in mod file.''' #mandatory
+
+[[dependencies.${mod_id}]] #optional
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="${forge_version_range}" #mandatory
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.${mod_id}]]
+    modId="kotlinforforge"
+    mandatory=true
+    versionRange="${kff_version_range}"
+    ordering="NONE"
+    side="BOTH"
+# У автора: dependencies = "required-after:Botania"
+[[dependencies.${mod_id}]]
+    modId="botania"
+    mandatory=true
+    versionRange="${botania_version_range}"
+    ordering="AFTER"
+    side="BOTH"
+# Лексикон Botania 1.20.1 — книга Patchouli (SPEC, Р-8)
+[[dependencies.${mod_id}]]
+    modId="patchouli"
+    mandatory=true
+    versionRange="${patchouli_version_range}"
+    ordering="AFTER"
+    side="BOTH"
+# Аксессуары: Baubles → Curios (SPEC, Р-14)
+[[dependencies.${mod_id}]]
+    modId="curios"
+    mandatory=true
+    versionRange="${curios_version_range}"
+    ordering="AFTER"
+    side="BOTH"
