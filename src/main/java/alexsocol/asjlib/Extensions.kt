@@ -6,7 +6,10 @@ package alexsocol.asjlib
 // «PORT: по мере надобности»: их переносит КТ, которой они нужны, и сверяет смысл с 1.20.1
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.Mth
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.block.Block
 import net.minecraftforge.common.MinecraftForge
 import java.util.*
 import kotlin.math.*
@@ -222,13 +225,19 @@ var ItemStack.meta
 
 operator fun IInventory.get(i: Int): ItemStack? = getStackInSlot(i)
 operator fun IInventory.set(i: Int, stack: ItemStack?) = setInventorySlotContents(i, stack)
+*/
 
-fun Block.toItem(): Item? = Item.getItemFromBlock(this)
-fun Item.toBlock() = if (this is ItemReed) field_150935_a!! else Block.getBlockFromItem(this)!!
+// PORT: Item.getItemFromBlock → asItem: у блока без предмета 1.7.10 давал null, 1.20.1 — Items.AIR
+fun Block.toItem(): Item? = asItem().takeUnless { it === Items.AIR }
+// PORT: Block.getBlockFromItem и ItemReed → Block.byItem (тростник и ему подобные в 1.20.1 — BlockItem); у предмета без блока — воздух, как в 1.7.10
+fun Item.toBlock(): Block = Block.byItem(this)
+/* PORT: по мере надобности — числовые id блоков и предметов, в 1.20.1 их нет
 val Block.id get() = Block.getIdFromBlock(this)
 val Item.id get() = Item.getIdFromItem(this)
+*/
 val ItemStack.block get() = item.toBlock()
 
+/* PORT: по мере надобности — зелья
 fun PotionEffectU(id: Int, time: Int, lvl: Int = 0, ambient: Boolean = false) = PotionEffect(id, time, lvl, ambient).apply { curativeItems.clear() }
 */
 
