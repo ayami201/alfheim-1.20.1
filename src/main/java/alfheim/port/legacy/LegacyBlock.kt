@@ -140,6 +140,23 @@ interface LegacyBlock {
 	fun lightOpacity() = legacy.lightOpacity ?: if (isOpaqueCube()) 255 else 0
 }
 
+/*
+ * Сеттер 1.7.10 в цепочке после другого сеттера (`BlockX().setCreativeTab(tab).setHardness(1.5f)`): предыдущий вернул
+ * Block, как в 1.7.10, — у блока порта сеттеры те же
+ */
+fun Block.setBlockName(name: String) = (this as LegacyBlock).setBlockName(name)
+fun Block.setBlockTextureName(name: String) = (this as LegacyBlock).setBlockTextureName(name)
+fun Block.setCreativeTab(tab: Any?) = (this as LegacyBlock).setCreativeTab(tab)
+fun Block.setHardness(hardness: Float) = (this as LegacyBlock).setHardness(hardness)
+fun Block.setResistance(resistance: Float) = (this as LegacyBlock).setResistance(resistance)
+fun Block.setBlockUnbreakable() = (this as LegacyBlock).setBlockUnbreakable()
+fun Block.setLightLevel(level: Float) = (this as LegacyBlock).setLightLevel(level)
+fun Block.setLightOpacity(opacity: Int) = (this as LegacyBlock).setLightOpacity(opacity)
+fun Block.setStepSound(sound: SoundType?) = (this as LegacyBlock).setStepSound(sound)
+fun Block.setTickRandomly(tick: Boolean) = (this as LegacyBlock).setTickRandomly(tick)
+fun Block.setHarvestLevel(toolClass: String?, level: Int) = (this as LegacyBlock).setHarvestLevel(toolClass, level)
+fun Block.setHarvestLevel(toolClass: String?, level: Int, metadata: Int) = (this as LegacyBlock).setHarvestLevel(toolClass, level, metadata)
+
 /** Имена звуков блока 1.7.10 (`soundTypeStone` и др.) внутри классов блоков, как в 1.7.10 */
 interface SoundTypes1710 {
 
