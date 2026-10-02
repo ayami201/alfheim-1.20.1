@@ -8,7 +8,7 @@
 
 ## КТ-1 — Фундамент
 
-- [ ] Конфиг: `AlfheimConfigHandler`, `AlfheimPreConfigHandler` → ForgeConfigSpec (SPEC, Р-12); опции, потерявшие смысл, — в MAPPING.md; сверка опций с автором скриптом в CI
+- [x] Конфиг: `AlfheimConfigHandler`, `AlfheimPreConfigHandler` → ForgeConfigSpec (SPEC, Р-12); опции, потерявшие смысл, — в MAPPING.md; сверка опций с автором скриптом в CI — `config/Alfheim/core.toml`, `mod.toml`, `client.toml`; 205 опций автора: 57 удалены, 13 в клиентском файле, 135 в файлах сервера со значениями автора (`python3 tools/check_config.py`)
 - [ ] ASJCore: `ASJUtilities`, `Extensions`, `ItemNBTHelper`, `math` — то, что нужно КТ-1 и КТ-2
 - [ ] Прослойка `alfheim.port.legacy` — минимум для КТ-2 (SPEC, Р-4)
 - [ ] Сеть: канал `SimpleChannel` и регистрация пакетов автора (SPEC, Р-11)
@@ -39,7 +39,7 @@
 ```bash
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ./gradlew build
-./gradlew runGameTestServer && python3 tools/check_server_log.py
+./gradlew runGameTestServer && python3 tools/check_server_log.py && python3 tools/check_config.py
 python3 tools/check_inventory.py && python3 tools/check_hooks.py
 ```
 
@@ -65,6 +65,16 @@ python3 tools/check_inventory.py && python3 tools/check_hooks.py
 - 02.10.2026 — `gradle/wrapper/gradle-wrapper.jar` — единственный новый jar в git: без него не работает `./gradlew`, которого требует CLAUDE.md. Это стандартная обёртка Gradle 8.14.3; CI сверяет её с контрольными суммами Gradle (`gradle/actions/setup-gradle`). Исключение записано в CLAUDE.md.
 - 02.10.2026 — правила — `move:`-коммит файла кода в `src/` ломает компиляцию до следующего `port:`-коммита: код 1.7.10 не собирается на 1.20.1. В КТ-0 обошлось: файлы перенесены и поправлены до появления сборки. Исключение записано в CLAUDE.md, раздел «Проверка».
 
+- 02.10.2026 — конфиг — Forge загружает файлы настроек после регистрации блоков, а автор читает их в preInit, до неё. Прослойка `alfheim.port.config.Configuration` читает файл сама в конструкторе мода; `readProperties` автора проходит дважды: объявление опций, затем чтение (`ASJConfigHandler.loadConfig`, `// PORT:`).
+- 02.10.2026 — конфиг — файлы `.cfg` → `.toml`; 13 опций интерфейса и графики, которые читает только клиентский код, — в `config/Alfheim/client.toml` (SPEC, Р-12; список — `ClientOptions.kt`). На выделенном сервере их нет, там они по умолчанию. `minimalGraphics` осталась в общем файле: у автора от неё зависит и сервер.
+- 02.10.2026 — конфиг — точка в имени опции (`wire.overpowered`, `TiC.materialIDs`) записывается уровнем TOML: `[general.wire] overpowered`. Иначе ForgeConfigSpec теряет комментарий такой опции и переписывает файл при каждом чтении.
+- 02.10.2026 — `AlfheimPreConfigHandler.kt` — `enableMMO` теперь в файле всегда; у автора без `enableElvenStory` её строки в файле не было. Значение то же (`// PORT:`).
+- 02.10.2026 — `ASJConfigHandler.kt` — число вне границ автора (`kudzuDelay` и др.) по-прежнему останавливает запуск исключением автора; значение не того типа заменяется значением по умолчанию, как в 1.7.10. `setRequiresMcRestart(true)` → `worldRestart()`: в 1.20.1 у общих конфигов нет пометки «перезапуск игры».
+- 02.10.2026 — `ASJUtilities.kt` — имя в логе всегда `ALFHEIM`. В 1.7.10 FML брал его по пакету на стеке вызова, и вне загрузки это было `ASJCORE`.
+- 02.10.2026 — `Vector3.kt` — ошибки автора перенесены как есть: `fromEntityCenter` для своего игрока на клиенте даёт точку на 1.62 ниже центра (posYp и yOffset вычитаются дважды); `isInside` сравнивает `y` с `maxY` вместо `minY`; `vecTileDistance`, `entityTileDistance` считают `x - xCoord + 0.5` вместо `x - (xCoord + 0.5)`.
+- 02.10.2026 — позиции сущностей — в 1.7.10 `posY` предметов, сфер опыта, падающих блоков, TNT, лодок и вагонеток был в центре хитбокса (`yOffset = height / 2`), в 1.20.1 `y` у всех — низ хитбокса. `Vector3.fromEntity` для них ниже на полвысоты (у предмета — на 0.125). Свой игрок на клиенте: в 1.7.10 `posY` — уровень глаз, в 1.20.1 — ног; это учитывается при переносе каждого места, где читается `posY` своего игрока.
+- 02.10.2026 — `ItemNBTHelper.kt` — тег зачарований `"ench"` → `"Enchantments"`: `setCompound` по-прежнему не затирает зачарования.
+
 ## Журнал решений
 
 | Дата | Решение | Почему | Как откатить |
@@ -85,4 +95,4 @@ python3 tools/check_inventory.py && python3 tools/check_hooks.py
 
 ## Вопросы к владельцу
 
-Пока нет.
+- **Экран настроек** (КТ-1, `GUIConfig.kt`, `GUIFactory.kt`). В оригинале настройки Alfheim открывались в игре: **Mods** → **Alfheim** → **Config**. Экран рисовал сам Forge 1.7.10, у автора — два коротких файла, которые его подключают. В Forge 1.20.1 такого экрана нет. Варианты: А) не писать свой — настройки меняются в файлах `config/Alfheim/*.toml` или в игре модом Configured, он сам показывает настройки любого мода; Б) написать экран — это новый код, лучше на стадии 2. Рекомендация — А. Пока ответа нет, файлы остаются в `legacy/` со статусом «ждёт».

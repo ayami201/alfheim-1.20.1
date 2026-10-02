@@ -81,7 +81,7 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `eventForge()` / `eventFML()` (asjlib) | `MinecraftForge.EVENT_BUS.register(...)` | события жизненного цикла мода — на шине мода |
 | `cpw.mods.fml…SubscribeEvent` | `net.minecraftforge.eventbus.api.SubscribeEvent` | |
 | `SimpleNetworkWrapper`, `IMessage` | `SimpleChannel`, encoder / decoder / handler | порядок полей — как у автора |
-| `Configuration` | `ForgeConfigSpec` | SPEC, Р-12 |
+| `Configuration` | `ForgeConfigSpec` через прослойку `alfheim.port.config.Configuration` | ✓ SPEC, Р-12; подробности — раздел «Файлы конфига» |
 | `CommandBase` | Brigadier, `RegisterCommandsEvent` | имена и аргументы — как у автора |
 | `ClientRegistry.registerKeyBinding` | `RegisterKeyMappingsEvent` | |
 | Ore Dictionary | теги | |
@@ -126,7 +126,30 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 
 ## Удалённые опции конфига
 
-Опции, потерявшие смысл в 1.20.1 (SPEC, п. 4). Заполняется в КТ-1.
+Опции, потерявшие смысл в 1.20.1 (SPEC, п. 4). Строка `loadProp` в коде автора
+закомментирована с пометкой `// PORT:`, поле остаётся со значением автора по
+умолчанию: код, который его читает, переносится в своей КТ. Таблицу читает
+`tools/check_config.py`; `*` в имени — любые символы.
 
 | Опция автора | Почему удалена |
 |---|---|
+| `dimensionIDAlfheim`, `dimensionIDNiflheim`, `dimensionIDDomains`, `dimensionIDHelheim` | номера измерений: в 1.20.1 измерения задаются именем в датапаке мода (SPEC, Р-10) |
+| `niflheimBiomeIDs` | номера биомов: в 1.20.1 биомы — данные с именами |
+| `potionID*` (43 опции) | номера зелий: в 1.20.1 эффекты регистрируются по имени, номер выдаёт реестр, конфликтов номеров нет |
+| `flagIdSheepRainbow`, `floatingIslandSyncedDataInitLimit`, `oiiaId` | номера в DataWatcher; в 1.20.1 номера SynchedEntityData выдаёт игра |
+| `TC.botaniaAspects`, `TC.tinctura`, `TC.overrideFMCaps`, `TC.treeCrafting` | интеграция с Thaumcraft и Forbidden Magic выпала (SPEC, п. 7) |
+| `elementiumClusterMeta` (`core.cfg`) | metadata кластера Thaumcraft; интеграция выпала (SPEC, п. 7) |
+| `overrideCoFHCollisionCheck` (`core.cfg`) | отключала врезку в CoFHCore 1.7.10; в 1.20.1 этой врезки нет |
+
+## Файлы конфига
+
+| Было | Стало | Примечание |
+|---|---|---|
+| `config/Alfheim/core.cfg` (`AlfheimPreConfigHandler`, читал coremod) | `config/Alfheim/core.toml`, читается первым в конструкторе мода | ✓ coremod в 1.20.1 нет |
+| `config/Alfheim/mod.cfg` (`AlfheimConfigHandler`) | `config/Alfheim/mod.toml` | ✓ |
+| — | `config/Alfheim/client.toml`: интерфейс и графика, только на клиенте | ✓ SPEC, Р-12; список — `alfheim.port.config.ClientOptions` |
+| `Configuration` / `PreConfiguration` в `ASJConfigHandler` / `ASJPreConfigHandler` | прослойка `alfheim.port.config.Configuration` поверх `ForgeConfigSpec` | ✓ код автора не меняется; два прохода `readProperties`: объявление опций, затем чтение |
+| категория `a.b` + опция `c` | таблица TOML `[a.b]`, ключ `c` | ✓ точка в имени опции — тоже уровень: `wire.overpowered` → `[general.wire] overpowered` |
+| `setRequiresMcRestart(true)` | `worldRestart()` | ✓ в 1.20.1 у общих конфигов нет пометки «нужен перезапуск игры» |
+| `OnConfigChangedEvent` (экран настроек) | `ModConfigEvent.Reloading` | ✓ Forge шлёт его, когда файл изменили во время игры |
+| значение не того типа | значение по умолчанию | ✓ как в 1.7.10; границы чисел проверяет `ASJConfigHandler` автора |

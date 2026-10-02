@@ -34,7 +34,7 @@ python3 tools/check_inventory.py
 | КТ | Файлов | Строк | ждёт | перенесено | выпало | WIP — стадия 2 |
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
-| КТ-1 | 33 | 5 661 | 33 |  |  |  |
+| КТ-1 | 33 | 5 661 | 31 | 2 |  |  |
 | КТ-2 | 222 | 19 082 | 222 |  |  |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 70 | 4 498 |  |  | 58 | 12 |
-| **всего** | **1153** | **124 643** | **1081** | **2** | **58** | **12** |
+| **всего** | **1153** | **124 643** | **1079** | **4** | **58** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -359,10 +359,10 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `GUIBanner.kt` | 66 | КТ-8 | ждёт | сезонные события |
-| `GUIConfig.kt` | 9 | КТ-1 | ждёт |  |
+| `GUIConfig.kt` | 9 | КТ-1 | ждёт | экран настроек: в Forge 1.20.1 встроенного нет — вопрос к владельцу (TASKS.md) |
 | `GUIDeathTimer.kt` | 77 | КТ-7 | ждёт |  |
 | `GUIEditGaiaButton.kt` | 43 | КТ-3 | ждёт |  |
-| `GUIFactory.kt` | 12 | КТ-1 | ждёт |  |
+| `GUIFactory.kt` | 12 | КТ-1 | ждёт | см. `GUIConfig.kt` |
 | `GUIParty.kt` | 693 | КТ-7 | ждёт |  |
 | `GUIRace.kt` | 64 | КТ-7 | ждёт |  |
 | `GUIScreenOverlay.kt` | 74 | КТ-6 | ждёт | холод Нифльхейма |
@@ -1078,8 +1078,8 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `AlfheimAchievementHandler.kt` | 83 | КТ-10 | ждёт | достижения → advancements |
-| `AlfheimConfigHandler.kt` | 613 | КТ-1 | ждёт |  |
-| `AlfheimPreConfigHandler.kt` | 25 | КТ-1 | ждёт |  |
+| `AlfheimConfigHandler.kt` | 613 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/AlfheimConfigHandler.kt`; удалённые опции — MAPPING.md |
+| `AlfheimPreConfigHandler.kt` | 25 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/AlfheimPreConfigHandler.kt` |
 | `CardinalSystem.kt` | 1173 | КТ-7 | ждёт |  |
 | `ChunkLoadingHandler.kt` | 129 | КТ-6 | ждёт |  |
 | `DispenserHandlers.kt` | 174 | КТ-2 | ждёт |  |
@@ -2161,4 +2161,24 @@ python3 tools/check_inventory.py
 
 Остальное в `legacy/` (сборка 1.7.10, `libs/`, `news/`, `release/`, служебные txt,
 `legacy/asjcore/`) — эталон для сверки, в порт не переносится. Части ASJCore
-переносятся по мере надобности (SPEC, Р-3) и отмечаются в примечании файла, которому понадобились.
+переносятся по мере надобности (SPEC, Р-3), список — ниже.
+
+## ASJCore
+
+Файлы библиотеки автора, перенесённые из `legacy/asjcore/src/main/java/` в
+`src/main/java/` с тем же путём (SPEC, Р-3). Перенос и правка — разными
+коммитами, как у файлов Alfheim. Функции, которые порту ещё не понадобились,
+закомментированы блоками `/* PORT: по мере надобности … */`: их включает КТ,
+которой они нужны, сверив смысл с 1.20.1.
+
+| Файл | Строк | КТ | Работает | Примечание |
+|---|---:|---|---|---|
+| `alexsocol/asjlib/extendables/ASJConfigHandler.kt` | 98 | КТ-1 | всё | поверх `alfheim.port.config.Configuration` |
+| `alexsocol/asjlib/extendables/ASJPreConfigHandler.kt` | 83 | КТ-1 | всё | то же |
+| `alexsocol/asjlib/ASJUtilities.kt` | 914 | КТ-1 | лог, сторона (`isServer`/`isClient`), `chance`, `randInBounds`, поиск в коллекциях | |
+| `alexsocol/asjlib/Extensions.kt` | 358 | КТ-1 | функции Kotlin, `clamp`/`mfloor`/`mceil`, `eventForge`/`eventFML`, `ItemStack.cooldown` | |
+| `alexsocol/asjlib/ExtensionsClient.kt` | 17 | КТ-1 | `mc` | |
+| `alexsocol/asjlib/ArrayExt.kt` | 88 | КТ-1 | всё | без правок |
+| `alexsocol/asjlib/ItemNBTHelper.kt` | 149 | КТ-1 | всё | |
+| `alexsocol/asjlib/math/Vector3.kt` | 391 | КТ-1 | всё, кроме `glVertex` | |
+| `alexsocol/asjlib/math/Quaternion.kt` | 94 | КТ-1 | всё | без правок |
