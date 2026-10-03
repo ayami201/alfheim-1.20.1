@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "alfheim:items/materials/rift_drive",
+    "layer1": "alfheim:items/materials/rift_drive1"
+  }
+}

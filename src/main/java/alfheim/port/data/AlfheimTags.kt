@@ -1,10 +1,11 @@
 package alfheim.port.data
 
 import alfheim.api.ModInfo.MODID
+import alfheim.api.lib.LibOreDict
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.item.AlfheimItems
 import alfheim.port.legacy.*
-import alfheim.port.registry.LegacyRegistration
+import alfheim.port.registry.*
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.PackOutput
 import net.minecraft.data.tags.*
@@ -78,8 +79,48 @@ object ShapeTags {
 object OreDictTags {
 
 	val names = mapOf(
-		"sand" to ResourceLocation("forge", "sand"),
+		"sand" to forge("sand"),
+		"coal" to ResourceLocation("minecraft", "coals"),
+		"slimeball" to forge("slimeballs"),
+		LibOreDict.DRAGON_ORE to forge("ores/dragonstone"),
+		LibOreDict.ELEMENTIUM_ORE to forge("ores/elementium"),
+		LibOreDict.ELVEN_QUARTZ_ORE to forge("ores/quartz_elven"),
+		LibOreDict.GOLD_ORE to forge("ores/gold"),
+		LibOreDict.GOLD_ORE + "Alfheim" to alfheim(LibOreDict.GOLD_ORE + "Alfheim"),
+		LibOreDict.IFFESAL_ORE to forge("ores/iffesal"),
+		LibOreDict.LAPIS_ORE to forge("ores/lapis"),
+		LibOreDict.LAPIS_ORE + "Alfheim" to alfheim(LibOreDict.LAPIS_ORE + "Alfheim"),
+		LibOreDict.ELVORIUM_INGOT to forge("ingots/elvorium"),
+		LibOreDict.MAUFTRIUM_INGOT to forge("ingots/mauftrium"),
+		LibOreDict.MUSPELHEIM_POWER_INGOT to forge("ingots/muspelheim_power"),
+		LibOreDict.NIFLHEIM_POWER_INGOT to forge("ingots/niflheim_power"),
+		LibOreDict.ELVORIUM_NUGGET to forge("nuggets/elvorium"),
+		LibOreDict.MAUFTRIUM_NUGGET to forge("nuggets/mauftrium"),
+		LibOreDict.IFFESAL_DUST to forge("dusts/iffesal"),
+		LibOreDict.MUSPELHEIM_ESSENCE to alfheim(LibOreDict.MUSPELHEIM_ESSENCE),
+		LibOreDict.NIFLHEIM_ESSENCE to alfheim(LibOreDict.NIFLHEIM_ESSENCE),
+		LibOreDict.FENRIR_FUR to alfheim(LibOreDict.FENRIR_FUR),
+		LibOreDict.ARUNE[0] to alfheim(LibOreDict.ARUNE[0]),
+		LibOreDict.ARUNE[1] to alfheim(LibOreDict.ARUNE[1]),
+		LibOreDict.ARUNE[2] to alfheim(LibOreDict.ARUNE[2]),
+		LibOreDict.INFUSED_DREAM_TWIG to alfheim(LibOreDict.INFUSED_DREAM_TWIG),
+		LibOreDict.TWIG_THUNDERWOOD to alfheim(LibOreDict.TWIG_THUNDERWOOD),
+		LibOreDict.SPLINTERS_THUNDERWOOD to alfheim(LibOreDict.SPLINTERS_THUNDERWOOD),
+		LibOreDict.TWIG_NETHERWOOD to alfheim(LibOreDict.TWIG_NETHERWOOD),
+		LibOreDict.SPLINTERS_NETHERWOOD to alfheim(LibOreDict.SPLINTERS_NETHERWOOD),
+		LibOreDict.COAL_NETHERWOOD to alfheim(LibOreDict.COAL_NETHERWOOD),
+		LibOreDict.DYES(LibOreDict.Color.Rainbow) to alfheim(LibOreDict.DYES(LibOreDict.Color.Rainbow)),
+		LibOreDict.FLORAL_POWDER to alfheim(LibOreDict.FLORAL_POWDER),
+		LibOreDict.RAINBOW_PETAL to alfheim(LibOreDict.RAINBOW_PETAL),
+		LibOreDict.RAINBOW_QUARTZ to alfheim(LibOreDict.RAINBOW_QUARTZ),
+		LibOreDict.PETAL_ANY to alfheim(LibOreDict.PETAL_ANY),
 	)
+
+	/** Общий тег Forge: `forge:ingots/elvorium` — так материалы называют и Botania 1.20.1, и другие моды */
+	private fun forge(path: String) = ResourceLocation("forge", path)
+
+	/** Имя, у которого нет общего тега, — тег Alfheim по имени автора: `essenceMuspelheim` → `alfheim:essence_muspelheim` */
+	private fun alfheim(name: String) = ResourceLocation(MODID, AlfheimRegisters.snakeCase(name))
 
 	fun entries(): List<Pair<String, ItemStack>> {
 		if (OreDictionary.entries.isEmpty()) {
@@ -103,9 +144,11 @@ class AlfheimBlockTags(output: PackOutput, lookup: CompletableFuture<HolderLooku
 			ShapeTags.tag(block)?.let { tag(it).add(block) }
 		}
 
+		// блок — вещь-блок 1.7.10 (ItemBlock). Предмет, который ставит блок под своим именем (ItemNameBlockItem: семена,
+		// лепестки Botania), в 1.7.10 был простым предметом
 		for ((name, stack) in OreDictTags.entries()) {
-			val block = Block.byItem(stack.item)
-			if (block != Blocks.AIR) tag(BlockTags.create(OreDictTags.tag(name))).add(block)
+			val item = stack.item as? BlockItem ?: continue
+			if (item !is ItemNameBlockItem) tag(BlockTags.create(OreDictTags.tag(name))).add(item.block)
 		}
 	}
 }
