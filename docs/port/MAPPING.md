@@ -103,6 +103,10 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `block.material.isLiquid` | `state.liquid()` | ✓ |
 | `Blocks.water` и `flowing_water`, `lava` и `flowing_lava` | `Blocks.WATER`, `Blocks.LAVA` | ✓ стоячая и текучая жидкость — один блок, уровень — свойство состояния: сравнения автора «стоячая — текучая» сводятся к одному блоку |
 | `IFluidBlock.canDrain(world, x, y, z)`, `drain(world, x, y, z, true)` | `canDrain(level, pos)`, `drain(level, pos, FluidAction.EXECUTE)` | ✓ |
+| `block.getBlockHardness(world, x, y, z)`, `block.canPlaceBlockAt(world, x, y, z)` | `state.getDestroySpeed(level, pos)`, `state.canSurvive(level, pos)` | ✓ |
+| `ITileEntityProvider` | `EntityBlock` | ✓ |
+| `te.writeToNBT(nbt)`; `TileEntity.createAndLoadEntity(nbt)` + `xCoord` / `yCoord` / `zCoord` + `world.setTileEntity(x, y, z, te)` | `be.saveWithFullMetadata()`; `BlockEntity.loadStatic(pos, state, nbt)` + `level.setBlockEntity(be)` | ✓ блок-сущность 1.20.1 создаётся сразу в своей точке |
+| «точки нет» — `y = -1` в NBT предмета | `Int.MIN_VALUE` (или нет записи) | ✓ мир 1.20.1 бывает ниже нуля, блок на −1 — обычный; так же у секстанта Botania 1.20.1 |
 
 ## Блоки и предметы
 
@@ -234,12 +238,17 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `MovingObjectPosition`, `MovingObjectType`; `typeOfHit`, `hitVec`, `blockX` / `blockY` / `blockZ`, `sideHit`, `entityHit` | `HitResult` (псевдоним) и свойства с именами 1.7.10 (`Hit1710`) | ✓ сторона — номер 1.7.10, он равен `Direction.get3DDataValue` |
 | `inventory[i]`, `inventory[i] = stack` (`IInventory`, ASJCore) | `Container.getItem(i)` / `setItem(i, …)` | ✓ пустой стек ↔ `null` |
 | `world.provider.dimensionId`, `entity.dimension` (номер измерения) | `level.dimensionId` — id строкой (`minecraft:overworld`); обратно — `dimensionKey(id)` | ✓ номеров измерений в 1.20.1 нет: где автор хранит номер, хранится id |
+| `ChunkCoordinates(x, y, z)`, `posX` / `posY` / `posZ`, `val (x, y, z) = coords` | как есть — `ChunkCoordinates` = `BlockPos` (`Coords1710`) | ✓ `BlockPos` неизменяемый: код, который меняет точку, переписывается на месте |
+| `ForgeDirection` (`getOrientation`, `VALID_DIRECTIONS`, `UNKNOWN`, `offsetX` / `Y` / `Z`) | как есть — перечисление `ForgeDirection` прослойки; для API 1.20.1 — `.direction` (`Direction`, у `UNKNOWN` — `null`) | ✓ номера сторон 1.7.10 = `Direction.get3DDataValue`; остальное (`getOpposite`, `getRotation`) — по мере надобности |
+| `player.capabilities.isCreativeMode` / `isFlying` / `allowFlying` / `disableDamage` | как есть — `Abilities` 1.20.1: `instabuild` / `flying` / `mayfly` / `invulnerable` (`Player1710`) | ✓ |
+| `GameRegistry.findUniqueIdentifierFor(block \| item).toString()` | как есть — ключ реестра (`modid:name`) | ✓ |
+| `nbt.hasNoTags()`, `world.removeTileEntity(x, y, z)` | `isEmpty`, `removeBlockEntity(pos)` | ✓ |
 
 ## Предметы, сущности, эффекты
 
 | Было | Стало | Примечание |
 |---|---|---|
-| `onItemRightClick` / `onItemUse` / `onUpdate` / `addInformation` | `use` / `useOn` / `inventoryTick` / `appendHoverText` | |
+| `onItemRightClick` / `onItemUse` / `onUpdate` / `addInformation` | `use` / `useOn` / `inventoryTick` / `appendHoverText` | `onItemUse` предмета автора остаётся как есть: `Item1710.useOn` зовёт его (`true` — успех, рука взмахивает; `false` — `PASS`, дальше `use`, как в 1.7.10) |
 | `onUsingTick(stack, player, count)` | `onUseTick(level, entity, stack, count)` | ✓ предмет может держать любое существо: код автора — после `entity as? Player ?: return` |
 | `player.theItemInWorldManager.blockReachDistance` | `player.blockReach` (атрибут Forge) | ✓ дальность руки игрока: в 1.7.10 на сервере — 5 блоков в любом режиме, в 1.20.1 — 4,5, в творческом — 5 |
 | `ASJUtilities.getMouseOver(entity, dist, interact)`, `getSelectedBlock(entity, dist, stopOnLiquid)`, `rayTrace(entity, dist)` | те же функции ASJCore на `ClipContext` | ✓ луч — от глаз (`eyePosition`) на обеих сторонах; `stopOnLiquid` — `ClipContext.Fluid.SOURCE_ONLY` (только источники, как в 1.7.10); промах — `null` |
@@ -337,6 +346,12 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `setGlow` (asjlib) | полная яркость, `LightTexture.FULL_BRIGHT` | |
 | `mc.gameSettings.particleSetting` | `mc.options.particles().get().id` | ✓ номера те же: 0 — все, 1 — меньше, 2 — минимум |
 | `mc.effectRenderer.addEffect(частица)` | `mc.particleEngine.createParticle(данные, x, y, z, vx, vy, vz)` | без ограничителя частиц ванилы, как `addEffect`; `level.addParticle` ограничивает ещё раз |
+| `RenderWorldLastEvent` | `RenderLevelStageEvent`, этап `AFTER_LEVEL` (после мира и погоды, до руки) | ✓ **на этом этапе Forge 1.20.1 кладёт в событие матрицу проекции, а не камеры**: поворот камеры строится сам — `PoseStack()`, `mulPose(XP(camera.xRot))`, `mulPose(YP(camera.yRot + 180))`. На других этапах `poseStack` события — камера |
+| `RenderManager.renderPosX` / `Y` / `Z` | `mc.gameRenderer.mainCamera.position` | ✓ |
+| линии `GL_LINES` / `GL_LINE_STRIP` с `glLineWidth` | шейдер линий ванилы: `RenderSystem.setShader(GameRenderer::getRendertypeLinesShader)`, формат `POSITION_COLOR_NORMAL`, у вершины — направление отрезка, толщина — `RenderSystem.lineWidth` | ✓ шейдер позиции рисует линии в 1 пиксель; рамка блока — `LevelRenderer.renderLineBox` |
+| текст в мире (`fontRenderer.drawString` в матрице мира) | `font.drawInBatch(…, Font.DisplayMode.SEE_THROUGH / NORMAL, 0, LightTexture.FULL_BRIGHT)` + `MultiBufferSource.immediate(…).endBatch()` | ✓ `SEE_THROUGH` — без проверки глубины |
+| `RenderGameOverlayEvent.Post` (`ElementType.ALL`), `ScaledResolution` | `RenderGuiEvent.Post` (`guiGraphics`), `mc.window.guiScaledWidth` / `guiScaledHeight` | ✓ |
+| `mc.objectMouseOver` | `mc.hitResult` | ✓ промах в 1.20.1 — `MISS`, в 1.7.10 — `null` |
 | своя частица автора (`EntityFX`): `addEffect(частица)`; `particleRed` / `Green` / `Blue`, `particleMaxAge`, `particleGravity`, `prevPosX`, `interpPosX` | `Particle`: `mc.particleEngine.add(частица)`; `rCol` / `gCol` / `bCol`, `lifetime`, `gravity`, `xo`, `camera.position.x` | ✓ `renderParticle(Tessellator, …)` → `render(VertexConsumer, Camera, partialTicks)`, точки — от камеры. Свой проход рисования автора (очередь и GL после частиц) — свой `ParticleRenderType` частицы (`EntityVoxelFX.RENDER_TYPE`) |
 
 ## Миры
@@ -366,6 +381,10 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | частицы `Botania.proxy.wispFX(world, x, y, z, r, g, b, size, gravity)` / `sparkleFX(world, x, y, z, r, g, b, size, m)` | `alfheim.port.legacy.botania.Botania.proxy` → `world.addParticle(WispParticleData.wisp(size, r, g, b, 1) / SparkleParticleData.sparkle(size, r, g, b, m), …)` | ✓ «гравитация» огонька — скорость вниз; на сервере — ничего, как в 1.7.10 |
 | `ItemKeepIvy.TAG_KEEP` (плющ верности) | `ResoluteIvyItem.TAG_KEEP` | ✓ тег тот же — `Botania_keepIvy` |
 | `ManaItemHandler.requestManaExact(…)` и др. | `ManaItemHandler.instance().requestManaExact(…)` | ✓ |
+| `vazkii.botania.common.core.helper.ItemNBTHelper` | `vazkii.botania.common.helper.ItemNBTHelper` | ✓ те же методы |
+| `ToolCommons.raytraceFromEntity(world, player, fluids, dist)` | `ToolCommons.raytraceFromEntity(entity, dist, fluids)` | ✓ промах — `MISS`, а не `null` |
+| структура секстанта: `MultiblockSextant` + `AnyComponent(pos, block, 0)`, `MultiblockRenderHandler.setMultiblock` / `anchor`; `Botania.proxy.removeSextantMultiblock()` | разреженная структура Patchouli (`PatchouliAPI.get().makeSparseMultiblock`, `predicateMatcher(block) { !it.isAir }`) с id `WorldshaperssSextantItem.MULTIBLOCK_ID`, показ — `Proxy.INSTANCE.showMultiblock(mb, название, точка, Rotation.NONE)`; `alfheim.port.legacy.botania.Botania.proxy.removeSextantMultiblock()` | ✓ как секстант Botania 1.20.1; с тем же id её убирает и секстант. Patchouli пишет над структурой название и долю готовых блоков |
+| `ConfigHandler.boundBlockWireframe` и др. настройки клиента Botania | `BotaniaConfig.client().boundBlockWireframe()` | ✓ |
 | `Botania.proxy.worldElapsedTicks` | `alfheim.port.legacy.botania.Botania.proxy.worldElapsedTicks` | ✓ на клиенте — тики игры Botania (`ClientTickHandler.ticksInGame`), на сервере — время основного мира |
 | `ModItems.manaResource` 9, `ModItems.quartz` 5 | `BotaniaItems.dragonstone`, `BotaniaItems.elfQuartz` | ✓ |
 | `ModItems.petal` с metadata цвета | `BotaniaItems.getPetal(DyeColor)` | ✓ |
