@@ -111,6 +111,8 @@ object PortWorldshaperTest {
 		val player = player(helper, "alfheim-triquetrum-move")
 		val base = helper.absolutePos(BlockPos(0, 40, 0))
 		clear(helper, base.offset(-1, -1, -1), base.offset(6, 3, 2))
+		// мир тестов сохраняется между запусками: предметы, оставшиеся здесь от других тестов, мешают проверке ниже
+		helper.level.getEntitiesOfClass(ItemEntity::class.java, AABB(base).inflate(3.0)).forEach { it.discard() }
 		helper.level.setBlock(base, Blocks.STONE.defaultBlockState(), 3)
 		helper.level.setBlock(base.east(), Blocks.CHEST.defaultBlockState(), 3)
 		(helper.level.getBlockEntity(base.east()) as ChestBlockEntity).setItem(0, ItemStack(Items.DIAMOND, 3))
