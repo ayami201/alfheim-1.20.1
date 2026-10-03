@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "alfheim:blocks/decor/living_mountain4",
+    "side": "alfheim:blocks/decor/living_mountain4",
+    "top": "alfheim:blocks/decor/living_mountain4"
+  }
+}

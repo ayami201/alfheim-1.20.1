@@ -27,8 +27,15 @@ object LegacyRegistration {
 	/** Новый id и имя 1.7.10; [oldMeta] — metadata варианта, `null` — вещь без вариантов */
 	class Entry(val id: ResourceLocation, val oldName: String, val oldMeta: Int?)
 
+	/**
+	 * Блок 1.7.10, у которого в 1.20.1 нет своего блока, — состояние другого блока: двойная плита — `type=double` плиты.
+	 * [state] — свойства состояния, как в `legacy_ids.json`: `type=double`
+	 */
+	class Alias(val oldName: String, val block: Block, val state: String)
+	
 	val blocks = LinkedHashMap<Block, Entry>()
 	val items = LinkedHashMap<Item, Entry>()
+	val aliases = ArrayList<Alias>()
 
 	private val blockSources = ArrayList<() -> Any>()
 	private val itemSources = ArrayList<() -> Any>()
@@ -83,6 +90,13 @@ object LegacyRegistration {
 		if (item != null) blockItems += block to item
 	}
 
+	/** Старое имя [name] — состояние [state] блока [block] ([Alias]) */
+	fun alias(name: String, block: Block, state: String) {
+		check(block in blocks) { "Alias $name: block is not registered" }
+		check(aliases.none { it.oldName == name }) { "Alias $name is registered twice" }
+		aliases += Alias(name, block, state)
+	}
+	
 	/** Предмет автора под именем [name] (как в `GameRegistry.registerItem` 1.7.10) */
 	fun item(item: Item, name: String, meta: Int?) = item(item, Entry(id(name, meta), name, meta))
 

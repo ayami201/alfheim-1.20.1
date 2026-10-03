@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/living_mountain0_slab"
+    },
+    "type=double": {
+      "model": "alfheim:block/living_mountain"
+    },
+    "type=top": {
+      "model": "alfheim:block/living_mountain0_slab_top"
+    }
+  }
+}

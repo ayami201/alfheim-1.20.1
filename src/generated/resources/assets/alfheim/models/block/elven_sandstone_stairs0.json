@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "alfheim:blocks/decor/elven_sandstone_bottom",
+    "side": "alfheim:blocks/decor/elven_sandstone_normal",
+    "top": "alfheim:blocks/decor/elven_sandstone_top"
+  }
+}

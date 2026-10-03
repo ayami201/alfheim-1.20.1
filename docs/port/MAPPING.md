@@ -48,6 +48,10 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 
 Пример: `"blocks": {"alfheim:altWood1": {"0": "alfheim:alt_wood1_…", "*": "…"}}`.
 
+Блок 1.7.10, у которого в 1.20.1 нет своего блока, записывается как состояние другого: двойная плита
+`"alfheim:LivingCobble0SlabFull": "alfheim:living_cobble0_slab[type=double]"` (`LegacyRegistration.alias`).
+Metadata поворота и половины (лестницы, плиты, столбы) — состояние: его переводит загрузчик построек (КТ-6).
+
 ## Переводы
 
 | Было | Стало | Примечание |
@@ -55,6 +59,7 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `assets/<ns>/lang/en_US.lang` | `assets/<ns>/lang/en_us.json` | ✓ собирает `tools/convert_lang.py` из `.lang` в `legacy/`; руками `.json` не правится |
 | значения с `%d`, `%.1f` | как есть | ✓ и 1.7.10, и 1.20.1 при загрузке заменяют их на `%s` |
 | ключи удалённых вещей | не переносятся | ✓ список с причинами — `REMOVED` в `tools/convert_lang.py` |
+| ключ предмета Botania `ItemBlockMod`, `ItemBlockModSlab` (`tile.botania:…`) | ключ блока | ✓ `ItemBlockMod` 1.7.10 менял `tile.` на `tile.botania:` — так эти ключи записаны в переводах Alfheim; ключи двойных плит (`…SlabFull`) не переносятся: своего предмета у двойной плиты нет |
 | `StatCollector.translateToLocal` / `translateToLocalFormatted` | `alfheim.port.legacy.StatCollector` там, где автору нужен готовый текст на этой стороне; `Component.translatable` — для текста, который уходит игроку | ✓ прослойка поверх `Language.getInstance()`: на сервере — английский, как в 1.7.10; при ошибке формата — «Format error: …». Ключи те же, пока их не переименует `legacy_ids.json` |
 
 ## Ресурсы
@@ -98,7 +103,8 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 
 Блоки автора наследуют базовые классы порта `alfheim.port.legacy.Block1710` (`Block` 1.7.10) и
 `BlockFalling1710` (`BlockFalling`). Они принимают материал 1.7.10, а сеттеры 1.7.10 работают после создания
-блока, как в 1.7.10: `init {}` блоков и цепочки сеттеров автора не меняются. Проверяет GameTest `PortBlocksTest`.
+блока, как в 1.7.10: `init {}` блоков и цепочки сеттеров автора не меняются. Блоки особой формы (лестница, плита, стена,
+забор, калитка, люк, панель) — свои базовые классы порта, строки ниже. Проверяют GameTest-ы `PortBlocksTest` и `PortDecorTest`.
 
 | Было | Стало | Примечание |
 |---|---|---|
@@ -125,6 +131,18 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | `block.material === Material.water` (блок в мире) | `block === Blocks.WATER` | ✓ в 1.7.10 материал воды был только у стоячей и текущей воды — в 1.20.1 это один блок |
 | `ItemBlock` автора (`ItemBlockLeavesMod`, `ItemBlockMetaName`) | наследник `BlockItem` с конструктором `(Block)` | ✓ имя предмета — имя блока |
 | `getEntry` (`ILexiconable`) | закомментирован до КТ-9 | лексикон |
+| `BlockStairs(source, meta)`, `BlockSlab(full, material)`, `BlockWall(block)`, `BlockFence(texture, material)`, `BlockFenceGate()`, `BlockTrapDoor(material)`, `BlockPane(texture, top, material, canDrop)` | `Stairs1710`, `Slab1710`, `Wall1710`, `Fence1710`, `FenceGate1710`, `TrapDoor1710`, `Pane1710` из `alfheim.port.legacy` — наследники блока той же формы 1.20.1 с сеттерами 1.7.10 | ✓ значения конструктора 1.7.10 те же (лестница и стена берут твёрдость, взрывоустойчивость и звук у блока-источника). Механика формы — 1.20.1: углы лестниц, плиты в двойную, высота и соединения стен, люк без подпорки, свет сквозь неполные блоки — как у блоков ванилы 1.20.1 |
+| источник лестницы, плиты, стены — блок с metadata (`BlockModStairs(livingrockDark, 1, …)`) | блок варианта (`BlockModStairs(livingrockDark[1], 1, …)`), номер варианта остаётся параметром | ✓ |
+| двойная плита — отдельный блок (`…SlabFull`), `getFullBlock()` | состояние `type=double` одинарной плиты: поле `…SlabFull` — та же плита, её `register()` закомментирован | ✓ роняет две плиты, при выборе колёсиком — одинарная; старое имя `…SlabFull` в `legacy_ids.json` — `…_slab[type=double]` |
+| грани лестницы, плиты, стены (`getIcon` блока-источника для каждой стороны) | модели генерации данных: бок, низ, верх — как у источника; у стены свои шаблоны `template_wall_*_faces` с текстурами `side`, `top`, `bottom` | ✓ в шаблоне стены ванилы одна текстура на все грани |
+| `canConnectFenceTo(world, x, y, z)` | `connectsTo(state, sideSolid, direction)` | ✓ сосед с твёрдой гранью и калитка, повёрнутая к забору, — в `super` 1.20.1 |
+| `canPaneConnectTo(...)` | не переопределяется: `IronBarsBlock.attachsTo` 1.20.1 — `final` | панель и так тянется к соседу с твёрдой гранью и к стенам |
+| теги формы | стена — `minecraft:walls`, забор — `minecraft:fences` (не `wooden_fences`), люк — `minecraft:trapdoors` | ✓ без них стена 1.20.1 не соединяется сама с собой, поводок не привязывается к забору; заборы ванилы к забору автора не тянутся, как в 1.7.10 |
+| поворот столба в metadata (`BlockModRotatedPillar`: `meta and 12`, `onBlockPlaced`) | свойство состояния `axis`, `getStateForPlacement` — по стороне, на которую ставят | ✓ модель — как у бревна (`cube_column`, `cube_column_horizontal`) |
+| `IFuelHandler`, топливо | деревянный блок порта (материал `wood`) горит 300 тиков — `alfheim.port.legacy.Fuel1710` | ✓ печь 1.7.10 проверяла материал раньше обработчиков модов; обработчик топлива предмета — в КТ своего предмета |
+| `Block.stepSound` чужого блока | расширение `Block.stepSound` прослойки | ✓ у блока порта и блока Botania 1.7.10 (`Botania1710`) |
+| `getIcon(world, x, y, z, side)` — иконка по координатам и стороне | модели вариантов; клиент выбирает грань по той же формуле (`alfheim.port.client.AlfheimModels`) | ✓ `BlockLivingCobble`, `BlockLivingMountain` и его плита |
+| текстура, которую автор грузил `InterpolatedIconHelper` (Botania `InterpolatedIcon`) | `"interpolate": true` в `.png.mcmeta` | ✓ `InterpolatedIcon` сглаживал кадры всегда; у части файлов автора ключ `"interpolated"` (1.7.10 его не читал) — исправляется на `"interpolate"` при переносе |
 
 ## Ore Dictionary
 
@@ -258,7 +276,10 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 
 | Было (r1.8-249) | Стало (1.20.1-456) | Примечание |
 |---|---|---|
-| `ModBlocks`, `ModItems` | `BotaniaBlocks`, `BotaniaItems` | |
+| `ModBlocks`, `ModFluffBlocks`, `ModItems` | `BotaniaBlocks`, `BotaniaItems` | ✓ вариант metadata — отдельный блок: `ModBlocks.livingrock`, 1 → `livingrockBrick`; `ModBlocks.livingwood`, `ModBlocks.dreamwood`: 0 (кора) → `livingwood`, `dreamwood`, 1 (доски) → `livingwoodPlanks`, `dreamwoodPlanks`; `ModFluffBlocks.elfQuartz` → `elfQuartz` |
+| значения блока Botania 1.7.10 (материал, твёрдость, звук, имя, иконка), когда из него сделан блок автора | `alfheim.port.legacy.botania.Botania1710` | ✓ из кода Botania r1.8-249; текстура — Botania 1.20.1 |
+| `vazkii.botania.common.block.decor.slabs.BlockModSlab`, `BlockLivingSlab`, `stairs.BlockModStairs`, `walls.BlockModWall`; `ItemBlockMod`, `ItemBlockModSlab` | те же имена в `alfheim.port.legacy.botania` поверх `Slab1710`, `Stairs1710`, `Wall1710` | ✓ в Botania 1.20.1 этих классов нет; регистрация и имена — как в r1.8-249, вкладка Botania не ставится (вкладку задаёт автор) |
+| `LibResources.PREFIX_MOD` | `ResourcesLib.PREFIX_MOD` (`botania:`), в коде автора — `import … ResourcesLib as LibResources` | ✓ |
 | `IManaItem`, `IManaReceiver` | `ManaItem`, `ManaReceiver` | у предметов — через capability |
 | `SubTileGenerating` / `SubTileFunctional` | `GeneratingFlowerBlockEntity` / `FunctionalFlowerBlockEntity` | |
 | `BotaniaAPI.register…Recipe` | рецепты в JSON (`botania:mana_infusion`, `botania:elven_trade` и др.) через datagen | |

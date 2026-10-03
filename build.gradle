@@ -87,8 +87,9 @@ minecraft {
         data {
             workingDirectory project.file('run-data')
 
-            // Генерация данных (SPEC, Р-9): результат коммитится в src/generated/resources
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            // Генерация данных (SPEC, Р-9): результат коммитится в src/generated/resources.
+            // Текстуры Botania — для моделей блоков автора, сделанных из блоков Botania (заборы, стены)
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/'), '--existing-mod', 'botania'
         }
     }
 }

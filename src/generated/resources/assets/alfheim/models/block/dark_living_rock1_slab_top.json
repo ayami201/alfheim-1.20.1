@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "alfheim:blocks/decor/dark_living_rock1",
+    "side": "alfheim:blocks/decor/dark_living_rock1",
+    "top": "alfheim:blocks/decor/dark_living_rock1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/dwarf_planks0_slab"
+    },
+    "type=double": {
+      "model": "alfheim:block/dwarf_planks"
+    },
+    "type=top": {
+      "model": "alfheim:block/dwarf_planks0_slab_top"
+    }
+  }
+}

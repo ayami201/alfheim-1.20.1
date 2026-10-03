@@ -11,11 +11,14 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.BlockAndTintGetter
+import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.SlabType
 import net.minecraftforge.client.event.ModelEvent
 import net.minecraftforge.client.model.BakedModelWrapper
 import net.minecraftforge.client.model.data.*
 import net.minecraftforge.eventbus.api.*
+import kotlin.math.abs
 
 /**
  * Модели блоков, которые в 1.7.10 выбирали иконку в коде (`registerBlockIcons` / `getIcon`), а не одной моделью
@@ -34,6 +37,7 @@ object AlfheimModels {
 	private fun registerAdditional(e: ModelEvent.RegisterAdditional) {
 		for (meta in 1..3) e.register(model("alf_storage$meta"))
 		e.register(model("living_cobble3_alt"))
+		for (i in 2..4) for (name in listOf("living_mountain", "living_mountain0_slab", "living_mountain0_slab_top")) e.register(model("${name}_icon$i"))
 	}
 	
 	private fun modifyBakingResult(e: ModelEvent.ModifyBakingResult) {
@@ -54,6 +58,55 @@ object AlfheimModels {
 		val base = models[location]
 		val alt = models[model("living_cobble3_alt")]
 		if (base != null && alt != null) models[location] = AltByPosition(base, alt)
+		
+		// BlockLivingMountain.getIcon(world, x, y, z, side) и BlockLivingMountainSlab: 4 иконки, грань выбирает по
+		// координатам. Двойная плита — блок живой горы целиком
+		for (block in listOf(AlfheimFluffBlocks.livingMountain, AlfheimFluffBlocks.livingMountainSlab))
+			for (state in block.stateDefinition.possibleStates) {
+				val name = when (if (state.hasProperty(SlabBlock.TYPE)) state.getValue(SlabBlock.TYPE) else null) {
+					null, SlabType.DOUBLE -> "living_mountain"
+					SlabType.BOTTOM       -> "living_mountain0_slab"
+					SlabType.TOP          -> "living_mountain0_slab_top"
+				}
+				val stateLocation = BlockModelShaper.stateToModelLocation(state)
+				val icons = listOf(models[stateLocation]) + (2..4).map { models[model("${name}_icon$it")] }
+				if (icons.all { it != null }) models[stateLocation] = IconByPosition(icons.map { it!! }, ::livingMountainIcon)
+			}
+	}
+	
+	/** Номер иконки грани `BlockLivingMountain.getIcon(world, x, y, z, side)` (0 — первая) */
+	private fun livingMountainIcon(pos: BlockPos, side: Direction): Int {
+		val x = pos.x
+		val y = pos.y
+		val z = pos.z
+		return when (side.get3DDataValue()) {
+			0, 1 -> abs(x % 2) + abs(z % 2) * 2
+			2, 3 -> abs(x % 2) + abs(y % 2) * 2
+			4, 5 -> abs(z % 2) + abs(y % 2) * 2
+			else -> 0
+		}
+	}
+	
+	/**
+	 * Модель, у которой каждая грань — из одной из моделей [icons] с одинаковой формой: номер выбирает [index] по
+	 * координатам блока и стороне грани, как `getIcon(world, x, y, z, side)` 1.7.10. Без координат (предмет) — первая
+	 */
+	private class IconByPosition(private val icons: List<BakedModel>, private val index: (BlockPos, Direction) -> Int): BakedModelWrapper<BakedModel>(icons[0]) {
+		
+		override fun getModelData(level: BlockAndTintGetter, pos: BlockPos, state: BlockState, modelData: ModelData): ModelData =
+			modelData.derive().with(POS, pos.immutable()).build()
+		
+		override fun getQuads(state: BlockState?, side: Direction?, rand: RandomSource, extraData: ModelData, renderType: RenderType?): List<BakedQuad> {
+			val pos = extraData.get(POS) ?: return super.getQuads(state, side, rand, extraData, renderType)
+			if (side != null) return icons[index(pos, side)].getQuads(state, side, rand, extraData, renderType)
+			// грани без стороны отсечения (верх нижней плиты) — по направлению самой грани
+			return Direction.values().flatMap { dir -> icons[index(pos, dir)].getQuads(state, null, rand, extraData, renderType).filter { it.direction == dir } }
+		}
+		
+		companion object {
+			
+			val POS = ModelProperty<BlockPos>()
+		}
 	}
 	
 	/** Модель, у которой на части координат квадраты другой модели — как `getIcon(world, x, y, z, side)` 1.7.10 */

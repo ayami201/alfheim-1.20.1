@@ -4,6 +4,8 @@ import alfheim.api.ModInfo.MODID
 import alfheim.common.block.*
 import alfheim.port.client.AlfheimModels
 import alfheim.port.data.AlfheimData
+import alfheim.port.hook.CreativeTabHooks
+import alfheim.port.legacy.Fuel1710
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.fml.DistExecutor
 import net.minecraft.core.registries.Registries
@@ -36,6 +38,10 @@ object AlfheimRegisters {
 			AlfheimFluffBlocks
 		}
 		LegacyRegistration.register(bus)
+		// деревянный блок 1.7.10 — топливо на 300 тиков
+		Fuel1710.register()
+		// врезки автора во вкладки творческого режима (HOOKS.md)
+		CreativeTabHooks.register(bus)
 		// модели, лут, теги и legacy_ids.json — генерация данных (./gradlew runData)
 		AlfheimData.register(bus)
 		// модели блоков, которые 1.7.10 выбирал в коде, — только на клиенте

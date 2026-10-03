@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "alfheim:blocks/decor/custom_roof2",
+    "side": "alfheim:blocks/decor/custom_roof2",
+    "top": "alfheim:blocks/decor/custom_roof2"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "alfheim:block/template_wall_side_faces",
+  "textures": {
+    "bottom": "alfheim:blocks/living_cobble0",
+    "side": "alfheim:blocks/living_cobble0",
+    "top": "alfheim:blocks/living_cobble0"
+  }
+}
