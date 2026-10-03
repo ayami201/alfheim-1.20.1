@@ -16,6 +16,7 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 | Имена полей 1.7.10 — частными свойствами внизу класса | поле только переименовано, смысл тот же | `private val Entity.posX get() = x` в `Vector3` |
 | Ветка, которой нужна механика другой КТ, — `Unit` и закомментированный код автора под ней | `when` по перечислению должен остаться полным | ветки пакетов `Message1d`, `Message2d` |
 | Блок `/* PORT: по мере надобности … */` | функция библиотеки ASJCore ещё не нужна порту | `Extensions.kt`, `ASJUtilities.kt` |
+| `// PORT-FIX:` над исправленной строкой, строка автора закомментирована под ней | техническая ошибка автора (CLAUDE.md, правило 5) | `Vector3.isInside` |
 
 ## Имена и metadata
 
@@ -306,6 +307,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `ChatComponentTranslation`, `IChatComponent.Serializer.func_150699_a` | `Component.translatable`, `Component.Serializer.fromJson` | ✓ |
 | `ICommandSender`, `addChatMessage` | `CommandSource`, `sendSystemMessage` | ✓ `ASJUtilities.say`; имя отправителя — `Nameable.name` или «Server» |
 | `EntityInteractEvent` `.entityPlayer`, `.target` | `PlayerInteractEvent.EntityInteract` `.entity`, `.target` | ✓ событие приходит для каждой руки: проверка предмета в главной руке повторяется, второй вызов ничего не меняет |
+| сделать после того, как событие закончится («Post» 1.7.10, которого в 1.20.1 нет) | `server.tell(TickTask(server.tickCount) { … })` — после тика | ✓ `server.execute` на потоке сервера выполняет задачу сразу |
 | `LivingPotionEvent` ASJCore: `Add.Post`, `Change.Post`, `Remove.Post` | `MobEffectEvent.Added` (`oldEffectInstance != null` — изменение), `MobEffectEvent.Remove`, `MobEffectEvent.Expired` | ✓ Forge сообщает об изменении до того, как эффект обновлён: пакет об изменении уходит в конце тика (`server.execute`). У `Remove` свой `effect` — `MobEffect`, эффект с длительностью — `effectInstance` (может быть `null`) |
 | `LivingUpdateEvent`, `LivingSetAttackTargetEvent`, `EntityJoinWorldEvent` | `LivingEvent.LivingTickEvent`, `LivingChangeTargetEvent` (цель снимается в самом событии: `newTarget = null`), `EntityJoinLevelEvent` | ✓ |
 | `BlockEvent.PlaceEvent`, `MultiPlaceEvent` | `BlockEvent.EntityPlaceEvent`, `EntityMultiPlaceEvent` | ✓ |

@@ -103,6 +103,13 @@ mixin {
     config "${mod_id}.mixins.json"
 }
 
+// Карту ссылок миксинов строит процессор аннотаций, пока javac компилирует миксины. MixinGradle перед компиляцией
+// удаляет старую карту, а инкрементальная компиляция после правки кода Kotlin не пересобирает ни одного Java-файла —
+// и в jar карты нет, игра падает при запуске (tools/check_mixins.py). Java-файлов в порту мало: собираются все.
+tasks.named('compileJava', JavaCompile).configure {
+    options.incremental = false
+}
+
 repositories {
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
     maven {
