@@ -1,18 +1,14 @@
 package alfheim.common.item
 
+// PORT: импорты 1.20.1 (MAPPING.md); Botania.proxy — alfheim.port.legacy.botania.Botania
 import alexsocol.asjlib.meta
 import alfheim.api.ModInfo
-import alfheim.client.core.helper.IconHelper
-import alfheim.common.block.AlfheimBlocks
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.Block
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.entity.passive.EntitySheep
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
-import net.minecraft.util.*
-import vazkii.botania.common.Botania
+import alfheim.port.legacy.*
+import alfheim.port.legacy.botania.Botania
+import net.minecraft.ChatFormatting as EnumChatFormatting
+import net.minecraft.network.chat.Component
+import net.minecraft.world.item.*
+import net.minecraft.world.level.Level
 import java.awt.Color
 
 open class ItemIridescent(name: String): ItemMod(name) {
@@ -36,13 +32,15 @@ open class ItemIridescent(name: String): ItemMod(name) {
 			if (meta == RAINBOW)
 				return rainbowColor()
 			
-			if (meta >= EntitySheep.fleeceColorTable.size)
+			// PORT: цвета шерсти 1.7.10 — Sheep1710 (в 1.20.1 цвета красителей другие)
+			if (meta >= Sheep1710.fleeceColorTable.size)
 				return 0xFFFFFF
 			
-			val color = EntitySheep.fleeceColorTable[meta]
+			val color = Sheep1710.fleeceColorTable[meta]
 			return Color(color[0], color[1], color[2]).rgb
 		}
 		
+		/* PORT: КТ-2 — цветная земля (irisDirt, rainbowDirt, auroraDirt) переносится с цветными блоками
 		fun dirtFromMeta(meta: Int): Block {
 			return when (meta) {
 				in 0..MAX_COLORED_META -> AlfheimBlocks.irisDirt
@@ -62,12 +60,15 @@ open class ItemIridescent(name: String): ItemMod(name) {
 			
 			return ItemStack(block, 1, if (meta > 15) 0 else meta)
 		}
+		*/
 	}
 	
 	init {
 		setHasSubtypes(true)
 	}
 	
+	// PORT: второй проход рендера (overlayIcon) — второй слой модели предмета (alfheim.port.data), без окраски
+	/*
 	lateinit var overlayIcon: IIcon
 	
 	override fun requiresMultipleRenderPasses() = true
@@ -80,13 +81,15 @@ open class ItemIridescent(name: String): ItemMod(name) {
 		super.registerIcons(reg)
 		overlayIcon = IconHelper.forItem(reg, this, "Overlay")
 	}
+	*/
 	
 	override fun getColorFromItemStack(stack: ItemStack, pass: Int): Int =
 		if (pass > 0) 0xFFFFFF else colorFromItemStack(stack)
 	
-	override fun addInformation(stack: ItemStack, player: EntityPlayer?, tooltip: MutableList<Any?>, adv: Boolean) {
+	// PORT: addInformation → appendHoverText, строка подсказки — Component
+	override fun appendHoverText(stack: ItemStack, world: Level?, tooltip: MutableList<Component>, adv: TooltipFlag) {
 		if (stack.meta >= TYPES) return
 		
-		tooltip += ("${EnumChatFormatting.GRAY}${StatCollector.translateToLocal("misc.${ModInfo.MODID}.color." + stack.meta)}")
+		tooltip += Component.literal("${EnumChatFormatting.GRAY}${StatCollector.translateToLocal("misc.${ModInfo.MODID}.color." + stack.meta)}")
 	}
 }

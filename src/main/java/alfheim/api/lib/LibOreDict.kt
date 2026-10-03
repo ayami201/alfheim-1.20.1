@@ -1,8 +1,9 @@
 package alfheim.api.lib
 
-import cpw.mods.fml.common.registry.GameRegistry
-import net.minecraft.block.Block
-import net.minecraft.init.Blocks
+// PORT: импорты 1.7.10 — вместе с beacons (КТ-6)
+//import cpw.mods.fml.common.registry.GameRegistry
+//import net.minecraft.block.Block
+//import net.minecraft.init.Blocks
 
 object LibOreDict {
 	
@@ -66,6 +67,7 @@ object LibOreDict {
 		val I get() = ordinal
 	}
 	
-	val beacons: Array<Block?>
-		get() = arrayOf(Blocks.beacon, GameRegistry.findBlock("etfuturum", "beacon"), GameRegistry.findBlock("chisel", "beacon"))
+	// PORT: КТ-6 — маяки для призыва Гайи в Альвхейме (ItemElvenResource.onItemUse)
+//	val beacons: Array<Block?>
+//		get() = arrayOf(Blocks.beacon, GameRegistry.findBlock("etfuturum", "beacon"), GameRegistry.findBlock("chisel", "beacon"))
 }

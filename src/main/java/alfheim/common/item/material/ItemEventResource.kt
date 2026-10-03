@@ -1,33 +1,36 @@
 package alfheim.common.item.material
 
+// PORT: импорты 1.20.1
 import alexsocol.asjlib.*
-import alfheim.client.core.helper.*
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.ItemMod
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.relauncher.*
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.*
-import net.minecraft.util.IIcon
-import net.minecraftforge.client.event.TextureStitchEvent
-import net.minecraftforge.common.MinecraftForge
+import net.minecraft.world.item.*
 import kotlin.math.*
 
-class ItemEventResource: ItemMod("EventResource") {
+// PORT: вариант metadata — отдельный предмет (SPEC, Р-5): номер варианта — meta, имя — из subItems
+// (SnowRelic → alfheim:snow_relic), создают их массивом `Array(subItems.size) { ItemEventResource(it) }`
+class ItemEventResource(val meta: Int): ItemMod("EventResource") {
 	
-	val texture = arrayOfNulls<IIcon>(subItems.size)
+	override val variant get() = meta
+	
+	override val variantName get() = subItems[meta]
+	
+	// PORT: иконки → модели предметов (alfheim.port.data)
+//	val texture = arrayOfNulls<IIcon>(subItems.size)
 	
 	init {
 		setHasSubtypes(true)
 		creativeTab = AlfheimTab
 		
-		if (ASJUtilities.isClient)
-			MinecraftForge.EVENT_BUS.register(this)
+		// PORT: анимированную текстуру 1.20.1 рисует сама по .mcmeta
+//		if (ASJUtilities.isClient)
+//			MinecraftForge.EVENT_BUS.register(this)
 	}
 	
 	fun isInterpolated(meta: Int) = meta == EventResourcesMetas.LavaMelon
 	
+	// PORT: иконки → модели предметов (alfheim.port.data); арбуз-лава — анимированная текстура с interpolate
+	/*
 	override fun registerIcons(reg: IIconRegister) {
 		for (i in subItems.indices)
 			if (!isInterpolated(i))
@@ -44,11 +47,14 @@ class ItemEventResource: ItemMod("EventResource") {
 				if (isInterpolated(i))
 					texture[i] = InterpolatedIconHelper.forName(event.map, subItems[i], "materials")
 	}
+	*/
 	
 	override fun getUnlocalizedName(stack: ItemStack) = "item.${subItems[max(0, min(stack.meta, subItems.size - 1))]}"
 	
-	override fun getSubItems(item: Item, tab: CreativeTabs?, list: MutableList<Any?>) {
-		for (i in subItems.indices) list.add(ItemStack(item, 1, i))
+	// PORT: вариант — отдельный предмет: каждый выдаёт во вкладку только свою вещь
+	override fun getSubItems(item: Item, tab: Any?, list: MutableList<Any?>) {
+		for (i in subItems.indices) if (i == meta) list.add(ItemStack(item))
+//		for (i in subItems.indices) list.add(ItemStack(item, 1, i))
 	}
 	
 	fun addStringToTooltip(s: String, tooltip: MutableList<String?>) {

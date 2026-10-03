@@ -2,6 +2,7 @@ package alfheim.port.data
 
 import alfheim.api.ModInfo.MODID
 import alfheim.common.block.AlfheimBlocks
+import alfheim.common.item.AlfheimItems
 import alfheim.port.legacy.*
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.core.HolderLookup
@@ -83,6 +84,7 @@ object OreDictTags {
 	fun entries(): List<Pair<String, ItemStack>> {
 		if (OreDictionary.entries.isEmpty()) {
 			AlfheimBlocks.regOreDict()
+			AlfheimItems.regOreDict()
 		}
 		return OreDictionary.entries
 	}

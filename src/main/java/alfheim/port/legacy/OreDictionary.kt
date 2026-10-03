@@ -14,8 +14,12 @@ object OreDictionary {
 	const val WILDCARD_VALUE = Short.MAX_VALUE.toInt()
 	
 	val entries = ArrayList<Pair<String, ItemStack>>()
+
+	/** `OreDictionary.registerOre(name, stack)` 1.7.10 */
+	fun registerOre(name: String, ore: ItemStack) {
+		entries += name to ore.copy()
+	}
 }
 
-fun registerOre(name: String, ore: ItemStack) {
-	OreDictionary.entries += name to ore.copy()
-}
+/** `registerOre` из `import net.minecraftforge.oredict.OreDictionary.*` */
+fun registerOre(name: String, ore: ItemStack) = OreDictionary.registerOre(name, ore)

@@ -163,4 +163,12 @@ open class Item1710: Item(Properties()), LegacyItem {
 
 	/** `getColorFromItemStack(stack, pass)` 1.7.10 — цвет прохода рендера; клиент красит им слой модели с тем же номером */
 	open fun getColorFromItemStack(stack: ItemStack, pass: Int) = 0xFFFFFF
+
+	/**
+	 * `getSubItems(item, tab, list)` 1.7.10 — вещи предмета во вкладке творческого режима, по порядку; вкладка автора
+	 * (`AlfheimTab`) зовёт его, как в 1.7.10. Предмет-вариант выдаёт только свои вещи
+	 */
+	open fun getSubItems(item: Item, tab: Any?, list: MutableList<Any?>) {
+		list.add(ItemStack(item))
+	}
 }

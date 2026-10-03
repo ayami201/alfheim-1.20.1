@@ -2,6 +2,7 @@ package alfheim.port.registry
 
 import alfheim.api.ModInfo.MODID
 import alfheim.common.block.*
+import alfheim.common.item.AlfheimItems
 import alfheim.port.client.AlfheimModels
 import alfheim.port.data.AlfheimData
 import alfheim.port.hook.CreativeTabHooks
@@ -36,6 +37,9 @@ object AlfheimRegisters {
 		LegacyRegistration.onBlocks {
 			AlfheimBlocks
 			AlfheimFluffBlocks
+		}
+		LegacyRegistration.onItems {
+			AlfheimItems
 		}
 		LegacyRegistration.register(bus)
 		// деревянный блок 1.7.10 — топливо на 300 тиков

@@ -1,40 +1,49 @@
 package alfheim.common.item.material
 
+// PORT: импорты 1.20.1; импорты механик КТ-3 закомментированы вместе с их строками
 import alexsocol.asjlib.*
 import alfheim.api.ModInfo
 import alfheim.common.item.ItemMod
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.IInventory
-import net.minecraft.item.*
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.StatCollector
-import vazkii.botania.api.internal.VanillaPacketDispatcher
-import vazkii.botania.api.item.IManaDissolvable
-import vazkii.botania.api.mana.IManaPool
-import vazkii.botania.api.recipe.IFlowerComponent
-import vazkii.botania.common.Botania
+import alfheim.port.legacy.StatCollector
+import net.minecraft.network.chat.Component
+import net.minecraft.world.item.*
+import net.minecraft.world.level.Level as World
+//import net.minecraft.entity.item.EntityItem
+//import net.minecraft.inventory.IInventory
+//import net.minecraft.tileentity.TileEntity
+//import vazkii.botania.api.internal.VanillaPacketDispatcher
+//import vazkii.botania.api.item.IManaDissolvable
+//import vazkii.botania.api.mana.IManaPool
+//import vazkii.botania.api.recipe.IFlowerComponent
+//import vazkii.botania.common.Botania
 
-class ItemWiltedLotus: ItemMod("wiltedLotus"), IManaDissolvable, IFlowerComponent {
+// PORT: вариант metadata — отдельный предмет (SPEC, Р-5): 0 — увядший лотос, 1 — увядший чёрный лотос
+// (alfheim:wilted_lotus0, alfheim:wilted_lotus1). КТ-3 — бассейн маны (IManaDissolvable) и аптекарь лепестков (IFlowerComponent)
+class ItemWiltedLotus(val meta: Int): ItemMod("wiltedLotus")/*, IManaDissolvable, IFlowerComponent*/ {
+	
+	override val variant get() = meta
 	
 	init {
 		setHasSubtypes(true)
 	}
 	
-	override fun getSubItems(item: Item, tab: CreativeTabs?, list: MutableList<Any?>) {
-		for (i in 0..1) list.add(ItemStack(item, 1, i))
+	// PORT: вариант — отдельный предмет: каждый выдаёт во вкладку только свою вещь
+	override fun getSubItems(item: Item, tab: Any?, list: MutableList<Any?>) {
+		for (i in 0..1) if (i == meta) list.add(ItemStack(item))
+//		for (i in 0..1) list.add(ItemStack(item, 1, i))
 	}
 	
 	override fun hasEffect(par1ItemStack: ItemStack, pass: Int) = par1ItemStack.meta > 0
 	
-	override fun addInformation(stack: ItemStack?, player: EntityPlayer?, list: MutableList<Any?>, adv: Boolean) {
-		list.add(StatCollector.translateToLocal("misc.${ModInfo.MODID}:lotusDesc"))
+	// PORT: addInformation → appendHoverText, строка подсказки — Component
+	override fun appendHoverText(stack: ItemStack, world: World?, list: MutableList<Component>, adv: TooltipFlag) {
+		list.add(Component.literal(StatCollector.translateToLocal("misc.${ModInfo.MODID}:lotusDesc")))
 	}
 	
 	override fun getUnlocalizedNameInefficiently(stack: ItemStack) =
 		super.getUnlocalizedNameInefficiently(stack) + stack.meta
 	
+	/* PORT: КТ-3 — аптекарь лепестков и бассейн маны Botania
 	override fun canFit(stack: ItemStack?, apothecary: IInventory?) = true
 	
 	override fun getParticleColor(stack: ItemStack?) = 0
@@ -71,6 +80,7 @@ class ItemWiltedLotus: ItemMod("wiltedLotus"), IManaDissolvable, IFlowerComponen
 		
 		item.playSoundAtEntity("botania:blackLotus", 0.5f, if (t2) 0.1f else 1f)
 	}
+	*/
 	
 	companion object {
 		

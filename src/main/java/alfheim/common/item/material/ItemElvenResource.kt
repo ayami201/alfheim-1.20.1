@@ -1,64 +1,68 @@
 package alfheim.common.item.material
 
+// PORT: импорты 1.20.1 (MAPPING.md); Botania.proxy — alfheim.port.legacy.botania.Botania. Импорты механик других КТ
+// закомментированы вместе с их строками
 import alexsocol.asjlib.*
-import alexsocol.patcher.asm.hook.ASJSuperWrapperHandler
 import alfheim.AlfheimCore
 import alfheim.api.*
-import alfheim.api.lib.LibOreDict
-import alfheim.client.core.helper.*
-import alfheim.common.block.*
-import alfheim.common.block.colored.rainbow.BlockRainbowGrass
-import alfheim.common.block.tile.*
-import alfheim.common.block.tile.TileKudzuVine.Companion.EnumMutation
-import alfheim.common.core.handler.*
-import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem
-import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
-import alfheim.common.core.handler.ragnarok.RagnarokHandler
-import alfheim.common.core.helper.ElementalDamage
-import alfheim.common.entity.EntityElementalSlime
-import alfheim.common.entity.boss.EntityFlugel
 import alfheim.common.item.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.Companion.of
-import alfheim.common.item.relic.ItemTankMask.Companion.limboCounter
-import alfheim.common.world.dim.niflheim.ChunkProviderNiflheim
-import cpw.mods.fml.common.IFuelHandler
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.*
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.*
-import net.minecraft.entity.passive.EntitySheep
-import net.minecraft.entity.player.*
-import net.minecraft.init.*
-import net.minecraft.inventory.IInventory
-import net.minecraft.item.*
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.potion.*
-import net.minecraft.util.*
-import net.minecraft.world.World
-import net.minecraftforge.client.event.TextureStitchEvent
-import net.minecraftforge.common.MinecraftForge
-import vazkii.botania.api.recipe.*
-import vazkii.botania.common.Botania
-import vazkii.botania.common.block.ModBlocks
-import vazkii.botania.common.entity.EntityDoppleganger
+import alfheim.port.legacy.*
+import alfheim.port.legacy.botania.Botania
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer as EntityPlayerMP
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.effect.*
+import net.minecraft.world.entity.*
+import net.minecraft.world.entity.player.Player as EntityPlayer
+import net.minecraft.world.item.*
+import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.level.Level as World
 import java.awt.Color
 import kotlin.math.sin
+//import alexsocol.patcher.asm.hook.ASJSuperWrapperHandler
+//import alfheim.api.lib.LibOreDict
+//import alfheim.common.block.*
+//import alfheim.common.block.colored.rainbow.BlockRainbowGrass
+//import alfheim.common.block.tile.*
+//import alfheim.common.block.tile.TileKudzuVine.Companion.EnumMutation
+//import alfheim.common.core.handler.*
+//import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem
+//import alfheim.common.core.handler.CardinalSystem.KnowledgeSystem.Knowledge
+//import alfheim.common.core.handler.ragnarok.RagnarokHandler
+//import alfheim.common.core.helper.ElementalDamage
+//import alfheim.common.entity.EntityElementalSlime
+//import alfheim.common.entity.boss.EntityFlugel
+//import alfheim.common.item.relic.ItemTankMask.Companion.limboCounter
+//import alfheim.common.world.dim.niflheim.ChunkProviderNiflheim
+//import vazkii.botania.common.block.ModBlocks
+//import vazkii.botania.common.entity.EntityDoppleganger
 
-class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IFuelHandler {
+// PORT: вариант metadata — отдельный предмет (SPEC, Р-5): номер варианта — meta, имя варианта — имя из
+// ElvenResourcesMetas (ElvoriumIngot → alfheim:elvorium_ingot), создают их массивом `Array(entries.size) { ItemElvenResource(it) }`.
+// КТ-3 — портал Botania (IElvenItem) и аптекарь лепестков (IFlowerComponent); топливо (IFuelHandler) — getBurnTime ниже
+class ItemElvenResource(val meta: Int): ItemMod("ElvenItems")/*, IElvenItem, IFlowerComponent, IFuelHandler*/ {
 	
-	val texture = arrayOfNulls<IIcon>(entries.size)
+	override val variant get() = meta
+	
+	override val variantName get() = of(meta).toString()
+	
+	// PORT: иконки → модели предметов (alfheim.port.data.AlfheimItemModels)
+//	val texture = arrayOfNulls<IIcon>(entries.size)
 	
 	init {
 		setHasSubtypes(true)
-		if (ASJUtilities.isClient)
-			MinecraftForge.EVENT_BUS.register(this)
-		
-		GameRegistry.registerFuelHandler(this)
+		// PORT: анимированные текстуры 1.20.1 рисует сама по .mcmeta; топливо 1.20.1 — метод предмета
+//		if (ASJUtilities.isClient)
+//			MinecraftForge.EVENT_BUS.register(this)
+//		
+//		GameRegistry.registerFuelHandler(this)
 	}
 	
+	// PORT: проходы рендера → слои модели предмета (alfheim.port.data.AlfheimItemModels)
+	/*
 	override fun getRenderPasses(meta: Int) =
 		when (meta) {
 			ElvenWeed.I, RiftDrive.I -> 2
@@ -66,8 +70,10 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		}
 	
 	override fun requiresMultipleRenderPasses() = true
+	*/
 	
-	override fun isElvenItem(stack: ItemStack) = stack.meta == InterdimensionalGatewayCore.I
+	// PORT: КТ-3 — портал Botania
+//	override fun isElvenItem(stack: ItemStack) = stack.meta == InterdimensionalGatewayCore.I
 	
 	fun isInterpolated(meta: Int) = when (of(meta)) {
 		ThunderwoodTwig, NetherwoodCoal, RainbowQuartz, Nifleur -> true
@@ -79,6 +85,8 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		else                                      -> false
 	}
 	
+	// PORT: КТ-3 — аптекарь лепестков Botania
+	/*
 	override fun canFit(stack: ItemStack, inventory: IInventory) = isFlowerComponent(stack.meta)
 	
 	override fun getParticleColor(stack: ItemStack): Int {
@@ -89,6 +97,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 			else           -> 0xFFFFFF
 		}
 	}
+	*/
 	
 	override fun getColorFromItemStack(stack: ItemStack, pass: Int) =
 		if ((stack.meta == ElvenWeed.I && pass == 1) || stack.meta == RiftShardEmpty.I)
@@ -96,19 +105,27 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		else if (stack.meta == ElementalSlimeBall.I && ItemNBTHelper.getBoolean(stack, TAG_RAINBOW, false))
 			ItemIridescent.rainbowColor()
 		else if ((stack.meta == RiftDrive.I && pass == 1)) {
-			val color = AlfheimAPI.getAnomaly(ItemNBTHelper.getString(stack, TileAnomaly.TAG_SUBTILE_NAME, "")).color
+			// PORT: КТ-3 — аномалии (AlfheimAPI.getAnomaly, TileAnomaly); до неё цвет любой аномалии — цвет заглушки
+			// fallbackAnomalyData, 0
+			val color = 0
+//			val color = AlfheimAPI.getAnomaly(ItemNBTHelper.getString(stack, TileAnomaly.TAG_SUBTILE_NAME, "")).color
 			if (color == -1) Color.HSBtoRGB(Botania.proxy.worldElapsedTicks * 2 % 360 / 360f, 1f, 1f) else color
 		} else when (stack.meta) {
 			RiftShardGinnungagap.I        -> Color.HSBtoRGB(0f, 0f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 20 + 0.05F)
 			RiftShardMuspelheim.I         -> Color.HSBtoRGB(0.05f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 8 + 0.75f, 1f)
 			RiftShardNiflheim.I           -> Color.HSBtoRGB(2 / 3f, (sin(Botania.proxy.worldElapsedTicks / 36.0).F + 1) / 8 + 0.75f, 1f)
 			RainbowPetal.I, RainbowDust.I -> ItemIridescent.rainbowColor()
-			ElementalSlimeBall.I          -> stack.element.color
+			// PORT: КТ-4 — стихии (ElementalDamage); пока шарик слизи без цвета стихии
+//			ElementalSlimeBall.I          -> stack.element.color
 			else                          -> super.getColorFromItemStack(stack, pass)
 		}
 	
 	val riftIcons = arrayOf(RiftShardGinnungagap.I, RiftShardMuspelheim.I, RiftShardNiflheim.I)
 	
+	// PORT: иконки → модели предметов (alfheim.port.data.AlfheimItemModels): текстура варианта — materials/<имя>, у
+	// осколков разлома — materials/RiftShardEmpty, второй слой ElvenWeed и RiftDrive — …1; на праздник у прутика —
+	// CandyCane (свойство модели alfheim:jingle_the_bells, alfheim.port.client.AlfheimItemColors)
+	/*
 	override fun registerIcons(reg: IIconRegister) {
 		for (type in entries)
 			if (!isInterpolated(type.I) && type.I !in riftIcons)
@@ -152,21 +169,29 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 			candy
 		else
 			texture.safeGet(stack.meta)
+	*/
 	
 	override fun getUnlocalizedName(stack: ItemStack) =
 		if (AlfheimCore.jingleTheBells && stack.meta == InfusedDreamwoodTwig.I)
 			"item.InfusedCandy"
 		else {
 			var name = "item.${of(stack.meta).toString()}"
-			if (stack.meta == ElementalSlimeBall.I) name += ".${stack.element.name}"
+			// PORT: КТ-4 — стихия (ElementalDamage); пока — имя стихии из NBT, без неё — COMMON
+			if (stack.meta == ElementalSlimeBall.I) name += ".${ItemNBTHelper.getString(stack, TAG_ELEMENT, "COMMON")}"
+//			if (stack.meta == ElementalSlimeBall.I) name += ".${stack.element.name}"
 			name
 		}
 	
-	override fun getSubItems(item: Item, tab: CreativeTabs?, list: MutableList<Any?>) {
+	// PORT: вариант — отдельный предмет: каждый выдаёт во вкладку только свои стаки
+	override fun getSubItems(item: Item, tab: Any?, list: MutableList<Any?>) {
 		for (type in entries) {
+			if (type.I != meta) continue
 			if (type in ElvenResourcesMetas.displayBlackList) continue
 			
 			when (type) {
+				// PORT: КТ-3 — аномалии (TileAnomaly); до неё накопителей разлома во вкладке нет
+				RiftDrive          -> Unit
+				/*
 				RiftDrive          -> AlfheimAPI.anomalies.keys.forEach {
 					if (!AlfheimAPI.anomalyBehaviors.containsKey(it)) return@forEach
 					
@@ -174,28 +199,42 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 					ItemNBTHelper.setString(stack, TileAnomaly.TAG_SUBTILE_NAME, it)
 					list += stack
 				}
-				ElementalSlimeBall -> EntityElementalSlime.allowedElements.mapTo(list) { ballForElement(it) }
+				*/
+				// PORT: КТ-5 — шарики слизи всех стихий (EntityElementalSlime); пока — один, без стихии
+				ElementalSlimeBall -> list += type.stack
+//				ElementalSlimeBall -> EntityElementalSlime.allowedElements.mapTo(list) { ballForElement(it) }
 				else               -> list += type.stack
 			}
 		}
 	}
 	
 	override fun onLeftClickEntity(stack: ItemStack, player: EntityPlayer, target: Entity): Boolean {
+		// PORT: commandSenderName игрока → gameProfile.name
 		return if (stack.meta == DasRheingold.I && target is EntityPlayer)
-			ItemNBTHelper.setString(stack, "nick", target.commandSenderName).let { true }
+			ItemNBTHelper.setString(stack, "nick", target.gameProfile.name).let { true }
 		else
 			super.onLeftClickEntity(stack, player, target)
 	}
 	
-	val ids = arrayOf(Potion.moveSpeed.id, Potion.regeneration.id, Potion.jump.id, Potion.hunger.id, Potion.confusion.id)
+	// PORT: номера зелий → эффекты 1.20.1
+	val ids = arrayOf(MobEffects.MOVEMENT_SPEED, MobEffects.REGENERATION, MobEffects.JUMP, MobEffects.HUNGER, MobEffects.CONFUSION)
+//	val ids = arrayOf(Potion.moveSpeed.id, Potion.regeneration.id, Potion.jump.id, Potion.hunger.id, Potion.confusion.id)
 	
 	val usable = arrayOf(ElvenWeed.I, WisdomBottle.I, YggFruit.I)
 	
-	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
+	// PORT: onItemRightClick → use; setItemInUse → startUsingItem. Бутылка мудрости работает только в Гиннунгагапе
+	// Рагнарёка (КТ-8): до тех пор она, как у автора вне Рагнарёка, не используется
+	override fun use(world: World, player: EntityPlayer, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+		val stack = player.getItemInHand(hand)
 		if (stack.meta in usable) {
-			if (stack.meta == WisdomBottle.I && (!RagnarokHandler.ginnungagap || player is EntityPlayerMP && KnowledgeSystem.know(player, Knowledge.ABYSS_TRUTH))) return stack
-			player.setItemInUse(stack, getMaxItemUseDuration(stack))
-		} else
+			if (stack.meta == WisdomBottle.I) return InteractionResultHolder.pass(stack) // PORT: КТ-8
+//			if (stack.meta == WisdomBottle.I && (!RagnarokHandler.ginnungagap || player is EntityPlayerMP && KnowledgeSystem.know(player, Knowledge.ABYSS_TRUTH))) return stack
+			player.startUsingItem(hand)
+			return InteractionResultHolder.consume(stack)
+//			player.setItemInUse(stack, getMaxItemUseDuration(stack))
+		}
+		/* PORT: КТ-8 — осколки разлома наполняются в Рагнарёк (Гиннунгагап, Муспельхейм, Нифльхейм)
+		else
 		// rift shard filling
 		if (stack.meta == RiftShardEmpty.I) {
 			if (!RagnarokHandler.ginnungagap || player !is EntityPlayerMP) return stack
@@ -240,24 +279,29 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 			if (!player.inventory.addItemStackToInventory(give))
 				player.dropPlayerItemWithRandomChoice(give, false)
 		}
+		*/
 		
-		return stack
+		return InteractionResultHolder.pass(stack)
 	}
 	
-	override fun getMaxItemUseDuration(stack: ItemStack) = if (stack.meta in usable) 40 else 0
+	// PORT: getMaxItemUseDuration → getUseDuration, getItemUseAction → getUseAnimation
+	override fun getUseDuration(stack: ItemStack) = if (stack.meta in usable) 40 else 0
 	
-	override fun getItemUseAction(stack: ItemStack) = when (of(stack.meta)) {
-		ElvenWeed    -> EnumAction.bow
-		WisdomBottle -> EnumAction.drink
-		YggFruit     -> EnumAction.eat
-		else         -> EnumAction.none
+	override fun getUseAnimation(stack: ItemStack) = when (of(stack.meta)) {
+		ElvenWeed    -> UseAnim.BOW
+		WisdomBottle -> UseAnim.DRINK
+		YggFruit     -> UseAnim.EAT
+		else         -> UseAnim.NONE
 	}
 	
-	override fun onEaten(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
+	// PORT: onEaten → finishUsingItem; эффект — MobEffectInstance
+	override fun finishUsingItem(stack: ItemStack, world: World, entity: LivingEntity): ItemStack {
+		val player = entity
 		if (ASJUtilities.isClient || player !is EntityPlayerMP) return stack
 		
 		when (of(stack.meta)) {
-			ElvenWeed -> for (i in ids) player.addPotionEffect(PotionEffect(i, 600))
+			ElvenWeed -> for (i in ids) player.addEffect(MobEffectInstance(i, 600))
+			/* PORT: КТ-8 — бутылка мудрости (Рагнарёк)
 			WisdomBottle -> {
 				if (!RagnarokHandler.ginnungagap) return stack
 				
@@ -266,21 +310,30 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 				ItemNBTHelper.setInt(stack, TAG_USAGES, usages)
 				return if (usages >= 3) ItemStack(Items.glass_bottle) else stack
 			}
+			*/
 			YggFruit -> {
-				player.limboCounter = 0
-				CardinalSystem.CommonSystem.loseHearts(player, -1)
+				// PORT: КТ-4 — счётчик Лимба маски (ItemTankMask), КТ-7 — потерянные сердца (CardinalSystem)
+//				player.limboCounter = 0
+//				CardinalSystem.CommonSystem.loseHearts(player, -1)
 				player.heal(player.maxHealth)
-				player.foodStats.addStats(20, 20f)
-				player.activePotionEffects.iterator().onEach { it as PotionEffect
-					if (!Potion.potionTypes[it.potionID].isBadEffect) return@onEach
-					remove()
-					player.onFinishedPotionEffect(it)
+				// PORT: foodStats.addStats → foodData.eat; эффекты — activeEffects, вредный — категория HARMFUL
+				player.foodData.eat(20, 20f)
+				player.activeEffects.toList().forEach {
+					if (it.effect.category != MobEffectCategory.HARMFUL) return@forEach
+					player.removeEffect(it.effect)
 				}
+//				player.foodStats.addStats(20, 20f)
+//				player.activePotionEffects.iterator().onEach { it as PotionEffect
+//					if (!Potion.potionTypes[it.potionID].isBadEffect) return@onEach
+//					remove()
+//					player.onFinishedPotionEffect(it)
+//				}
 			}
 			else -> Unit
 		}
 		
-		stack.stackSize--
+		stack.shrink(1)
+//		stack.stackSize--
 		return stack
 	}
 	
@@ -298,20 +351,26 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		return copy
 	}
 	
-	override fun doesContainerItemLeaveCraftingGrid(stack: ItemStack) = stack.meta != Stencil.I
+	// PORT: в 1.20.1 остаток всегда остаётся в сетке крафта; у трафарета у автора — так же
+//	override fun doesContainerItemLeaveCraftingGrid(stack: ItemStack) = stack.meta != Stencil.I
 	
-	override fun addInformation(stack: ItemStack, player: EntityPlayer?, tooltip: MutableList<Any?>, advanced: Boolean) {
+	// PORT: addInformation → appendHoverText
+	override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, advanced: TooltipFlag) {
 		when (stack.meta) {
 			DomainKey.I -> addStringToTooltip(tooltip, "alfheimmisc.creative")
 			RiftDrive.I -> {
-				val sub = ItemNBTHelper.getString(stack, TileAnomaly.TAG_SUBTILE_NAME, "")
+				// PORT: КТ-3 — TileAnomaly.TAG_SUBTILE_NAME; пока — её значение
+				val sub = ItemNBTHelper.getString(stack, /*TileAnomaly.TAG_SUBTILE_NAME*/ "subTileName", "")
 				if (sub.isNotEmpty())
 					addStringToTooltip(tooltip, "tile.Anomaly.$sub.name")
 			}
+			// PORT: КТ-3 — мутации кудзу (TileKudzuVine)
+			/*
 			KudzuSeed.I -> {
 				val mutations = if (ItemNBTHelper.verifyExistance(stack, TAG_MUTATIONS)) ItemNBTHelper.getIntArray(stack, TAG_MUTATIONS) else return
 				mutations.forEach { addStringToTooltip(tooltip, "item.alfheim:KudzuSeed.mutation.${EnumMutation.entries[it].name}") }
 			}
+			*/
 		}
 	}
 	
@@ -319,6 +378,8 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	
 	override fun getItemStackLimit(stack: ItemStack) = if (stack.meta in singles) 1 else 64
 	
+	/* PORT: КТ-3 — бассейн маны, композит и кудзу; КТ-2 — радужный цветок и закопанный лепесток (цветные блоки);
+	   КТ-6 — призыв Гайи в Альвхейме
 	override fun onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
 		val block = world.getBlock(x, y, z)
 		// Fabulous manapool
@@ -378,6 +439,9 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		return false
 	}
 	
+	*/
+	
+	/* PORT: КТ-3 — радужная овца (LensPaintExtender)
 	override fun itemInteractionForEntity(stack: ItemStack, player: EntityPlayer?, sheep: EntityLivingBase?): Boolean {
 		if (stack.meta != RainbowDust.I ||
 		    sheep !is EntitySheep ||
@@ -391,9 +455,14 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		
 		return true
 	}
+	*/
 	
-	override fun getBurnTime(fuel: ItemStack): Int {
-		if (fuel.item === AlfheimItems.elvenResource) {
+	// PORT: IFuelHandler → время горения предмета 1.20.1
+	override fun getBurnTime(stack: ItemStack, recipeType: RecipeType<*>?) = getBurnTime(stack)
+	
+	// PORT: предмет с вариантами — массив предметов
+	fun getBurnTime(fuel: ItemStack): Int {
+		if (fuel.item in AlfheimItems.elvenResource) {
 			return when (of(fuel.meta)) {
 				InfusedDreamwoodTwig, ThunderwoodTwig     -> 600 // 2
 				NetherwoodTwig                            -> 4000 // 20
@@ -408,6 +477,8 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 	
 	companion object {
 		
+		// PORT: иконки, которые рисуют другие предметы и эффекты, переносятся с ними (КТ-4, КТ-7)
+		/*
 		lateinit var amulet: IIcon
 		lateinit var candy: IIcon
 		lateinit var flugel: IIcon
@@ -419,6 +490,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		
 		lateinit var drive1: IIcon
 		lateinit var weed1: IIcon
+		*/
 		
 		const val MAX_STENCIL_USES = 100
 		
@@ -428,6 +500,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 		const val TAG_USAGES = "usages"
 		const val TAG_MUTATIONS = "mutations"
 		
+		/* PORT: КТ-4 — стихии (ElementalDamage)
 		private val ItemStack.element get() = ElementalDamage.valueOf(ItemNBTHelper.getString(this, TAG_ELEMENT, ElementalDamage.COMMON.name))
 		
 		fun ballForElement(element: ElementalDamage?, size: Int = 1): ItemStack {
@@ -440,6 +513,7 @@ class ItemElvenResource: ItemMod("ElvenItems"), IElvenItem, IFlowerComponent, IF
 			}
 			return stack
 		}
+		*/
 	}
 }
 
@@ -493,7 +567,9 @@ enum class ElvenResourcesMetas {
 	
 	val stack get() = stack(1)
 	
-	fun stack(size: Int) = ItemStack(AlfheimItems.elvenResource, size, I)
+	// PORT: вариант — отдельный предмет (SPEC, Р-5)
+	fun stack(size: Int) = ItemStack(AlfheimItems.elvenResource[I], size)
+//	fun stack(size: Int) = ItemStack(AlfheimItems.elvenResource, size, I)
 	
 	companion object {
 		

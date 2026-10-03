@@ -3,6 +3,7 @@ package alfheim.common.core.util
 // PORT: импорты 1.20.1 — первыми; импорты автора закомментированы до КТ, в которых появятся их блоки и предметы
 import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks.alfStorage
+import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.elvenSand
 import alfheim.common.block.AlfheimBlocks.livingcobble
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
@@ -49,6 +50,10 @@ import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteSlab
 import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.core.handler.AlfheimConfigHandler
+import alfheim.common.item.AlfheimItems
+import alfheim.common.item.AlfheimItems.elvenResource
+import alfheim.common.item.AlfheimItems.wiltedLotus
+import alfheim.port.legacy.Item1710
 import alfheim.port.registry.AlfheimRegisters
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -104,7 +109,6 @@ import alfheim.common.block.AlfheimBlocks.corporeaInjector
 import alfheim.common.block.AlfheimBlocks.corporeaRatBase
 import alfheim.common.block.AlfheimBlocks.corporeaSparkBase
 import alfheim.common.block.AlfheimBlocks.dreamSapling
-import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.enderActuator
 import alfheim.common.block.AlfheimBlocks.gaiaButton
 import alfheim.common.block.AlfheimBlocks.grapesRed
@@ -241,7 +245,6 @@ import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.core.asm.transformer.AlfheimClassTransformer
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.core.helper.ContributorsPrivacyHelper
-import alfheim.common.item.AlfheimItems
 import alfheim.common.item.AlfheimItems.`DEV-NULL`
 import alfheim.common.item.AlfheimItems.aesirCloak
 import alfheim.common.item.AlfheimItems.aesirEmblem
@@ -279,7 +282,6 @@ import alfheim.common.item.AlfheimItems.elfIcePendant
 import alfheim.common.item.AlfheimItems.elvenChakram
 import alfheim.common.item.AlfheimItems.elvenDisguise
 import alfheim.common.item.AlfheimItems.elvenFood
-import alfheim.common.item.AlfheimItems.elvenResource
 import alfheim.common.item.AlfheimItems.elvoriumBoots
 import alfheim.common.item.AlfheimItems.elvoriumChestplate
 import alfheim.common.item.AlfheimItems.elvoriumHelmet
@@ -376,7 +378,6 @@ import alfheim.common.item.AlfheimItems.volcanoHelmet
 import alfheim.common.item.AlfheimItems.volcanoLeggings
 import alfheim.common.item.AlfheimItems.volcanoMace
 import alfheim.common.item.AlfheimItems.warBanner
-import alfheim.common.item.AlfheimItems.wiltedLotus
 import alfheim.common.item.AlfheimItems.wireAxe
 import net.minecraft.block.Block
 import net.minecraft.creativetab.CreativeTabs
@@ -496,12 +497,14 @@ object AlfheimTab {
 			addBlock(snowGrass)
 			addBlock(snowLayer)
 		}
+		*/
 		
 		addItem(elvenResource)
 		addItem(AlfheimItems.eventResource)
+		/* PORT: КТ-2
 		addItem(elvenFood)
-		addItem(wiltedLotus)
 		*/
+		addItem(wiltedLotus)
 		/* PORT: КТ-4
 		addItem(ModItems.ancientWill, 6)
 		*/
@@ -791,9 +794,9 @@ object AlfheimTab {
 		addBlock(stalagmite)
 		addBlock(icicle)
 		addBlock(nidhoggTooth)
+		*/
 		
 		addBlock(elvenOre)
-		*/
 		
 		addBlock(livingMountain)
 		addBlock(livingMountainSlab)
@@ -935,9 +938,15 @@ object AlfheimTab {
 		blocks.forEach { addBlock(it) }
 	}
 	
+	// PORT: getSubItems — у предмета порта (Item1710); прочие выдают одну вещь
 	fun addItem(item: Item) {
-		addStack(ItemStack(item))
+		if (item is Item1710) item.getSubItems(item, this, list) else addStack(ItemStack(item))
 //		item.getSubItems(item, this, list)
+	}
+	
+	// PORT: предмет с вариантами metadata — массив предметов (SPEC, Р-5); getSubItems выдавал все варианты по порядку
+	fun addItem(items: Array<Item>) {
+		items.forEach { addItem(it) }
 	}
 	
 	// PORT: КТ-2 — вещь по старому имени и metadata найдёт legacy_ids.json (SPEC, Р-5), когда в нём будут записи
