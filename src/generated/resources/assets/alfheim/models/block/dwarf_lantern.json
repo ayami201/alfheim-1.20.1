@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "alfheim:blocks/decor/dwarf_lantern_top",
+    "side": "alfheim:blocks/decor/dwarf_lantern"
+  }
+}

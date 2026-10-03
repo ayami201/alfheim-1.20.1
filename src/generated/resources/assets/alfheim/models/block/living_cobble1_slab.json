@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "alfheim:blocks/living_cobble1",
+    "side": "alfheim:blocks/living_cobble1",
+    "top": "alfheim:blocks/living_cobble1"
+  }
+}

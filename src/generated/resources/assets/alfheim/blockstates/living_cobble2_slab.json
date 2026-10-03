@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/living_cobble2_slab"
+    },
+    "type=double": {
+      "model": "alfheim:block/living_cobble2_slab_double"
+    },
+    "type=top": {
+      "model": "alfheim:block/living_cobble2_slab_top"
+    }
+  }
+}

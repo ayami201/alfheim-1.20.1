@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/custom_roof2_slab"
+    },
+    "type=double": {
+      "model": "alfheim:block/custom_roof2"
+    },
+    "type=top": {
+      "model": "alfheim:block/custom_roof2_slab_top"
+    }
+  }
+}

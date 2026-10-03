@@ -5,6 +5,7 @@ import alexsocol.asjlib.extendables.block.BlockModMeta
 import alfheim.api.ModInfo.MODID
 import alfheim.common.item.block.ItemBlockLeavesMod
 import alfheim.port.legacy.LegacyBlock
+import alfheim.port.legacy.botania.*
 import alfheim.port.registry.LegacyRegistration
 import com.google.gson.*
 import net.minecraft.data.*
@@ -24,7 +25,11 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 			add("по блокам и предметам, зарегистрированным в порту; руками не правится. Из него читают все: загрузчик построек,")
 			add("перевод ключей lang (tools/convert_lang.py), лексикон, тесты паритета. Формат — docs/port/MAPPING.md, раздел «legacy_ids.json».")
 		})
-		json.add("blocks", ids(LegacyRegistration.blocks.values))
+		json.add("blocks", ids(LegacyRegistration.blocks.values).apply {
+			// блок 1.7.10, который в 1.20.1 — состояние другого блока (двойная плита)
+			for (alias in LegacyRegistration.aliases)
+				addProperty("$MODID:${alias.oldName}", "${LegacyRegistration.blocks[alias.block]!!.id}[${alias.state}]")
+		})
 		json.add("items", ids(LegacyRegistration.items.values))
 		json.add("entities", JsonObject())
 		json.add("lang", JsonObject().apply {
@@ -50,8 +55,8 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 
 		/**
 		 * Ключ перевода предмета-блока в 1.7.10: `tile.` + имя блока; `ItemBlockMetaName` дописывал номер варианта,
-		 * `ItemBlockLeavesMod` — приставку `alfheim:`. Предмет 1.20.1 берёт ключ блока, поэтому старый ключ
-		 * переименовывается в ключ блока
+		 * `ItemBlockLeavesMod` — приставку `alfheim:`, `ItemBlockMod` и `ItemBlockModSlab` Botania — `botania:`.
+		 * Предмет 1.20.1 берёт ключ блока, поэтому старый ключ переименовывается в ключ блока
 		 */
 		fun legacyLangKey(block: Block): String? {
 			val legacy = block as? LegacyBlock ?: return null
@@ -59,6 +64,7 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 			var key = legacy.legacy.unlocalizedName
 			if (item is ItemBlockMetaName && ((block as? BlockModMeta)?.subtypes ?: 16) > 1) key += legacy.variant ?: 0
 			if (item is ItemBlockLeavesMod) key = key.replace("tile.", "tile.$MODID:")
+			if (item is ItemBlockMod || item is ItemBlockModSlab) key = key.replace("tile.", "tile.botania:")
 			return "$key.name"
 		}
 	}

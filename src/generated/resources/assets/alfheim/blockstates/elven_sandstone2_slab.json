@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/elven_sandstone2_slab"
+    },
+    "type=double": {
+      "model": "alfheim:block/elven_sandstone2"
+    },
+    "type=top": {
+      "model": "alfheim:block/elven_sandstone2_slab_top"
+    }
+  }
+}

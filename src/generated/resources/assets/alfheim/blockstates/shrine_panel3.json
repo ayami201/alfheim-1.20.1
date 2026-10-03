@@ -1,0 +1,77 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "alfheim:block/shrine_panel3_post"
+      }
+    },
+    {
+      "apply": {
+        "model": "alfheim:block/shrine_panel3_side"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alfheim:block/shrine_panel3_noside"
+      },
+      "when": {
+        "north": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "alfheim:block/shrine_panel3_side_alt"
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alfheim:block/shrine_panel3_noside_alt",
+        "y": 90
+      },
+      "when": {
+        "south": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "alfheim:block/shrine_panel3_side_alt",
+        "y": 90
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alfheim:block/shrine_panel3_noside",
+        "y": 270
+      },
+      "when": {
+        "west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "alfheim:block/shrine_panel3_side",
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alfheim:block/shrine_panel3_noside_alt"
+      },
+      "when": {
+        "east": "false"
+      }
+    }
+  ]
+}

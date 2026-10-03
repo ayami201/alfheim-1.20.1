@@ -54,6 +54,22 @@ object HarvestTags {
 }
 
 /**
+ * Теги формы, без которых блок 1.20.1 ведёт себя не так, как блок этой формы (MAPPING.md, «Блоки и предметы»): стена
+ * соединяется со стенами и панелями из `minecraft:walls`, к забору из `minecraft:fences` привязывается поводок, через
+ * люк из `minecraft:trapdoors` ходят мобы. Забор порта не в `minecraft:wooden_fences`: к нему не тянутся заборы
+ * ванилы, как в 1.7.10 (сам он тянется к любому забору — `BlockModFence.connectsTo`)
+ */
+object ShapeTags {
+
+	fun tag(block: Block): TagKey<Block>? = when (block) {
+		is Wall1710     -> BlockTags.WALLS
+		is Fence1710    -> BlockTags.FENCES
+		is TrapDoor1710 -> BlockTags.TRAPDOORS
+		else            -> null
+	}
+}
+
+/**
  * Ore Dictionary 1.7.10 → теги 1.20.1 (MAPPING.md, «Ore Dictionary»). Записи даёт `regOreDict` автора; каждое имя
  * должно быть в [names], иначе генерация данных падает — новое имя добавляет КТ, в которой появилась его вещь.
  * Тег один и тот же для предмета и для блока: в 1.7.10 по Ore Dictionary искали и вещи, и блоки.
@@ -82,6 +98,7 @@ class AlfheimBlockTags(output: PackOutput, lookup: CompletableFuture<HolderLooku
 			HarvestTags.tools(block).forEach { tag(it).add(block) }
 			HarvestTags.tier(block)?.let { tag(it).add(block) }
 			if (block.isBeaconBase(null, 0, 0, 0, 0, 0, 0)) tag(BlockTags.BEACON_BASE_BLOCKS).add(block)
+			ShapeTags.tag(block)?.let { tag(it).add(block) }
 		}
 
 		for ((name, stack) in OreDictTags.entries()) {

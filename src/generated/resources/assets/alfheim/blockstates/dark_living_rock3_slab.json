@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/dark_living_rock3_slab"
+    },
+    "type=double": {
+      "model": "alfheim:block/dark_living_rock3"
+    },
+    "type=top": {
+      "model": "alfheim:block/dark_living_rock3_slab_top"
+    }
+  }
+}
