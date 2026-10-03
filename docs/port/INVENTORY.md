@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 223 | 19 303 | 141 | 81 | 1 |  |
+| КТ-2 | 223 | 19 303 | 140 | 82 | 1 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **967** | **113** | **61** | **12** |
+| **всего** | **1153** | **124 643** | **966** | **114** | **61** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -1082,7 +1082,7 @@ python3 tools/check_inventory.py
 | `AlfheimPreConfigHandler.kt` | 25 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/AlfheimPreConfigHandler.kt` |
 | `CardinalSystem.kt` | 1173 | КТ-7 | ждёт |  |
 | `ChunkLoadingHandler.kt` | 129 | КТ-6 | ждёт |  |
-| `DispenserHandlers.kt` | 174 | КТ-2 | ждёт |  |
+| `DispenserHandlers.kt` | 174 | КТ-2 | перенесено | → `src/main/java/alfheim/common/core/handler/DispenserHandlers.kt`; `BifrostFlowerDispenserHandler` — в комментарии до радужной травы (`block/colored`); поведение регистрируется в `FMLCommonSetupEvent` |
 | `ESMHandlers.kt` | 391 | КТ-7 | ждёт |  |
 | `EventHandler.kt` | 488 | КТ-1 | перенесено | → `src/main/java/alfheim/common/core/handler/EventHandler.kt`; общий обработчик: работают новости при входе и две особенности участников, остальное раскомментирует КТ своей механики |
 | `EventHandlerSummer.kt` | 38 | КТ-8 | ждёт | сезонные события |
