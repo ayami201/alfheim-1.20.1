@@ -1,5 +1,6 @@
 package alfheim.port.test
 
+import alexsocol.asjlib.meta
 import alfheim.api.ModInfo.MODID
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.AlfheimFluffBlocks
@@ -218,8 +219,10 @@ object PortDecorTest {
 		val alfheim = AlfheimTab.tab.get().displayItems.map { it.item }
 		val hidden = listOf(AlfheimBlocks.manaIce.asItem(), AlfheimFluffBlocks.elfQuartzWall.asItem()) +
 			listOf(ElvenResourcesMetas.ElvenWeed, ElvenResourcesMetas.WisdomBottle, ElvenResourcesMetas.RiftDrive).map { AlfheimItems.elvenResource[it.I] }
-		val expected = LegacyRegistration.items.keys.filter { it !in hidden }
+		// рог души — дважды: обычный и заряженный (metadata 1), как у автора
+		val expected = LegacyRegistration.items.keys.filter { it !in hidden } + AlfheimItems.soulHorn
 		helper.assertTrue(alfheim.toSet() == expected.toSet() && alfheim.size == expected.size, "Alfheim tab: ${alfheim.size} items, expected ${expected.size}; missing ${expected - alfheim.toSet()}")
+		helper.assertTrue(AlfheimTab.tab.get().displayItems.filter { it.item == AlfheimItems.soulHorn }.map { it.meta } == listOf(0, 1), "soul horns in the tab")
 		val resources = alfheim.filterIsInstance<ItemElvenResource>().map { it.meta }
 		helper.assertTrue(resources == resources.sorted(), "elven resources in the tab: $resources")
 
