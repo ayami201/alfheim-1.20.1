@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 222 | 19 082 | 193 | 28 | 1 |  |
+| КТ-2 | 222 | 19 082 | 155 | 66 | 1 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **1020** | **60** | **61** | **12** |
+| **всего** | **1153** | **124 643** | **982** | **98** | **61** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -1670,7 +1670,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `ItemElvenFood.kt` | 213 | КТ-2 | ждёт |  |
+| `ItemElvenFood.kt` | 213 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemElvenFood.kt`; варианты — отдельные предметы; рецепты — с рецептами КТ-2 |
 | `ItemElvenResource.kt` | 504 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemElvenResource.kt`; ждут: портал и аптекарь Botania, бассейн маны, аномалии, кудзу — КТ-3, стихии шарика слизи — КТ-4 и КТ-5, призыв Гайи — КТ-6, бутылка мудрости и осколки разлома — КТ-8, радужный цветок и закопанный лепесток — цветные блоки КТ-2 |
 | `ItemEventResource.kt` | 76 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemEventResource.kt` |
 | `ItemSoulHorn.kt` | 27 | КТ-2 | ждёт |  |
@@ -1762,7 +1762,7 @@ python3 tools/check_inventory.py
 | `MessageContributor.kt` | 80 | КТ-1 | перенесено | → `src/main/java/alfheim/common/network/packet/MessageContributor.kt` |
 | `MessageCorporeaRequest.kt` | 22 | КТ-3 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageDisguise.kt` | 55 | КТ-4 | ждёт | канал — КТ-1, пакет — вместе с механикой |
-| `MessageEffect.kt` | 55 | КТ-2 | ждёт | канал — КТ-1, пакет — вместе с механикой |
+| `MessageEffect.kt` | 55 | КТ-2 | перенесено | → `src/main/java/alfheim/common/network/packet/MessageEffect.kt`; события зелий ASJCore → `MobEffectEvent` (EventHandler) |
 | `MessageFIBlock.kt` | 21 | КТ-6 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageFuckedUpServerPrecision.kt` | 18 | КТ-3 | ждёт | канал — КТ-1, пакет — вместе с механикой |
 | `MessageGleipnirLeash.kt` | 22 | КТ-4 | ждёт | канал — КТ-1, пакет — вместе с механикой |
@@ -1787,47 +1787,47 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `PotionAlfheim.kt` | 40 | КТ-2 | ждёт |  |
-| `PotionBeastWithin.kt` | 23 | КТ-2 | ждёт |  |
-| `PotionBeer.kt` | 44 | КТ-2 | ждёт |  |
-| `PotionBerserk.kt` | 24 | КТ-2 | ждёт |  |
-| `PotionBleeding.kt` | 24 | КТ-2 | ждёт |  |
-| `PotionButterShield.kt` | 56 | КТ-2 | ждёт |  |
-| `PotionChampagne.kt` | 20 | КТ-2 | ждёт |  |
-| `PotionDeathMark.kt` | 15 | КТ-2 | ждёт |  |
-| `PotionEdgeLife.kt` | 18 | КТ-2 | ждёт |  |
-| `PotionEternity.kt` | 103 | КТ-2 | ждёт |  |
-| `PotionGoldRush.kt` | 19 | КТ-2 | ждёт |  |
-| `PotionHystrix.kt` | 30 | КТ-2 | ждёт |  |
-| `PotionIceLens.kt` | 25 | КТ-2 | ждёт |  |
-| `PotionLeftFlame.kt` | 109 | КТ-2 | ждёт |  |
-| `PotionLightningShield.kt` | 46 | КТ-2 | ждёт |  |
-| `PotionManaVoid.kt` | 77 | КТ-2 | ждёт |  |
-| `PotionNinja.kt` | 24 | КТ-2 | ждёт |  |
-| `PotionNoclip.kt` | 82 | КТ-2 | ждёт |  |
-| `PotionPriorityTarget.kt` | 121 | КТ-2 | ждёт |  |
-| `PotionQuadDamage.kt` | 83 | КТ-2 | ждёт |  |
-| `PotionSacrifice.kt` | 50 | КТ-2 | ждёт |  |
-| `PotionShowMana.kt` | 33 | КТ-2 | ждёт |  |
-| `PotionSoulburn.kt` | 67 | КТ-2 | ждёт |  |
-| `PotionTank.kt` | 24 | КТ-2 | ждёт |  |
-| `PotionThrow.kt` | 33 | КТ-2 | ждёт |  |
-| `PotionTimeAnchor.kt` | 51 | КТ-2 | ждёт |  |
-| `PotionTimeConquest.kt` | 36 | КТ-2 | ждёт |  |
-| `PotionVoodooDoll.kt` | 56 | КТ-2 | ждёт |  |
-| `PotionVoodooTarget.kt` | 33 | КТ-2 | ждёт |  |
-| `PotionWellOLife.kt` | 15 | КТ-2 | ждёт |  |
-| `PotionWhiteWine.kt` | 29 | КТ-2 | ждёт |  |
+| `PotionAlfheim.kt` | 40 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionAlfheim.kt` |
+| `PotionBeastWithin.kt` | 23 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionBeastWithin.kt`; кровотечение силой заклинания ждёт КТ-7 |
+| `PotionBeer.kt` | 44 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionBeer.kt` |
+| `PotionBerserk.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionBerserk.kt` |
+| `PotionBleeding.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionBleeding.kt`; урон кровотечением ждёт КТ-7 |
+| `PotionButterShield.kt` | 56 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionButterShield.kt`; бабочки вокруг существа (рендер) ждут КТ-7 |
+| `PotionChampagne.kt` | 20 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionChampagne.kt` |
+| `PotionDeathMark.kt` | 15 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionDeathMark.kt`; урон «Метки смерти» ждёт КТ-7 |
+| `PotionEdgeLife.kt` | 18 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionEdgeLife.kt` |
+| `PotionEternity.kt` | 103 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionEternity.kt`; существа Нифльхейма ждут КТ-5, урон льдом и запрет заклинаний — КТ-7 |
+| `PotionGoldRush.kt` | 19 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionGoldRush.kt`; скорость добычи по силе заклинания ждёт КТ-7 |
+| `PotionHystrix.kt` | 30 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionHystrix.kt`; шипы ждут КТ-7 |
+| `PotionIceLens.kt` | 25 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionIceLens.kt`; плата маной заклинания ждёт КТ-7 |
+| `PotionLeftFlame.kt` | 109 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionLeftFlame.kt`; смерть игрока в режиме MMO ждёт КТ-7 |
+| `PotionLightningShield.kt` | 46 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionLightningShield.kt`; цвет с амулета перекраски и плащ жреца ждут КТ-4, урон молнией — КТ-7 |
+| `PotionManaVoid.kt` | 77 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionManaVoid.kt`; мана в предметах и аксессуарах ждёт КТ-3 |
+| `PotionNinja.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionNinja.kt` |
+| `PotionNoclip.kt` | 82 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionNoclip.kt`; листва и древесина Иггдрасиля — с деревьями КТ-2 |
+| `PotionPriorityTarget.kt` | 121 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionPriorityTarget.kt`; урон и метка цели на экране ждут КТ-7 |
+| `PotionQuadDamage.kt` | 83 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionQuadDamage.kt`; цепочка заклинаний и удар молнии ждут КТ-7 |
+| `PotionSacrifice.kt` | 50 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionSacrifice.kt`; урон и огоньки заклинания ждут КТ-7 |
+| `PotionShowMana.kt` | 33 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionShowMana.kt`; частицы маны ждут КТ-7 |
+| `PotionSoulburn.kt` | 67 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionSoulburn.kt`; существа Муспельхейма ждут КТ-5, урон — КТ-7, красное пламя на экране (H-119) — КТ-2 |
+| `PotionTank.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionTank.kt` |
+| `PotionThrow.kt` | 33 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionThrow.kt`; урон воздухом ждёт КТ-7, стихия — КТ-4 |
+| `PotionTimeAnchor.kt` | 51 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionTimeAnchor.kt`; возврат на якорь ждёт КТ-7 |
+| `PotionTimeConquest.kt` | 36 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionTimeConquest.kt`; перезарядка заклинаний ждёт КТ-7 |
+| `PotionVoodooDoll.kt` | 56 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionVoodooDoll.kt`; стихии урона ждут КТ-4, урон заклинания — КТ-7 |
+| `PotionVoodooTarget.kt` | 33 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionVoodooTarget.kt` |
+| `PotionWellOLife.kt` | 15 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionWellOLife.kt`; лечение силой заклинания ждёт КТ-7 |
+| `PotionWhiteWine.kt` | 29 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/PotionWhiteWine.kt` |
 
 ### `legacy/src/main/java/alfheim/common/potion/berries/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `PotionWTFBerry0.kt` | 36 | КТ-2 | ждёт |  |
-| `PotionWTFBerry2.kt` | 22 | КТ-2 | ждёт |  |
-| `PotionWTFBerry3.kt` | 22 | КТ-2 | ждёт |  |
-| `PotionWTFBerry4.kt` | 30 | КТ-2 | ждёт |  |
-| `PotionWTFBerry5.kt` | 32 | КТ-2 | ждёт |  |
+| `PotionWTFBerry0.kt` | 36 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/berries/PotionWTFBerry0.kt`; радиус дерева-барьера (TileTreeWind) — с деревьями КТ-2 |
+| `PotionWTFBerry2.kt` | 22 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/berries/PotionWTFBerry2.kt`; сигнал красного камня ждёт КТ-4 |
+| `PotionWTFBerry3.kt` | 22 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/berries/PotionWTFBerry3.kt`; ответный удар молнией ждёт КТ-7 |
+| `PotionWTFBerry4.kt` | 30 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/berries/PotionWTFBerry4.kt`; холод Нифльхейма ждёт КТ-6 |
+| `PotionWTFBerry5.kt` | 32 | КТ-2 | перенесено | → `src/main/java/alfheim/common/potion/berries/PotionWTFBerry5.kt` |
 
 ### `legacy/src/main/java/alfheim/common/spell/darkness/`
 
@@ -2117,13 +2117,13 @@ python3 tools/check_inventory.py
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
 | `alfheim/textures/environment/` | 1 | КТ-6 | ждёт | небо миров |
-| `alfheim/textures/gui/` (только файлы папки) | 13 | по владельцу | ждёт | интерфейс: HUD рас и заклинаний — КТ-7, оверлеи блоков — КТ-3 |
+| `alfheim/textures/gui/` (только файлы папки) | 13 | по владельцу | ждёт | перенесено 2 — листы иконок зелий `potions0.png`, `potions1.png` (КТ-2); интерфейс: HUD рас и заклинаний — КТ-7, оверлеи блоков — КТ-3 |
 | `alfheim/textures/gui/categories/` | 7 | КТ-9 | ждёт | лексикон |
 | `alfheim/textures/gui/entries/` | 8 | КТ-9 | ждёт | лексикон |
 | `alfheim/textures/gui/spells/` | 85 | КТ-7 | ждёт | иконки заклинаний |
 | `alfheim/textures/items/` (только файлы папки) | 182 | КТ-2 | ждёт | текстуры предметов других КТ переносятся вместе с предметом; перенесено 1 — `wiltedLotus.png` |
 | `alfheim/textures/items/coatofarms/` | 19 | КТ-4 | ждёт | `ItemCoatOfArms` |
-| `alfheim/textures/items/materials/` | 72 | КТ-2 | ждёт | перенесено 51 — материалы `ElvenItems` и `EventResource`; осталась еда (`food/`, 21 файл) — с `ItemElvenFood` |
+| `alfheim/textures/items/materials/` | 72 | КТ-2 | перенесено | материалы `ElvenItems` и `EventResource` (51), еда `ItemElvenFood` (`food/`, 19); `food/RedGrapes_new.png`, `food/WhiteGrapes_old.png` код автора не использует — остаются здесь |
 | `alfheim/textures/items/misc/` | 17 | КТ-2 | ждёт |  |
 | `alfheim/textures/items/unused/` | 23 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
 | `alfheim/textures/misc/` (только файлы папки) | 19 | по владельцу | ждёт | эффекты и оверлеи; каждый — в КТ своей механики |

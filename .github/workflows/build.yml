@@ -72,6 +72,10 @@ jobs:
       - name: Сверка настроек с автором
         run: python3 tools/check_config.py run/config/Alfheim
 
+      # В игре миксины находят методы Minecraft по карте ссылок из jar; GameTest-ы её не проверяют
+      - name: Миксины в jar
+        run: python3 tools/check_mixins.py
+
       - name: jar мода
         uses: actions/upload-artifact@v4
         with:

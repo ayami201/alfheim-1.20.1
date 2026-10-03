@@ -4,11 +4,12 @@ import alfheim.AlfheimCore
 import alfheim.api.ModInfo.MODID
 import alfheim.common.block.*
 import alfheim.common.item.AlfheimItems
-import alfheim.common.item.material.ElvenResourcesMetas
+import alfheim.common.item.material.*
 import alfheim.port.data.AlfheimItemModels
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.block.BlockModelShaper
 import net.minecraft.client.renderer.block.model.BakedQuad
+import net.minecraft.client.renderer.item.ItemProperties
 import net.minecraft.client.resources.model.*
 import net.minecraft.core.*
 import net.minecraft.core.registries.BuiltInRegistries
@@ -22,6 +23,7 @@ import net.minecraftforge.client.event.ModelEvent
 import net.minecraftforge.client.model.BakedModelWrapper
 import net.minecraftforge.client.model.data.*
 import net.minecraftforge.eventbus.api.*
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import kotlin.math.abs
 
 /**
@@ -34,6 +36,13 @@ object AlfheimModels {
 	fun register(bus: IEventBus) {
 		bus.addListener(EventPriority.NORMAL, false, ModelEvent.RegisterAdditional::class.java, ::registerAdditional)
 		bus.addListener(EventPriority.NORMAL, false, ModelEvent.ModifyBakingResult::class.java, ::modifyBakingResult)
+		bus.addListener(EventPriority.NORMAL, false, FMLClientSetupEvent::class.java, ::registerProperties)
+	}
+	
+	/** Свойства моделей предметов: иконка, которую 1.7.10 выбирал по стаку (`getIcon(stack, pass)`) */
+	private fun registerProperties(e: FMLClientSetupEvent) = e.enqueueWork {
+		// ItemElvenFood.getIcon: пиво с именем «Cerveza Cristal» рисуется своей иконкой
+		ItemProperties.register(AlfheimItems.elvenFood[ElvenFoodMetas.Beer.I], AlfheimItemModels.CC_PROPERTY) { stack, _, _, _ -> if (ItemElvenFood.isCC(stack)) 1f else 0f }
 	}
 	
 	private fun model(path: String) = ResourceLocation(MODID, "block/$path")

@@ -2,12 +2,15 @@ package alfheim.port.registry
 
 import alfheim.api.ModInfo.MODID
 import alfheim.port.legacy.LegacyItem
+import alfheim.port.legacy.Potion1710
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.eventbus.api.IEventBus
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.registries.RegisterEvent
 
 /**
@@ -36,9 +39,11 @@ object LegacyRegistration {
 	
 	val blocks = LinkedHashMap<Block, Entry>()
 	val items = LinkedHashMap<Item, Entry>()
+	val effects = LinkedHashMap<MobEffect, Entry>()
 	val aliases = ArrayList<Alias>()
 
 	private val pendingItems = ArrayList<Pair<Item, String>>()
+	private val pendingEffects = ArrayList<Potion1710>()
 	private val blockSources = ArrayList<() -> Any>()
 	private val itemSources = ArrayList<() -> Any>()
 	private val blockItems = ArrayList<Pair<Block, (Block) -> Item>>()
@@ -47,6 +52,8 @@ object LegacyRegistration {
 	/** Подписка на событие регистрации; вызывается из конструктора мода */
 	fun register(bus: IEventBus) {
 		bus.addListener(EventPriority.NORMAL, false, RegisterEvent::class.java, ::onRegister)
+		// id 1.7.10 остальным эффектам — когда реестр заполнен всеми модами
+		bus.addListener(EventPriority.NORMAL, false, FMLCommonSetupEvent::class.java) { Potion1710.assignIds() }
 	}
 
 	/** Что создаёт блоки автора: обычно обращение к его реестру (`AlfheimBlocks`), создание объекта и есть регистрация */
@@ -60,6 +67,8 @@ object LegacyRegistration {
 	}
 
 	private fun onRegister(e: RegisterEvent) {
+		if (e.registryKey == Registries.MOB_EFFECT) return registerEffects(e)
+		
 		val sources = when (e.registryKey) {
 			Registries.BLOCK -> blockSources
 			Registries.ITEM  -> itemSources
@@ -116,6 +125,26 @@ object LegacyRegistration {
 		pendingItems += item to name
 	}
 
+	/**
+	 * Зелье автора ([Potion1710]): создаётся, когда к нему впервые обращаются (у автора — в preInit), и ждёт
+	 * регистрации эффектов. Id — имя из `setPotionName` без приставки: `alfheim.potion.whiteWine` → `alfheim:white_wine`
+	 */
+	fun effect(potion: Potion1710) {
+		check(potion !in pendingEffects && potion !in effects) { "Potion ${potion.id} is registered twice" }
+		pendingEffects += potion
+	}
+	
+	private fun registerEffects(e: RegisterEvent) {
+		for (potion in pendingEffects) {
+			val name = potion.name.substringAfterLast('.')
+			val entry = Entry(id(name, null), name, null)
+			check(effects.values.none { it.id == entry.id }) { "Effect id ${entry.id} is registered twice" }
+			effects[potion] = entry
+			e.register(Registries.MOB_EFFECT, entry.id) { potion }
+		}
+		pendingEffects.clear()
+	}
+	
 	private fun item(item: Item, entry: Entry) {
 		val e = event?.takeIf { it.registryKey == Registries.ITEM } ?: throw IllegalStateException("Item ${entry.id} is created outside of the item registration: create it from LegacyRegistration.onItems")
 		check(items.values.none { it.id == entry.id }) { "Item id ${entry.id} is registered twice" }

@@ -4,6 +4,7 @@ package alfheim.common.core.handler
 
 // PORT: импорты 1.7.10 заменены на 1.20.1; импорты кода, который ещё не перенесён, закомментированы до его КТ
 import alexsocol.asjlib.*
+import alfheim.port.legacy.*
 //import alexsocol.asjlib.math.Vector3
 //import alexsocol.patcher.event.*
 //import alfheim.api.entity.*
@@ -19,8 +20,8 @@ import alfheim.common.core.util.*
 //import alfheim.common.item.AlfheimItems
 //import alfheim.common.item.equipment.tool.ItemSoulSword
 //import alfheim.common.item.relic.ItemTankMask
-//import alfheim.common.network.*
-//import alfheim.common.network.packet.*
+import alfheim.common.network.*
+import alfheim.common.network.packet.*
 //import alfheim.common.spell.darkness.SpellDecay
 //import cpw.mods.fml.common.IFuelHandler
 import net.minecraftforge.eventbus.api.*
@@ -46,6 +47,7 @@ import net.minecraft.network.chat.Component
 //import net.minecraftforge.event.entity.EntityJoinWorldEvent
 //import net.minecraftforge.event.entity.living.*
 //import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
+import net.minecraftforge.event.entity.living.MobEffectEvent
 import net.minecraftforge.event.entity.player.*
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract as EntityInteractEvent
 //import net.minecraftforge.event.world.BlockEvent
@@ -387,9 +389,14 @@ object EventHandler {
 	}
 	*/
 	
-	/* PORT: КТ-2 — зелья: события LivingPotionEvent ASJCore → MobEffectEvent Forge, пакет MessageEffect
+	// PORT: события зелий ASJCore (LivingPotionEvent) → MobEffectEvent Forge. Added — эффект наложен; если такой уже был,
+	// это изменение (Change.Post 1.7.10): Forge сообщает о нём до того, как эффект обновлён, — пакет уходит в конце тика,
+	// с обновлённым эффектом. Remove — эффект снят (Forge — до снятия; последним, если его никто не отменил), Expired —
+	// закончился; в 1.7.10 оба — Remove.Post
 	@SubscribeEvent
-	fun onNewPotionEffect(e: LivingPotionEvent.Add.Post) {
+	fun onNewPotionEffect(e: MobEffectEvent.Added) {
+		if (e.oldEffectInstance != null) return onChangedPotionEffect(e)
+		
 		if (ASJUtilities.isServer) NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, e.effect.potionID, e.effect.duration, e.effect.amplifier, false, 1))
 		
 		onlyOneStoneEffect(e)
@@ -397,7 +404,7 @@ object EventHandler {
 	
 	val stoneEffects = arrayOf(AlfheimConfigHandler.potionIDBerserk, AlfheimConfigHandler.potionIDNinja, AlfheimConfigHandler.potionIDOvermage, AlfheimConfigHandler.potionIDTank)
 	
-	fun onlyOneStoneEffect(e: LivingPotionEvent.Add.Post) {
+	fun onlyOneStoneEffect(e: MobEffectEvent.Added) {
 		if (e.effect.potionID !in stoneEffects) return
 		
 		for (id in stoneEffects) {
@@ -407,16 +414,26 @@ object EventHandler {
 		}
 	}
 	
-	@SubscribeEvent
-	fun onChangedPotionEffect(e: LivingPotionEvent.Change.Post) {
-		if (ASJUtilities.isServer) NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, e.effect.potionID, e.effect.duration, e.effect.amplifier, e.update, 0))
+	fun onChangedPotionEffect(e: MobEffectEvent.Added) {
+		val effect = e.oldEffectInstance!!
+		if (ASJUtilities.isServer) e.entityLiving.server?.execute { NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, effect.potionID, effect.duration, effect.amplifier, true, 0)) }
+//		if (ASJUtilities.isServer) NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, e.effect.potionID, e.effect.duration, e.effect.amplifier, e.update, 0))
 	}
 	
-	@SubscribeEvent
-	fun onFinishedPotionEffect(e: LivingPotionEvent.Remove.Post) {
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	fun onFinishedPotionEffect(e: MobEffectEvent.Remove) {
+		if (e.effectInstance == null) return
+		// PORT: у Remove свой effect — MobEffect; эффект с длительностью — effectInstance
+		if (ASJUtilities.isServer) NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, e.effectInstance!!.potionID, e.effectInstance!!.duration, e.effectInstance!!.amplifier, false, -1))
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	fun onExpiredPotionEffect(e: MobEffectEvent.Expired) {
+		if (e.effectInstance == null) return
 		if (ASJUtilities.isServer) NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, e.effect.potionID, e.effect.duration, e.effect.amplifier, false, -1))
 	}
-	*/
+	
+	private val MobEffectEvent.effect get() = effectInstance!!
 	
 //	@SubscribeEvent
 //	fun onEntityUpdate(e: EntityUpdateEvent) {
@@ -530,6 +547,7 @@ object EventHandler {
 	private val EntityPlayer.heldItem get() = mainHandItem.takeUnless { it.isEmpty }
 	private val EntityPlayer.commandSenderName: String get() = gameProfile.name
 	private val Entity.riddenByEntity get() = firstPassenger
+	private val Entity.entityId get() = id
 	private val EntityWolf.isTamed get() = isTame
 	// PORT: mountEntity 1.7.10 сажает без проверок, кроме кольца из всадников; startRiding с force — так же
 	private fun Entity.mountEntity(entity: Entity) = startRiding(entity, true)

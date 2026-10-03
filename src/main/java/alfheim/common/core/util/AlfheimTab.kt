@@ -51,6 +51,7 @@ import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.AlfheimItems
+import alfheim.common.item.AlfheimItems.elvenFood
 import alfheim.common.item.AlfheimItems.elvenResource
 import alfheim.common.item.AlfheimItems.wiltedLotus
 import alfheim.port.legacy.Item1710
@@ -281,7 +282,6 @@ import alfheim.common.item.AlfheimItems.elfFirePendant
 import alfheim.common.item.AlfheimItems.elfIcePendant
 import alfheim.common.item.AlfheimItems.elvenChakram
 import alfheim.common.item.AlfheimItems.elvenDisguise
-import alfheim.common.item.AlfheimItems.elvenFood
 import alfheim.common.item.AlfheimItems.elvoriumBoots
 import alfheim.common.item.AlfheimItems.elvoriumChestplate
 import alfheim.common.item.AlfheimItems.elvoriumHelmet
@@ -501,9 +501,7 @@ object AlfheimTab {
 		
 		addItem(elvenResource)
 		addItem(AlfheimItems.eventResource)
-		/* PORT: КТ-2
 		addItem(elvenFood)
-		*/
 		addItem(wiltedLotus)
 		/* PORT: КТ-4
 		addItem(ModItems.ancientWill, 6)

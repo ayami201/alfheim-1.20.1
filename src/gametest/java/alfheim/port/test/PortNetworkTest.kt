@@ -53,6 +53,9 @@ object PortNetworkTest {
 		val ni = roundTrip(MessageNI(Mni.WINGS_BL, 1, -1, 7))
 		helper.assertTrue(ni.type == Mni.WINGS_BL.ordinal && ni.intArray.contentEquals(intArrayOf(1, -1, 7)), "MessageNI: ${ni.type} ${ni.intArray.toList()}")
 
+		val effect = roundTrip(MessageEffect(42, 7, 1200, 3, true, -1))
+		helper.assertTrue(effect.entity == 42 && effect.id == 7 && effect.dur == 1200 && effect.amp == 3 && effect.readd && effect.state == (-1).toByte(), "MessageEffect")
+
 		val contributor = roundTrip(MessageContributor("AlexSocol", "Альфхейм", true))
 		helper.assertTrue(contributor.key == "AlexSocol" && contributor.value == "Альфхейм" && contributor.isRequest, "MessageContributor: ${contributor.key} ${contributor.value} ${contributor.isRequest}")
 

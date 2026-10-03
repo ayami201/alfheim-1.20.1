@@ -2,7 +2,7 @@ package alfheim.common.core.registry
 
 // PORT: импорты 1.7.10 заменены на 1.20.1; импорты кода, который ещё не перенесён, закомментированы до его КТ
 //import alexsocol.asjlib.ASJUtilities.registerEntity
-//import alexsocol.asjlib.eventForge
+import alexsocol.asjlib.eventForge
 import alfheim.api.*
 //import alfheim.api.AlfheimAPI.addPink
 //import alfheim.api.AlfheimAPI.registerAnomaly
@@ -23,8 +23,8 @@ import alfheim.common.core.handler.*
 //import alfheim.common.item.*
 //import alfheim.common.item.material.*
 //import alfheim.common.item.material.ElvenResourcesMetas.ElementalSlimeBall
-//import alfheim.common.potion.*
-//import alfheim.common.potion.berries.*
+import alfheim.common.potion.*
+import alfheim.common.potion.berries.*
 //import alfheim.common.spell.darkness.*
 //import alfheim.common.spell.earth.*
 //import alfheim.common.spell.fire.*
@@ -56,8 +56,8 @@ import kotlin.jvm.java
 object AlfheimRegistry {
 	
 	fun preInit() {
-		// PORT: КТ-2 — зелья; существа и блок-сущности — в КТ каждого (по описи)
-//		registerPotions()
+		// PORT: существа и блок-сущности — в КТ каждого (по описи)
+		registerPotions()
 //		registerEntities()
 //		registerTileEntities()
 	}
@@ -102,7 +102,8 @@ object AlfheimRegistry {
 	}
 	*/
 	
-	/* PORT: КТ-2 — зелья: MobEffect через DeferredRegister, номера зелий из конфига удалены (MAPPING.md)
+	// PORT: зелье — MobEffect (alfheim.port.legacy.Potion1710): создаётся здесь, регистрирует его LegacyRegistration в
+	// событии регистрации эффектов; номера зелий из конфига удалены (MAPPING.md)
 	private fun registerPotions() {
 		PotionBeastWithin
 		PotionBeer
@@ -148,7 +149,6 @@ object AlfheimRegistry {
 		PotionWTFBerry4.eventForge() // nether
 		PotionWTFBerry5.eventForge() // sealing
 	}
-	*/
 	
 	/* PORT: существа — в КТ каждого (по описи): EntityType через DeferredRegister, яйца — ForgeSpawnEggItem (MAPPING.md)
 	var nextEntityID = 0

@@ -9,6 +9,7 @@ import alfheim.port.registry.LegacyRegistration
 import net.minecraft.data.PackOutput
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.*
+import net.minecraftforge.client.model.generators.ItemModelBuilder
 import net.minecraftforge.client.model.generators.ItemModelProvider
 import net.minecraftforge.common.data.ExistingFileHelper
 
@@ -29,6 +30,7 @@ class AlfheimItemModels(output: PackOutput, files: ExistingFileHelper): ItemMode
 		for (item in LegacyRegistration.items.keys) when (item) {
 			is BlockItem         -> Unit
 			is ItemElvenResource -> elvenResource(item)
+			is ItemElvenFood     -> elvenFood(item)
 			is ItemEventResource -> item(item, "materials/${ItemEventResource.subItems[item.meta]}")
 			is ItemMod           -> item(item, item.legacy.unlocalizedName.removePrefix("item."))
 			else                 -> throw IllegalStateException("No 1.7.10 icon rule for ${item.javaClass.name}")
@@ -50,17 +52,36 @@ class AlfheimItemModels(output: PackOutput, files: ExistingFileHelper): ItemMode
 		item(item, *icons.toTypedArray())
 	}
 
+	/**
+	 * ItemElvenFood.registerIcons и getIcon: иконка варианта — `materials/food/<имя>`; пиво с именем «Cerveza Cristal»
+	 * (`ItemElvenFood.isCC`) — `materials/food/cc`: модель [CC] по свойству [CC_PROPERTY], которое ставит клиент
+	 * (alfheim.port.client.AlfheimModels)
+	 */
+	private fun elvenFood(item: ItemElvenFood) {
+		val model = item(item, "materials/food/${ElvenFoodMetas.entries[item.meta]}")
+		if (item.meta != ElvenFoodMetas.Beer.I) return
+		val cc = withExistingParent(CC, mcLoc("item/generated")).texture("layer0", legacyTexture("$MODID:materials/food/cc"))
+		model.override().predicate(CC_PROPERTY, 1f).model(cc).end()
+	}
+	
 	/** Модель предмета с иконкой на каждый проход рендера, по порядку */
-	private fun item(item: Item, vararg icons: String) {
+	private fun item(item: Item, vararg icons: String): ItemModelBuilder {
 		val full3D = (item as LegacyItem).legacy.full3D
 		val model = withExistingParent(LegacyRegistration.items[item]!!.id.path, mcLoc(if (full3D) "item/handheld" else "item/generated"))
 		icons.forEachIndexed { pass, icon -> model.texture("layer$pass", legacyTexture("$MODID:$icon")) }
+		return model
 	}
 
 	companion object {
 
 		/** Модель прутика на праздник */
 		const val INFUSED_CANDY = "infused_candy"
+		
+		/** Модель пива Cerveza Cristal */
+		const val CC = "cc"
+		
+		/** Свойство модели пива: 1 — Cerveza Cristal */
+		val CC_PROPERTY = ResourceLocation(MODID, "cc")
 
 		/** Имя иконки предмета 1.7.10 `modid:путь` → спрайт 1.20.1 `modid:items/путь` (MAPPING.md, «Ресурсы») */
 		fun legacyTexture(icon: String): ResourceLocation {

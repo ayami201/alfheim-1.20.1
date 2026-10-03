@@ -55,7 +55,7 @@ object PortMaterialsTest {
 			if (target?.id != entry.id) problems += "legacy_ids.json: $MODID:${entry.oldName}:${entry.oldMeta} -> ${target?.id}, expected ${entry.id}"
 		}
 		helper.assertTrue(problems.isEmpty(), problems.toString())
-		helper.assertTrue(LegacyRegistration.items.keys.count { it !is BlockItem } == 47, "items of the author: ${LegacyRegistration.items.keys.count { it !is BlockItem }}")
+		helper.assertTrue(LegacyRegistration.items.keys.count { it !is BlockItem && it !is ItemElvenFood } == 47, "items of the author: ${LegacyRegistration.items.keys.count { it !is BlockItem && it !is ItemElvenFood }}")
 		helper.succeed()
 	}
 
