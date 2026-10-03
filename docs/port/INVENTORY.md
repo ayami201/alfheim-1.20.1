@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 222 | 19 082 | 201 | 20 | 1 |  |
+| КТ-2 | 222 | 19 082 | 193 | 28 | 1 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **1049** | **32** | **60** | **12** |
+| **всего** | **1153** | **124 643** | **1020** | **60** | **61** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -295,7 +295,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `LibOreDict.kt` | 71 | КТ-2 | ждёт |  |
+| `LibOreDict.kt` | 71 | КТ-2 | перенесено | → `src/main/java/alfheim/api/lib/LibOreDict.kt`; `beacons` (маяки для призыва Гайи) ждёт КТ-6 |
 | `LibRenderIDs.kt` | 33 | КТ-2 | ждёт |  |
 | `LibResourceLocations.kt` | 318 | КТ-1 | перенесено | → `src/main/java/alfheim/api/lib/LibResourceLocations.kt`; пути через `legacyPath`; анимированные текстуры (`ResourceLocationAnimated`) — в КТ своих моделей |
 | `LibShaderIDs.kt` | 14 | КТ-2 | ждёт |  |
@@ -654,7 +654,7 @@ python3 tools/check_inventory.py
 | `BlockDoubleCamo.kt` | 220 | КТ-3 | ждёт | основа маскирующихся блоков с блок-сущностью |
 | `BlockDreamSapling.kt` | 87 | КТ-2 | ждёт |  |
 | `BlockDwarfLantern.kt` | 44 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockDwarfLantern.kt` |
-| `BlockElvenOre.kt` | 58 | КТ-2 | ждёт |  |
+| `BlockElvenOre.kt` | 58 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockElvenOre.kt`; лексикон ждёт КТ-9 |
 | `BlockElvenSand.kt` | 18 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockElvenSand.kt` |
 | `BlockElvenSandstone.kt` | 53 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockElvenSandstone.kt` |
 | `BlockEnderActuator.kt` | 58 | КТ-3 | ждёт | с блок-сущностью |
@@ -1448,7 +1448,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimItems.kt` | 399 | КТ-2 | ждёт | список предметов; предметы других КТ добавляются вместе с ними |
+| `AlfheimItems.kt` | 399 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/AlfheimItems.kt`; предметы, которых ещё нет, закомментированы с `// PORT: КТ-n` и включаются вместе со своей КТ |
 | `ItemArmilla.kt` | 182 | КТ-2 | ждёт |  |
 | `ItemAstrolabe.kt` | 273 | КТ-4 | ждёт |  |
 | `ItemCarver.kt` | 88 | КТ-3 | ждёт |  |
@@ -1464,12 +1464,12 @@ python3 tools/check_inventory.py
 | `ItemHeadFlugel.kt` | 79 | КТ-8 | ждёт |  |
 | `ItemHeadMiku.kt` | 76 | КТ-8 | ждёт |  |
 | `ItemHyperBucket.kt` | 87 | КТ-2 | ждёт |  |
-| `ItemIridescent.kt` | 92 | КТ-2 | ждёт |  |
+| `ItemIridescent.kt` | 92 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemIridescent.kt`; `dirtFromMeta` ждёт цветную землю (`block/colored`) |
 | `ItemLensFlashInvisible.kt` | 187 | КТ-3 | ждёт |  |
 | `ItemLootInterceptor.kt` | 96 | КТ-4 | ждёт |  |
 | `ItemManaMirrorImba.kt` | 192 | КТ-4 | ждёт |  |
 | `ItemManaStorage.kt` | 83 | КТ-4 | ждёт |  |
-| `ItemMod.kt` | 33 | КТ-2 | ждёт |  |
+| `ItemMod.kt` | 33 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemMod.kt` |
 | `ItemOrgans.kt` | 464 | КТ-8 | ждёт |  |
 | `ItemPaperBreak.kt` | 65 | КТ-7 | ждёт |  |
 | `ItemPaperRace.kt` | 123 | КТ-7 | ждёт |  |
@@ -1671,11 +1671,11 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `ItemElvenFood.kt` | 213 | КТ-2 | ждёт |  |
-| `ItemElvenResource.kt` | 504 | КТ-2 | ждёт |  |
-| `ItemEventResource.kt` | 76 | КТ-2 | ждёт |  |
+| `ItemElvenResource.kt` | 504 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemElvenResource.kt`; ждут: портал и аптекарь Botania, бассейн маны, аномалии, кудзу — КТ-3, стихии шарика слизи — КТ-4 и КТ-5, призыв Гайи — КТ-6, бутылка мудрости и осколки разлома — КТ-8, радужный цветок и закопанный лепесток — цветные блоки КТ-2 |
+| `ItemEventResource.kt` | 76 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemEventResource.kt` |
 | `ItemSoulHorn.kt` | 27 | КТ-2 | ждёт |  |
 | `ItemStoryToken.kt` | 54 | КТ-2 | ждёт |  |
-| `ItemWiltedLotus.kt` | 80 | КТ-2 | ждёт |  |
+| `ItemWiltedLotus.kt` | 80 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemWiltedLotus.kt`; бассейн маны и аптекарь Botania ждут КТ-3 |
 
 ### `legacy/src/main/java/alfheim/common/item/relic/`
 
@@ -2112,7 +2112,7 @@ python3 tools/check_inventory.py
 | `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
-| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 18 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
+| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 24 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
 | `alfheim/textures/blocks/decor/` | 83 | КТ-2 | ждёт | перенесено 69 — декор `AlfheimFluffBlocks`; осталась мерцающая кварцевая плитка (`*ShimmerQuartz*`, 14 файлов) — с блоками `shimmerQuartz` |
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
@@ -2121,9 +2121,9 @@ python3 tools/check_inventory.py
 | `alfheim/textures/gui/categories/` | 7 | КТ-9 | ждёт | лексикон |
 | `alfheim/textures/gui/entries/` | 8 | КТ-9 | ждёт | лексикон |
 | `alfheim/textures/gui/spells/` | 85 | КТ-7 | ждёт | иконки заклинаний |
-| `alfheim/textures/items/` (только файлы папки) | 182 | КТ-2 | ждёт | текстуры предметов других КТ переносятся вместе с предметом |
+| `alfheim/textures/items/` (только файлы папки) | 182 | КТ-2 | ждёт | текстуры предметов других КТ переносятся вместе с предметом; перенесено 1 — `wiltedLotus.png` |
 | `alfheim/textures/items/coatofarms/` | 19 | КТ-4 | ждёт | `ItemCoatOfArms` |
-| `alfheim/textures/items/materials/` | 72 | КТ-2 | ждёт |  |
+| `alfheim/textures/items/materials/` | 72 | КТ-2 | ждёт | перенесено 51 — материалы `ElvenItems` и `EventResource`; осталась еда (`food/`, 21 файл) — с `ItemElvenFood` |
 | `alfheim/textures/items/misc/` | 17 | КТ-2 | ждёт |  |
 | `alfheim/textures/items/unused/` | 23 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
 | `alfheim/textures/misc/` (только файлы папки) | 19 | по владельцу | ждёт | эффекты и оверлеи; каждый — в КТ своей механики |
