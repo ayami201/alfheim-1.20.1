@@ -52,6 +52,18 @@ fun MobEffect.removeAttributesModifiersFromEntity(entity: LivingEntity, attribut
 /** `Potion.isBadEffect` 1.7.10 у любого эффекта; у [Potion1710] — его метод */
 val MobEffect.isBadEffect get() = category == MobEffectCategory.HARMFUL
 
+/** `Potion.isInstant()` 1.7.10: мгновенный эффект (лечение, урон) */
+val MobEffect.isInstant get() = isInstantenous
+
+/**
+ * `Potion.affectEntity(thrower, target, amplifier, health)` 1.7.10 — действие мгновенного эффекта брызгами; [health] —
+ * доля силы (1 — прямое попадание). Урон засчитывается бросившему, как в 1.7.10
+ */
+fun MobEffect.affectEntity(thrower: LivingEntity?, target: LivingEntity, amplifier: Int, health: Double) = applyInstantenousEffect(thrower, thrower, target, amplifier, health)
+
+/** `PotionEffect.getEffectName()` 1.7.10 — ключ перевода эффекта */
+val MobEffectInstance.effectName: String get() = descriptionId
+
 /** `SharedMonsterAttributes` 1.7.10 */
 object SharedMonsterAttributes {
 	

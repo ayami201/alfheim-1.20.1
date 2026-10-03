@@ -1,40 +1,44 @@
 package alfheim.common.item
 
+// PORT: импорты 1.20.1 (MAPPING.md). Иконка с плавной анимацией (InterpolatedIconHelper, TextureStitchEvent) — в
+// 1.20.1 модель предмета (генерация данных) и "interpolate" в .mcmeta текстуры, которое 1.20.1 понимает само
 import alexsocol.asjlib.*
-import alfheim.client.core.helper.InterpolatedIconHelper
 import alfheim.common.entity.EntityThrowableItem
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.relauncher.*
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.world.World
-import net.minecraftforge.client.event.TextureStitchEvent
-import net.minecraftforge.common.MinecraftForge
+import alfheim.port.legacy.*
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player as EntityPlayer
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level as World
+//import alfheim.client.core.helper.InterpolatedIconHelper
 
 class ItemFireGrenade: ItemMod("fireGrenade") {
 	
-	init {
-		if (ASJUtilities.isClient)
-			MinecraftForge.EVENT_BUS.register(this)
-	}
+//	init {
+//		if (ASJUtilities.isClient)
+//			MinecraftForge.EVENT_BUS.register(this)
+//	}
 	
-	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
+	// PORT: onItemRightClick → use
+	override fun use(world: World, player: EntityPlayer, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+		val stack = player.getItemInHand(hand)
 		if (!world.isRemote) {
 			EntityThrowableItem(player).spawn()
-			stack.stackSize--
+			stack.shrink(1)
+//			stack.stackSize--
 		}
 		
-		return stack
+		return InteractionResultHolder.consume(stack)
+//		return stack
 	}
 	
-	override fun registerIcons(reg: IIconRegister) = Unit // NO-OP
-	
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	fun loadTextures(event: TextureStitchEvent.Pre) {
-		if (event.map.textureType == 1) {
-			itemIcon = InterpolatedIconHelper.forItem(event.map, this)
-		}
-	}
+//	override fun registerIcons(reg: IIconRegister) = Unit // NO-OP
+//
+//	@SubscribeEvent
+//	@SideOnly(Side.CLIENT)
+//	fun loadTextures(event: TextureStitchEvent.Pre) {
+//		if (event.map.textureType == 1) {
+//			itemIcon = InterpolatedIconHelper.forItem(event.map, this)
+//		}
+//	}
 }

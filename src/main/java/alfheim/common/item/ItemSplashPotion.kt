@@ -1,43 +1,57 @@
 package alfheim.common.item
 
+// PORT: импорты 1.20.1 (MAPPING.md). Варево Botania 1.7.10 (IBrewItem, IBrewContainer, BotaniaAPI.brewMap) — Botania
+// 1.20.1 (BrewItem, BrewContainer, реестр варев); иконки склянки Botania — модель предмета (генерация данных)
 import alexsocol.asjlib.*
 import alfheim.common.entity.EntityThrownPotion
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.*
-import net.minecraft.potion.Potion
-import net.minecraft.util.*
-import net.minecraft.world.World
+import alfheim.port.legacy.*
+import alfheim.port.legacy.Potion1710 as Potion
+import alfheim.port.legacy.botania.Botania
+import net.minecraft.ChatFormatting as EnumChatFormatting
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player as EntityPlayer
+import net.minecraft.world.item.*
+import net.minecraft.world.level.Level as World
 import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.brew.*
-import vazkii.botania.client.core.helper.IconHelper
-import vazkii.botania.common.Botania
-import vazkii.botania.common.core.helper.ItemNBTHelper
+import vazkii.botania.common.brew.BotaniaBrews
+import vazkii.botania.common.helper.ItemNBTHelper
 import java.awt.Color
 import kotlin.math.*
 
-class ItemSplashPotion: ItemMod("splashPotion"), IBrewItem, IBrewContainer {
+class ItemSplashPotion: ItemMod("splashPotion"), BrewItem, BrewContainer {
 	
-	lateinit var itemIconFluid: IIcon
+//	lateinit var itemIconFluid: IIcon
 	
 	init {
 		maxStackSize = 1
 	}
 	
-	override fun getSubItems(item: Item, tab: CreativeTabs?, list: MutableList<Any?>) {
-		for (brew in BotaniaAPI.brewMap.keys)
-			list.add(getItemForBrew(BotaniaAPI.brewMap[brew] as Brew, ItemStack(this)))
+	// PORT: brewMap 1.7.10 → реестр варев Botania 1.20.1; запасного варева (fallback) в brewMap 1.7.10 не было
+	override fun getSubItems(item: Item, tab: Any?, list: MutableList<Any?>) {
+		for (brew in BotaniaAPI.instance().brewRegistry!!) {
+			if (brew === BotaniaBrews.fallbackBrew) continue
+			list.add(getItemForBrew(brew, ItemStack(this)))
+		}
+//		for (brew in BotaniaAPI.brewMap.keys)
+//			list.add(getItemForBrew(BotaniaAPI.brewMap[brew] as Brew, ItemStack(this)))
 	}
 	
-	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
+	// PORT: onItemRightClick → use
+	override fun use(world: World, player: EntityPlayer, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+		val stack = player.getItemInHand(hand)
 		if (!world.isRemote) {
 			EntityThrownPotion(player, stack).spawn(world)
 			
-			stack.stackSize--
+			stack.shrink(1)
+//			stack.stackSize--
 		}
 		
-		return stack
+		return InteractionResultHolder.consume(stack)
+//		return stack
 	}
 	
 	fun getColor(stack: ItemStack?): Int {
@@ -53,20 +67,23 @@ class ItemSplashPotion: ItemMod("splashPotion"), IBrewItem, IBrewContainer {
 		return 0xFFFFFF
 	}
 	
-	override fun getColorFromItemStack(stack: ItemStack?, pass: Int): Int {
+	override fun getColorFromItemStack(stack: ItemStack, pass: Int): Int {
 		return if (pass == 0) {
 			0xCCCCCFF
 		} else getColor(stack)
 	}
 	
-	override fun registerIcons(reg: IIconRegister) {
-		itemIcon = IconHelper.forName(reg, "vial" + "0")
-		itemIconFluid = IconHelper.forName(reg, "vial" + "1_0")
-	}
+	// PORT: иконки Botania vial0 и vial1_0 — слои 0 и 1 модели предмета (vial и brew_vial_0 Botania 1.20.1)
+//	override fun registerIcons(reg: IIconRegister) {
+//		itemIcon = IconHelper.forName(reg, "vial" + "0")
+//		itemIconFluid = IconHelper.forName(reg, "vial" + "1_0")
+//	}
 	
-	override fun addInformation(stack: ItemStack, player: EntityPlayer?, list: MutableList<Any?>, adv: Boolean) {
+	// PORT: addInformation → appendHoverText; строки собираются, как у автора, переводит StatCollector
+	override fun appendHoverText(stack: ItemStack, world: World?, list: MutableList<Component>, adv: TooltipFlag) {
 		val brew = getBrew(stack)
-		addStringToTooltip("${EnumChatFormatting.DARK_PURPLE}${StatCollector.translateToLocalFormatted("botaniamisc.brewOf", StatCollector.translateToLocal(brew.getUnlocalizedName(stack)))}", list)
+		addStringToTooltip("${EnumChatFormatting.DARK_PURPLE}${StatCollector.translateToLocalFormatted("botaniamisc.brewOf", StatCollector.translateToLocal(brew.getTranslationKey(stack)))}", list)
+//		addStringToTooltip("${EnumChatFormatting.DARK_PURPLE}${StatCollector.translateToLocalFormatted("botaniamisc.brewOf", StatCollector.translateToLocal(brew.getUnlocalizedName(stack)))}", list)
 		
 		for (effect in brew.getPotionEffects(stack)) {
 			val potion = Potion.potionTypes[effect.potionID]
@@ -81,25 +98,32 @@ class ItemSplashPotion: ItemMod("splashPotion"), IBrewItem, IBrewContainer {
 		return brewStack
 	}
 	
-	internal fun addStringToTooltip(s: String, tooltip: MutableList<Any?>?) {
-		tooltip?.add(s.replace("&".toRegex(), "§"))
+	// PORT: строка подсказки 1.7.10 → Component
+	internal fun addStringToTooltip(s: String, tooltip: MutableList<Component>?) {
+		tooltip?.add(Component.literal(s.replace("&".toRegex(), "§")))
 	}
+//	internal fun addStringToTooltip(s: String, tooltip: MutableList<Any?>?) {
+//		tooltip?.add(s.replace("&".toRegex(), "§"))
+//	}
 	
-	override fun requiresMultipleRenderPasses() = true
+//	override fun requiresMultipleRenderPasses() = true
+//
+//	override fun getRenderPasses(metadata: Int) = 2
+//
+//	override fun getIcon(stack: ItemStack, pass: Int) = (if (pass == 0) itemIcon else itemIconFluid)!!
 	
-	override fun getRenderPasses(metadata: Int) = 2
-	
-	override fun getIcon(stack: ItemStack, pass: Int) = (if (pass == 0) itemIcon else itemIconFluid)!!
-	
+	// PORT: ключ варева — id в реестре Botania 1.20.1 (botania:healing), в 1.7.10 — имя (healing)
 	override fun getBrew(stack: ItemStack): Brew {
 		val key = ItemNBTHelper.getString(stack, "brewKey", "")
-		return BotaniaAPI.getBrewFromKey(key)
+		return BotaniaAPI.instance().brewRegistry!!.get(ResourceLocation.tryParse(key)) ?: BotaniaBrews.fallbackBrew
+//		return BotaniaAPI.getBrewFromKey(key)
 	}
 	
 	override fun getManaCost(p0: Brew?, p1: ItemStack?) = p0?.manaCost?.times(1.5)?.I ?: 400
 	
 	fun setBrew(stack: ItemStack, brew: Brew?) {
-		setBrew(stack, (brew ?: BotaniaAPI.fallbackBrew).key)
+		setBrew(stack, BotaniaAPI.instance().brewRegistry!!.getKey(brew ?: BotaniaBrews.fallbackBrew).toString())
+//		setBrew(stack, (brew ?: BotaniaAPI.fallbackBrew).key)
 	}
 	
 	fun setBrew(stack: ItemStack, brew: String) {

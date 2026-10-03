@@ -36,6 +36,7 @@ import alfheim.port.legacy.Material.Companion.web
 import alfheim.port.legacy.Material.Companion.wood
 import alfheim.port.legacy.StatCollector
 import alfheim.port.legacy.MovingObjectPosition
+import alfheim.port.registry.LegacyRegistration
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -771,12 +772,22 @@ object ASJUtilities {
 		return entityplayer
 	}
 	
+	*/
+	
 	/**
 	 * Registers new entity
 	 * @param entityClass Entity's class file
 	 * @param name The name of this entity
 	 * @param id Mod-specific entity id
 	 */
+	// PORT: EntityRegistry.registerModEntity → тип существа 1.20.1 с теми же дальностью слежения (128), частотой
+	// обновления (1) и отправкой скорости (LegacyRegistration.entity); номер существа в 1.20.1 не нужен
+	@JvmStatic
+	fun registerEntity(entityClass: Class<out Entity>, name: String, @Suppress("UNUSED_PARAMETER") id: Int) {
+		LegacyRegistration.entity(entityClass, name)
+	}
+	
+	/* PORT: по мере надобности (продолжение); выше — перенесённая функция, здесь — её код 1.7.10
 	@JvmStatic
 	fun registerEntity(entityClass: Class<out Entity>, name: String, id: Int) {
 		EntityRegistry.registerModEntity(entityClass, name, id, Loader.instance().activeModContainer().mod, 128, 1, true)

@@ -97,7 +97,7 @@ object AlfheimItems {
 //	val fenrirHelmetRevealing: Item? // PORT: КТ-4
 //	val fenrirLeggings: Item // PORT: КТ-4
 //	val fenrirLoot: Item // PORT: КТ-8
-//	val fireGrenade: Item // PORT: КТ-2
+	val fireGrenade: Item
 //	val floatingIslandGenerator: Item // PORT: КТ-6
 //	val flugelHead: Item // PORT: КТ-8
 //	val flugelHead2: Item // PORT: КТ-8
@@ -168,7 +168,7 @@ object AlfheimItems {
 //	val soulSword: Item // PORT: КТ-4
 //	val spatiotemporalRing: Item // PORT: КТ-4
 //	val spawnEgg: Item // PORT: КТ-5
-//	val splashPotion: Item // PORT: КТ-2
+	val splashPotion: Item
 //	val starPlacer: Item // PORT: КТ-3
 //	val starPlacer2: Item // PORT: КТ-3
 	//val storyToken: Item
@@ -221,7 +221,7 @@ object AlfheimItems {
 //		discSurtr = ItemModRecord("surtr", "SurtrDisc").setCreativeTab(AlfheimTab) // PORT: КТ-8
 //		discThrym = ItemModRecord("thrym", "ThrymDisc").setCreativeTab(AlfheimTab) // PORT: КТ-8
 //		dodgeRing = ItemDodgeRing() // PORT: КТ-4
-//		fireGrenade = ItemFireGrenade() // PORT: КТ-2
+		fireGrenade = ItemFireGrenade()
 //		elementalHelmet = ItemElementalWaterHelm() // PORT: КТ-4
 //		elementalHelmetRevealing = if (Botania.thaumcraftLoaded) ItemElementalWaterHelmRevealing() else null // PORT: выпало — Thaumcraft отсутствует на 1.20.1 (SPEC, п. 7)
 //		elementalChestplate = ItemElementalEarthChest() // PORT: КТ-4
@@ -319,7 +319,7 @@ object AlfheimItems {
 		soulHorn = ItemSoulHorn()
 //		soulSword = ItemSoulSword() // PORT: КТ-4
 //		spatiotemporalRing = ItemSpatiotemporalRing() // PORT: КТ-4
-//		splashPotion = ItemSplashPotion() // PORT: КТ-2
+		splashPotion = ItemSplashPotion()
 //		spawnEgg = ItemSpawnEgg() // PORT: КТ-5
 //		starPlacer = ItemStarPlacer() // PORT: КТ-3
 //		starPlacer2 = ItemStarPlacer2() // PORT: КТ-3

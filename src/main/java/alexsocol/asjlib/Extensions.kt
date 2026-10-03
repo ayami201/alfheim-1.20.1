@@ -149,6 +149,9 @@ operator fun ChunkCoordinates.component1() = posX
 operator fun ChunkCoordinates.component2() = posY
 operator fun ChunkCoordinates.component3() = posZ
 
+// PORT: World → Level (worldObj и spawnEntityInWorld — alfheim.port.legacy)
+fun Entity.spawn(world: Level = this.worldObj) = world.spawnEntityInWorld(this)
+
 /* PORT: по мере надобности — DataWatcher, AxisAlignedBB, ChunkCoordinates, Vec3, metadata, IInventory, OreDictionary
 fun DataWatcher.getWatchableObjectChunkCoordinates(id: Int): ChunkCoordinates {
 	return getWatchedObject(id).`object` as ChunkCoordinates? ?: ChunkCoordinates()
@@ -198,7 +201,8 @@ fun Entity.setMotion(x: Double, y: Double = x, z: Double = y) {
 	motionZ = z
 }
 
-fun Entity.spawn(world: World = this.worldObj) = world.spawnEntityInWorld(this)
+// PORT: перенесена выше
+//fun Entity.spawn(world: World = this.worldObj) = world.spawnEntityInWorld(this)
 
 // PORT: перенесены выше
 //operator fun ChunkCoordinates.component1() = posX

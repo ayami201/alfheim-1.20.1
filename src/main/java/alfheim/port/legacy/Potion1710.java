@@ -136,6 +136,14 @@ public class Potion1710 extends MobEffect {
 		return getCategory() == MobEffectCategory.HARMFUL;
 	}
 
+	/**
+	 * {@code Potion.getDurationString(effect)} 1.7.10: длительность, как её пишет игра у всех зелий. В 1.20.1 минуты —
+	 * двумя цифрами ({@code 03:00}), в 1.7.10 — без нуля ({@code 3:00})
+	 */
+	public static String getDurationString(MobEffectInstance effect) {
+		return MobEffectUtil.formatDuration(effect, 1f).getString();
+	}
+
 	/** {@code isReady(duration, amplifier)} 1.7.10: работает ли {@link #performEffect} в этот тик */
 	public boolean isReady(int duration, int amplifier) {
 		return super.isDurationEffectTick(duration, amplifier);
