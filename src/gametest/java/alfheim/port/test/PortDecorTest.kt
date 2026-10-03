@@ -25,8 +25,10 @@ import net.minecraft.world.phys.Vec3
 import net.minecraftforge.common.ForgeHooks
 import net.minecraftforge.gametest.GameTestHolder
 import net.minecraftforge.gametest.PrefixGameTestTemplate
+import vazkii.botania.api.BotaniaAPI
 import vazkii.botania.api.BotaniaRegistries
 import vazkii.botania.common.block.BotaniaBlocks
+import vazkii.botania.common.brew.BotaniaBrews
 
 /**
  * КТ-2, партия 2: декор `AlfheimFluffBlocks` — лестницы, плиты, стены, заборы, калитки, люк, панели, столб и блоки
@@ -219,8 +221,10 @@ object PortDecorTest {
 		val alfheim = AlfheimTab.tab.get().displayItems.map { it.item }
 		val hidden = listOf(AlfheimBlocks.manaIce.asItem(), AlfheimFluffBlocks.elfQuartzWall.asItem()) +
 			listOf(ElvenResourcesMetas.ElvenWeed, ElvenResourcesMetas.WisdomBottle, ElvenResourcesMetas.RiftDrive).map { AlfheimItems.elvenResource[it.I] }
-		// рог души — дважды: обычный и заряженный (metadata 1), как у автора
-		val expected = LegacyRegistration.items.keys.filter { it !in hidden } + AlfheimItems.soulHorn
+		// рог души — дважды: обычный и заряженный (metadata 1); брызгающее зелье — по разу на варево Botania, кроме
+		// запасного, как у автора
+		val brews = BotaniaAPI.instance().brewRegistry!!.count { it !== BotaniaBrews.fallbackBrew }
+		val expected = LegacyRegistration.items.keys.filter { it !in hidden } + AlfheimItems.soulHorn + List(brews - 1) { AlfheimItems.splashPotion }
 		helper.assertTrue(alfheim.toSet() == expected.toSet() && alfheim.size == expected.size, "Alfheim tab: ${alfheim.size} items, expected ${expected.size}; missing ${expected - alfheim.toSet()}")
 		helper.assertTrue(AlfheimTab.tab.get().displayItems.filter { it.item == AlfheimItems.soulHorn }.map { it.meta } == listOf(0, 1), "soul horns in the tab")
 		val resources = alfheim.filterIsInstance<ItemElvenResource>().map { it.meta }

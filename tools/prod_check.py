@@ -12,7 +12,9 @@ GameTest-ы идут в среде разработки: там у методо�
 3. «Пиво» прибавляет здоровье (`Potion1710` подменяет `addAttributeModifiers` и
    `getAttributeModifierValue`);
 4. «Шампанское» снимает яд (`Potion1710` подменяет `isDurationEffectTick` и `applyEffectTick`);
-5. имя зелья на сервере — перевод ключа автора; предмет мода (`alfheim:lembas`) существует.
+5. имя зелья на сервере — перевод ключа автора; предмет мода (`alfheim:lembas`) существует;
+6. существа мода: граната (`alfheim:thrown_item`) с бросившим хаском падает на другого хаска — урон
+   «огненный шар» и огонь; летящее зелье (`alfheim:thrown_potion`) появляется командой.
 
 Команды идут по RCON (удалённая консоль сервера): скрипт сам включает его в `server.properties`
 (порт 25575, пароль `alfcheck`). Существа появляются в точке появления мира с меткой `alfcheck` и
@@ -87,7 +89,7 @@ class Rcon:
 
 
 def number(text):
-    found = re.findall(r"(-?\d+(?:\.\d+)?)f?\s*$", text.strip())
+    found = re.findall(r"(-?\d+(?:\.\d+)?)[bsfdL]?\s*$", text.strip())
     return float(found[0]) if found else None
 
 
@@ -173,6 +175,23 @@ def main():
         r("summon minecraft:item ~ ~1 ~ {Item:{id:\"alfheim:lembas\",Count:1b},Tags:[\"alfcheck\",\"alfcheck_item\"],PickupDelay:32767}")
         item = r("data get entity @e[tag=alfcheck_item,limit=1] Item.id")
         check("Предмет мода существует (alfheim:lembas)", "alfheim:lembas" in item, item)
+
+        # 6. Граната от бросившего (хаск «ctrl») падает на хаска: урон 3 («огненный шар») за вычетом брони хаска (2) —
+        # 2,94, и огонь на 10 секунд
+        r('summon minecraft:husk ~9 ~ ~ {NoAI:1b,PersistenceRequired:1b,Tags:["alfcheck","alfcheck_fire"]}')
+        owner = re.search(r"\[I;\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\]", r("data get entity @e[tag=alfcheck_ctrl,limit=1] UUID"))
+        start = health("alfcheck_fire")
+        if owner:
+            r('summon alfheim:thrown_item ~9 ~3 ~ {Owner:[I;%s],Motion:[0.0d,-1.0d,0.0d],Tags:["alfcheck"]}' % ",".join(owner.groups()))
+        time.sleep(1)
+        burnt = health("alfcheck_fire")
+        fire = number(r("data get entity @e[tag=alfcheck_fire,limit=1] Fire"))
+        check("Граната мода ранит и поджигает (alfheim:thrown_item)",
+              owner is not None and None not in (start, burnt, fire) and start - burnt >= 2.9 and fire > 0,
+              f"здоровье {start} → {burnt} (ждём −2,94 и больше), огонь {fire} тиков")
+        r('summon alfheim:thrown_potion ~9 ~6 ~ {NoGravity:1b,Tags:["alfcheck","alfcheck_potion"]}')
+        potion = r("execute if entity @e[type=alfheim:thrown_potion,tag=alfcheck_potion]")
+        check("Летящее зелье мода существует (alfheim:thrown_potion)", "count: 1" in potion, potion)
 
         r("kill @e[tag=alfcheck]")
         r("stop")

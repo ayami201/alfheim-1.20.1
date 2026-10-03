@@ -32,7 +32,7 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 				addProperty("$MODID:${alias.oldName}", "${LegacyRegistration.blocks[alias.block]!!.id}[${alias.state}]")
 		})
 		json.add("items", ids(LegacyRegistration.items.values))
-		json.add("entities", JsonObject())
+		json.add("entities", ids(LegacyRegistration.entities.values))
 		json.add("lang", JsonObject().apply {
 			for ((block, entry) in LegacyRegistration.blocks)
 				legacyLangKey(block)?.let { addProperty(it, block.descriptionId) }
@@ -41,6 +41,9 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 			// имя зелья 1.7.10 — ключ из setPotionName, 1.20.1 — ключ эффекта
 			for (potion in LegacyRegistration.effects.keys)
 				addProperty((potion as Potion1710).name, potion.descriptionId)
+			// имя существа 1.7.10 — `entity.` + имя в EntityList (`alfheim.ThrownPotion`) + `.name`, 1.20.1 — ключ типа
+			for ((type, entry) in LegacyRegistration.entities)
+				addProperty("entity.$MODID.${entry.oldName}.name", type.descriptionId)
 		})
 		return DataProvider.saveStable(cache, json, output.outputFolder.resolve("alfheim/legacy_ids.json"))
 	}

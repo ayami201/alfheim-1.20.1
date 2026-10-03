@@ -153,7 +153,10 @@
     "alfheim:livingrock1Wall": "alfheim:livingrock1_wall",
     "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall"
   },
-  "entities": {},
+  "entities": {
+    "alfheim:ThrownItem": "alfheim:thrown_item",
+    "alfheim:ThrownPotion": "alfheim:thrown_potion"
+  },
   "items": {
     "alfheim:Armilla": "alfheim:armilla",
     "alfheim:Chalk": "alfheim:chalk",
@@ -361,8 +364,10 @@
       "4": "alfheim:alf_storage4",
       "5": "alfheim:alf_storage5"
     },
+    "alfheim:fireGrenade": "alfheim:fire_grenade",
     "alfheim:livingrock1Wall": "alfheim:livingrock1_wall",
     "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall",
+    "alfheim:splashPotion": "alfheim:splash_potion",
     "alfheim:wiltedLotus": {
       "0": "alfheim:wilted_lotus0",
       "1": "alfheim:wilted_lotus1"
@@ -412,6 +417,8 @@
     "alfheim.potion.wellolife": "effect.alfheim.wellolife",
     "alfheim.potion.whiteWine": "effect.alfheim.white_wine",
     "alfheim.potion.wisdom": "effect.alfheim.wisdom",
+    "entity.alfheim.ThrownItem.name": "entity.alfheim.thrown_item",
+    "entity.alfheim.ThrownPotion.name": "entity.alfheim.thrown_potion",
     "item.alfheim:Armilla.name": "item.alfheim.armilla",
     "item.alfheim:Chalk.name": "item.alfheim.chalk",
     "item.alfheim:DasRheingold.name": "item.alfheim.das_rheingold",
@@ -481,6 +488,8 @@
     "item.alfheim:VolcanoRelic.name": "item.alfheim.volcano_relic",
     "item.alfheim:WisdomBottle.name": "item.alfheim.wisdom_bottle",
     "item.alfheim:YggFruit.name": "item.alfheim.ygg_fruit",
+    "item.alfheim:fireGrenade.name": "item.alfheim.fire_grenade",
+    "item.alfheim:splashPotion.name": "item.alfheim.splash_potion",
     "item.alfheim:wiltedLotus0.name": "item.alfheim.wilted_lotus0",
     "item.alfheim:wiltedLotus1.name": "item.alfheim.wilted_lotus1",
     "tile.CustomRoof0.name": "block.alfheim.custom_roof0",

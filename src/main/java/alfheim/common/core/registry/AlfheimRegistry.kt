@@ -1,7 +1,7 @@
 package alfheim.common.core.registry
 
 // PORT: импорты 1.7.10 заменены на 1.20.1; импорты кода, который ещё не перенесён, закомментированы до его КТ
-//import alexsocol.asjlib.ASJUtilities.registerEntity
+import alexsocol.asjlib.ASJUtilities.registerEntity
 import alexsocol.asjlib.eventForge
 import alfheim.api.*
 //import alfheim.api.AlfheimAPI.addPink
@@ -14,7 +14,7 @@ import alfheim.api.*
 //import alfheim.common.block.tile.corporea.*
 //import alfheim.common.block.tile.sub.anomaly.*
 import alfheim.common.core.handler.*
-//import alfheim.common.entity.*
+import alfheim.common.entity.*
 //import alfheim.common.entity.boss.*
 //import alfheim.common.entity.boss.primal.*
 //import alfheim.common.entity.item.*
@@ -58,7 +58,7 @@ object AlfheimRegistry {
 	fun preInit() {
 		// PORT: существа и блок-сущности — в КТ каждого (по описи)
 		registerPotions()
-//		registerEntities()
+		registerEntities()
 //		registerTileEntities()
 	}
 	
@@ -150,11 +150,13 @@ object AlfheimRegistry {
 		PotionWTFBerry5.eventForge() // sealing
 	}
 	
-	/* PORT: существа — в КТ каждого (по описи): EntityType через DeferredRegister, яйца — ForgeSpawnEggItem (MAPPING.md)
 	var nextEntityID = 0
 		get() = field++
 	
+	// PORT: существа — в КТ своих классов (по описи); пока не перенесённые — в комментарии на своих местах. Тип 1.20.1 —
+	// LegacyRegistration.entity, яйца — ForgeSpawnEggItem (MAPPING.md)
 	private fun registerEntities() {
+		/*
 		registerEntity(EntityButterfly::class.java, "Butterfly", nextEntityID, 0, -1)
 		registerEntity(EntityDedMoroz::class.java, "DedMoroz", nextEntityID)
 		registerEntity(EntityElementalSlime::class.java, "ElementalSlime", nextEntityID, -1, 0x7EBF6E)
@@ -210,8 +212,10 @@ object AlfheimRegistry {
 		registerEntity(EntitySit::class.java, "Sit", nextEntityID)
 		registerEntity(EntitySniceBall::class.java, "SniceBall", nextEntityID)
 //		registerEntity(EntitySpaceSwordBurst::class.java, "SpaceSwordBurst", nextEntityID)
+		*/
 		registerEntity(EntityThrowableItem::class.java, "ThrownItem", nextEntityID)
 		registerEntity(EntityThrownPotion::class.java, "ThrownPotion", nextEntityID)
+		/*
 		registerEntity(EntityTornado::class.java, "Tornado", nextEntityID)
 		registerEntity(EntityWarBanner::class.java, "WarBanner", nextEntityID)
 		
@@ -238,8 +242,10 @@ object AlfheimRegistry {
 		registerEntity(EntitySpellMortar::class.java, "SpellMortar", nextEntityID)
 		registerEntity(EntitySpellNoteshot::class.java, "SpellNoteshot", nextEntityID)
 		registerEntity(EntitySpellWindBlade::class.java, "SpellWindBlade", nextEntityID)
+		*/
 	}
 	
+	/* PORT: КТ существ с яйцами (по описи)
 	/**
 	 * Registers new entity with egg. -1 color is rainbow color
 	 * @param entityClass Entity's class file

@@ -5,7 +5,14 @@ import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.AlfheimCore
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects.*
+import alfheim.common.item.AlfheimItems
+import alfheim.port.legacy.*
 import net.minecraft.client.Minecraft
+import net.minecraft.core.particles.ItemParticleOption
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
+import kotlin.math.*
 /*
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
@@ -51,7 +58,7 @@ object VisualEffectHandlerClient {
 		if (mc.level == null) return
 		
 		// PORT: эффекты включаются вместе с механиками, которые их шлют (КТ — по отправителям в INVENTORY.md):
-		// КТ-2 — CHALK (включён), POTION, QUAD, QUADH;
+		// КТ-2 — CHALK, POTION (включены), QUAD, QUADH;
 		// КТ-3 — CREATION, FIREWORK, GAIA_SOUL, ICONCRACK, LIGHTNING, MANABURST, MANAVOID, SMOKE, WISP;
 		// КТ-4 — BIFROST, BIFROST_DONE, EMBLEM_ACTIVATION, FALLING, GUNGNIR, MOON, SEAROD, SPARKLE, SPLASH, WIRE;
 		// КТ-6 — ENDER, MIST;
@@ -60,6 +67,7 @@ object VisualEffectHandlerClient {
 		// КТ-8 — FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, PRIMAL_BOSS_ATTACK, SNICE_MARK, SURTRWALL, THRYM_DOME, WHIRL
 		when (s) {
 			CHALK              -> AlfheimCore.proxy.voxelFX(mc.theWorld, d[0], d[1], d[2], d[3].F, d[4].F, d[5].F)
+			POTION             -> spawnPotion(d[0], d[1], d[2], d[3].I, d[4] == 1.0)
 			else               -> Unit
 		}
 		/*
@@ -412,21 +420,31 @@ object VisualEffectHandlerClient {
 		mc.theWorld.spawnParticle("note", x, y, z, mc.theWorld.rand.nextInt(25) / 24.0, 0.0, 0.0)
 	}
 	
+	*/
+	
+	// PORT: RenderGlobal 1.7.10 — LevelRenderer 1.20.1, у мира клиента он один (списка worldAccesses нет);
+	// doSpawnParticle — addParticleInternal (открыт в accesstransformer.cfg): те же правила ванилы — дальность и
+	// настройка «Частицы». Частицы по имени — ParticleOptions: iconcrack — частица предмета, spell и instantSpell —
+	// EFFECT и INSTANT_EFFECT; у частицы 1.20.1 цвет — setColor, множитель скорости — setPower
 	fun spawnPotion(x: Double, y: Double, z: Double, color: Int, insta: Boolean) {
 		val worldObj = mc.theWorld
 		val rand = worldObj.rand
 		
-		for (acc in worldObj.worldAccesses) {
-			if (acc !is RenderGlobal) continue
+		mc.levelRenderer.let { acc ->
+//		for (acc in worldObj.worldAccesses) {
+//			if (acc !is RenderGlobal) continue
 			
-			val s = "iconcrack_${AlfheimItems.splashPotion.id}_0"
+			val s = ItemParticleOption(ParticleTypes.ITEM, ItemStack(AlfheimItems.splashPotion))
+//			val s = "iconcrack_${AlfheimItems.splashPotion.id}_0"
 			
-			for (i in 0..8) worldObj.spawnParticle(s, x, y, z, rand.nextGaussian() * 0.15, rand.nextDouble() * 0.2, rand.nextGaussian() * 0.15)
+			for (i in 0..8) worldObj.addParticle(s, x, y, z, rand.nextGaussian() * 0.15, rand.nextDouble() * 0.2, rand.nextGaussian() * 0.15)
+//			for (i in 0..8) worldObj.spawnParticle(s, x, y, z, rand.nextGaussian() * 0.15, rand.nextDouble() * 0.2, rand.nextGaussian() * 0.15)
 			
 			val f = (color shr 16 and 255).F / 255f
 			val f1 = (color shr 8 and 255).F / 255f
 			val f2 = (color shr 0 and 255).F / 255f
-			val s1 = if (insta) "instantSpell" else "spell"
+			val s1 = if (insta) ParticleTypes.INSTANT_EFFECT else ParticleTypes.EFFECT
+//			val s1 = if (insta) "instantSpell" else "spell"
 			
 			for (l2 in 1..100) {
 				val d4 = rand.nextDouble() * 4.0
@@ -435,17 +453,21 @@ object VisualEffectHandlerClient {
 				val d6 = 0.01 + rand.nextDouble() * 0.5
 				val d7 = sin(d13) * d4
 				
-				val entityfx = acc.doSpawnParticle(s1, x + d5 * 0.1, y + 0.3, z + d7 * 0.1, d5, d6, d7) ?: continue
+				val entityfx = acc.addParticleInternal(s1, s1.type.overrideLimiter, x + d5 * 0.1, y + 0.3, z + d7 * 0.1, d5, d6, d7) ?: continue
+//				val entityfx = acc.doSpawnParticle(s1, x + d5 * 0.1, y + 0.3, z + d7 * 0.1, d5, d6, d7) ?: continue
 				
 				val f4 = 0.75f + rand.nextFloat() * 0.25f
-				entityfx.setRBGColorF(f * f4, f1 * f4, f2 * f4)
-				entityfx.multiplyVelocity(d4.F)
+				entityfx.setColor(f * f4, f1 * f4, f2 * f4)
+				entityfx.setPower(d4.F)
+//				entityfx.setRBGColorF(f * f4, f1 * f4, f2 * f4)
+//				entityfx.multiplyVelocity(d4.F)
 			}
 			
 			worldObj.playSound(x + 0.5, y + 0.5, z + 0.5, "game.potion.smash", 1f, worldObj.rand.nextFloat() * 0.1f + 0.9f, false)
 		}
 	}
 	
+	/*
 	fun spawnPure(x: Double, y: Double, z: Double) {
 		for (i in 0..63) {
 			v.rand().sub(0.5).normalize().mul(SpellPurifyingSurface.radius / 25)
@@ -574,4 +596,5 @@ object VisualEffectHandlerClient {
 	
 	// PORT: имена 1.7.10
 	private val Minecraft.theWorld get() = level!!
+	private val Level.rand get() = random
 }

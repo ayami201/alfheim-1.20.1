@@ -1,8 +1,8 @@
 package alfheim.api.item
 
-import net.minecraft.entity.projectile.EntityThrowable
-import net.minecraft.item.ItemStack
-import net.minecraft.util.MovingObjectPosition
+// PORT: импорты 1.20.1; EntityThrowable и MovingObjectPosition 1.7.10 — alfheim.port.legacy
+import alfheim.port.legacy.*
+import net.minecraft.world.item.ItemStack
 
 class ThrowableCollidingItem(internal var key: String, internal var stack: ItemStack, internal var event: (EntityThrowable, MovingObjectPosition) -> Unit) {
 	

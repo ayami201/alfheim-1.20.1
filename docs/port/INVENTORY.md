@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 223 | 19 303 | 148 | 74 | 1 |  |
+| КТ-2 | 223 | 19 303 | 141 | 81 | 1 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **974** | **106** | **61** | **12** |
+| **всего** | **1153** | **124 643** | **967** | **113** | **61** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -277,7 +277,7 @@ python3 tools/check_inventory.py
 | `IDoubleBoundItem.kt` | 221 | КТ-2 | перенесено | → `src/main/java/alfheim/api/item/IDoubleBoundItem.kt`; КТ-4 → КТ-2: интерфейсы и рамку выделения использует только трикветр |
 | `Interfaces.kt` | 99 | КТ-4 | ждёт |  |
 | `IPriestColorOverride.kt` | 8 | КТ-4 | ждёт |  |
-| `ThrowableCollidingItem.kt` | 12 | КТ-2 | ждёт |  |
+| `ThrowableCollidingItem.kt` | 12 | КТ-2 | перенесено | → `src/main/java/alfheim/api/item/ThrowableCollidingItem.kt` |
 
 ### `legacy/src/main/java/alfheim/api/item/equipment/`
 
@@ -526,8 +526,8 @@ python3 tools/check_inventory.py
 | `RenderEntitySubspace.kt` | 33 | КТ-4 | ждёт |  |
 | `RenderEntitySubspaceSpear.kt` | 53 | КТ-4 | ждёт |  |
 | `RenderEntitySurtr.kt` | 213 | КТ-8 | ждёт |  |
-| `RenderEntityThrownItem.kt` | 58 | КТ-2 | ждёт |  |
-| `RenderEntityThrownPotion.kt` | 67 | КТ-2 | ждёт |  |
+| `RenderEntityThrownItem.kt` | 58 | КТ-2 | перенесено | → `src/main/java/alfheim/client/render/entity/RenderEntityThrownItem.kt`; регистрация — `alfheim.port.client.AlfheimEntityRenderers` |
+| `RenderEntityThrownPotion.kt` | 67 | КТ-2 | перенесено | → `src/main/java/alfheim/client/render/entity/RenderEntityThrownPotion.kt`; регистрация — `alfheim.port.client.AlfheimEntityRenderers` |
 | `RenderEntityThrym.kt` | 161 | КТ-8 | ждёт |  |
 | `RenderEntityVenusHumanTrap.kt` | 10 | КТ-5 | ждёт |  |
 | `RenderEntityWarBanner.kt` | 28 | КТ-4 | ждёт |  |
@@ -1231,8 +1231,8 @@ python3 tools/check_inventory.py
 | `EntitySubspace.kt` | 167 | КТ-4 | ждёт |  |
 | `EntitySubspaceSpear.kt` | 111 | КТ-4 | ждёт |  |
 | `EntityThrowableCopy_1.12.2.kt` | 19 | КТ-2 | ждёт |  |
-| `EntityThrowableItem.kt` | 52 | КТ-2 | ждёт |  |
-| `EntityThrownPotion.kt` | 96 | КТ-2 | ждёт |  |
+| `EntityThrowableItem.kt` | 52 | КТ-2 | перенесено | → `src/main/java/alfheim/common/entity/EntityThrowableItem.kt`; `EntityThrowable` 1.7.10 — `alfheim.port.legacy` |
+| `EntityThrownPotion.kt` | 96 | КТ-2 | перенесено | → `src/main/java/alfheim/common/entity/EntityThrownPotion.kt` |
 | `EntityTornado.kt` | 85 | КТ-8 | ждёт | зарегистрирована, но используется только незарегистрированным `EntityFenrirNew`; переносится как зарегистрированная (SPEC п. 6) |
 | `EntityVenusHumanTrap.kt` | 145 | КТ-5 | ждёт |  |
 | `EntityVoidCreeper.kt` | 37 | КТ-5 | ждёт |  |
@@ -1459,7 +1459,7 @@ python3 tools/check_inventory.py
 | `ItemElvenChakram.kt` | 54 | КТ-4 | ждёт |  |
 | `ItemEnlighter.kt` | 80 | КТ-4 | ждёт |  |
 | `ItemFenrirLoot.kt` | 268 | КТ-8 | ждёт |  |
-| `ItemFireGrenade.kt` | 40 | КТ-2 | ждёт |  |
+| `ItemFireGrenade.kt` | 40 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemFireGrenade.kt`; плавная анимация иконки — `interpolate` в `.mcmeta` текстуры |
 | `ItemFloatingIslandGenerator.kt` | 38 | КТ-6 | ждёт |  |
 | `ItemHeadFlugel.kt` | 79 | КТ-8 | ждёт |  |
 | `ItemHeadMiku.kt` | 76 | КТ-8 | ждёт |  |
@@ -1475,7 +1475,7 @@ python3 tools/check_inventory.py
 | `ItemPaperRace.kt` | 123 | КТ-7 | ждёт |  |
 | `ItemPeacePipe.kt` | 77 | КТ-7 | ждёт |  |
 | `ItemSpawnEgg.kt` | 151 | КТ-5 | ждёт |  |
-| `ItemSplashPotion.kt` | 108 | КТ-2 | ждёт |  |
+| `ItemSplashPotion.kt` | 108 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemSplashPotion.kt`; особый рецепт `RecipeThrowablePotion` и раздатчик — следующая партия |
 | `ItemTriquetrum.kt` | 188 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemTriquetrum.kt` |
 | `ItemWarBanner.kt` | 113 | КТ-4 | ждёт |  |
 | `TheRodOfTheDebug.kt` | 80 | КТ-4 | ждёт |  |
@@ -2121,7 +2121,7 @@ python3 tools/check_inventory.py
 | `alfheim/textures/gui/categories/` | 7 | КТ-9 | ждёт | лексикон |
 | `alfheim/textures/gui/entries/` | 8 | КТ-9 | ждёт | лексикон |
 | `alfheim/textures/gui/spells/` | 85 | КТ-7 | ждёт | иконки заклинаний |
-| `alfheim/textures/items/` (только файлы папки) | 182 | КТ-2 | ждёт | текстуры предметов других КТ переносятся вместе с предметом; перенесено 7 — `wiltedLotus.png`, `Chalk.png`, `DeathSeed.png`, `HyperpolatedBucket.png`, `SoulHorn.png`, `Triquetrum.png`, `Armilla.png` |
+| `alfheim/textures/items/` (только файлы папки) | 182 | КТ-2 | ждёт | текстуры предметов других КТ переносятся вместе с предметом; перенесено 9 — `wiltedLotus.png`, `Chalk.png`, `DeathSeed.png`, `HyperpolatedBucket.png`, `SoulHorn.png`, `Triquetrum.png`, `Armilla.png`, `fireGrenade.png` с `fireGrenade.png.mcmeta` |
 | `alfheim/textures/items/coatofarms/` | 19 | КТ-4 | ждёт | `ItemCoatOfArms` |
 | `alfheim/textures/items/materials/` | 72 | КТ-2 | перенесено | материалы `ElvenItems` и `EventResource` (51), еда `ItemElvenFood` (`food/`, 19); `food/RedGrapes_new.png`, `food/WhiteGrapes_old.png` код автора не использует — остаются здесь |
 | `alfheim/textures/items/misc/` | 17 | КТ-2 | ждёт |  |

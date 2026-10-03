@@ -6,7 +6,11 @@ import alfheim.port.legacy.Potion1710
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.effect.MobEffect
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.eventbus.api.IEventBus
@@ -40,7 +44,11 @@ object LegacyRegistration {
 	val blocks = LinkedHashMap<Block, Entry>()
 	val items = LinkedHashMap<Item, Entry>()
 	val effects = LinkedHashMap<MobEffect, Entry>()
+	val entities = LinkedHashMap<EntityType<*>, Entry>()
 	val aliases = ArrayList<Alias>()
+	
+	private val entityTypes = HashMap<Class<out Entity>, EntityType<*>>()
+	private val pendingEntities = ArrayList<Triple<Class<out Entity>, String, MobCategory>>()
 
 	private val pendingItems = ArrayList<Pair<Item, String>>()
 	private val pendingEffects = ArrayList<Potion1710>()
@@ -68,6 +76,7 @@ object LegacyRegistration {
 
 	private fun onRegister(e: RegisterEvent) {
 		if (e.registryKey == Registries.MOB_EFFECT) return registerEffects(e)
+		if (e.registryKey == Registries.ENTITY_TYPE) return registerEntities(e)
 		
 		val sources = when (e.registryKey) {
 			Registries.BLOCK -> blockSources
@@ -143,6 +152,38 @@ object LegacyRegistration {
 			e.register(Registries.MOB_EFFECT, entry.id) { potion }
 		}
 		pendingEffects.clear()
+	}
+	
+	/**
+	 * Существо автора под именем [name] (`EntityRegistry.registerModEntity(класс, имя, номер, мод, 128, 1, true)` 1.7.10):
+	 * слежение на 128 блоков, обновление каждый тик, скорость — клиентам. Создаётся конструктором `(World)`, как в
+	 * 1.7.10; [category] — для спавна (в 1.7.10 тип существа задавался при добавлении спавна). Id — имя в snake_case
+	 * (`ThrownPotion` → `alfheim:thrown_potion`), имя 1.7.10 — `alfheim.ThrownPotion`
+	 */
+	fun entity(clazz: Class<out Entity>, name: String, category: MobCategory = MobCategory.MISC) {
+		check(pendingEntities.none { it.first == clazz } && clazz !in entityTypes) { "Entity $name is registered twice" }
+		pendingEntities += Triple(clazz, name, category)
+	}
+	
+	/** Тип 1.20.1 существа автора: конструктор существа 1.20.1 принимает его первым аргументом */
+	@Suppress("UNCHECKED_CAST")
+	fun <T: Entity> entityType(clazz: Class<T>) = entityTypes[clazz] as EntityType<T>? ?: throw IllegalStateException("Entity ${clazz.name} is not registered: ASJUtilities.registerEntity")
+	
+	private fun registerEntities(e: RegisterEvent) {
+		for ((clazz, name, category) in pendingEntities) {
+			val entry = Entry(id(name, null), name, null)
+			check(entities.values.none { it.id == entry.id }) { "Entity id ${entry.id} is registered twice" }
+			val constructor = clazz.getConstructor(Level::class.java)
+			val type = EntityType.Builder.of<Entity>({ _, level -> constructor.newInstance(level) }, category)
+				.clientTrackingRange(8) // 128 блоков
+				.updateInterval(1)
+				.setShouldReceiveVelocityUpdates(true)
+				.build(entry.id.toString())
+			entityTypes[clazz] = type
+			entities[type] = entry
+			e.register(Registries.ENTITY_TYPE, entry.id) { type }
+		}
+		pendingEntities.clear()
 	}
 	
 	private fun item(item: Item, entry: Entry) {

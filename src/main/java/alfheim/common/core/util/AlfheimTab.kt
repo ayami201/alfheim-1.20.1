@@ -57,8 +57,10 @@ import alfheim.common.item.AlfheimItems.chalk
 import alfheim.common.item.AlfheimItems.deathSeed
 import alfheim.common.item.AlfheimItems.elvenFood
 import alfheim.common.item.AlfheimItems.elvenResource
+import alfheim.common.item.AlfheimItems.fireGrenade
 import alfheim.common.item.AlfheimItems.hyperBucket
 import alfheim.common.item.AlfheimItems.soulHorn
+import alfheim.common.item.AlfheimItems.splashPotion
 import alfheim.common.item.AlfheimItems.triquetrum
 import alfheim.common.item.AlfheimItems.wiltedLotus
 import alfheim.port.legacy.Item1710
@@ -301,7 +303,6 @@ import alfheim.common.item.AlfheimItems.fenrirGlove
 import alfheim.common.item.AlfheimItems.fenrirHelmet
 import alfheim.common.item.AlfheimItems.fenrirLeggings
 import alfheim.common.item.AlfheimItems.fenrirLoot
-import alfheim.common.item.AlfheimItems.fireGrenade
 import alfheim.common.item.AlfheimItems.floatingIslandGenerator
 import alfheim.common.item.AlfheimItems.flugelHead
 import alfheim.common.item.AlfheimItems.flugelSoul
@@ -365,7 +366,6 @@ import alfheim.common.item.AlfheimItems.snowSword
 import alfheim.common.item.AlfheimItems.soulSword
 import alfheim.common.item.AlfheimItems.spatiotemporalRing
 import alfheim.common.item.AlfheimItems.spawnEgg
-import alfheim.common.item.AlfheimItems.splashPotion
 import alfheim.common.item.AlfheimItems.starPlacer
 import alfheim.common.item.AlfheimItems.starPlacer2
 import alfheim.common.item.AlfheimItems.subspaceSpear
@@ -741,10 +741,10 @@ object AlfheimTab {
 		/* PORT: КТ-5
 		addItem(spawnEgg)
 		*/
-		/* PORT: КТ-2
 		addItem(splashPotion)
 		addItem(fireGrenade)
 		
+		/* PORT: КТ-2
 		addBlock(airyVirus)
 		addBlock(snakeObject)
 		*/

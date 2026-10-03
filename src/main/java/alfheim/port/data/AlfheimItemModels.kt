@@ -2,6 +2,7 @@ package alfheim.port.data
 
 import alfheim.api.ModInfo.MODID
 import alfheim.common.item.ItemMod
+import alfheim.common.item.ItemSplashPotion
 import alfheim.common.item.material.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.port.legacy.*
@@ -32,6 +33,7 @@ class AlfheimItemModels(output: PackOutput, files: ExistingFileHelper): ItemMode
 			is ItemElvenResource -> elvenResource(item)
 			is ItemElvenFood     -> elvenFood(item)
 			is ItemEventResource -> item(item, "materials/${ItemEventResource.subItems[item.meta]}")
+			is ItemSplashPotion  -> splashPotion(item)
 			is ItemMod           -> item(item, item.legacy.unlocalizedName.removePrefix("item."))
 			else                 -> throw IllegalStateException("No 1.7.10 icon rule for ${item.javaClass.name}")
 		}
@@ -62,6 +64,16 @@ class AlfheimItemModels(output: PackOutput, files: ExistingFileHelper): ItemMode
 		if (item.meta != ElvenFoodMetas.Beer.I) return
 		val cc = withExistingParent(CC, mcLoc("item/generated")).texture("layer0", legacyTexture("$MODID:materials/food/cc"))
 		model.override().predicate(CC_PROPERTY, 1f).model(cc).end()
+	}
+	
+	/**
+	 * ItemSplashPotion.registerIcons и getIcon: склянка `vial0` и жидкость `vial1_0` Botania (проходы 0 и 1) — те же
+	 * иконки Botania 1.20.1: `item/vial` и `item/brew_vial_0` (полная склянка с варевом)
+	 */
+	private fun splashPotion(item: ItemSplashPotion) {
+		withExistingParent(LegacyRegistration.items[item]!!.id.path, mcLoc("item/generated"))
+			.texture("layer0", ResourceLocation("botania", "item/vial"))
+			.texture("layer1", ResourceLocation("botania", "item/brew_vial_0"))
 	}
 	
 	/** Модель предмета с иконкой на каждый проход рендера, по порядку */

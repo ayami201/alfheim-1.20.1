@@ -259,11 +259,17 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `EntityTameable.isTamed`, `func_152115_b(uuidString)` | `isTame`, `setOwnerUUID(uuid)` | ✓ |
 | `Items.stick`, `Blocks.grass` и др. | `Items.STICK`, `Blocks.GRASS_BLOCK` и др. | поля ванилы в 1.20.1 — заглавными; имя проверять по смыслу |
 | `World` в сигнатурах автора | `import net.minecraft.world.level.Level as World` | ✓ |
-| `entityInit` + `DataWatcher` | `defineSynchedData` + `SynchedEntityData` | |
+| `entityInit` + `DataWatcher` | `defineSynchedData` + `SynchedEntityData` | ✓ номер ячейки → ключ `SynchedEntityData.defineId(Класс::class.java, EntityDataSerializers.…)` в `companion object` класса; `addObject(n, v)` → `define(KEY, v)`, `getWatchableObject…(n)` / `updateObject(n, v)` → `get(KEY)` / `set(KEY, v)`; `setObjectWatched` не нужен |
+| `EntityThrowable` (`super(world)`, `super(world, thrower)`, `onImpact`, `getThrower`, `func_70182_d` — скорость, `func_70183_g` — поправка угла, `getGravityVelocity`, `setSize`) | `alfheim.port.legacy.EntityThrowable` поверх `ThrowableProjectile`: `super(legacyType<Класс>(), world)`, остальное — имена 1.7.10 | ✓ бросок — из глаз, на 0,16 вбок и 0,1 вниз, как в 1.7.10; `setThrowableHeading` → `shoot`: разброс 1.20.1 — треугольный, той же величины. Блоки 1.20.1, которые отвечают на удар снаряда (мишень, колокол), не отвечают |
+| `worldObj`, `setDead()`, `getDistanceSqToEntity(e)`, `attackEntityFrom(source, amount)`, `setFire(seconds)` | `level()`, `discard()`, `distanceToSqr(e)`, `hurt`, `setSecondsOnFire` (`Entity1710`) | ✓ |
+| `EntityDamageSourceIndirect("fireball", прямой, виновник).setFireDamage()` | `DamageSource(тип DamageTypes.FIREBALL из реестра, прямой, виновник)` | ✓ тип «огненный шар» — огненный; `damageSources().fireball` 1.20.1 принимает только огненный шар (`Fireball`) |
+| `world.playAuxSFX(2002, x, y, z, metadata зелья)` (брызги зелья) | `level.levelEvent(2002, BlockPos, цвет)` | ✓ в 1.20.1 число события — цвет брызг (`MobEffects.X.color`); частицы — от середины низа блока, в 1.7.10 — от угла |
+| `Potion.isInstant()`, `affectEntity(thrower, target, amplifier, health)`, `PotionEffect.getEffectName()`, `Potion.getDurationString(effect)` | `isInstantenous`, `applyInstantenousEffect(thrower, thrower, target, …)`, `descriptionId`, `MobEffectUtil.formatDuration` — в `Effects1710` и `Potion1710` | ✓ урон засчитывается бросившему, без бросившего — обычная магия, как в 1.7.10. Длительность 1.20.1 — `03:00` (в 1.7.10 — `3:00`), как у всех зелий 1.20.1 |
 | `readEntityFromNBT` / `writeEntityToNBT` | `readAdditionalSaveData` / `addAdditionalSaveData` | |
 | `onUpdate` (сущность) | `tick` | |
 | `applyEntityAttributes` | атрибуты в `EntityAttributeCreationEvent` | |
-| `EntityRegistry.registerModEntity` + яйцо | `EntityType` + `ForgeSpawnEggItem` | цвета яиц — авторские |
+| `EntityRegistry.registerModEntity` (`ASJUtilities.registerEntity(класс, имя, номер)`) | `LegacyRegistration.entity(класс, имя)` → `EntityType` с конструктором `(World)` в событии регистрации | ✓ слежение 8 чанков (128 блоков), обновление каждый тик, скорость — клиентам, как `registerModEntity(…, 128, 1, true)`; id — имя в snake_case (`ThrownPotion` → `alfheim:thrown_potion`); тип для `super(…)` — `legacyType<Класс>()`. Имя 1.7.10 — `alfheim.ThrownPotion`, его ключ перевода `entity.alfheim.ThrownPotion.name` → `entity.alfheim.thrown_potion` |
+| яйцо существа (`registerEntity` с цветами) | `ForgeSpawnEggItem` | цвета яиц — авторские |
 | `IExtendedEntityProperties` | Capability Forge | SPEC, Р-11 |
 | `WorldSavedData` | `SavedData` | |
 | `Potion` (зелье автора и `Potion.regeneration` и др.) | `alfheim.port.legacy.Potion1710` — наследник `MobEffect` с API 1.7.10; ванила — его поля с именами 1.7.10 | ✓ номер 1.7.10 остаётся: ванила — 1–23, зелья автора — номера по умолчанию из конфига, прочие эффекты реестра — свободные номера после регистрации (`Potion1710.assignIds`). `Potion.potionTypes[id]`, `MobEffect.id`, `PotionEffect.potionID`. Имя в реестре — из `setPotionName` без приставки, в snake_case: `alfheim.potion.whiteWine` → `alfheim:white_wine` |
@@ -304,7 +310,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 |---|---|---|
 | `eventForge()` / `eventFML()` (asjlib) | `MinecraftForge.EVENT_BUS.register(...)` | события жизненного цикла мода — на шине мода |
 | `cpw.mods.fml…SubscribeEvent` | `net.minecraftforge.eventbus.api.SubscribeEvent` | |
-| `SimpleNetworkWrapper`, `IMessage` | `SimpleChannel`; `ASJPacket.toBytes` / `fromBytes` / `create`, обработчик `AlfheimPacket.onMessage` | ✓ поля пишет `ASJPacket`, как coremod `ASJPacketCompleter`: свои поля класса пакета, не static и не final, в порядке объявления, после `toCustomBytes`. Обработка — в основном потоке (`enqueueWork`) |
+| `SimpleNetworkWrapper`, `IMessage` | `SimpleChannel`; `ASJPacket.toBytes` / `fromBytes` / `create`, обработчик `AlfheimPacket.onMessage` | ✓ поля пишет `ASJPacket`, как coremod `ASJPacketCompleter`: свои поля класса пакета, не static и не final, в порядке объявления, после `toCustomBytes`. Обработка — в основном потоке (`enqueueWork`); ошибка обработчика пишется в лог (`exceptionally`), как в 1.7.10 — иначе она остаётся в `CompletableFuture` |
 | регистрация пакета для обеих сторон (`Side.CLIENT` и `Side.SERVER`) | второй раз — без привязки к направлению | ✓ в `SimpleChannel` класс пакета — ключ кодека |
 | `sendToDimension(packet, dimId)` | `sendToDim(packet, ResourceKey<Level>)`, `PacketDistributor.DIMENSION` | ✓ номеров измерений нет |
 | `NetworkRegistry.TargetPoint(dim, x, y, z, range)` | `alfheim.port.legacy.TargetPoint(level.dimension(), x, y, z, range)` | ✓ радиус как у автора; в Forge он в квадрате, переводит `toForge()` |
@@ -340,7 +346,13 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `ISimpleBlockRenderingHandler` | JSON-модель, BakedModel или BlockEntityRenderer | SPEC, Р-13 |
 | `IItemRenderer` | `BlockEntityWithoutLevelRenderer` через `IClientItemExtensions` | |
 | `ModelBase` / `ModelRenderer` | `EntityModel` / `ModelPart` + `LayerDefinition` | размеры, опоры, UV — авторские |
-| `RenderingRegistry.registerEntityRenderingHandler` | `EntityRenderersEvent.RegisterRenderers` | |
+| `RenderingRegistry.registerEntityRenderingHandler` | `EntityRenderersEvent.RegisterRenderers` (`alfheim.port.client.AlfheimEntityRenderers`) | ✓ событие идёт раньше postInit, где автор регистрировал рендер, поэтому пары «существо — рендер» собраны там; строки в `ClientProxy` помечены. У каждого существа нужен рендер: без него клиент падает |
+| `Render` (объект): `doRender(entity, x, y, z, yaw, partialTicks)`, `getEntityTexture` | `EntityRenderer<T>` (класс с конструктором от контекста): `render(entity, yaw, partialTicks, poseStack, buffers, light)`, `getTextureLocation` | ✓ смещение к существу уже в матрице; `GL_BLEND` — вид отрисовки `RenderType.entityTranslucent(атлас)`, без смешивания — `entityCutout`; `TextureMap.locationItemsTexture` → `InventoryMenu.BLOCK_ATLAS` |
+| квадрат лицом к камере: `glRotatef(180 − playerViewY, Y)`, `glRotatef(−playerViewX, X)` | `mulPose(entityRenderDispatcher.cameraOrientation())`, `mulPose(YP(180))` | ✓ так рисует брошенный предмет ванила 1.20.1. Цвет, свет (`setBrightness(240)` → `uv2(240)`), наложение и нормаль — у каждой вершины |
+| иконка предмета в рендере: `item.getIcon(stack, pass)`, `getIconFromDamage(meta)` | `alfheim.port.client.getIcon` / `getIconFromDamage` — спрайт слоя модели предмета с тем же номером | ✓ проход 0 — частица модели (слой 0) |
+| `RenderGlobal.doSpawnParticle(имя, …)` из `worldAccesses` (частица, которой потом меняют цвет или скорость) | `mc.levelRenderer.addParticleInternal(данные, данные.type.overrideLimiter, …)` (открыт в `accesstransformer.cfg`) | ✓ те же правила ванилы: дальность и настройка «Частицы»; `LevelRenderer` у мира клиента один |
+| `EntityFX.setRBGColorF(r, g, b)`, `multiplyVelocity(m)` | `Particle.setColor(r, g, b)`, `setPower(m)` | ✓ |
+| частица `iconcrack_<id>_<meta>` | `ItemParticleOption(ParticleTypes.ITEM, ItemStack(предмет))` | ✓ рисунок — частица модели предмета (слой 0), как иконка прохода 0 в 1.7.10 |
 | `bindTileEntitySpecialRenderer` | `EntityRenderersEvent.RegisterRenderers` (`registerBlockEntityRenderer`) | |
 | `ASJShaderHelper` + шейдеры автора | core shaders через `RegisterShadersEvent` + свой `RenderType` | |
 | `setGlow` (asjlib) | полная яркость, `LightTexture.FULL_BRIGHT` | |
@@ -392,6 +404,10 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `ModItems.vial` 1 (колба из альвийского стекла) | `BotaniaItems.flask` | ✓ |
 | `PotionMod` (зелье Botania 1.7.10) | `alfheim.port.legacy.botania.PotionMod` поверх `Potion1710` | ✓ имя `botania.potion.<имя>`, как в r1.8-249 |
 | `Botania.proxy.lightningFX(world, Vector3, Vector3, …)` | `alfheim.port.legacy.botania.Botania.proxy.lightningFX` → `Proxy.INSTANCE.lightningFX(level, Vec3, Vec3, …)` | ✓ |
+| `IBrewItem`, `IBrewContainer`; `brew.getUnlocalizedName(stack)` | `BrewItem`, `BrewContainer`; `getTranslationKey(stack)` | ✓ |
+| `BotaniaAPI.brewMap`, `getBrewFromKey(ключ)`, `fallbackBrew`, `brew.key`; `ModBrews` | реестр варев `BotaniaAPI.instance().brewRegistry!!` (перебор, `get(ResourceLocation)`, `getKey(brew)`), `BotaniaBrews.fallbackBrew`; `BotaniaBrews` | ✓ ключ варева в NBT вещи (`brewKey`) — id в реестре (`botania:healing`), в 1.7.10 — имя (`healing`). Запасное варево в 1.20.1 — в реестре: перебор варев его пропускает, как перебор `brewMap` 1.7.10 |
+| `ModPotions` (`vazkii.botania.common.brew`) | `BotaniaMobEffects` | ✓ |
+| иконки склянки Botania `vial0`, `vial1_0` | текстуры `botania:item/vial`, `botania:item/brew_vial_0` | ✓ |
 
 ## Удалённые опции конфига
 
