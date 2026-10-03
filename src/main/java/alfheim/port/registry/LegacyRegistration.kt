@@ -1,6 +1,7 @@
 package alfheim.port.registry
 
 import alfheim.api.ModInfo.MODID
+import alfheim.port.legacy.LegacyItem
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
@@ -37,6 +38,7 @@ object LegacyRegistration {
 	val items = LinkedHashMap<Item, Entry>()
 	val aliases = ArrayList<Alias>()
 
+	private val pendingItems = ArrayList<Pair<Item, String>>()
 	private val blockSources = ArrayList<() -> Any>()
 	private val itemSources = ArrayList<() -> Any>()
 	private val blockItems = ArrayList<Pair<Block, (Block) -> Item>>()
@@ -69,6 +71,14 @@ object LegacyRegistration {
 			if (e.registryKey == Registries.ITEM)
 				for ((block, factory) in blockItems) item(factory(block), blocks[block]!!)
 			sources.forEach { it() }
+			// вариант предмета известен после его конструктора: предмет автора регистрируется в конструкторе
+			// базового класса (ItemMod), раньше, чем у наследника появляется номер варианта
+			for ((item, name) in pendingItems) {
+				val legacy = item as? LegacyItem
+				val meta = legacy?.variant
+				item(item, Entry(legacy?.variantName?.let { id(it, null) } ?: id(name, meta), name, meta))
+			}
+			pendingItems.clear()
 		} finally {
 			event = null
 		}
@@ -97,8 +107,14 @@ object LegacyRegistration {
 		aliases += Alias(name, block, state)
 	}
 	
-	/** Предмет автора под именем [name] (как в `GameRegistry.registerItem` 1.7.10) */
-	fun item(item: Item, name: String, meta: Int?) = item(item, Entry(id(name, meta), name, meta))
+	/**
+	 * Предмет автора под именем [name] (как в `GameRegistry.registerItem` 1.7.10). Id — по имени и номеру варианта
+	 * ([LegacyItem.variant]) или по имени варианта ([LegacyItem.variantName]); регистрируется в конце события
+	 */
+	fun item(item: Item, name: String) {
+		event?.takeIf { it.registryKey == Registries.ITEM } ?: throw IllegalStateException("Item $name is created outside of the item registration: create it from LegacyRegistration.onItems")
+		pendingItems += item to name
+	}
 
 	private fun item(item: Item, entry: Entry) {
 		val e = event?.takeIf { it.registryKey == Registries.ITEM } ?: throw IllegalStateException("Item ${entry.id} is created outside of the item registration: create it from LegacyRegistration.onItems")

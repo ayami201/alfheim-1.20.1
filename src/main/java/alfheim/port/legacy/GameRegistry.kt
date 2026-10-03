@@ -27,7 +27,7 @@ object GameRegistry {
 
 	@JvmStatic
 	fun registerItem(item: Item, name: String): Item {
-		LegacyRegistration.item(item, name, null)
+		LegacyRegistration.item(item, name)
 		return item
 	}
 

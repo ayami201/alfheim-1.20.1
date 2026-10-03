@@ -1,5 +1,6 @@
 package alfheim.port.legacy
 
+import alfheim.port.registry.LegacyIds
 import net.minecraft.locale.Language
 import java.util.IllegalFormatException
 
@@ -10,7 +11,8 @@ import java.util.IllegalFormatException
  */
 object StatCollector {
 	
-	fun translateToLocal(key: String): String = Language.getInstance().getOrDefault(key)
+	/** Ключ автора, переименованный в ключ 1.20.1 (`legacy_ids.json`, раздел `lang`), читается по новому имени */
+	fun translateToLocal(key: String): String = Language.getInstance().getOrDefault(LegacyIds.lang[key] ?: key)
 	
 	/** Как `StringTranslate.translateKeyFormat` 1.7.10: при ошибке формата — «Format error: …» */
 	fun translateToLocalFormatted(key: String, vararg args: Any?): String {
@@ -22,5 +24,5 @@ object StatCollector {
 		}
 	}
 	
-	fun canTranslate(key: String) = Language.getInstance().has(key)
+	fun canTranslate(key: String) = Language.getInstance().has(LegacyIds.lang[key] ?: key)
 }
