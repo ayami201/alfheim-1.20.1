@@ -21,7 +21,8 @@ true» (досрочно завершает метод) и т. п. Смысл в
 Botania — подписаться на событие. Иначе миксин: Java-класс в `src/main/java/alfheim/port/mixin/`,
 строка в `src/main/resources/alfheim.mixins.json`. Строка `"refmap": "alfheim.refmap.json"` в
 `alfheim.mixins.json` нужна миксинам, чтобы найти методы Minecraft в собранном jar; её вернул
-первый миксин (H-008, H-009).
+первый миксин (H-008, H-009). Карту ссылок в jar проверяет `tools/check_mixins.py` в CI: GameTest-ы
+идут без неё и её отсутствия не замечают.
 
 ## Сверка
 
