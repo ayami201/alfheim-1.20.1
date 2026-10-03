@@ -70,7 +70,16 @@ object PortToolsTest {
 
 		helper.assertTrue(seed.use(helper.level, player, InteractionHand.MAIN_HAND).result == InteractionResult.PASS && seed.count == 1, "no place recorded — nothing happens")
 
-		val place = helper.absoluteVec(Vec3(0.5, -40.0, 0.5))
+		// смерть в пустоте — ниже мира, как y < 0 у автора: места нет
+		val void = helper.absoluteVec(Vec3(0.5, 0.0, 0.5))
+		player.moveTo(void.x, helper.level.minBuildHeight - 70.0, void.z)
+		MinecraftForge.EVENT_BUS.post(LivingDeathEvent(player, player.damageSources().fellOutOfWorld()))
+		helper.assertTrue(ItemNBTHelper.getString(seed, ItemDeathSeed.TAG_D, "") == "minecraft:overworld" && !ItemNBTHelper.verifyExistance(seed, ItemDeathSeed.TAG_Y), "death in the void is no place")
+		helper.assertTrue(seed.use(helper.level, player, InteractionHand.MAIN_HAND).result == InteractionResult.PASS && seed.count == 1, "death in the void — nothing happens")
+
+		// мир 1.20.1 ниже нуля: такая высота — место
+		val place = Vec3(void.x, -50.0, void.z)
+		helper.assertTrue(place.y > helper.level.minBuildHeight, "the test world goes below -50")
 		player.moveTo(place.x, place.y, place.z)
 		MinecraftForge.EVENT_BUS.post(LivingDeathEvent(player, player.damageSources().generic()))
 		helper.assertTrue(ItemNBTHelper.getString(seed, ItemDeathSeed.TAG_D, "") == "minecraft:overworld", "dimension of death: ${ItemNBTHelper.getString(seed, ItemDeathSeed.TAG_D, "")}")
