@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": {
+      "tag": "forge:nuggets/mauftrium"
+    },
+    "Q": {
+      "item": "botania:quartz_dark"
+    }
+  },
+  "pattern": [
+    "  M",
+    " Q ",
+    "Q  "
+  ],
+  "result": {
+    "item": "alfheim:chalk"
+  }
+}

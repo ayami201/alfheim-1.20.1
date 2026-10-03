@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "botania:open_bucket"
+    },
+    "E": {
+      "tag": "forge:ingots/elvorium"
+    },
+    "I": {
+      "tag": "forge:dusts/iffesal"
+    },
+    "M": {
+      "tag": "forge:nuggets/mauftrium"
+    }
+  },
+  "pattern": [
+    "III",
+    "EBE",
+    "MMM"
+  ],
+  "result": {
+    "item": "alfheim:hyperpolated_bucket"
+  }
+}

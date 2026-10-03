@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "type": "alfheim:meta",
+      "item": "alfheim:hyperpolated_bucket",
+      "meta": 0
+    },
+    {
+      "tag": "forge:ingots/mauftrium"
+    }
+  ],
+  "result": {
+    "item": "alfheim:hyperpolated_bucket",
+    "nbt": "{Damage:1}"
+  }
+}

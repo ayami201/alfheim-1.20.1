@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "botania:life_essence"
+    },
+    "H": {
+      "item": "minecraft:player_head"
+    },
+    "I": {
+      "item": "botania:keep_ivy"
+    },
+    "R": {
+      "item": "botania:rune_sloth"
+    }
+  },
+  "pattern": [
+    " H ",
+    "GIG",
+    " R "
+  ],
+  "result": {
+    "item": "alfheim:death_seed"
+  }
+}
