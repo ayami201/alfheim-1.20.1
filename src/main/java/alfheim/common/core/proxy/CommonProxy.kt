@@ -42,8 +42,10 @@ open class CommonProxy {
 //		AlfheimBlocks
 //		AlfheimItems
 		AlfheimRegistry.preInit()
-		// PORT: КТ-10 — достижения → advancements; КТ-2 — раздатчики (DispenserHandlers)
+		// PORT: КТ-10 — достижения → advancements
 //		AlfheimAchievements
+		// PORT: раздатчики — в init (AlfheimCore), в очереди основного потока: предметы 1.20.1 создаются в событии
+		// регистрации, позже preInit, а реестр поведения раздатчика общий для модов и не потокобезопасный
 //		BifrostFlowerDispenserHandler
 //		ThrownPotionDispenserHandler
 //		ThrownItemDispenserHandler

@@ -136,6 +136,13 @@ object AlfheimCore {
 		
 		proxy.init()
 		proxy.initializeAndRegisterHandlers()
+		// PORT: раздатчики автора из CommonProxy.preInit — здесь, в очереди основного потока (причина — там же)
+		e.enqueueWork {
+//			BifrostFlowerDispenserHandler // PORT: КТ-2 — с радужной травой (block/colored)
+			ThrownPotionDispenserHandler
+			ThrownItemDispenserHandler
+			WaterBowlDispenserHandler
+		}
 	}
 	
 	// PORT: было @EventHandler, FMLPostInitializationEvent

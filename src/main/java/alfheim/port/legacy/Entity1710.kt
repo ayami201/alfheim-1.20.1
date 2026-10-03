@@ -6,6 +6,7 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.entity.projectile.ThrowableProjectile
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.Vec3
 import kotlin.math.*
 
 /*
@@ -33,6 +34,60 @@ fun Entity.attackEntityFrom(source: DamageSource, amount: Float) = hurt(source, 
 
 /** `setFire(seconds)` 1.7.10 */
 fun Entity.setFire(seconds: Int) = setSecondsOnFire(seconds)
+
+/**
+ * `posX`, `posY`, `posZ` 1.7.10; запись — `setPos`. `posY` — низ существа, как у большинства существ 1.7.10; у своего
+ * игрока на клиенте 1.7.10 `posY` был на уровне глаз — такие места переносятся на месте вызова
+ */
+var Entity.posX: Double
+	get() = x
+	set(value) = setPos(value, y, z)
+
+var Entity.posY: Double
+	get() = y
+	set(value) = setPos(x, value, z)
+
+var Entity.posZ: Double
+	get() = z
+	set(value) = setPos(x, y, value)
+
+/** `motionX`, `motionY`, `motionZ` 1.7.10 — `deltaMovement` 1.20.1 */
+var Entity.motionX: Double
+	get() = deltaMovement.x
+	set(value) {
+		deltaMovement = Vec3(value, deltaMovement.y, deltaMovement.z)
+	}
+
+var Entity.motionY: Double
+	get() = deltaMovement.y
+	set(value) {
+		deltaMovement = Vec3(deltaMovement.x, value, deltaMovement.z)
+	}
+
+var Entity.motionZ: Double
+	get() = deltaMovement.z
+	set(value) {
+		deltaMovement = Vec3(deltaMovement.x, deltaMovement.y, value)
+	}
+
+/** `rotationYaw`, `rotationPitch` 1.7.10 */
+var Entity.rotationYaw: Float
+	get() = yRot
+	set(value) {
+		yRot = value
+	}
+
+var Entity.rotationPitch: Float
+	get() = xRot
+	set(value) {
+		xRot = value
+	}
+
+/** `setLocationAndAngles(x, y, z, yaw, pitch)` 1.7.10 */
+fun Entity.setLocationAndAngles(x: Double, y: Double, z: Double, yaw: Float, pitch: Float) = moveTo(x, y, z, yaw, pitch)
+
+/** `setPosition(x, y, z)` 1.7.10 */
+fun Entity.setPosition(x: Double, y: Double, z: Double) = setPos(x, y, z)
 
 /**
  * `EntityThrowable` 1.7.10 поверх `ThrowableProjectile` 1.20.1. Полёт, сопротивление воздуха и воды, поиск удара — 1.20.1;
@@ -74,6 +129,9 @@ abstract class EntityThrowable(type: EntityType<out EntityThrowable>, world: Lev
 
 	/** `getThrower()` 1.7.10 */
 	val thrower: LivingEntity? get() = owner as? LivingEntity
+
+	/** `setThrowableHeading(x, y, z, velocity, inaccuracy)` 1.7.10 — `shoot` 1.20.1 (разброс треугольный, той же величины) */
+	fun setThrowableHeading(x: Double, y: Double, z: Double, velocity: Float, inaccuracy: Float) = shoot(x, y, z, velocity, inaccuracy)
 
 	/** Скорость броска; в 1.7.10 по умолчанию 1,5 */
 	open fun func_70182_d() = 1.5f

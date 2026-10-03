@@ -1,20 +1,24 @@
 package alfheim.common.core.handler
 
+// PORT: импорты 1.20.1 (MAPPING.md); раздатчик и существа 1.7.10 — alfheim.port.legacy (Dispenser1710, Entity1710)
 import alexsocol.asjlib.*
-import alfheim.common.block.AlfheimBlocks
 import alfheim.common.entity.*
 import alfheim.common.item.AlfheimItems
-import alfheim.common.item.material.ElvenResourcesMetas
-import net.minecraft.block.BlockDispenser
-import net.minecraft.dispenser.*
-import net.minecraft.init.*
-import net.minecraft.item.ItemStack
-import net.minecraft.tileentity.TileEntityDispenser
-import net.minecraft.util.MathHelper
-import net.minecraftforge.common.util.ForgeDirection
-import vazkii.botania.common.block.ModBlocks
-import vazkii.botania.common.item.ModItems
+import alfheim.port.legacy.*
+import net.minecraft.core.BlockPos
+import net.minecraft.util.Mth as MathHelper
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.DispenserBlock
+import net.minecraft.world.level.block.LiquidBlock
+import net.minecraft.world.level.block.entity.DispenserBlockEntity as TileEntityDispenser
+import vazkii.botania.common.item.BotaniaItems as ModItems
+//import alfheim.common.block.AlfheimBlocks
+//import alfheim.common.item.material.ElvenResourcesMetas
+//import vazkii.botania.common.block.ModBlocks
 
+/* PORT: КТ-2 — с радужной травой (block/colored): раздатчик сажает её из радужной пыли на цветок Botania
 /**
  * @author WireSegal
  * Created at 9:28 PM on 2/15/16.
@@ -43,15 +47,20 @@ object BifrostFlowerDispenserHandler: IBehaviorDispenseItem {
 		return stack
 	}
 }
+*/
 
 object ThrownPotionDispenserHandler: IBehaviorDispenseItem {
 	
+	// PORT: реестр поведения раздатчика 1.20.1 — DispenserBlock.registerBehavior
 	init {
-		BlockDispenser.dispenseBehaviorRegistry.putObject(AlfheimItems.splashPotion, this)
+		DispenserBlock.registerBehavior(AlfheimItems.splashPotion, this)
+//		BlockDispenser.dispenseBehaviorRegistry.putObject(AlfheimItems.splashPotion, this)
 	}
 	
+	// PORT: сторона раздатчика 1.20.1 — в состоянии блока, а не в metadata; номера сторон те же
 	override fun dispense(block: IBlockSource, stack: ItemStack): ItemStack {
-		val facing = ForgeDirection.getOrientation(BlockDispenser.func_149937_b(block.blockMetadata).ordinal)
+		val facing = ForgeDirection.getOrientation(block.blockState.getValue(DispenserBlock.FACING).ordinal)
+//		val facing = ForgeDirection.getOrientation(BlockDispenser.func_149937_b(block.blockMetadata).ordinal)
 		
 		val x = block.xInt + facing.offsetX + 0.5
 		val y = block.yInt + facing.offsetY + 0.5
@@ -73,14 +82,16 @@ object ThrownPotionDispenserHandler: IBehaviorDispenseItem {
 		
 		val potion = EntityThrownPotion(block.world, stack)
 		
-		--stack.stackSize
+		stack.shrink(1)
+//		--stack.stackSize
 		
 		potion.setLocationAndAngles(x, y, z, yaw, pitch)
 		potion.posX -= (MathHelper.cos(potion.rotationYaw / 180f * Math.PI.F) * 0.16f).D
 		potion.posY -= 0.10000000149011612
 		potion.posZ -= (MathHelper.sin(potion.rotationYaw / 180f * Math.PI.F) * 0.16f).D
 		potion.setPosition(potion.posX, potion.posY, potion.posZ)
-		potion.yOffset = 0f
+		// PORT: yOffset 1.7.10 (сдвиг рисунка по высоте) в 1.20.1 нет; у EntityThrowable он и так 0
+//		potion.yOffset = 0f
 		val f = 0.4f
 		potion.motionX = (-MathHelper.sin(potion.rotationYaw / 180f * Math.PI.F) * MathHelper.cos(potion.rotationPitch / 180f * Math.PI.F) * f).D
 		potion.motionZ = (MathHelper.cos(potion.rotationYaw / 180f * Math.PI.F) * MathHelper.cos(potion.rotationPitch / 180f * Math.PI.F) * f).D
@@ -94,12 +105,16 @@ object ThrownPotionDispenserHandler: IBehaviorDispenseItem {
 
 object ThrownItemDispenserHandler: IBehaviorDispenseItem {
 	
+	// PORT: реестр поведения раздатчика 1.20.1 — DispenserBlock.registerBehavior
 	init {
-		BlockDispenser.dispenseBehaviorRegistry.putObject(AlfheimItems.fireGrenade, this)
+		DispenserBlock.registerBehavior(AlfheimItems.fireGrenade, this)
+//		BlockDispenser.dispenseBehaviorRegistry.putObject(AlfheimItems.fireGrenade, this)
 	}
 	
+	// PORT: сторона раздатчика 1.20.1 — в состоянии блока, а не в metadata; номера сторон те же
 	override fun dispense(block: IBlockSource, stack: ItemStack): ItemStack {
-		val facing = ForgeDirection.getOrientation(BlockDispenser.func_149937_b(block.blockMetadata).ordinal)
+		val facing = ForgeDirection.getOrientation(block.blockState.getValue(DispenserBlock.FACING).ordinal)
+//		val facing = ForgeDirection.getOrientation(BlockDispenser.func_149937_b(block.blockMetadata).ordinal)
 		
 		val x = block.xInt + facing.offsetX + 0.5
 		val y = block.yInt + facing.offsetY + 0.5
@@ -121,14 +136,16 @@ object ThrownItemDispenserHandler: IBehaviorDispenseItem {
 		
 		val potion = EntityThrowableItem(block.world)
 		
-		--stack.stackSize
+		stack.shrink(1)
+//		--stack.stackSize
 		
 		potion.setLocationAndAngles(x, y, z, yaw, pitch)
 		potion.posX -= (MathHelper.cos(potion.rotationYaw / 180f * Math.PI.F) * 0.16f).D
 		potion.posY -= 0.10000000149011612
 		potion.posZ -= (MathHelper.sin(potion.rotationYaw / 180f * Math.PI.F) * 0.16f).D
 		potion.setPosition(potion.posX, potion.posY, potion.posZ)
-		potion.yOffset = 0f
+		// PORT: yOffset 1.7.10 (сдвиг рисунка по высоте) в 1.20.1 нет; у EntityThrowable он и так 0
+//		potion.yOffset = 0f
 		val f = 0.4f
 		potion.motionX = (-MathHelper.sin(potion.rotationYaw / 180f * Math.PI.F) * MathHelper.cos(potion.rotationPitch / 180f * Math.PI.F) * f).D
 		potion.motionZ = (MathHelper.cos(potion.rotationYaw / 180f * Math.PI.F) * MathHelper.cos(potion.rotationPitch / 180f * Math.PI.F) * f).D
@@ -144,30 +161,45 @@ object WaterBowlDispenserHandler: BehaviorDefaultDispenseItem() {
 	
 	private val field_150840_b = BehaviorDefaultDispenseItem()
 	
+	// PORT: реестр поведения раздатчика 1.20.1 — DispenserBlock.registerBehavior
 	init {
-		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.bowl, this)
+		DispenserBlock.registerBehavior(Items.BOWL, this)
+//		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.bowl, this)
 	}
 	
-	override fun dispenseStack(block: IBlockSource, stack: ItemStack): ItemStack {
-		val enumfacing = BlockDispenser.func_149937_b(block.blockMetadata)
+	// PORT: dispenseStack → execute; сторона раздатчика — в состоянии блока; источник воды 1.20.1 — вода с уровнем 0
+	// (стоячей и текучей воды 1.7.10 в 1.20.1 нет — один блок); предмет стака в 1.20.1 не меняется — вместо
+	// func_150996_a возвращается новый стак, его раздатчик кладёт в тот же слот
+	override fun execute(block: IBlockSource, stack: ItemStack): ItemStack {
+		val enumfacing = block.blockState.getValue(DispenserBlock.FACING)
+//		val enumfacing = BlockDispenser.func_149937_b(block.blockMetadata)
 		val world = block.world
 		val i = block.xInt + enumfacing.frontOffsetX
 		val j = block.yInt + enumfacing.frontOffsetY
 		val k = block.zInt + enumfacing.frontOffsetZ
 		val target = world.getBlock(i, j, k)
-		val l = world.getBlockMetadata(i, j, k)
-		val item = if (target === Blocks.flowing_water && l == 0) { // no need in check for static water because of block update
+		val l = world.getBlockState(BlockPos(i, j, k)).getOptionalValue(LiquidBlock.LEVEL).orElse(-1)
+//		val l = world.getBlockMetadata(i, j, k)
+		val item = if (target === Blocks.WATER && l == 0) { // no need in check for static water because of block update
+//		val item = if (target === Blocks.flowing_water && l == 0) { // no need in check for static water because of block update
 			ModItems.waterBowl
 		} else {
-			return super.dispenseStack(block, stack)
+			return super.execute(block, stack)
+//			return super.dispenseStack(block, stack)
 		}
 		
-		if (--stack.stackSize == 0) {
-			stack.func_150996_a(item)
-			stack.stackSize = 1
-		} else if ((block.blockTileEntity as TileEntityDispenser).func_146019_a(ItemStack(item)) < 0) {
+		stack.shrink(1)
+		if (stack.isEmpty) {
+			return ItemStack(item)
+		} else if ((block.blockTileEntity as TileEntityDispenser).addItem(ItemStack(item)) < 0) {
 			this.field_150840_b.dispense(block, ItemStack(item))
 		}
+//		if (--stack.stackSize == 0) {
+//			stack.func_150996_a(item)
+//			stack.stackSize = 1
+//		} else if ((block.blockTileEntity as TileEntityDispenser).func_146019_a(ItemStack(item)) < 0) {
+//			this.field_150840_b.dispense(block, ItemStack(item))
+//		}
 		
 		return stack
 	}
