@@ -38,6 +38,9 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 				legacyLangKey(block)?.let { addProperty(it, block.descriptionId) }
 			for ((item, entry) in LegacyRegistration.items)
 				legacyLangKey(item)?.let { addProperty(it, "item.${entry.id.namespace}.${entry.id.path}") }
+			// имя зелья 1.7.10 — ключ из setPotionName, 1.20.1 — ключ эффекта
+			for (potion in LegacyRegistration.effects.keys)
+				addProperty((potion as Potion1710).name, potion.descriptionId)
 		})
 		return DataProvider.saveStable(cache, json, output.outputFolder.resolve("alfheim/legacy_ids.json"))
 	}

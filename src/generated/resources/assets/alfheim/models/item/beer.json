@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "alfheim:item/cc",
+      "predicate": {
+        "alfheim:cc": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "alfheim:items/materials/food/beer"
+  }
+}
