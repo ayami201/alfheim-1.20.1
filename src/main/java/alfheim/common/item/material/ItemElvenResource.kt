@@ -124,7 +124,7 @@ class ItemElvenResource(val meta: Int): ItemMod("ElvenItems")/*, IElvenItem, IFl
 	
 	// PORT: иконки → модели предметов (alfheim.port.data.AlfheimItemModels): текстура варианта — materials/<имя>, у
 	// осколков разлома — materials/RiftShardEmpty, второй слой ElvenWeed и RiftDrive — …1; на праздник у прутика —
-	// CandyCane (свойство модели alfheim:jingle_the_bells, alfheim.port.client.AlfheimItemColors)
+	// CandyCane (модель alfheim:item/infused_candy подставляет alfheim.port.client.AlfheimModels)
 	/*
 	override fun registerIcons(reg: IIconRegister) {
 		for (type in entries)
