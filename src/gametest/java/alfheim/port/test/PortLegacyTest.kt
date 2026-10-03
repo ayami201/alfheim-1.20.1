@@ -1,22 +1,31 @@
 package alfheim.port.test
 
+import alexsocol.asjlib.component1
+import alexsocol.asjlib.component2
+import alexsocol.asjlib.component3
 import alfheim.api.ModInfo.MODID
 import alfheim.port.legacy.*
 import alfheim.port.registry.AlfheimSounds
 import com.google.gson.JsonParser
+import com.mojang.authlib.GameProfile
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.ChestBlockEntity
+import net.minecraftforge.common.util.FakePlayerFactory
 import net.minecraftforge.gametest.GameTestHolder
 import net.minecraftforge.gametest.PrefixGameTestTemplate
+import java.util.UUID
 
 /**
  * КТ-1: прослойка `alfheim.port.legacy` (SPEC, Р-4) на мире сервера: блоки по координатам, звуки и частицы по
@@ -80,6 +89,40 @@ object PortLegacyTest {
 
 		val pos = helper.absolutePos(BlockPos(1, 2, 1))
 		helper.level.spawnParticle("explode", pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), 0.0, 0.0, 0.0)
+		helper.succeed()
+	}
+
+	/** Стороны и координаты 1.7.10, флаги игрока, имя в реестре, пустой NBT (партия 5б) */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun coordsAndCapabilities(helper: GameTestHelper) {
+		for (id in 0..5) {
+			val dir = ForgeDirection.getOrientation(id)
+			val vanilla = Direction.from3DDataValue(id)
+			helper.assertTrue(dir.direction == vanilla && dir.offsetX == vanilla.stepX && dir.offsetY == vanilla.stepY && dir.offsetZ == vanilla.stepZ, "side $id: $dir")
+		}
+		for (id in listOf(-1, 6)) {
+			val dir = ForgeDirection.getOrientation(id)
+			helper.assertTrue(dir == ForgeDirection.UNKNOWN && dir.direction == null && dir.offsetX == 0 && dir.offsetY == 0 && dir.offsetZ == 0, "side $id is UNKNOWN")
+		}
+
+		val (x, y, z) = ChunkCoordinates(1, -1, 2)
+		helper.assertTrue(x == 1 && y == -1 && z == 2 && ChunkCoordinates(1, -1, 2).posY == -1, "ChunkCoordinates")
+
+		val player = FakePlayerFactory.get(helper.level, GameProfile(UUID.randomUUID(), "alfheim-capabilities"))
+		player.capabilities.isCreativeMode = true
+		player.capabilities.allowFlying = true
+		player.capabilities.isFlying = true
+		player.capabilities.disableDamage = true
+		helper.assertTrue(player.abilities.instabuild && player.abilities.mayfly && player.abilities.flying && player.abilities.invulnerable, "capabilities set the abilities")
+		player.capabilities.isCreativeMode = false
+		player.capabilities.allowFlying = false
+		player.capabilities.isFlying = false
+		player.capabilities.disableDamage = false
+		helper.assertTrue(!player.abilities.instabuild && !player.abilities.mayfly && !player.abilities.flying && !player.abilities.invulnerable, "capabilities clear the abilities")
+
+		helper.assertTrue(GameRegistry.findUniqueIdentifierFor(Blocks.STONE).toString() == "minecraft:stone" && GameRegistry.findUniqueIdentifierFor(Items.STICK).toString() == "minecraft:stick", "registry names")
+		helper.assertTrue(CompoundTag().hasNoTags() && !CompoundTag().apply { putInt("a", 1) }.hasNoTags(), "hasNoTags")
 		helper.succeed()
 	}
 }
