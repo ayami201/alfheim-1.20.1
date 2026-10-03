@@ -19,10 +19,9 @@ true» (досрочно завершает метод) и т. п. Смысл в
 **Как переносить врезку.** Найти цель в исходниках 1.20.1 (Minecraft — в `build/` после
 сборки, Botania — артефакт `-sources`). Если механика есть в событии Forge или в API
 Botania — подписаться на событие. Иначе миксин: Java-класс в `src/main/java/alfheim/port/mixin/`,
-строка в `src/main/resources/alfheim.mixins.json`. **С первым миксином** вернуть в
-`alfheim.mixins.json` строку `"refmap": "alfheim.refmap.json"`: без неё миксины не найдут
-методы Minecraft в собранном jar. Её убрали в КТ-0, пока миксинов нет: иначе Mixin
-пишет в лог предупреждение о пустой карте ссылок.
+строка в `src/main/resources/alfheim.mixins.json`. Строка `"refmap": "alfheim.refmap.json"` в
+`alfheim.mixins.json` нужна миксинам, чтобы найти методы Minecraft в собранном jar; её вернул
+первый миксин (H-008, H-009).
 
 ## Сверка
 
@@ -55,7 +54,7 @@ python3 tools/check_hooks.py
 | КТ | Всего | ждёт | перенесено | не нужна | выпало | WIP — стадия 2 |
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-1 | 3 | 3 |  |  |  |  |
-| КТ-2 | 20 | 18 | 1 | 1 |  |  |
+| КТ-2 | 20 | 16 | 3 | 1 |  |  |
 | КТ-3 | 190 | 190 |  |  |  |  |
 | КТ-4 | 105 | 105 |  |  |  |  |
 | КТ-5 | 13 | 13 |  |  |  |  |
@@ -65,7 +64,7 @@ python3 tools/check_hooks.py
 | КТ-9 | 5 | 5 |  |  |  |  |
 | КТ-10 | 5 | 5 |  |  |  |  |
 | — | 50 |  |  |  | 43 | 7 |
-| **всего** | **465** | **413** | **1** | **1** | **43** | **7** |
+| **всего** | **465** | **411** | **3** | **1** | **43** | **7** |
 
 Сводку пересчитывает `tools/check_hooks.py --summary`.
 
@@ -83,8 +82,8 @@ python3 tools/check_hooks.py
 | H-005 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:175` | `AlfheimAPI#registerSpell` | в начале, выходит, если true | оба | КТ-7 |  | ждёт |  |
 | H-006 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:182` | `WorldServer#createBonusChest` | в начале, выходит, если true | оба | КТ-7 |  | ждёт |  |
 | H-007 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:186` | `EntityCreeper#<init>` | в конце, добавляет код | оба | КТ-7 |  | ждёт |  |
-| H-008 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:192` | `EntityLivingBase#isPotionActive` | в начале, возвращает свой результат | оба | КТ-2 |  | ждёт |  |
-| H-009 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:199` | `EntityLivingBase#getActivePotionEffect` | в начале, возвращает свой результат | оба | КТ-2 |  | ждёт |  |
+| H-008 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:192` | `EntityLivingBase#isPotionActive` | в начале, возвращает свой результат | оба | КТ-2 | миксин `alfheim.port.mixin.LivingEntityMixin` → `LivingEntity#hasEffect`, код врезки — `alfheim.port.hook.EffectHooks` | перенесено | «Танк» засчитывается как «Сопротивление»; проверяет `PortPotionsTest.tankCountsAsResistance` |
+| H-009 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:199` | `EntityLivingBase#getActivePotionEffect` | в начале, возвращает свой результат | оба | КТ-2 | миксин `alfheim.port.mixin.LivingEntityMixin` → `LivingEntity#getEffect`, код врезки — `alfheim.port.hook.EffectHooks` | перенесено | сила «Танка» прибавляется к силе «Сопротивления» (у автора — к самому эффекту на существе, при каждом вызове: ошибка автора перенесена); проверяет `PortPotionsTest.tankCountsAsResistance` |
 | H-010 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:212` | `EntityLiving#despawnEntity` | в начале, выходит, если true | оба | КТ-5 |  | ждёт |  |
 | H-011 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:216` | `EntityDragon#attackEntityFrom` | в начале, возвращает свой результат | оба | КТ-7 |  | ждёт |  |
 | H-012 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:225` | `BlockFire#updateTick` | в начале, выходит, если true | оба | КТ-8 |  | ждёт |  |

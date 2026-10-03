@@ -40,11 +40,12 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 |---|---|---|
 | `blocks`, `items`, `entities` | старое имя в реестре 1.7.10, `modid:name` | новый id; если вещь различалась metadata — объект `{"0": …, "1": …}`, ключ `"*"` — любая metadata |
 | | | к id блока можно дописать свойства состояния: `"alfheim:alt_wood[axis=y]"` |
-| `lang` | старый ключ перевода | новый ключ (`block.alfheim.<id>`, `item.alfheim.<id>`); применяет `tools/convert_lang.py` |
+| `lang` | старый ключ перевода | новый ключ (`block.alfheim.<id>`, `item.alfheim.<id>`, `effect.alfheim.<id>`); применяет `tools/convert_lang.py` |
 
 Старый ключ предмета-блока: `tile.` + имя из `setBlockName`; `ItemBlockMetaName` дописывал номер варианта,
 `ItemBlockLeavesMod` — приставку `alfheim:` (`tile.alfheim:ElvenSand.name`). В 1.20.1 у предмета-блока ключ блока,
-поэтому старый ключ предмета переименовывается в ключ блока.
+поэтому старый ключ предмета переименовывается в ключ блока. Имя зелья — ключ из `setPotionName`
+(`alfheim.potion.whiteWine`) → ключ эффекта (`effect.alfheim.white_wine`); ключи `….postfix` остаются как были.
 
 Пример: `"blocks": {"alfheim:altWood1": {"0": "alfheim:alt_wood1_…", "*": "…"}}`.
 
@@ -164,6 +165,8 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `addInformation(stack, player, list, adv)` | `appendHoverText(stack, level, tooltip: MutableList<Component>, flag)`; `addStringToTooltip` (ASJCore) принимает `MutableList<Component>` | ✓ |
 | `onItemRightClick` / `setItemInUse` / `getMaxItemUseDuration` / `getItemUseAction` / `onEaten` | `use` / `startUsingItem(hand)` / `getUseDuration` / `getUseAnimation` (`EnumAction.bow` → `UseAnim.BOW`) / `finishUsingItem` | ✓ |
 | `stack.stackSize--`, `foodStats.addStats(f, s)`, `isBadEffect` | `stack.shrink(1)`, `foodData.eat(f, s)`, `effect.category == HARMFUL` | ✓ |
+| `ItemFood(heal, saturation, wolfMeat)`: `func_150905_g(stack)`, `func_150906_h(stack)`, `onEaten`, `setAlwaysEdible` | `alfheim.port.legacy.ItemFood1710`: те же методы сытости и насыщения; `onEaten` → `finishUsingItem` (минус один, `foodData.eat`, отрыжка) | ✓ сытость спрашивается у стака, как в 1.7.10; в 1.20.1 пустой стак теряет свой предмет, поэтому всё, что зависит от варианта (`stack.meta`), берётся до того, как стак уменьшен. `player.canEat` — метод 1.20.1: в творческом режиме есть можно всегда |
+| `stack.displayName` | `stack.hoverName.string` | ✓ `ItemStack.getDisplayName` 1.20.1 — другой метод (имя в скобках), он закрывает свойство прослойки |
 | `IFuelHandler.getBurnTime(fuel)` предмета | `getBurnTime(stack, recipeType)` предмета зовёт метод автора | ✓ |
 | `commandSenderName` игрока | `gameProfile.name` | ✓ |
 | `EntitySheep.fleeceColorTable` | `alfheim.port.legacy.Sheep1710.fleeceColorTable` | ✓ таблица 1.7.10: цвета красителей 1.20.1 другие |
@@ -218,6 +221,12 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `soundTypeStone`, `soundTypeWood`, `soundTypeGrass`, `soundTypeGravel`, `soundTypeCloth`, `soundTypeGlass`, `soundTypeSnow`, `soundTypeSand`, `soundTypeMetal`, `soundTypePiston`, `soundTypeLadder`, `soundTypeAnvil` в классе блока | как есть — `SoundTypes1710` у `Block1710` и `BlockFalling1710` | ✓ `SoundType.STONE`, `WOOD`, `GRASS`, `GRAVEL`, `WOOL`, `GLASS`, `SNOW`, `SAND`, `METAL`, `STONE`, `LADDER`, `ANVIL` |
 | `Block.soundTypeStone` и др. вне класса блока | `Block1710.soundTypeStone` и др. | ✓ |
 | `registerOre(name, stack)` (Ore Dictionary) | `registerOre` прослойки: записывает пару, теги строит генерация данных | ✓ раздел «Ore Dictionary» |
+| `hasKey`, `removeTag`, `setTag`, `getCompoundTag`, `setString`, `setInteger`, `getInteger`, `setDouble`, `setFloat`, `setBoolean` у NBT | `contains`, `remove`, `put`, `getCompound`, `putString`, `putInt`, `getInt`, `putDouble`, `putFloat`, `putBoolean` (`NBT1710`) | ✓ |
+| `e.entityLiving`, `e.entityPlayer`, `e.ammount` (`LivingHurtEvent`, `LivingAttackEvent`), `HarvestCheck.success`, `source.damageType` | `entity`, `amount`, `canHarvest`, `msgId` (`Events1710`) | ✓ |
+| `hurtResistantTime`, `maxHurtResistantTime`, `lastDamage` существа | `invulnerableTime`, `invulnerableDuration`, `lastHurt` (открыт преобразователем доступа) | ✓ |
+| `getEntitiesWithinAABB(world, clazz, aabb)`, `getBoundingBox(…)`, `Entity.boundingBox(range)`, `AABB.expand` / `offset` (ASJCore) | `getEntitiesOfClass`, `AABB`, `inflate` / `move` | ✓ наблюдатели 1.20.1 в выборку не попадают — в 1.7.10 их не было |
+| `Entity.playSoundAtEntity(name, volume, pitch)` (ASJCore) | `level().playSoundAtEntity(entity, …)` прослойки | ✓ |
+| `ASJUtilities.isServer` / `isClient` | выделенный сервер — сервер; иначе — логическая сторона потока (`EffectiveSide`) | ✓ потоки загрузки Forge считают себя клиентом: без проверки выделенного сервера код загрузки на сервере шёл бы клиентскими ветками |
 
 ## Предметы, сущности, эффекты
 
@@ -238,7 +247,16 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `EntityRegistry.registerModEntity` + яйцо | `EntityType` + `ForgeSpawnEggItem` | цвета яиц — авторские |
 | `IExtendedEntityProperties` | Capability Forge | SPEC, Р-11 |
 | `WorldSavedData` | `SavedData` | |
-| `Potion` / `PotionEffect` | `MobEffect` / `MobEffectInstance` | номера зелий из конфига удаляются |
+| `Potion` (зелье автора и `Potion.regeneration` и др.) | `alfheim.port.legacy.Potion1710` — наследник `MobEffect` с API 1.7.10; ванила — его поля с именами 1.7.10 | ✓ номер 1.7.10 остаётся: ванила — 1–23, зелья автора — номера по умолчанию из конфига, прочие эффекты реестра — свободные номера после регистрации (`Potion1710.assignIds`). `Potion.potionTypes[id]`, `MobEffect.id`, `PotionEffect.potionID`. Имя в реестре — из `setPotionName` без приставки, в snake_case: `alfheim.potion.whiteWine` → `alfheim:white_wine` |
+| `isReady` / `performEffect` / `applyAttributesModifiersToEntity` / `removeAttributesModifiersFromEntity` / `func_111184_a` / `func_111183_a` / `func_111186_k` | те же методы `Potion1710`; 1.20.1 зовёт их вместо `isDurationEffectTick` / `applyEffectTick` / `addAttributeModifiers` / `removeAttributeModifiers` / `addAttributeModifier` / `getAttributeModifierValue` / `getAttributeModifiers` | ✓ |
+| `setIconIndex`, `getStatusIconIndex` + `bindTexture(лист)` | `setIconIndex` как есть, лист — `Potion1710.iconSheet`; иконку рисует клиент (`alfheim.port.client.LegacyEffectIcons`) | ✓ клетка 18×18 листа 256×256 с высоты 198, как в 1.7.10; и в инвентаре, и в углу экрана |
+| `PotionEffect(id, duration, amplifier)`, `pe.duration = …`, `pe.amplifier = …` | `MobEffectInstance` (`PotionEffect` — псевдоним прослойки, `PotionEffect(id, …)`); поля открыты преобразователем доступа | ✓ как ASJCore в 1.7.10 |
+| `isPotionActive(id \| зелье)`, `getActivePotionEffect(id \| зелье)`, `addPotionEffect`, `removePotionEffect(id)`, `activePotionEffects` | `alfheim.port.legacy` (`Effects1710`): `hasEffect`, `getEffect`, `addEffect`, `removeEffect`, `activeEffects` | ✓ |
+| `activePotionEffects.iterator()` + `remove()` + `onFinishedPotionEffect(pe)` | `activeEffects.toList().forEach { removeEffect(it.effect) }` | ✓ `removeEffect` и убирает эффект, и снимает его действие |
+| `SharedMonsterAttributes.maxHealth` и др., `getEntityAttribute`, `applyModifier`, `AttributeModifier(uuid, name, amount, operation: Int)` | `Attributes.MAX_HEALTH` и др., `getAttribute`, `addPermanentModifier`, `AttributeModifier.Operation.fromValue` — в `Effects1710` | ✓ |
+| `entityData` (NBT существа Forge) | `persistentData` | ✓ правится на месте |
+| `entityId`, `uniqueID`, `getRNG()` (`rng`) | `id`, `uuid`, `random` (`RandomSource`) | ✓ `Collection.random(RandomSource)` (ASJCore) — выбор по генератору 1.20.1 |
+| `ridingEntity` | `vehicle` | ✓ |
 | `DamageSource` автора | тип урона (`damage_type` в датапаке) + `DamageSource` | с 1.19.4 типы урона — данные |
 
 ## Класс мода и жизненный цикл
@@ -288,6 +306,10 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `ChatComponentTranslation`, `IChatComponent.Serializer.func_150699_a` | `Component.translatable`, `Component.Serializer.fromJson` | ✓ |
 | `ICommandSender`, `addChatMessage` | `CommandSource`, `sendSystemMessage` | ✓ `ASJUtilities.say`; имя отправителя — `Nameable.name` или «Server» |
 | `EntityInteractEvent` `.entityPlayer`, `.target` | `PlayerInteractEvent.EntityInteract` `.entity`, `.target` | ✓ событие приходит для каждой руки: проверка предмета в главной руке повторяется, второй вызов ничего не меняет |
+| `LivingPotionEvent` ASJCore: `Add.Post`, `Change.Post`, `Remove.Post` | `MobEffectEvent.Added` (`oldEffectInstance != null` — изменение), `MobEffectEvent.Remove`, `MobEffectEvent.Expired` | ✓ Forge сообщает об изменении до того, как эффект обновлён: пакет об изменении уходит в конце тика (`server.execute`). У `Remove` свой `effect` — `MobEffect`, эффект с длительностью — `effectInstance` (может быть `null`) |
+| `LivingUpdateEvent`, `LivingSetAttackTargetEvent`, `EntityJoinWorldEvent` | `LivingEvent.LivingTickEvent`, `LivingChangeTargetEvent` (цель снимается в самом событии: `newTarget = null`), `EntityJoinLevelEvent` | ✓ |
+| `BlockEvent.PlaceEvent`, `MultiPlaceEvent` | `BlockEvent.EntityPlaceEvent`, `EntityMultiPlaceEvent` | ✓ |
+| `RenderBlockOverlayEvent`, `DrawBlockHighlightEvent` | `RenderBlockScreenEffectEvent`, `RenderHighlightEvent.Block` | ✓ |
 | объект без методов `@SubscribeEvent` на шине | как есть | ✓ шина Forge 1.20.1 принимает его молча — общий обработчик подписывается, даже если его методы ещё ждут свою КТ |
 
 ## Рендер
@@ -333,6 +355,9 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `ModItems.manaResource` 9, `ModItems.quartz` 5 | `BotaniaItems.dragonstone`, `BotaniaItems.elfQuartz` | ✓ |
 | `ModItems.petal` с metadata цвета | `BotaniaItems.getPetal(DyeColor)` | ✓ |
 | `ModItems.dye` (цветочная пыль) | краситель ванилы (`DyeItem.byColor`) | ✓ в Botania 1.20.1 цветочной пыли нет: лепестки дают краситель ванилы |
+| `ModItems.vial` 1 (колба из альвийского стекла) | `BotaniaItems.flask` | ✓ |
+| `PotionMod` (зелье Botania 1.7.10) | `alfheim.port.legacy.botania.PotionMod` поверх `Potion1710` | ✓ имя `botania.potion.<имя>`, как в r1.8-249 |
+| `Botania.proxy.lightningFX(world, Vector3, Vector3, …)` | `alfheim.port.legacy.botania.Botania.proxy.lightningFX` → `Proxy.INSTANCE.lightningFX(level, Vec3, Vec3, …)` | ✓ |
 
 ## Удалённые опции конфига
 
@@ -345,7 +370,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 |---|---|
 | `dimensionIDAlfheim`, `dimensionIDNiflheim`, `dimensionIDDomains`, `dimensionIDHelheim` | номера измерений: в 1.20.1 измерения задаются именем в датапаке мода (SPEC, Р-10) |
 | `niflheimBiomeIDs` | номера биомов: в 1.20.1 биомы — данные с именами |
-| `potionID*` (43 опции) | номера зелий: в 1.20.1 эффекты регистрируются по имени, номер выдаёт реестр, конфликтов номеров нет |
+| `potionID*` (43 опции) | номера зелий: в 1.20.1 эффекты регистрируются по имени, конфликтов номеров нет; зелья автора сохраняют номера по умолчанию (`Potion1710`) |
 | `flagIdSheepRainbow`, `floatingIslandSyncedDataInitLimit`, `oiiaId` | номера в DataWatcher; в 1.20.1 номера SynchedEntityData выдаёт игра |
 | `TC.botaniaAspects`, `TC.tinctura`, `TC.overrideFMCaps`, `TC.treeCrafting` | интеграция с Thaumcraft и Forbidden Magic выпала (SPEC, п. 7) |
 | `elementiumClusterMeta` (`core.cfg`) | metadata кластера Thaumcraft; интеграция выпала (SPEC, п. 7) |
