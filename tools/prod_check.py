@@ -14,7 +14,8 @@ GameTest-ы идут в среде разработки: там у методо�
 4. «Шампанское» снимает яд (`Potion1710` подменяет `isDurationEffectTick` и `applyEffectTick`);
 5. имя зелья на сервере — перевод ключа автора; предмет мода (`alfheim:lembas`) существует;
 6. существа мода: граната (`alfheim:thrown_item`) с бросившим хаском падает на другого хаска — урон
-   «огненный шар» и огонь; летящее зелье (`alfheim:thrown_potion`) появляется командой.
+   «огненный шар» и огонь; летящее зелье (`alfheim:thrown_potion`) появляется командой;
+7. раздатчик со склянкой мода бросает летящее зелье (поведение раздатчика регистрируется в `FMLCommonSetupEvent`).
 
 Команды идут по RCON (удалённая консоль сервера): скрипт сам включает его в `server.properties`
 (порт 25575, пароль `alfcheck`). Существа появляются в точке появления мира с меткой `alfcheck` и
@@ -192,6 +193,14 @@ def main():
         r('summon alfheim:thrown_potion ~9 ~6 ~ {NoGravity:1b,Tags:["alfcheck","alfcheck_potion"]}')
         potion = r("execute if entity @e[type=alfheim:thrown_potion,tag=alfcheck_potion]")
         check("Летящее зелье мода существует (alfheim:thrown_potion)", "count: 1" in potion, potion)
+
+        # 7. Раздатчик вверх со склянкой лечения, рядом — блок красного камня: через 4 тика склянка вылетает
+        r('setblock ~-1 ~ ~2 minecraft:dispenser[facing=up]{Items:[{Slot:0b,id:"alfheim:splash_potion",Count:1b,tag:{brewKey:"botania:healing"}}]}')
+        r("setblock ~-2 ~ ~2 minecraft:redstone_block")
+        time.sleep(0.5)
+        dispensed = r("execute if entity @e[type=alfheim:thrown_potion,tag=!alfcheck_potion]")
+        items = r("data get block ~-1 ~ ~2 Items")
+        check("Раздатчик бросает склянку мода", "count: 1" in dispensed and items.rstrip().endswith("[]"), f"{dispensed}; {items}")
 
         r("kill @e[tag=alfcheck]")
         r("stop")
