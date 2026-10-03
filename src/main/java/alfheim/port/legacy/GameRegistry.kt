@@ -1,6 +1,8 @@
 package alfheim.port.legacy
 
 import alfheim.port.registry.LegacyRegistration
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
@@ -30,6 +32,13 @@ object GameRegistry {
 		LegacyRegistration.item(item, name)
 		return item
 	}
+
+	/** Имя в реестре: `modid:name`, как `toString` у `UniqueIdentifier` 1.7.10 */
+	@JvmStatic
+	fun findUniqueIdentifierFor(block: Block): ResourceLocation = BuiltInRegistries.BLOCK.getKey(block)
+
+	@JvmStatic
+	fun findUniqueIdentifierFor(item: Item): ResourceLocation = BuiltInRegistries.ITEM.getKey(item)
 
 	/** Как 1.7.10 создавал предмет-блок: конструктор `(Block, аргументы…)`; у `BlockItem` 1.20.1 — ещё и свойства предмета */
 	fun itemFactory(itemClass: Class<out Item>, itemArgs: Array<out Any> = emptyArray()): (Block) -> Item = { block ->

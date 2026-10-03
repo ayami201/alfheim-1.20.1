@@ -37,6 +37,8 @@ fun LevelAccessor.setBlock(x: Int, y: Int, z: Int, state: BlockState, flags: Int
 
 fun LevelAccessor.setBlockToAir(x: Int, y: Int, z: Int) = setBlock(BlockPos(x, y, z), Blocks.AIR.defaultBlockState(), 3)
 
+fun Level.removeTileEntity(x: Int, y: Int, z: Int) = removeBlockEntity(BlockPos(x, y, z))
+
 fun Level.notifyBlocksOfNeighborChange(x: Int, y: Int, z: Int, block: Block) = updateNeighborsAt(BlockPos(x, y, z), block)
 
 fun LevelAccessor.scheduleBlockUpdate(x: Int, y: Int, z: Int, block: Block, delay: Int) = scheduleTick(BlockPos(x, y, z), block, delay)

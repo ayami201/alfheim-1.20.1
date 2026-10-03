@@ -140,7 +140,13 @@ LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe xvfb-run -n 99 \
 ```
 
 - **Снимок экрана:** `XAUTHORITY=$(ls /tmp/xvfb-run.*/Xauthority) DISPLAY=:99 import -window root shot.png`
-  (ImageMagick уже установлен). Без `XAUTHORITY` виртуальный экран отвечает «Authorization required».
+  (ImageMagick уже установлен). Без `XAUTHORITY` виртуальный экран отвечает «Authorization required». После
+  прошлых запусков папок `/tmp/xvfb-run.*` бывает несколько — нужна та, с которой экран `:99` открывается.
+- **Мышь:** та же XTEST — `fake_input(d, X.ButtonPress, 3)` и `X.ButtonRelease` (3 — правая кнопка): так держат
+  предмет «в использовании». Повернуть взгляд, не отпуская кнопку, может функция датапака по NBT предмета в руке
+  (`execute as @a[nbt={SelectedItem:{…}}] at @s run tp @s ~ ~ ~ facing …`): чат отпустил бы кнопку.
+- **Прицел и F3:** «Targeted Block» на экране F3 — свой луч на 20 блоков; рамка, стрелка и другие вещи «под
+  прицелом» берут луч игры — в пределах руки (4,5 блока в выживании).
 - **Клики и клавиши:** расширение XTEST через `python-xlib`:
   `pip install --target <папка> python-xlib`, затем `Xlib.ext.xtest.fake_input`.
   Окно игры — 854×480 в центре экрана 1280×720; координаты кнопок видны на снимке.

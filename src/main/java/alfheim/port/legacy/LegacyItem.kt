@@ -1,7 +1,11 @@
 package alfheim.port.legacy
 
 import alfheim.port.registry.LegacyIds
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.*
+import net.minecraft.world.item.context.UseOnContext
+import net.minecraft.world.level.Level
 
 /*
  * Предмет с сеттерами 1.7.10 (SPEC, Р-4; MAPPING.md, «Блоки и предметы»).
@@ -160,6 +164,22 @@ open class Item1710: Item(Properties()), LegacyItem {
 	open fun hasEffect(stack: ItemStack, pass: Int) = pass == 0 && stack.isEnchanted
 
 	override fun isFoil(stack: ItemStack) = hasEffect(stack, 0)
+
+	/**
+	 * `onItemUse` 1.7.10 — предмет применён к блоку: `true` — сработал (рука взмахивает), `false` — нет, и игра зовёт
+	 * [use], как `onItemRightClick` в 1.7.10. Сторона — номер 1.7.10, `hitX`–`hitZ` — точка на блоке (0–1)
+	 */
+	open fun onItemUse(stack: ItemStack, player: Player, world: Level, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float) = false
+
+	/** Применение без игрока (раздатчик и др.) в 1.7.10 шло не через `onItemUse` */
+	override fun useOn(ctx: UseOnContext): InteractionResult {
+		val player = ctx.player ?: return InteractionResult.PASS
+		val pos = ctx.clickedPos
+		val hit = ctx.clickLocation
+		return if (onItemUse(ctx.itemInHand, player, ctx.level, pos.x, pos.y, pos.z, ctx.clickedFace.get3DDataValue(), (hit.x - pos.x).toFloat(), (hit.y - pos.y).toFloat(), (hit.z - pos.z).toFloat()))
+			InteractionResult.sidedSuccess(ctx.level.isClientSide)
+		else InteractionResult.PASS
+	}
 
 	/** `getColorFromItemStack(stack, pass)` 1.7.10 — цвет прохода рендера; клиент красит им слой модели с тем же номером */
 	open fun getColorFromItemStack(stack: ItemStack, pass: Int) = 0xFFFFFF

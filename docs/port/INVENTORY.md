@@ -35,9 +35,9 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 222 | 19 082 | 150 | 71 | 1 |  |
+| КТ-2 | 223 | 19 303 | 148 | 74 | 1 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
-| КТ-4 | 177 | 24 578 | 177 |  |  |  |
+| КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
 | КТ-6 | 107 | 12 508 | 107 |  |  |  |
 | КТ-7 | 139 | 10 888 | 139 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **977** | **103** | **61** | **12** |
+| **всего** | **1153** | **124 643** | **974** | **106** | **61** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -274,7 +274,7 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `ColorOverrideHelper.kt` | 51 | КТ-4 | ждёт |  |
-| `IDoubleBoundItem.kt` | 221 | КТ-4 | ждёт |  |
+| `IDoubleBoundItem.kt` | 221 | КТ-2 | перенесено | → `src/main/java/alfheim/api/item/IDoubleBoundItem.kt`; КТ-4 → КТ-2: интерфейсы и рамку выделения использует только трикветр |
 | `Interfaces.kt` | 99 | КТ-4 | ждёт |  |
 | `IPriestColorOverride.kt` | 8 | КТ-4 | ждёт |  |
 | `ThrowableCollidingItem.kt` | 12 | КТ-2 | ждёт |  |
@@ -1449,7 +1449,7 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `AlfheimItems.kt` | 399 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/AlfheimItems.kt`; предметы, которых ещё нет, закомментированы с `// PORT: КТ-n` и включаются вместе со своей КТ |
-| `ItemArmilla.kt` | 182 | КТ-2 | ждёт |  |
+| `ItemArmilla.kt` | 182 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemArmilla.kt`; подсветка сферы — структура Patchouli через прокси Botania, как у секстанта Botania 1.20.1 |
 | `ItemAstrolabe.kt` | 273 | КТ-4 | ждёт |  |
 | `ItemCarver.kt` | 88 | КТ-3 | ждёт |  |
 | `ItemChalk.kt` | 52 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemChalk.kt`; цвет с амулета (`ColorOverrideHelper`) — КТ-4 |
@@ -1476,7 +1476,7 @@ python3 tools/check_inventory.py
 | `ItemPeacePipe.kt` | 77 | КТ-7 | ждёт |  |
 | `ItemSpawnEgg.kt` | 151 | КТ-5 | ждёт |  |
 | `ItemSplashPotion.kt` | 108 | КТ-2 | ждёт |  |
-| `ItemTriquetrum.kt` | 188 | КТ-2 | ждёт |  |
+| `ItemTriquetrum.kt` | 188 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemTriquetrum.kt` |
 | `ItemWarBanner.kt` | 113 | КТ-4 | ждёт |  |
 | `TheRodOfTheDebug.kt` | 80 | КТ-4 | ждёт |  |
 
@@ -2121,7 +2121,7 @@ python3 tools/check_inventory.py
 | `alfheim/textures/gui/categories/` | 7 | КТ-9 | ждёт | лексикон |
 | `alfheim/textures/gui/entries/` | 8 | КТ-9 | ждёт | лексикон |
 | `alfheim/textures/gui/spells/` | 85 | КТ-7 | ждёт | иконки заклинаний |
-| `alfheim/textures/items/` (только файлы папки) | 182 | КТ-2 | ждёт | текстуры предметов других КТ переносятся вместе с предметом; перенесено 5 — `wiltedLotus.png`, `Chalk.png`, `DeathSeed.png`, `HyperpolatedBucket.png`, `SoulHorn.png` |
+| `alfheim/textures/items/` (только файлы папки) | 182 | КТ-2 | ждёт | текстуры предметов других КТ переносятся вместе с предметом; перенесено 7 — `wiltedLotus.png`, `Chalk.png`, `DeathSeed.png`, `HyperpolatedBucket.png`, `SoulHorn.png`, `Triquetrum.png`, `Armilla.png` |
 | `alfheim/textures/items/coatofarms/` | 19 | КТ-4 | ждёт | `ItemCoatOfArms` |
 | `alfheim/textures/items/materials/` | 72 | КТ-2 | перенесено | материалы `ElvenItems` и `EventResource` (51), еда `ItemElvenFood` (`food/`, 19); `food/RedGrapes_new.png`, `food/WhiteGrapes_old.png` код автора не использует — остаются здесь |
 | `alfheim/textures/items/misc/` | 17 | КТ-2 | ждёт |  |
