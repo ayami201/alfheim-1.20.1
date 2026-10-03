@@ -40,6 +40,11 @@ object PortBlocksTest {
 			val loot = helper.level.server.lootData.getLootTable(block.lootTable)
 			if (loot === LootTable.EMPTY) problems += "${entry.id} has no loot table"
 		}
+		// двойная плита 1.7.10 — состояние своей плиты
+		for (alias in LegacyRegistration.aliases) {
+			val target = LegacyIds.block("$MODID:${alias.oldName}")
+			if (target?.id != LegacyRegistration.blocks[alias.block]?.id || target?.state != mapOf("type" to "double")) problems += "legacy_ids.json: $MODID:${alias.oldName} -> $target"
+		}
 		helper.assertTrue(problems.isEmpty(), problems.toString())
 		helper.succeed()
 	}
