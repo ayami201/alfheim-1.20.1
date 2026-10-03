@@ -47,8 +47,8 @@ object AlfheimRegisters {
 		Fuel1710.register()
 		// врезки автора во вкладки творческого режима (HOOKS.md)
 		CreativeTabHooks.register(bus)
-		// особые рецепты автора — свой сериализатор у каждого; обычные рецепты — данные
-		LegacySpecialRecipes.register()
+		// особые рецепты автора — свой сериализатор у каждого, ингредиент «предмет с metadata»; обычные рецепты — данные
+		LegacySpecialRecipes.register(bus)
 		// модели, лут, теги, рецепты и legacy_ids.json — генерация данных (./gradlew runData)
 		AlfheimData.register(bus)
 		// модели блоков и предметов, которые 1.7.10 выбирал в коде, цвета предметов и рендер существ — только на клиенте
