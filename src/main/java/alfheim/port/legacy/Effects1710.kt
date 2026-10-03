@@ -11,6 +11,9 @@ import java.util.UUID
  * эффекта автор меняет прямо (`pe.duration = 0`) — поля открыты `META-INF/accesstransformer.cfg`, как в ASJCore 1.7.10.
  */
 
+/** `PotionEffect` 1.7.10 */
+typealias PotionEffect = MobEffectInstance
+
 /** `PotionEffect(id, duration, amplifier, ambient)` 1.7.10; частицы видны, как у любого эффекта 1.7.10 */
 fun PotionEffect(id: Int, duration: Int, amplifier: Int = 0, ambient: Boolean = false) = PotionEffect(Potion1710.byId(id)!!, duration, amplifier, ambient)
 
@@ -37,8 +40,17 @@ fun LivingEntity.removePotionEffect(id: Int) {
 	Potion1710.byId(id)?.let { removeEffect(it) }
 }
 
-/** `getActivePotionEffects()` 1.7.10 — эффекты на существе */
-val LivingEntity.activePotionEffects: Collection<MobEffectInstance> get() = activeEffects
+/** `getActivePotionEffects()` 1.7.10 — эффекты на существе (живой список, как в 1.7.10) */
+val LivingEntity.activePotionEffects: MutableCollection<MobEffectInstance> get() = activeEffects
+
+/** `applyAttributesModifiersToEntity` 1.7.10 у любого эффекта; у [Potion1710] 1.20.1 сам зовёт метод автора */
+fun MobEffect.applyAttributesModifiersToEntity(entity: LivingEntity, attributes: AttributeMap, amplifier: Int) = addAttributeModifiers(entity, attributes, amplifier)
+
+/** `removeAttributesModifiersFromEntity` 1.7.10 у любого эффекта */
+fun MobEffect.removeAttributesModifiersFromEntity(entity: LivingEntity, attributes: AttributeMap, amplifier: Int) = removeAttributeModifiers(entity, attributes, amplifier)
+
+/** `Potion.isBadEffect` 1.7.10 у любого эффекта; у [Potion1710] — его метод */
+val MobEffect.isBadEffect get() = category == MobEffectCategory.HARMFUL
 
 /** `SharedMonsterAttributes` 1.7.10 */
 object SharedMonsterAttributes {

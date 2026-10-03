@@ -49,7 +49,7 @@ object NetworkService {
 		// PORT: пакеты механик регистрируются вместе с механикой, КТ — в конце строки (INVENTORY.md)
 		registerPacket(MessageContributor::class, Side.CLIENT)
 //		registerPacket(MessageDisguise::class, Side.CLIENT) // КТ-4
-//		registerPacket(MessageEffect::class, Side.CLIENT) // КТ-2
+		registerPacket(MessageEffect::class, Side.CLIENT)
 //		registerPacket(MessageFIBlock::class, Side.CLIENT) // КТ-6
 //		registerPacket(MessageGleipnirLeash::class, Side.CLIENT) // КТ-4
 //		registerPacket(MessageHotSpellC::class, Side.CLIENT) // КТ-7

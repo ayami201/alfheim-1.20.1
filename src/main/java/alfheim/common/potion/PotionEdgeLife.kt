@@ -1,8 +1,10 @@
 package alfheim.common.potion
 
+// PORT: импорты 1.20.1
 import alfheim.common.core.handler.AlfheimConfigHandler
-import cpw.mods.fml.common.eventhandler.*
+import alfheim.port.legacy.*
 import net.minecraftforge.event.entity.living.LivingDeathEvent
+import net.minecraftforge.eventbus.api.*
 import kotlin.math.max
 
 object PotionEdgeLife: PotionAlfheim(AlfheimConfigHandler.potionIDEdgeLife, "edgeLife", false, 0x600000) {

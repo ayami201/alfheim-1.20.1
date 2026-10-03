@@ -7,13 +7,17 @@ package alexsocol.asjlib
 import alfheim.port.legacy.*
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.util.Mth
+import net.minecraft.util.RandomSource
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.phys.AABB
 import net.minecraftforge.common.MinecraftForge
 import java.util.*
 import kotlin.math.*
@@ -45,6 +49,9 @@ inline fun <T> Iterable<T>.sumOf(selector: (T) -> Float): Float {
 }
 
 fun <T> Collection<T>.random(random: Random = Random()) = if (isEmpty()) null else elementAt(random.nextInt(size))
+
+// PORT: генератор сущности и мира 1.20.1 — RandomSource, а не java.util.Random
+fun <T> Collection<T>.random(random: RandomSource) = if (isEmpty()) null else elementAt(random.nextInt(size))
 
 /**
  * Makes a list of [Pair]s from original [Iterable] (zero to first, second to third, etc)
@@ -113,13 +120,37 @@ fun Float.mfloor() = Mth.floor(this)
 fun Double.mceil() = Mth.ceil(this)
 fun Float.mceil() = Mth.ceil(this)
 
+// PORT: AxisAlignedBB → AABB (expand → inflate, offset → move), World.getEntitiesWithinAABB → getEntitiesOfClass
+// (наблюдатели 1.20.1 в выборку не попадают — в 1.7.10 их не было)
+fun <E: Entity> getEntitiesWithinAABB(world: Level, clazz: Class<E>, aabb: AABB): ArrayList<E> = ArrayList(world.getEntitiesOfClass(clazz, aabb))
+
+fun getBoundingBox(x: Number, y: Number, z: Number) = getBoundingBox(x, y, z, x, y, z)
+
+fun getBoundingBox(x1: Number, y1: Number, z1: Number, x2: Number, y2: Number, z2: Number) = AABB(x1.D, y1.D, z1.D, x2.D, y2.D, z2.D)
+
+fun Entity.boundingBox(range: Number = 0) = getBoundingBox(x, y, z, x + bbWidth, y + bbHeight, z + bbWidth).offset(bbWidth / -2.0, 0.0, bbWidth / -2.0).expand(range)
+
+fun AABB.expand(d: Number) = expand(d, d, d)
+
+fun AABB.offset(d: Number) = offset(d, d, d)
+
+fun AABB.expand(x: Number, y: Number, z: Number) = inflate(x.D, y.D, z.D)!!
+
+fun AABB.offset(x: Number, y: Number, z: Number) = move(x.D, y.D, z.D)!!
+
+// PORT: worldObj → level()
+fun Entity.playSoundAtEntity(sound: String, volume: Float, duration: Float) {
+	level().playSoundAtEntity(this, sound, volume, duration)
+}
+
 /* PORT: по мере надобности — DataWatcher, AxisAlignedBB, ChunkCoordinates, Vec3, metadata, IInventory, OreDictionary
 fun DataWatcher.getWatchableObjectChunkCoordinates(id: Int): ChunkCoordinates {
 	return getWatchedObject(id).`object` as ChunkCoordinates? ?: ChunkCoordinates()
 }
 
-@Suppress("UNCHECKED_CAST") // FUCKING RAW GENERICS
-fun <E: Any> getEntitiesWithinAABB(world: World, clazz: Class<E>, aabb: AxisAlignedBB): ArrayList<E> = world.getEntitiesWithinAABB(clazz, aabb) as ArrayList<E>
+// PORT: перенесены выше
+//@Suppress("UNCHECKED_CAST") // FUCKING RAW GENERICS
+//fun <E: Any> getEntitiesWithinAABB(world: World, clazz: Class<E>, aabb: AxisAlignedBB): ArrayList<E> = world.getEntitiesWithinAABB(clazz, aabb) as ArrayList<E>
 
 @Suppress("UNCHECKED_CAST") // FUCKING RAW GENERICS
 fun <E: Any> selectEntitiesWithinAABB(world: World, clazz: Class<E>, aabb: AxisAlignedBB, selector: (E) -> Boolean): ArrayList<E> {
@@ -131,25 +162,25 @@ fun <E: Any> selectEntitiesWithinAABB(world: World, clazz: Class<E>, aabb: AxisA
 	return world.selectEntitiesWithinAABB(clazz, aabb, GenericLambdaEntitySelector(selector)) as ArrayList<E>
 }
 
-fun getBoundingBox(x: Number, y: Number, z: Number) = getBoundingBox(x, y, z, x, y, z)
-
-fun getBoundingBox(x1: Number, y1: Number, z1: Number, x2: Number, y2: Number, z2: Number) = AxisAlignedBB.getBoundingBox(x1.D, y1.D, z1.D, x2.D, y2.D, z2.D)!!
+//fun getBoundingBox(x: Number, y: Number, z: Number) = getBoundingBox(x, y, z, x, y, z)
+//
+//fun getBoundingBox(x1: Number, y1: Number, z1: Number, x2: Number, y2: Number, z2: Number) = AxisAlignedBB.getBoundingBox(x1.D, y1.D, z1.D, x2.D, y2.D, z2.D)!!
 
 fun TileEntity.boundingBox(range: Number = 0) = getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(range)
 
-fun Entity.boundingBox(range: Number = 0) = getBoundingBox(posX, posY, posZ, posX + width, posY + height, posZ + width).offset(width / -2.0, 0.0, width / -2.0).expand(range)
+//fun Entity.boundingBox(range: Number = 0) = getBoundingBox(posX, posY, posZ, posX + width, posY + height, posZ + width).offset(width / -2.0, 0.0, width / -2.0).expand(range)
+//
+//fun AxisAlignedBB.expand(d: Number) = expand(d, d, d)
+//
+//fun AxisAlignedBB.offset(d: Number) = offset(d, d, d)
+//
+//fun AxisAlignedBB.expand(x: Number, y: Number, z: Number) = expand(x.D, y.D, z.D)!!
+//
+//fun AxisAlignedBB.offset(x: Number, y: Number, z: Number) = offset(x.D, y.D, z.D)!!
 
-fun AxisAlignedBB.expand(d: Number) = expand(d, d, d)
-
-fun AxisAlignedBB.offset(d: Number) = offset(d, d, d)
-
-fun AxisAlignedBB.expand(x: Number, y: Number, z: Number) = expand(x.D, y.D, z.D)!!
-
-fun AxisAlignedBB.offset(x: Number, y: Number, z: Number) = offset(x.D, y.D, z.D)!!
-
-fun Entity.playSoundAtEntity(sound: String, volume: Float, duration: Float) {
-	worldObj.playSoundAtEntity(this, sound, volume, duration)
-}
+//fun Entity.playSoundAtEntity(sound: String, volume: Float, duration: Float) {
+//	worldObj.playSoundAtEntity(this, sound, volume, duration)
+//}
 
 fun Entity.setPosition(e: Entity, oX: Double = 0.0, oY: Double = 0.0, oZ: Double = 0.0) = setPosition(e.posX + oX, e.posY + oY, e.posZ + oZ)
 

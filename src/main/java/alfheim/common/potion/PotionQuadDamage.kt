@@ -1,14 +1,15 @@
 package alfheim.common.potion
 
-import alexsocol.asjlib.*
-import alfheim.api.event.SpellCastEvent
+// PORT: импорты 1.20.1; заклинания и CardinalSystem (КТ-7) закомментированы вместе со своими строками
 import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects
 import alfheim.common.core.handler.*
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.ai.attributes.BaseAttributeMap
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraftforge.event.entity.EntityStruckByLightningEvent
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
+import net.minecraft.world.entity.ai.attributes.AttributeMap as BaseAttributeMap
+//import alexsocol.asjlib.*
+//import alfheim.api.event.SpellCastEvent
+//import cpw.mods.fml.common.eventhandler.SubscribeEvent
+//import net.minecraft.entity.player.EntityPlayer
+//import net.minecraftforge.event.entity.EntityStruckByLightningEvent
 
 object PotionQuadDamage: PotionAlfheim(AlfheimConfigHandler.potionIDQuadDamage, "quadDamage", false, 0x22FFFF) {
 	
@@ -21,6 +22,8 @@ object PotionQuadDamage: PotionAlfheim(AlfheimConfigHandler.potionIDQuadDamage, 
 	
 	override fun performEffect(target: EntityLivingBase, amp: Int) = VisualEffectHandler.sendPacket(VisualEffects.QUADH, target)
 	
+	// PORT: КТ-7 — четверной урон даёт цепочка заклинаний (SpellCastEvent, CardinalSystem.quadStage) и удар молнии
+	/*
 	@SubscribeEvent
 	fun handleQuadDamageSequence(e: SpellCastEvent.Post) {
 		if (e.caster !is EntityPlayer) return
@@ -80,4 +83,5 @@ object PotionQuadDamage: PotionAlfheim(AlfheimConfigHandler.potionIDQuadDamage, 
 		player.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDQuadDamage, 600, 24))
 		e.isCanceled = true
 	}
+	*/
 }

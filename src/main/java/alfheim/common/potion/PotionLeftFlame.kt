@@ -1,18 +1,22 @@
 package alfheim.common.potion
 
+// PORT: импорты 1.20.1 (MAPPING.md); смерть в режиме MMO (КТ-7) закомментирована вместе со своими строками
 import alexsocol.asjlib.*
-import alfheim.client.render.world.VisualEffectHandlerClient
 import alfheim.common.core.handler.AlfheimConfigHandler
-import cpw.mods.fml.common.eventhandler.*
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.ai.attributes.BaseAttributeMap
-import net.minecraft.entity.player.*
-import net.minecraft.util.DamageSource
+import alfheim.port.legacy.*
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
+import net.minecraft.world.entity.ai.attributes.AttributeMap as BaseAttributeMap
 import net.minecraftforge.event.*
 import net.minecraftforge.event.entity.item.ItemTossEvent
 import net.minecraftforge.event.entity.living.LivingHealEvent
 import net.minecraftforge.event.entity.player.PlayerEvent.*
-import net.minecraftforge.event.world.BlockEvent.*
+import net.minecraftforge.event.level.BlockEvent.*
+import net.minecraftforge.event.level.BlockEvent.EntityMultiPlaceEvent as MultiPlaceEvent
+import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent as PlaceEvent
+import net.minecraftforge.eventbus.api.*
+//import alfheim.client.render.world.VisualEffectHandlerClient
+//import net.minecraft.entity.player.*
+//import net.minecraft.util.DamageSource
 
 object PotionLeftFlame: PotionAlfheim(AlfheimConfigHandler.potionIDLeftFlame, "leftFlame", false, 0) {
 	
@@ -20,8 +24,11 @@ object PotionLeftFlame: PotionAlfheim(AlfheimConfigHandler.potionIDLeftFlame, "l
 		eventForge()
 	}
 	
+	// PORT: КТ-7 — смерть игрока в режиме MMO: дух без права строить и дальности действия, таймер смерти
+	// (VisualEffectHandlerClient.onDeath, GUIDeathTimer), возрождение по окончании (onDeath)
 	override fun applyAttributesModifiersToEntity(target: EntityLivingBase?, attributes: BaseAttributeMap, ampl: Int) {
 		super.applyAttributesModifiersToEntity(target, attributes, ampl)
+		/*
 		if (AlfheimConfigHandler.enableMMO && target is EntityPlayer) {
 			target.capabilities.allowEdit = false
 			target.capabilities.allowFlying = true
@@ -31,10 +38,12 @@ object PotionLeftFlame: PotionAlfheim(AlfheimConfigHandler.potionIDLeftFlame, "l
 			if (target is EntityPlayerMP) target.theItemInWorldManager.blockReachDistance = 0.1
 			if (ASJUtilities.isClient) VisualEffectHandlerClient.onDeath(target)
 		}
+		*/
 	}
 	
 	override fun removeAttributesModifiersFromEntity(target: EntityLivingBase?, attributes: BaseAttributeMap, ampl: Int) {
 		super.removeAttributesModifiersFromEntity(target, attributes, ampl)
+		/*
 		if (AlfheimConfigHandler.enableMMO && target is EntityPlayer) {
 			target.capabilities.allowEdit = true
 			target.capabilities.allowFlying = false
@@ -50,6 +59,7 @@ object PotionLeftFlame: PotionAlfheim(AlfheimConfigHandler.potionIDLeftFlame, "l
 			it.dataWatcher.updateObject(6, 0f)
 			it.onDeath(DamageSource("Respawn"))
 		}
+		*/
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -86,7 +96,9 @@ object PotionLeftFlame: PotionAlfheim(AlfheimConfigHandler.potionIDLeftFlame, "l
 	fun onPlayerDrop(e: ItemTossEvent) {
 		if (check(e.player)) {
 			e.isCanceled = true
-			e.player.inventory.addItemStackToInventory(e.entityItem.entityItem.copy())
+			// PORT: entityItem.entityItem → entity.item, addItemStackToInventory → inventory.add
+			e.player.inventory.add(e.entity.item.copy())
+//			e.player.inventory.addItemStackToInventory(e.entityItem.entityItem.copy())
 		}
 	}
 	
@@ -106,4 +118,8 @@ object PotionLeftFlame: PotionAlfheim(AlfheimConfigHandler.potionIDLeftFlame, "l
 	}
 	
 	fun check(e: EntityLivingBase?) = AlfheimConfigHandler.enableMMO && e?.isPotionActive(this) == true
+	
+	// PORT: имена полей 1.7.10: игрок события установки блока — тот, кто ставит; отправитель команды — её источник
+	private val PlaceEvent.player get() = entity as? EntityLivingBase
+	private val CommandEvent.sender get() = parseResults.context.source.entity
 }

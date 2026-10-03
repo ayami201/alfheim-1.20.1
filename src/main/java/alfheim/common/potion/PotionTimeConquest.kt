@@ -1,16 +1,18 @@
 package alfheim.common.potion
 
-import alexsocol.asjlib.D
-import alfheim.api.AlfheimAPI
+// PORT: импорты 1.20.1; заклинания и их перезарядка (КТ-7) закомментированы вместе со своими строками
 import alfheim.common.core.handler.AlfheimConfigHandler
-import alfheim.common.core.handler.CardinalSystem.SpellCastingSystem
-import alfheim.common.network.*
-import alfheim.common.network.packet.Message2d
-import alfheim.common.spell.tech.SpellTimeConquest
-import cpw.mods.fml.common.eventhandler.*
-import net.minecraft.entity.player.EntityPlayerMP
+import alfheim.port.legacy.*
+import net.minecraft.server.level.ServerPlayer as EntityPlayerMP
 import net.minecraftforge.event.entity.living.LivingHurtEvent
-import kotlin.math.*
+import net.minecraftforge.eventbus.api.*
+//import alexsocol.asjlib.D
+//import alfheim.api.AlfheimAPI
+//import alfheim.common.core.handler.CardinalSystem.SpellCastingSystem
+//import alfheim.common.network.*
+//import alfheim.common.network.packet.Message2d
+//import alfheim.common.spell.tech.SpellTimeConquest
+//import kotlin.math.*
 
 object PotionTimeConquest: PotionAlfheim(AlfheimConfigHandler.potionIDTimeConquest, "timeConquest", false, 0x00FABB) {
 	
@@ -20,6 +22,8 @@ object PotionTimeConquest: PotionAlfheim(AlfheimConfigHandler.potionIDTimeConque
 		
 		val attacker = e.source.entity as? EntityPlayerMP ?: return
 		
+		// PORT: КТ-7 — перезарядка заклинаний (AlfheimAPI.spells, CardinalSystem.SpellCastingSystem, SpellTimeConquest)
+		/*
 		AlfheimAPI.spells.forEach { spell ->
 			if (spell === SpellTimeConquest || spell.hard) return@forEach
 			
@@ -32,5 +36,6 @@ object PotionTimeConquest: PotionAlfheim(AlfheimConfigHandler.potionIDTimeConque
 			SpellCastingSystem.setCoolDown(attacker, spell, new)
 			NetworkService.sendTo(Message2d(M2d.COOLDOWN, (spell.race.ordinal and 0xF shl 28 or (AlfheimAPI.getSpellID(spell) and 0xFFFFFFF)).D, new.D), attacker)
 		}
+		*/
 	}
 }

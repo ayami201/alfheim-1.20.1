@@ -1,11 +1,13 @@
 package alfheim.common.potion
 
+// PORT: импорты 1.20.1 (MAPPING.md); заклинание (КТ-7) закомментировано вместе со своей строкой
 import alexsocol.asjlib.*
 import alfheim.common.core.handler.AlfheimConfigHandler
-import alfheim.common.spell.nature.SpellBeastWithin
-import cpw.mods.fml.common.eventhandler.*
-import net.minecraft.entity.*
+import alfheim.port.legacy.*
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
 import net.minecraftforge.event.entity.living.LivingHurtEvent
+import net.minecraftforge.eventbus.api.*
+//import alfheim.common.spell.nature.SpellBeastWithin
 
 object PotionBeastWithin: PotionAlfheim(AlfheimConfigHandler.potionIDBeastWithin, "beast", false, 0xFF8000) {
 	
@@ -18,6 +20,7 @@ object PotionBeastWithin: PotionAlfheim(AlfheimConfigHandler.potionIDBeastWithin
 	fun onLivingHurt(e: LivingHurtEvent) {
 		val attacker = e.source.entity as? EntityLivingBase ?: return
 		if (!attacker.isPotionActive(this)) return
-		e.entityLiving.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDBleeding, SpellBeastWithin.damage.I, SpellBeastWithin.efficiency.I))
+		// PORT: КТ-7 — кровотечение силой заклинания «Зверь внутри» (SpellBeastWithin)
+//		e.entityLiving.addPotionEffect(PotionEffectU(AlfheimConfigHandler.potionIDBleeding, SpellBeastWithin.damage.I, SpellBeastWithin.efficiency.I))
 	}
 }

@@ -1,40 +1,45 @@
 package alfheim.common.potion
 
+// PORT: импорты 1.20.1 (MAPPING.md); заклинание, его урон и метка цели на экране (КТ-7) закомментированы вместе со
+// своими строками
 import alexsocol.asjlib.*
-import alexsocol.asjlib.render.ASJRenderHelper
 import alfheim.api.ModInfo
-import alfheim.api.lib.LibResourceLocations
 import alfheim.common.core.handler.AlfheimConfigHandler
-import alfheim.common.core.util.DamageSourceSpell
 import alfheim.common.network.*
 import alfheim.common.network.packet.Message2d
-import alfheim.common.spell.sound.SpellPriorityTarget
-import cpw.mods.fml.common.eventhandler.*
-import cpw.mods.fml.relauncher.*
-import net.minecraft.client.renderer.Tessellator
-import net.minecraft.client.renderer.entity.RenderManager
-import net.minecraft.entity.*
-import net.minecraft.entity.ai.attributes.BaseAttributeMap
-import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraftforge.client.event.RenderWorldLastEvent
-import net.minecraftforge.event.entity.EntityJoinWorldEvent
+import alfheim.port.legacy.*
+import net.minecraft.server.level.ServerPlayer as EntityPlayerMP
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
+import net.minecraft.world.entity.ai.attributes.AttributeMap as BaseAttributeMap
+import net.minecraftforge.event.entity.EntityJoinLevelEvent as EntityJoinWorldEvent
 import net.minecraftforge.event.entity.living.LivingHurtEvent
-import org.lwjgl.opengl.GL11.*
-import org.lwjgl.opengl.GL12
+import net.minecraftforge.eventbus.api.*
 import java.util.*
+//import alexsocol.asjlib.render.ASJRenderHelper
+//import alfheim.api.lib.LibResourceLocations
+//import alfheim.common.core.util.DamageSourceSpell
+//import alfheim.common.spell.sound.SpellPriorityTarget
+//import cpw.mods.fml.relauncher.*
+//import net.minecraft.client.renderer.Tessellator
+//import net.minecraft.client.renderer.entity.RenderManager
+//import net.minecraft.entity.*
+//import net.minecraftforge.client.event.RenderWorldLastEvent
+//import org.lwjgl.opengl.GL11.*
+//import org.lwjgl.opengl.GL12
 
 object PotionPriorityTarget: PotionAlfheim(AlfheimConfigHandler.potionIDPriorityTarget, "priorityTarget", false, 0x004DFF) {
 	
 	const val TAG_PT = "${ModInfo.MODID}.PriorityTarget"
 	
-	fun hasPriorityTarget(target: EntityLivingBase) = target.entityData.hasKey(TAG_PT)
+	// PORT: entityData (NBT существа Forge 1.7.10) → persistentData, uniqueID → uuid
+	fun hasPriorityTarget(target: EntityLivingBase) = target.persistentData.hasKey(TAG_PT)
 	
-	fun getPriorityTarget(target: EntityLivingBase) = target.entityData.getString(TAG_PT)!!
+	fun getPriorityTarget(target: EntityLivingBase) = target.persistentData.getString(TAG_PT)!!
 	
 	fun applyTo(target: EntityLivingBase, pm: EntityLivingBase, duration: Int) {
 		pm.addPotionEffect(PotionEffectU(id, duration))
-		val uuid = target.uniqueID
-		pm.entityData.setString(TAG_PT, uuid.toString())
+		val uuid = target.uuid
+		pm.persistentData.setString(TAG_PT, uuid.toString())
 		
 		if (pm is EntityPlayerMP)
 			NetworkService.sendTo(Message2d(M2d.PRIOTGT, Double.fromBits(uuid.mostSignificantBits), Double.fromBits(uuid.leastSignificantBits)), pm)
@@ -42,7 +47,7 @@ object PotionPriorityTarget: PotionAlfheim(AlfheimConfigHandler.potionIDPriority
 	
 	override fun removeAttributesModifiersFromEntity(target: EntityLivingBase, map: BaseAttributeMap?, mod: Int) {
 		super.removeAttributesModifiersFromEntity(target, map, mod)
-		target.entityData.removeTag(TAG_PT)
+		target.persistentData.removeTag(TAG_PT)
 		
 		if (target is EntityPlayerMP)
 			NetworkService.sendTo(Message2d(M2d.PRIOTGT, 0.0, 0.0), target)
@@ -62,6 +67,8 @@ object PotionPriorityTarget: PotionAlfheim(AlfheimConfigHandler.potionIDPriority
 		val attacker = e.source.entity as? EntityLivingBase ?: return
 		if (!hasPriorityTarget(attacker)) return
 		
+		// PORT: КТ-7 — урон по цели и мимо неё силой заклинания «Приоритетная цель» (SpellPriorityTarget, DamageSourceSpell)
+		/*
 		val target = getPriorityTarget(attacker)
 		val victim = e.entityLiving.uniqueID.toString()
 		
@@ -76,8 +83,11 @@ object PotionPriorityTarget: PotionAlfheim(AlfheimConfigHandler.potionIDPriority
 			attacker.attackEntityFrom(DamageSourceSpell.notPriorityTarget, e.ammount * SpellPriorityTarget.efficiency.F)
 			attacker.hurtResistantTime = prev
 		}
+		*/
 	}
 	
+	// PORT: КТ-7 — метка цели на экране (рендер 1.20.1: RenderLevelStageEvent, PoseStack)
+	/*
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	fun renderTargetMarker(e: RenderWorldLastEvent) {
@@ -118,4 +128,5 @@ object PotionPriorityTarget: PotionAlfheim(AlfheimConfigHandler.potionIDPriority
 		glEnable(GL_DEPTH_TEST)
 		glPopMatrix()
 	}
+	*/
 }

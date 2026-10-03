@@ -1,8 +1,11 @@
 package alfheim.common.potion
 
+// PORT: импорты 1.20.1 (MAPPING.md); SharedMonsterAttributes и сеттеры атрибутов 1.7.10 — alfheim.port.legacy
 import alfheim.common.core.handler.AlfheimConfigHandler
-import net.minecraft.entity.*
-import net.minecraft.entity.ai.attributes.*
+import alfheim.port.legacy.*
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
+import net.minecraft.world.entity.ai.attributes.*
+import net.minecraft.world.entity.ai.attributes.AttributeMap as BaseAttributeMap
 import java.util.*
 
 object PotionBerserk: PotionAlfheim(AlfheimConfigHandler.potionIDBerserk, "berserk", false, 0xAA1111) {

@@ -1,10 +1,11 @@
 package alfheim.common.potion
 
+// PORT: импорты 1.20.1; PotionMod Botania 1.7.10 — alfheim.port.legacy.botania.PotionMod
 import alexsocol.asjlib.*
 import alfheim.api.lib.LibResourceLocations
-import cpw.mods.fml.relauncher.*
-import org.lwjgl.opengl.GL11.*
-import vazkii.botania.common.brew.potion.PotionMod
+import alfheim.port.legacy.botania.PotionMod
+//import cpw.mods.fml.relauncher.*
+//import org.lwjgl.opengl.GL11.*
 
 open class PotionAlfheim(id: Int, name: String, badEffect: Boolean, color: Int): PotionMod(id, name, badEffect, color, nextIconID) {
 	
@@ -14,8 +15,12 @@ open class PotionAlfheim(id: Int, name: String, badEffect: Boolean, color: Int):
 		setPotionName("alfheim.potion.$name")
 		
 		if (ASJUtilities.isClient) LibResourceLocations.potions(iconSet) // just load
+		// PORT: лист иконок, из которого getStatusIconIndex ниже рисовал иконку, — его рисует клиент
+		// (alfheim.port.client.LegacyEffectIcons)
+		iconSheet = LibResourceLocations.potions(iconSet)
 	}
 	
+	/*
 	@SideOnly(Side.CLIENT)
 	override fun getStatusIconIndex(): Int {
 		glEnable(GL_BLEND)
@@ -23,6 +28,7 @@ open class PotionAlfheim(id: Int, name: String, badEffect: Boolean, color: Int):
 		mc.renderEngine.bindTexture(LibResourceLocations.potions(iconSet))
 		return id
 	}
+	*/
 	
 	companion object {
 		

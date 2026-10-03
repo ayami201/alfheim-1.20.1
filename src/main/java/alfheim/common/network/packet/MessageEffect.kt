@@ -1,9 +1,12 @@
 package alfheim.common.network.packet
 
+// PORT: импорты 1.20.1; зелья 1.7.10 (Potion, PotionEffect) — alfheim.port.legacy
 import alexsocol.asjlib.*
 import alfheim.api.network.AlfheimPacket
-import net.minecraft.entity.*
-import net.minecraft.potion.*
+import alfheim.port.legacy.*
+import alfheim.port.legacy.Potion1710 as Potion
+import net.minecraft.world.entity.*
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
 
 /**
  * @param state 1 - add, 0 - update, -1 - remove
@@ -52,4 +55,12 @@ class MessageEffect(var entity: Int, var id: Int, var dur: Int, var amp: Int, va
 			}
 		}
 	}
+	
+	// PORT: имена 1.7.10
+	private val net.minecraft.client.Minecraft.theWorld get() = level!!
+	private fun net.minecraft.world.level.Level.getEntityByID(id: Int) = getEntity(id)
+	private fun EntityLivingBase.getAttributeMap() = attributes
 }
+
+// PORT: имя 1.7.10; вне класса — его зовёт и второй конструктор
+private val Entity.entityId get() = id

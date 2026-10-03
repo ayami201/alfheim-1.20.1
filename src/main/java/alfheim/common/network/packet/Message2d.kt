@@ -4,6 +4,7 @@ package alfheim.common.network.packet
 //import alexsocol.asjlib.*
 //import alfheim.api.AlfheimAPI
 //import alfheim.api.entity.*
+import alexsocol.asjlib.mc
 import alfheim.api.network.AlfheimPacket
 //import alfheim.api.spell.SpellBase
 //import alfheim.client.core.handler.CardinalSystemClient
@@ -11,21 +12,30 @@ import alfheim.api.network.AlfheimPacket
 //import alfheim.common.core.helper.flight
 //import alfheim.common.entity.spell.EntitySpellFireball
 import alfheim.common.network.M2d
-//import alfheim.common.potion.PotionPriorityTarget.TAG_PT
+import alfheim.port.legacy.*
+import alfheim.common.potion.PotionPriorityTarget.TAG_PT
 //import net.minecraft.entity.EntityLivingBase
-//import java.util.*
+import java.util.*
 
 class Message2d(ty: M2d, var data1: Double, var data2: Double, var type: Int = ty.ordinal): AlfheimPacket<Message2d>() {
 	
 	override fun handleClient() {
 		when (M2d.entries[type]) {
-			// PORT: КТ-7 — расы, заклинания, отряды, режимы ESM и MMO; КТ-2 — PotionPriorityTarget
+			// PORT: КТ-7 — расы, заклинания, отряды, режимы ESM и MMO
 			M2d.ATTRIBUTE    -> Unit
 			M2d.COOLDOWN     -> Unit
 			M2d.PARTYID      -> Unit
 			M2d.MODES        -> Unit
 			M2d.FIREBALLSYNC -> Unit
-			M2d.PRIOTGT      -> Unit
+			M2d.PRIOTGT      -> {
+				// PORT: entityData (NBT существа Forge 1.7.10) → persistentData
+				val nbt = mc.player!!.persistentData
+				if (data1 == 0.0 && data2 == 0.0)
+					return nbt.removeTag(TAG_PT)
+				
+				val uuid = UUID(data1.toRawBits(), data2.toRawBits())
+				nbt.setString(TAG_PT, uuid.toString())
+			}
 //			M2d.ATTRIBUTE -> {
 //				when (data1.I) {
 //					0 -> mc.thePlayer.raceID = data2.I

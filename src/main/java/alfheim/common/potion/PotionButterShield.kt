@@ -1,15 +1,16 @@
 package alfheim.common.potion
 
+// PORT: импорты 1.20.1; рендер бабочек вокруг существа (КТ-7) закомментирован вместе со своими строками
 import alexsocol.asjlib.*
-import alexsocol.asjlib.render.ASJRenderHelper
-import alexsocol.patcher.event.RenderEntityPostEvent
-import alfheim.api.lib.LibResourceLocations
 import alfheim.common.core.handler.AlfheimConfigHandler
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import net.minecraft.entity.EntityLivingBase
-import org.lwjgl.opengl.GL11.*
 import java.util.*
-import kotlin.math.max
+//import alexsocol.asjlib.render.ASJRenderHelper
+//import alexsocol.patcher.event.RenderEntityPostEvent
+//import alfheim.api.lib.LibResourceLocations
+//import cpw.mods.fml.common.eventhandler.SubscribeEvent
+//import net.minecraft.entity.EntityLivingBase
+//import org.lwjgl.opengl.GL11.*
+//import kotlin.math.max
 
 object PotionButterShield: PotionAlfheim(AlfheimConfigHandler.potionIDButterShield, "butterShield", false, 0x00FFFF) {
 	
@@ -19,6 +20,8 @@ object PotionButterShield: PotionAlfheim(AlfheimConfigHandler.potionIDButterShie
 	
 	val rand = Random()
 	
+	// PORT: КТ-7 — бабочки вокруг существа (событие рендера ASJCore → RenderLivingEvent.Post, PoseStack)
+	/*
 	@SubscribeEvent
 	fun onEntityPostRender(e: RenderEntityPostEvent) {
 		if (!AlfheimConfigHandler.enableMMO) return
@@ -53,4 +56,5 @@ object PotionButterShield: PotionAlfheim(AlfheimConfigHandler.potionIDButterShie
 		
 		glPopMatrix()
 	}
+	*/
 }

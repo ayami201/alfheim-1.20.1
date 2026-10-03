@@ -40,6 +40,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world.Nameable
 import net.minecraftforge.fml.LogicalSide
+import net.minecraftforge.fml.loading.FMLEnvironment
 import net.minecraftforge.fml.util.thread.EffectiveSide
 import org.apache.logging.log4j.*
 import java.util.*
@@ -910,14 +911,16 @@ object ASJUtilities {
 	}
 	*/
 	
-	// PORT: сторона определяется по потоку, как в 1.7.10: FMLCommonHandler.effectiveSide → EffectiveSide
+	// PORT: сторона определяется по потоку, как в 1.7.10: FMLCommonHandler.effectiveSide → EffectiveSide. Потоки загрузки
+	// мода Forge 1.20.1 стороны не знают, и EffectiveSide называет их клиентом; в 1.7.10 выделенный сервер грузил мод в
+	// потоке сервера — там сторона всегда серверная
 	@JvmStatic
 	val isServer: Boolean
-		get() = EffectiveSide.get() == LogicalSide.SERVER
+		get() = FMLEnvironment.dist.isDedicatedServer || EffectiveSide.get() == LogicalSide.SERVER
 	
 	@JvmStatic
 	val isClient
-		get() = EffectiveSide.get() == LogicalSide.CLIENT
+		get() = !isServer
 	
 	/* PORT: по мере надобности — NBT
 	@JvmStatic

@@ -1,15 +1,17 @@
 package alfheim.common.potion
 
-import alexsocol.asjlib.*
-import alfheim.api.entity.IMuspelheimEntity
-import alfheim.common.block.*
+// PORT: импорты 1.20.1; защита существ Муспельхейма (КТ-5), урон (КТ-7) и огонь на экране (красное пламя, КТ-2)
+// закомментированы вместе со своими строками
 import alfheim.common.core.handler.AlfheimConfigHandler
-import alfheim.common.core.util.DamageSourceSpell
-import cpw.mods.fml.relauncher.*
-import net.minecraft.client.renderer.*
-import net.minecraft.client.renderer.texture.TextureMap
-import net.minecraft.entity.EntityLivingBase
-import org.lwjgl.opengl.GL11.*
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
+//import alexsocol.asjlib.*
+//import alfheim.api.entity.IMuspelheimEntity
+//import alfheim.common.block.*
+//import alfheim.common.core.util.DamageSourceSpell
+//import cpw.mods.fml.relauncher.*
+//import net.minecraft.client.renderer.*
+//import net.minecraft.client.renderer.texture.TextureMap
+//import org.lwjgl.opengl.GL11.*
 
 object PotionSoulburn: PotionAlfheim(AlfheimConfigHandler.potionIDSoulburn, "soulburn", true, 0xCC4400) {
 	
@@ -20,15 +22,21 @@ object PotionSoulburn: PotionAlfheim(AlfheimConfigHandler.potionIDSoulburn, "sou
 		return dur % 20 == 0
 	}
 	
+	// PORT: КТ-5 — защита существ Муспельхейма (IMuspelheimEntity), КТ-7 — урон (DamageSourceSpell.soulburn)
 	override fun performEffect(living: EntityLivingBase, amp: Int) {
+		/*
 		if (IMuspelheimEntity.checkProtection(living, time)) {
 			living.getActivePotionEffect(id)?.duration = 0
 			return
 		}
 		
 		living.attackEntityFrom(DamageSourceSpell.soulburn, (amp + 1).F)
+		*/
 	}
 	
+	// PORT: КТ-2 — огонь на экране — иконка красного пламени (AlfheimBlocks.redFlame), врезка H-119; рендер 1.20.1 —
+	// RenderBlockScreenEffectEvent, PoseStack
+	/*
 	@SideOnly(Side.CLIENT)
 	fun renderFireInFirstPerson() {
 		val tessellator = Tessellator.instance
@@ -64,4 +72,5 @@ object PotionSoulburn: PotionAlfheim(AlfheimConfigHandler.potionIDSoulburn, "sou
 		glColor4f(1f, 1f, 1f, 1f)
 		glDisable(GL_BLEND)
 	}
+	*/
 }

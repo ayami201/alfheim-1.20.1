@@ -1,11 +1,14 @@
 package alfheim.common.potion
 
+// PORT: импорты 1.20.1 (MAPPING.md); поля событий и существ 1.7.10 — alfheim.port.legacy
 import alexsocol.asjlib.*
 import alfheim.common.core.handler.*
-import cpw.mods.fml.common.eventhandler.*
-import net.minecraft.entity.*
-import net.minecraft.entity.ai.attributes.*
+import alfheim.port.legacy.*
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
+import net.minecraft.world.entity.ai.attributes.*
+import net.minecraft.world.entity.ai.attributes.AttributeMap as BaseAttributeMap
 import net.minecraftforge.event.entity.living.*
+import net.minecraftforge.eventbus.api.*
 import kotlin.math.min
 
 object PotionBeer: PotionAlfheim(AlfheimConfigHandler.potionIDBeer, "beer", false, 0xFF8000) {

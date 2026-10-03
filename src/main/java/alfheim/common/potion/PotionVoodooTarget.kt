@@ -1,23 +1,26 @@
 package alfheim.common.potion
 
+// PORT: импорты 1.20.1 (MAPPING.md)
 import alexsocol.asjlib.PotionEffectU
 import alfheim.api.ModInfo
 import alfheim.common.core.handler.AlfheimConfigHandler
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.ai.attributes.BaseAttributeMap
-import net.minecraft.entity.player.EntityPlayer
+import alfheim.port.legacy.*
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
+import net.minecraft.world.entity.ai.attributes.AttributeMap as BaseAttributeMap
+import net.minecraft.world.entity.player.Player as EntityPlayer
 
 object PotionVoodooTarget: PotionAlfheim(AlfheimConfigHandler.potionIDVoodooTarget, "voodooTarget", true, 0xD2B10F) {
 	
 	const val TAG_VOODOO_TARGET = "${ModInfo.MODID}.VoodooTarget"
 	
-	fun isTarget(target: EntityLivingBase) = target.entityData.hasKey(TAG_VOODOO_TARGET)
+	// PORT: entityData (NBT существа Forge 1.7.10) → persistentData, commandSenderName игрока → gameProfile.name
+	fun isTarget(target: EntityLivingBase) = target.persistentData.hasKey(TAG_VOODOO_TARGET)
 	
-	fun getMage(target: EntityLivingBase) = target.entityData.getString(TAG_VOODOO_TARGET)!!
+	fun getMage(target: EntityLivingBase) = target.persistentData.getString(TAG_VOODOO_TARGET)!!
 	
 	fun applyTo(target: EntityLivingBase, caster: EntityPlayer, duration: Int) {
 		target.addPotionEffect(PotionEffectU(id, duration))
-		target.entityData.setString(TAG_VOODOO_TARGET, caster.commandSenderName)
+		target.persistentData.setString(TAG_VOODOO_TARGET, caster.gameProfile.name)
 	}
 	
 	override fun isReady(time: Int, ampl: Int) = true
@@ -28,6 +31,6 @@ object PotionVoodooTarget: PotionAlfheim(AlfheimConfigHandler.potionIDVoodooTarg
 	
 	override fun removeAttributesModifiersFromEntity(target: EntityLivingBase, map: BaseAttributeMap?, mod: Int) {
 		super.removeAttributesModifiersFromEntity(target, map, mod)
-		target.entityData.removeTag(TAG_VOODOO_TARGET)
+		target.persistentData.removeTag(TAG_VOODOO_TARGET)
 	}
 }

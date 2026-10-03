@@ -78,7 +78,7 @@ object AlfheimItems {
 //	val elfIcePendant: Item // PORT: КТ-4
 //	val elvenChakram: Item // PORT: КТ-4
 //	val elvenDisguise: Item // PORT: КТ-4
-//	val elvenFood: Item // PORT: КТ-2
+	val elvenFood: Array<Item>
 	val elvenResource: Array<Item>
 //	val elvoriumBoots: Item // PORT: КТ-4
 //	val elvoriumChestplate: Item // PORT: КТ-4
@@ -231,7 +231,7 @@ object AlfheimItems {
 //		elfIcePendant = ItemPendant("IcePendant") // PORT: КТ-4
 //		elvenChakram = ItemElvenChakram() // PORT: КТ-4
 //		elvenDisguise = ItemElvenDisguise() // PORT: КТ-4
-//		elvenFood = ItemElvenFood() // PORT: КТ-2
+		elvenFood = Array(ElvenFoodMetas.entries.size) { ItemElvenFood(it) }
 		elvenResource = Array(ElvenResourcesMetas.entries.size) { ItemElvenResource(it) }
 //		elvoriumHelmet = ItemElvoriumHelmet() // PORT: КТ-4
 //		elvoriumHelmetRevealing = if (Botania.thaumcraftLoaded) ItemElvoriumHelmetRevealing() else null // PORT: выпало — Thaumcraft отсутствует на 1.20.1 (SPEC, п. 7)

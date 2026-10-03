@@ -1,16 +1,22 @@
 package alfheim.common.potion
 
+// PORT: импорты 1.20.1 (MAPPING.md); защита существ Нифльхейма (КТ-5), заклинания и их урон (КТ-7) закомментированы
+// вместе со своими строками
 import alexsocol.asjlib.getActivePotionEffect
-import alfheim.api.entity.INiflheimEntity
-import alfheim.api.event.SpellCastEvent
 import alfheim.common.core.handler.AlfheimConfigHandler
-import alfheim.common.core.util.DamageSourceSpell
-import cpw.mods.fml.common.eventhandler.*
-import net.minecraft.entity.*
-import net.minecraft.entity.ai.attributes.*
-import net.minecraft.entity.player.EntityPlayer
+import alfheim.port.legacy.*
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
+import net.minecraft.world.entity.ai.attributes.*
+import net.minecraft.world.entity.ai.attributes.AttributeMap as BaseAttributeMap
+import net.minecraft.world.entity.player.Player as EntityPlayer
+import net.minecraft.world.phys.Vec3
 import net.minecraftforge.event.entity.living.*
+import net.minecraftforge.eventbus.api.*
 import java.util.*
+//import alfheim.api.entity.INiflheimEntity
+//import alfheim.api.event.SpellCastEvent
+//import alfheim.common.core.util.DamageSourceSpell
 
 /**
  * @author ExtraMeteorP, CKATEPTb
@@ -52,10 +58,12 @@ object PotionEternity: PotionAlfheim(AlfheimConfigHandler.potionIDEternity, "ete
 			if (target.isSneaking) target.getActivePotionEffect(id)?.duration = 0
 			
 			if (time >= 115) return
-		} else if (amp and IRREMOVABLE == 0 && INiflheimEntity.checkProtection(target, time)) {
+		}
+		// PORT: КТ-5 — защита существ Нифльхейма (INiflheimEntity)
+		/* else if (amp and IRREMOVABLE == 0 && INiflheimEntity.checkProtection(target, time)) {
 			target.getActivePotionEffect(id)?.duration = 0
 			return
-		}
+		}*/
 		
 		val stun = amp == 0 || amp and STUN != 0
 		val attack = amp and ATTACK != 0 && time % 20 == 0
@@ -71,8 +79,9 @@ object PotionEternity: PotionAlfheim(AlfheimConfigHandler.potionIDEternity, "ete
 			}
 		}
 		
-		if (attack && !INiflheimEntity.checkProtection(target, 300))
-			target.attackEntityFrom(DamageSourceSpell.nifleice, 1f)
+		// PORT: КТ-5 — защита существ Нифльхейма (INiflheimEntity), КТ-7 — урон льдом (DamageSourceSpell.nifleice)
+//		if (attack && !INiflheimEntity.checkProtection(target, 300))
+//			target.attackEntityFrom(DamageSourceSpell.nifleice, 1f)
 	}
 	
 	@SubscribeEvent
@@ -88,11 +97,14 @@ object PotionEternity: PotionAlfheim(AlfheimConfigHandler.potionIDEternity, "ete
 		if (pe.amplifier and STUN != 0) e.isCanceled = true
 	}
 	
+	// PORT: КТ-7 — запрет заклинаний (SpellCastEvent)
+	/*
 	@SubscribeEvent
 	fun disableCast(e: SpellCastEvent.Pre) {
 		val pe = e.caster.getActivePotionEffect(this) ?: return
 		if (pe.amplifier and DISABLE != 0) e.isCanceled = true
 	}
+	*/
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	fun disableAttacks(e: LivingAttackEvent) {
@@ -100,4 +112,29 @@ object PotionEternity: PotionAlfheim(AlfheimConfigHandler.potionIDEternity, "ete
 		val pe = attacker.getActivePotionEffect(this) ?: return
 		if (pe.amplifier and DISABLE != 0) e.isCanceled = true
 	}
+	
+	// PORT: имена полей 1.7.10; скорость существа 1.20.1 — вектор deltaMovement
+	private val Entity.isSneaking get() = isShiftKeyDown
+	private val EntityPlayer.capabilities get() = abilities
+	private var net.minecraft.world.entity.player.Abilities.isFlying: Boolean
+		get() = flying
+		set(value) {
+			flying = value
+		}
+	private val Entity.onGround get() = onGround()
+	private var Entity.motionX: Double
+		get() = deltaMovement.x
+		set(value) {
+			deltaMovement = Vec3(value, deltaMovement.y, deltaMovement.z)
+		}
+	private var Entity.motionY: Double
+		get() = deltaMovement.y
+		set(value) {
+			deltaMovement = Vec3(deltaMovement.x, value, deltaMovement.z)
+		}
+	private var Entity.motionZ: Double
+		get() = deltaMovement.z
+		set(value) {
+			deltaMovement = Vec3(deltaMovement.x, deltaMovement.y, value)
+		}
 }
