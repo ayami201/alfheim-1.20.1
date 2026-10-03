@@ -158,3 +158,28 @@ LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe xvfb-run -n 99 \
   который был пустым, до него не доходит. Помогает уйти телепортом за дальность прорисовки и вернуться
   (`/tp @s 900 200 900`, затем обратно): чанки приходят заново, уже со светом.
 - `run/` в git не попадает: мир, `options.txt` и снимки остаются только в облаке.
+
+## 7. Сервер Forge, как у игроков
+
+Проверено в сессии КТ-2 (03.10.2026). GameTest-ы идут в среде разработки, где у методов игры официальные имена;
+у игроков — имена SRG, и мод к ним попадает переименованным. Такой сервер в облаке поднимается за пару минут,
+проверки на нём — `tools/prod_check.py` (CHECKS.md, C-010).
+
+```bash
+mkdir prodserver && cd prodserver
+curl -O https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.4.23/forge-1.20.1-47.4.23-installer.jar
+/usr/lib/jvm/java-17-openjdk-amd64/bin/java -jar forge-1.20.1-47.4.23-installer.jar --installServer .
+echo "eula=true" > eula.txt          # согласие с EULA Mojang для тестового сервера
+mkdir mods                           # jar мода из build/libs/ и зависимости — см. ниже
+cd .. && PATH=/usr/lib/jvm/java-17-openjdk-amd64/bin:$PATH python3 tools/prod_check.py --dir prodserver -- ./run.sh nogui
+```
+
+- **Зависимости — только файлы для игроков** (CurseForge, Modrinth). В облаке оба сайта закрыты (403): файлы
+  присылает владелец, прикрепив их к сообщению. Botania из Maven (`maven.blamejared.com`, кэш Gradle) — сборка
+  с именами Mojang для среды разработки: на настоящем сервере она падает (`NoSuchFieldError: SOUND_EVENT`, миксин
+  `EntityMixin` не находит `getType`). Patchouli и Curios из Maven переименованы, но это не те же файлы, что у
+  игроков (другие хеши). Kotlin for Forge — `kotlinforforge-4.12.0-all.jar` из кэша Gradle.
+- Файлы, с которыми проверка прошла 03.10.2026 (SHA-1): Botania 1.20.1-456-FORGE `17e0cab4160e86f434cd137a60faeb2594ae4e15`,
+  Patchouli 1.20.1-85-FORGE `d4614507d6e4c7cb464bba5eca891978272062ef`, Curios 5.14.1+1.20.1
+  `452175b95ad3db6ff58bb8968f6bf7a9d1e0f480`, Kotlin for Forge 4.12.0 all `70924805d671487681ea9dafad3f86c776f66f79`.
+- Применился ли миксин — строка `Mixing LivingEntityMixin from alfheim.mixins.json` в `logs/debug.log` сервера.
