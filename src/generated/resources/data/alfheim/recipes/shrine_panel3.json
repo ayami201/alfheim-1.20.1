@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "D": {
+      "tag": "forge:dyes/blue"
+    },
+    "G": {
+      "item": "alfheim:shrine_glass0"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "DDD",
+    "GGG"
+  ],
+  "result": {
+    "count": 16,
+    "item": "alfheim:shrine_panel3"
+  }
+}

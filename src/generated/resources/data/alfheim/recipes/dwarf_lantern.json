@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "botania:chiseled_livingrock_bricks"
+    },
+    "L": {
+      "item": "botania:livingrock_bricks"
+    },
+    "S": {
+      "item": "alfheim:shrine_light1"
+    }
+  },
+  "pattern": [
+    "LCL",
+    "CSC",
+    "LCL"
+  ],
+  "result": {
+    "count": 8,
+    "item": "alfheim:dwarf_lantern"
+  }
+}

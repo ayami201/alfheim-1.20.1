@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L": {
+      "item": "botania:dreamwood_twig"
+    },
+    "P": {
+      "item": "botania:dreamwood_planks"
+    }
+  },
+  "pattern": [
+    "LPL",
+    "LPL"
+  ],
+  "result": {
+    "item": "alfheim:dreamwood_fence_gate"
+  }
+}

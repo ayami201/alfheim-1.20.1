@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L": {
+      "item": "botania:livingwood_twig"
+    },
+    "P": {
+      "item": "botania:livingwood"
+    }
+  },
+  "pattern": [
+    "LPL",
+    "LPL"
+  ],
+  "result": {
+    "item": "alfheim:livingwood_bark_fence_gate"
+  }
+}

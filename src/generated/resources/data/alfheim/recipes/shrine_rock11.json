@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L": {
+      "item": "botania:livingrock"
+    },
+    "M": {
+      "item": "botania:red_mushroom"
+    }
+  },
+  "pattern": [
+    "LLL",
+    "LML",
+    "LLL"
+  ],
+  "result": {
+    "count": 8,
+    "item": "alfheim:shrine_rock11"
+  }
+}

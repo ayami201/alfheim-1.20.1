@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.2,
+  "ingredient": {
+    "item": "alfheim:elven_ore5"
+  },
+  "result": "minecraft:lapis_lazuli"
+}

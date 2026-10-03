@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/elvorium"
+    },
+    "S": {
+      "tag": "alfheim:essence_niflheim"
+    }
+  },
+  "pattern": [
+    " S ",
+    "SIS",
+    " S "
+  ],
+  "result": {
+    "item": "alfheim:niflheim_power_ingot"
+  }
+}

@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 223 | 19 303 | 140 | 82 | 1 |  |
+| КТ-2 | 223 | 19 303 | 138 | 84 | 1 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **966** | **114** | **61** | **12** |
+| **всего** | **1153** | **124 643** | **964** | **116** | **61** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -1144,7 +1144,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `AlfheimRecipes.kt` | 3222 | КТ-2 | ждёт | переносится по одному рецепту; рецепты вещей других КТ — вместе с ними (SPEC Р-9) |
+| `AlfheimRecipes.kt` | 3222 | КТ-2 | перенесено | → `src/main/java/alfheim/common/crafting/recipe/AlfheimRecipes.kt`; рецепты — данные (SPEC Р-9): объект выполняет генерация данных; рецепты вещей, которых ещё нет, закомментированы блоками `/* PORT: КТ-n` и включаются вместе с вещами |
 | `RecipePureDaisyExclusion.kt` | 19 | КТ-3 | ждёт |  |
 | `RecipePureDaisyMeta.kt` | 19 | КТ-3 | ждёт |  |
 | `RecipeRuneAltarFull.kt` | 9 | КТ-3 | ждёт |  |
@@ -1186,7 +1186,7 @@ python3 tools/check_inventory.py
 | `RecipeSaveIvy.kt` | 97 | КТ-2 | ждёт |  |
 | `RecipeSpecialFloatingFlower.kt` | 51 | КТ-3 | ждёт |  |
 | `RecipeStencil.kt` | 104 | КТ-2 | ждёт |  |
-| `RecipeThrowablePotion.kt` | 55 | КТ-2 | ждёт |  |
+| `RecipeThrowablePotion.kt` | 55 | КТ-2 | перенесено | → `src/main/java/alfheim/common/crafting/recipe/workbench/RecipeThrowablePotion.kt`; особый рецепт `alfheim:throwpotion` (`LegacySpecialRecipes`) |
 
 ### `legacy/src/main/java/alfheim/common/entity/`
 
@@ -1475,7 +1475,7 @@ python3 tools/check_inventory.py
 | `ItemPaperRace.kt` | 123 | КТ-7 | ждёт |  |
 | `ItemPeacePipe.kt` | 77 | КТ-7 | ждёт |  |
 | `ItemSpawnEgg.kt` | 151 | КТ-5 | ждёт |  |
-| `ItemSplashPotion.kt` | 108 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemSplashPotion.kt`; особый рецепт `RecipeThrowablePotion` и раздатчик — следующая партия |
+| `ItemSplashPotion.kt` | 108 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemSplashPotion.kt`; особый рецепт — `RecipeThrowablePotion`, раздатчик — `DispenserHandlers` |
 | `ItemTriquetrum.kt` | 188 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemTriquetrum.kt` |
 | `ItemWarBanner.kt` | 113 | КТ-4 | ждёт |  |
 | `TheRodOfTheDebug.kt` | 80 | КТ-4 | ждёт |  |

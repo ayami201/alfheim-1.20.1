@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "Q": {
+      "item": "botania:elf_quartz"
+    }
+  },
+  "pattern": [
+    "QQQ",
+    "QQQ"
+  ],
+  "result": {
+    "count": 16,
+    "item": "alfheim:quartz_type_elf0_wall"
+  }
+}

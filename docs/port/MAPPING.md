@@ -208,6 +208,45 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `twigThunderwood`, `splinterThunderwood`, `twigNetherwood`, `splinterNetherwood`, `coalFlame` | `alfheim:<имя в snake_case>` | ✓ |
 | `dyeRainbow`, `dyeFloralPowder`, `petalRainbow`, `quartzRainbow`, `petalMystic` | `alfheim:<имя в snake_case>` | ✓ в `dyeRainbow` — и блок радужного моста Botania |
 
+Имена, которые автор берёт у Forge и Botania 1.7.10, в рецептах переводит таблица `Ingredients1710.ore`
+(`alfheim.port.legacy.Recipes1710`): имя Forge — общий тег Forge или ванилы 1.20.1, если он есть, иначе предмет;
+имя Botania — то, что ставит на его место в свои рецепты Botania 1.20.1. Имена Botania 1.7.10 в коде автора —
+`alfheim.port.legacy.botania.LibOreDict` (в Botania 1.20.1 класса нет). Имя без строки в таблице роняет генерацию
+данных: строку добавляет КТ, рецептам которой имя понадобилось.
+
+| Имя 1.7.10 | Ингредиент 1.20.1 | Примечание |
+|---|---|---|
+| `ingotGold`, `nuggetGold`, `ingotBrickNether`, `gemQuartz`, `gemEmerald`, `dustRedstone`, `dustGlowstone`, `blockRedstone`, `cobblestone`, `stickWood` | `forge:ingots/gold`, `forge:nuggets/gold`, `forge:ingots/nether_brick`, `forge:gems/quartz`, `forge:gems/emerald`, `forge:dusts/redstone`, `forge:dusts/glowstone`, `forge:storage_blocks/redstone`, `forge:cobblestone`, `forge:rods/wooden` | ✓ имена Forge 1.7.10 |
+| `dye<Цвет>`, `blockGlass<Цвет>` | `forge:dyes/<цвет>`, `forge:glass/<цвет>` | ✓ белый краситель 1.20.1 — не костная мука, как в 1.7.10 |
+| `treeSapling`, `glowstone` | `minecraft:saplings`, предмет `minecraft:glowstone` | ✓ |
+| `livingwood`, `dreamwood`, `ingotManasteel`, `manaDiamond`, `ingotTerrasteel`, `ingotElvenElementium`, `elvenDragonstone`, `nuggetManasteel`, `nuggetTerrasteel`, `nuggetElvenElementium`, `powderMana`, `petal<Цвет>` | `botania:livingwood_logs`, `botania:dreamwood_logs`, `botania:manasteel_ingots`, `botania:mana_diamond_gems`, `botania:terrasteel_ingots`, `botania:elementium_ingots`, `botania:dragonstone_gems`, `botania:manasteel_nuggets`, `botania:terrasteel_nuggets`, `botania:elementium_nuggets`, `botania:mana_dusts`, `botania:petals/<цвет>` | ✓ теги Botania 1.20.1 |
+| `livingrock`, `manaPearl`, `livingwoodTwig`, `dreamwoodTwig`, `eternalLifeEssence`, `redstoneRoot`, `elvenPixieDust`, `bPlaceholder`, `bRedString`, `gaiaIngot`, `bEnderAirBottle`, `manaString`, `livingRoot`, `clothManaweave`, `blockBlaze` | предметы Botania 1.20.1 | ✓ так эти вещи стоят в рецептах Botania 1.20.1 |
+| `rune<Имя>B`, `mysticFlower<Цвет>`, `mysticFlower<Цвет>Double`, `quartz<Имя>` | руны, цветы и кварц Botania 1.20.1 | ✓ |
+| `shardPrismarine` | `minecraft:prismarine_shard` | ✓ осколок призмарина Botania 1.7.10 в 1.20.1 — предмет ванилы |
+| `dirt`, `slabCobblestone`, `powderBlaze`, `rodBlaze` | `minecraft:dirt`, `minecraft:cobblestone_slab`, `minecraft:blaze_powder`, `forge:rods/blaze` | ✓ их регистрировала Botania 1.7.10 |
+| `pestleAndMortar` | — | в Botania 1.20.1 ступки нет: рецепты автора с ней ждут решения владельца (TASKS.md) |
+
+## Рецепты
+
+`AlfheimRecipes` автора остаётся: вызовы 1.7.10 записывают рецепты в прослойку (`alfheim.port.legacy.Recipes1710`),
+генерация данных (`alfheim.port.data.AlfheimRecipeProvider`) пишет из записей JSON 1.20.1 (SPEC, Р-9). В игре код
+автора не выполняется. Рецепты вещей, которых ещё нет в порту, закомментированы блоками `/* PORT: КТ-n — … */`;
+рецепт включается вместе со своей вещью — вместе со строкой `BotaniaAPI.getLatestAddedRecipe(s)` за ним, если она есть.
+
+| Было (1.7.10) | Стало (1.20.1) | Примечание |
+|---|---|---|
+| `addOreDictRecipe`, `addShapelessOreDictRecipe` (ASJCore), `GameRegistry.addRecipe` / `addShapedRecipe` / `addShapelessRecipe`, `CraftingManager.getInstance().recipeList.add(ShapedOreRecipe(…))` | как есть — записывают `ShapedOreRecipe` / `ShapelessOreRecipe` прослойки; JSON — `minecraft:crafting_shaped`, `minecraft:crafting_shapeless` | ✓ шаблон зеркальный, как в 1.7.10; символ шаблона без ингредиента — пустая клетка; пустые края шаблона роняют генерацию данных (1.20.1 их срезает, и рецепт складывается в любом месте сетки) |
+| `GameRegistry.addSmelting(вход, выход, опыт)` | `minecraft:smelting`, 200 тиков | ✓ `Item` и `Block` без стека — любой вариант, как `WILDCARD_VALUE` в 1.7.10 |
+| ингредиент `ItemStack`, `Item`, `Block` | предмет 1.20.1 | ✓ сравнение — по предмету и metadata, без NBT и числа: повреждаемый предмет — только целый (`forge:partial_nbt`, `Damage: 0`), `ItemStack(x, n, WILDCARD_VALUE)` — с любым износом; `Block` в рецепте по шаблону — любой вариант, в рецепте без формы — вариант 0; блок или предмет с вариантами в порту — массив (`livingcobble`): «любой» — все варианты |
+| имя Ore Dictionary | тег или предмет | ✓ раздел «Ore Dictionary» |
+| результат `ItemStack(x, n, meta)` | `ItemStack(x[meta], n)` | ✓ раздел «Имена и metadata» |
+| id рецепта (в 1.7.10 его не было) | путь id результата: `alfheim:elvorium_ingot`; переплавка — `…_from_smelting`; одинаковые — `_2`, `_3` в порядке рецептов автора | ✓ |
+| книга рецептов (в 1.7.10 её не было) | достижений, открывающих рецепты, нет: рецепт попадает в книгу, когда игрок его сделает | ✓ раздел книги — по результату: блок — «строительство», в печи еда — «еда» |
+| особый рецепт: `addRecipe(RecipeX)` + `RecipeSorter.register("alfheim:имя", …)` | тип рецепта `alfheim:<имя в snake_case>` со своим сериализатором (`alfheim.port.registry.LegacySpecialRecipes`), JSON `{"type": "alfheim:имя"}`; рецепт верстака 1.20.1 зовёт `matches`, `getCraftingResult`, `getRecipeSize` класса автора | ✓ как особые рецепты ванилы, в книге рецептов его нет; новый особый рецепт — строка в `LegacySpecialRecipes` |
+| `IRecipe`, `InventoryCrafting`, `inv.sizeInventory`, `inv[i]` | `IRecipe` прослойки (Java: `recipe.recipeOutput` читается как свойство), `CraftingContainer`, `containerSize`, `getItem` (пустой — `null`) | ✓ |
+| `BotaniaAPI.getLatestAddedRecipe()`, `getLatestAddedRecipes(n)` | `alfheim.port.legacy.botania.BotaniaAPI` — последние записанные рецепты | ✓ |
+| рецепт, раскладку которого занимает рецепт другого мода 1.20.1 | GameTest `PortRecipesTest.recipesDoNotOverlap` | известные пересечения — в тесте, с вопросом владельцу |
+
 ## Прослойка `alfheim.port.legacy`
 
 Функции с сигнатурами 1.7.10 поверх 1.20.1 (SPEC, Р-4). Код автора с ними остаётся как был, нужен только импорт
@@ -258,6 +297,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `mountEntity(entity)` | `startRiding(entity, true)` | ✓ 1.7.10 сажал без проверок, кроме кольца из всадников; `force = true` — так же |
 | `EntityTameable.isTamed`, `func_152115_b(uuidString)` | `isTame`, `setOwnerUUID(uuid)` | ✓ |
 | `Items.stick`, `Blocks.grass` и др. | `Items.STICK`, `Blocks.GRASS_BLOCK` и др. | поля ванилы в 1.20.1 — заглавными; имя проверять по смыслу |
+| `Blocks.planks` 5, `Items.dye` 4 | `Blocks.DARK_OAK_PLANKS`, `Items.LAPIS_LAZULI` | ✓ вариант ванилы 1.7.10 — отдельный предмет 1.20.1 |
 | `World` в сигнатурах автора | `import net.minecraft.world.level.Level as World` | ✓ |
 | `entityInit` + `DataWatcher` | `defineSynchedData` + `SynchedEntityData` | ✓ номер ячейки → ключ `SynchedEntityData.defineId(Класс::class.java, EntityDataSerializers.…)` в `companion object` класса; `addObject(n, v)` → `define(KEY, v)`, `getWatchableObject…(n)` / `updateObject(n, v)` → `get(KEY)` / `set(KEY, v)`; `setObjectWatched` не нужен |
 | `EntityThrowable` (`super(world)`, `super(world, thrower)`, `onImpact`, `getThrower`, `func_70182_d` — скорость, `func_70183_g` — поправка угла, `getGravityVelocity`, `setSize`) | `alfheim.port.legacy.EntityThrowable` поверх `ThrowableProjectile`: `super(legacyType<Класс>(), world)`, остальное — имена 1.7.10 | ✓ бросок — из глаз, на 0,16 вбок и 0,1 вниз, как в 1.7.10; `setThrowableHeading` → `shoot`: разброс 1.20.1 — треугольный, той же величины. Блоки 1.20.1, которые отвечают на удар снаряда (мишень, колокол), не отвечают |
@@ -405,6 +445,13 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `ConfigHandler.boundBlockWireframe` и др. настройки клиента Botania | `BotaniaConfig.client().boundBlockWireframe()` | ✓ |
 | `Botania.proxy.worldElapsedTicks` | `alfheim.port.legacy.botania.Botania.proxy.worldElapsedTicks` | ✓ на клиенте — тики игры Botania (`ClientTickHandler.ticksInGame`), на сервере — время основного мира |
 | `ModItems.manaResource` 9, `ModItems.quartz` 5 | `BotaniaItems.dragonstone`, `BotaniaItems.elfQuartz` | ✓ |
+| `ModItems.manaResource` 1, 7, 14 | `BotaniaItems.manaPearl`, `elementium`, `gaiaIngot` | ✓ |
+| `ModBlocks.livingrock` 4 (резные кирпичи) | `BotaniaBlocks.livingrockBrickChiseled` | ✓ |
+| `ModFluffBlocks.livingrockStairs`, `livingrockBrickStairs`, `livingrockSlab`, `livingrockBrickSlab`, `livingrockWall` | `BotaniaBlocks` — те же имена | ✓ |
+| `ModBlocks.mushroom` с metadata цвета | грибы Botania 1.20.1 по цвету: `BotaniaBlocks.whiteMushroom` … (`getMushroom(DyeColor)`) | ✓ |
+| `ModFluffBlocks.elfQuartz` и др. кварцевые блоки | `BotaniaBlocks.elfQuartz` и др. | ✓ так же в Botania 1.20.1 называются предметы кварца — в коде автора явный импорт блока |
+| `ModBlocks.customBrick` 3 (черепица) | — | в Botania 1.20.1 нет: рецепты черепицы автора ждут решения владельца (TASKS.md) |
+| `ModItems.brewVial` (`ItemBrewVial`), `BotaniaAPI.fallbackBrew` | `BotaniaItems.brewVial` (`BaseBrewItem`), `BotaniaBrews.fallbackBrew` | ✓ |
 | `ModItems.petal` с metadata цвета | `BotaniaItems.getPetal(DyeColor)` | ✓ |
 | `ModItems.dye` (цветочная пыль) | краситель ванилы (`DyeItem.byColor`) | ✓ в Botania 1.20.1 цветочной пыли нет: лепестки дают краситель ванилы |
 | `ModItems.vial` 1 (колба из альвийского стекла) | `BotaniaItems.flask` | ✓ |

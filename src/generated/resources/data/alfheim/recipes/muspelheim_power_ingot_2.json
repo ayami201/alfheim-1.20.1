@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "alfheim:alf_storage2"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "alfheim:muspelheim_power_ingot"
+  }
+}

@@ -15,7 +15,8 @@ GameTest-ы идут в среде разработки: там у методо�
 5. имя зелья на сервере — перевод ключа автора; предмет мода (`alfheim:lembas`) существует;
 6. существа мода: граната (`alfheim:thrown_item`) с бросившим хаском падает на другого хаска — урон
    «огненный шар» и огонь; летящее зелье (`alfheim:thrown_potion`) появляется командой;
-7. раздатчик со склянкой мода бросает летящее зелье (поведение раздатчика регистрируется в `FMLCommonSetupEvent`).
+7. раздатчик со склянкой мода бросает летящее зелье (поведение раздатчика регистрируется в `FMLCommonSetupEvent`);
+8. рецепты мода загружены без ошибок разбора — в том числе особый рецепт `alfheim:throwpotion` со своим сериализатором.
 
 Команды идут по RCON (удалённая консоль сервера): скрипт сам включает его в `server.properties`
 (порт 25575, пароль `alfcheck`). Существа появляются в точке появления мира с меткой `alfcheck` и
@@ -201,6 +202,11 @@ def main():
         dispensed = r("execute if entity @e[type=alfheim:thrown_potion,tag=!alfcheck_potion]")
         items = r("data get block ~-1 ~ ~2 Items")
         check("Раздатчик бросает склянку мода", "count: 1" in dispensed and items.rstrip().endswith("[]"), f"{dispensed}; {items}")
+
+        # 8. Рецепты мода — данные: игра пропускает рецепт с ошибкой и пишет «Parsing error loading recipe»; особый
+        # рецепт читает сериализатор мода, его методы у игроков — с именами SRG
+        bad = [l for l in output if "Parsing error loading recipe" in l and "alfheim" in l]
+        check("Рецепты мода загружены (alfheim:throwpotion — свой сериализатор)", not bad, "\n".join(bad[:5]))
 
         r("kill @e[tag=alfcheck]")
         r("stop")

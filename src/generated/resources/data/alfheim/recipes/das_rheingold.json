@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "botania:spell_cloth"
+    },
+    "G": {
+      "tag": "forge:ingots/gold"
+    },
+    "S": {
+      "item": "botania:life_essence"
+    }
+  },
+  "pattern": [
+    "SCS",
+    "CGC",
+    "SCS"
+  ],
+  "result": {
+    "item": "alfheim:das_rheingold"
+  }
+}
