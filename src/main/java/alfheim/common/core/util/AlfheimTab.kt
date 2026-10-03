@@ -52,12 +52,14 @@ import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.AlfheimItems
+import alfheim.common.item.AlfheimItems.armilla
 import alfheim.common.item.AlfheimItems.chalk
 import alfheim.common.item.AlfheimItems.deathSeed
 import alfheim.common.item.AlfheimItems.elvenFood
 import alfheim.common.item.AlfheimItems.elvenResource
 import alfheim.common.item.AlfheimItems.hyperBucket
 import alfheim.common.item.AlfheimItems.soulHorn
+import alfheim.common.item.AlfheimItems.triquetrum
 import alfheim.common.item.AlfheimItems.wiltedLotus
 import alfheim.port.legacy.Item1710
 import alfheim.port.legacy.LegacyItem
@@ -256,7 +258,6 @@ import alfheim.common.item.AlfheimItems.`DEV-NULL`
 import alfheim.common.item.AlfheimItems.aesirCloak
 import alfheim.common.item.AlfheimItems.aesirEmblem
 import alfheim.common.item.AlfheimItems.akashicRecords
-import alfheim.common.item.AlfheimItems.armilla
 import alfheim.common.item.AlfheimItems.astrolabe
 import alfheim.common.item.AlfheimItems.attributionBauble
 import alfheim.common.item.AlfheimItems.auraRingElven
@@ -372,7 +373,6 @@ import alfheim.common.item.AlfheimItems.surtrSword
 import alfheim.common.item.AlfheimItems.terraHoe
 import alfheim.common.item.AlfheimItems.thrymAxe
 import alfheim.common.item.AlfheimItems.toolbelt
-import alfheim.common.item.AlfheimItems.triquetrum
 import alfheim.common.item.AlfheimItems.trisDagger
 import alfheim.common.item.AlfheimItems.volcanoBoots
 import alfheim.common.item.AlfheimItems.volcanoChest
@@ -571,10 +571,8 @@ object AlfheimTab {
 		
 		addItem(astrolabe)
 		*/
-		/* PORT: КТ-2
 		addItem(triquetrum)
 		addItem(armilla)
-		*/
 		/* PORT: КТ-4
 		addItem(enlighter)
 		addItem(lootInterceptor)

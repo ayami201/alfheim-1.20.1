@@ -10,6 +10,8 @@ import net.minecraft.nbt.Tag
 
 fun CompoundTag.hasKey(key: String) = contains(key)
 
+fun CompoundTag.hasNoTags() = isEmpty
+
 fun CompoundTag.removeTag(key: String) = remove(key)
 
 fun CompoundTag.setTag(key: String, tag: Tag) {

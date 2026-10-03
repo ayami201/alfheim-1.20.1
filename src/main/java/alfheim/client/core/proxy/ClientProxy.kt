@@ -6,7 +6,7 @@ import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 //import alfheim.api.ModInfo
 //import alfheim.api.event.AlfheimModeChangedEvent
-//import alfheim.api.item.DoubleBoundItemRender
+import alfheim.api.item.DoubleBoundItemRender
 //import alfheim.api.lib.*
 import alfheim.client.core.handler.*
 //import alfheim.client.core.handler.CardinalSystemClient.TimeStopSystemClient
@@ -50,6 +50,7 @@ import vazkii.botania.client.core.proxy.ClientProxy
 //import vazkii.botania.client.render.tile.RenderTileFloatingFlower
 //import vazkii.botania.common.block.tile.TileFloatingFlower
 //import vazkii.botania.common.core.handler.ConfigHandler
+import vazkii.botania.xplat.BotaniaConfig
 import kotlin.jvm.java
 
 object ClientProxy : CommonProxy() {
@@ -227,11 +228,13 @@ object ClientProxy : CommonProxy() {
 	override fun initializeAndRegisterHandlers() {
 		super.initializeAndRegisterHandlers()
 		EventHandlerClient
-		// PORT: КТ-4 — ItemsRemainingRenderHandler, DoubleBoundItemRender; КТ-3 — HUDCorporeaRat
+		// PORT: КТ-4 — ItemsRemainingRenderHandler; КТ-3 — HUDCorporeaRat
 //		ItemsRemainingRenderHandler
 //		
 //		HUDCorporeaRat.eventForge()
 //		
+		// PORT: ConfigHandler.boundBlockWireframe Botania 1.7.10 — та же настройка клиента Botania 1.20.1
+		if (BotaniaConfig.client().boundBlockWireframe()) DoubleBoundItemRender
 //		if (ConfigHandler.boundBlockWireframe) DoubleBoundItemRender
 		// PORT: выпало — Travellers Gear и Thermal Foundation отсутствуют на 1.20.1 (SPEC, п. 7)
 //		if (AlfheimCore.TravellersGearLoaded) TGHandlerBotaniaRenderer

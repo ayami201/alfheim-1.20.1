@@ -144,6 +144,11 @@ fun Entity.playSoundAtEntity(sound: String, volume: Float, duration: Float) {
 	level().playSoundAtEntity(this, sound, volume, duration)
 }
 
+// PORT: ChunkCoordinates 1.7.10 — BlockPos 1.20.1 (alfheim.port.legacy)
+operator fun ChunkCoordinates.component1() = posX
+operator fun ChunkCoordinates.component2() = posY
+operator fun ChunkCoordinates.component3() = posZ
+
 /* PORT: по мере надобности — DataWatcher, AxisAlignedBB, ChunkCoordinates, Vec3, metadata, IInventory, OreDictionary
 fun DataWatcher.getWatchableObjectChunkCoordinates(id: Int): ChunkCoordinates {
 	return getWatchedObject(id).`object` as ChunkCoordinates? ?: ChunkCoordinates()
@@ -195,9 +200,10 @@ fun Entity.setMotion(x: Double, y: Double = x, z: Double = y) {
 
 fun Entity.spawn(world: World = this.worldObj) = world.spawnEntityInWorld(this)
 
-operator fun ChunkCoordinates.component1() = posX
-operator fun ChunkCoordinates.component2() = posY
-operator fun ChunkCoordinates.component3() = posZ
+// PORT: перенесены выше
+//operator fun ChunkCoordinates.component1() = posX
+//operator fun ChunkCoordinates.component2() = posY
+//operator fun ChunkCoordinates.component3() = posZ
 
 operator fun Vec3.component1() = xCoord
 operator fun Vec3.component2() = yCoord

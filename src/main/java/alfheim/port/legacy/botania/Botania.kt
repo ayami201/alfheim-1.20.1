@@ -43,6 +43,12 @@ object Botania {
 		/** `wispFX(world, x, y, z, r, g, b, size, gravity)` — огонёк Botania 1.20.1; «гравитация» 1.7.10 — скорость вниз */
 		fun wispFX(world: Level, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float, size: Float, gravity: Float) =
 			world.addParticle(WispParticleData.wisp(size, r, g, b, 1f), x, y, z, 0.0, -gravity.toDouble(), 0.0)
+		
+		/**
+		 * `removeSextantMultiblock` — убрать подсветку секстанта: в 1.7.10 — структуру класса `MultiblockSextant`, в
+		 * 1.20.1 — структуру Patchouli с id секстанта (`WorldshaperssSextantItem.MULTIBLOCK_ID`). На сервере — ничего
+		 */
+		fun removeSextantMultiblock() = vazkii.botania.common.proxy.Proxy.INSTANCE.clearSextantMultiblock()
 	}
 }
 

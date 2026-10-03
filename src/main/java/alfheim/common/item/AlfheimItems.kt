@@ -44,7 +44,7 @@ object AlfheimItems {
 //	val akashicRecords: Item // PORT: КТ-4
 //	val aesirCloak: Item // PORT: КТ-4
 //	val aesirEmblem: Item // PORT: КТ-4
-//	val armilla: Item // PORT: КТ-2
+	val armilla: Item
 //	val astrolabe: Item // PORT: КТ-4
 //	val attributionBauble: Item // PORT: КТ-4
 //	val auraRingElven: Item // PORT: КТ-4
@@ -179,7 +179,7 @@ object AlfheimItems {
 //	val thrymAxe: Item // PORT: КТ-4
 //	val toolbelt: Item // PORT: КТ-4
 //	val trisDagger: Item // PORT: КТ-4
-//	val triquetrum: Item // PORT: КТ-2
+	val triquetrum: Item
 //	val volcanoMace: Item // PORT: КТ-4
 //	val volcanoHelmet: Item // PORT: КТ-4
 //	val volcanoHelmetRevealing: Item? // PORT: выпало — Thaumcraft отсутствует на 1.20.1 (SPEC, п. 7)
@@ -196,7 +196,7 @@ object AlfheimItems {
 //		akashicRecords = ItemAkashicRecords() // PORT: КТ-4
 //		aesirCloak = ItemAesirCloak() // PORT: КТ-4
 //		aesirEmblem = ItemAesirEmblem() // PORT: КТ-4
-//		armilla = ItemArmilla() // PORT: КТ-2
+		armilla = ItemArmilla()
 //		astrolabe = ItemAstrolabe() // PORT: КТ-4
 //		attributionBauble = ItemAttributionBauble() // PORT: КТ-4
 //		auraRingElven = ItemAuraRingAlfheim("AuraRingElven") // PORT: КТ-4
@@ -330,7 +330,7 @@ object AlfheimItems {
 //		thinkingHand = ItemThinkingHand() // PORT: КТ-4
 //		thrymAxe = ItemThrymAxe() // PORT: КТ-4
 //		trisDagger = ItemTrisDagger() // PORT: КТ-4
-//		triquetrum = ItemTriquetrum() // PORT: КТ-2
+		triquetrum = ItemTriquetrum()
 //		toolbelt = ItemToolBelt() // PORT: КТ-4
 //		volcanoMace = ItemVolcanoMace() // PORT: КТ-4
 //		volcanoHelmet = ItemVolcanoArmor(0, "VolcanoHelmet") // PORT: КТ-4
