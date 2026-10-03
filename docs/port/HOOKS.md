@@ -55,7 +55,7 @@ python3 tools/check_hooks.py
 | КТ | Всего | ждёт | перенесено | не нужна | выпало | WIP — стадия 2 |
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-1 | 3 | 3 |  |  |  |  |
-| КТ-2 | 20 | 20 |  |  |  |  |
+| КТ-2 | 20 | 18 | 1 | 1 |  |  |
 | КТ-3 | 190 | 190 |  |  |  |  |
 | КТ-4 | 105 | 105 |  |  |  |  |
 | КТ-5 | 13 | 13 |  |  |  |  |
@@ -65,7 +65,7 @@ python3 tools/check_hooks.py
 | КТ-9 | 5 | 5 |  |  |  |  |
 | КТ-10 | 5 | 5 |  |  |  |  |
 | — | 50 |  |  |  | 43 | 7 |
-| **всего** | **465** | **415** | **0** | **0** | **43** | **7** |
+| **всего** | **465** | **413** | **1** | **1** | **43** | **7** |
 
 Сводку пересчитывает `tools/check_hooks.py --summary`.
 
@@ -97,8 +97,8 @@ python3 tools/check_hooks.py
 | H-019 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:329` | `ManaItemHandler#requestManaExact` | в начале, выходит, если true | оба | КТ-3 |  | ждёт |  |
 | H-020 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:333` | `ManaItemHandler#requestMana` | в начале, выходит, если true, результат — из `requestManaChecked` | оба | КТ-3 |  | ждёт |  |
 | H-021 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:340` | `ManaItemHandler#getFullDiscountForTools` | в конце, возвращает свой результат, читает результат метода | оба | КТ-4 |  | ждёт | скидка маны от аксессуаров и расы; часть про Travellers Gear выпадает |
-| H-022 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:365` | `BlockModWall#<init>` | в конце, добавляет код | оба | КТ-2 |  | ждёт |  |
-| H-023 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:371` | `BotaniaCreativeTab#addBlock` | в конце, добавляет код | оба | КТ-2 |  | ждёт |  |
+| H-022 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:365` | `BlockModWall#<init>` | в конце, добавляет код | оба | КТ-2 | — | не нужна (стены Botania 1.20.1 и так во вкладке Botania; стенам Alfheim автор сразу ставит вкладку Alfheim, `setCreativeTab(AlfheimTab)`) | вкладка Botania каждой стене `BlockModWall` — и стенам Botania (их конструктор ванилы клал во вкладку «Строительные блоки»), и стенам Alfheim |
+| H-023 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:371` | `BotaniaCreativeTab#addBlock` | в конце, добавляет код | оба | КТ-2 | событие `BuildCreativeModeTabContentsEvent` (`alfheim.port.hook.CreativeTabHooks`) | перенесено | стена из эльфийского кварца во вкладке Botania сразу за лестницей из эльфийского кварца; проверяет `PortDecorTest.creativeTabs` |
 | H-024 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:378` | `BlockSpreader#<init>` | в конце, добавляет код | оба | КТ-3 |  | ждёт |  |
 | H-025 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:385` | `BlockHourglass#tickRate` | в начале, возвращает свой результат | оба | КТ-3 |  | ждёт |  |
 | H-026 | `legacy/src/main/java/alfheim/common/core/asm/hook/AlfheimHookHandler.kt:389` | `BlockHourglass#onBurstCollision` | в начале, возвращает свой результат | оба | КТ-3 |  | ждёт |  |

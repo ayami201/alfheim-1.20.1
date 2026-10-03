@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 222 | 19 082 | 212 | 10 |  |  |
+| КТ-2 | 222 | 19 082 | 201 | 20 | 1 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -474,7 +474,7 @@ python3 tools/check_inventory.py
 | `RenderBlockNiflheimSet.kt` | 82 | КТ-2 | ждёт |  |
 | `RenderBlockOnyx.kt` | 12 | КТ-2 | ждёт |  |
 | `RenderBlockPowerStone.kt` | 30 | КТ-3 | ждёт |  |
-| `RenderBlockShrinePanel.kt` | 362 | КТ-2 | ждёт |  |
+| `RenderBlockShrinePanel.kt` | 362 | КТ-2 | выпало (заменён моделью: рендер стеклянной панели ванилы 1.7.10 с иконкой по metadata — модель панели 1.20.1 из генерации данных, SPEC Р-13) | `BlockPaneMeta` |
 | `RenderBlockSpire.kt` | 28 | КТ-3 | ждёт |  |
 | `RenderBlockTable.kt` | 35 | КТ-3 | ждёт |  |
 | `RenderBlockWorldTree.kt` | 32 | КТ-3 | ждёт |  |
@@ -634,7 +634,7 @@ python3 tools/check_inventory.py
 | `BlockAiryVirus.kt` | 61 | КТ-2 | ждёт |  |
 | `BlockAlfheimPortal.kt` | 80 | КТ-6 | ждёт | портал в Альфхейм |
 | `BlockAlfheimPylon.kt` | 61 | КТ-3 | ждёт | с блок-сущностью |
-| `BlockAlfheimSlabs.kt` | 90 | КТ-2 | ждёт |  |
+| `BlockAlfheimSlabs.kt` | 90 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockAlfheimSlabs.kt`; двойная плита — состояние `type=double` одинарной |
 | `BlockAlfStorage.kt` | 67 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockAlfStorage.kt` |
 | `BlockAmplifier.kt` | 25 | КТ-2 | ждёт |  |
 | `BlockAnimatedTorch.kt` | 83 | КТ-3 | ждёт | с блок-сущностью |
@@ -653,7 +653,7 @@ python3 tools/check_inventory.py
 | `BlockDoubleBlock.kt` | 191 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockDoubleCamo.kt` | 220 | КТ-3 | ждёт | основа маскирующихся блоков с блок-сущностью |
 | `BlockDreamSapling.kt` | 87 | КТ-2 | ждёт |  |
-| `BlockDwarfLantern.kt` | 44 | КТ-2 | ждёт |  |
+| `BlockDwarfLantern.kt` | 44 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockDwarfLantern.kt` |
 | `BlockElvenOre.kt` | 58 | КТ-2 | ждёт |  |
 | `BlockElvenSand.kt` | 18 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockElvenSand.kt` |
 | `BlockElvenSandstone.kt` | 53 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockElvenSandstone.kt` |
@@ -674,16 +674,16 @@ python3 tools/check_inventory.py
 | `BlockKindling.kt` | 57 | КТ-2 | ждёт |  |
 | `BlockKudzuVine.kt` | 497 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockLivingCobble.kt` | 39 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockLivingCobble.kt` |
-| `BlockLivingMountain.kt` | 30 | КТ-2 | ждёт |  |
+| `BlockLivingMountain.kt` | 30 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockLivingMountain.kt` |
 | `BlockLootbox.kt` | 260 | КТ-6 | ждёт | летающие острова |
 | `BlockManaIce.kt` | 20 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockManaIce.kt` |
-| `BlockModTrapDoor.kt` | 39 | КТ-2 | ждёт |  |
+| `BlockModTrapDoor.kt` | 39 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockModTrapDoor.kt` |
 | `BlockNidhoggTooth.kt` | 53 | КТ-2 | ждёт |  |
 | `BlockNiflheim.kt` | 112 | КТ-2 | ждёт |  |
 | `BlockNiflheimIce.kt` | 128 | КТ-2 | ждёт |  |
 | `BlockNiflheimPortal.kt` | 160 | КТ-6 | ждёт | портал в Нифльхейм |
 | `BlockOnyx.kt` | 11 | КТ-2 | ждёт | WIP автора (`.WIP()`): переносится как есть, с меткой [WIP] (SPEC п. 6) |
-| `BlockPaneMeta.kt` | 46 | КТ-2 | ждёт |  |
+| `BlockPaneMeta.kt` | 46 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockPaneMeta.kt`; вариант metadata — отдельный блок |
 | `BlockPatternLexicon.kt` | 63 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockPatternLexicon.kt` |
 | `BlockPowerStone.kt` | 56 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockRaceSelector.kt` | 167 | КТ-7 | ждёт | выбор расы |
@@ -697,8 +697,8 @@ python3 tools/check_inventory.py
 | `BlockRift.kt` | 22 | КТ-4 | ждёт | вместе с инструментами разлома (`ItemRiftPick`, `ItemRiftSword`) |
 | `BlockSadOakLeaves.kt` | 71 | КТ-2 | ждёт |  |
 | `BlockSecretGlass.kt` | 56 | КТ-3 | ждёт | с блок-сущностью |
-| `BlockShrineGlass.kt` | 36 | КТ-2 | ждёт |  |
-| `BlockShrinePillar.kt` | 33 | КТ-2 | ждёт |  |
+| `BlockShrineGlass.kt` | 36 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockShrineGlass.kt` |
+| `BlockShrinePillar.kt` | 33 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockShrinePillar.kt` |
 | `BlockSnakeBody.kt` | 204 | КТ-2 | ждёт |  |
 | `BlockSnakeObject.kt` | 32 | КТ-2 | ждёт |  |
 | `BlockSnowGrass.kt` | 117 | КТ-2 | ждёт |  |
@@ -721,7 +721,7 @@ python3 tools/check_inventory.py
 | `BlockAltPlanks.kt` | 120 | КТ-2 | ждёт |  |
 | `BlockAltWood.kt` | 140 | КТ-2 | ждёт |  |
 | `BlockAltWoodPartials.kt` | 96 | КТ-2 | ждёт |  |
-| `BlockYggDecor.kt` | 31 | КТ-2 | ждёт |  |
+| `BlockYggDecor.kt` | 31 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockYggDecor.kt` |
 
 ### `legacy/src/main/java/alfheim/common/block/base/`
 
@@ -730,10 +730,10 @@ python3 tools/check_inventory.py
 | `BlockContainerMod.kt` | 55 | КТ-2 | ждёт |  |
 | `BlockLeavesMod.kt` | 209 | КТ-2 | ждёт |  |
 | `BlockMod.kt` | 49 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockMod.kt` |
-| `BlockModRotatedPillar.kt` | 92 | КТ-2 | ждёт |  |
+| `BlockModRotatedPillar.kt` | 92 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockModRotatedPillar.kt`; поворот — свойство состояния `axis`; `register` по умолчанию ждёт `ItemIridescentBlockMod` (цветные деревья) |
 | `BlockRainbowManaFlame.kt` | 85 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockSlabMod.kt` | 53 | КТ-2 | ждёт |  |
-| `BlockStairsMod.kt` | 31 | КТ-2 | ждёт |  |
+| `BlockStairsMod.kt` | 31 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockStairsMod.kt`; `register` по умолчанию ждёт `ItemIridescentBlockMod` (цветные деревья) |
 | `IDoublePlant.kt` | 13 | КТ-2 | ждёт |  |
 | `IMultipassRenderer.kt` | 10 | КТ-3 | ждёт | основа маскирующихся блоков с блок-сущностью |
 
@@ -2112,8 +2112,8 @@ python3 tools/check_inventory.py
 | `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
-| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 17 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
-| `alfheim/textures/blocks/decor/` | 83 | КТ-2 | ждёт | перенесено 5 (`ElvenSandstone*`) |
+| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 18 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
+| `alfheim/textures/blocks/decor/` | 83 | КТ-2 | ждёт | перенесено 69 — декор `AlfheimFluffBlocks`; осталась мерцающая кварцевая плитка (`*ShimmerQuartz*`, 14 файлов) — с блоками `shimmerQuartz` |
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
 | `alfheim/textures/environment/` | 1 | КТ-6 | ждёт | небо миров |
@@ -2185,3 +2185,5 @@ python3 tools/check_inventory.py
 | `alexsocol/asjlib/network/ASJPacket.kt` | 143 | КТ-1 | всё | работу coremod `ASJPacketCompleter` (запись и чтение полей пакета) делает отражение |
 | `alexsocol/asjlib/extendables/block/BlockModMeta.kt` | 46 | КТ-2 | всё | вариант metadata — отдельный блок с номером `meta`; иконки — модели генерации данных |
 | `alexsocol/asjlib/extendables/ItemBlockMetaName.kt` | 17 | КТ-2 | всё | номер варианта — в id блока и в ключе перевода |
+| `alexsocol/asjlib/extendables/block/BlockModFence.kt` | 25 | КТ-2 | всё | поверх `Fence1710`; `canConnectFenceTo` → `connectsTo` |
+| `alexsocol/asjlib/extendables/block/BlockModFenceGate.kt` | 19 | КТ-2 | всё | поверх `FenceGate1710`; иконка блока-источника — модель генерации данных |
