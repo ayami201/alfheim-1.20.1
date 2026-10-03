@@ -7,6 +7,7 @@ package alexsocol.asjlib
 import alfheim.port.legacy.*
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.util.Mth
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -172,7 +173,8 @@ operator fun Vec3.component3() = zCoord
 
 fun Vec3(x: Number, y: Number, z: Number): Vec3 = Vec3.createVectorHelper(x.D, y.D, z.D)
 
-fun EntityLivingBase.getActivePotionEffect(id: Int) = activePotionsMap[id] as PotionEffect?
+// PORT: перенесена выше, к PotionEffectU
+//fun EntityLivingBase.getActivePotionEffect(id: Int) = activePotionsMap[id] as PotionEffect?
 
 fun Entity.knockback(attacker: Entity, force: Float) {
 	val (mx, _, mz) = Vector3.fromEntity(attacker).sub(this).mul(1, 0, 1).normalize().mul(force)
@@ -250,9 +252,12 @@ val Item.id get() = Item.getIdFromItem(this)
 */
 val ItemStack.block get() = item.toBlock()
 
-/* PORT: по мере надобности — зелья
+// PORT: PotionEffect 1.7.10 — MobEffectInstance (alfheim.port.legacy.PotionEffect); curativeItems — список Forge,
+// без лекарств эффект не снимает молоко, как в 1.7.10
 fun PotionEffectU(id: Int, time: Int, lvl: Int = 0, ambient: Boolean = false) = PotionEffect(id, time, lvl, ambient).apply { curativeItems.clear() }
-*/
+
+// PORT: activePotionsMap[id] → эффект по id 1.7.10 (alfheim.port.legacy.Potion1710)
+fun LivingEntity.getActivePotionEffect(id: Int) = Potion1710.byId(id)?.let { getEffect(it) }
 
 fun <T> T.eventForge(): T {
 	MinecraftForge.EVENT_BUS.register(this)
