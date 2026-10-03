@@ -138,6 +138,7 @@ object ASJUtilities {
 			return target.moveTo(x, y, z, target.yRot, target.xRot)
 		}
 		
+		// PORT-FIX: нет такого измерения (мод с ним убран из сборки) — ничего не происходит; в 1.7.10 — падение
 		val worldTo = server.getLevel(dimTo) ?: return
 		
 		if (target is ServerPlayer)

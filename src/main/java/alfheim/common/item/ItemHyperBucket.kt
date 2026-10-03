@@ -43,7 +43,6 @@ class ItemHyperBucket: ItemMod("HyperpolatedBucket") {
 		val mop = ASJUtilities.getSelectedBlock(player, player.blockReach, true) ?: return InteractionResultHolder.pass(stack)
 		
 		if (mop.typeOfHit != MovingObjectType.BLOCK) return InteractionResultHolder.pass(stack)
-//		if (player.isSneaking) {
 //		if (player !is EntityPlayerMP) return stack
 //		val mop = ASJUtilities.getSelectedBlock(player, player.theItemInWorldManager.blockReachDistance, true) ?: return stack
 //		if (mop.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return stack
