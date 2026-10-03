@@ -4,11 +4,12 @@ import alexsocol.asjlib.extendables.ItemBlockMetaName
 import alexsocol.asjlib.extendables.block.BlockModMeta
 import alfheim.api.ModInfo.MODID
 import alfheim.common.item.block.ItemBlockLeavesMod
-import alfheim.port.legacy.LegacyBlock
+import alfheim.port.legacy.*
 import alfheim.port.legacy.botania.*
 import alfheim.port.registry.LegacyRegistration
 import com.google.gson.*
 import net.minecraft.data.*
+import net.minecraft.world.item.*
 import net.minecraft.world.level.block.Block
 import java.util.concurrent.CompletableFuture
 
@@ -35,6 +36,8 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 		json.add("lang", JsonObject().apply {
 			for ((block, entry) in LegacyRegistration.blocks)
 				legacyLangKey(block)?.let { addProperty(it, block.descriptionId) }
+			for ((item, entry) in LegacyRegistration.items)
+				legacyLangKey(item)?.let { addProperty(it, "item.${entry.id.namespace}.${entry.id.path}") }
 		})
 		return DataProvider.saveStable(cache, json, output.outputFolder.resolve("alfheim/legacy_ids.json"))
 	}
@@ -67,5 +70,20 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 			if (item is ItemBlockMod || item is ItemBlockModSlab) key = key.replace("tile.", "tile.botania:")
 			return "$key.name"
 		}
+
+		/**
+		 * Ключ имени предмета автора в 1.7.10 — `getUnlocalizedNameInefficiently(stack) + ".name"` его вещи без NBT,
+		 * как у `getItemStackDisplayName`. Имена, которые автор собирает по NBT (шарик слизи стихии), остаются его
+		 * ключами. Имя, которое он выбирает по дате, — не основное: генерация данных берёт будничное ([HOLIDAY_NAMES]),
+		 * чтобы файл не зависел от дня запуска
+		 */
+		fun legacyLangKey(item: Item): String? {
+			if (item !is Item1710) return null
+			val key = item.getUnlocalizedNameInefficiently(ItemStack(item)) + ".name"
+			return HOLIDAY_NAMES[key] ?: key
+		}
+
+		/** Праздничное имя → будничное: на праздник (`AlfheimCore.jingleTheBells`) прутик — конфета (ItemElvenResource) */
+		private val HOLIDAY_NAMES = mapOf("item.$MODID:InfusedCandy.name" to "item.$MODID:InfusedDreamwoodTwig.name")
 	}
 }

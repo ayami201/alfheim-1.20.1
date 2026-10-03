@@ -1,7 +1,11 @@
 package alfheim.port.client
 
+import alfheim.AlfheimCore
 import alfheim.api.ModInfo.MODID
 import alfheim.common.block.*
+import alfheim.common.item.AlfheimItems
+import alfheim.common.item.material.ElvenResourcesMetas
+import alfheim.port.data.AlfheimItemModels
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.block.BlockModelShaper
 import net.minecraft.client.renderer.block.model.BakedQuad
@@ -21,8 +25,9 @@ import net.minecraftforge.eventbus.api.*
 import kotlin.math.abs
 
 /**
- * Модели блоков, которые в 1.7.10 выбирали иконку в коде (`registerBlockIcons` / `getIcon`), а не одной моделью
- * (MAPPING.md, «Блоки и предметы»). Сами модели строит генерация данных (`alfheim.port.data.AlfheimBlockStates`).
+ * Модели блоков и предметов, которые в 1.7.10 выбирали иконку в коде (`registerBlockIcons` / `registerIcons` /
+ * `getIcon`), а не одной моделью (MAPPING.md, «Блоки и предметы»). Сами модели строит генерация данных
+ * (`alfheim.port.data.AlfheimBlockStates`, `alfheim.port.data.AlfheimItemModels`).
  */
 object AlfheimModels {
 	
@@ -38,6 +43,7 @@ object AlfheimModels {
 		for (meta in 1..3) e.register(model("alf_storage$meta"))
 		e.register(model("living_cobble3_alt"))
 		for (i in 2..4) for (name in listOf("living_mountain", "living_mountain0_slab", "living_mountain0_slab_top")) e.register(model("${name}_icon$i"))
+		e.register(ResourceLocation(MODID, "item/${AlfheimItemModels.INFUSED_CANDY}"))
 	}
 	
 	private fun modifyBakingResult(e: ModelEvent.ModifyBakingResult) {
@@ -72,6 +78,13 @@ object AlfheimModels {
 				val icons = listOf(models[stateLocation]) + (2..4).map { models[model("${name}_icon$it")] }
 				if (icons.all { it != null }) models[stateLocation] = IconByPosition(icons.map { it!! }, ::livingMountainIcon)
 			}
+		
+		// ItemElvenResource.getIcon: на праздник (AlfheimCore.jingleTheBells) прутик рисуется конфетой
+		if (AlfheimCore.jingleTheBells) {
+			val twig = AlfheimItems.elvenResource[ElvenResourcesMetas.InfusedDreamwoodTwig.I]
+			val candy = models[ResourceLocation(MODID, "item/${AlfheimItemModels.INFUSED_CANDY}")]
+			if (candy != null) models[ModelResourceLocation(BuiltInRegistries.ITEM.getKey(twig), "inventory")] = candy
+		}
 	}
 	
 	/** Номер иконки грани `BlockLivingMountain.getIcon(world, x, y, z, side)` (0 — первая) */

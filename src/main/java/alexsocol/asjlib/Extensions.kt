@@ -4,8 +4,11 @@ package alexsocol.asjlib
 
 // PORT: импорты 1.7.10 заменены на 1.20.1. Функции, которые порту ещё не понадобились, закомментированы блоками
 // «PORT: по мере надобности»: их переносит КТ, которой они нужны, и сверяет смысл с 1.20.1
+import alfheim.port.legacy.*
+import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.Mth
+import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -217,12 +220,22 @@ fun ItemStack.areItemStackTagsEqual(stack: ItemStack): Boolean {
 	}
 }
 
-var ItemStack.meta
-	get() = itemDamage
-	set(meta) {
-		itemDamage = meta
-	}
+*/
 
+// PORT: metadata варианта — отдельный предмет или блок (SPEC, Р-5): meta стака — номер варианта его предмета (или блока
+// предмета-блока), у предмета без вариантов — повреждение, как в 1.7.10. Сменить вариант у стака нельзя: сеттер меняет
+// только повреждение
+var ItemStack.meta
+	get() = (item as? LegacyItem)?.variant ?: ((item as? BlockItem)?.block as? LegacyBlock)?.variant ?: damageValue
+	set(meta) {
+		damageValue = meta
+	}
+//	get() = itemDamage
+//	set(meta) {
+//		itemDamage = meta
+//	}
+
+/* PORT: по мере надобности — IInventory
 operator fun IInventory.get(i: Int): ItemStack? = getStackInSlot(i)
 operator fun IInventory.set(i: Int, stack: ItemStack?) = setInventorySlotContents(i, stack)
 */
@@ -276,9 +289,17 @@ fun World.setBlock(e: Entity, block: Block, x: Int = 0, y: Int = 0, z: Int = 0, 
 	return setBlock(i + x, j + y, k + z, block, meta, 3)
 }
 
-fun addStringToTooltip(tooltip: MutableList<Any?>, s: String, vararg format: String) {
-	tooltip.add(StatCollector.translateToLocalFormatted(s, *format).replace("&".toRegex(), "\u00a7"))
+*/
+
+// PORT: строка подсказки 1.20.1 — Component; перевод — на этой стороне, как в 1.7.10
+fun addStringToTooltip(tooltip: MutableList<Component>, s: String, vararg format: String) {
+	tooltip.add(Component.literal(StatCollector.translateToLocalFormatted(s, *format).replace("&".toRegex(), "\u00a7")))
 }
+//fun addStringToTooltip(tooltip: MutableList<Any?>, s: String, vararg format: String) {
+//	tooltip.add(StatCollector.translateToLocalFormatted(s, *format).replace("&".toRegex(), "\u00a7"))
+//}
+
+/* PORT: по мере надобности — Entity
 
 fun EntityLivingBase.teleportRandomly(radius: Double): Boolean {
 	val d0 = posX + (rng.nextDouble() - 0.5) * radius

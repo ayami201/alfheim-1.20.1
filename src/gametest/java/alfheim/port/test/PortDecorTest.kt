@@ -4,6 +4,8 @@ import alfheim.api.ModInfo.MODID
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.AlfheimFluffBlocks
 import alfheim.common.core.util.AlfheimTab
+import alfheim.common.item.AlfheimItems
+import alfheim.common.item.material.*
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -48,7 +50,8 @@ object PortDecorTest {
 			listOf("livingwood", "dreamwood").flatMap { listOf("${it}_bark_fence", "${it}_bark_fence_gate", "${it}_fence", "${it}_fence_gate") } + listOf("dwarf_trap_door")
 		helper.assertTrue(ids.size == 88, "ids: ${ids.size}")
 		for (id in ids) helper.assertTrue(BuiltInRegistries.BLOCK.containsKey(ResourceLocation(MODID, id)), "$MODID:$id is not registered")
-		helper.assertTrue(LegacyRegistration.blocks.size == 105, "blocks of the author: ${LegacyRegistration.blocks.size}")
+		// 105 блоков партий 1 и 2 и 6 вариантов эльфийской руды партии 3
+		helper.assertTrue(LegacyRegistration.blocks.size == 111, "blocks of the author: ${LegacyRegistration.blocks.size}")
 		helper.succeed()
 	}
 
@@ -203,16 +206,22 @@ object PortDecorTest {
 	}
 
 	/**
-	 * Вкладки: во вкладке Alfheim — все блоки автора, кроме мана-льда (его нет и у автора) и стены из эльфийского кварца —
-	 * она во вкладке Botania сразу за лестницей из эльфийского кварца (врезка H-023)
+	 * Вкладки: во вкладке Alfheim — все блоки и предметы автора, кроме мана-льда (его нет и у автора), стены из
+	 * эльфийского кварца — она во вкладке Botania сразу за лестницей из эльфийского кварца (врезка H-023), — и
+	 * эльфийских ресурсов, которых автор во вкладку не выдавал (`ElvenResourcesMetas.displayBlackList`); накопитель
+	 * разлома выдаётся по аномалиям (КТ-3). Эльфийские ресурсы — в порядке номеров, как выдавал `getSubItems`
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
 	fun creativeTabs(helper: GameTestHelper) {
 		CreativeModeTabs.tryRebuildTabContents(helper.level.enabledFeatures(), true, helper.level.registryAccess())
 		val alfheim = AlfheimTab.tab.get().displayItems.map { it.item }
-		val expected = LegacyRegistration.blocks.keys.filter { it !== AlfheimBlocks.manaIce && it !== AlfheimFluffBlocks.elfQuartzWall }.map { it.asItem() }
+		val hidden = listOf(AlfheimBlocks.manaIce.asItem(), AlfheimFluffBlocks.elfQuartzWall.asItem()) +
+			listOf(ElvenResourcesMetas.ElvenWeed, ElvenResourcesMetas.WisdomBottle, ElvenResourcesMetas.RiftDrive).map { AlfheimItems.elvenResource[it.I] }
+		val expected = LegacyRegistration.items.keys.filter { it !in hidden }
 		helper.assertTrue(alfheim.toSet() == expected.toSet() && alfheim.size == expected.size, "Alfheim tab: ${alfheim.size} items, expected ${expected.size}; missing ${expected - alfheim.toSet()}")
+		val resources = alfheim.filterIsInstance<ItemElvenResource>().map { it.meta }
+		helper.assertTrue(resources == resources.sorted(), "elven resources in the tab: $resources")
 
 		val botania = BuiltInRegistries.CREATIVE_MODE_TAB.get(BotaniaRegistries.BOTANIA_TAB_KEY)!!.displayItems.map { it.item }
 		val stairs = botania.indexOf(BotaniaBlocks.elfQuartzStairs.asItem())

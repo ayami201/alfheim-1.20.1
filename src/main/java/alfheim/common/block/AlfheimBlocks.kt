@@ -1,6 +1,7 @@
 package alfheim.common.block
 
 // PORT: импорты 1.20.1 — первыми; импорты автора закомментированы до КТ, в которых появятся их блоки
+import alfheim.api.lib.LibOreDict
 import alfheim.port.legacy.*
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
@@ -8,7 +9,6 @@ import net.minecraft.world.level.block.Block
 //import alexsocol.asjlib.capitalized
 //import alexsocol.asjlib.extendables.block.BlockPattern
 //import alfheim.api.*
-//import alfheim.api.lib.LibOreDict
 //import alfheim.api.lib.LibOreDict.IRIS_WOOD
 //import alfheim.common.block.alt.*
 //import alfheim.common.block.base.*
@@ -70,7 +70,7 @@ object AlfheimBlocks {
 //	val dirtDissolvable: Block // PORT: КТ-2
 //	val domainDoor: Block // PORT: КТ-6
 //	val dreamSapling: Block // PORT: КТ-2
-//	val elvenOre: Block // PORT: КТ-2
+	val elvenOre: Array<Block>
 	val elvenSand: Block
 //	val enderActuator: Block // PORT: КТ-3
 //	val flugelHeadBlock: Block // PORT: КТ-8
@@ -262,7 +262,7 @@ object AlfheimBlocks {
 //		dirtDissolvable = BlockDirtDissolvable() // PORT: КТ-2
 //		domainDoor = BlockDomainDoor() // PORT: КТ-6
 //		dreamSapling = BlockDreamSapling() // PORT: КТ-2
-//		elvenOre = BlockElvenOre() // PORT: КТ-2
+		elvenOre = Array(6) { BlockElvenOre(it) }
 		elvenSand = BlockElvenSand()
 //		enderActuator = BlockEnderActuator() // PORT: КТ-3
 //		flugelHeadBlock = BlockHeadFlugel() // PORT: КТ-8
@@ -499,14 +499,15 @@ object AlfheimBlocks {
 //		BotaniaAPI.registerSemiDisposableBlock("endstone") // PORT: КТ-3
 //		BotaniaAPI.registerDisposableBlock("niflStone") // PORT: КТ-3
 		
-//		registerOre(LibOreDict.DRAGON_ORE, ItemStack(elvenOre)) // PORT: КТ-2
-//		registerOre(LibOreDict.ELEMENTIUM_ORE, ItemStack(elvenOre, 1, 1)) // PORT: КТ-2
-//		registerOre(LibOreDict.ELVEN_QUARTZ_ORE, ItemStack(elvenOre, 1, 2)) // PORT: КТ-2
-//		registerOre(LibOreDict.GOLD_ORE, ItemStack(elvenOre, 1, 3)) // PORT: КТ-2
-//		registerOre(LibOreDict.GOLD_ORE + "Alfheim", ItemStack(elvenOre, 1, 3)) // PORT: КТ-2
-//		registerOre(LibOreDict.IFFESAL_ORE, ItemStack(elvenOre, 1, 4)) // PORT: КТ-2
-//		registerOre(LibOreDict.LAPIS_ORE, ItemStack(elvenOre, 1, 5)) // PORT: КТ-2
-//		registerOre(LibOreDict.LAPIS_ORE + "Alfheim", ItemStack(elvenOre, 1, 5)) // PORT: КТ-2
+		// PORT: вариант metadata — отдельный блок, ItemStack(elvenOre, 1, n) → ItemStack(elvenOre[n])
+		registerOre(LibOreDict.DRAGON_ORE, ItemStack(elvenOre[0]))
+		registerOre(LibOreDict.ELEMENTIUM_ORE, ItemStack(elvenOre[1]))
+		registerOre(LibOreDict.ELVEN_QUARTZ_ORE, ItemStack(elvenOre[2]))
+		registerOre(LibOreDict.GOLD_ORE, ItemStack(elvenOre[3]))
+		registerOre(LibOreDict.GOLD_ORE + "Alfheim", ItemStack(elvenOre[3]))
+		registerOre(LibOreDict.IFFESAL_ORE, ItemStack(elvenOre[4]))
+		registerOre(LibOreDict.LAPIS_ORE, ItemStack(elvenOre[5]))
+		registerOre(LibOreDict.LAPIS_ORE + "Alfheim", ItemStack(elvenOre[5]))
 		
 //		registerOre(LibOreDict.NIFLEUR_ORE, BlockNiflheim.NiflheimBlockMetas.ORE.stack) // PORT: КТ-2
 		

@@ -142,7 +142,34 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `IFuelHandler`, топливо | деревянный блок порта (материал `wood`) горит 300 тиков — `alfheim.port.legacy.Fuel1710` | ✓ печь 1.7.10 проверяла материал раньше обработчиков модов; обработчик топлива предмета — в КТ своего предмета |
 | `Block.stepSound` чужого блока | расширение `Block.stepSound` прослойки | ✓ у блока порта и блока Botania 1.7.10 (`Botania1710`) |
 | `getIcon(world, x, y, z, side)` — иконка по координатам и стороне | модели вариантов; клиент выбирает грань по той же формуле (`alfheim.port.client.AlfheimModels`) | ✓ `BlockLivingCobble`, `BlockLivingMountain` и его плита |
-| текстура, которую автор грузил `InterpolatedIconHelper` (Botania `InterpolatedIcon`) | `"interpolate": true` в `.png.mcmeta` | ✓ `InterpolatedIcon` сглаживал кадры всегда; у части файлов автора ключ `"interpolated"` (1.7.10 его не читал) — исправляется на `"interpolate"` при переносе |
+| текстура, которую автор грузил `InterpolatedIconHelper` (Botania `InterpolatedIcon`) | `"interpolate": true` в `.png.mcmeta` | ✓ `InterpolatedIcon` сглаживал кадры всегда; у части файлов автора ключ `"interpolated"` (1.7.10 его не читал) — исправляется на `"interpolate"` при переносе. У текстуры, которую автор грузил обычной иконкой, ключ `"interpolated"` остаётся: её кадры и в 1.7.10 не сглаживались (`netherwood_twig`) |
+
+### Предметы
+
+Предметы автора наследуют `alfheim.port.legacy.Item1710` (`Item` 1.7.10): предмет создаётся без свойств, а
+сеттеры 1.7.10 (`setMaxStackSize`, `setHasSubtypes`, `setContainerItem`…) работают после создания; 1.20.1 читает их
+методами предмета. Проверяет GameTest `PortMaterialsTest`.
+
+| Было | Стало | Примечание |
+|---|---|---|
+| `Item()`, сеттеры, `unlocalizedName = name`, `creativeTab = tab` | `Item1710()`, те же сеттеры и свойства | ✓ `getItemStackLimit`, `getMaxDamage`, `isDamageable` (прочность есть и вариантов нет), `hasContainerItem` / `getContainerItem` (`null` — ничего не остаётся) — открытые методы `Item1710` с именами 1.7.10 |
+| metadata = разные предметы (`ItemElvenResource`, `getSubItems` по номерам) | массив предметов `Array(n) { ItemX(it) }`, номер — `val meta` предмета (`LegacyItem.variant`) | ✓ id — имя варианта у автора, если у варианта своё имя (`LegacyItem.variantName`: `ElvenItems` 3 → `ElvoriumIngot` → `alfheim:elvorium_ingot`), иначе имя предмета и номер (`wiltedLotus` 1 → `wilted_lotus1`) |
+| `ItemStack(item, n, meta)`, `stack.itemDamage` как вариант | `ItemStack(items[meta], n)`; `stack.meta` (ASJCore) — номер варианта предмета или блока, иначе повреждение | ✓ |
+| `getItemStackDisplayName(stack)`, ключ `getUnlocalizedNameInefficiently(stack) + ".name"` | `getDescriptionId(stack)` `Item1710` — тот же ключ, переименованный по `legacy_ids.json`; `ItemMod.getName` переводит его на этой стороне (`StatCollector`), `&` → `§` | ✓ имена, которые автор собирает по NBT, — его ключи; на сервере имя английское, как в 1.7.10 |
+| `getSubItems(item, tab, list)` | `Item1710.getSubItems(item, tab, list)`; вкладка автора зовёт его, как в 1.7.10 | ✓ предмет-вариант выдаёт только свои вещи |
+| `registerIcons` / `getIcon(stack, pass)` / `getRenderPasses` / `IIcon` | закомментированы в классе предмета; модели строит генерация данных (`AlfheimItemModels`): проход n — слой `layer<n>` `item/generated` | ✓ текстура `alfheim:materials/RiftShardEmpty` → `alfheim:items/materials/rift_shard_empty` |
+| `getColorFromItemStack(stack, pass)` | как есть; клиент красит им слой с тем же номером (`alfheim.port.client.AlfheimItemColors`) | ✓ спрашивается на каждом кадре — переливы как в 1.7.10 |
+| `setFull3D()` | родитель модели `item/handheld` | |
+| `hasEffect(stack, pass)` | как есть; `isFoil` = `hasEffect(stack, 0)` | ✓ |
+| `addInformation(stack, player, list, adv)` | `appendHoverText(stack, level, tooltip: MutableList<Component>, flag)`; `addStringToTooltip` (ASJCore) принимает `MutableList<Component>` | ✓ |
+| `onItemRightClick` / `setItemInUse` / `getMaxItemUseDuration` / `getItemUseAction` / `onEaten` | `use` / `startUsingItem(hand)` / `getUseDuration` / `getUseAnimation` (`EnumAction.bow` → `UseAnim.BOW`) / `finishUsingItem` | ✓ |
+| `stack.stackSize--`, `foodStats.addStats(f, s)`, `isBadEffect` | `stack.shrink(1)`, `foodData.eat(f, s)`, `effect.category == HARMFUL` | ✓ |
+| `IFuelHandler.getBurnTime(fuel)` предмета | `getBurnTime(stack, recipeType)` предмета зовёт метод автора | ✓ |
+| `commandSenderName` игрока | `gameProfile.name` | ✓ |
+| `EntitySheep.fleeceColorTable` | `alfheim.port.legacy.Sheep1710.fleeceColorTable` | ✓ таблица 1.7.10: цвета красителей 1.20.1 другие |
+| иконка на праздник (`AlfheimCore.jingleTheBells`) | вторая модель; нужную подставляет клиент при сборке моделей (`AlfheimModels`) | ✓ |
+| `getItemDropped` / `damageDropped` / `quantityDropped` блока | таблица лута из генерации данных по методам автора (`AlfheimBlockLoot`); `getItemDropped` возвращает предмет 1.20.1 | ✓ формула удачи 1.7.10 — `ApplyBonusCount.addOreBonusCount`; при взрыве каждая вещь — с шансом 1 / сила взрыва (`explosion_decay`) |
+| `getExpDrop(world, meta, fortune)` | `getExpDrop(state, level, random, pos, fortune, silkTouch)` зовёт метод автора; с шёлковым касанием — 0 | ✓ так считал опыт Forge 1.7.10 (`BlockEvent.BreakEvent`) |
 
 ## Ore Dictionary
 
@@ -150,9 +177,25 @@ Metadata поворота и половины (лестницы, плиты, с�
 (`alfheim.port.data.OreDictTags`) превращает их в теги — один и тот же для предмета и для блока: в 1.7.10 по
 Ore Dictionary искали и вещи, и блоки. Имя без строки в таблице роняет генерацию данных.
 
+Имя, у которого есть общий тег Forge (так материалы называют Botania 1.20.1 и другие моды), — этот тег:
+`ingotX` → `forge:ingots/x`, `nuggetX` → `forge:nuggets/x`, `dustX` → `forge:dusts/x`, `oreX` → `forge:ores/x`.
+Остальные — тег Alfheim по имени автора в snake_case: `essenceMuspelheim` → `alfheim:essence_muspelheim`.
+Предмет, который ставит блок под своим именем (`ItemNameBlockItem`: семена, лепестки Botania), в тег блоков не
+попадает: в 1.7.10 это был простой предмет.
+
 | Имя 1.7.10 | Тег 1.20.1 | Примечание |
 |---|---|---|
 | `sand` | `forge:sand` | ✓ |
+| `coal` | `minecraft:coals` | ✓ уголь и древесный уголь |
+| `slimeball` | `forge:slimeballs` | ✓ |
+| `ingotElvorium`, `ingotMauftrium`, `ingotMuspelheimPower`, `ingotNiflheimPower` | `forge:ingots/elvorium`, `…/mauftrium`, `…/muspelheim_power`, `…/niflheim_power` | ✓ |
+| `nuggetElvorium`, `nuggetMauftrium` | `forge:nuggets/elvorium`, `…/mauftrium` | ✓ |
+| `dustIffesal` | `forge:dusts/iffesal` | ✓ |
+| `oreDragonstone`, `oreElementium`, `oreQuartzElven`, `oreGold`, `oreIffesal`, `oreLapis` | `forge:ores/dragonstone`, `…/elementium`, `…/quartz_elven`, `…/gold`, `…/iffesal`, `…/lapis` | ✓ |
+| `oreGoldAlfheim`, `oreLapisAlfheim` | `alfheim:ore_gold_alfheim`, `alfheim:ore_lapis_alfheim` | ✓ |
+| `essenceMuspelheim`, `essenceNiflheim`, `furFenrir`, `runePrimalA`, `runeMuspelheimA`, `runeNiflheimA`, `twigDreamwoodInfused` | `alfheim:<имя в snake_case>` | ✓ |
+| `twigThunderwood`, `splinterThunderwood`, `twigNetherwood`, `splinterNetherwood`, `coalFlame` | `alfheim:<имя в snake_case>` | ✓ |
+| `dyeRainbow`, `dyeFloralPowder`, `petalRainbow`, `quartzRainbow`, `petalMystic` | `alfheim:<имя в snake_case>` | ✓ в `dyeRainbow` — и блок радужного моста Botania |
 
 ## Прослойка `alfheim.port.legacy`
 
@@ -286,6 +329,10 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | лексикон (`LexiconEntry`, страницы) | Patchouli, расширение `botania:lexicon` | SPEC, Р-8 |
 | Baubles | Curios, как у аксессуаров Botania 1.20.1 | |
 | частицы `Botania.proxy.wispFX` / `sparkleFX` | `WispParticleData` / `SparkleParticleData` | |
+| `Botania.proxy.worldElapsedTicks` | `alfheim.port.legacy.botania.Botania.proxy.worldElapsedTicks` | ✓ на клиенте — тики игры Botania (`ClientTickHandler.ticksInGame`), на сервере — время основного мира |
+| `ModItems.manaResource` 9, `ModItems.quartz` 5 | `BotaniaItems.dragonstone`, `BotaniaItems.elfQuartz` | ✓ |
+| `ModItems.petal` с metadata цвета | `BotaniaItems.getPetal(DyeColor)` | ✓ |
+| `ModItems.dye` (цветочная пыль) | краситель ванилы (`DyeItem.byColor`) | ✓ в Botania 1.20.1 цветочной пыли нет: лепестки дают краситель ванилы |
 
 ## Удалённые опции конфига
 
