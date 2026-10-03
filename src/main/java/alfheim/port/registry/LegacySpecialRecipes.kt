@@ -1,5 +1,6 @@
 package alfheim.port.registry
 
+import alfheim.common.crafting.recipe.workbench.RecipeThrowablePotion
 import alfheim.port.legacy.IRecipe
 import com.google.gson.JsonObject
 import net.minecraft.core.RegistryAccess
@@ -23,6 +24,7 @@ object LegacySpecialRecipes {
 
 	/** Имя `RecipeSorter.register` без `alfheim:` → рецепт автора */
 	val recipes: Map<String, () -> IRecipe> = linkedMapOf(
+		"throwpotion" to { RecipeThrowablePotion },
 	)
 
 	/** Id рецепта и сериализатора: имя автора в snake_case */

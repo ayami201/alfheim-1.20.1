@@ -1,17 +1,17 @@
 package alfheim.common.crafting.recipe.workbench
 
+// PORT: импорты 1.20.1 (MAPPING.md, «Рецепты»): IRecipe и сетка верстака 1.7.10 — прослойка alfheim.port.legacy;
+// склянка с варевом Botania 1.20.1 — BaseBrewItem, запасное варево — BotaniaBrews.fallbackBrew
 import alexsocol.asjlib.get
 import alfheim.common.item.AlfheimItems.splashPotion
 import alfheim.common.item.ItemSplashPotion
-import net.minecraft.init.Items
-import net.minecraft.inventory.InventoryCrafting
-import net.minecraft.item.ItemStack
-import net.minecraft.item.crafting.IRecipe
-import net.minecraft.world.World
-import vazkii.botania.api.BotaniaAPI
-import vazkii.botania.common.brew.ModBrews
-import vazkii.botania.common.item.ModItems
-import vazkii.botania.common.item.brew.ItemBrewVial
+import alfheim.port.legacy.*
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.Level as World
+import vazkii.botania.common.brew.BotaniaBrews as ModBrews
+import vazkii.botania.common.item.BotaniaItems as ModItems
+import vazkii.botania.common.item.brew.BaseBrewItem as ItemBrewVial
 
 object RecipeThrowablePotion: IRecipe {
 	
@@ -22,7 +22,7 @@ object RecipeThrowablePotion: IRecipe {
 		for (i in 0 until inv.sizeInventory) {
 			val stack = inv[i] ?: continue
 			when {
-				stack.item === Items.gunpowder   -> foundGunpowder = true
+				stack.item === Items.GUNPOWDER   -> foundGunpowder = true
 				stack.item === ModItems.brewVial -> foundVial = true
 				else                             -> return false // Found an invalid item, breaking the recipe
 			}
@@ -44,7 +44,8 @@ object RecipeThrowablePotion: IRecipe {
 		val item = vial.item as ItemBrewVial
 		val brew = item.getBrew(vial)
 		
-		if (brew === BotaniaAPI.fallbackBrew) return null
+		if (brew === ModBrews.fallbackBrew) return null
+//		if (brew === BotaniaAPI.fallbackBrew) return null
 		
 		return (splashPotion as ItemSplashPotion).getItemForBrew(brew, vial)
 	}

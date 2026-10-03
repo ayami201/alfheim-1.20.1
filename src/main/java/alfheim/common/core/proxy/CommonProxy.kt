@@ -61,7 +61,8 @@ open class CommonProxy {
 	open fun registerKeyBinds() = Unit
 	
 	fun init() {
-		// PORT: Ore Dictionary → теги: их строит генерация данных по regOreDict (alfheim.port.data); КТ-2 — рецепты
+		// PORT: Ore Dictionary → теги, рецепты → JSON: их строит генерация данных по regOreDict и AlfheimRecipes
+		// (alfheim.port.data); в игре этот код не выполняется
 //		AlfheimBlocks.regOreDict()
 //		AlfheimItems.regOreDict()
 //		

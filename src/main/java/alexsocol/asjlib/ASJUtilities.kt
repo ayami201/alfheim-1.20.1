@@ -3,6 +3,7 @@ package alexsocol.asjlib
 // PORT: импорты 1.7.10 заменены на 1.20.1. Функции, которые порту ещё не понадобились, закомментированы блоками
 // «PORT: по мере надобности»: их переносит КТ, которой они нужны, и сверяет смысл с 1.20.1
 import alfheim.port.legacy.Block1710
+import alfheim.port.legacy.CraftingManager
 import alfheim.port.legacy.Material
 import alfheim.port.legacy.Material.Companion.air
 import alfheim.port.legacy.Material.Companion.anvil
@@ -36,6 +37,8 @@ import alfheim.port.legacy.Material.Companion.web
 import alfheim.port.legacy.Material.Companion.wood
 import alfheim.port.legacy.StatCollector
 import alfheim.port.legacy.MovingObjectPosition
+import alfheim.port.legacy.ShapedOreRecipe
+import alfheim.port.legacy.ShapelessOreRecipe
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
@@ -44,6 +47,7 @@ import net.minecraft.world.Container
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level as World
 import net.minecraft.world.level.portal.PortalInfo
@@ -434,6 +438,10 @@ object ASJUtilities {
 	}
 }*/
 	
+	*/
+	
+	// PORT: рецепты 1.7.10 — прослойка alfheim.port.legacy (Recipes1710.kt): CraftingManager записывает рецепт,
+	// JSON 1.20.1 строит генерация данных
 	/**
 	 * Adds new recipe with [OreDictionary] support
 	 */
@@ -449,6 +457,8 @@ object ASJUtilities {
 	fun addShapelessOreDictRecipe(output: ItemStack, vararg recipe: Any) {
 		CraftingManager.getInstance().recipeList.add(ShapelessOreRecipe(output, *recipe))
 	}
+	
+	/* PORT: по мере надобности (продолжение)
 	
 	/**
 	 * Checks whether `stack` is registered to oredict `name`

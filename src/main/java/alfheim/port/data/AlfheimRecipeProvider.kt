@@ -1,6 +1,7 @@
 package alfheim.port.data
 
 import alfheim.api.ModInfo.MODID
+import alfheim.common.crafting.recipe.AlfheimRecipes
 import alfheim.port.legacy.*
 import alfheim.port.registry.LegacySpecialRecipes
 import com.google.gson.JsonArray
@@ -30,6 +31,8 @@ import java.util.function.Consumer
 class AlfheimRecipeProvider(output: PackOutput): RecipeProvider(output) {
 
 	override fun buildRecipes(writer: Consumer<FinishedRecipe>) {
+		AlfheimRecipes // записывает рецепты автора в прослойку
+
 		val counts = HashMap<String, Int>()
 		fun id(path: String): ResourceLocation {
 			val n = counts.merge(path, 1, Int::plus)!!
@@ -86,9 +89,11 @@ class AlfheimRecipeProvider(output: PackOutput): RecipeProvider(output) {
 		json.addProperty("cookingtime", 200)
 	}
 
-	/** Особый рецепт: имя `RecipeSorter` автора, класс — в [LegacySpecialRecipes] */
+	/** Особый рецепт: имя `RecipeSorter` автора (`alfheim:throwpotion`), класс — в [LegacySpecialRecipes] */
 	private fun special(recipe: IRecipe): Finished {
-		val name = RecipeSorter.names[recipe.javaClass] ?: throw IllegalStateException("Special recipe ${recipe.javaClass.name} has no RecipeSorter name")
+		val sorter = RecipeSorter.names[recipe.javaClass] ?: throw IllegalStateException("Special recipe ${recipe.javaClass.name} has no RecipeSorter name")
+		check(sorter.startsWith("$MODID:")) { "Special recipe name $sorter is not in the $MODID namespace" }
+		val name = sorter.removePrefix("$MODID:")
 		check(LegacySpecialRecipes.recipes[name]?.invoke() === recipe) { "Special recipe $name (${recipe.javaClass.name}) is not in LegacySpecialRecipes" }
 		val id = ResourceLocation(MODID, LegacySpecialRecipes.id(name))
 		return Finished(id, ForgeRegistries.RECIPE_SERIALIZERS.getValue(id)!!) { json -> json.addProperty("category", "misc") }
