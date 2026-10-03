@@ -18,6 +18,11 @@ val Vec3i.posX get() = x
 val Vec3i.posY get() = y
 val Vec3i.posZ get() = z
 
+/** `EnumFacing.frontOffsetX`, `frontOffsetY`, `frontOffsetZ` 1.7.10 */
+val Direction.frontOffsetX get() = stepX
+val Direction.frontOffsetY get() = stepY
+val Direction.frontOffsetZ get() = stepZ
+
 /**
  * `ForgeDirection` 1.7.10: шесть сторон по номерам 1.7.10 (0 — низ, 1 — верх, 2 — север, 3 — юг, 4 — запад,
  * 5 — восток; тот же порядок у `Direction` 1.20.1) и `UNKNOWN` — «стороны нет», смещение 0. Для API 1.20.1 —
