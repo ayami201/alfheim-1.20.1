@@ -155,6 +155,7 @@
   },
   "entities": {},
   "items": {
+    "alfheim:Chalk": "alfheim:chalk",
     "alfheim:CustomRoof": {
       "0": "alfheim:custom_roof0",
       "1": "alfheim:custom_roof1",
@@ -180,6 +181,7 @@
     "alfheim:DarkLivingRockStairs0": "alfheim:dark_living_rock_stairs0",
     "alfheim:DarkLivingRockStairs1": "alfheim:dark_living_rock_stairs1",
     "alfheim:DarkLivingRockStairs3": "alfheim:dark_living_rock_stairs3",
+    "alfheim:DeathSeed": "alfheim:death_seed",
     "alfheim:DreamwoodBarkFence": "alfheim:dreamwood_bark_fence",
     "alfheim:DreamwoodBarkFenceGate": "alfheim:dreamwood_bark_fence_gate",
     "alfheim:DreamwoodFence": "alfheim:dreamwood_fence",
@@ -280,6 +282,7 @@
       "1": "alfheim:volcano_relic",
       "2": "alfheim:lava_melon"
     },
+    "alfheim:HyperpolatedBucket": "alfheim:hyperpolated_bucket",
     "alfheim:LivingCobble": {
       "0": "alfheim:living_cobble0",
       "1": "alfheim:living_cobble1",
@@ -342,6 +345,7 @@
     },
     "alfheim:ShrineRock0Slab": "alfheim:shrine_rock0_slab",
     "alfheim:ShrineRockWhiteStairs": "alfheim:shrine_rock_white_stairs",
+    "alfheim:SoulHorn": "alfheim:soul_horn",
     "alfheim:Wisdomwood": {
       "0": "alfheim:wisdomwood0",
       "1": "alfheim:wisdomwood1",
@@ -406,7 +410,9 @@
     "alfheim.potion.wellolife": "effect.alfheim.wellolife",
     "alfheim.potion.whiteWine": "effect.alfheim.white_wine",
     "alfheim.potion.wisdom": "effect.alfheim.wisdom",
+    "item.alfheim:Chalk.name": "item.alfheim.chalk",
     "item.alfheim:DasRheingold.name": "item.alfheim.das_rheingold",
+    "item.alfheim:DeathSeed.name": "item.alfheim.death_seed",
     "item.alfheim:DomainKey.name": "item.alfheim.domain_key",
     "item.alfheim:ElementalSlimeBall.COMMON.name": "item.alfheim.elemental_slime_ball",
     "item.alfheim:ElvenFood.Beer.name": "item.alfheim.beer",
@@ -432,6 +438,7 @@
     "item.alfheim:ElvoriumNugget.name": "item.alfheim.elvorium_nugget",
     "item.alfheim:FenrirFur.name": "item.alfheim.fenrir_fur",
     "item.alfheim:GrapeLeaf.name": "item.alfheim.grape_leaf",
+    "item.alfheim:HyperpolatedBucket.name": "item.alfheim.hyperpolated_bucket",
     "item.alfheim:IffesalDust.name": "item.alfheim.iffesal_dust",
     "item.alfheim:InfusedDreamwoodTwig.name": "item.alfheim.infused_dreamwood_twig",
     "item.alfheim:InterdimensionalGatewayCore.name": "item.alfheim.interdimensional_gateway_core",
@@ -463,6 +470,7 @@
     "item.alfheim:RiftShardNiflheim.name": "item.alfheim.rift_shard_niflheim",
     "item.alfheim:SaveIvy.name": "item.alfheim.save_ivy",
     "item.alfheim:SnowRelic.name": "item.alfheim.snow_relic",
+    "item.alfheim:SoulHorn.name": "item.alfheim.soul_horn",
     "item.alfheim:Stencil.name": "item.alfheim.stencil",
     "item.alfheim:ThunderwoodSplinters.name": "item.alfheim.thunderwood_splinters",
     "item.alfheim:ThunderwoodTwig.name": "item.alfheim.thunderwood_twig",

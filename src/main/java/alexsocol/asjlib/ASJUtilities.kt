@@ -35,6 +35,20 @@ import alfheim.port.legacy.Material.Companion.vine
 import alfheim.port.legacy.Material.Companion.web
 import alfheim.port.legacy.Material.Companion.wood
 import alfheim.port.legacy.StatCollector
+import alfheim.port.legacy.MovingObjectPosition
+import net.minecraft.resources.ResourceKey
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.Container
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.ClipContext
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.portal.PortalInfo
+import net.minecraft.world.phys.*
+import net.minecraftforge.common.util.ITeleporter
+import java.util.function.Function
 import net.minecraft.commands.CommandSource as ICommandSender
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
@@ -99,11 +113,48 @@ object ASJUtilities {
 		return if (id == null || id.modId == "") "minecraft" else id.modId
 	}
 	
+	*/
+	
 	/**
 	 * Sends entity to dimension without portal frames
 	 * @param target Entity to send
 	 * @param dimTo ID of the dimension the entity should be sent to
 	 */
+	// PORT: номер измерения → ключ измерения 1.20.1. Перенос между мирами — teleportTo (игрок) и changeDimension с
+	// телепортом прямо в точку (прочие); копию существа 1.20.1 делает сам. Игрока из Края 1.7.10 сначала возрождал
+	// (иначе показывались титры); teleportTo 1.20.1 переносит из Края так же, как из других миров
+	@JvmStatic
+	fun sendToDimensionWithoutPortal(target: Entity, dimTo: ResourceKey<World>, x: Double, y: Double, z: Double) {
+		if (target.level().isClientSide || target.isRemoved) return
+		
+		val server = target.server ?: return
+		
+		target.stopRiding()
+		
+		if (dimTo == target.level().dimension()) {
+			if (target is LivingEntity)
+				return target.teleportTo(x, y, z)
+			
+			return target.moveTo(x, y, z, target.yRot, target.xRot)
+		}
+		
+		// PORT-FIX: нет такого измерения (мод с ним убран из сборки) — ничего не происходит; в 1.7.10 — падение
+		val worldTo = server.getLevel(dimTo) ?: return
+		
+		if (target is ServerPlayer)
+			return target.teleportTo(worldTo, x, y, z, target.yRot, target.xRot)
+		
+		target.changeDimension(worldTo, object: ITeleporter {
+			override fun getPortalInfo(entity: Entity, destWorld: ServerLevel, defaultPortalInfo: Function<ServerLevel, PortalInfo>) =
+				PortalInfo(Vec3(x, y, z), Vec3.ZERO, entity.yRot, entity.xRot)
+			
+			override fun isVanilla() = false
+			
+			override fun playTeleportSound(player: ServerPlayer, sourceWorld: ServerLevel, destWorld: ServerLevel) = false
+		})
+	}
+	
+	/* PORT: по мере надобности (продолжение); выше — перенесённая функция, здесь — её код 1.7.10
 	@JvmStatic
 	fun sendToDimensionWithoutPortal(target: Entity, dimTo: Int, x: Double, y: Double, z: Double) {
 		if (target.worldObj.isRemote || target.isDead) return
@@ -207,11 +258,18 @@ object ASJUtilities {
 	
 	// ################################ STACKS ################################
 	
+	*/
+	
 	/**
 	 * Returns the number of the slot with item matching to item passed in
 	 * @param item The item to compare
 	 * @param inventory The inventory to scan
 	 */
+	// PORT: IInventory → Container
+	@JvmStatic
+	fun getSlotWithItem(item: Item, inventory: Container) = (0 until inventory.containerSize).firstOrNull { inventory[it]?.item === item } ?: -1
+	
+	/* PORT: по мере надобности (продолжение); выше — перенесённая функция, здесь — её код 1.7.10
 	@JvmStatic
 	fun getSlotWithItem(item: Item, inventory: IInventory) = (0 until inventory.sizeInventory).firstOrNull { inventory[it]?.item === item } ?: -1
 	
@@ -469,6 +527,12 @@ object ASJUtilities {
 		return f + f3
 	}
 	
+	*/
+	
+	// PORT: MovingObjectPosition → HitResult (alfheim.port.legacy.Hit1710), промах — null, как в 1.7.10. Глаза
+	// существа — getEyePosition на обеих сторонах: в 1.7.10 у своего игрока на клиенте posY уже был на уровне глаз,
+	// отсюда поправки автора по стороне. Луч до жидкости 1.7.10 останавливался только на источнике — SOURCE_ONLY
+	
 	/**
 	 * Returns MOP with block and entity
 	 * @param entity Entity to calculate vector from
@@ -476,6 +540,94 @@ object ASJUtilities {
 	 * @param interact Whether to get uncollidable entities / stop on hitting water
 	 * @author timaxa007
 	 */
+	@JvmStatic
+	fun getMouseOver(entity: LivingEntity?, dist: Double, interact: Boolean): MovingObjectPosition? {
+		if (entity == null) return null
+		
+		var pointedEntity: Entity? = null
+		var d1 = dist
+		val vec3 = entity.eyePosition
+		val vec31 = entity.lookAngle
+		val vec32 = vec3.add(vec31.x * dist, vec31.y * dist, vec31.z * dist)
+		var vec33: Vec3? = null
+		val objectMouseOver = rayTrace(entity, dist)
+		
+		if (objectMouseOver != null) {
+			d1 = objectMouseOver.location.distanceTo(vec3)
+		}
+		
+		val f1 = 1f
+		val list = getEntitiesWithinAABB(entity.level(), Entity::class.java, entity.boundingBox.expandTowards(vec31.x * dist, vec31.y * dist, vec31.z * dist).inflate(f1.D))
+		list.remove(entity)
+		var d2 = d1
+		
+		list.forEach {
+			if (!it.isPickable && !interact) return@forEach
+			val f2 = it.pickRadius
+			val axisalignedbb = it.boundingBox.inflate(f2.D)
+			val movingobjectposition = axisalignedbb.clip(vec3, vec32).orElse(null)
+			
+			if (axisalignedbb.contains(vec3)) {
+				if (0.0 < d2 || d2 == 0.0) {
+					pointedEntity = it
+					vec33 = movingobjectposition ?: vec3
+					d2 = 0.0
+				}
+			} else if (movingobjectposition != null) {
+				val d3 = vec3.distanceTo(movingobjectposition)
+				
+				if (d3 < d2 || d2 == 0.0) {
+					if (it === entity.vehicle && !it.canRiderInteract()) {
+						if (d2 == 0.0) {
+							pointedEntity = it
+							vec33 = movingobjectposition
+						}
+					} else {
+						pointedEntity = it
+						vec33 = movingobjectposition
+						d2 = d3
+					}
+				}
+			}
+		}
+		
+		return if (pointedEntity != null && (d2 < d1 || objectMouseOver == null)) {
+			EntityHitResult(pointedEntity!!, vec33!!)
+		} else getSelectedBlock(entity, dist, interact)
+	}
+	
+	/**
+	 * Raytracer for 'getMouseOver' method.
+	 */
+	private fun rayTrace(entity: LivingEntity, dist: Double): BlockHitResult? {
+		val vec3 = entity.eyePosition
+		val vec31 = entity.lookAngle
+		val vec32 = vec3.add(vec31.x * dist, vec31.y * dist, vec31.z * dist)
+		return entity.level().clip(ClipContext(vec3, vec32, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).takeUnless { it.type == HitResult.Type.MISS }
+	}
+	
+	/**
+	 * Returns MOP with only blocks.
+	 * @param entity Player to calculate vector from
+	 * @param dist Max distance for use
+	 * @param stopOnWater Whether to stop raytrace when hitting liquid
+	 */
+	@JvmStatic
+	fun getSelectedBlock(entity: LivingEntity, dist: Double, stopOnWater: Boolean): BlockHitResult? {
+		val pos = getPosition(entity)
+		val look = entity.getViewVector(0f)
+		val combined = pos.add(look.x * dist, look.y * dist, look.z * dist)
+		return entity.level().clip(ClipContext(pos, combined, ClipContext.Block.OUTLINE, if (stopOnWater) ClipContext.Fluid.SOURCE_ONLY else ClipContext.Fluid.NONE, entity)).takeUnless { it.type == HitResult.Type.MISS }
+	}
+	
+	/**
+	 * Corrected position vector
+	 * @author Azanor
+	 */
+	@JvmStatic
+	fun getPosition(target: LivingEntity): Vec3 = target.eyePosition
+	
+	/* PORT: по мере надобности (продолжение); выше — перенесённая функция, здесь — её код 1.7.10
 	@JvmStatic
 	fun getMouseOver(entity: EntityLivingBase?, dist: Double, interact: Boolean): MovingObjectPosition? {
 		if (entity?.worldObj == null) return null

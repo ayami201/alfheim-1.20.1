@@ -3,6 +3,9 @@ package alfheim.client.render.world
 // PORT: импорты 1.20.1 — первыми; импорты автора закомментированы до КТ эффектов, которым они нужны
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.AlfheimCore
+import alfheim.client.render.world.VisualEffectHandlerClient.VisualEffects.*
+import net.minecraft.client.Minecraft
 /*
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
@@ -48,13 +51,17 @@ object VisualEffectHandlerClient {
 		if (mc.level == null) return
 		
 		// PORT: эффекты включаются вместе с механиками, которые их шлют (КТ — по отправителям в INVENTORY.md):
-		// КТ-2 — CHALK, POTION, QUAD, QUADH;
+		// КТ-2 — CHALK (включён), POTION, QUAD, QUADH;
 		// КТ-3 — CREATION, FIREWORK, GAIA_SOUL, ICONCRACK, LIGHTNING, MANABURST, MANAVOID, SMOKE, WISP;
 		// КТ-4 — BIFROST, BIFROST_DONE, EMBLEM_ACTIVATION, FALLING, GUNGNIR, MOON, SEAROD, SPARKLE, SPLASH, WIRE;
 		// КТ-6 — ENDER, MIST;
 		// КТ-7 — ACID, AQUASTREAM_HIT, DISPEL, ECHO, ECHO_ENTITY, ECHO_ITEM, ECHO_MOB, ECHO_PLAYER, EXPL, FEATHER,
 		//        FIRESTAR, HEAL, HORN, MANA, NOTE, NVISION, PURE, PURE_AREA, SHADOW, SMOKESCREEN, THROW, TREMORS, UPHEAL;
 		// КТ-8 — FENRIR_AREA, FENRIR_AREA_END, FENRIR_DASH, PRIMAL_BOSS_ATTACK, SNICE_MARK, SURTRWALL, THRYM_DOME, WHIRL
+		when (s) {
+			CHALK              -> AlfheimCore.proxy.voxelFX(mc.theWorld, d[0], d[1], d[2], d[3].F, d[4].F, d[5].F)
+			else               -> Unit
+		}
 		/*
 		when (s) {
 			ACID               -> spawnAcid(d[0], d[1], d[2])
@@ -564,4 +571,7 @@ object VisualEffectHandlerClient {
 		Botania.proxy.wispFX(target.worldObj, target.posX, target.posY - if (mc.thePlayer === target) 1.5 else 0.0, target.posZ, (c shr 16 and 0xFF) / 255f, (c shr 8 and 0xFF) / 255f, (c and 0xFF) / 255f, (Math.random() * 0.5).F, (Math.random() * 0.015 - 0.0075).F, (Math.random() * 0.025).F, (Math.random() * 0.015 - 0.0075).F, 2f)
 	}
 	*/
+	
+	// PORT: имена 1.7.10
+	private val Minecraft.theWorld get() = level!!
 }

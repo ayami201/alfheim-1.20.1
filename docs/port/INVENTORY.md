@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 222 | 19 082 | 155 | 66 | 1 |  |
+| КТ-2 | 222 | 19 082 | 150 | 71 | 1 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 177 | 24 578 | 177 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **982** | **98** | **61** | **12** |
+| **всего** | **1153** | **124 643** | **977** | **103** | **61** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -565,7 +565,7 @@ python3 tools/check_inventory.py
 | `EntityFeatherFx.kt` | 117 | КТ-7 | ждёт |  |
 | `EntityFXSmoke.kt` | 69 | КТ-2 | ждёт |  |
 | `EntityTornadoFX.kt` | 68 | КТ-8 | ждёт |  |
-| `EntityVoxelFX.kt` | 123 | КТ-2 | ждёт |  |
+| `EntityVoxelFX.kt` | 123 | КТ-2 | перенесено | → `src/main/java/alfheim/client/render/particle/EntityVoxelFX.kt`; частица 1.20.1 (`Particle`) со своим способом рисования (`ParticleRenderType`) вместо очереди автора `renderQueue` |
 
 ### `legacy/src/main/java/alfheim/client/render/tile/`
 
@@ -1452,10 +1452,10 @@ python3 tools/check_inventory.py
 | `ItemArmilla.kt` | 182 | КТ-2 | ждёт |  |
 | `ItemAstrolabe.kt` | 273 | КТ-4 | ждёт |  |
 | `ItemCarver.kt` | 88 | КТ-3 | ждёт |  |
-| `ItemChalk.kt` | 52 | КТ-2 | ждёт |  |
+| `ItemChalk.kt` | 52 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemChalk.kt`; цвет с амулета (`ColorOverrideHelper`) — КТ-4 |
 | `ItemColorSeeds.kt` | 258 | КТ-2 | ждёт |  |
 | `ItemCorporeaRat.kt` | 104 | КТ-3 | ждёт |  |
-| `ItemDeathSeed.kt` | 70 | КТ-2 | ждёт |  |
+| `ItemDeathSeed.kt` | 70 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemDeathSeed.kt` |
 | `ItemElvenChakram.kt` | 54 | КТ-4 | ждёт |  |
 | `ItemEnlighter.kt` | 80 | КТ-4 | ждёт |  |
 | `ItemFenrirLoot.kt` | 268 | КТ-8 | ждёт |  |
@@ -1463,7 +1463,7 @@ python3 tools/check_inventory.py
 | `ItemFloatingIslandGenerator.kt` | 38 | КТ-6 | ждёт |  |
 | `ItemHeadFlugel.kt` | 79 | КТ-8 | ждёт |  |
 | `ItemHeadMiku.kt` | 76 | КТ-8 | ждёт |  |
-| `ItemHyperBucket.kt` | 87 | КТ-2 | ждёт |  |
+| `ItemHyperBucket.kt` | 87 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemHyperBucket.kt`; счётчик на экране (`ItemsRemainingRenderHandler`) — КТ-4 |
 | `ItemIridescent.kt` | 92 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/ItemIridescent.kt`; `dirtFromMeta` ждёт цветную землю (`block/colored`) |
 | `ItemLensFlashInvisible.kt` | 187 | КТ-3 | ждёт |  |
 | `ItemLootInterceptor.kt` | 96 | КТ-4 | ждёт |  |
@@ -1673,7 +1673,7 @@ python3 tools/check_inventory.py
 | `ItemElvenFood.kt` | 213 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemElvenFood.kt`; варианты — отдельные предметы; рецепты — с рецептами КТ-2 |
 | `ItemElvenResource.kt` | 504 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemElvenResource.kt`; ждут: портал и аптекарь Botania, бассейн маны, аномалии, кудзу — КТ-3, стихии шарика слизи — КТ-4 и КТ-5, призыв Гайи — КТ-6, бутылка мудрости и осколки разлома — КТ-8, радужный цветок и закопанный лепесток — цветные блоки КТ-2 |
 | `ItemEventResource.kt` | 76 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemEventResource.kt` |
-| `ItemSoulHorn.kt` | 27 | КТ-2 | ждёт |  |
+| `ItemSoulHorn.kt` | 27 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemSoulHorn.kt`; призыв Флюгеля — КТ-8 |
 | `ItemStoryToken.kt` | 54 | КТ-2 | ждёт |  |
 | `ItemWiltedLotus.kt` | 80 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/material/ItemWiltedLotus.kt`; бассейн маны и аптекарь Botania ждут КТ-3 |
 
@@ -2121,7 +2121,7 @@ python3 tools/check_inventory.py
 | `alfheim/textures/gui/categories/` | 7 | КТ-9 | ждёт | лексикон |
 | `alfheim/textures/gui/entries/` | 8 | КТ-9 | ждёт | лексикон |
 | `alfheim/textures/gui/spells/` | 85 | КТ-7 | ждёт | иконки заклинаний |
-| `alfheim/textures/items/` (только файлы папки) | 182 | КТ-2 | ждёт | текстуры предметов других КТ переносятся вместе с предметом; перенесено 1 — `wiltedLotus.png` |
+| `alfheim/textures/items/` (только файлы папки) | 182 | КТ-2 | ждёт | текстуры предметов других КТ переносятся вместе с предметом; перенесено 5 — `wiltedLotus.png`, `Chalk.png`, `DeathSeed.png`, `HyperpolatedBucket.png`, `SoulHorn.png` |
 | `alfheim/textures/items/coatofarms/` | 19 | КТ-4 | ждёт | `ItemCoatOfArms` |
 | `alfheim/textures/items/materials/` | 72 | КТ-2 | перенесено | материалы `ElvenItems` и `EventResource` (51), еда `ItemElvenFood` (`food/`, 19); `food/RedGrapes_new.png`, `food/WhiteGrapes_old.png` код автора не использует — остаются здесь |
 | `alfheim/textures/items/misc/` | 17 | КТ-2 | ждёт |  |

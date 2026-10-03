@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
+import net.minecraft.world.Container
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.BlockItem
@@ -268,10 +269,11 @@ var ItemStack.meta
 //		itemDamage = meta
 //	}
 
-/* PORT: по мере надобности — IInventory
-operator fun IInventory.get(i: Int): ItemStack? = getStackInSlot(i)
-operator fun IInventory.set(i: Int, stack: ItemStack?) = setInventorySlotContents(i, stack)
-*/
+// PORT: IInventory → Container; пустой слот 1.20.1 — пустой стак, здесь — null, как в 1.7.10
+operator fun Container.get(i: Int): ItemStack? = getItem(i).takeUnless { it.isEmpty }
+operator fun Container.set(i: Int, stack: ItemStack?) = setItem(i, stack ?: ItemStack.EMPTY)
+//operator fun IInventory.get(i: Int): ItemStack? = getStackInSlot(i)
+//operator fun IInventory.set(i: Int, stack: ItemStack?) = setInventorySlotContents(i, stack)
 
 // PORT: Item.getItemFromBlock → asItem: у блока без предмета 1.7.10 давал null, 1.20.1 — Items.AIR
 fun Block.toItem(): Item? = asItem().takeUnless { it === Items.AIR }

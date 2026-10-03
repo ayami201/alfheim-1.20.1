@@ -100,6 +100,9 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `readFromNBT` / `writeToNBT` | `load` / `saveAdditional` | |
 | `getDescriptionPacket` / `onDataPacket` | `getUpdatePacket` / `getUpdateTag` / `onDataPacket` | |
 | `AxisAlignedBB`, `MathHelper`, `MovingObjectPosition` | `AABB`, `Mth`, `HitResult` | |
+| `block.material.isLiquid` | `state.liquid()` | ✓ |
+| `Blocks.water` и `flowing_water`, `lava` и `flowing_lava` | `Blocks.WATER`, `Blocks.LAVA` | ✓ стоячая и текучая жидкость — один блок, уровень — свойство состояния: сравнения автора «стоячая — текучая» сводятся к одному блоку |
+| `IFluidBlock.canDrain(world, x, y, z)`, `drain(world, x, y, z, true)` | `canDrain(level, pos)`, `drain(level, pos, FluidAction.EXECUTE)` | ✓ |
 
 ## Блоки и предметы
 
@@ -228,12 +231,18 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `getEntitiesWithinAABB(world, clazz, aabb)`, `getBoundingBox(…)`, `Entity.boundingBox(range)`, `AABB.expand` / `offset` (ASJCore) | `getEntitiesOfClass`, `AABB`, `inflate` / `move` | ✓ наблюдатели 1.20.1 в выборку не попадают — в 1.7.10 их не было |
 | `Entity.playSoundAtEntity(name, volume, pitch)` (ASJCore) | `level().playSoundAtEntity(entity, …)` прослойки | ✓ |
 | `ASJUtilities.isServer` / `isClient` | выделенный сервер — сервер; иначе — логическая сторона потока (`EffectiveSide`) | ✓ потоки загрузки Forge считают себя клиентом: без проверки выделенного сервера код загрузки на сервере шёл бы клиентскими ветками |
+| `MovingObjectPosition`, `MovingObjectType`; `typeOfHit`, `hitVec`, `blockX` / `blockY` / `blockZ`, `sideHit`, `entityHit` | `HitResult` (псевдоним) и свойства с именами 1.7.10 (`Hit1710`) | ✓ сторона — номер 1.7.10, он равен `Direction.get3DDataValue` |
+| `inventory[i]`, `inventory[i] = stack` (`IInventory`, ASJCore) | `Container.getItem(i)` / `setItem(i, …)` | ✓ пустой стек ↔ `null` |
+| `world.provider.dimensionId`, `entity.dimension` (номер измерения) | `level.dimensionId` — id строкой (`minecraft:overworld`); обратно — `dimensionKey(id)` | ✓ номеров измерений в 1.20.1 нет: где автор хранит номер, хранится id |
 
 ## Предметы, сущности, эффекты
 
 | Было | Стало | Примечание |
 |---|---|---|
 | `onItemRightClick` / `onItemUse` / `onUpdate` / `addInformation` | `use` / `useOn` / `inventoryTick` / `appendHoverText` | |
+| `onUsingTick(stack, player, count)` | `onUseTick(level, entity, stack, count)` | ✓ предмет может держать любое существо: код автора — после `entity as? Player ?: return` |
+| `player.theItemInWorldManager.blockReachDistance` | `player.blockReach` (атрибут Forge) | ✓ дальность руки игрока: в 1.7.10 на сервере — 5 блоков в любом режиме, в 1.20.1 — 4,5, в творческом — 5 |
+| `ASJUtilities.getMouseOver(entity, dist, interact)`, `getSelectedBlock(entity, dist, stopOnLiquid)`, `rayTrace(entity, dist)` | те же функции ASJCore на `ClipContext` | ✓ луч — от глаз (`eyePosition`) на обеих сторонах; `stopOnLiquid` — `ClipContext.Fluid.SOURCE_ONLY` (только источники, как в 1.7.10); промах — `null` |
 | `stack.stackTagCompound`, `NBTTagCompound` | `stack.getTag()` / `getOrCreateTag()`, `CompoundTag` | `ItemNBTHelper` автора сохраняется поверх |
 | `EntityPlayer`, `EntityLivingBase` | `Player`, `LivingEntity` | |
 | `isSneaking`, `heldItem`, `riddenByEntity` | `isShiftKeyDown`, `mainHandItem` (пустой стек вместо `null`), `firstPassenger` | ✓ |
@@ -328,6 +337,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `setGlow` (asjlib) | полная яркость, `LightTexture.FULL_BRIGHT` | |
 | `mc.gameSettings.particleSetting` | `mc.options.particles().get().id` | ✓ номера те же: 0 — все, 1 — меньше, 2 — минимум |
 | `mc.effectRenderer.addEffect(частица)` | `mc.particleEngine.createParticle(данные, x, y, z, vx, vy, vz)` | без ограничителя частиц ванилы, как `addEffect`; `level.addParticle` ограничивает ещё раз |
+| своя частица автора (`EntityFX`): `addEffect(частица)`; `particleRed` / `Green` / `Blue`, `particleMaxAge`, `particleGravity`, `prevPosX`, `interpPosX` | `Particle`: `mc.particleEngine.add(частица)`; `rCol` / `gCol` / `bCol`, `lifetime`, `gravity`, `xo`, `camera.position.x` | ✓ `renderParticle(Tessellator, …)` → `render(VertexConsumer, Camera, partialTicks)`, точки — от камеры. Свой проход рисования автора (очередь и GL после частиц) — свой `ParticleRenderType` частицы (`EntityVoxelFX.RENDER_TYPE`) |
 
 ## Миры
 
@@ -338,6 +348,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `BiomeGenBase` | биом в датапаке + свой `BiomeSource` | |
 | `EntityRegistry.addSpawn` в чужие биомы | Forge biome modifier | веса — авторские |
 | телепорт между мирами | `entity.changeDimension(level, ITeleporter)` | |
+| `ASJUtilities.sendToDimensionWithoutPortal(entity, dim, x, y, z)` | то же, `dim` — `ResourceKey<Level>`: игрок — `ServerPlayer.teleportTo(level, …)`, прочие — `changeDimension` с телепортером в точку | ✓ игрок уходит и из Края без титров, как у автора; нет такого измерения — ничего не происходит (в 1.7.10 — падение) |
 
 ## Botania
 
@@ -352,7 +363,9 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `BotaniaAPI.register…Recipe` | рецепты в JSON (`botania:mana_infusion`, `botania:elven_trade` и др.) через datagen | |
 | лексикон (`LexiconEntry`, страницы) | Patchouli, расширение `botania:lexicon` | SPEC, Р-8 |
 | Baubles | Curios, как у аксессуаров Botania 1.20.1 | |
-| частицы `Botania.proxy.wispFX` / `sparkleFX` | `WispParticleData` / `SparkleParticleData` | |
+| частицы `Botania.proxy.wispFX(world, x, y, z, r, g, b, size, gravity)` / `sparkleFX(world, x, y, z, r, g, b, size, m)` | `alfheim.port.legacy.botania.Botania.proxy` → `world.addParticle(WispParticleData.wisp(size, r, g, b, 1) / SparkleParticleData.sparkle(size, r, g, b, m), …)` | ✓ «гравитация» огонька — скорость вниз; на сервере — ничего, как в 1.7.10 |
+| `ItemKeepIvy.TAG_KEEP` (плющ верности) | `ResoluteIvyItem.TAG_KEEP` | ✓ тег тот же — `Botania_keepIvy` |
+| `ManaItemHandler.requestManaExact(…)` и др. | `ManaItemHandler.instance().requestManaExact(…)` | ✓ |
 | `Botania.proxy.worldElapsedTicks` | `alfheim.port.legacy.botania.Botania.proxy.worldElapsedTicks` | ✓ на клиенте — тики игры Botania (`ClientTickHandler.ticksInGame`), на сервере — время основного мира |
 | `ModItems.manaResource` 9, `ModItems.quartz` 5 | `BotaniaItems.dragonstone`, `BotaniaItems.elfQuartz` | ✓ |
 | `ModItems.petal` с metadata цвета | `BotaniaItems.getPetal(DyeColor)` | ✓ |

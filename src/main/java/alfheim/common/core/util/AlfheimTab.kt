@@ -1,6 +1,7 @@
 package alfheim.common.core.util
 
 // PORT: импорты 1.20.1 — первыми; импорты автора закомментированы до КТ, в которых появятся их блоки и предметы
+import alexsocol.asjlib.meta
 import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks.alfStorage
 import alfheim.common.block.AlfheimBlocks.elvenOre
@@ -51,10 +52,15 @@ import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.item.AlfheimItems
+import alfheim.common.item.AlfheimItems.chalk
+import alfheim.common.item.AlfheimItems.deathSeed
 import alfheim.common.item.AlfheimItems.elvenFood
 import alfheim.common.item.AlfheimItems.elvenResource
+import alfheim.common.item.AlfheimItems.hyperBucket
+import alfheim.common.item.AlfheimItems.soulHorn
 import alfheim.common.item.AlfheimItems.wiltedLotus
 import alfheim.port.legacy.Item1710
+import alfheim.port.legacy.LegacyItem
 import alfheim.port.registry.AlfheimRegisters
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -258,7 +264,6 @@ import alfheim.common.item.AlfheimItems.auraRingGod
 import alfheim.common.item.AlfheimItems.auraRingPink
 import alfheim.common.item.AlfheimItems.balanceCloak
 import alfheim.common.item.AlfheimItems.carver
-import alfheim.common.item.AlfheimItems.chalk
 import alfheim.common.item.AlfheimItems.cloudPendant
 import alfheim.common.item.AlfheimItems.cloudPendantSuper
 import alfheim.common.item.AlfheimItems.coatOfArms
@@ -267,7 +272,6 @@ import alfheim.common.item.AlfheimItems.corporeaRat
 import alfheim.common.item.AlfheimItems.creativeReachPendant
 import alfheim.common.item.AlfheimItems.crescentMoonAmulet
 import alfheim.common.item.AlfheimItems.daolos
-import alfheim.common.item.AlfheimItems.deathSeed
 import alfheim.common.item.AlfheimItems.discFenrir
 import alfheim.common.item.AlfheimItems.discFlugel
 import alfheim.common.item.AlfheimItems.discFlugelUltra
@@ -305,7 +309,6 @@ import alfheim.common.item.AlfheimItems.gjallarhorn
 import alfheim.common.item.AlfheimItems.gleipnir
 import alfheim.common.item.AlfheimItems.goddesCharm
 import alfheim.common.item.AlfheimItems.gungnir
-import alfheim.common.item.AlfheimItems.hyperBucket
 import alfheim.common.item.AlfheimItems.invisibilityCloak
 import alfheim.common.item.AlfheimItems.invisibleFlameLens
 import alfheim.common.item.AlfheimItems.irisSeeds
@@ -358,7 +361,6 @@ import alfheim.common.item.AlfheimItems.snowChest
 import alfheim.common.item.AlfheimItems.snowHelmet
 import alfheim.common.item.AlfheimItems.snowLeggings
 import alfheim.common.item.AlfheimItems.snowSword
-import alfheim.common.item.AlfheimItems.soulHorn
 import alfheim.common.item.AlfheimItems.soulSword
 import alfheim.common.item.AlfheimItems.spatiotemporalRing
 import alfheim.common.item.AlfheimItems.spawnEgg
@@ -506,9 +508,7 @@ object AlfheimTab {
 		/* PORT: КТ-4
 		addItem(ModItems.ancientWill, 6)
 		*/
-		/* PORT: КТ-2
 		addItem(deathSeed)
-		*/
 		/* PORT: КТ-4
 		addItem(warBanner)
 		*/
@@ -579,9 +579,7 @@ object AlfheimTab {
 		addItem(enlighter)
 		addItem(lootInterceptor)
 		*/
-		/* PORT: КТ-2
 		addItem(hyperBucket)
-		*/
 		/* PORT: КТ-4
 		addItem(manaMirrorImba)
 		*/
@@ -595,10 +593,8 @@ object AlfheimTab {
 		addItem(ModItems.lens, 5000)
 		*/
 		
-		/* PORT: КТ-2
 		addItem(soulHorn)
 		addItem(soulHorn, 1)
-		*/
 		
 		/* PORT: КТ-4
 		addItem(rodMuspelheim)
@@ -615,9 +611,7 @@ object AlfheimTab {
 		addItem(rodSuperExchange)
 		addItem(rodGrass)
 		*/
-		/* PORT: КТ-2
 		addItem(chalk)
-		*/
 		/* PORT: КТ-3
 		addItem(corporeaRat)
 		*/
@@ -952,7 +946,10 @@ object AlfheimTab {
 //		addStack(ItemStack(block, 1, meta))
 	}
 	
+	// PORT: у предмета автора без вариантов metadata — повреждение (рог души 1 — заряженный); вариант metadata —
+	// отдельная вещь, её найдёт legacy_ids.json
 	fun addItem(item: Item, meta: Int) {
+		if (item is LegacyItem && item.variant == null) addStack(ItemStack(item).also { it.meta = meta })
 //		addStack(ItemStack(item, 1, meta))
 	}
 	
