@@ -27,6 +27,7 @@ object AlfheimRegisters {
 	val MOB_EFFECTS: DeferredRegister<net.minecraft.world.effect.MobEffect> = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, MODID)
 	val SOUND_EVENTS: DeferredRegister<net.minecraft.sounds.SoundEvent> = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID)
 	val CREATIVE_MODE_TABS: DeferredRegister<net.minecraft.world.item.CreativeModeTab> = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID)
+	val RECIPE_SERIALIZERS: DeferredRegister<net.minecraft.world.item.crafting.RecipeSerializer<*>> = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MODID)
 	
 	/** Все реестры — на шину мода; вызывается из конструктора мода, до события регистрации */
 	fun register(bus: IEventBus) {
@@ -46,12 +47,14 @@ object AlfheimRegisters {
 		Fuel1710.register()
 		// врезки автора во вкладки творческого режима (HOOKS.md)
 		CreativeTabHooks.register(bus)
-		// модели, лут, теги и legacy_ids.json — генерация данных (./gradlew runData)
+		// особые рецепты автора — свой сериализатор у каждого; обычные рецепты — данные
+		LegacySpecialRecipes.register()
+		// модели, лут, теги, рецепты и legacy_ids.json — генерация данных (./gradlew runData)
 		AlfheimData.register(bus)
 		// модели блоков и предметов, которые 1.7.10 выбирал в коде, цвета предметов и рендер существ — только на клиенте
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT) { Runnable { AlfheimModels.register(bus); AlfheimItemColors.register(bus); AlfheimEntityRenderers.register(bus) } }
 		
-		for (register in listOf(BLOCKS, ITEMS, BLOCK_ENTITY_TYPES, ENTITY_TYPES, MOB_EFFECTS, SOUND_EVENTS, CREATIVE_MODE_TABS))
+		for (register in listOf(BLOCKS, ITEMS, BLOCK_ENTITY_TYPES, ENTITY_TYPES, MOB_EFFECTS, SOUND_EVENTS, CREATIVE_MODE_TABS, RECIPE_SERIALIZERS))
 			register.register(bus)
 	}
 	

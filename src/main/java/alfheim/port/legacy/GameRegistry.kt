@@ -5,6 +5,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 
 /**
@@ -45,4 +46,55 @@ object GameRegistry {
 		if (itemClass == BlockItem::class.java) BlockItem(block, Item.Properties())
 		else itemClass.constructors.first { it.parameterCount == itemArgs.size + 1 }.newInstance(block, *itemArgs) as Item
 	}
+
+	// Рецепты 1.7.10 записываются для генерации данных (Recipes1710.kt)
+
+	@JvmStatic
+	fun addRecipe(output: ItemStack, vararg params: Any?) {
+		addShapedRecipe(output, *params)
+	}
+
+	@JvmStatic
+	fun addShapedRecipe(output: ItemStack, vararg params: Any?) = CraftingManager.getInstance().addRecipe(output, *params)
+
+	@JvmStatic
+	fun addShapelessRecipe(output: ItemStack, vararg params: Any?) {
+		CraftingManager.getInstance().addShapelessRecipe(output, *params)
+	}
+
+	@JvmStatic
+	fun addRecipe(recipe: IRecipe) {
+		CraftingManager.getInstance().recipeList.add(recipe)
+	}
+
+	/** Блок или предмет без стека — любая metadata, как в 1.7.10; блок с вариантами в порту — массив блоков */
+	@JvmStatic
+	fun addSmelting(input: Block, output: ItemStack, xp: Float) = FurnaceRecipes.smelting().addSmelting(input, output, xp)
+
+	@JvmStatic
+	fun addSmelting(input: Array<out Block>, output: ItemStack, xp: Float) = FurnaceRecipes.smelting().addSmelting(input, output, xp)
+
+	@JvmStatic
+	fun addSmelting(input: Item, output: ItemStack, xp: Float) = FurnaceRecipes.smelting().addSmelting(input, output, xp)
+
+	@JvmStatic
+	fun addSmelting(input: ItemStack, output: ItemStack, xp: Float) = FurnaceRecipes.smelting().addSmelting(input.copy(), output, xp)
 }
+
+// Вызовы из `import cpw.mods.fml.common.registry.GameRegistry.*`
+
+fun addRecipe(output: ItemStack, vararg params: Any?) = GameRegistry.addRecipe(output, *params)
+
+fun addShapedRecipe(output: ItemStack, vararg params: Any?) = GameRegistry.addShapedRecipe(output, *params)
+
+fun addShapelessRecipe(output: ItemStack, vararg params: Any?) = GameRegistry.addShapelessRecipe(output, *params)
+
+fun addRecipe(recipe: IRecipe) = GameRegistry.addRecipe(recipe)
+
+fun addSmelting(input: Block, output: ItemStack, xp: Float) = GameRegistry.addSmelting(input, output, xp)
+
+fun addSmelting(input: Array<out Block>, output: ItemStack, xp: Float) = GameRegistry.addSmelting(input, output, xp)
+
+fun addSmelting(input: Item, output: ItemStack, xp: Float) = GameRegistry.addSmelting(input, output, xp)
+
+fun addSmelting(input: ItemStack, output: ItemStack, xp: Float) = GameRegistry.addSmelting(input, output, xp)
