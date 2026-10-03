@@ -343,6 +343,7 @@ import alfheim.port.legacy.*
 import alfheim.port.legacy.OreDictionary.WILDCARD_VALUE
 import alfheim.port.legacy.botania.BotaniaAPI
 import alfheim.port.legacy.botania.LibOreDict.*
+import alfheim.port.legacy.botania.ancientWill
 import net.minecraft.world.item.*
 import net.minecraft.world.level.block.*
 import vazkii.botania.common.block.BotaniaBlocks.*
@@ -657,7 +658,7 @@ object AlfheimRecipes {
 	}
 	
 	private fun registerCraftingRecipes() {
-		/* PORT: КТ-2, КТ-3, КТ-4, КТ-6, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними; Thaumcraft выпал (SPEC, п. 7)
+		/* PORT: КТ-2, КТ-3, КТ-4, КТ-6 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(airyVirus, 3),
 		                 "RGR", "EVE", "AAA",
 		                 'R', REDSTONE_DUST,
@@ -759,6 +760,7 @@ object AlfheimRecipes {
 						 'S', LIFE_ESSENCE,
 						 'D', DREAM_WOOD)
 		recipeAstrolabe = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addOreDictRecipe(ItemStack(armilla),
 		                 "TN ", "NEN", " NT",
@@ -767,6 +769,7 @@ object AlfheimRecipes {
 		                 'T', LIVINGWOOD_TWIG)
 		recipeArmilla = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(attributionBauble),
 						 "S S", "Q Q", " G ",
 						 'G', "ingotGold",
@@ -900,15 +903,18 @@ object AlfheimRecipes {
 						 'R', RUNE[13], // wrath
 						 'S', ItemStack(manaResource, 1, 12))
 		recipeCrescentAmulet = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
+		// PORT: череп ванилы 3 (голова игрока) → Items.PLAYER_HEAD
 		addOreDictRecipe(ItemStack(deathSeed),
 		                 " H ", "GIG", " R ",
-		                 'H', ItemStack(skullPlacer, 1, 3),
+		                 'H', ItemStack(Items.PLAYER_HEAD),
 		                 'G', LIFE_ESSENCE,
 		                 'I', keepIvy,
 		                 'R', RUNE[12]) // sloth
 		recipeDeathSeed = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними; Thaumcraft выпал (SPEC, п. 7)
 		addOreDictRecipe(ItemStack(chair, 3),
 		                 "CCC", " W ", " S ",
 		                 'C', ItemStack(chair, 1, 7),
@@ -1307,7 +1313,6 @@ object AlfheimRecipes {
 		                 'S', LIFE_ESSENCE,
 		                 'E', ELVORIUM_INGOT)
 		
-		/* PORT: КТ-2, КТ-3, КТ-4, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(hyperBucket),
 						 "III", "EBE", "MMM",
 						 'B', openBucket,
@@ -1316,6 +1321,7 @@ object AlfheimRecipes {
 						 'M', MAUFTRIUM_NUGGET)
 		recipeHyperBucket = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(goddesCharm),
 		                 " P ", " P ", "WDS",
 		                 'P', PETAL[6],
@@ -1382,12 +1388,14 @@ object AlfheimRecipes {
 			                 'N', it,
 			                 'W', ItemStack(dreamwoodSlab))
 		}
+		*/
 		
 		addOreDictRecipe(Jug.stack,
 						 "B B", "B B", " B ",
-						 'B', brick)
+						 'B', Items.BRICK)
 		recipeJug = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-3 — рецепты вещей этой КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(laputaShard),
 						 "SFS", "PDP", "ASE",
 						 'S', LIFE_ESSENCE,
@@ -1414,14 +1422,16 @@ object AlfheimRecipes {
 		
 		CraftingManager.getInstance().recipeList.add(RecipeLensPurification)
 		recipeLensPurification = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addOreDictRecipe(Lembas.stack,
 						 " LB", "NBN", "BL ",
 						 'N', Nectar.stack,
 						 'L', GrapeLeaf.stack,
-						 'B', bread)
+						 'B', Items.BREAD)
 		recipeLembas = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(kindling),
 						 " S ", "SBS", " S ",
 						 'B', "powderBlaze",
@@ -1574,14 +1584,19 @@ object AlfheimRecipes {
 						 'P', PIXIE_DUST,
 						 'S', RUNE[2])
 		recipePixieAttractor = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
-		addOreDictRecipe(ItemStack(platform, 2, 1),
+		// PORT: ModBlocks.platform 1 (спектральная платформа), ModBlocks.dreamwood 3 и 4 (обрамлённое и узорчатое сонное
+		// дерево) → spectralPlatform, dreamwoodFramed, dreamwoodPatternFramed; ModBlocks.livingwood 0 → LIVING_WOOD — тег, как
+		// в рецептах Botania 1.20.1 (MAPPING.md, «Botania»)
+		addOreDictRecipe(ItemStack(spectralPlatform, 2),
 		                 "343", "0E0",
-		                 '0', ItemStack(livingwood),
-		                 '3', ItemStack(dreamwood, 1, 3),
-		                 '4', ItemStack(dreamwood, 1, 4),
+		                 '0', LIVING_WOOD,
+		                 '3', ItemStack(dreamwoodFramed),
+		                 '4', ItemStack(dreamwoodPatternFramed),
 		                 'E', LIFE_ESSENCE)
 		
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(priestCloak),
 						 "WGW", "TWT", "ITI",
 						 'W', ItemStack(wool, 1, 15),
@@ -1864,6 +1879,7 @@ object AlfheimRecipes {
 						 'W', INFUSED_DREAM_TWIG,
 						 'E', end_stone)
 		recipeRodSuperExchange = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addOreDictRecipe(ItemStack(chalk),
 						 "  M", " Q ", "Q  ",
@@ -1871,6 +1887,7 @@ object AlfheimRecipes {
 						 'Q', QUARTZ[0])
 		recipeRunicChalk = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addRecipe(ItemStack(sealingSlabs, 6),
 				  "PPP",
 				  'P', ItemStack(sealingPlanks))
@@ -1887,6 +1904,7 @@ object AlfheimRecipes {
 						 'S', MANA_STRING,
 						 'L', livingwoodPlankSlab)
 		recipeSerenade = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addOreDictRecipe(ItemStack(soulHorn),
 						 "MIM", "EIE", " E ",
@@ -1895,6 +1913,7 @@ object AlfheimRecipes {
 						 'I', IFFESAL_DUST)
 		recipeSoulHorn = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(soulSword),
 						 "  G", "TG ", "DT ",
 						 'G', GAIA_INGOT,
@@ -1981,12 +2000,14 @@ object AlfheimRecipes {
 				  "P", "P",
 				  'P', ItemStack(lightningWood))
 		recipeThunderousTwig = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
-		addRecipe(ItemStack(torch, 6),
+		addRecipe(ItemStack(Blocks.TORCH, 6),
 				  "C", "S",
 				  'C', NetherwoodCoal.stack,
-				  'S', ItemStack(stick))
+				  'S', ItemStack(Items.STICK))
 		
+		/* PORT: КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(toolbelt),
 		                 "CL ", "L L", "PLR",
 		                 'C', chest,
@@ -2000,6 +2021,7 @@ object AlfheimRecipes {
 						 'L', LIVING_ROCK,
 						 'E', ELVORIUM_NUGGET)
 		recipeTradePortal = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addOreDictRecipe(ItemStack(triquetrum),
 						 "NLN", " NL", " II",
@@ -2008,6 +2030,7 @@ object AlfheimRecipes {
 						 'I', TERRA_STEEL)
 		recipeTriquetrum = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		val s = AlfheimCore.stupidMode
 		
 		// if no TiC || if Avaritia loaded || if molten Mauftrium is disabled
@@ -2116,7 +2139,8 @@ object AlfheimRecipes {
 		
 		addOreDictRecipe(ItemStack(livingwoodBarkFence, 6), "LLL", "LLL", 'L', LIVINGWOOD_TWIG)
 		
-		addOreDictRecipe(ItemStack(livingwoodBarkFenceGate, 1), "LPL", "LPL", 'L', LIVINGWOOD_TWIG, 'P', ItemStack(livingwood))
+		// PORT: ModBlocks.livingwood 0 (живое дерево) → LIVING_WOOD — тег, как в рецептах Botania 1.20.1 (MAPPING.md, «Botania»)
+		addOreDictRecipe(ItemStack(livingwoodBarkFenceGate, 1), "LPL", "LPL", 'L', LIVINGWOOD_TWIG, 'P', LIVING_WOOD)
 		
 		addRecipe(ItemStack(dreamwoodFence, 6), "LLL", "LLL", 'L', ItemStack(dreamwoodPlanks))
 		
@@ -2124,7 +2148,8 @@ object AlfheimRecipes {
 		
 		addOreDictRecipe(ItemStack(dreamwoodBarkFence, 6), "LLL", "LLL", 'L', DREAMWOOD_TWIG)
 		
-		addOreDictRecipe(ItemStack(dreamwoodBarkFenceGate, 1), "LPL", "LPL", 'L', DREAMWOOD_TWIG, 'P', ItemStack(dreamwood))
+		// PORT: ModBlocks.dreamwood 0 (сонное дерево) → DREAM_WOOD — тег, как в рецептах Botania 1.20.1
+		addOreDictRecipe(ItemStack(dreamwoodBarkFenceGate, 1), "LPL", "LPL", 'L', DREAMWOOD_TWIG, 'P', DREAM_WOOD)
 		
 		// PORT: доски ванилы 5 (тёмный дуб) → Blocks.DARK_OAK_PLANKS
 		addOreDictRecipe(ItemStack(dwarfPlanks, 4), " P ", "PMP", " P ", 'P', ItemStack(Blocks.DARK_OAK_PLANKS), 'M', MANA_POWDER)
@@ -2415,18 +2440,20 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(ElvoriumIngot.stack, *Array(9) { ELVORIUM_NUGGET })
 		addShapelessOreDictRecipe(MauftriumIngot.stack, *Array(9) { MAUFTRIUM_NUGGET })
 		
-		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними; ступки (PESTLE_AND_MORTAR) в Botania 1.20.1 нет — TASKS.md, «Вопросы к владельцу»
+		/* PORT: КТ-3 — рецепты вещей этой КТ, включаются вместе с ними; ступки (PESTLE_AND_MORTAR) в Botania 1.20.1 нет — TASKS.md, «Вопросы к владельцу»
 		addShapelessOreDictRecipe(ItemStack(glowstone_dust), PESTLE_AND_MORTAR, DreamCherry.stack, DreamCherry.stack, DreamCherry.stack)
 		
 		addShapelessOreDictRecipe(ItemStack(fertilizer, if (Botania.gardenOfGlassLoaded) 3 else 1), ItemStack(justDye, 1, 15), FLORAL_POWDER, FLORAL_POWDER, FLORAL_POWDER, FLORAL_POWDER)
 		ModCraftingRecipes.recipeFertilizerPowder?.let { CraftingManager.getInstance().recipeList.remove(it) }
 		ModCraftingRecipes.recipeFertilizerPowder = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		for (i in 0..5) {
-			val enh: Any = if (i < 3) MAUFTRIUM_INGOT else ItemStack(alfStorage, 1, 1)
+			val enh: Any = if (i < 3) MAUFTRIUM_INGOT else ItemStack(alfStorage[1])
 			addShapelessOreDictRecipe(ItemStack(hyperBucket, 1, i + 1), ItemStack(hyperBucket, 1, i), enh)
 		}
 		
+		/* PORT: КТ-3 — рецепты вещей этой КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(invisibleFlameLens),
 								  ItemStack(lens, 1, 17), phantomInk)
 		
@@ -2435,13 +2462,16 @@ object AlfheimRecipes {
 		
 		addShapelessRecipe(ItemStack(itemFrame), item_frame, sign)
 		recipeItemFrame = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
-		addShapelessRecipe(JellyBread.stack, bread, JellyBottle.stack)
+		addShapelessRecipe(JellyBread.stack, Items.BREAD, JellyBottle.stack)
 		recipeJellybread = BotaniaAPI.getLatestAddedRecipe()
 		
-		addShapelessRecipe(JellyCod.stack, ItemStack(cooked_fished), JellyBottle.stack)
+		// PORT: приготовленная рыба ванилы 0 (треска) → Items.COOKED_COD
+		addShapelessRecipe(JellyCod.stack, ItemStack(Items.COOKED_COD), JellyBottle.stack)
 		recipeJellyfish = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		for (i in 0..15)
 			addShapelessOreDictRecipe(ItemStack(irisPlanks, 4, i), WOOD[i])
 		addShapelessOreDictRecipe(ItemStack(rainbowPlanks, 4), rainbowWood)
@@ -2464,10 +2494,12 @@ object AlfheimRecipes {
 		
 		addShapelessOreDictRecipe(ItemStack(lens, 1, UNLINK.meta), ItemStack(lens), RUNE[8], manasteelShears, RED_STRING)
 		recipeLensUnlink = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
-		addShapelessOreDictRecipe(SaveIvy.stack, vine, DRAGONSTONE, MAUFTRIUM_NUGGET)
+		addShapelessOreDictRecipe(SaveIvy.stack, Blocks.VINE, DRAGONSTONE, MAUFTRIUM_NUGGET)
 		recipeSaveIvy = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(lightningPlanks, 4), lightningWood)
 		recipeThunderousPlanks = BotaniaAPI.getLatestAddedRecipe()
 		*/
@@ -2488,10 +2520,12 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(ItemStack(livingrockDarkWalls[0]), ItemStack(livingrockWall), "coal")
 		addShapelessOreDictRecipe(ItemStack(livingrockDarkWalls[1]), ItemStack(livingrockBrickWall), "coal")
 		
-		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними; ступки (PESTLE_AND_MORTAR) в Botania 1.20.1 нет — TASKS.md, «Вопросы к владельцу»
+		// PORT: ModItems.manaResource 5 (эссенция жизни) → lifeEssence; ModItems.ancientWill 0–5 — шесть предметов
+		// Botania 1.20.1, по номеру — ancientWill[i] (BotaniaItems1710.kt, MAPPING.md, «Botania»)
 		for (i in 0..5)
-			addShapelessOreDictRecipe(ItemStack(manaResource, 4, 5), ItemStack(ancientWill, 1, i))
+			addShapelessOreDictRecipe(ItemStack(lifeEssence, 4), ItemStack(ancientWill[i]))
 		
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними; ступки (PESTLE_AND_MORTAR) в Botania 1.20.1 нет — TASKS.md, «Вопросы к владельцу»
 		addOreDictRecipe(ItemStack(redstoneAttractor),
 			"R", "L",
 			'L', LIVING_ROCK,
@@ -2530,10 +2564,12 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(RainbowPetal.stack(2), RAINBOW_FLOWER)
 		addShapelessOreDictRecipe(RainbowPetal.stack(4), RAINBOW_DOUBLE_FLOWER)
 		recipesRainbowPetal = BotaniaAPI.getLatestAddedRecipes(2)
+		*/
 		
-		addShapelessOreDictRecipe(ItemStack(fireGrenade), vial, fire_charge, gunpowder)
+		addShapelessOreDictRecipe(ItemStack(fireGrenade), vial, Items.FIRE_CHARGE, Items.GUNPOWDER)
 		recipeGrenade = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(rainbowGrass, 1, 3), "dustGlowstone", "dustGlowstone", ItemStack(rainbowGrass, 1, 2))
 		ModCraftingRecipes.recipesShinyFlowers?.add(BotaniaAPI.getLatestAddedRecipe())
 		
@@ -2568,21 +2604,28 @@ object AlfheimRecipes {
 		
 		addShapelessOreDictRecipe(ItemStack(lightRelay, 1, 3), lightRelay, animatedTorch)
 		recipeLuminizer3 = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
-		addShapelessRecipe(ItemStack(brown_mushroom), ItemStack(mushroom, 1, 12))
-		addShapelessRecipe(ItemStack(red_mushroom), ItemStack(mushroom, 1, 14))
+		// PORT: ModBlocks.mushroom 12 (коричневый) и 14 (красный) → brownMushroom, redMushroom
+		addShapelessRecipe(ItemStack(Blocks.BROWN_MUSHROOM), ItemStack(brownMushroom))
+		addShapelessRecipe(ItemStack(Blocks.RED_MUSHROOM), ItemStack(redMushroom))
 		
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessRecipe(NiflheimBlockMetas.COBBLESTONE.stack, NiflheimBlockMetas.STONE.stack)
 		
 		// change to shapeless, same parts
 		addShapelessOreDictRecipe(ItemStack(spreader, 1, 3), LIFE_ESSENCE, ItemStack(spreader, 1, 2), DRAGONSTONE)
 		ModCraftingRecipes.recipeUltraSpreader?.let { CraftingManager.getInstance().recipeList.remove(it) }
 		ModCraftingRecipes.recipeUltraSpreader = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
+		/* PORT: не переносится — в Botania 1.20.1 этот рецепт есть: блок лепестков → 9 лепестков (botania:conversions/<цвет>_petal_block_deconstruct)
 		repeat(16) {
 			addShapelessRecipe(ItemStack(petal, 9, it), ItemStack(petalBlock, 1, it))
 		}
+		*/
 		
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessRecipe(RainbowPetal.stack(9), ItemStack(softStorage))
 		addShapelessRecipe(ItemStack(manaResource, 9, 8), ItemStack(softStorage, 1, 1))
 		addShapelessRecipe(IffesalDust.stack(9), ItemStack(softStorage, 1, 2))

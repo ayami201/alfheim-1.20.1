@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "type": "alfheim:meta",
+      "item": "alfheim:hyperpolated_bucket",
+      "meta": 4
+    },
+    {
+      "item": "alfheim:alf_storage1"
+    }
+  ],
+  "result": {
+    "item": "alfheim:hyperpolated_bucket",
+    "nbt": "{Damage:5}"
+  }
+}

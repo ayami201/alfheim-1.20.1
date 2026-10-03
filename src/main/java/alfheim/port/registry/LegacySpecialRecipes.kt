@@ -2,6 +2,7 @@ package alfheim.port.registry
 
 import alfheim.common.crafting.recipe.workbench.RecipeThrowablePotion
 import alfheim.port.legacy.IRecipe
+import alfheim.port.legacy.MetaIngredient
 import com.google.gson.JsonObject
 import net.minecraft.core.RegistryAccess
 import net.minecraft.network.FriendlyByteBuf
@@ -11,6 +12,11 @@ import net.minecraft.world.inventory.CraftingContainer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.*
 import net.minecraft.world.level.Level
+import net.minecraftforge.common.crafting.CraftingHelper
+import net.minecraftforge.eventbus.api.EventPriority
+import net.minecraftforge.eventbus.api.IEventBus
+import net.minecraftforge.registries.ForgeRegistries
+import net.minecraftforge.registries.RegisterEvent
 
 /**
  * Особые рецепты автора (SPEC, Р-9; MAPPING.md, «Рецепты»): класс автора с `IRecipe` 1.7.10, который
@@ -18,7 +24,8 @@ import net.minecraft.world.level.Level
  * сериализатор с id — именем автора в snake_case (`alfheim:throwpotion`); JSON рецепта с этим типом пишет генерация
  * данных. Рецепт верстака 1.20.1 ([LegacyCraftingRecipe]) зовёт методы 1.7.10 класса автора.
  *
- * Список — по именам `RecipeSorter`: особый рецепт автора, которого здесь нет, роняет генерацию данных
+ * Список — по именам `RecipeSorter`: особый рецепт автора, которого здесь нет, роняет генерацию данных. Здесь же
+ * регистрируется ингредиент рецептов 1.7.10 `alfheim:meta` ([MetaIngredient])
  */
 object LegacySpecialRecipes {
 
@@ -30,9 +37,13 @@ object LegacySpecialRecipes {
 	/** Id рецепта и сериализатора: имя автора в snake_case */
 	fun id(name: String) = AlfheimRegisters.snakeCase(name)
 
-	fun register() {
+	fun register(bus: IEventBus) {
 		for ((name, recipe) in recipes)
 			AlfheimRegisters.RECIPE_SERIALIZERS.register(id(name)) { LegacyRecipeSerializer(recipe) }
+		// ингредиент «предмет с metadata» 1.7.10 — как ингредиенты Forge, при регистрации сериализаторов рецептов
+		bus.addListener(EventPriority.NORMAL, false, RegisterEvent::class.java) { event ->
+			if (event.registryKey == ForgeRegistries.Keys.RECIPE_SERIALIZERS) CraftingHelper.register(MetaIngredient.ID, MetaIngredient.Serializer)
+		}
 	}
 }
 

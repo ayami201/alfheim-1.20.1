@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "0": {
+      "tag": "botania:livingwood_logs"
+    },
+    "3": {
+      "item": "botania:framed_dreamwood"
+    },
+    "4": {
+      "item": "botania:pattern_framed_dreamwood"
+    },
+    "E": {
+      "item": "botania:life_essence"
+    }
+  },
+  "pattern": [
+    "343",
+    "0E0"
+  ],
+  "result": {
+    "count": 2,
+    "item": "botania:spectral_platform"
+  }
+}

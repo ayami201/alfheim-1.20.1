@@ -6,7 +6,7 @@
       "item": "botania:dreamwood_twig"
     },
     "P": {
-      "item": "botania:dreamwood"
+      "tag": "botania:dreamwood_logs"
     }
   },
   "pattern": [

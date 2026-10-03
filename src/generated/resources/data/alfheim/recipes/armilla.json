@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "tag": "forge:ingots/elvorium"
+    },
+    "N": {
+      "tag": "forge:nuggets/elvorium"
+    },
+    "T": {
+      "item": "botania:livingwood_twig"
+    }
+  },
+  "pattern": [
+    "TN ",
+    "NEN",
+    " NT"
+  ],
+  "result": {
+    "item": "alfheim:armilla"
+  }
+}

@@ -2,11 +2,15 @@ package alfheim.port.legacy
 
 import alfheim.api.ModInfo.MODID
 import alfheim.port.data.OreDictTags
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import net.minecraft.core.NonNullList
-import net.minecraft.core.RegistryAccess
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.ItemTags
+import net.minecraft.util.GsonHelper
 import net.minecraft.world.Container
 import net.minecraft.world.inventory.CraftingContainer
 import net.minecraft.world.item.*
@@ -15,9 +19,14 @@ import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraftforge.common.crafting.AbstractIngredient
+import net.minecraftforge.common.crafting.CraftingHelper
+import net.minecraftforge.common.crafting.IIngredientSerializer
 import net.minecraftforge.common.crafting.PartialNBTIngredient
+import net.minecraftforge.registries.ForgeRegistries
 import vazkii.botania.common.block.BotaniaBlocks
 import vazkii.botania.common.item.BotaniaItems
+import java.util.stream.Stream
 
 /*
  * Рецепты 1.7.10 (SPEC, Р-9; MAPPING.md, «Рецепты»). В 1.20.1 рецепты — данные мода. Код автора (`AlfheimRecipes`)
@@ -36,13 +45,19 @@ val Container.sizeInventory get() = containerSize
 private const val TAG_WILDCARD = "$MODID:wildcard1710"
 
 /**
- * `ItemStack(item, size, OreDictionary.WILDCARD_VALUE)` 1.7.10 — ингредиент «с любой metadata»: у инструмента — с
- * любым повреждением. Вариант metadata в 1.20.1 — отдельный предмет (`ItemStack(items[meta])`, MAPPING.md, «Имена и
- * metadata»), поэтому другая metadata здесь — ошибка переноса
+ * `ItemStack(item, size, meta)` 1.7.10. `OreDictionary.WILDCARD_VALUE` — ингредиент «с любой metadata»: у инструмента —
+ * с любым повреждением. У предмета мода без вариантов metadata — повреждение (`ItemStack.meta` ASJCore), как уровень
+ * гиперведра: в рецепте такой стак — ингредиент [MetaIngredient]. Вариант metadata в 1.20.1 — отдельный предмет
+ * (`ItemStack(items[meta])`, MAPPING.md, «Имена и metadata»), metadata предмета Botania или ванилы — тоже
+ * (`ItemStack(gaiaIngot)`), поэтому здесь они — ошибка переноса
  */
 fun ItemStack(item: ItemLike, size: Int, meta: Int): ItemStack {
-	require(meta == OreDictionary.WILDCARD_VALUE) { "1.7.10 metadata $meta of $item is a variant: write ItemStack(items[meta])" }
-	return ItemStack(item, size).also { it.orCreateTag.putBoolean(TAG_WILDCARD, true) }
+	val stack = ItemStack(item, size)
+	if (meta == OreDictionary.WILDCARD_VALUE) return stack.also { it.orCreateTag.putBoolean(TAG_WILDCARD, true) }
+	val variant = (stack.item as? LegacyItem)?.variant ?: ((stack.item as? BlockItem)?.block as? LegacyBlock)?.variant
+	require(variant == null && BuiltInRegistries.ITEM.getKey(stack.item).namespace == MODID) { "1.7.10 metadata $meta of $item is a variant or not a mod item: write the 1.20.1 item, ItemStack(items[meta])" }
+	// у предмета без повреждения тег Damage ставит только заданная metadata: по нему стак отличается от ItemStack(item)
+	return stack.also { it.damageValue = meta }
 }
 
 /**
@@ -50,7 +65,8 @@ fun ItemStack(item: ItemLike, size: Int, meta: Int): ItemStack {
  * числа в стеке:
  * - имя Ore Dictionary — тег или предмет по таблице [ore];
  * - `ItemStack` — его предмет; повреждаемый предмет (инструмент) — только целый, как metadata 0 в 1.7.10, а
- *   `ItemStack(x, n, WILDCARD_VALUE)` — с любым повреждением;
+ *   `ItemStack(x, n, WILDCARD_VALUE)` — с любым повреждением; предмет без вариантов с заданной metadata
+ *   (`ItemStack(x, n, meta)`) — только с ней ([MetaIngredient]);
  * - `Item` и `Block` — как у рецепта этого вида в 1.7.10 ([Mode]): metadata 0 или любая. Блок или предмет с
  *   вариантами metadata в порту — массив (`alfStorage`, `livingcobble`): «любая» — все варианты, 0 — первый.
  */
@@ -66,7 +82,7 @@ object Ingredients1710 {
 	fun of(input: Any?, mode: Mode): Ingredient = when (input) {
 		null         -> Ingredient.EMPTY
 		is String    -> ore(input)
-		is ItemStack -> stack(input.item, input.tag?.getBoolean(TAG_WILDCARD) == true)
+		is ItemStack -> stack(input.item, input.tag?.getBoolean(TAG_WILDCARD) == true, input.damageValue.takeIf { input.tag?.contains("Damage") == true })
 		is Item      -> stack(input, mode.anyItem)
 		is Block     -> stack(input.asItem(), mode.anyBlock)
 		is Array<*>  -> variants(input, mode)
@@ -78,10 +94,19 @@ object Ingredients1710 {
 		return if (any) Ingredient.of(*variants.map { (it as ItemLike).asItem() }.toTypedArray()) else of(variants[0], mode)
 	}
 
-	/** Целый инструмент: у повреждаемого стека 1.20.1 всегда есть `Damage` (0 — целый) */
-	private fun stack(item: Item, any: Boolean): Ingredient {
+	/**
+	 * Предмет с любой metadata ([any]) или с заданной ([meta]; без неё — 0). Инструмент — по повреждению: у
+	 * повреждаемого стека 1.20.1 всегда есть `Damage` (0 — целый). Предмет без повреждения с заданной metadata —
+	 * [MetaIngredient]
+	 */
+	private fun stack(item: Item, any: Boolean, meta: Int? = null): Ingredient {
 		if (item === Items.AIR) throw IllegalArgumentException("1.7.10 recipe ingredient has no item")
-		return if (any || !item.canBeDepleted()) Ingredient.of(item) else PartialNBTIngredient.of(item, CompoundTag().apply { putInt("Damage", 0) })
+		return when {
+			any                  -> Ingredient.of(item)
+			item.canBeDepleted() -> PartialNBTIngredient.of(item, CompoundTag().apply { putInt("Damage", meta ?: 0) })
+			meta != null         -> MetaIngredient(item, meta)
+			else                 -> Ingredient.of(item)
+		}
 	}
 
 	/**
@@ -167,6 +192,43 @@ object Ingredients1710 {
 	private fun forge(path: String) = ResourceLocation("forge", path)
 
 	private fun botania(path: String) = ResourceLocation("botania", path)
+}
+
+/**
+ * Ингредиент `alfheim:meta`: предмет мода без вариантов с заданной metadata 1.7.10 — его повреждением (`ItemStack.meta`
+ * ASJCore), как уровень гиперведра. Стак без `Damage` — metadata 0; NBT и число в стеке, как в 1.7.10, не
+ * сравниваются. Сериализатор регистрирует `alfheim.port.registry.LegacySpecialRecipes`
+ */
+class MetaIngredient(val item: Item, val meta: Int): AbstractIngredient(Stream.of(Ingredient.ItemValue(ItemStack(item).also { if (meta != 0) it.damageValue = meta }))) {
+
+	override fun test(stack: ItemStack?) = stack != null && stack.`is`(item) && stack.damageValue == meta
+
+	override fun isSimple() = false
+
+	override fun getSerializer() = Serializer
+
+	override fun toJson(): JsonElement = JsonObject().apply {
+		addProperty("type", ID.toString())
+		addProperty("item", BuiltInRegistries.ITEM.getKey(item).toString())
+		addProperty("meta", meta)
+	}
+
+	object Serializer: IIngredientSerializer<MetaIngredient> {
+
+		override fun parse(json: JsonObject) = MetaIngredient(CraftingHelper.getItem(GsonHelper.getAsString(json, "item"), true), GsonHelper.getAsInt(json, "meta"))
+
+		override fun parse(buf: FriendlyByteBuf) = MetaIngredient(buf.readRegistryIdUnsafe(ForgeRegistries.ITEMS), buf.readVarInt())
+
+		override fun write(buf: FriendlyByteBuf, ingredient: MetaIngredient) {
+			buf.writeRegistryIdUnsafe(ForgeRegistries.ITEMS, ingredient.item)
+			buf.writeVarInt(ingredient.meta)
+		}
+	}
+
+	companion object {
+
+		val ID = ResourceLocation(MODID, "meta")
+	}
 }
 
 /**

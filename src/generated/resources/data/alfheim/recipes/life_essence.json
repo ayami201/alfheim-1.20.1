@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "botania:ancient_will_ahrim"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "botania:life_essence"
+  }
+}

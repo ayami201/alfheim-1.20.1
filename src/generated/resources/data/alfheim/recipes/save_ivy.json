@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:vine"
+    },
+    {
+      "tag": "botania:dragonstone_gems"
+    },
+    {
+      "tag": "forge:nuggets/mauftrium"
+    }
+  ],
+  "result": {
+    "item": "alfheim:save_ivy"
+  }
+}

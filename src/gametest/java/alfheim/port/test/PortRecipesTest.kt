@@ -5,7 +5,12 @@ import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.AlfheimFluffBlocks
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.ItemSplashPotion
+import alfheim.common.item.material.ElvenFoodMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
+import alfheim.port.legacy.MetaIngredient
+import alfheim.port.legacy.botania.ancientWill
+import io.netty.buffer.Unpooled
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.player.Player
@@ -16,6 +21,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.*
 import net.minecraft.gametest.framework.*
+import net.minecraftforge.common.crafting.CraftingHelper
 import net.minecraftforge.gametest.GameTestHolder
 import net.minecraftforge.gametest.PrefixGameTestTemplate
 import vazkii.botania.common.block.BotaniaBlocks
@@ -24,7 +30,7 @@ import vazkii.botania.common.item.BotaniaItems
 import vazkii.botania.common.item.brew.BaseBrewItem
 
 /**
- * КТ-2, партия 7а: рецепты автора (`AlfheimRecipes`) — данные 1.20.1 из генерации данных. Проверяется то, что
+ * КТ-2, партии 7а и 7б: рецепты автора (`AlfheimRecipes`) — данные 1.20.1 из генерации данных. Проверяется то, что
  * загрузила игра: каждый JSON стал рецептом, у каждого ингредиента есть предметы, раскладку на верстаке занимает один
  * рецепт, выборочные рецепты дают то же, что у автора
  */
@@ -38,6 +44,8 @@ object PortRecipesTest {
 	 */
 	private val knownConflicts = mapOf(
 		ResourceLocation(MODID, "livingrock1_wall") to setOf(ResourceLocation("botania", "livingrock_bricks_wall")),
+		ResourceLocation(MODID, "brown_mushroom") to setOf(ResourceLocation("botania", "dye_brown")),
+		ResourceLocation(MODID, "red_mushroom") to setOf(ResourceLocation("botania", "dye_red")),
 	)
 
 	/** Сетка верстака 3×3 без меню; [stacks] — слоты по строкам */
@@ -59,6 +67,14 @@ object PortRecipesTest {
 		helper.assertTrue(ItemStack.isSameItemSameTags(crafted, result) && crafted.count == result.count, "$what: $crafted, expected $result")
 	}
 
+	/** Рецепт мода [path] подходит к раскладке и даёт [result]: для раскладок из [knownConflicts], где верстак берёт любой рецепт */
+	private fun assertRecipe(helper: GameTestHelper, path: String, grid: CraftingContainer, result: ItemStack) {
+		val recipe = helper.level.recipeManager.byKey(ResourceLocation(MODID, path)).orElse(null) as? CraftingRecipe
+		helper.assertTrue(recipe != null && recipe.matches(grid, helper.level), "$MODID:$path matches")
+		val crafted = recipe!!.assemble(grid, helper.level.registryAccess())
+		helper.assertTrue(ItemStack.isSameItemSameTags(crafted, result) && crafted.count == result.count, "$MODID:$path: $crafted, expected $result")
+	}
+
 	/**
 	 * Каждый JSON рецепта мода загружен (рецепт с ошибкой игра пропускает, только пишет в лог); у каждого ингредиента
 	 * есть предметы: пустой тег Forge показывает барьером
@@ -68,7 +84,7 @@ object PortRecipesTest {
 	fun recipesLoaded(helper: GameTestHelper) {
 		val files = helper.level.server.resourceManager.listResources("recipes") { it.namespace == MODID && it.path.endsWith(".json") }
 		val recipes = recipes(helper)
-		helper.assertTrue(files.size == recipes.size && recipes.size >= 137, "recipe files: ${files.size}, loaded: ${recipes.size}")
+		helper.assertTrue(files.size == recipes.size && recipes.size >= 165, "recipe files: ${files.size}, loaded: ${recipes.size}")
 		val problems = ArrayList<String>()
 		for (recipe in recipes) {
 			if (recipe is CustomRecipe) continue
@@ -142,6 +158,58 @@ object PortRecipesTest {
 		val cloth = ItemStack(BotaniaItems.spellCloth).apply { damageValue = 10 }
 		val essence = ItemStack(BotaniaItems.lifeEssence)
 		assertCraft(helper, grid(essence, cloth, essence, cloth, ItemStack(Items.GOLD_INGOT), cloth, essence, cloth, essence), DasRheingold.stack, "Das Rheingold with a worn spell cloth")
+		helper.succeed()
+	}
+
+	/** Рецепты партии 7б — вещей, перенесённых раньше рецептов: числа и ингредиенты из `AlfheimRecipes` */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun itemRecipes(helper: GameTestHelper) {
+		// факел: древесный уголь Нифльхейма над палкой → 6 факелов
+		assertCraft(helper, grid(NetherwoodCoal.stack, null, null, ItemStack(Items.STICK)), ItemStack(Items.TORCH, 6), "torches")
+		// воля любого из шести братьев → 4 эссенции жизни
+		for (will in ancientWill) assertCraft(helper, grid(ItemStack(will)), ItemStack(BotaniaItems.lifeEssence, 4), "life essence from $will")
+		// грибы Botania → грибы ванилы (раскладку занимает и краситель Botania 1.20.1 — knownConflicts)
+		assertRecipe(helper, "brown_mushroom", grid(ItemStack(BotaniaBlocks.brownMushroom)), ItemStack(Items.BROWN_MUSHROOM))
+		assertRecipe(helper, "red_mushroom", grid(ItemStack(BotaniaBlocks.redMushroom)), ItemStack(Items.RED_MUSHROOM))
+		// желе: хлеб или жареная треска с бутылкой желе
+		assertCraft(helper, grid(ItemStack(Items.BREAD), JellyBottle.stack), JellyBread.stack, "jelly bread")
+		assertCraft(helper, grid(JellyBottle.stack, ItemStack(Items.COOKED_COD)), JellyCod.stack, "jelly cod")
+		// спектральная платформа: обрамлённое и узорчатое сонное дерево, живое дерево — любое из тега, как у Botania
+		val framed = ItemStack(BotaniaBlocks.dreamwoodFramed)
+		val pattern = ItemStack(BotaniaBlocks.dreamwoodPatternFramed)
+		val platform = ItemStack(BotaniaBlocks.spectralPlatform, 2)
+		for (wood in listOf(BotaniaBlocks.livingwoodLog, BotaniaBlocks.livingwood))
+			assertCraft(helper, grid(framed, pattern, framed, ItemStack(wood), ItemStack(BotaniaItems.lifeEssence), ItemStack(wood)), platform, "spectral platform with $wood")
+		// калитка из коры живого дерева: веточки и живое дерево
+		val twig = ItemStack(BotaniaItems.livingwoodTwig)
+		val log = ItemStack(BotaniaBlocks.livingwoodLog)
+		assertCraft(helper, grid(twig, log, twig, twig, log, twig), ItemStack(AlfheimFluffBlocks.livingwoodBarkFenceGate), "livingwood bark fence gate")
+		helper.succeed()
+	}
+
+	/**
+	 * Гиперведро: уровень — metadata 1.7.10 (повреждение стака). Уровни 0–2 улучшает слиток мауфтрия, 3–5 — блок
+	 * мауфтрия; ведро другого уровня в рецепт не подходит
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun hyperBucketUpgrades(helper: GameTestHelper) {
+		fun bucket(level: Int) = ItemStack(AlfheimItems.hyperBucket).also { if (level > 0) it.damageValue = level }
+		val ingot = MauftriumIngot.stack
+		val block = ItemStack(AlfheimBlocks.alfStorage[1])
+		for (level in 0..5) assertCraft(helper, grid(bucket(level), if (level < 3) ingot else block), bucket(level + 1), "bucket level $level → ${level + 1}")
+		helper.assertTrue(craft(helper, grid(bucket(3), ingot)).isEmpty, "level 3 is not upgraded with an ingot")
+		helper.assertTrue(craft(helper, grid(bucket(0), block)).isEmpty, "level 0 is not upgraded with a block")
+		helper.assertTrue(craft(helper, grid(bucket(6), block)).isEmpty, "level 6 is the last")
+		// ингредиент alfheim:meta доходит до клиента и читается из JSON тем же
+		val ingredient = MetaIngredient(AlfheimItems.hyperBucket, 3)
+		val buf = FriendlyByteBuf(Unpooled.buffer())
+		ingredient.toNetwork(buf)
+		val fromNetwork = Ingredient.fromNetwork(buf)
+		val fromJson = CraftingHelper.getIngredient(ingredient.toJson(), false)
+		for (read in listOf(fromNetwork, fromJson))
+			helper.assertTrue(read is MetaIngredient && read.item === AlfheimItems.hyperBucket && read.meta == 3 && read.test(bucket(3)) && !read.test(bucket(2)), "alfheim:meta read back: $read")
 		helper.succeed()
 	}
 

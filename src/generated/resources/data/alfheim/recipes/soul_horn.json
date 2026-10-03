@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "tag": "forge:ingots/elvorium"
+    },
+    "I": {
+      "tag": "forge:dusts/iffesal"
+    },
+    "M": {
+      "tag": "forge:ingots/mauftrium"
+    }
+  },
+  "pattern": [
+    "MIM",
+    "EIE",
+    " E "
+  ],
+  "result": {
+    "item": "alfheim:soul_horn"
+  }
+}

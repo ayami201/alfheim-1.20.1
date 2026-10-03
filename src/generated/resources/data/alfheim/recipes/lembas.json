@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:bread"
+    },
+    "L": {
+      "item": "alfheim:grape_leaf"
+    },
+    "N": {
+      "item": "alfheim:nectar"
+    }
+  },
+  "pattern": [
+    " LB",
+    "NBN",
+    "BL "
+  ],
+  "result": {
+    "item": "alfheim:lembas"
+  }
+}
