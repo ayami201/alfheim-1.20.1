@@ -30,8 +30,9 @@ class ItemDeathSeed: ItemMod("DeathSeed") {
 	}
 	
 	// PORT: onItemRightClick → use. Измерение — id строкой (номеров измерений в 1.20.1 нет). «Места нет» у автора —
-	// y < 0: в 1.20.1 мир ниже нуля, поэтому смотрится, записано ли место. posY своего игрока на клиенте 1.7.10 был на
-	// уровне глаз (отсюда − 1.6), в 1.20.1 posY — у ног
+	// y < 0, ниже мира 1.7.10: семя без записи или смерть в пустоте. В 1.20.1 мир бывает ниже нуля, поэтому «места
+	// нет» — нет записи высоты (смерть ниже мира её не пишет, onPlayerDied). posY своего игрока на клиенте 1.7.10 был
+	// на уровне глаз (отсюда − 1.6), в 1.20.1 posY — у ног
 	override fun use(world: World, player: EntityPlayer, hand: InteractionHand): InteractionResultHolder<ItemStack> {
 		val stack = player.getItemInHand(hand)
 		val d = ItemNBTHelper.getString(stack, TAG_D, World.OVERWORLD.location().toString())
@@ -78,6 +79,9 @@ class ItemDeathSeed: ItemMod("DeathSeed") {
 			ItemNBTHelper.setString(stack, TAG_D, player.level().dimensionId)
 //			ItemNBTHelper.setInt(stack, TAG_D, player.dimension)
 			ItemNBTHelper.setDouble(stack, TAG_X, x)
+			// PORT: смерть ниже мира (в пустоте) у автора записывалась с y < 0 — «места нет». Низ мира 1.20.1 у
+			// измерений свой (у основного мира −64): такая смерть записывается без высоты
+			if (y < player.level().minBuildHeight) stack.tag?.remove(TAG_Y) else
 			ItemNBTHelper.setDouble(stack, TAG_Y, y)
 			ItemNBTHelper.setDouble(stack, TAG_Z, z)
 		}
