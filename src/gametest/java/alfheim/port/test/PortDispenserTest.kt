@@ -90,13 +90,13 @@ object PortDispenserTest {
 		helper.runAfterDelay(10) {
 			helper.assertTrue(dispenser.getItem(0).`is`(Items.BOWL) && dispenser.getItem(0).count == 1, "one bowl is left: ${dispenser.getItem(0)}")
 			helper.assertTrue((0 until dispenser.containerSize).count { dispenser.getItem(it).`is`(BotaniaItems.waterBowl) } == 1, "a water bowl is in the dispenser")
-			// второй раз — последняя миска
+			// второй раз — последняя миска; раздатчик берёт случайный непустой слот, поэтому миска с водой вынимается
+			for (slot in 1 until dispenser.containerSize) dispenser.setItem(slot, ItemStack.EMPTY)
 			helper.level.setBlock(pos.south(), Blocks.AIR.defaultBlockState(), 3)
 			helper.runAfterDelay(4) {
 				helper.level.setBlock(pos.south(), Blocks.REDSTONE_BLOCK.defaultBlockState(), 3)
 				helper.runAfterDelay(10) {
-					helper.assertTrue(dispenser.getItem(0).`is`(BotaniaItems.waterBowl), "the last bowl becomes a water bowl: ${dispenser.getItem(0)}")
-					helper.assertTrue((0 until dispenser.containerSize).count { dispenser.getItem(it).`is`(BotaniaItems.waterBowl) } == 2, "two water bowls")
+					helper.assertTrue(dispenser.getItem(0).`is`(BotaniaItems.waterBowl) && dispenser.getItem(0).count == 1, "the last bowl becomes a water bowl: ${dispenser.getItem(0)}")
 					clear(helper, pos)
 					helper.succeed()
 				}
