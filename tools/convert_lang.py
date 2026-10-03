@@ -51,6 +51,7 @@ REMOVED = [
     ("oiiaId", "подпись удалённой настройки (MAPPING.md)"),
     ("elementiumClusterMeta", "подпись удалённой настройки (MAPPING.md)"),
     ("overrideCoFHCollisionCheck", "подпись удалённой настройки (MAPPING.md)"),
+    ("tile.*Slab*Full*.name", "двойная плита — состояние type=double одинарной, своего предмета и имени у неё нет (MAPPING.md)"),
 ]
 
 # Языки, на которых у каждой вещи должно быть имя (ROADMAP, КТ-2)
