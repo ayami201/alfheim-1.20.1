@@ -1,6 +1,9 @@
 package alfheim.port.legacy
 
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
@@ -41,3 +44,9 @@ fun LevelAccessor.scheduleBlockUpdate(x: Int, y: Int, z: Int, block: Block, dela
 fun Level.spawnEntityInWorld(entity: Entity) = addFreshEntity(entity)
 
 val Level.isRemote: Boolean get() = isClientSide
+
+/** Номера измерения 1.7.10 (`dimension`) в 1.20.1 нет: измерение хранится строкой — id мира, `minecraft:overworld` */
+val Level.dimensionId: String get() = dimension().location().toString()
+
+/** Измерение по id строкой ([dimensionId]) */
+fun dimensionKey(id: String): ResourceKey<Level> = ResourceKey.create(Registries.DIMENSION, ResourceLocation(id))

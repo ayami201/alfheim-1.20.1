@@ -52,7 +52,7 @@ object AlfheimItems {
 //	val auraRingPink: Item // PORT: КТ-4
 //	val balanceCloak: Item // PORT: КТ-4
 //	val carver: Item // PORT: КТ-3
-//	val chalk: Item // PORT: КТ-2
+	val chalk: Item
 //	val cloudPendant: Item // PORT: КТ-4
 //	val cloudPendantSuper: Item // PORT: КТ-4
 //	val coatOfArms: Item // PORT: КТ-4
@@ -61,7 +61,7 @@ object AlfheimItems {
 //	val creativeReachPendant: Item // PORT: КТ-4
 //	val crescentMoonAmulet: Item // PORT: КТ-4
 //	val daolos: Item // PORT: КТ-4
-//	val deathSeed: Item // PORT: КТ-2
+	val deathSeed: Item
 //	val discFenrir: Item // PORT: КТ-8
 //	val discFlugel: Item // PORT: КТ-8
 //	val discFlugelMeme: Item // PORT: КТ-8
@@ -107,7 +107,7 @@ object AlfheimItems {
 //	val gjallarhorn: Item // PORT: КТ-4
 //	val gleipnir: Item // PORT: КТ-4
 //	val gungnir: Item // PORT: КТ-4
-//	val hyperBucket: Item // PORT: КТ-2
+	val hyperBucket: Item
 //	val invisibilityCloak: Item // PORT: КТ-4
 //	val invisibleFlameLens: Item // PORT: КТ-3
 //	val irisSeeds: Item // PORT: КТ-2
@@ -164,7 +164,7 @@ object AlfheimItems {
 //	val snowChest: Item // PORT: КТ-4
 //	val snowLeggings: Item // PORT: КТ-4
 //	val snowBoots: Item // PORT: КТ-4
-//	val soulHorn: Item // PORT: КТ-2
+	val soulHorn: Item
 //	val soulSword: Item // PORT: КТ-4
 //	val spatiotemporalRing: Item // PORT: КТ-4
 //	val spawnEgg: Item // PORT: КТ-5
@@ -204,7 +204,7 @@ object AlfheimItems {
 //		auraRingPink = ItemAuraRingAlfheim("AuraRingPink", 50, 0.075f) // PORT: КТ-4
 //		balanceCloak = ItemBalanceCloak() // PORT: КТ-4
 //		carver = ItemCarver() // PORT: КТ-3
-//		chalk = ItemChalk() // PORT: КТ-2
+		chalk = ItemChalk()
 //		cloudPendant = ItemCloudPendant() // PORT: КТ-4
 //		cloudPendantSuper = ItemCloudPendant("SuperCloudPendant", 3) // PORT: КТ-4
 //		coatOfArms = ItemCoatOfArms() // PORT: КТ-4
@@ -213,7 +213,7 @@ object AlfheimItems {
 //		creativeReachPendant = ItemCreativeReachPendant() // PORT: КТ-4
 //		crescentMoonAmulet = ItemCrescentMoonAmulet() // PORT: КТ-4
 //		daolos = ItemDaolos() // PORT: КТ-4
-//		deathSeed = ItemDeathSeed() // PORT: КТ-2
+		deathSeed = ItemDeathSeed()
 //		discFenrir = ItemModRecord("fenrir", "FenrirDisc").setCreativeTab(AlfheimTab) // PORT: КТ-8
 //		discFlugel = ItemModRecord("flugel", "FlugelDisc").setCreativeTab(AlfheimTab) // PORT: КТ-8
 //		discFlugelMeme = ItemModRecord("miku", "MikuDisc").setCreativeTab(null) // PORT: КТ-8
@@ -259,7 +259,7 @@ object AlfheimItems {
 //		gjallarhorn = ItemGjallarhorn() // PORT: КТ-4
 //		gleipnir = ItemGleipnir() // PORT: КТ-4
 //		gungnir = ItemGungnir() // PORT: КТ-4
-//		hyperBucket = ItemHyperBucket() // PORT: КТ-2
+		hyperBucket = ItemHyperBucket()
 //		invisibilityCloak = ItemInvisibilityCloak() // PORT: КТ-4
 //		invisibleFlameLens = ItemLensFlashInvisible() // PORT: КТ-3
 //		irisSeeds = ItemColorSeeds() // PORT: КТ-2
@@ -316,7 +316,7 @@ object AlfheimItems {
 //		snowChest = ItemSnowArmor(1, "SnowChest") // PORT: КТ-4
 //		snowLeggings = ItemSnowArmor(2, "SnowLeggings") // PORT: КТ-4
 //		snowBoots = ItemSnowArmor(3, "SnowBoots") // PORT: КТ-4
-//		soulHorn = ItemSoulHorn() // PORT: КТ-2
+		soulHorn = ItemSoulHorn()
 //		soulSword = ItemSoulSword() // PORT: КТ-4
 //		spatiotemporalRing = ItemSpatiotemporalRing() // PORT: КТ-4
 //		splashPotion = ItemSplashPotion() // PORT: КТ-2

@@ -1,16 +1,21 @@
 package alfheim.common.item
 
+// PORT: импорты 1.20.1 (MAPPING.md); Botania.proxy — alfheim.port.legacy.botania.Botania, плющ верности Botania 1.7.10
+// (ItemKeepIvy) в 1.20.1 — ResoluteIvyItem с тем же тегом
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import cpw.mods.fml.common.eventhandler.*
-import net.minecraft.entity.Entity
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.potion.Potion
-import net.minecraft.world.World
+import alfheim.port.legacy.*
+import alfheim.port.legacy.Potion1710 as Potion
+import alfheim.port.legacy.botania.Botania
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player as EntityPlayer
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level as World
 import net.minecraftforge.event.entity.living.LivingDeathEvent
-import vazkii.botania.common.Botania
-import vazkii.botania.common.item.ItemKeepIvy
+import net.minecraftforge.eventbus.api.*
+import vazkii.botania.common.item.ResoluteIvyItem as ItemKeepIvy
 
 class ItemDeathSeed: ItemMod("DeathSeed") {
 	
@@ -18,29 +23,38 @@ class ItemDeathSeed: ItemMod("DeathSeed") {
 		maxStackSize = 1
 	}
 	
-	override fun onUpdate(stack: ItemStack, world: World?, entity: Entity?, slot: Int, inHand: Boolean) {
+	// PORT: onUpdate → inventoryTick
+	override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, inHand: Boolean) {
 		if (!ItemNBTHelper.getBoolean(stack, ItemKeepIvy.TAG_KEEP, false))
 			ItemNBTHelper.setBoolean(stack, ItemKeepIvy.TAG_KEEP, true)
 	}
 	
-	override fun onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack {
-		val d = ItemNBTHelper.getInt(stack, TAG_D, 0)
+	// PORT: onItemRightClick → use. Измерение — id строкой (номеров измерений в 1.20.1 нет). «Места нет» у автора —
+	// y < 0: в 1.20.1 мир ниже нуля, поэтому смотрится, записано ли место. posY своего игрока на клиенте 1.7.10 был на
+	// уровне глаз (отсюда − 1.6), в 1.20.1 posY — у ног
+	override fun use(world: World, player: EntityPlayer, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+		val stack = player.getItemInHand(hand)
+		val d = ItemNBTHelper.getString(stack, TAG_D, World.OVERWORLD.location().toString())
 		val x = ItemNBTHelper.getDouble(stack, TAG_X, 0.0)
 		val y = ItemNBTHelper.getDouble(stack, TAG_Y, -1.0)
 		val z = ItemNBTHelper.getDouble(stack, TAG_Z, 0.0)
 		
-		if (y < 0) return stack
+		if (!ItemNBTHelper.verifyExistance(stack, TAG_Y)) return InteractionResultHolder.pass(stack)
+//		val d = ItemNBTHelper.getInt(stack, TAG_D, 0)
+//		if (y < 0) return stack
 		
 		player.addPotionEffect(PotionEffectU(Potion.resistance.id, 100, 4))
-		ASJUtilities.sendToDimensionWithoutPortal(player, d, x, y, z)
+		ASJUtilities.sendToDimensionWithoutPortal(player, dimensionKey(d), x, y, z)
 		
 		world.playSoundAtEntity(player, "mob.endermen.portal", 1f, 1f)
 		for (i in 0..49)
-			Botania.proxy.sparkleFX(player.worldObj, player.posX + Math.random() * player.width, player.posY - 1.6 + Math.random() * player.height, player.posZ + Math.random() * player.width, 0.25f, 1f, 0.25f, 1f, 10)
+			Botania.proxy.sparkleFX(player.worldObj, player.posX + Math.random() * player.width, player.posY + Math.random() * player.height, player.posZ + Math.random() * player.width, 0.25f, 1f, 0.25f, 1f, 10)
+//			Botania.proxy.sparkleFX(player.worldObj, player.posX + Math.random() * player.width, player.posY - 1.6 + Math.random() * player.height, player.posZ + Math.random() * player.width, 0.25f, 1f, 0.25f, 1f, 10)
 		
-		--stack.stackSize
+		stack.shrink(1)
+//		--stack.stackSize
 		
-		return stack
+		return InteractionResultHolder.consume(stack)
 	}
 	
 	companion object {
@@ -61,10 +75,19 @@ class ItemDeathSeed: ItemMod("DeathSeed") {
 			if (slot == -1) return
 			val stack = player.inventory[slot] ?: return
 			val (x, y, z) = Vector3.fromEntity(player)
-			ItemNBTHelper.setInt(stack, TAG_D, player.dimension)
+			ItemNBTHelper.setString(stack, TAG_D, player.level().dimensionId)
+//			ItemNBTHelper.setInt(stack, TAG_D, player.dimension)
 			ItemNBTHelper.setDouble(stack, TAG_X, x)
 			ItemNBTHelper.setDouble(stack, TAG_Y, y)
 			ItemNBTHelper.setDouble(stack, TAG_Z, z)
 		}
 	}
+	
+	// PORT: имена полей 1.7.10
+	private val Entity.worldObj get() = level()
+	private val Entity.posX get() = x
+	private val Entity.posY get() = y
+	private val Entity.posZ get() = z
+	private val Entity.width get() = bbWidth
+	private val Entity.height get() = bbHeight
 }

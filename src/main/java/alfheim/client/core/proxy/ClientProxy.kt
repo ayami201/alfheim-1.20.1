@@ -13,6 +13,7 @@ import alfheim.client.core.handler.*
 //import alfheim.client.core.util.AlfheimBotaniaModifiersClient
 //import alfheim.client.gui.*
 import alfheim.client.lib.LibResourceLocationsActual
+import alfheim.client.render.particle.EntityVoxelFX
 //import alfheim.client.render.block.*
 //import alfheim.client.render.entity.*
 //import alfheim.client.render.item.*
@@ -37,6 +38,7 @@ import alfheim.common.core.proxy.CommonProxy
 //import net.minecraft.client.renderer.OpenGlHelper
 //import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher
 //import net.minecraft.client.settings.KeyBinding
+import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.world.level.Level as World
 //import net.minecraftforge.client.MinecraftForgeClient
 import net.minecraftforge.common.MinecraftForge
@@ -289,11 +291,12 @@ object ClientProxy : CommonProxy() {
 //		mc.effectRenderer.addEffect(sparkle)
 	}
 	
+	// PORT: мир частицы 1.20.1 — мир клиента; effectRenderer → particleEngine
 	override fun voxelFX(world: World, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float) {
-		// PORT: КТ-2 — частица EntityVoxelFX
-//		if (!doParticle()) return
-//		val voxel = EntityVoxelFX(world, x, y, z, r, g, b)
-//		
+		if (!doParticle()) return
+		val voxel = EntityVoxelFX(world as ClientLevel, x, y, z, r, g, b)
+		
+		mc.particleEngine.add(voxel)
 //		mc.effectRenderer.addEffect(voxel)
 	}
 	
