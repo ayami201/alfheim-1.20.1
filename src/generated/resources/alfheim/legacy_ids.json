@@ -155,6 +155,7 @@
   },
   "entities": {},
   "items": {
+    "alfheim:Armilla": "alfheim:armilla",
     "alfheim:Chalk": "alfheim:chalk",
     "alfheim:CustomRoof": {
       "0": "alfheim:custom_roof0",
@@ -346,6 +347,7 @@
     "alfheim:ShrineRock0Slab": "alfheim:shrine_rock0_slab",
     "alfheim:ShrineRockWhiteStairs": "alfheim:shrine_rock_white_stairs",
     "alfheim:SoulHorn": "alfheim:soul_horn",
+    "alfheim:Triquetrum": "alfheim:triquetrum",
     "alfheim:Wisdomwood": {
       "0": "alfheim:wisdomwood0",
       "1": "alfheim:wisdomwood1",
@@ -410,6 +412,7 @@
     "alfheim.potion.wellolife": "effect.alfheim.wellolife",
     "alfheim.potion.whiteWine": "effect.alfheim.white_wine",
     "alfheim.potion.wisdom": "effect.alfheim.wisdom",
+    "item.alfheim:Armilla.name": "item.alfheim.armilla",
     "item.alfheim:Chalk.name": "item.alfheim.chalk",
     "item.alfheim:DasRheingold.name": "item.alfheim.das_rheingold",
     "item.alfheim:DeathSeed.name": "item.alfheim.death_seed",
@@ -474,6 +477,7 @@
     "item.alfheim:Stencil.name": "item.alfheim.stencil",
     "item.alfheim:ThunderwoodSplinters.name": "item.alfheim.thunderwood_splinters",
     "item.alfheim:ThunderwoodTwig.name": "item.alfheim.thunderwood_twig",
+    "item.alfheim:Triquetrum.name": "item.alfheim.triquetrum",
     "item.alfheim:VolcanoRelic.name": "item.alfheim.volcano_relic",
     "item.alfheim:WisdomBottle.name": "item.alfheim.wisdom_bottle",
     "item.alfheim:YggFruit.name": "item.alfheim.ygg_fruit",
