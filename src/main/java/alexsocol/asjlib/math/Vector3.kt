@@ -258,7 +258,10 @@ class Vector3: Serializable {
 	/** in RAD */
 	fun angle(vec: Vector3) = acos(copy().normalize().dotProduct(vec.copy().normalize()))
 	
-	fun isInside(aabb: AABB) = x >= aabb.minX && y >= aabb.maxY && z >= aabb.minZ && x < aabb.maxX && y < aabb.maxY && z < aabb.maxZ
+	// PORT-FIX: высота сравнивалась с верхом области дважды (y >= maxY && y < maxY) — функция всегда отвечала false.
+	// В коде автора её не вызывают, игрок разницы не заметит
+	fun isInside(aabb: AABB) = x >= aabb.minX && y >= aabb.minY && z >= aabb.minZ && x < aabb.maxX && y < aabb.maxY && z < aabb.maxZ
+//	fun isInside(aabb: AABB) = x >= aabb.minX && y >= aabb.maxY && z >= aabb.minZ && x < aabb.maxX && y < aabb.maxY && z < aabb.maxZ
 	
 	@OnlyIn(Dist.CLIENT)
 	fun vector3f() = Vector3f(x.F, y.F, z.F)

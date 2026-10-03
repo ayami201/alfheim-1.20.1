@@ -48,6 +48,7 @@ import net.minecraft.network.chat.Component
 //import net.minecraftforge.event.entity.living.*
 //import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
 import net.minecraftforge.event.entity.living.MobEffectEvent
+import net.minecraft.server.TickTask
 import net.minecraftforge.event.entity.player.*
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract as EntityInteractEvent
 //import net.minecraftforge.event.world.BlockEvent
@@ -416,7 +417,10 @@ object EventHandler {
 	
 	fun onChangedPotionEffect(e: MobEffectEvent.Added) {
 		val effect = e.oldEffectInstance!!
-		if (ASJUtilities.isServer) e.entityLiving.server?.execute { NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, effect.potionID, effect.duration, effect.amplifier, true, 0)) }
+		// PORT: задача в очереди сервера (tell) выполняется после тика, когда эффект уже обновлён; execute на потоке
+		// сервера выполнил бы её сразу, со старыми длительностью и силой
+		val server = e.entityLiving.server ?: return
+		if (ASJUtilities.isServer) server.tell(TickTask(server.tickCount) { NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, effect.potionID, effect.duration, effect.amplifier, true, 0)) })
 //		if (ASJUtilities.isServer) NetworkService.sendToAll(MessageEffect(e.entityLiving.entityId, e.effect.potionID, e.effect.duration, e.effect.amplifier, e.update, 0))
 	}
 	
