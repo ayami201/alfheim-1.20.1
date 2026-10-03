@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "botania:pixie_dust"
+    },
+    "G": {
+      "tag": "forge:ingots/gold"
+    },
+    "P": {
+      "tag": "forge:dusts/iffesal"
+    }
+  },
+  "pattern": [
+    "PGP",
+    "GDG",
+    "PGP"
+  ],
+  "result": {
+    "item": "alfheim:mana_infusion_core"
+  }
+}

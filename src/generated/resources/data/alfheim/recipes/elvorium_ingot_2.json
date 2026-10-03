@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "forge:nuggets/elvorium"
+    },
+    {
+      "tag": "forge:nuggets/elvorium"
+    },
+    {
+      "tag": "forge:nuggets/elvorium"
+    },
+    {
+      "tag": "forge:nuggets/elvorium"
+    },
+    {
+      "tag": "forge:nuggets/elvorium"
+    },
+    {
+      "tag": "forge:nuggets/elvorium"
+    },
+    {
+      "tag": "forge:nuggets/elvorium"
+    },
+    {
+      "tag": "forge:nuggets/elvorium"
+    },
+    {
+      "tag": "forge:nuggets/elvorium"
+    }
+  ],
+  "result": {
+    "item": "alfheim:elvorium_ingot"
+  }
+}

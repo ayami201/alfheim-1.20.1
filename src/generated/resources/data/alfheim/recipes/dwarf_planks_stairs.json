@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "Q": {
+      "item": "alfheim:dwarf_planks"
+    }
+  },
+  "pattern": [
+    "Q  ",
+    "QQ ",
+    "QQQ"
+  ],
+  "result": {
+    "count": 4,
+    "item": "alfheim:dwarf_planks_stairs"
+  }
+}

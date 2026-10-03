@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "alfheim:living_cobble0"
+    },
+    "R": {
+      "item": "botania:livingrock"
+    }
+  },
+  "pattern": [
+    "CRC",
+    "RCR",
+    "CRC"
+  ],
+  "result": {
+    "count": 9,
+    "item": "alfheim:living_mountain"
+  }
+}

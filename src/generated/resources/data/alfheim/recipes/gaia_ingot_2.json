@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "alfheim:alf_storage4"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "botania:gaia_ingot"
+  }
+}

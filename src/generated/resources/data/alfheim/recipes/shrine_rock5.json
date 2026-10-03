@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L": {
+      "item": "botania:livingrock"
+    },
+    "S": {
+      "item": "minecraft:sugar"
+    }
+  },
+  "pattern": [
+    "LLL",
+    "LSL",
+    "LLL"
+  ],
+  "result": {
+    "count": 8,
+    "item": "alfheim:shrine_rock5"
+  }
+}

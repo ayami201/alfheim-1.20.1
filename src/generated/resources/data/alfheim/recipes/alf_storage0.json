@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/elvorium"
+    },
+    {
+      "tag": "forge:ingots/elvorium"
+    },
+    {
+      "tag": "forge:ingots/elvorium"
+    },
+    {
+      "tag": "forge:ingots/elvorium"
+    },
+    {
+      "tag": "forge:ingots/elvorium"
+    },
+    {
+      "tag": "forge:ingots/elvorium"
+    },
+    {
+      "tag": "forge:ingots/elvorium"
+    },
+    {
+      "tag": "forge:ingots/elvorium"
+    },
+    {
+      "tag": "forge:ingots/elvorium"
+    }
+  ],
+  "result": {
+    "item": "alfheim:alf_storage0"
+  }
+}

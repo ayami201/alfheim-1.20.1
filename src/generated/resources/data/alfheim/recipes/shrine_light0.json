@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "D": {
+      "tag": "forge:dyes/red"
+    },
+    "L": {
+      "item": "minecraft:glowstone"
+    }
+  },
+  "pattern": [
+    "LLL",
+    "LDL",
+    "LLL"
+  ],
+  "result": {
+    "count": 8,
+    "item": "alfheim:shrine_light0"
+  }
+}

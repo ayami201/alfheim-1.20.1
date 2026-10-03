@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "tag": "forge:ingots/elvorium"
+    },
+    "S": {
+      "item": "botania:life_essence"
+    }
+  },
+  "pattern": [
+    " S ",
+    "SES",
+    " S "
+  ],
+  "result": {
+    "item": "botania:gaia_ingot"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "M": {
+      "tag": "botania:mana_dusts"
+    },
+    "P": {
+      "item": "minecraft:dark_oak_planks"
+    }
+  },
+  "pattern": [
+    " P ",
+    "PMP",
+    " P "
+  ],
+  "result": {
+    "count": 4,
+    "item": "alfheim:dwarf_planks"
+  }
+}

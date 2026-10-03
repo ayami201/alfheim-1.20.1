@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L": {
+      "item": "alfheim:dark_living_rock0_slab"
+    }
+  },
+  "pattern": [
+    "L",
+    "L"
+  ],
+  "result": {
+    "item": "alfheim:dark_living_rock0"
+  }
+}
