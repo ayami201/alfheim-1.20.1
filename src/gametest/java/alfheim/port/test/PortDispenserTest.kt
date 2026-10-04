@@ -1,14 +1,17 @@
 package alfheim.port.test
 
 import alfheim.api.ModInfo.MODID
+import alfheim.common.block.AlfheimBlocks
 import alfheim.common.entity.EntityThrowableItem
 import alfheim.common.entity.EntityThrownPotion
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.ItemSplashPotion
+import alfheim.common.item.material.ElvenResourcesMetas.RainbowDust
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.gametest.framework.*
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
@@ -17,6 +20,7 @@ import net.minecraft.world.level.block.entity.DispenserBlockEntity
 import net.minecraft.world.phys.AABB
 import net.minecraftforge.gametest.GameTestHolder
 import net.minecraftforge.gametest.PrefixGameTestTemplate
+import vazkii.botania.common.block.BotaniaBlocks
 import vazkii.botania.common.brew.BotaniaBrews
 import vazkii.botania.common.item.BotaniaItems
 
@@ -101,6 +105,25 @@ object PortDispenserTest {
 					helper.succeed()
 				}
 			}
+		}
+	}
+
+	/**
+	 * Раздатчик моста Бифрост (`BifrostFlowerDispenserHandler`): радужная пыль перед мистическим цветком Botania делает его
+	 * радужным цветком, пыль тратится
+	 */
+	@JvmStatic
+	@GameTest(template = "empty", timeoutTicks = 100)
+	fun dispenserBifrostFlower(helper: GameTestHelper) {
+		val (pos, dispenser) = dispenser(helper, 150, Direction.EAST, RainbowDust.stack(2))
+		helper.level.setBlock(pos.east().below(), Blocks.GRASS_BLOCK.defaultBlockState(), 3)
+		helper.level.setBlock(pos.east(), BotaniaBlocks.getFlower(DyeColor.BLUE).defaultBlockState(), 3)
+		helper.level.setBlock(pos.west(), Blocks.REDSTONE_BLOCK.defaultBlockState(), 3)
+		helper.runAfterDelay(10) {
+			helper.assertTrue(helper.level.getBlockState(pos.east()).`is`(AlfheimBlocks.rainbowGrass[2]), "the Botania flower became a rainbow flower: ${helper.level.getBlockState(pos.east())}")
+			helper.assertTrue(dispenser.getItem(0).count == 1, "one rainbow dust is used: ${dispenser.getItem(0)}")
+			clear(helper, pos)
+			helper.succeed()
 		}
 	}
 }
