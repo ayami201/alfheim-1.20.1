@@ -87,17 +87,17 @@ import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.elvenSand
 //import alfheim.common.block.AlfheimBlocks.enderActuator // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.gaiaButton // PORT: КТ-3
-//import alfheim.common.block.AlfheimBlocks.irisDirt // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.irisDirt
 //import alfheim.common.block.AlfheimBlocks.irisGrass // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.irisLamp // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.irisPlanks // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.irisLamp
+import alfheim.common.block.AlfheimBlocks.irisPlanks
 //import alfheim.common.block.AlfheimBlocks.irisSapling // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.irisSlabs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.irisStairs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.irisWood0 // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.irisWood1 // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.irisWood2 // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.irisWood3 // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.irisSlabs
+import alfheim.common.block.AlfheimBlocks.irisStairs
+import alfheim.common.block.AlfheimBlocks.irisWood0
+import alfheim.common.block.AlfheimBlocks.irisWood1
+import alfheim.common.block.AlfheimBlocks.irisWood2
+import alfheim.common.block.AlfheimBlocks.irisWood3
 //import alfheim.common.block.AlfheimBlocks.itemDisplay // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.itemFrame // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.kindling // PORT: КТ-2
@@ -1337,15 +1337,20 @@ object AlfheimRecipes {
 						 'G', manaGlass,
 						 'J', MANA_PEARL)
 		recipeInvisibilityCloak = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
+		// PORT: поля ванилы 1.20.1 — заглавными (Blocks.REDSTONE_LAMP)
 		addOreDictRecipe(ItemStack(irisLamp),
 						 " B ", "BLB", " B ",
-						 'L', ItemStack(redstone_lamp),
+						 'L', ItemStack(Blocks.REDSTONE_LAMP),
 						 'B', DYES[16])
 		recipeLamp = BotaniaAPI.getLatestAddedRecipe()
 		
+		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(irisPlanks, 1, i) → ItemStack(irisPlanks[i], 1).
+		// КТ-2, партия 8б — рецепты радужных блоков и списки рецептов для лексикона вместе с ними
 		for (i in 0..15)
-			addRecipe(ItemStack(irisPlanks, 1, i), "P", "P", 'P', ItemStack(irisSlabs[i], 1))
+			addRecipe(ItemStack(irisPlanks[i], 1), "P", "P", 'P', ItemStack(irisSlabs[i], 1))
+		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addRecipe(ItemStack(rainbowPlanks), "P", "P", 'P', ItemStack(rainbowSlab))
 		recipesColoredPlanksFromSlabs = BotaniaAPI.getLatestAddedRecipes(17)
 		
@@ -1356,19 +1361,24 @@ object AlfheimRecipes {
 			addRecipe(ItemStack(altPlanks, 1, i), "P", "P", 'P', ItemStack(altSlabs, 1, i))
 		recipesAltPlanksFromSlabs = BotaniaAPI.getLatestAddedRecipes(6)
 		
+		*/
+		
 		for (i in 0..15)
 			addRecipe(ItemStack(irisSlabs[i], 6),
 					  "PPP",
-					  'P', ItemStack(irisPlanks, 1, i))
+					  'P', ItemStack(irisPlanks[i], 1))
+		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addRecipe(ItemStack(rainbowSlab, 6),
 				  "PPP",
 				  'P', ItemStack(rainbowPlanks))
 		recipesColoredSlabs = BotaniaAPI.getLatestAddedRecipes(17)
+		*/
 		
 		for (i in 0..15)
 			addOreDictRecipe(ItemStack(irisStairs[i], 4), true,
 							 "P  ", "PP ", "PPP",
-							 'P', ItemStack(irisPlanks, 1, i))
+							 'P', ItemStack(irisPlanks[i], 1))
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(rainbowStairs, 4), true,
 						 "P  ", "PP ", "PPP",
 						 'P', ItemStack(rainbowPlanks))
@@ -2096,10 +2106,11 @@ object AlfheimRecipes {
 		
 		addOreDictRecipe(ItemStack(elvenSandstoneWalls[1], 6), "SSS", "SSS", 'S', ItemStack(elvenSandstone[2]))
 		
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
+		// PORT: ItemStack(irisDirt, 8, i) → ItemStack(irisDirt[i], 8) (SPEC, Р-5); поля ванилы 1.20.1 — заглавными (Blocks.DIRT)
 		for (i in 0..15)
-			addOreDictRecipe(ItemStack(irisDirt, 8, i), "DDD", "DPD", "DDD", 'P', DYES[i], 'D', ItemStack(dirt, 1))
+			addOreDictRecipe(ItemStack(irisDirt[i], 8), "DDD", "DPD", "DDD", 'P', DYES[i], 'D', ItemStack(Blocks.DIRT, 1))
 		
+		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(rainbowDirt, 8), "DDD", "DPD", "DDD", 'P', DYES[16], 'D', ItemStack(dirt, 1))
 		
 		recipesColoredDirt = BotaniaAPI.getLatestAddedRecipes(17)
@@ -2471,9 +2482,10 @@ object AlfheimRecipes {
 		addShapelessRecipe(JellyCod.stack, ItemStack(Items.COOKED_COD), JellyBottle.stack)
 		recipeJellyfish = BotaniaAPI.getLatestAddedRecipe()
 		
-		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
+		// PORT: ItemStack(irisPlanks, 4, i) → ItemStack(irisPlanks[i], 4) (SPEC, Р-5)
 		for (i in 0..15)
-			addShapelessOreDictRecipe(ItemStack(irisPlanks, 4, i), WOOD[i])
+			addShapelessOreDictRecipe(ItemStack(irisPlanks[i], 4), WOOD[i])
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(rainbowPlanks, 4), rainbowWood)
 		recipesColoredPlanks = BotaniaAPI.getLatestAddedRecipes(17)
 		
@@ -2644,11 +2656,14 @@ object AlfheimRecipes {
 			if (i % 4 != 2)
 				addSmelting(ItemStack(altWood1, 1, i), ItemStack(coal, 1, 1), 0.15f)
 		}
+		*/
 		
-		addSmelting(irisWood0, ItemStack(coal, 1, 1), 0.15f)
-		addSmelting(irisWood1, ItemStack(coal, 1, 1), 0.15f)
-		addSmelting(irisWood2, ItemStack(coal, 1, 1), 0.15f)
-		addSmelting(irisWood3, ItemStack(coal, 1, 1), 0.15f)
+		// PORT: Items.coal 1 → Items.CHARCOAL (вариант ванилы 1.7.10 — отдельный предмет 1.20.1); брёвна — массивы вариантов
+		addSmelting(irisWood0, ItemStack(Items.CHARCOAL), 0.15f)
+		addSmelting(irisWood1, ItemStack(Items.CHARCOAL), 0.15f)
+		addSmelting(irisWood2, ItemStack(Items.CHARCOAL), 0.15f)
+		addSmelting(irisWood3, ItemStack(Items.CHARCOAL), 0.15f)
+		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addSmelting(rainbowWood, ItemStack(coal, 1, 1), 0.15f)
 		addSmelting(auroraWood, ItemStack(coal, 1, 1), 0.15f)
 		addSmelting(lightningWood, ItemStack(coal, 1, 1), 0.15f)

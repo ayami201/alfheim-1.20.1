@@ -1,6 +1,7 @@
 package alfheim.common.block.base
 
 // PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
+import alfheim.common.item.block.ItemIridescentBlockMod
 import alfheim.port.legacy.*
 import net.minecraft.core.Direction
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -34,9 +35,7 @@ abstract class BlockModRotatedPillar(mat: Material): BlockMod(mat)/*, ILexiconab
 	}
 	
 	open fun register(name: String) {
-		// PORT: КТ-2 — ItemIridescentBlockMod переносится с цветными деревьями; блоки этой партии переопределяют register
-//		GameRegistry.registerBlock(this, ItemIridescentBlockMod::class.java, name)
-		throw IllegalStateException("ItemIridescentBlockMod is not ported yet: $name")
+		GameRegistry.registerBlock(this, ItemIridescentBlockMod::class.java, name)
 	}
 	
 	// PORT: лут (alfheim.port.data.AlfheimBlockLoot) — сам блок, один

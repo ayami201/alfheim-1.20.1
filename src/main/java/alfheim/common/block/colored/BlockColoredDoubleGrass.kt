@@ -1,37 +1,31 @@
 package alfheim.common.block.colored
 
-import alexsocol.asjlib.id
-import alfheim.api.lib.LibRenderIDs
-import alfheim.client.core.helper.IconHelper
-import alfheim.common.block.AlfheimBlocks
+// PORT: импорты 1.20.1; BlockDoublePlant 1.7.10 — alfheim.port.legacy.DoublePlant1710 (MAPPING.md, «Растения»); цвета
+// шерсти 1.7.10 — Sheep1710
 import alfheim.common.block.base.IDoublePlant
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.*
-import alfheim.common.lexicon.AlfheimLexiconData
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.*
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.entity.passive.EntitySheep
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.*
-import net.minecraft.item.*
-import net.minecraft.stats.StatList
-import net.minecraft.util.IIcon
-import net.minecraft.world.*
-import net.minecraftforge.event.ForgeEventFactory
-import vazkii.botania.api.lexicon.ILexiconable
+import alfheim.port.legacy.*
+import alfheim.port.legacy.Sheep1710 as EntitySheep
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.BlockGetter as IBlockAccess
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.Block
+import net.minecraftforge.api.distmarker.*
 import java.awt.Color
-import java.util.*
 
-class BlockColoredDoubleGrass(var colorSet: Int): BlockDoublePlant(), IDoublePlant, ILexiconable {
+// PORT: вариант metadata (цвет) — отдельный блок (SPEC, Р-5): номер варианта — meta, создают массивом
+// `Array(8) { BlockColoredDoubleGrass(colorSet, it) }`; верхняя половина (бит 8 metadata) — свойство half
+// (DoublePlant1710). КТ-9 — лексикон (ILexiconable)
+class BlockColoredDoubleGrass(var colorSet: Int, val meta: Int): DoublePlant1710(), IDoublePlant/*, ILexiconable*/ {
 	
 	val name = "irisDoubleGrass$colorSet"
 	val TYPES: Int = 8
-	lateinit var topIcon: IIcon
-	lateinit var bottomIcon: IIcon
+	// PORT: иконки половин → модели (alfheim.port.data.AlfheimBlockStates): низ — irisDoubleGrass, верх — irisDoubleGrassTop
+//	lateinit var topIcon: IIcon
+//	lateinit var bottomIcon: IIcon
+	
+	override val variant get() = meta
 	
 	init {
 		setBlockNameSafe(name)
@@ -57,28 +51,32 @@ class BlockColoredDoubleGrass(var colorSet: Int): BlockDoublePlant(), IDoublePla
 	
 	override fun setBlockName(par1Str: String) = this
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun getBlockColor() = 0xFFFFFF
 	
 	/**
 	 * Returns the color this block should be rendered. Used by leaves.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun getRenderColor(meta: Int): Int {
 		val subtype = meta % TYPES
 		val color = EntitySheep.fleeceColorTable[subtype + TYPES * colorSet]
 		return Color(color[0], color[1], color[2]).rgb
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun colorMultiplier(access: IBlockAccess, x: Int, y: Int, z: Int): Int {
-		if ((access.getBlockMetadata(x, y, z) and 8) != 0 && y > 0)
-			return colorMultiplier(access, x, y - 1, z)
+		// PORT: верхняя половина брала цвет у нижней; номер варианта у них один — сам блок (SPEC, Р-5)
+//		if ((access.getBlockMetadata(x, y, z) and 8) != 0 && y > 0)
+//			return colorMultiplier(access, x, y - 1, z)
 		
-		val meta = access.getBlockMetadata(x, y, z)
+		val meta = this.meta
+//		val meta = access.getBlockMetadata(x, y, z)
 		return getRenderColor(meta)
 	}
 	
+	/* PORT: варианты во вкладке — отдельные блоки (AlfheimTab); иконки → модели половин и предмета
+	   (alfheim.port.data.AlfheimBlockStates)
 	override fun getSubBlocks(item: Item?, tab: CreativeTabs?, list: MutableList<Any?>?) {
 		if (list != null && item != null)
 			for (i in 0 until TYPES) {
@@ -97,9 +95,15 @@ class BlockColoredDoubleGrass(var colorSet: Int): BlockDoublePlant(), IDoublePla
 	
 	@SideOnly(Side.CLIENT)
 	override fun func_149888_a(top: Boolean, index: Int) = if (top) topIcon else bottomIcon
+	*/
 	
-	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.pastoralSeeds
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.pastoralSeeds
 	
+	/* PORT: поломку обеих половин ведёт DoublePlantBlock 1.20.1: вторая половина исчезает без лута, в творческом режиме
+	   нижняя тоже ничего не роняет (onBlockHarvested ниже). Лут — таблица (alfheim.port.data.AlfheimBlockLoot): с
+	   ножницами — две травы ириса цвета растения (onSheared), без них ничего (getItemDropped = null); шёлковое касание
+	   двойное растение 1.7.10 не брало (canSilkHarvest: не обычный куб)
 	override fun harvestBlock(world: World, player: EntityPlayer, x: Int, y: Int, z: Int, meta: Int) {
 		if (world.isRemote || player.currentEquippedItem == null || player.currentEquippedItem.item !== Items.shears || func_149887_c(meta)/*|| !dropBlock(world, x, y, z, meta, player)*/) {
 			superSuperHarvestBlock(world, player, x, y, z, meta)
@@ -173,5 +177,6 @@ class BlockColoredDoubleGrass(var colorSet: Int): BlockDoublePlant(), IDoublePla
 	override fun getBottomIcon(lowerMeta: Int) = bottomIcon
 	
 	override fun getTopIcon(lowerMeta: Int) = topIcon
+	*/
 	
 }

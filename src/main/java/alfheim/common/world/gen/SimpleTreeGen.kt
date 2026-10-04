@@ -1,12 +1,15 @@
 package alfheim.common.world.gen
 
+// PORT: импорты 1.20.1; WorldGenAbstractTree 1.7.10 — alfheim.port.legacy.WorldGenAbstractTree (MAPPING.md, «Растения»)
 import alfheim.api.AlfheimAPI
-import net.minecraft.block.Block
-import net.minecraft.world.World
-import net.minecraft.world.gen.feature.WorldGenAbstractTree
-import java.util.*
+import alfheim.port.legacy.*
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.Block
 import kotlin.math.abs
 
+// PORT: metadata почвы — номер её варианта (getBlockVariant, SPEC, Р-5); высота мира 1.7.10 (0–255) — границы мира
+// 1.20.1 (minBuildHeight, maxBuildHeight)
 class SimpleTreeGen(val minTreeHeight: Int): WorldGenAbstractTree(true) {
 	
 	override fun generate(world: World?, random: Random?, x: Int, y: Int, z: Int): Boolean {
@@ -14,12 +17,13 @@ class SimpleTreeGen(val minTreeHeight: Int): WorldGenAbstractTree(true) {
 			val l: Int = random!!.nextInt(3) + minTreeHeight
 			var flag = true
 			
-			val variant = AlfheimAPI.getTreeVariant(world.getBlock(x, y - 1, z), world.getBlockMetadata(x, y - 1, z))
+			val variant = AlfheimAPI.getTreeVariant(world.getBlock(x, y - 1, z), world.getBlockVariant(x, y - 1, z))
 			if (variant != null) {
-				val wood = variant.getWood(world.getBlock(x, y - 1, z), world.getBlockMetadata(x, y - 1, z))
-				val leaves = variant.getLeaves(world.getBlock(x, y - 1, z), world.getBlockMetadata(x, y - 1, z))
+				val wood = variant.getWood(world.getBlock(x, y - 1, z), world.getBlockVariant(x, y - 1, z))
+				val leaves = variant.getLeaves(world.getBlock(x, y - 1, z), world.getBlockVariant(x, y - 1, z))
 				
-				if (y >= 1 && y + l + 1 <= 256) {
+				if (y >= world.minBuildHeight + 1 && y + l + 1 <= world.maxBuildHeight) {
+//				if (y >= 1 && y + l + 1 <= 256) {
 					var b0: Byte
 					var block: Block
 					
@@ -32,10 +36,13 @@ class SimpleTreeGen(val minTreeHeight: Int): WorldGenAbstractTree(true) {
 						
 						for (j1 in (x - b0)..(x + b0)) {
 							for (i2 in (z - b0)..(z + b0)) {
-								if (i1 in 0..255) {
+								if (i1 in world.minBuildHeight until world.maxBuildHeight) {
+//								if (i1 in 0..255) {
 									block = world.getBlock(j1, i1, i2)
 									
-									if (!block.isReplaceable(world, j1, i1, i2) && !block.isLeaves(world, j1, i1, i2) && block != wood) {
+									// PORT: wood 1.7.10 — блок со всеми вариантами metadata (isSameBlock1710)
+									if (!block.isReplaceable(world, j1, i1, i2) && !block.isLeaves(world, j1, i1, i2) && !block.isSameBlock1710(wood)) {
+//									if (!block.isReplaceable(world, j1, i1, i2) && !block.isLeaves(world, j1, i1, i2) && block != wood) {
 										flag = false
 										break@isGen
 									}
@@ -49,9 +56,10 @@ class SimpleTreeGen(val minTreeHeight: Int): WorldGenAbstractTree(true) {
 					
 					if (!flag) return false
 					val block2: Block = world.getBlock(x, y - 1, z)
-					val soilMeta = world.getBlockMetadata(x, y - 1, z)
+					val soilMeta = world.getBlockVariant(x, y - 1, z)
 					
-					if (y < 256 - l - 1) {
+					if (y < world.maxBuildHeight - l - 1) {
+//					if (y < 256 - l - 1) {
 						block2.onPlantGrow(world, x, y - 1, z, x, y, z)
 						b0 = 3
 						val b1: Byte = 0

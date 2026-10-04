@@ -1,26 +1,27 @@
 package alfheim.common.block.colored
 
-import alfheim.client.core.helper.IconHelper
+// PORT: импорты 1.20.1; BlockTallGrass 1.7.10 — alfheim.port.legacy.TallGrass1710 (MAPPING.md, «Растения»); цвета шерсти
+// 1.7.10 — Sheep1710
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.ItemIridescentGrassMod
-import alfheim.common.lexicon.AlfheimLexiconData
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.*
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.passive.EntitySheep
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.*
-import net.minecraft.world.*
-import vazkii.botania.api.lexicon.ILexiconable
+import alfheim.port.legacy.*
+import alfheim.port.legacy.Sheep1710 as EntitySheep
+import net.minecraft.core.BlockPos
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.BlockGetter as IBlockAccess
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.*
+import net.minecraftforge.api.distmarker.*
 import java.awt.Color
-import java.util.*
 
-class BlockColoredGrass: BlockTallGrass(), ILexiconable {
+// PORT: вариант metadata (цвет) — отдельный блок (SPEC, Р-5): номер варианта — meta, создают массивом
+// `Array(16) { BlockColoredGrass(it) }`. КТ-9 — лексикон (ILexiconable)
+class BlockColoredGrass(val meta: Int): TallGrass1710()/*, ILexiconable*/ {
 	
 	val TYPES: Int = 16
+	
+	override val variant get() = meta
 	
 	init {
 		setBlockName("irisGrass")
@@ -31,16 +32,22 @@ class BlockColoredGrass: BlockTallGrass(), ILexiconable {
 	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, remote: Boolean) = true
 	
 	override fun func_149853_b(world: World, random: Random, x: Int, y: Int, z: Int) {
-		val l = world.getBlockMetadata(x, y, z)
+		// PORT: metadata — номер варианта блока (SPEC, Р-5)
+		val l = meta
+//		val l = world.getBlockMetadata(x, y, z)
 		val b0 = l % 8
 		
-		if (AlfheimBlocks.irisTallGrass0.canPlaceBlockAt(world, x, y, z)) {
+		// PORT: двойная трава — массивы вариантов (SPEC, Р-5); обе половины (верхняя — metadata 8) ставит
+		// DoublePlantBlock.placeAt 1.20.1, флаги те же
+		if (AlfheimBlocks.irisTallGrass0[b0].canPlaceBlockAt(world, x, y, z)) {
 			if (l < 8) {
-				world.setBlock(x, y, z, AlfheimBlocks.irisTallGrass0, b0, 2)
-				world.setBlock(x, y + 1, z, AlfheimBlocks.irisTallGrass0, 8, 2)
+				DoublePlantBlock.placeAt(world, AlfheimBlocks.irisTallGrass0[b0].defaultBlockState(), BlockPos(x, y, z), 2)
+//				world.setBlock(x, y, z, AlfheimBlocks.irisTallGrass0, b0, 2)
+//				world.setBlock(x, y + 1, z, AlfheimBlocks.irisTallGrass0, 8, 2)
 			} else {
-				world.setBlock(x, y, z, AlfheimBlocks.irisTallGrass1, b0, 2)
-				world.setBlock(x, y + 1, z, AlfheimBlocks.irisTallGrass1, 8, 2)
+				DoublePlantBlock.placeAt(world, AlfheimBlocks.irisTallGrass1[b0].defaultBlockState(), BlockPos(x, y, z), 2)
+//				world.setBlock(x, y, z, AlfheimBlocks.irisTallGrass1, b0, 2)
+//				world.setBlock(x, y + 1, z, AlfheimBlocks.irisTallGrass1, 8, 2)
 			}
 		}
 	}
@@ -54,19 +61,22 @@ class BlockColoredGrass: BlockTallGrass(), ILexiconable {
 		return super.setBlockName(par1Str)
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun getBlockColor() = 0xFFFFFF
 	
+	// PORT: лут с ножницами — таблица травы (alfheim.port.data.AlfheimBlockLoot): сама трава, как здесь
+	/*
 	override fun onSheared(item: ItemStack, world: IBlockAccess, x: Int, y: Int, z: Int, fortune: Int): ArrayList<ItemStack> {
 		val ret = ArrayList<ItemStack>()
 		ret.add(ItemStack(this, 1, world.getBlockMetadata(x, y, z)))
 		return ret
 	}
+	*/
 	
 	/**
 	 * Returns the color this block should be rendered. Used by leaves.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun getRenderColor(meta: Int): Int {
 		if (meta >= EntitySheep.fleeceColorTable.size)
 			return 0xFFFFFF
@@ -75,12 +85,16 @@ class BlockColoredGrass: BlockTallGrass(), ILexiconable {
 		return Color(color[0], color[1], color[2]).rgb
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun colorMultiplier(access: IBlockAccess?, x: Int, y: Int, z: Int): Int {
-		val meta = access!!.getBlockMetadata(x, y, z)
+		// PORT: metadata — номер варианта блока (SPEC, Р-5)
+		val meta = this.meta
+//		val meta = access!!.getBlockMetadata(x, y, z)
 		return getRenderColor(meta)
 	}
 	
+	/* PORT: варианты во вкладке — отдельные блоки (AlfheimTab); иконка → модель (alfheim.port.data.AlfheimBlockStates):
+	   окрашенный крест с текстурой блока
 	override fun getSubBlocks(item: Item?, tab: CreativeTabs?, list: MutableList<Any?>?) {
 		if (list != null && item != null)
 			for (i in 0 until TYPES) {
@@ -95,6 +109,8 @@ class BlockColoredGrass: BlockTallGrass(), ILexiconable {
 	
 	@SideOnly(Side.CLIENT)
 	override fun getIcon(side: Int, meta: Int) = blockIcon!!
+	*/
 	
-	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.pastoralSeeds
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.pastoralSeeds
 }

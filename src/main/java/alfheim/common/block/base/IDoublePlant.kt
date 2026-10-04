@@ -1,6 +1,7 @@
 package alfheim.common.block.base
 
-import net.minecraft.util.IIcon
+// PORT: иконки половин двойного растения → модели половин (alfheim.port.data.AlfheimBlockStates); IIcon в 1.20.1 нет
+//import net.minecraft.util.IIcon
 
 /**
  * @author WireSegal
@@ -8,6 +9,6 @@ import net.minecraft.util.IIcon
  */
 interface IDoublePlant {
 	
-	fun getTopIcon(lowerMeta: Int): IIcon
-	fun getBottomIcon(lowerMeta: Int): IIcon
+//	fun getTopIcon(lowerMeta: Int): IIcon
+//	fun getBottomIcon(lowerMeta: Int): IIcon
 }
