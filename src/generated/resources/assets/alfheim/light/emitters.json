@@ -1,0 +1,22 @@
+{
+  "alfheim:iris_lamp": {
+    "default": "#FFFFFF",
+    "states": {
+      "power=1": "#FF0000",
+      "power=10": "#009FFF",
+      "power=11": "#0040FF",
+      "power=12": "#2000FF",
+      "power=13": "#8000FF",
+      "power=14": "#DF00FF",
+      "power=15": "#FFFFFF",
+      "power=2": "#FF6000",
+      "power=3": "#FFBF00",
+      "power=4": "#DFFF00",
+      "power=5": "#80FF00",
+      "power=6": "#20FF00",
+      "power=7": "#00FF40",
+      "power=8": "#00FF9F",
+      "power=9": "#00FFFF"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "tag": "forge:ingots/brick"
+    }
+  },
+  "pattern": [
+    "BB",
+    "BB",
+    "BB"
+  ],
+  "result": {
+    "count": 4,
+    "item": "alfheim:custom_brick3"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "alfheim:petal_rainbow"
+    }
+  ],
+  "result": {
+    "item": "alfheim:rainbow_dust"
+  }
+}

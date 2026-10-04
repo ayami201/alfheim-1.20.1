@@ -2,7 +2,8 @@
 """Переводы автора: .lang (1.7.10) → .json (1.20.1) (ROADMAP, КТ-1).
 
 Читает legacy/src/main/resources/assets/<alfheim|botania>/lang/<en_US|ru_RU|zh_CN>.lang и пишет
-src/main/resources/assets/<…>/lang/<en_us|ru_ru|zh_cn>.json.
+src/main/resources/assets/<…>/lang/<en_us|ru_ru|zh_cn>.json. К переводам alfheim добавляются имена блоков Botania
+1.7.10, которые вернул порт (BOTANIA_1710 ниже).
 
 Разбор — как у LanguageMap 1.7.10: пустые строки и строки с «#» в начале пропускаются, строка делится
 по первому «=», строка без «=» пропускается, ключ и значение не обрезаются, у повторного ключа
@@ -53,7 +54,14 @@ REMOVED = [
     ("elementiumClusterMeta", "подпись удалённой настройки (MAPPING.md)"),
     ("overrideCoFHCollisionCheck", "подпись удалённой настройки (MAPPING.md)"),
     ("tile.*Slab*Full*.name", "двойная плита — состояние type=double одинарной, своего предмета и имени у неё нет (MAPPING.md)"),
+    ("tile.botania:livingrock1Wall.name", "стену автора из кирпичей живого камня заменила стена Botania 1.20.1 со своим именем (решение автора, TASKS.md)"),
 ]
+
+# Имена блоков Botania r1.8-249, которые вернул порт (alfheim.port.legacy.botania.BotaniaBlocks1710): ключ → язык → текст.
+# Тексты — из .lang Botania r1.8-249 (legacy/libs/Botania r1.8-249-deobf-src.jar, assets/botania/lang), автор Vazkii
+BOTANIA_1710 = {
+    "tile.botania:customBrick3.name": {"en_US": "Roof Tile", "ru_RU": "Черепица", "zh_CN": "瓦块"},
+}
 
 # Языки, на которых у каждой вещи должно быть имя (ROADMAP, КТ-2)
 NAMED_LANGS = ["en_us", "ru_ru"]
@@ -116,7 +124,9 @@ def name_keys():
         out = []
         for value in ids[section].values():
             for new in (value.values() if isinstance(value, dict) else [value]):
-                out.append(new.split("[")[0])
+                # блок другого мода вместо блока автора (стена Botania) — имя у него своё
+                if new.startswith("alfheim:"):
+                    out.append(new.split("[")[0])
         return out
 
     blocks = set(new_ids("blocks"))
@@ -149,6 +159,8 @@ def main():
             src = SRC % (ns, lang)
             dst = DST % (ns, lang.lower())
             entries = parse_lang(src)
+            if ns == "alfheim":
+                entries.update({key: texts[lang] for key, texts in BOTANIA_1710.items() if lang in texts})
             out, removed, renamed = convert(entries, renames)
             text = dump(out)
             if check:

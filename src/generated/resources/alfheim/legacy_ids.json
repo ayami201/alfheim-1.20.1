@@ -5,6 +5,9 @@
     "перевод ключей lang (tools/convert_lang.py), лексикон, тесты паритета. Формат — docs/port/MAPPING.md, раздел «legacy_ids.json»."
   ],
   "blocks": {
+    "Botania:customBrick": {
+      "3": "alfheim:custom_brick3"
+    },
     "alfheim:CustomRoof": {
       "0": "alfheim:custom_roof0",
       "1": "alfheim:custom_roof1",
@@ -325,7 +328,7 @@
       "2": "alfheim:iris_wood32",
       "3": "alfheim:iris_wood33"
     },
-    "alfheim:livingrock1Wall": "alfheim:livingrock1_wall",
+    "alfheim:livingrock1Wall": "botania:livingrock_bricks_wall",
     "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall",
     "alfheim:rainbowDirt": "alfheim:rainbow_dirt",
     "alfheim:rainbowLeaves": "alfheim:rainbow_leaves",
@@ -340,6 +343,9 @@
     "alfheim:ThrownPotion": "alfheim:thrown_potion"
   },
   "items": {
+    "Botania:customBrick": {
+      "3": "alfheim:custom_brick3"
+    },
     "alfheim:Armilla": "alfheim:armilla",
     "alfheim:Chalk": "alfheim:chalk",
     "alfheim:CustomRoof": {
@@ -705,7 +711,7 @@
       "2": "alfheim:iris_wood32",
       "3": "alfheim:iris_wood33"
     },
-    "alfheim:livingrock1Wall": "alfheim:livingrock1_wall",
+    "alfheim:livingrock1Wall": "botania:livingrock_bricks_wall",
     "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall",
     "alfheim:rainbowDirt": "alfheim:rainbow_dirt",
     "alfheim:rainbowLeaves": "alfheim:rainbow_leaves",
@@ -1105,7 +1111,7 @@
     "tile.botania:LivingCobbleStairs2.name": "block.alfheim.living_cobble_stairs2",
     "tile.botania:LivingMountain0Slab.name": "block.alfheim.living_mountain0_slab",
     "tile.botania:ShrineRock0Slab.name": "block.alfheim.shrine_rock0_slab",
-    "tile.botania:livingrock1Wall.name": "block.alfheim.livingrock1_wall",
+    "tile.botania:customBrick3.name": "block.alfheim.custom_brick3",
     "tile.botania:quartzTypeElf0Wall.name": "block.alfheim.quartz_type_elf0_wall"
   }
 }
