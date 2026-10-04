@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 224 | 19 401 | 118 | 104 | 2 |  |
+| КТ-2 | 224 | 19 401 | 107 | 115 | 2 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **943** | **136** | **62** | **12** |
+| **всего** | **1153** | **124 643** | **932** | **147** | **62** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -741,11 +741,11 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockAuroraDirt.kt` | 161 | КТ-2 | ждёт |  |
-| `BlockAuroraLeaves.kt` | 38 | КТ-2 | ждёт |  |
-| `BlockAuroraPlanks.kt` | 64 | КТ-2 | ждёт |  |
-| `BlockAuroraWood.kt` | 52 | КТ-2 | ждёт |  |
-| `BlockAuroraWoodPartials.kt` | 54 | КТ-2 | ждёт |  |
+| `BlockAuroraDirt.kt` | 161 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockAuroraDirt.kt`; цвет по координатам (`getBlockColor`), цвет вещи — по игроку клиента (только на клиенте); авроровая трава от костной муки — партия 8б-2 |
+| `BlockAuroraLeaves.kt` | 38 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockAuroraLeaves.kt`; бит опадания — свойство `persistent` |
+| `BlockAuroraPlanks.kt` | 64 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockAuroraPlanks.kt`; превращение посохом в древесную кузню — КТ-3 |
+| `BlockAuroraWood.kt` | 52 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockAuroraWood.kt` |
+| `BlockAuroraWoodPartials.kt` | 54 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockAuroraWoodPartials.kt`; плита `aurora_planks_slab17` (двойная — её состояние `type=double`), ступеньки `aurora_planks_stairs17` |
 | `BlockColoredDirt.kt` | 125 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredDirt.kt`; 16 блоков-вариантов `colored_dirt0`–`15`; цветок биома от костной муки — `plantFlower` прослойки |
 | `BlockColoredDoubleGrass.kt` | 177 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredDoubleGrass.kt`; 16 блоков-вариантов `iris_double_grass00`–`17`; поломка половин — `DoublePlantBlock` 1.20.1, лут с ножницами — таблица |
 | `BlockColoredGrass.kt` | 100 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredGrass.kt`; 16 блоков-вариантов `iris_grass0`–`15` |
@@ -762,15 +762,15 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockRainbowDirt.kt` | 92 | КТ-2 | ждёт |  |
+| `BlockRainbowDirt.kt` | 92 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowDirt.kt`; радужная трава от костной муки — партия 8б-2 |
 | `BlockRainbowDoubleFlower.kt` | 162 | КТ-2 | ждёт |  |
 | `BlockRainbowDoubleGrass.kt` | 185 | КТ-2 | ждёт |  |
 | `BlockRainbowGrass.kt` | 199 | КТ-2 | ждёт |  |
-| `BlockRainbowLeaves.kt` | 35 | КТ-2 | ждёт |  |
+| `BlockRainbowLeaves.kt` | 35 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowLeaves.kt`; бит опадания (0x1) — свойство `persistent` |
 | `BlockRainbowMushroom.kt` | 106 | КТ-2 | ждёт |  |
-| `BlockRainbowPlanks.kt` | 74 | КТ-2 | ждёт |  |
-| `BlockRainbowWood.kt` | 51 | КТ-2 | ждёт |  |
-| `BlockRainbowWoodPartials.kt` | 42 | КТ-2 | ждёт |  |
+| `BlockRainbowPlanks.kt` | 74 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowPlanks.kt`; превращение посохом в древесную кузню — КТ-3 |
+| `BlockRainbowWood.kt` | 51 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowWood.kt` |
+| `BlockRainbowWoodPartials.kt` | 42 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowWoodPartials.kt`; плита `rainbow_planks_slab` (двойная — её состояние `type=double`), ступеньки `rainbow_planks_stairs` |
 | `BlockShimmerQuartz.kt` | 93 | КТ-2 | ждёт |  |
 | `BlockSoftStorage.kt` | 61 | КТ-2 | ждёт |  |
 
@@ -1485,7 +1485,7 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `ItemBlockAnomaly.kt` | 81 | КТ-3 | ждёт |  |
-| `ItemBlockAurora.kt` | 27 | КТ-2 | ждёт |  |
+| `ItemBlockAurora.kt` | 27 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/block/ItemBlockAurora.kt`; подсказка — `appendHoverText`; цвет вещи — только на клиенте |
 | `ItemBlockGrapeRed.kt` | 27 | КТ-2 | ждёт |  |
 | `ItemBlockGrapeWhite.kt` | 45 | КТ-2 | ждёт |  |
 | `ItemBlockItemFrame.kt` | 76 | КТ-3 | ждёт | WIP автора (`.WIP()`): переносится как есть, с меткой [WIP] (SPEC п. 6) |
@@ -2112,7 +2112,7 @@ python3 tools/check_inventory.py
 | `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
-| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 24 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
+| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 63 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
 | `alfheim/textures/blocks/decor/` | 83 | КТ-2 | ждёт | перенесено 69 — декор `AlfheimFluffBlocks`; осталась мерцающая кварцевая плитка (`*ShimmerQuartz*`, 14 файлов) — с блоками `shimmerQuartz` |
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
