@@ -57,11 +57,11 @@ import alfheim.common.block.AlfheimBlocks.alfStorage
 //import alfheim.common.block.AlfheimBlocks.animatedTorch // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.anomalyHarvester // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.anyavil // PORT: КТ-3
-//import alfheim.common.block.AlfheimBlocks.auroraDirt // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.auroraPlanks // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.auroraSlab // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.auroraStairs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.auroraWood // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.auroraDirt
+import alfheim.common.block.AlfheimBlocks.auroraPlanks
+import alfheim.common.block.AlfheimBlocks.auroraSlab
+import alfheim.common.block.AlfheimBlocks.auroraStairs
+import alfheim.common.block.AlfheimBlocks.auroraWood
 //import alfheim.common.block.AlfheimBlocks.barrel // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.barrierPlanks // PORT: КТ-2
 //import alfheim.common.block.AlfheimBlocks.barrierSapling // PORT: КТ-2
@@ -121,14 +121,14 @@ import alfheim.common.block.AlfheimBlocks.manaIce
 //import alfheim.common.block.AlfheimBlocks.netherStairs // PORT: КТ-2
 //import alfheim.common.block.AlfheimBlocks.netherWood // PORT: КТ-2
 //import alfheim.common.block.AlfheimBlocks.niflheimBlock // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.rainbowDirt // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.rainbowDirt
 //import alfheim.common.block.AlfheimBlocks.rainbowFlowerFloating // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.rainbowGrass // PORT: КТ-2
 //import alfheim.common.block.AlfheimBlocks.rainbowMushroom // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.rainbowPlanks // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.rainbowSlab // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.rainbowStairs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.rainbowWood // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.rainbowPlanks
+import alfheim.common.block.AlfheimBlocks.rainbowSlab
+import alfheim.common.block.AlfheimBlocks.rainbowStairs
+import alfheim.common.block.AlfheimBlocks.rainbowWood
 //import alfheim.common.block.AlfheimBlocks.realityAnchor // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.redStringObserver // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.redStringWatcher // PORT: КТ-3
@@ -782,6 +782,7 @@ object AlfheimRecipes {
 		                 'C', ManaInfusionCore.stack,
 		                 'E', ELEMENTIUM)
 		recipeAuraRingPink = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addRecipe(ItemStack(auroraSlab, 6),
 				  "PPP",
@@ -793,6 +794,7 @@ object AlfheimRecipes {
 						 'P', ItemStack(auroraPlanks))
 		recipeAuroraStairs = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(balanceCloak),
 						 "WWW", "EWE", "ESE",
 						 'W', ItemStack(wool, 1, 8),
@@ -1346,17 +1348,16 @@ object AlfheimRecipes {
 						 'B', DYES[16])
 		recipeLamp = BotaniaAPI.getLatestAddedRecipe()
 		
-		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(irisPlanks, 1, i) → ItemStack(irisPlanks[i], 1).
-		// КТ-2, партия 8б — рецепты радужных блоков и списки рецептов для лексикона вместе с ними
+		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(irisPlanks, 1, i) → ItemStack(irisPlanks[i], 1)
 		for (i in 0..15)
 			addRecipe(ItemStack(irisPlanks[i], 1), "P", "P", 'P', ItemStack(irisSlabs[i], 1))
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addRecipe(ItemStack(rainbowPlanks), "P", "P", 'P', ItemStack(rainbowSlab))
 		recipesColoredPlanksFromSlabs = BotaniaAPI.getLatestAddedRecipes(17)
 		
 		addRecipe(ItemStack(auroraPlanks), "P", "P", 'P', ItemStack(auroraSlab))
 		recipeAuroraPlanksFromSlabs = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		for (i in 0..6)
 			addRecipe(ItemStack(altPlanks, 1, i), "P", "P", 'P', ItemStack(altSlabs, 1, i))
 		recipesAltPlanksFromSlabs = BotaniaAPI.getLatestAddedRecipes(6)
@@ -1367,23 +1368,21 @@ object AlfheimRecipes {
 			addRecipe(ItemStack(irisSlabs[i], 6),
 					  "PPP",
 					  'P', ItemStack(irisPlanks[i], 1))
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addRecipe(ItemStack(rainbowSlab, 6),
 				  "PPP",
 				  'P', ItemStack(rainbowPlanks))
 		recipesColoredSlabs = BotaniaAPI.getLatestAddedRecipes(17)
-		*/
 		
 		for (i in 0..15)
 			addOreDictRecipe(ItemStack(irisStairs[i], 4), true,
 							 "P  ", "PP ", "PPP",
 							 'P', ItemStack(irisPlanks[i], 1))
-		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(rainbowStairs, 4), true,
 						 "P  ", "PP ", "PPP",
 						 'P', ItemStack(rainbowPlanks))
 		recipesColoredStairs = BotaniaAPI.getLatestAddedRecipes(17)
 		
+		/* PORT: КТ-3 — рецепты вещей этой КТ, включаются вместе с ними
 		arrayOf(MANASTEEL_NUGGET, TERRASTEEL_NUGGET).forEachIndexed { id, it ->
 			addOreDictRecipe(ItemStack(itemDisplay, 1, id),
 							 "N", "W",
@@ -2110,15 +2109,13 @@ object AlfheimRecipes {
 		for (i in 0..15)
 			addOreDictRecipe(ItemStack(irisDirt[i], 8), "DDD", "DPD", "DDD", 'P', DYES[i], 'D', ItemStack(Blocks.DIRT, 1))
 		
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
-		addOreDictRecipe(ItemStack(rainbowDirt, 8), "DDD", "DPD", "DDD", 'P', DYES[16], 'D', ItemStack(dirt, 1))
+		addOreDictRecipe(ItemStack(rainbowDirt, 8), "DDD", "DPD", "DDD", 'P', DYES[16], 'D', ItemStack(Blocks.DIRT, 1))
 		
 		recipesColoredDirt = BotaniaAPI.getLatestAddedRecipes(17)
 		
-		addOreDictRecipe(ItemStack(auroraDirt, 8), "DDD", "DPD", "DDD", 'P', MANA_PEARL, 'D', ItemStack(dirt, 1))
+		addOreDictRecipe(ItemStack(auroraDirt, 8), "DDD", "DPD", "DDD", 'P', MANA_PEARL, 'D', ItemStack(Blocks.DIRT, 1))
 		
 		recipeAuroraDirt = BotaniaAPI.getLatestAddedRecipe()
-		*/
 		
 		addOreDictRecipe(ItemStack(livingcobbleStairs, 4), true, "L  ", "LL ", "LLL", 'L', ItemStack(livingcobble[0]))
 		
@@ -2403,10 +2400,12 @@ object AlfheimRecipes {
 		
 		addShapelessOreDictRecipe(ItemStack(auraRingGod), MAUFTRIUM_INGOT, auraRingElven)
 		recipeAuraRingGod = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addShapelessOreDictRecipe(ItemStack(auroraPlanks, 4), auroraWood)
 		recipeAuroraPlanks = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними; Thaumcraft выпал (SPEC, п. 7); ступки (PESTLE_AND_MORTAR) в Botania 1.20.1 нет — TASKS.md, «Вопросы к владельцу»
 		addShapelessOreDictRecipe(ItemStack(barrierPlanks, 4), barrierWood)
 		recipeBarrierPlanks = BotaniaAPI.getLatestAddedRecipe()
 		
@@ -2485,10 +2484,10 @@ object AlfheimRecipes {
 		// PORT: ItemStack(irisPlanks, 4, i) → ItemStack(irisPlanks[i], 4) (SPEC, Р-5)
 		for (i in 0..15)
 			addShapelessOreDictRecipe(ItemStack(irisPlanks[i], 4), WOOD[i])
-		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(rainbowPlanks, 4), rainbowWood)
 		recipesColoredPlanks = BotaniaAPI.getLatestAddedRecipes(17)
 		
+		/* PORT: КТ-3 — рецепты вещей этой КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(lens, 1, LINKBACK.meta), ItemStack(lens), RUNE[8], MANA_POWDER, RED_STRING)
 		recipeLensLinkback = BotaniaAPI.getLatestAddedRecipe()
 		
@@ -2663,9 +2662,9 @@ object AlfheimRecipes {
 		addSmelting(irisWood1, ItemStack(Items.CHARCOAL), 0.15f)
 		addSmelting(irisWood2, ItemStack(Items.CHARCOAL), 0.15f)
 		addSmelting(irisWood3, ItemStack(Items.CHARCOAL), 0.15f)
+		addSmelting(rainbowWood, ItemStack(Items.CHARCOAL), 0.15f)
+		addSmelting(auroraWood, ItemStack(Items.CHARCOAL), 0.15f)
 		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
-		addSmelting(rainbowWood, ItemStack(coal, 1, 1), 0.15f)
-		addSmelting(auroraWood, ItemStack(coal, 1, 1), 0.15f)
 		addSmelting(lightningWood, ItemStack(coal, 1, 1), 0.15f)
 		addSmelting(sealingWood, ItemStack(coal, 1, 1), 0.15f)
 		addSmelting(netherWood, NetherwoodCoal.stack, 0.15f)

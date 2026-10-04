@@ -140,6 +140,7 @@ Metadata поворота и половины (лестницы, плиты, с�
 | лут по умолчанию (`getItemDropped` — свой предмет, `damageDropped` — вариант) | таблица `dropSelf` | ✓ при взрыве — с шансом 1 / сила взрыва, как в 1.7.10 |
 | `updateTick` падающего блока (`func_149830_m`) | `tick` `FallingBlock` 1.20.1 | ✓ пыли под висящим блоком нет: блок 1.7.10 не пылил |
 | `canSustainPlant(world, x, y, z, direction, plantable)` | `canSustainPlant(state, world, pos, direction, plantable)`, `EnumPlantType.Desert` → `PlantType.DESERT` | ✓ |
+| `isFertile(world, x, y, z)` (плодородная почва: в скорость роста посевов она даёт 3 вместо 1, как политая пашня) | `isFertile(state, world, pos)` | ✓ `CropBlock` 1.20.1 считает скорость роста так же, как `BlockCrops` 1.7.10 |
 | `block.material === Material.water` (блок в мире) | `block === Blocks.WATER` | ✓ в 1.7.10 материал воды был только у стоячей и текущей воды — в 1.20.1 это один блок |
 | `ItemBlock` автора (`ItemBlockLeavesMod`, `ItemBlockMetaName`) | наследник `BlockItem` с конструктором `(Block)` | ✓ имя предмета — имя блока |
 | `getEntry` (`ILexiconable`) | закомментирован до КТ-9 | лексикон |
@@ -316,6 +317,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `hurtResistantTime`, `maxHurtResistantTime`, `lastDamage` существа | `invulnerableTime`, `invulnerableDuration`, `lastHurt` (открыт преобразователем доступа) | ✓ |
 | `getEntitiesWithinAABB(world, clazz, aabb)`, `getBoundingBox(…)`, `Entity.boundingBox(range)`, `AABB.expand` / `offset` (ASJCore) | `getEntitiesOfClass`, `AABB`, `inflate` / `move` | ✓ наблюдатели 1.20.1 в выборку не попадают — в 1.7.10 их не было |
 | `Entity.playSoundAtEntity(name, volume, pitch)` (ASJCore) | `level().playSoundAtEntity(entity, …)` прослойки | ✓ |
+| `mc.thePlayer` (игрок клиента) в методе общего класса | `mc.player`; метод — `@OnlyIn(Dist.CLIENT)` с пометкой `// PORT-FIX:` | ✓ без пометки выделенный сервер падает при загрузке класса: проверка байткода ищет класс игрока клиента, а его на сервере нет (`BlockAuroraDirt.getItemColor`) |
 | `ASJUtilities.isServer` / `isClient` | выделенный сервер — сервер; иначе — логическая сторона потока (`EffectiveSide`) | ✓ потоки загрузки Forge считают себя клиентом: без проверки выделенного сервера код загрузки на сервере шёл бы клиентскими ветками |
 | `MovingObjectPosition`, `MovingObjectType`; `typeOfHit`, `hitVec`, `blockX` / `blockY` / `blockZ`, `sideHit`, `entityHit` | `HitResult` (псевдоним) и свойства с именами 1.7.10 (`Hit1710`) | ✓ сторона — номер 1.7.10, он равен `Direction.get3DDataValue` |
 | `inventory[i]`, `inventory[i] = stack` (`IInventory`, ASJCore) | `Container.getItem(i)` / `setItem(i, …)` | ✓ пустой стек ↔ `null` |

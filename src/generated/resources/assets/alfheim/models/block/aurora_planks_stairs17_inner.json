@@ -1,0 +1,8 @@
+{
+  "parent": "alfheim:block/tinted_inner_stairs",
+  "textures": {
+    "bottom": "alfheim:blocks/aurora_planks",
+    "side": "alfheim:blocks/aurora_planks",
+    "top": "alfheim:blocks/aurora_planks"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "alfheim:block/tinted_cube_all",
+  "textures": {
+    "all": "alfheim:blocks/aurora_dirt"
+  }
+}

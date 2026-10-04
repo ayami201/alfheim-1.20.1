@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "alfheim:blocks/rainbow_planks",
+    "side": "alfheim:blocks/rainbow_planks",
+    "top": "alfheim:blocks/rainbow_planks"
+  }
+}

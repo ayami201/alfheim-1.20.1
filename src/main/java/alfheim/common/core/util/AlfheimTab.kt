@@ -4,6 +4,12 @@ package alfheim.common.core.util
 import alexsocol.asjlib.meta
 import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks.alfStorage
+import alfheim.common.block.AlfheimBlocks.auroraDirt
+import alfheim.common.block.AlfheimBlocks.auroraLeaves
+import alfheim.common.block.AlfheimBlocks.auroraPlanks
+import alfheim.common.block.AlfheimBlocks.auroraSlab
+import alfheim.common.block.AlfheimBlocks.auroraStairs
+import alfheim.common.block.AlfheimBlocks.auroraWood
 import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.elvenSand
 import alfheim.common.block.AlfheimBlocks.irisDirt
@@ -22,6 +28,12 @@ import alfheim.common.block.AlfheimBlocks.irisWood1
 import alfheim.common.block.AlfheimBlocks.irisWood2
 import alfheim.common.block.AlfheimBlocks.irisWood3
 import alfheim.common.block.AlfheimBlocks.livingcobble
+import alfheim.common.block.AlfheimBlocks.rainbowDirt
+import alfheim.common.block.AlfheimBlocks.rainbowLeaves
+import alfheim.common.block.AlfheimBlocks.rainbowPlanks
+import alfheim.common.block.AlfheimBlocks.rainbowSlab
+import alfheim.common.block.AlfheimBlocks.rainbowStairs
+import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFenceGate
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFence
@@ -104,12 +116,6 @@ import alfheim.common.block.AlfheimBlocks.amplifier
 import alfheim.common.block.AlfheimBlocks.animatedTorch
 import alfheim.common.block.AlfheimBlocks.anomalyHarvester
 import alfheim.common.block.AlfheimBlocks.anyavil
-import alfheim.common.block.AlfheimBlocks.auroraDirt
-import alfheim.common.block.AlfheimBlocks.auroraLeaves
-import alfheim.common.block.AlfheimBlocks.auroraPlanks
-import alfheim.common.block.AlfheimBlocks.auroraSlab
-import alfheim.common.block.AlfheimBlocks.auroraStairs
-import alfheim.common.block.AlfheimBlocks.auroraWood
 import alfheim.common.block.AlfheimBlocks.barrel
 import alfheim.common.block.AlfheimBlocks.barrierLeaves
 import alfheim.common.block.AlfheimBlocks.barrierPlanks
@@ -162,17 +168,11 @@ import alfheim.common.block.AlfheimBlocks.netherWood
 import alfheim.common.block.AlfheimBlocks.nidhoggTooth
 import alfheim.common.block.AlfheimBlocks.niflheimBlock
 import alfheim.common.block.AlfheimBlocks.powerStone
-import alfheim.common.block.AlfheimBlocks.rainbowDirt
 import alfheim.common.block.AlfheimBlocks.rainbowFlowerFloating
 import alfheim.common.block.AlfheimBlocks.rainbowGrass
-import alfheim.common.block.AlfheimBlocks.rainbowLeaves
 import alfheim.common.block.AlfheimBlocks.rainbowMushroom
-import alfheim.common.block.AlfheimBlocks.rainbowPlanks
-import alfheim.common.block.AlfheimBlocks.rainbowSlab
-import alfheim.common.block.AlfheimBlocks.rainbowStairs
 import alfheim.common.block.AlfheimBlocks.rainbowTallFlower
 import alfheim.common.block.AlfheimBlocks.rainbowTallGrass
-import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimBlocks.realityAnchor
 import alfheim.common.block.AlfheimBlocks.redStringObserver
 import alfheim.common.block.AlfheimBlocks.redStringWatcher
@@ -838,34 +838,34 @@ object AlfheimTab {
 		addItem(carver)
 		*/
 		
-		// PORT: строки «//» — КТ-2: радужные и авроровые блоки, субспейсиан — партия 8б, семена ириса — со своими предметами
+		// PORT: строки «//» — КТ-2: радужная трава, цветы и гриб, субспейсиан — партия 8б-2, семена ириса — со своими предметами
 		addBlock(irisDirt)
-//		addBlock(rainbowDirt)
-//		addBlock(auroraDirt)
+		addBlock(rainbowDirt)
+		addBlock(auroraDirt)
 		
 		addBlock(irisWood0)
 		addBlock(irisWood1)
 		addBlock(irisWood2)
 		addBlock(irisWood3)
-//		addBlock(rainbowWood)
-//		addBlock(auroraWood)
+		addBlock(rainbowWood)
+		addBlock(auroraWood)
 		
 		addBlock(irisPlanks)
-//		addBlock(rainbowPlanks)
-//		addBlock(auroraPlanks)
+		addBlock(rainbowPlanks)
+		addBlock(auroraPlanks)
 		
 		irisStairs.forEach { addBlock(it) }
-//		addBlock(rainbowStairs)
-//		addBlock(auroraStairs)
+		addBlock(rainbowStairs)
+		addBlock(auroraStairs)
 		
 		irisSlabs.forEach { addBlock(it) }
-//		addBlock(rainbowSlab)
-//		addBlock(auroraSlab)
+		addBlock(rainbowSlab)
+		addBlock(auroraSlab)
 		
 		addBlock(irisLeaves0)
 		addBlock(irisLeaves1)
-//		addBlock(rainbowLeaves)
-//		addBlock(auroraLeaves)
+		addBlock(rainbowLeaves)
+		addBlock(auroraLeaves)
 		
 		addBlock(irisGrass)
 //		addBlock(rainbowGrass, 0)

@@ -14,7 +14,7 @@ import alfheim.api.lib.LibOreDict.IRIS_WOOD
 //import alfheim.common.block.alt.*
 import alfheim.common.block.base.*
 import alfheim.common.block.colored.*
-//import alfheim.common.block.colored.rainbow.*
+import alfheim.common.block.colored.rainbow.*
 //import alfheim.common.block.corporea.*
 //import alfheim.common.block.fluid.BlockManaFluid
 //import alfheim.common.block.magtrees.BlockTunedSapling
@@ -54,13 +54,13 @@ object AlfheimBlocks {
 //	val anomaly: Block // PORT: КТ-3
 //	val anomalyHarvester: Block // PORT: КТ-3
 //	val anyavil: Block // PORT: КТ-3
-//	val auroraDirt: Block // PORT: КТ-2
-//	val auroraLeaves: Block // PORT: КТ-2
-//	val auroraPlanks: Block // PORT: КТ-2
-//	val auroraSlab: Block // PORT: КТ-2
-//	val auroraSlabFull: Block // PORT: КТ-2
-//	val auroraStairs: Block // PORT: КТ-2
-//	val auroraWood: Block // PORT: КТ-2
+	val auroraDirt: Block
+	val auroraLeaves: Block
+	val auroraPlanks: Block
+	val auroraSlab: Block
+	val auroraSlabFull: Block
+	val auroraStairs: Block
+	val auroraWood: Block
 //	val barrel: Block // PORT: КТ-3
 //	val barrier: Block // PORT: КТ-2
 //	val bottomlessChest: Block // PORT: КТ-3
@@ -119,19 +119,19 @@ object AlfheimBlocks {
 //	val poisonIce: Block // PORT: КТ-2
 //	val powerStone: Block // PORT: КТ-3
 //	val raceSelector: Block // PORT: КТ-7
-//	val rainbowDirt: Block // PORT: КТ-2
+	val rainbowDirt: Block
 //	val rainbowFlame: Block // PORT: КТ-3
 //	val rainbowFlowerFloating: Block // PORT: КТ-3
 //	val rainbowGrass: Block // PORT: КТ-2
-//	val rainbowLeaves: Block // PORT: КТ-2
+	val rainbowLeaves: Block
 //	val rainbowMushroom: Block // PORT: КТ-2
-//	val rainbowPlanks: Block // PORT: КТ-2
-//	val rainbowSlab: Block // PORT: КТ-2
-//	val rainbowSlabFull: Block // PORT: КТ-2
-//	val rainbowStairs: Block // PORT: КТ-2
+	val rainbowPlanks: Block
+	val rainbowSlab: Block
+	val rainbowSlabFull: Block
+	val rainbowStairs: Block
 //	val rainbowTallGrass: Block // PORT: КТ-2
 //	val rainbowTallFlower: Block // PORT: КТ-2
-//	val rainbowWood: Block // PORT: КТ-2
+	val rainbowWood: Block
 //	val realityAnchor: Block // PORT: КТ-3
 //	val redFlame: Block // PORT: КТ-2
 //	val redstoneAttractor: Block // PORT: КТ-2
@@ -244,15 +244,16 @@ object AlfheimBlocks {
 //		anomaly = BlockAnomaly() // PORT: КТ-3
 //		anomalyHarvester = BlockAnomalyHarvester() // PORT: КТ-3
 //		anyavil = BlockAnyavil() // PORT: КТ-3
-//		auroraDirt = BlockAuroraDirt() // PORT: КТ-2
-//		auroraLeaves = BlockAuroraLeaves() // PORT: КТ-2
-//		auroraPlanks = BlockAuroraPlanks() // PORT: КТ-2
-//		auroraSlab = BlockAuroraWoodSlab(false) // PORT: КТ-2
-//		auroraSlabFull = BlockAuroraWoodSlab(true) // PORT: КТ-2
-//		auroraSlab.register() // PORT: КТ-2
-//		auroraSlabFull.register() // PORT: КТ-2
-//		auroraStairs = BlockAuroraWoodStairs() // PORT: КТ-2
-//		auroraWood = BlockAuroraWood() // PORT: КТ-2
+		auroraDirt = BlockAuroraDirt()
+		auroraLeaves = BlockAuroraLeaves()
+		auroraPlanks = BlockAuroraPlanks()
+		auroraSlab = BlockAuroraWoodSlab(false)
+		auroraSlabFull = auroraSlab // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
+//		auroraSlabFull = BlockAuroraWoodSlab(true)
+		auroraSlab.register()
+//		auroraSlabFull.register()
+		auroraStairs = BlockAuroraWoodStairs()
+		auroraWood = BlockAuroraWood()
 //		barrel = BlockBarrel() // PORT: КТ-3
 //		barrier = BlockBarrier() // PORT: КТ-2
 //		bottomlessChest = BlockBottomlessChest() // PORT: КТ-3
@@ -314,21 +315,22 @@ object AlfheimBlocks {
 //		poisonIce = BlockNiflheimIce() // PORT: КТ-2
 //		powerStone = BlockPowerStone() // PORT: КТ-3
 //		raceSelector = BlockRaceSelector() // PORT: КТ-7
-//		rainbowDirt = BlockRainbowDirt() // PORT: КТ-2
+		rainbowDirt = BlockRainbowDirt()
 //		rainbowFlame = BlockRainbowManaFlame() // PORT: КТ-3
 //		rainbowFlowerFloating = BlockFloatingFlowerRainbow() // PORT: КТ-3
-//		rainbowLeaves = BlockRainbowLeaves() // PORT: КТ-2
+		rainbowLeaves = BlockRainbowLeaves()
 //		rainbowGrass = BlockRainbowGrass() // PORT: КТ-2
 //		rainbowMushroom = BlockRainbowMushroom() // PORT: КТ-2
-//		rainbowPlanks = BlockRainbowPlanks() // PORT: КТ-2
-//		rainbowSlab = BlockRainbowWoodSlab(false) // PORT: КТ-2
-//		rainbowSlabFull = BlockRainbowWoodSlab(true) // PORT: КТ-2
-//		rainbowSlab.register() // PORT: КТ-2
-//		rainbowSlabFull.register() // PORT: КТ-2
-//		rainbowStairs = BlockRainbowWoodStairs() // PORT: КТ-2
+		rainbowPlanks = BlockRainbowPlanks()
+		rainbowSlab = BlockRainbowWoodSlab(false)
+		rainbowSlabFull = rainbowSlab // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
+//		rainbowSlabFull = BlockRainbowWoodSlab(true)
+		rainbowSlab.register()
+//		rainbowSlabFull.register()
+		rainbowStairs = BlockRainbowWoodStairs()
 //		rainbowTallGrass = BlockRainbowDoubleGrass() // PORT: КТ-2
 //		rainbowTallFlower = BlockRainbowDoubleFlower() // PORT: КТ-2
-//		rainbowWood = BlockRainbowWood() // PORT: КТ-2
+		rainbowWood = BlockRainbowWood()
 //		realityAnchor = BlockRealityAnchor() // PORT: КТ-3
 //		redFlame = BlockRedFlame() // PORT: КТ-2
 //		redstoneAttractor = BlockRedstoneAttractor() // PORT: КТ-2
@@ -474,18 +476,18 @@ object AlfheimBlocks {
 //			BotaniaAPI.registerPaintableBlock(it)
 //		}
 		
-//		BotaniaAPI.registerPaintableBlock(rainbowWood) // PORT: КТ-2
-//		BotaniaAPI.registerPaintableBlock(rainbowPlanks) // PORT: КТ-2
-//		BotaniaAPI.registerPaintableBlock(rainbowStairs) // PORT: КТ-2
-//		BotaniaAPI.registerPaintableBlock(rainbowSlab) // PORT: КТ-2
-//		BotaniaAPI.registerPaintableBlock(rainbowSlabFull) // PORT: КТ-2
+//		BotaniaAPI.registerPaintableBlock(rainbowWood) // PORT: КТ-3 (линза краски, H-293)
+//		BotaniaAPI.registerPaintableBlock(rainbowPlanks) // PORT: КТ-3 (линза краски, H-293)
+//		BotaniaAPI.registerPaintableBlock(rainbowStairs) // PORT: КТ-3 (линза краски, H-293)
+//		BotaniaAPI.registerPaintableBlock(rainbowSlab) // PORT: КТ-3 (линза краски, H-293)
+//		BotaniaAPI.registerPaintableBlock(rainbowSlabFull) // PORT: КТ-3 (линза краски, H-293)
 		
 //		BotaniaAPI.registerPaintableBlock(starBlock) // PORT: КТ-3
 //		BotaniaAPI.registerPaintableBlock(starBlock2) // PORT: КТ-3
 		
 //		BotaniaAPI.registerPaintableBlock(Blocks.dirt) // PORT: КТ-2
 //		BotaniaAPI.registerPaintableBlock(irisDirt) // PORT: КТ-3 (линза краски, H-293)
-//		BotaniaAPI.registerPaintableBlock(rainbowDirt) // PORT: КТ-2
+//		BotaniaAPI.registerPaintableBlock(rainbowDirt) // PORT: КТ-3 (линза краски, H-293)
 		
 //		BotaniaAPI.registerPaintableBlock(ModBlocks.livingrock) // PORT: КТ-3
 //		BotaniaAPI.registerPaintableBlock(ModBlocks.dreamwood) // PORT: КТ-3
@@ -590,16 +592,16 @@ object AlfheimBlocks {
 			registerOre(LibOreDict.WOOD[i + 12], ItemStack(irisWood3[i], 1))
 		}
 			
-//		registerOre(LibOreDict.WOOD[16], ItemStack(rainbowWood)) // PORT: КТ-2
-//		registerOre(LibOreDict.WOOD[17], ItemStack(auroraWood)) // PORT: КТ-2
+		registerOre(LibOreDict.WOOD[16], ItemStack(rainbowWood))
+		registerOre(LibOreDict.WOOD[17], ItemStack(auroraWood))
 			
 		for (i in 0..7) {
 			registerOre(LibOreDict.LEAVES[i], ItemStack(irisLeaves0[i], 1))
 			registerOre(LibOreDict.LEAVES[i + 8], ItemStack(irisLeaves1[i], 1))
 		}
 			
-//		registerOre(LibOreDict.LEAVES[16], ItemStack(rainbowLeaves)) // PORT: КТ-2
-//		registerOre(LibOreDict.LEAVES[17], ItemStack(auroraLeaves)) // PORT: КТ-2
+		registerOre(LibOreDict.LEAVES[16], ItemStack(rainbowLeaves))
+		registerOre(LibOreDict.LEAVES[17], ItemStack(auroraLeaves))
 		
 //		for (i in 0..5) { // PORT: КТ-2
 //			registerOre("stairWood", ItemStack(altStairs[i], 1))
@@ -624,10 +626,10 @@ object AlfheimBlocks {
 //			registerOre(it, ItemStack(irisDirt, 1, id))
 		}
 			
-//		registerOre(LibOreDict.DIRT[16], ItemStack(rainbowDirt)) // PORT: КТ-2
-//		registerOre(LibOreDict.IRIS_DIRT, ItemStack(rainbowDirt)) // PORT: КТ-2
-//		registerOre(LibOreDict.DIRT[17], ItemStack(auroraDirt)) // PORT: КТ-2
-//		registerOre(LibOreDict.IRIS_DIRT, ItemStack(auroraDirt)) // PORT: КТ-2
+		registerOre(LibOreDict.DIRT[16], ItemStack(rainbowDirt))
+		registerOre(LibOreDict.IRIS_DIRT, ItemStack(rainbowDirt))
+		registerOre(LibOreDict.DIRT[17], ItemStack(auroraDirt))
+		registerOre(LibOreDict.IRIS_DIRT, ItemStack(auroraDirt))
 		
 		var t: ItemStack
 		
@@ -635,16 +637,16 @@ object AlfheimBlocks {
 //			registerOre("logWood", ItemStack(it, 1, WILDCARD_VALUE))
 //		}
 		
-		// PORT: блоки с вариантами — массивы, вместе — все варианты (SPEC, Р-5). КТ-2, партия 8б — rainbowWood, auroraWood
-		(irisWood0 + irisWood1 + irisWood2 + irisWood3/* + rainbowWood + auroraWood*/).forEach {
+		// PORT: блоки с вариантами — массивы, вместе — все варианты (SPEC, Р-5)
+		(irisWood0 + irisWood1 + irisWood2 + irisWood3 + rainbowWood + auroraWood).forEach {
 //		arrayOf(irisWood0, irisWood1, irisWood2, irisWood3, rainbowWood, auroraWood).forEach {
 			t = ItemStack(it, 1, WILDCARD_VALUE)
 			registerOre("logWood", t)
 			registerOre(IRIS_WOOD, t)
 		}
 		
-		// PORT: блоки с вариантами — массивы, вместе — все варианты (SPEC, Р-5). КТ-2, партия 8б — rainbowLeaves, auroraLeaves
-		(irisLeaves0 + irisLeaves1/* + rainbowLeaves + auroraLeaves*/).forEach {
+		// PORT: блоки с вариантами — массивы, вместе — все варианты (SPEC, Р-5)
+		(irisLeaves0 + irisLeaves1 + rainbowLeaves + auroraLeaves).forEach {
 //		arrayOf(irisLeaves0, irisLeaves1, rainbowLeaves, auroraLeaves).forEach {
 			t = ItemStack(it, 1, WILDCARD_VALUE)
 			registerOre("treeLeaves", t)
@@ -654,20 +656,20 @@ object AlfheimBlocks {
 		irisPlanks.forEach { registerOre("plankWood", ItemStack(it, 1, WILDCARD_VALUE)) }
 //		registerOre("plankWood", ItemStack(irisPlanks, 1, WILDCARD_VALUE))
 //		registerOre("plankWood", ItemStack(altPlanks, 1, WILDCARD_VALUE)) // PORT: КТ-2
-//		registerOre("plankWood", ItemStack(rainbowPlanks, 1, WILDCARD_VALUE)) // PORT: КТ-2
-//		registerOre("plankWood", ItemStack(auroraPlanks, 1, WILDCARD_VALUE)) // PORT: КТ-2
+		registerOre("plankWood", ItemStack(rainbowPlanks, 1, WILDCARD_VALUE))
+		registerOre("plankWood", ItemStack(auroraPlanks, 1, WILDCARD_VALUE))
 
 		irisStairs.forEach {
 			registerOre("stairWood", it)
 		}
-//		registerOre("stairWood", rainbowStairs) // PORT: КТ-2
-//		registerOre("stairWood", auroraStairs) // PORT: КТ-2
+		registerOre("stairWood", rainbowStairs)
+		registerOre("stairWood", auroraStairs)
 
 		irisSlabs.forEach {
 			registerOre("slabWood", ItemStack(it, 1, WILDCARD_VALUE))
 		}
-//		registerOre("slabWood", rainbowSlab) // PORT: КТ-2
-//		registerOre("slabWood", auroraSlab) // PORT: КТ-2
+		registerOre("slabWood", rainbowSlab)
+		registerOre("slabWood", auroraSlab)
 
 //		for (i in 0..15) { // PORT: КТ-2
 //			if (i !in arrayOf(2, 6, 10, 14)) { // Yggdrasil metas
@@ -748,11 +750,11 @@ object AlfheimBlocks {
 		
 //		setBurnable(amplifier, 5, 20) // PORT: КТ-2
 		
-//		setBurnable(auroraPlanks, 5, 20) // PORT: КТ-2
-//		setBurnable(auroraSlab, 5, 20) // PORT: КТ-2
-//		setBurnable(auroraSlabFull, 5, 20) // PORT: КТ-2
-//		setBurnable(auroraStairs, 5, 20) // PORT: КТ-2
-//		setBurnable(auroraWood, 5, 5) // PORT: КТ-2
+		setBurnable(auroraPlanks, 5, 20)
+		setBurnable(auroraSlab, 5, 20)
+		setBurnable(auroraSlabFull, 5, 20)
+		setBurnable(auroraStairs, 5, 20)
+		setBurnable(auroraWood, 5, 5)
 		
 //		setBurnable(calicoLeaves, 30, 60) // PORT: КТ-2
 //		setBurnable(calicoPlanks, 5, 20) // PORT: КТ-2
@@ -791,13 +793,13 @@ object AlfheimBlocks {
 //		setBurnable(lightningWood, 5, 5) // PORT: КТ-2
 		
 //		setBurnable(rainbowGrass, 60, 100) // PORT: КТ-2
-//		setBurnable(rainbowLeaves, 30, 60) // PORT: КТ-2
-//		setBurnable(rainbowPlanks, 5, 20) // PORT: КТ-2
-//		setBurnable(rainbowSlab, 5, 20) // PORT: КТ-2
-//		setBurnable(rainbowSlabFull, 5, 20) // PORT: КТ-2
-//		setBurnable(rainbowStairs, 5, 20) // PORT: КТ-2
+		setBurnable(rainbowLeaves, 30, 60)
+		setBurnable(rainbowPlanks, 5, 20)
+		setBurnable(rainbowSlab, 5, 20)
+		setBurnable(rainbowSlabFull, 5, 20)
+		setBurnable(rainbowStairs, 5, 20)
 //		setBurnable(rainbowTallGrass, 60, 100) // PORT: КТ-2
-//		setBurnable(rainbowWood, 5, 5) // PORT: КТ-2
+		setBurnable(rainbowWood, 5, 5)
 		
 //		setBurnable(sealingLeaves, 30, 60) // PORT: КТ-2
 //		setBurnable(sealingPlanks, 5, 20) // PORT: КТ-2
@@ -834,8 +836,12 @@ object AlfheimBlocks {
 		AlfheimAPI.addTreeVariant(irisDirt, irisWood1, irisLeaves0, 4, 7)
 		AlfheimAPI.addTreeVariant(irisDirt, irisWood2, irisLeaves1, 8, 11, 8)
 		AlfheimAPI.addTreeVariant(irisDirt, irisWood3, irisLeaves1, 12, 15, 8)
-//		AlfheimAPI.addTreeVariant(rainbowDirt, rainbowWood, rainbowLeaves) // PORT: КТ-2
-//		AlfheimAPI.addTreeVariant(auroraDirt, auroraWood, auroraLeaves) // PORT: КТ-2
+		// PORT: почва, бревно и листва варианта — массивы блоков-вариантов (AlfheimAPI.addTreeVariant); блок без вариантов —
+		// массив из одного блока
+		AlfheimAPI.addTreeVariant(arrayOf(rainbowDirt), arrayOf(rainbowWood), arrayOf(rainbowLeaves))
+		AlfheimAPI.addTreeVariant(arrayOf(auroraDirt), arrayOf(auroraWood), arrayOf(auroraLeaves))
+//		AlfheimAPI.addTreeVariant(rainbowDirt, rainbowWood, rainbowLeaves)
+//		AlfheimAPI.addTreeVariant(auroraDirt, auroraWood, auroraLeaves)
 //		AlfheimAPI.addTreeVariant(ModBlocks.altGrass, altWood0, altLeaves, 0, 3) // PORT: КТ-2
 //		AlfheimAPI.addTreeVariant(ModBlocks.altGrass, altWood1, altLeaves, 4, 5) // PORT: КТ-2
 	}
