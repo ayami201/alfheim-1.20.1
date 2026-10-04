@@ -56,8 +56,8 @@ object PortDecorTest {
 		helper.assertTrue(ids.size == 87, "ids: ${ids.size}")
 		for (id in ids) helper.assertTrue(BuiltInRegistries.BLOCK.containsKey(ResourceLocation(MODID, id)), "$MODID:$id is not registered")
 		// 104 блока партий 1 и 2, 6 вариантов эльфийской руды партии 3, 130 цветных блоков партии 8а, 12 радужных и
-		// авроровых блоков партии 8б и черепица Botania 1.7.10
-		helper.assertTrue(LegacyRegistration.blocks.size == 253, "blocks of the author: ${LegacyRegistration.blocks.size}")
+		// авроровых блоков партии 8б-1, 8 радужных растений партии 8б-2 и черепица Botania 1.7.10
+		helper.assertTrue(LegacyRegistration.blocks.size == 261, "blocks of the author: ${LegacyRegistration.blocks.size}")
 		helper.succeed()
 	}
 
@@ -215,14 +215,15 @@ object PortDecorTest {
 	 * эльфийского кварца — она во вкладке Botania сразу за лестницей из эльфийского кварца (врезка H-023), — и
 	 * эльфийских ресурсов, которых автор во вкладку не выдавал (`ElvenResourcesMetas.displayBlackList`); накопитель
 	 * разлома выдаётся по аномалиям (КТ-3). Эльфийские ресурсы — в порядке номеров, как выдавал `getSubItems`.
-	 * Черепица Botania 1.7.10 — во вкладке Botania перед первым азулежу, как в Botania 1.7.10
+	 * Черепица Botania 1.7.10 — во вкладке Botania перед первым азулежу, как в Botania 1.7.10. Закопанных радужных
+	 * лепестков во вкладке нет и у автора (`BlockRainbowGrass.getSubBlocks`)
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
 	fun creativeTabs(helper: GameTestHelper) {
 		CreativeModeTabs.tryRebuildTabContents(helper.level.enabledFeatures(), true, helper.level.registryAccess())
 		val alfheim = AlfheimTab.tab.get().displayItems.map { it.item }
-		val hidden = listOf(AlfheimBlocks.manaIce.asItem(), AlfheimFluffBlocks.elfQuartzWall.asItem(), BotaniaBlocks1710.roofTile.asItem()) +
+		val hidden = listOf(AlfheimBlocks.manaIce.asItem(), AlfheimFluffBlocks.elfQuartzWall.asItem(), BotaniaBlocks1710.roofTile.asItem(), AlfheimBlocks.rainbowGrass[4].asItem()) +
 			listOf(ElvenResourcesMetas.ElvenWeed, ElvenResourcesMetas.WisdomBottle, ElvenResourcesMetas.RiftDrive).map { AlfheimItems.elvenResource[it.I] }
 		// рог души — дважды: обычный и заряженный (metadata 1); брызгающее зелье — по разу на варево Botania, кроме
 		// запасного, как у автора

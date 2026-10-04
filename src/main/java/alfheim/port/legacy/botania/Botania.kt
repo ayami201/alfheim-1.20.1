@@ -33,16 +33,28 @@ object Botania {
 		fun lightningFX(world: Level, start: Vector3, end: Vector3, ticksPerMeter: Float, colorOuter: Int, colorInner: Int) =
 			vazkii.botania.common.proxy.Proxy.INSTANCE.lightningFX(world, start.toVec3(), end.toVec3(), ticksPerMeter, colorOuter, colorInner)
 		
+		/** Флаг `setSparkleFXNoClip` прокси 1.7.10: пока он стоит, искры летят сквозь блоки */
+		private var sparkleNoClip = false
+		
+		/** `setSparkleFXNoClip(noclip)`: следующие искры — сквозь блоки (`SparkleParticleData.noClip`), пока флаг не снят */
+		fun setSparkleFXNoClip(noclip: Boolean) {
+			sparkleNoClip = noclip
+		}
+		
 		/**
 		 * `sparkleFX(world, x, y, z, r, g, b, size, m)` — искра Botania 1.20.1 (`SparkleParticleData`). Как у прокси
 		 * 1.7.10, частица появляется только у клиента: мир сервера частиц не рисует
 		 */
 		fun sparkleFX(world: Level, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float, size: Float, m: Int) =
-			world.addParticle(SparkleParticleData.sparkle(size, r, g, b, m), x, y, z, 0.0, 0.0, 0.0)
+			world.addParticle(if (sparkleNoClip) SparkleParticleData.noClip(size, r, g, b, m) else SparkleParticleData.sparkle(size, r, g, b, m), x, y, z, 0.0, 0.0, 0.0)
 		
 		/** `wispFX(world, x, y, z, r, g, b, size, gravity)` — огонёк Botania 1.20.1; «гравитация» 1.7.10 — скорость вниз */
 		fun wispFX(world: Level, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float, size: Float, gravity: Float) =
 			world.addParticle(WispParticleData.wisp(size, r, g, b, 1f), x, y, z, 0.0, -gravity.toDouble(), 0.0)
+		
+		/** `wispFX(world, x, y, z, r, g, b, size, motionX, motionY, motionZ)` — огонёк Botania 1.20.1 с заданной скоростью */
+		fun wispFX(world: Level, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float, size: Float, motionX: Float, motionY: Float, motionZ: Float) =
+			world.addParticle(WispParticleData.wisp(size, r, g, b, 1f), x, y, z, motionX.toDouble(), motionY.toDouble(), motionZ.toDouble())
 		
 		/**
 		 * `removeSextantMultiblock` — убрать подсветку секстанта: в 1.7.10 — структуру класса `MultiblockSextant`, в

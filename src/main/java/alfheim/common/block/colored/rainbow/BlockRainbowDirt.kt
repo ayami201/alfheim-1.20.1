@@ -57,10 +57,12 @@ class BlockRainbowDirt: BlockMod(Material.ground), IGrowable/*, ILexiconable*/ {
 					}
 				} else if (world.getBlock(i1, j1, k1).isAir(world, i1, j1, k1)) {
 					if (random.nextInt(8) != 0) {
-						// PORT: КТ-2, партия 8б-2 — радужная трава (BlockRainbowGrass)
+						// PORT: радужная трава — массив вариантов (SPEC, Р-5)
+						if (AlfheimBlocks.rainbowGrass[0].canBlockStay(world, i1, j1, k1)) {
 //						if (AlfheimBlocks.rainbowGrass.canBlockStay(world, i1, j1, k1)) {
+							world.setBlock(i1, j1, k1, AlfheimBlocks.rainbowGrass[0].defaultBlockState(), 3)
 //							world.setBlock(i1, j1, k1, AlfheimBlocks.rainbowGrass, 0, 3)
-//						}
+						}
 					} else {
 						// PORT: цветок биома — World.kt (plantFlower)
 						world.plantFlower(random, i1, j1, k1)

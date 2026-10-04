@@ -88,7 +88,7 @@ import alfheim.common.block.AlfheimBlocks.elvenSand
 //import alfheim.common.block.AlfheimBlocks.enderActuator // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.gaiaButton // PORT: КТ-3
 import alfheim.common.block.AlfheimBlocks.irisDirt
-//import alfheim.common.block.AlfheimBlocks.irisGrass // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.irisGrass
 import alfheim.common.block.AlfheimBlocks.irisLamp
 import alfheim.common.block.AlfheimBlocks.irisPlanks
 //import alfheim.common.block.AlfheimBlocks.irisSapling // PORT: КТ-2
@@ -123,7 +123,7 @@ import alfheim.common.block.AlfheimBlocks.manaIce
 //import alfheim.common.block.AlfheimBlocks.niflheimBlock // PORT: КТ-2
 import alfheim.common.block.AlfheimBlocks.rainbowDirt
 //import alfheim.common.block.AlfheimBlocks.rainbowFlowerFloating // PORT: КТ-3
-//import alfheim.common.block.AlfheimBlocks.rainbowGrass // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.rainbowGrass
 //import alfheim.common.block.AlfheimBlocks.rainbowMushroom // PORT: КТ-2
 import alfheim.common.block.AlfheimBlocks.rainbowPlanks
 import alfheim.common.block.AlfheimBlocks.rainbowSlab
@@ -2553,11 +2553,16 @@ object AlfheimRecipes {
 			'L', LIVING_ROCK,
 			'R', REDSTONE_DUST)
 		recipeRedstoneAttractor = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
-		val grasses = Array(16) { ItemStack(irisGrass, 1, it) } + Array(2) { ItemStack(rainbowGrass, 1, it) }
-		grasses.forEach { addShapelessOreDictRecipe(ItemStack(manaResource, 1, 6), "dustRedstone", it) }
+		// PORT: вариант metadata — блок массива (SPEC, Р-5); ModItems.manaResource 6 (корень красного камня) → redstoneRoot
+		val grasses = Array(16) { ItemStack(irisGrass[it], 1) } + Array(2) { ItemStack(rainbowGrass[it], 1) }
+		grasses.forEach { addShapelessOreDictRecipe(ItemStack(redstoneRoot), "dustRedstone", it) }
+//		val grasses = Array(16) { ItemStack(irisGrass, 1, it) } + Array(2) { ItemStack(rainbowGrass, 1, it) }
+//		grasses.forEach { addShapelessOreDictRecipe(ItemStack(manaResource, 1, 6), "dustRedstone", it) }
 		recipesRedstoneRoot = BotaniaAPI.getLatestAddedRecipes(18)
 		
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(redStringObserver),
 			"LLL", "LRS", "LLL",
 			'L', LIVING_ROCK,
@@ -2585,19 +2590,20 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(RainbowDust.stack, RAINBOW_PETAL, PESTLE_AND_MORTAR)
 		recipeRainbowPetalGrinding = BotaniaAPI.getLatestAddedRecipe()
 		
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(RainbowPetal.stack(2), RAINBOW_FLOWER)
 		addShapelessOreDictRecipe(RainbowPetal.stack(4), RAINBOW_DOUBLE_FLOWER)
 		recipesRainbowPetal = BotaniaAPI.getLatestAddedRecipes(2)
-		*/
 		
 		addShapelessOreDictRecipe(ItemStack(fireGrenade), vial, Items.FIRE_CHARGE, Items.GUNPOWDER)
 		recipeGrenade = BotaniaAPI.getLatestAddedRecipe()
 		
-		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
-		addShapelessOreDictRecipe(ItemStack(rainbowGrass, 1, 3), "dustGlowstone", "dustGlowstone", ItemStack(rainbowGrass, 1, 2))
-		ModCraftingRecipes.recipesShinyFlowers?.add(BotaniaAPI.getLatestAddedRecipe())
+		// PORT: вариант metadata — блок массива (SPEC, Р-5)
+		addShapelessOreDictRecipe(ItemStack(rainbowGrass[3]), "dustGlowstone", "dustGlowstone", ItemStack(rainbowGrass[2]))
+//		addShapelessOreDictRecipe(ItemStack(rainbowGrass, 1, 3), "dustGlowstone", "dustGlowstone", ItemStack(rainbowGrass, 1, 2))
+		// PORT: КТ-9 — рецепты страницы лексикона Botania «Мерцающие цветы»
+//		ModCraftingRecipes.recipesShinyFlowers?.add(BotaniaAPI.getLatestAddedRecipe())
 		
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessRecipe(ItemStack(rainbowMushroom), ItemStack(red_mushroom), RainbowDust.stack)
 		addShapelessRecipe(ItemStack(rainbowMushroom), ItemStack(brown_mushroom), RainbowDust.stack)
 		ModCraftingRecipes.recipesMushrooms?.addAll(BotaniaAPI.getLatestAddedRecipes(2))

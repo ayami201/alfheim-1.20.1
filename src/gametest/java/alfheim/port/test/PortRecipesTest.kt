@@ -210,6 +210,24 @@ object PortRecipesTest {
 	}
 
 	/**
+	 * Рецепты радужных растений (партия 8б-2): цветок → 2 радужных лепестка, двойной цветок → 4; цветок и 2 светокаменной
+	 * пыли → мерцающий цветок; красная пыль и трава ириса или радужная трава → корень красного камня Botania
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun rainbowPlantRecipes(helper: GameTestHelper) {
+		val flower = ItemStack(AlfheimBlocks.rainbowGrass[2])
+		assertCraft(helper, grid(flower), RainbowPetal.stack(2), "petals from a rainbow flower")
+		assertCraft(helper, grid(ItemStack(AlfheimBlocks.rainbowTallFlower)), RainbowPetal.stack(4), "petals from a double rainbow flower")
+		val glowstone = ItemStack(Items.GLOWSTONE_DUST)
+		assertCraft(helper, grid(glowstone, flower, glowstone), ItemStack(AlfheimBlocks.rainbowGrass[3]), "glimmering rainbow flower")
+		val redstone = ItemStack(Items.REDSTONE)
+		for (grass in listOf(AlfheimBlocks.irisGrass[5], AlfheimBlocks.rainbowGrass[0], AlfheimBlocks.rainbowGrass[1]))
+			assertCraft(helper, grid(ItemStack(grass), redstone), ItemStack(BotaniaItems.redstoneRoot), "redstone root from $grass")
+		helper.succeed()
+	}
+
+	/**
 	 * Гиперведро: уровень — metadata 1.7.10 (повреждение стака). Уровни 0–2 улучшает слиток мауфтрия, 3–5 — блок
 	 * мауфтрия; ведро другого уровня в рецепт не подходит
 	 */

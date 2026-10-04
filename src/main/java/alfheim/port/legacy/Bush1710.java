@@ -22,8 +22,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * же, по типу растения ({@code getPlantType}).
  * <p>
  * Методы 1.7.10, которые переопределяет автор: {@link #canBlockStay}, {@link #updateTick} (и запланированный, и
- * случайный тик), {@link #checkAndDropBlock}. Класс написан на Java, как {@code BlockBush} 1.7.10: переопределения
- * автора объявляют параметры кто nullable, кто нет.
+ * случайный тик), {@link #checkAndDropBlock}, {@link #randomDisplayTick}. Класс написан на Java, как {@code BlockBush}
+ * 1.7.10: переопределения автора объявляют параметры кто nullable, кто нет.
  */
 public class Bush1710 extends BushBlock implements LegacyBlock, SoundTypes1710 {
 
@@ -85,6 +85,15 @@ public class Bush1710 extends BushBlock implements LegacyBlock, SoundTypes1710 {
 	@Override
 	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		updateTick(level, pos.getX(), pos.getY(), pos.getZ(), random);
+	}
+
+	/** {@code randomDisplayTick} 1.7.10 — частицы и звуки рядом с игроком на клиенте; у куста их нет */
+	public void randomDisplayTick(Level world, int x, int y, int z, RandomSource random) {
+	}
+
+	@Override
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+		randomDisplayTick(level, pos.getX(), pos.getY(), pos.getZ(), random);
 	}
 
 	/** Без опоры — лут блока и воздух (флаг 2: без частиц и звука), как в 1.7.10 */

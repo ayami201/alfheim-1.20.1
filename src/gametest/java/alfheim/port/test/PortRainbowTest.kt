@@ -5,25 +5,36 @@ import alfheim.api.ModInfo.MODID
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.base.BlockLeavesMod
 import alfheim.common.block.colored.*
+import alfheim.common.block.colored.rainbow.*
+import alfheim.common.item.AlfheimItems
+import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.port.legacy.*
+import alfheim.port.registry.LegacyIds
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.gametest.framework.*
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
+import net.minecraft.world.InteractionHand
 import net.minecraft.util.RandomSource
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.item.*
+import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.SlabType
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.Vec3
 import net.minecraftforge.common.ForgeHooks
 import net.minecraftforge.gametest.GameTestHolder
 import net.minecraftforge.gametest.PrefixGameTestTemplate
+import vazkii.botania.common.block.BotaniaBlocks
 
 /**
- * КТ-2, партия 8б: радужные и авроровые блоки. Числа и правила — из классов автора (`alfheim.common.block.colored`,
+ * КТ-2, партии 8б-1 и 8б-2: радужные и авроровые блоки и радужные растения. Числа и правила — из классов автора (`alfheim.common.block.colored`,
  * `alfheim.common.block.colored.rainbow`) и правил 1.7.10 (MAPPING.md, «Растения»)
  */
 @GameTestHolder(MODID)
@@ -194,6 +205,168 @@ object PortRainbowTest {
 			val smelted = helper.level.recipeManager.getRecipeFor(RecipeType.SMELTING, SimpleContainer(ItemStack(wood)), helper.level).orElse(null)
 			helper.assertTrue(smelted != null && smelted.getResultItem(helper.level.registryAccess()).item === Items.CHARCOAL && smelted.experience == 0.15f, "$wood → charcoal")
 		}
+		helper.succeed()
+	}
+
+	/**
+	 * Радужные растения — варианты metadata (SPEC, Р-5): трава 0–4 (трава, авроровая трава, цветок, мерцающий цветок,
+	 * закопанные лепестки), двойная трава 0–1, двойной цветок без вариантов; старые имена — в `legacy_ids.json`
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun rainbowPlantIds(helper: GameTestHelper) {
+		val ids = (0..4).map { "rainbow_grass$it" } + (0..1).map { "rainbow_double_grass$it" } + "rainbow_double_flower"
+		for (id in ids) helper.assertTrue(BuiltInRegistries.BLOCK.containsKey(ResourceLocation(MODID, id)), "$MODID:$id is not registered")
+		helper.assertTrue(AlfheimBlocks.rainbowGrass.size == 5 && AlfheimBlocks.rainbowTallGrass.size == 2, "variant arrays")
+		for (meta in 0..4) helper.assertTrue(LegacyIds.block("$MODID:rainbowGrass", meta)?.id == ResourceLocation(MODID, "rainbow_grass$meta"), "legacy id rainbowGrass:$meta")
+		for (meta in 0..1) helper.assertTrue(LegacyIds.block("$MODID:rainbowDoubleGrass", meta)?.id == ResourceLocation(MODID, "rainbow_double_grass$meta"), "legacy id rainbowDoubleGrass:$meta")
+		helper.assertTrue(LegacyIds.block("$MODID:rainbowDoubleFlower")?.id == ResourceLocation(MODID, "rainbow_double_flower"), "legacy id rainbowDoubleFlower")
+		helper.succeed()
+	}
+
+	/**
+	 * Варианты радужной травы (`BlockRainbowGrass`): свет — мерцающий цветок 15, закопанные лепестки 3; высота рамки —
+	 * трава 0,8, цветы 1, лепестки 0,1; костную муку берут все, кроме мерцающего цветка; двойные растения — нет
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun rainbowGrassVariants(helper: GameTestHelper) {
+		val grass = AlfheimBlocks.rainbowGrass
+		val light = listOf(0, 0, 0, 15, 3)
+		val height = listOf(0.8, 0.8, 1.0, 1.0, 0.1)
+		helper.setBlock(BlockPos(0, 0, 0), AlfheimBlocks.rainbowDirt)
+		val pos = helper.absolutePos(BlockPos(0, 1, 0))
+		for (meta in 0..4) {
+			val state = grass[meta].defaultBlockState()
+			helper.assertTrue(state.lightEmission == light[meta], "rainbow grass $meta light ${state.lightEmission}")
+			val top = state.getShape(helper.level, pos).max(Direction.Axis.Y)
+			helper.assertTrue(kotlin.math.abs(top - height[meta]) < 1e-6, "rainbow grass $meta height $top")
+			helper.assertTrue((grass[meta] as BlockRainbowGrass).func_149851_a(helper.level, pos.x, pos.y, pos.z, false) == (meta != BlockRainbowGrass.GLIMMER), "rainbow grass $meta bone meal")
+		}
+		helper.assertTrue(!(AlfheimBlocks.rainbowTallGrass[0] as BlockRainbowDoubleGrass).func_149851_a(helper.level, pos.x, pos.y, pos.z, false), "double grass takes no bone meal")
+		helper.assertTrue(!(AlfheimBlocks.rainbowTallFlower as BlockRainbowDoubleFlower).func_149851_a(helper.level, pos.x, pos.y, pos.z, false), "double flower takes no bone meal")
+		helper.succeed()
+	}
+
+	/**
+	 * Костная мука (`func_149853_b`): на радужной земле вырастает радужная трава или цветок биома, на авроровой —
+	 * авроровая трава или цветок; трава и авроровая трава становятся двойной травой своего варианта, цветок и закопанные
+	 * лепестки — двойным цветком
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun rainbowBonemeal(helper: GameTestHelper) {
+		val soil = BlockPos(0, 0, 0)
+		for ((dirt, meta) in listOf(AlfheimBlocks.rainbowDirt to 0, AlfheimBlocks.auroraDirt to 1)) {
+			helper.setBlock(soil.above(), Blocks.AIR)
+			helper.setBlock(soil, dirt)
+			val pos = helper.absolutePos(soil)
+			(dirt as IGrowable).func_149853_b(helper.level, RandomSource.create(3), pos.x, pos.y, pos.z)
+			val grown = helper.getBlockState(soil.above())
+			helper.assertTrue(grown.block === AlfheimBlocks.rainbowGrass[meta] || grown.`is`(BlockTags.SMALL_FLOWERS), "grown on $dirt: $grown")
+		}
+		helper.setBlock(soil, AlfheimBlocks.rainbowDirt)
+		val above = helper.absolutePos(soil.above())
+		for ((meta, grown) in listOf(0 to AlfheimBlocks.rainbowTallGrass[0], 1 to AlfheimBlocks.rainbowTallGrass[1], 2 to AlfheimBlocks.rainbowTallFlower, 4 to AlfheimBlocks.rainbowTallFlower)) {
+			helper.setBlock(soil.above(2), Blocks.AIR)
+			helper.setBlock(soil.above(), AlfheimBlocks.rainbowGrass[meta])
+			(AlfheimBlocks.rainbowGrass[meta] as BlockRainbowGrass).func_149853_b(helper.level, RandomSource.create(4), above.x, above.y, above.z)
+			helper.assertBlockPresent(grown, soil.above())
+			helper.assertBlockProperty(soil.above(), DoublePlantBlock.HALF, DoubleBlockHalf.LOWER)
+			helper.assertBlockPresent(grown, soil.above(2))
+			helper.assertBlockProperty(soil.above(2), DoublePlantBlock.HALF, DoubleBlockHalf.UPPER)
+		}
+		helper.succeed()
+	}
+
+	/**
+	 * Лут, горение и Ore Dictionary радужных растений: трава и авроровая трава — сами с ножницами, без них — только
+	 * семена; цветы — сами; закопанные лепестки — радужный лепесток; двойная трава с ножницами — две травы своего
+	 * варианта, двойной цветок — сам, без ножниц — ничего. Горят трава и двойная трава (60, 100); двойного цветка в
+	 * `registerBurnables` нет (BUGS.md, B-022)
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun rainbowPlantLootAndTags(helper: GameTestHelper) {
+		val shears = ItemStack(Items.SHEARS)
+		fun drops(pos: BlockPos, tool: ItemStack) = Block.getDrops(helper.getBlockState(pos), helper.level, helper.absolutePos(pos), null, null, tool)
+		fun only(pos: BlockPos, tool: ItemStack, item: Item, count: Int, what: String) {
+			val stacks = drops(pos, tool)
+			helper.assertTrue(stacks.size == 1 && stacks[0].item === item && stacks[0].count == count, "$what drops $stacks")
+		}
+
+		val soil = BlockPos(1, 0, 1)
+		val pos = soil.above()
+		helper.setBlock(soil, AlfheimBlocks.rainbowDirt)
+		for (meta in 0..1) {
+			helper.setBlock(pos, AlfheimBlocks.rainbowGrass[meta])
+			only(pos, shears, AlfheimBlocks.rainbowGrass[meta].asItem(), 1, "sheared rainbow grass $meta")
+			repeat(50) { helper.assertTrue(drops(pos, ItemStack.EMPTY).all { it.item === Items.WHEAT_SEEDS }, "rainbow grass $meta without shears") }
+		}
+		for (meta in 2..3) {
+			helper.setBlock(pos, AlfheimBlocks.rainbowGrass[meta])
+			only(pos, ItemStack.EMPTY, AlfheimBlocks.rainbowGrass[meta].asItem(), 1, "rainbow flower $meta")
+		}
+		helper.setBlock(pos, AlfheimBlocks.rainbowGrass[BlockRainbowGrass.BURIED])
+		only(pos, ItemStack.EMPTY, AlfheimItems.elvenResource[RainbowPetal.I], 1, "buried petals")
+
+		// новое двойное растение — на пустое место: половины прежнего, оставшись без пары, убрали бы и новую нижнюю
+		fun place(block: Block) {
+			helper.setBlock(pos.above(), Blocks.AIR)
+			helper.setBlock(pos, Blocks.AIR)
+			DoublePlantBlock.placeAt(helper.level, block.defaultBlockState(), helper.absolutePos(pos), 2)
+		}
+		for (meta in 0..1) {
+			place(AlfheimBlocks.rainbowTallGrass[meta])
+			only(pos, shears, AlfheimBlocks.rainbowGrass[meta].asItem(), 2, "sheared double grass $meta")
+			only(pos.above(), shears, AlfheimBlocks.rainbowGrass[meta].asItem(), 2, "sheared upper half of double grass $meta")
+			helper.assertTrue(drops(pos, ItemStack.EMPTY).isEmpty(), "double grass $meta without shears")
+		}
+		place(AlfheimBlocks.rainbowTallFlower)
+		only(pos, shears, AlfheimBlocks.rainbowTallFlower.asItem(), 1, "sheared double flower")
+		only(pos.above(), shears, AlfheimBlocks.rainbowTallFlower.asItem(), 1, "sheared upper half of double flower")
+		helper.assertTrue(drops(pos, ItemStack.EMPTY).isEmpty(), "double flower without shears")
+
+		fun fire(block: Block, encouragement: Int, flammability: Int) {
+			val state = block.defaultBlockState()
+			helper.assertTrue(state.getFireSpreadSpeed(helper.level, BlockPos.ZERO, Direction.UP) == encouragement && state.getFlammability(helper.level, BlockPos.ZERO, Direction.UP) == flammability, "$block fire")
+		}
+		AlfheimBlocks.rainbowGrass.forEach { fire(it, 60, 100) }
+		AlfheimBlocks.rainbowTallGrass.forEach { fire(it, 60, 100) }
+		fire(AlfheimBlocks.rainbowTallFlower, 0, 0)
+
+		helper.assertTrue(ItemStack(AlfheimBlocks.rainbowGrass[2]).`is`(ItemTags.create(ResourceLocation(MODID, "mystic_flower_rainbow"))), "mysticFlowerRainbow")
+		helper.assertTrue(ItemStack(AlfheimBlocks.rainbowTallFlower).`is`(ItemTags.create(ResourceLocation(MODID, "mystic_flower_rainbow_double"))), "mysticFlowerRainbowDouble")
+		helper.succeed()
+	}
+
+	/**
+	 * `ItemElvenResource.onItemUse`: радужная пыль на мистическом цветке Botania делает его радужным цветком, пыль
+	 * тратится; радужный лепесток на верх блока, который держит растение, закапывается — закопанные лепестки
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun rainbowDustAndPetal(helper: GameTestHelper) {
+		val player = helper.makeMockPlayer()
+		fun use(stack: ItemStack, pos: BlockPos, side: Direction) {
+			player.setItemInHand(InteractionHand.MAIN_HAND, stack)
+			val abs = helper.absolutePos(pos)
+			stack.useOn(UseOnContext(player, InteractionHand.MAIN_HAND, BlockHitResult(Vec3.atCenterOf(abs), side, abs, false)))
+		}
+		val soil = BlockPos(2, 0, 2)
+		helper.setBlock(soil, Blocks.GRASS_BLOCK)
+		helper.setBlock(soil.above(), BotaniaBlocks.getFlower(DyeColor.RED))
+		val dust = RainbowDust.stack(2)
+		use(dust, soil.above(), Direction.UP)
+		helper.assertBlockPresent(AlfheimBlocks.rainbowGrass[BlockRainbowGrass.FLOWER], soil.above())
+		helper.assertTrue(dust.count == 1, "rainbow dust is used: ${dust.count}")
+
+		helper.setBlock(soil.above(), Blocks.AIR)
+		helper.setBlock(soil, AlfheimBlocks.rainbowDirt)
+		val petal = RainbowPetal.stack(2)
+		use(petal, soil, Direction.UP)
+		helper.assertBlockPresent(AlfheimBlocks.rainbowGrass[BlockRainbowGrass.BURIED], soil.above())
+		helper.assertTrue(petal.count == 1, "rainbow petal is used: ${petal.count}")
 		helper.succeed()
 	}
 }
