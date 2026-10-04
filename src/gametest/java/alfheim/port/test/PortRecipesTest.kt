@@ -8,6 +8,7 @@ import alfheim.common.item.ItemSplashPotion
 import alfheim.common.item.material.ElvenFoodMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.port.legacy.MetaIngredient
+import alfheim.port.legacy.botania.BotaniaBlocks1710
 import alfheim.port.legacy.botania.ancientWill
 import io.netty.buffer.Unpooled
 import net.minecraft.network.FriendlyByteBuf
@@ -39,14 +40,10 @@ import vazkii.botania.common.item.brew.BaseBrewItem
 object PortRecipesTest {
 
 	/**
-	 * Раскладки, которые занимает и рецепт автора, и рецепт другого мода 1.20.1: в 1.7.10 второго рецепта не было
-	 * (TASKS.md, «Вопросы к владельцу»)
+	 * Раскладки, которые занимает и рецепт автора, и рецепт другого мода 1.20.1: в 1.7.10 второго рецепта не было. Сейчас
+	 * таких нет: стену из кирпичей живого камня и грибы Botania решил автор (TASKS.md, журнал решений)
 	 */
-	private val knownConflicts = mapOf(
-		ResourceLocation(MODID, "livingrock1_wall") to setOf(ResourceLocation("botania", "livingrock_bricks_wall")),
-		ResourceLocation(MODID, "brown_mushroom") to setOf(ResourceLocation("botania", "dye_brown")),
-		ResourceLocation(MODID, "red_mushroom") to setOf(ResourceLocation("botania", "dye_red")),
-	)
+	private val knownConflicts = mapOf<ResourceLocation, Set<ResourceLocation>>()
 
 	/** Сетка верстака 3×3 без меню; [stacks] — слоты по строкам */
 	private fun grid(vararg stacks: ItemStack?): CraftingContainer {
@@ -65,14 +62,6 @@ object PortRecipesTest {
 	private fun assertCraft(helper: GameTestHelper, grid: CraftingContainer, result: ItemStack, what: String) {
 		val crafted = craft(helper, grid)
 		helper.assertTrue(ItemStack.isSameItemSameTags(crafted, result) && crafted.count == result.count, "$what: $crafted, expected $result")
-	}
-
-	/** Рецепт мода [path] подходит к раскладке и даёт [result]: для раскладок из [knownConflicts], где верстак берёт любой рецепт */
-	private fun assertRecipe(helper: GameTestHelper, path: String, grid: CraftingContainer, result: ItemStack) {
-		val recipe = helper.level.recipeManager.byKey(ResourceLocation(MODID, path)).orElse(null) as? CraftingRecipe
-		helper.assertTrue(recipe != null && recipe.matches(grid, helper.level), "$MODID:$path matches")
-		val crafted = recipe!!.assemble(grid, helper.level.registryAccess())
-		helper.assertTrue(ItemStack.isSameItemSameTags(crafted, result) && crafted.count == result.count, "$MODID:$path: $crafted, expected $result")
 	}
 
 	/**
@@ -169,9 +158,9 @@ object PortRecipesTest {
 		assertCraft(helper, grid(NetherwoodCoal.stack, null, null, ItemStack(Items.STICK)), ItemStack(Items.TORCH, 6), "torches")
 		// воля любого из шести братьев → 4 эссенции жизни
 		for (will in ancientWill) assertCraft(helper, grid(ItemStack(will)), ItemStack(BotaniaItems.lifeEssence, 4), "life essence from $will")
-		// грибы Botania → грибы ванилы (раскладку занимает и краситель Botania 1.20.1 — knownConflicts)
-		assertRecipe(helper, "brown_mushroom", grid(ItemStack(BotaniaBlocks.brownMushroom)), ItemStack(Items.BROWN_MUSHROOM))
-		assertRecipe(helper, "red_mushroom", grid(ItemStack(BotaniaBlocks.redMushroom)), ItemStack(Items.RED_MUSHROOM))
+		// гриб Botania — краситель, как в Botania 1.20.1: рецептов автора «гриб Botania → гриб ванилы» нет (решение автора)
+		assertCraft(helper, grid(ItemStack(BotaniaBlocks.brownMushroom)), ItemStack(Items.BROWN_DYE), "brown dye from the Botania mushroom")
+		assertCraft(helper, grid(ItemStack(BotaniaBlocks.redMushroom)), ItemStack(Items.RED_DYE), "red dye from the Botania mushroom")
 		// желе: хлеб или жареная треска с бутылкой желе
 		assertCraft(helper, grid(ItemStack(Items.BREAD), JellyBottle.stack), JellyBread.stack, "jelly bread")
 		assertCraft(helper, grid(JellyBottle.stack, ItemStack(Items.COOKED_COD)), JellyCod.stack, "jelly cod")
@@ -185,6 +174,38 @@ object PortRecipesTest {
 		val twig = ItemStack(BotaniaItems.livingwoodTwig)
 		val log = ItemStack(BotaniaBlocks.livingwoodLog)
 		assertCraft(helper, grid(twig, log, twig, twig, log, twig), ItemStack(AlfheimFluffBlocks.livingwoodBarkFenceGate), "livingwood bark fence gate")
+		helper.succeed()
+	}
+
+	/**
+	 * Решения автора (TASKS.md, журнал решений): черепица Botania 1.7.10 и цветная черепица из неё; рецепты со ступкой —
+	 * без неё; стена из кирпичей живого камня — стена Botania 1.20.1
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun authorDecisionRecipes(helper: GameTestHelper) {
+		// черепица Botania: 6 кирпичей столбиком 2×3 → 4 черепицы, в любом месте сетки
+		val brick = ItemStack(Items.BRICK)
+		val tile = ItemStack(BotaniaBlocks1710.roofTile)
+		assertCraft(helper, grid(brick, brick, null, brick, brick, null, brick, brick), ItemStack(BotaniaBlocks1710.roofTile, 4), "Botania roof tile")
+		assertCraft(helper, grid(null, brick, brick, null, brick, brick, null, brick, brick), ItemStack(BotaniaBlocks1710.roofTile, 4), "Botania roof tile on the right")
+		// цветная черепица автора: черепица Botania и красители
+		assertCraft(helper, grid(tile, ItemStack(Items.PURPLE_DYE), ItemStack(Items.GRAY_DYE)), ItemStack(AlfheimFluffBlocks.roofTile[0]), "roof tile 0")
+		assertCraft(helper, grid(tile, ItemStack(Items.GREEN_DYE), ItemStack(Items.BLUE_DYE), ItemStack(Items.GRAY_DYE)), ItemStack(AlfheimFluffBlocks.roofTile[1]), "roof tile 1")
+		assertCraft(helper, grid(tile, ItemStack(Items.GREEN_DYE)), ItemStack(AlfheimFluffBlocks.roofTile[2]), "roof tile 2")
+		// без ступки: цветная листва → краситель её цвета, радужная листва и радужный лепесток → радужная пыль, три
+		// вишни → светокаменная пыль; авроровая листва ничего не даёт
+		assertCraft(helper, grid(ItemStack(AlfheimBlocks.irisLeaves0[0])), ItemStack(Items.WHITE_DYE), "white dye from white leaves")
+		assertCraft(helper, grid(ItemStack(AlfheimBlocks.irisLeaves1[7])), ItemStack(Items.BLACK_DYE), "black dye from black leaves")
+		assertCraft(helper, grid(ItemStack(AlfheimBlocks.rainbowLeaves)), RainbowDust.stack, "rainbow dust from rainbow leaves")
+		assertCraft(helper, grid(ItemStack(AlfheimBlocks.auroraLeaves)), ItemStack.EMPTY, "nothing from aurora leaves")
+		assertCraft(helper, grid(RainbowPetal.stack), RainbowDust.stack, "rainbow dust from a rainbow petal")
+		assertCraft(helper, grid(DreamCherry.stack, DreamCherry.stack, DreamCherry.stack), ItemStack(Items.GLOWSTONE_DUST), "glowstone dust from dream cherries")
+		// стена из кирпичей живого камня — рецепт Botania; тёмная стена — из стены Botania и угля
+		val bricks = ItemStack(BotaniaBlocks.livingrockBrick)
+		assertCraft(helper, grid(bricks, bricks, bricks, bricks, bricks, bricks), ItemStack(BotaniaBlocks.livingrockBrickWall, 6), "Botania livingrock brick wall")
+		assertCraft(helper, grid(ItemStack(BotaniaBlocks.livingrockBrickWall), ItemStack(Items.COAL)), ItemStack(AlfheimFluffBlocks.livingrockDarkWalls[1]), "dark livingrock brick wall")
+		helper.assertTrue(recipes(helper).none { it.id.path in setOf("livingrock1_wall", "brown_mushroom", "red_mushroom") }, "removed recipes are loaded")
 		helper.succeed()
 	}
 

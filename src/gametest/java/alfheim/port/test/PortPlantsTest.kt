@@ -6,6 +6,7 @@ import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.base.BlockLeavesMod
 import alfheim.common.block.colored.*
 import alfheim.port.legacy.*
+import com.google.gson.JsonParser
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
@@ -192,6 +193,27 @@ object PortPlantsTest {
 		helper.setBlock(lamp.west(), Blocks.REDSTONE_BLOCK)
 		helper.setBlock(lamp, AlfheimBlocks.irisLamp)
 		helper.assertBlockProperty(lamp, BlockColoredLamp.POWER, 15)
+		helper.succeed()
+	}
+
+	/**
+	 * Цветной свет лампы для мода Colorful Lighting (`assets/alfheim/light/emitters.json` в jar мода): у каждой силы
+	 * сигнала, при которой лампа светит, — цвет `powerColor` автора; ключ — свойство состояния `power`
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun irisLampColoredLight(helper: GameTestHelper) {
+		val stream = PortPlantsTest::class.java.getResourceAsStream("/assets/$MODID/light/emitters.json")
+		helper.assertTrue(stream != null, "light/emitters.json is not in the mod jar")
+		val json = stream!!.reader(Charsets.UTF_8).use { JsonParser.parseReader(it).asJsonObject }
+		val lamp = AlfheimBlocks.irisLamp as BlockColoredLamp
+		val states = json.getAsJsonObject(BuiltInRegistries.BLOCK.getKey(lamp).toString()).getAsJsonObject("states")
+		for (state in lamp.stateDefinition.possibleStates) {
+			if (state.lightEmission == 0) continue
+			val power = state.getValue(BlockColoredLamp.POWER)
+			val color = states.get("${BlockColoredLamp.POWER.name}=$power")?.asString
+			helper.assertTrue(color == "#%06X".format(lamp.powerColor(power) and 0xFFFFFF), "power $power: $color")
+		}
 		helper.succeed()
 	}
 

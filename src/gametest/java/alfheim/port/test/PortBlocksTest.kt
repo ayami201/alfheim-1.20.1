@@ -36,8 +36,8 @@ object PortBlocksTest {
 			if (BuiltInRegistries.BLOCK.getKey(block) != entry.id) problems += "${entry.id} is registered as ${BuiltInRegistries.BLOCK.getKey(block)}"
 			val item = block.asItem()
 			if (item !is BlockItem || BuiltInRegistries.ITEM.getKey(item) != entry.id) problems += "${entry.id} has no block item"
-			val target = LegacyIds.block("$MODID:${entry.oldName}", entry.oldMeta ?: 0)
-			if (target?.id != entry.id) problems += "legacy_ids.json: $MODID:${entry.oldName}:${entry.oldMeta} -> ${target?.id}, expected ${entry.id}"
+			val target = LegacyIds.block(entry.legacyId, entry.oldMeta ?: 0)
+			if (target?.id != entry.id) problems += "legacy_ids.json: ${entry.legacyId}:${entry.oldMeta} -> ${target?.id}, expected ${entry.id}"
 			val loot = helper.level.server.lootData.getLootTable(block.lootTable)
 			if (loot === LootTable.EMPTY) problems += "${entry.id} has no loot table"
 		}
@@ -45,6 +45,11 @@ object PortBlocksTest {
 		for (alias in LegacyRegistration.aliases) {
 			val target = LegacyIds.block("$MODID:${alias.oldName}")
 			if (target?.id != LegacyRegistration.blocks[alias.block]?.id || target?.state != mapOf("type" to "double")) problems += "legacy_ids.json: $MODID:${alias.oldName} -> $target"
+		}
+		// блок автора, вместо которого блок другого мода
+		for (replacement in LegacyRegistration.replacements) {
+			val target = LegacyIds.block("$MODID:${replacement.oldName}")
+			if (target?.id != BuiltInRegistries.BLOCK.getKey(replacement.block)) problems += "legacy_ids.json: $MODID:${replacement.oldName} -> $target"
 		}
 		helper.assertTrue(problems.isEmpty(), problems.toString())
 		helper.succeed()

@@ -7,6 +7,8 @@ import alfheim.common.block.AlfheimFluffBlocks
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.*
+import alfheim.port.legacy.botania.BotaniaBlocks1710
+import alfheim.port.registry.LegacyIds
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -39,7 +41,7 @@ import vazkii.botania.common.brew.BotaniaBrews
 @PrefixGameTestTemplate(false)
 object PortDecorTest {
 
-	/** Блоки партии 2 и их варианты — под именами SPEC, Р-5 */
+	/** Блоки партии 2 и их варианты — под именами SPEC, Р-5; стены из кирпичей живого камня нет — её заменила стена Botania */
 	@JvmStatic
 	@GameTest(template = "empty")
 	fun secondBatchIds(helper: GameTestHelper) {
@@ -49,12 +51,12 @@ object PortDecorTest {
 			listOf("dwarf_lantern") + (0..5).map { "shrine_light$it" } + (0..4).map { "shrine_glass$it" } + (0..3).map { "shrine_panel$it" } +
 			listOf("quartz_type_elf0_wall", "dwarf_planks", "dwarf_planks_stairs", "dwarf_planks0_slab") +
 			listOf(0, 2).flatMap { listOf("elven_sandstone_stairs$it", "elven_sandstone${it}_slab", "elven_sandstone${it}_wall") } +
-			listOf("living_cobble_stairs", "living_cobble_stairs1", "living_cobble_stairs2") + (0..2).map { "living_cobble${it}_slab" } + listOf("living_cobble0_wall", "livingrock1_wall") +
+			listOf("living_cobble_stairs", "living_cobble_stairs1", "living_cobble_stairs2") + (0..2).map { "living_cobble${it}_slab" } + listOf("living_cobble0_wall") +
 			listOf("livingwood", "dreamwood").flatMap { listOf("${it}_bark_fence", "${it}_bark_fence_gate", "${it}_fence", "${it}_fence_gate") } + listOf("dwarf_trap_door")
-		helper.assertTrue(ids.size == 88, "ids: ${ids.size}")
+		helper.assertTrue(ids.size == 87, "ids: ${ids.size}")
 		for (id in ids) helper.assertTrue(BuiltInRegistries.BLOCK.containsKey(ResourceLocation(MODID, id)), "$MODID:$id is not registered")
-		// 105 блоков партий 1 и 2, 6 вариантов эльфийской руды партии 3, 130 цветных блоков партии 8а и 12 радужных и
-		// авроровых блоков партии 8б
+		// 104 блока партий 1 и 2, 6 вариантов эльфийской руды партии 3, 130 цветных блоков партии 8а, 12 радужных и
+		// авроровых блоков партии 8б и черепица Botania 1.7.10
 		helper.assertTrue(LegacyRegistration.blocks.size == 253, "blocks of the author: ${LegacyRegistration.blocks.size}")
 		helper.succeed()
 	}
@@ -103,7 +105,6 @@ object PortDecorTest {
 		// стена BlockWall: твёрдость и взрывоустойчивость блока-источника, у блоков Botania — из Botania r1.8-249
 		f.livingrockDarkWalls.forEach { check(it, 2f, 30f / 5f, SoundType.STONE, true) }
 		check(f.elvenSandstoneWalls[0], 1f, 15f / 5f, SoundType.STONE, true)
-		check(f.livingrockBrickWall, 2f, 30f / 5f, SoundType.STONE, true)
 		check(f.elfQuartzWall, 0.8f, 30f / 5f, SoundType.STONE, true)
 		// забор и калитка: setHardness(2) → 10, setResistance(5) → 15; люк: setHardness(3) → 15
 		for (block in listOf(f.livingwoodFence, f.livingwoodBarkFence, f.dreamwoodFence, f.dreamwoodBarkFence, f.livingwoodFenceGate, f.livingwoodBarkFenceGate, f.dreamwoodFenceGate, f.dreamwoodBarkFenceGate))
@@ -131,7 +132,7 @@ object PortDecorTest {
 	@GameTest(template = "empty")
 	fun decorTags(helper: GameTestHelper) {
 		val f = AlfheimFluffBlocks
-		for (wall in f.livingrockDarkWalls + f.elvenSandstoneWalls + listOf(f.livingcobbleWall, f.livingrockBrickWall, f.elfQuartzWall))
+		for (wall in f.livingrockDarkWalls + f.elvenSandstoneWalls + listOf(f.livingcobbleWall, f.elfQuartzWall))
 			helper.assertTrue(wall.defaultBlockState().`is`(BlockTags.WALLS), "${BuiltInRegistries.BLOCK.getKey(wall)} is a wall")
 		for (fence in listOf(f.livingwoodFence, f.livingwoodBarkFence, f.dreamwoodFence, f.dreamwoodBarkFence)) {
 			val state = fence.defaultBlockState()
@@ -213,14 +214,15 @@ object PortDecorTest {
 	 * Вкладки: во вкладке Alfheim — все блоки и предметы автора, кроме мана-льда (его нет и у автора), стены из
 	 * эльфийского кварца — она во вкладке Botania сразу за лестницей из эльфийского кварца (врезка H-023), — и
 	 * эльфийских ресурсов, которых автор во вкладку не выдавал (`ElvenResourcesMetas.displayBlackList`); накопитель
-	 * разлома выдаётся по аномалиям (КТ-3). Эльфийские ресурсы — в порядке номеров, как выдавал `getSubItems`
+	 * разлома выдаётся по аномалиям (КТ-3). Эльфийские ресурсы — в порядке номеров, как выдавал `getSubItems`.
+	 * Черепица Botania 1.7.10 — во вкладке Botania перед первым азулежу, как в Botania 1.7.10
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
 	fun creativeTabs(helper: GameTestHelper) {
 		CreativeModeTabs.tryRebuildTabContents(helper.level.enabledFeatures(), true, helper.level.registryAccess())
 		val alfheim = AlfheimTab.tab.get().displayItems.map { it.item }
-		val hidden = listOf(AlfheimBlocks.manaIce.asItem(), AlfheimFluffBlocks.elfQuartzWall.asItem()) +
+		val hidden = listOf(AlfheimBlocks.manaIce.asItem(), AlfheimFluffBlocks.elfQuartzWall.asItem(), BotaniaBlocks1710.roofTile.asItem()) +
 			listOf(ElvenResourcesMetas.ElvenWeed, ElvenResourcesMetas.WisdomBottle, ElvenResourcesMetas.RiftDrive).map { AlfheimItems.elvenResource[it.I] }
 		// рог души — дважды: обычный и заряженный (metadata 1); брызгающее зелье — по разу на варево Botania, кроме
 		// запасного, как у автора
@@ -234,6 +236,41 @@ object PortDecorTest {
 		val botania = BuiltInRegistries.CREATIVE_MODE_TAB.get(BotaniaRegistries.BOTANIA_TAB_KEY)!!.displayItems.map { it.item }
 		val stairs = botania.indexOf(BotaniaBlocks.elfQuartzStairs.asItem())
 		helper.assertTrue(stairs >= 0 && botania.indexOf(AlfheimFluffBlocks.elfQuartzWall.asItem()) == stairs + 1, "elven quartz wall is not right after elven quartz stairs in the Botania tab")
+		val azulejo = botania.indexOf(BotaniaBlocks.azulejo0.asItem())
+		helper.assertTrue(azulejo > 0 && botania.indexOf(BotaniaBlocks1710.roofTile.asItem()) == azulejo - 1, "Botania roof tile is not right before the first azulejo in the Botania tab")
+		helper.succeed()
+	}
+
+	/**
+	 * Черепица Botania 1.7.10 (`ModBlocks.customBrick`, 3), которую вернул порт: id по правилу порта, старое имя Botania
+	 * в `legacy_ids.json`; камень: `setHardness(2)` → 10, `setResistance(5)` → 15; добывается киркой, роняет себя
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun botaniaRoofTile(helper: GameTestHelper) {
+		val tile = BotaniaBlocks1710.roofTile
+		helper.assertTrue(BuiltInRegistries.BLOCK.getKey(tile) == ResourceLocation(MODID, "custom_brick3"), "roof tile id ${BuiltInRegistries.BLOCK.getKey(tile)}")
+		helper.assertTrue(LegacyIds.block("Botania:customBrick", 3)?.id == ResourceLocation(MODID, "custom_brick3") && LegacyIds.item("Botania:customBrick", 3)?.id == ResourceLocation(MODID, "custom_brick3"), "legacy_ids.json: Botania:customBrick 3")
+		val state = tile.defaultBlockState()
+		helper.assertTrue(state.getDestroySpeed(helper.level, BlockPos.ZERO) == 2f && tile.explosionResistance == 15f / 5f && state.soundType == SoundType.STONE, "roof tile properties")
+		helper.assertTrue(state.requiresCorrectToolForDrops() && state.`is`(BlockTags.MINEABLE_WITH_PICKAXE), "roof tile needs a pickaxe")
+		val pos = helper.absolutePos(BlockPos(0, 1, 0))
+		val drops = Block.getDrops(state, helper.level, pos, null, null, ItemStack(Items.WOODEN_PICKAXE))
+		helper.assertTrue(drops.size == 1 && drops[0].item == tile.asItem() && drops[0].count == 1, "roof tile drops $drops")
+		helper.succeed()
+	}
+
+	/**
+	 * Стены автора из кирпичей живого камня нет (решение автора): в коде автора — стена Botania 1.20.1, на неё ведёт
+	 * старое имя в `legacy_ids.json` (в постройках автора она стоит на арене и в руинах)
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun livingrockBrickWallIsBotanias(helper: GameTestHelper) {
+		val wall = ResourceLocation("botania", "livingrock_bricks_wall")
+		helper.assertTrue(AlfheimFluffBlocks.livingrockBrickWall === BotaniaBlocks.livingrockBrickWall, "livingrockBrickWall is the Botania wall")
+		helper.assertTrue(!BuiltInRegistries.BLOCK.containsKey(ResourceLocation(MODID, "livingrock1_wall")), "the author's wall is registered")
+		helper.assertTrue(LegacyIds.block("$MODID:livingrock1Wall")?.id == wall && LegacyIds.item("$MODID:livingrock1Wall")?.id == wall, "legacy_ids.json: $MODID:livingrock1Wall")
 		helper.succeed()
 	}
 }

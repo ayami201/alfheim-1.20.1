@@ -51,8 +51,8 @@ object PortMaterialsTest {
 		for ((item, entry) in LegacyRegistration.items) {
 			if (item is BlockItem) continue
 			if (BuiltInRegistries.ITEM.getKey(item) != entry.id) problems += "${entry.id} is registered as ${BuiltInRegistries.ITEM.getKey(item)}"
-			val target = LegacyIds.item("$MODID:${entry.oldName}", entry.oldMeta ?: 0)
-			if (target?.id != entry.id) problems += "legacy_ids.json: $MODID:${entry.oldName}:${entry.oldMeta} -> ${target?.id}, expected ${entry.id}"
+			val target = LegacyIds.item(entry.legacyId, entry.oldMeta ?: 0)
+			if (target?.id != entry.id) problems += "legacy_ids.json: ${entry.legacyId}:${entry.oldMeta} -> ${target?.id}, expected ${entry.id}"
 		}
 		helper.assertTrue(problems.isEmpty(), problems.toString())
 		val materials = LegacyRegistration.items.keys.count { it is ItemElvenResource || it is ItemEventResource || it is ItemWiltedLotus }
