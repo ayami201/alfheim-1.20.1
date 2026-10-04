@@ -87,7 +87,7 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 		fun legacyLangKey(block: Block): String? {
 			val legacy = block as? LegacyBlock ?: return null
 			val item = block.asItem()
-			var key = legacy.legacy.unlocalizedName
+			var key = legacy.getUnlocalizedName()
 			val variant = legacy.variant ?: 0
 			if (item is ItemBlockMetaName && ((block as? BlockModMeta)?.subtypes ?: 16) > 1) key += variant
 			if (item is ItemBlockLeavesMod) key = key.replace("tile.", "tile.$MODID:")
