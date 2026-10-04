@@ -78,6 +78,7 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `ResourceLocationIL(…)` (LibResourceLocations) | как есть | ✓ конструктор сам применяет `legacyPath` |
 | `ResourceLocation(modid, path)` с путём автора | `ResourceLocation(modid, legacyPath(path))` | ✓ |
 | ванильные `textures/blocks/…`, `textures/items/…` | `textures/block/…`, `textures/item/…` | ✓ |
+| иконка 1.7.10 без единого видимого пикселя (закопанные лепестки Botania 1.7.10) | модель без граней; частицы поломки и предмет — прозрачная текстура порта `alfheim:blocks/port/transparent` | ✓ блок не виден, как в 1.7.10 |
 | текстуры блоков и предметов автора `textures/blocks/…`, `textures/items/…` | те же папки, имена файлов в snake_case; в модели — `alfheim:blocks/elven_sand` | ✓ атлас блоков 1.20.1 берёт только `block/` и `item/`, папки автора добавляет `assets/minecraft/atlases/blocks.json`. Переносит `tools/move_legacy.py` |
 | `.png.mcmeta` с `"interpolate": true` (`InterpolatedIconHelper`) | как есть | ✓ плавную анимацию 1.20.1 рисует сама |
 | `vazkii.botania.client.lib.LibResources` | `vazkii.botania.client.lib.ResourcesLib` | ✓ константы — полные пути `botania:…`; «розовый» пилон 1.7.10 — `MODEL_PYLON_GAIA` |
@@ -510,6 +511,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `ModBlocks.livingrock` 4 (резные кирпичи) | `BotaniaBlocks.livingrockBrickChiseled` | ✓ |
 | `ModFluffBlocks.livingrockStairs`, `livingrockBrickStairs`, `livingrockSlab`, `livingrockBrickSlab`, `livingrockWall` | `BotaniaBlocks` — те же имена | ✓ |
 | `ModBlocks.mushroom` с metadata цвета | грибы Botania 1.20.1 по цвету: `BotaniaBlocks.whiteMushroom` … (`getMushroom(DyeColor)`) | ✓ |
+| `block === ModBlocks.flower` (мистический цветок, 16 metadata) | блок с тегом `BotaniaTags.Blocks.MYSTICAL_FLOWERS` (`botania:mystical_flowers`) | ✓ 16 цветов Botania 1.20.1; блестящие и парящие цветы в теге не состоят, как и в 1.7.10 |
 | `ModFluffBlocks.elfQuartz` и др. кварцевые блоки | `BotaniaBlocks.elfQuartz` и др. | ✓ так же в Botania 1.20.1 называются предметы кварца — в коде автора явный импорт блока |
 | `ModBlocks.customBrick` 3 (черепица) | `alfheim.port.legacy.botania.BotaniaBlocks1710.roofTile` (`alfheim:custom_brick3`) | ✓ в Botania 1.20.1 черепицы нет — порт вернул блок Botania 1.7.10 с его свойствами, текстурой, именем, рецептом (6 кирпичей → 4) и местом во вкладке Botania (решение автора) |
 | стена автора `livingrockBrickWall` (`livingrock1Wall`) | `BotaniaBlocks.livingrockBrickWall` | ✓ решение автора: такая же стена Botania 1.20.1 с тем же рецептом; поле автора указывает на неё, её рецепт автора и место во вкладке Alfheim убраны |
