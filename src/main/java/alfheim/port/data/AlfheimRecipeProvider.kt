@@ -3,6 +3,7 @@ package alfheim.port.data
 import alfheim.api.ModInfo.MODID
 import alfheim.common.crafting.recipe.AlfheimRecipes
 import alfheim.port.legacy.*
+import alfheim.port.legacy.botania.BotaniaBlocks1710
 import alfheim.port.registry.LegacySpecialRecipes
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -32,6 +33,7 @@ class AlfheimRecipeProvider(output: PackOutput): RecipeProvider(output) {
 
 	override fun buildRecipes(writer: Consumer<FinishedRecipe>) {
 		AlfheimRecipes // записывает рецепты автора в прослойку
+		BotaniaBlocks1710.registerRecipes() // и рецепты блоков Botania 1.7.10, которые вернул порт
 
 		val counts = HashMap<String, Int>()
 		fun id(path: String): ResourceLocation {
