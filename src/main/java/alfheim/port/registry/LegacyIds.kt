@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation
  * `blocks`, `items`, `entities`: старое имя в реестре 1.7.10 (`modid:name`) → новый id. Если вещь различалась
  * metadata — объект «metadata → новый id», ключ `*` — для любой metadata. К новому id блока можно
  * дописать свойства состояния: `alfheim:alt_wood[axis=y]`.
- * `lang`: старый ключ перевода → новый.
+ * `lang`: старый ключ перевода → новый; если у вариантов одно имя 1.7.10 — список новых ключей (тексты у них одинаковые).
  */
 object LegacyIds {
 	
@@ -24,7 +24,8 @@ object LegacyIds {
 	val blocks by lazy { section("blocks") }
 	val items by lazy { section("items") }
 	val entities by lazy { section("entities") }
-	val lang: Map<String, String> by lazy { json.getAsJsonObject("lang").entrySet().associate { (k, v) -> k to v.asString } }
+	/** Старый ключ → новый; у общего имени вариантов — первый из новых ключей: текст у них один */
+	val lang: Map<String, String> by lazy { json.getAsJsonObject("lang").entrySet().associate { (k, v) -> k to if (v.isJsonArray) v.asJsonArray[0].asString else v.asString } }
 	
 	/** Новый блок для старого имени и metadata; null, если соответствия нет */
 	fun block(oldName: String, meta: Int = 0) = find(blocks, oldName, meta)

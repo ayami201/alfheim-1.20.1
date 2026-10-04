@@ -4,9 +4,12 @@ import net.minecraft.core.BlockPos
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration
 import net.minecraft.world.phys.shapes.*
+import java.util.function.BiConsumer
 import kotlin.math.min
 
 /*
@@ -232,6 +235,12 @@ open class Block1710(material: Material): Block(material.properties()), LegacyBl
 
 	/** Свет неба 1.7.10 проходил блок с непрозрачностью 0 не ослабевая */
 	override fun propagatesSkylightDown(state: BlockState, level: BlockGetter, pos: BlockPos) = lightOpacity() == 0
+
+	/**
+	 * Дерево ванилы, выросшее на блоке, в 1.7.10 оставляло его как был: землёй становились только трава и пашня
+	 * (`onPlantGrow` Forge). 1.20.1 делает землёй всё, чего нет в теге `minecraft:dirt`
+	 */
+	override fun onTreeGrow(state: BlockState, level: LevelReader, placeFunction: BiConsumer<BlockPos, BlockState>, randomSource: RandomSource, pos: BlockPos, config: TreeConfiguration) = true
 
 	companion object: SoundTypes1710
 }

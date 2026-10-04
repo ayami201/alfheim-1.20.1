@@ -1,9 +1,12 @@
 package alfheim.port.legacy
 
+import alfheim.port.registry.LegacyRegistration
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.util.RandomSource
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.BlockGetter
@@ -14,6 +17,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration
 import net.minecraftforge.common.IPlantable
 
 /*
@@ -105,3 +109,56 @@ fun Block.onPlantGrow(world: LevelAccessor, x: Int, y: Int, z: Int, sourceX: Int
 	val state = world.getBlockState(pos)
 	if (state.`is`(Blocks.GRASS_BLOCK) || state.`is`(Blocks.FARMLAND)) world.setBlock(pos, Blocks.DIRT.defaultBlockState(), 2)
 }
+
+/**
+ * `isNormalCube(world, x, y, z)` Forge 1.7.10: блок в точке — непрозрачный полный куб, который не даёт сигнал
+ * красного камня. В 1.20.1 это `isRedstoneConductor` состояния (так метод и назывался до 1.16)
+ */
+@Suppress("UNUSED_PARAMETER")
+fun Block.isNormalCube(world: BlockGetter, x: Int, y: Int, z: Int): Boolean {
+	val pos = BlockPos(x, y, z)
+	return world.getBlockState(pos).isRedstoneConductor(world, pos)
+}
+
+/**
+ * `world.getBiomeGenForCoords(x, z).plantFlower(world, random, x, y, z)` Forge 1.7.10 — цветок биома в точке, если он
+ * там удержится. Цветы биома 1.20.1 — его цветочные узоры генерации: ставится цветок первого, как от костной муки на
+ * траве 1.20.1. Биом — в самой точке: в 1.20.1 он зависит и от высоты
+ */
+fun Level.plantFlower(random: RandomSource, x: Int, y: Int, z: Int) {
+	val level = this as? ServerLevel ?: return
+	val pos = BlockPos(x, y, z)
+	val flowers = level.getBiome(pos).value().generationSettings.flowerFeatures
+	if (flowers.isEmpty()) return
+	(flowers[0].config() as RandomPatchConfiguration).feature().value().place(level, level.chunkSource.generator, random, pos)
+}
+
+/**
+ * `canBlockStay` 1.7.10 у любого блока: удержится ли он в точке. Растение порта решает своим правилом ([Bush1710]),
+ * прочие — как `canSurvive` 1.20.1 их состояния по умолчанию
+ */
+fun Block.canBlockStay(world: Level, x: Int, y: Int, z: Int) =
+	if (this is Bush1710) canBlockStay(world, x, y, z) else defaultBlockState().canSurvive(world, BlockPos(x, y, z))
+
+/**
+ * `canPlaceBlockAt` 1.7.10 у любого блока: можно ли поставить его в точку. Двойное растение порта решает своим
+ * правилом ([DoublePlant1710]), прочие — место заменяемое и блок там удержится (`canSurvive` 1.20.1)
+ */
+fun Block.canPlaceBlockAt(world: Level, x: Int, y: Int, z: Int): Boolean {
+	if (this is DoublePlant1710) return canPlaceBlockAt(world, x, y, z)
+	val pos = BlockPos(x, y, z)
+	return world.getBlockState(pos).canBeReplaced() && defaultBlockState().canSurvive(world, pos)
+}
+
+/**
+ * Номер варианта блока в точке — metadata 1.7.10 блока, варианты которого в порту — отдельные блоки (SPEC, Р-5); у
+ * блока без вариантов — 0. Metadata-состояние (поворот, рост, половина) сюда не входит: его код блока читает из состояния
+ */
+fun BlockGetter.getBlockVariant(x: Int, y: Int, z: Int) = (getBlock(x, y, z) as? LegacyBlock)?.variant ?: 0
+
+/**
+ * `block == other` 1.7.10, когда у блока есть варианты metadata: в 1.7.10 это один блок, в порту — разные блоки с одним
+ * именем 1.7.10 (SPEC, Р-5)
+ */
+fun Block.isSameBlock1710(other: Block) =
+	this === other || LegacyRegistration.blocks[this]?.oldName.let { it != null && it == LegacyRegistration.blocks[other]?.oldName }
