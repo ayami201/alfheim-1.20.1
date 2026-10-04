@@ -22,6 +22,7 @@ object AlfheimData {
 		val output = generator.packOutput
 		val files = e.existingFileHelper
 		
+		generator.addProvider(e.includeClient(), TintedTemplates(output, files))
 		generator.addProvider(e.includeClient(), AlfheimBlockStates(output, files))
 		generator.addProvider(e.includeClient(), AlfheimItemModels(output, files))
 		generator.addProvider(e.includeServer(), LootTableProvider(output, emptySet(), listOf(LootTableProvider.SubProviderEntry(::AlfheimBlockLoot, LootContextParamSets.BLOCK))))

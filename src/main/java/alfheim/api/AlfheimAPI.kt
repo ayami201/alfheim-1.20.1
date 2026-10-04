@@ -1,8 +1,10 @@
 package alfheim.api
 
 // PORT: импорты 1.20.1 — первыми; импорты автора закомментированы до КТ, которым они нужны
+import alfheim.api.trees.*
 import net.minecraft.ChatFormatting
 import net.minecraft.world.item.*
+import net.minecraft.world.level.block.Block
 /*
 import alexsocol.asjlib.ASJUtilities
 import alfheim.api.block.tile.SubTileAnomalyBase
@@ -106,10 +108,12 @@ object AlfheimAPI {
 	val warmBlocks = mutableSetOf(Blocks.fire, Blocks.lava, Blocks.flowing_lava, Blocks.lit_furnace, Blocks.torch, Blocks.lit_pumpkin, Blocks.brewing_stand)
 	*/
 	
-	// PORT: КТ-3 — RecipeTreeCrafting; КТ-2 — IIridescentSaplingVariant, ThrowableCollidingItem
+	// PORT: КТ-3 — RecipeTreeCrafting; КТ-2 — ThrowableCollidingItem
 	/*
 	val treeRecipes: MutableList<RecipeTreeCrafting> = ArrayList()
+	*/
 	val treeVariants: MutableList<IIridescentSaplingVariant> = ArrayList()
+	/*
 	val collidingItemHashMap: MutableMap<String, ThrowableCollidingItem> = LinkedHashMap()
 	val fallbackTcl = ThrowableCollidingItem("${ModInfo.MODID}_fallback", ItemStack(Items.blaze_rod)) { _, _ -> }
 	*/
@@ -266,7 +270,7 @@ object AlfheimAPI {
 		oreWeightsAlfheim[ore] = weight
 	}
 	
-	// PORT: КТ-3 — дерево-крафтер; КТ-2 — варианты радужных саженцев, метательные предметы; КТ-3 — аномалии
+	// PORT: КТ-3 — дерево-крафтер
 	/*
 	/**
 	 * Adds a tree crafting recipe to the registry.
@@ -311,6 +315,7 @@ object AlfheimAPI {
 		treeRecipes.indices
 			.firstOrNull { ASJUtilities.isItemStackEqualCrafting(treeRecipes[it].output, result) }
 			?.let { treeRecipes.removeAt(it) }
+	*/
 	
 	/**
 	 * Adds an Iridescent Sapling variant to the registry.
@@ -321,6 +326,9 @@ object AlfheimAPI {
 	fun addTreeVariant(variant: IIridescentSaplingVariant) =
 		variant.also { treeVariants.add(it) }
 	
+	// PORT: почва, бревно и листва — массивы блоков-вариантов (SPEC, Р-5; IridescentSaplingBaseVariant); блок без
+	// вариантов — arrayOf(блок)
+	
 	/**
 	 * Adds an Iridescent Sapling variant with the specified parameters to the registry, ignoring metadata.
 	 *
@@ -329,7 +337,7 @@ object AlfheimAPI {
 	 * @param leaves - The leaves block the variant uses.
 	 * @return The variant that was added to the registry.
 	 */
-	fun addTreeVariant(soil: Block, wood: Block, leaves: Block) =
+	fun addTreeVariant(soil: Array<out Block>, wood: Array<out Block>, leaves: Array<out Block>) =
 		addTreeVariant(IridescentSaplingBaseVariant(soil, wood, leaves))
 	
 	/**
@@ -341,7 +349,7 @@ object AlfheimAPI {
 	 * @param meta   - The metadata of the soil the variant uses.
 	 * @return The variant that was added to the registry.
 	 */
-	fun addTreeVariant(soil: Block, wood: Block, leaves: Block, meta: Int) =
+	fun addTreeVariant(soil: Array<out Block>, wood: Array<out Block>, leaves: Array<out Block>, meta: Int) =
 		addTreeVariant(IridescentSaplingBaseVariant(soil, wood, leaves, meta))
 	
 	/**
@@ -354,7 +362,7 @@ object AlfheimAPI {
 	 * @param metaMax - The maximum meta value of the soil the variant uses.
 	 * @return The variant that was added to the registry.
 	 */
-	fun addTreeVariant(soil: Block, wood: Block, leaves: Block, metaMin: Int, metaMax: Int) =
+	fun addTreeVariant(soil: Array<out Block>, wood: Array<out Block>, leaves: Array<out Block>, metaMin: Int, metaMax: Int) =
 		addTreeVariant(IridescentSaplingBaseVariant(soil, wood, leaves, metaMin, metaMax))
 	
 	/**
@@ -368,14 +376,16 @@ object AlfheimAPI {
 	 * @param metaShift - The amount to subtract from the soil's metadata value to make the leaf metadata.
 	 * @return The variant that was added to the registry.
 	 */
-	fun addTreeVariant(soil: Block, wood: Block, leaves: Block, metaMin: Int, metaMax: Int, metaShift: Int) =
+	fun addTreeVariant(soil: Array<out Block>, wood: Array<out Block>, leaves: Array<out Block>, metaMin: Int, metaMax: Int, metaShift: Int) =
 		addTreeVariant(IridescentSaplingBaseVariant(soil, wood, leaves, metaMin, metaMax, metaShift))
 	
+	/* PORT: КТ-2 — ThrowableCollidingItem
 	fun registerThrowable(tcl: ThrowableCollidingItem) =
 		tcl.also { collidingItemHashMap[it.key] = it }
 	
 	fun getThrowableFromKey(key: String) =
 		collidingItemHashMap[key] ?: fallbackTcl
+	*/
 	
 	/**
 	 * Gets a list of all acceptable Iridescent Sapling soils.
@@ -400,6 +410,7 @@ object AlfheimAPI {
 	fun getTreeVariant(soil: Block, meta: Int) =
 		treeVariants.firstOrNull { it.matchesSoil(soil, meta) }
 	
+	/* PORT: КТ-3 — аномалии
 	private object FallbackAnomaly: SubTileAnomalyBase() {
 		override val targets: List<Any> = emptyList()
 		override fun performEffect(target: Any) = Unit

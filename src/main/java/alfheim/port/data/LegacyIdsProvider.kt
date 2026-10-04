@@ -3,7 +3,7 @@ package alfheim.port.data
 import alexsocol.asjlib.extendables.ItemBlockMetaName
 import alexsocol.asjlib.extendables.block.BlockModMeta
 import alfheim.api.ModInfo.MODID
-import alfheim.common.item.block.ItemBlockLeavesMod
+import alfheim.common.item.block.*
 import alfheim.port.legacy.*
 import alfheim.port.legacy.botania.*
 import alfheim.port.registry.LegacyRegistration
@@ -34,16 +34,21 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 		json.add("items", ids(LegacyRegistration.items.values))
 		json.add("entities", ids(LegacyRegistration.entities.values))
 		json.add("lang", JsonObject().apply {
+			// у вариантов с общим именем 1.7.10 (tile.alfheim:irisWood.name) старый ключ один, новых — по ключу на блок
+			val lang = LinkedHashMap<String, MutableList<String>>()
+			fun rename(old: String, new: String) = lang.getOrPut(old) { ArrayList() }.add(new)
 			for ((block, entry) in LegacyRegistration.blocks)
-				legacyLangKey(block)?.let { addProperty(it, block.descriptionId) }
+				legacyLangKey(block)?.let { rename(it, block.descriptionId) }
 			for ((item, entry) in LegacyRegistration.items)
-				legacyLangKey(item)?.let { addProperty(it, "item.${entry.id.namespace}.${entry.id.path}") }
+				legacyLangKey(item)?.let { rename(it, "item.${entry.id.namespace}.${entry.id.path}") }
 			// имя зелья 1.7.10 — ключ из setPotionName, 1.20.1 — ключ эффекта
 			for (potion in LegacyRegistration.effects.keys)
-				addProperty((potion as Potion1710).name, potion.descriptionId)
+				rename((potion as Potion1710).name, potion.descriptionId)
 			// имя существа 1.7.10 — `entity.` + имя в EntityList (`alfheim.ThrownPotion`) + `.name`, 1.20.1 — ключ типа
 			for ((type, entry) in LegacyRegistration.entities)
-				addProperty("entity.$MODID.${entry.oldName}.name", type.descriptionId)
+				rename("entity.$MODID.${entry.oldName}.name", type.descriptionId)
+			for ((old, new) in lang)
+				if (new.size == 1) addProperty(old, new[0]) else add(old, JsonArray().apply { new.forEach { add(it) } })
 		})
 		return DataProvider.saveStable(cache, json, output.outputFolder.resolve("alfheim/legacy_ids.json"))
 	}
@@ -65,15 +70,22 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 		/**
 		 * Ключ перевода предмета-блока в 1.7.10: `tile.` + имя блока; `ItemBlockMetaName` дописывал номер варианта,
 		 * `ItemBlockLeavesMod` — приставку `alfheim:`, `ItemBlockMod` и `ItemBlockModSlab` Botania — `botania:`.
-		 * Предмет 1.20.1 берёт ключ блока, поэтому старый ключ переименовывается в ключ блока
+		 * `ItemSubtypedBlockMod`, `ItemIridescentBlockMod` и `ItemSlabMod` — приставку `alfheim:` и убирали номер в конце
+		 * имени (у всех цветов одно имя), `ItemUniqueSubtypedBlockMod` — дописывал номер варианта по модулю числа видов,
+		 * `ItemMetaSlabMod` — номер варианта без бита 8. Предмет 1.20.1 берёт ключ блока, поэтому старый ключ
+		 * переименовывается в ключ блока
 		 */
 		fun legacyLangKey(block: Block): String? {
 			val legacy = block as? LegacyBlock ?: return null
 			val item = block.asItem()
 			var key = legacy.legacy.unlocalizedName
-			if (item is ItemBlockMetaName && ((block as? BlockModMeta)?.subtypes ?: 16) > 1) key += legacy.variant ?: 0
+			val variant = legacy.variant ?: 0
+			if (item is ItemBlockMetaName && ((block as? BlockModMeta)?.subtypes ?: 16) > 1) key += variant
 			if (item is ItemBlockLeavesMod) key = key.replace("tile.", "tile.$MODID:")
 			if (item is ItemBlockMod || item is ItemBlockModSlab) key = key.replace("tile.", "tile.botania:")
+			if (item is ItemSubtypedBlockMod || item is ItemIridescentBlockMod || item is ItemSlabMod) key = key.replace("tile.", "tile.$MODID:").replace(Regex("\\d+$"), "")
+			if (item is ItemUniqueSubtypedBlockMod) key = key.replace("tile.", "tile.$MODID:") + variant % item.subtypes.toInt()
+			if (item is ItemMetaSlabMod) key = key.replace("tile.", "tile.$MODID:") + (variant and 0x8.inv())
 			return "$key.name"
 		}
 

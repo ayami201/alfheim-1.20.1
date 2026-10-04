@@ -4,9 +4,12 @@ import net.minecraft.core.BlockPos
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration
 import net.minecraft.world.phys.shapes.*
+import java.util.function.BiConsumer
 import kotlin.math.min
 
 /*
@@ -48,8 +51,11 @@ class BlockProps(val material: Material) {
 	var harvestLevel = -1
 }
 
-/** Блок порта с сеттерами и свойствами 1.7.10; реализуют [Block1710] и [BlockFalling1710] */
-interface LegacyBlock {
+/**
+ * Блок порта с сеттерами и свойствами 1.7.10; реализуют [Block1710], [BlockFalling1710] и базовые классы блоков особой
+ * формы и растений. Методы 1.7.10, которые переопределяет автор, — [LegacyBlockMethods]
+ */
+interface LegacyBlock: LegacyBlockMethods {
 
 	val legacy: BlockProps
 
@@ -141,6 +147,38 @@ interface LegacyBlock {
 }
 
 /*
+ * Поля 1.7.10, которые автор пишет напрямую (`blockHardness = 2F`, `tickRandomly = true`; `stepSound` —
+ * LegacyBlockTypes.kt). Запись поля — не сеттер: `blockHardness` меняет только твёрдость, взрывоустойчивость остаётся
+ * прежней, как в 1.7.10. Расширения, а не свойства интерфейса: у Java-классов порта свойство и сеттер 1.7.10
+ * (`setTickRandomly`) с одним именем не уживаются
+ */
+
+var LegacyBlock.blockHardness: Float
+	get() = legacy.blockHardness
+	set(value) {
+		legacy.blockHardness = value
+		for (state in (this as Block).stateDefinition.possibleStates) state.destroySpeed = value
+	}
+
+var LegacyBlock.tickRandomly: Boolean
+	get() = legacy.needsRandomTick
+	set(value) {
+		legacy.needsRandomTick = value
+	}
+
+/**
+ * Блок красит класс автора: переопределяет `colorMultiplier` или `getRenderColor` 1.7.10 ([LegacyBlockMethods]). Его
+ * моделям генерация ставит tintindex, клиент красит их (alfheim.port.client.AlfheimBlockColors)
+ */
+val LegacyBlock.isTinted: Boolean
+	get() {
+		val methods = LegacyBlockMethods::class.java
+		val world = javaClass.getMethod("colorMultiplier", BlockGetter::class.java, Int::class.java, Int::class.java, Int::class.java)
+		val item = javaClass.getMethod("getRenderColor", Int::class.java)
+		return world.declaringClass != methods || item.declaringClass != methods
+	}
+
+/*
  * Сеттер 1.7.10 в цепочке после другого сеттера (`BlockX().setCreativeTab(tab).setHardness(1.5f)`): предыдущий вернул
  * Block, как в 1.7.10, — у блока порта сеттеры те же
  */
@@ -197,6 +235,12 @@ open class Block1710(material: Material): Block(material.properties()), LegacyBl
 
 	/** Свет неба 1.7.10 проходил блок с непрозрачностью 0 не ослабевая */
 	override fun propagatesSkylightDown(state: BlockState, level: BlockGetter, pos: BlockPos) = lightOpacity() == 0
+
+	/**
+	 * Дерево ванилы, выросшее на блоке, в 1.7.10 оставляло его как был: землёй становились только трава и пашня
+	 * (`onPlantGrow` Forge). 1.20.1 делает землёй всё, чего нет в теге `minecraft:dirt`
+	 */
+	override fun onTreeGrow(state: BlockState, level: LevelReader, placeFunction: BiConsumer<BlockPos, BlockState>, randomSource: RandomSource, pos: BlockPos, config: TreeConfiguration) = true
 
 	companion object: SoundTypes1710
 }

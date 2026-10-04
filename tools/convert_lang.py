@@ -11,7 +11,8 @@ src/main/resources/assets/<…>/lang/<en_us|ru_ru|zh_cn>.json.
 
 Ключи:
 - переименовываются по разделу "lang" файла src/generated/resources/alfheim/legacy_ids.json (SPEC, Р-5;
-  его строит генерация данных);
+  его строит генерация данных). Если у вариантов было одно имя (tile.alfheim:irisWood.name), новых ключей
+  список — значение получает каждый;
 - не переносятся ключи из REMOVED ниже — вещей, которых в порту нет.
 
 Имена вещей: у каждого блока и предмета из legacy_ids.json есть имя на английском и русском (ROADMAP, КТ-2),
@@ -20,8 +21,8 @@ src/main/resources/assets/<…>/lang/<en_us|ru_ru|zh_cn>.json.
 Запуск из корня репозитория:
     python3 tools/convert_lang.py           записать .json
     python3 tools/convert_lang.py --check   сверить .json с .lang (CI): число ключей = ключи автора
-                                            минус удалённые, переименования применены, файлы не правлены руками,
-                                            у каждой вещи есть имя
+                                            минус удалённые плюс лишние из списков новых ключей, переименования
+                                            применены, файлы не правлены руками, у каждой вещи есть имя
 """
 import fnmatch
 import json
@@ -88,11 +89,18 @@ def convert(entries, renames):
         if removed_reason(key):
             removed.append(key)
             continue
+        keys = [key]
         if key in renames:
             renamed.append(key)
-            key = renames[key]
-        out[key] = value
+            keys = renames[key] if isinstance(renames[key], list) else [renames[key]]
+        for new in keys:
+            out[new] = value
     return out, removed, renamed
+
+
+def extra_keys(entries, renames):
+    """Сколько ключей добавляют списки: старый ключ с n новыми даёт n − 1 лишних"""
+    return sum(len(renames[key]) - 1 for key in entries if isinstance(renames.get(key), list) and not removed_reason(key))
 
 
 def dump(data):
@@ -151,8 +159,9 @@ def main():
                     current = f.read()
                 if current != text:
                     errors.append("%s не совпадает с %s после перевода: запусти python3 tools/convert_lang.py" % (dst, src))
-                if len(json.loads(current)) != len(entries) - len(removed):
-                    errors.append("%s: ключей %d, ожидалось %d" % (dst, len(json.loads(current)), len(entries) - len(removed)))
+                expected = len(entries) - len(removed) + extra_keys(entries, renames)
+                if len(json.loads(current)) != expected:
+                    errors.append("%s: ключей %d, ожидалось %d" % (dst, len(json.loads(current)), expected))
             else:
                 os.makedirs(os.path.dirname(dst), exist_ok=True)
                 with open(dst, "w", encoding="utf-8") as f:

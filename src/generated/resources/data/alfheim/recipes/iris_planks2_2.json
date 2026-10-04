@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "alfheim:iris_wood_magenta"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "alfheim:iris_planks2"
+  }
+}

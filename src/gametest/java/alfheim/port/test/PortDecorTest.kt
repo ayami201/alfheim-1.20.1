@@ -53,8 +53,8 @@ object PortDecorTest {
 			listOf("livingwood", "dreamwood").flatMap { listOf("${it}_bark_fence", "${it}_bark_fence_gate", "${it}_fence", "${it}_fence_gate") } + listOf("dwarf_trap_door")
 		helper.assertTrue(ids.size == 88, "ids: ${ids.size}")
 		for (id in ids) helper.assertTrue(BuiltInRegistries.BLOCK.containsKey(ResourceLocation(MODID, id)), "$MODID:$id is not registered")
-		// 105 блоков партий 1 и 2 и 6 вариантов эльфийской руды партии 3
-		helper.assertTrue(LegacyRegistration.blocks.size == 111, "blocks of the author: ${LegacyRegistration.blocks.size}")
+		// 105 блоков партий 1 и 2, 6 вариантов эльфийской руды партии 3 и 130 цветных блоков партии 8а
+		helper.assertTrue(LegacyRegistration.blocks.size == 241, "blocks of the author: ${LegacyRegistration.blocks.size}")
 		helper.succeed()
 	}
 

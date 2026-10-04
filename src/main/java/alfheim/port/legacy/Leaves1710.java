@@ -1,0 +1,84 @@
+package alfheim.port.legacy;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+
+/**
+ * {@code net.minecraft.block.BlockLeaves} 1.7.10 (MAPPING.md, «Растения»): материал листвы; свет задерживает слабо, в
+ * дождь роняет капли, при «быстрой» графике рисуется сплошной — как листва 1.20.1. Бит опадания metadata (у автора —
+ * {@code decayBit()}: листва, которую поставил игрок, не опадает) — свойство {@code persistent}.
+ * <p>
+ * Опадать ли, решает метод 1.7.10 {@link #updateTick} класса автора — на случайном тике листвы, которая может опасть.
+ * Расстояние до бревна ({@code distance}) листва считает, как листва 1.20.1: по нему через неё находит бревно листва
+ * ванилы. Лут — таблица (генерация данных): с ножницами или шёлковым касанием — сама листва, иначе — что даёт
+ * {@link #getItemDropped}.
+ * <p>
+ * Класс написан на Java, как {@code BlockLeaves} 1.7.10: переопределения автора объявляют параметры кто nullable, кто
+ * нет.
+ */
+public abstract class Leaves1710 extends LeavesBlock implements LegacyBlock, SoundTypes1710 {
+
+	private final BlockProps legacy;
+
+	public Leaves1710() {
+		super(Material.leaves.properties().noOcclusion());
+		legacy = new BlockProps(Material.leaves);
+	}
+
+	@Override
+	public BlockProps getLegacy() {
+		return legacy;
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	/** {@code updateTick} 1.7.10 — опадание; у ванилы 1.7.10 своё, класс автора переопределяет */
+	public void updateTick(Level world, int x, int y, int z, RandomSource random) {
+	}
+
+	@Override
+	public boolean isRandomlyTicking(BlockState state) {
+		return !state.getValue(PERSISTENT);
+	}
+
+	@Override
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		updateTick(level, pos.getX(), pos.getY(), pos.getZ(), random);
+	}
+
+	/** Что роняет листва без ножниц ({@code getItemDropped} 1.7.10): у ванилы — саженец дуба */
+	public Item getItemDropped(int meta, RandomSource random, int fortune) {
+		return Items.OAK_SAPLING;
+	}
+
+	/** {@code quantityDropped} 1.7.10; лут листвы 1.7.10 ({@code getDrops}) его не спрашивал — у саженца свой шанс */
+	public int quantityDropped(RandomSource random) {
+		return random.nextInt(20) == 0 ? 1 : 0;
+	}
+
+	@Override
+	public float getExplosionResistance() {
+		return legacy.getBlockResistance() / 5f;
+	}
+
+	@Override
+	public float getFriction() {
+		return legacy.getSlipperiness();
+	}
+
+	@Override
+	public SoundType getSoundType(BlockState state) {
+		SoundType sound = legacy.getStepSound();
+		return sound != null ? sound : SoundType.STONE;
+	}
+}

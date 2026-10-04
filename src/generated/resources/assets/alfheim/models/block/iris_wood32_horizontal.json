@@ -1,0 +1,7 @@
+{
+  "parent": "alfheim:block/tinted_cube_column_horizontal",
+  "textures": {
+    "end": "alfheim:blocks/iris_wood3_top",
+    "side": "alfheim:blocks/iris_wood3_side"
+  }
+}

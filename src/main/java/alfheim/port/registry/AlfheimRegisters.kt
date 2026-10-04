@@ -51,8 +51,8 @@ object AlfheimRegisters {
 		LegacySpecialRecipes.register(bus)
 		// модели, лут, теги, рецепты и legacy_ids.json — генерация данных (./gradlew runData)
 		AlfheimData.register(bus)
-		// модели блоков и предметов, которые 1.7.10 выбирал в коде, цвета предметов и рендер существ — только на клиенте
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT) { Runnable { AlfheimModels.register(bus); AlfheimItemColors.register(bus); AlfheimEntityRenderers.register(bus) } }
+		// модели блоков и предметов, которые 1.7.10 выбирал в коде, цвета блоков и предметов и рендер существ — только на клиенте
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT) { Runnable { AlfheimModels.register(bus); AlfheimBlockColors.register(bus); AlfheimItemColors.register(bus); AlfheimEntityRenderers.register(bus) } }
 		
 		for (register in listOf(BLOCKS, ITEMS, BLOCK_ENTITY_TYPES, ENTITY_TYPES, MOB_EFFECTS, SOUND_EVENTS, CREATIVE_MODE_TABS, RECIPE_SERIALIZERS))
 			register.register(bus)

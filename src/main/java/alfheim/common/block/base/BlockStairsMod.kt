@@ -2,6 +2,7 @@ package alfheim.common.block.base
 
 // PORT: импорты 1.20.1; BlockStairs 1.7.10 — Stairs1710 (MAPPING.md, «Блоки и предметы»)
 import alfheim.common.core.util.AlfheimTab
+import alfheim.common.item.block.ItemIridescentBlockMod
 import alfheim.port.legacy.*
 import net.minecraft.world.level.block.Block
 
@@ -26,9 +27,7 @@ abstract class BlockStairsMod(val source: Block, val meta: Int, val name: String
 	}
 	
 	open fun register() {
-		// PORT: КТ-2 — ItemIridescentBlockMod переносится с цветными деревьями; блоки этой партии переопределяют register
-//		GameRegistry.registerBlock(this, ItemIridescentBlockMod::class.java, name)
-		throw IllegalStateException("ItemIridescentBlockMod is not ported yet: $name")
+		GameRegistry.registerBlock(this, ItemIridescentBlockMod::class.java, name)
 	}
 	
 }

@@ -6,6 +6,21 @@ import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks.alfStorage
 import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.elvenSand
+import alfheim.common.block.AlfheimBlocks.irisDirt
+import alfheim.common.block.AlfheimBlocks.irisGrass
+import alfheim.common.block.AlfheimBlocks.irisLamp
+import alfheim.common.block.AlfheimBlocks.irisLeaves0
+import alfheim.common.block.AlfheimBlocks.irisLeaves1
+import alfheim.common.block.AlfheimBlocks.irisPlanks
+import alfheim.common.block.AlfheimBlocks.irisSapling
+import alfheim.common.block.AlfheimBlocks.irisSlabs
+import alfheim.common.block.AlfheimBlocks.irisStairs
+import alfheim.common.block.AlfheimBlocks.irisTallGrass0
+import alfheim.common.block.AlfheimBlocks.irisTallGrass1
+import alfheim.common.block.AlfheimBlocks.irisWood0
+import alfheim.common.block.AlfheimBlocks.irisWood1
+import alfheim.common.block.AlfheimBlocks.irisWood2
+import alfheim.common.block.AlfheimBlocks.irisWood3
 import alfheim.common.block.AlfheimBlocks.livingcobble
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFenceGate
@@ -125,21 +140,6 @@ import alfheim.common.block.AlfheimBlocks.gaiaButton
 import alfheim.common.block.AlfheimBlocks.grapesRed
 import alfheim.common.block.AlfheimBlocks.grapesWhite
 import alfheim.common.block.AlfheimBlocks.icicle
-import alfheim.common.block.AlfheimBlocks.irisDirt
-import alfheim.common.block.AlfheimBlocks.irisGrass
-import alfheim.common.block.AlfheimBlocks.irisLamp
-import alfheim.common.block.AlfheimBlocks.irisLeaves0
-import alfheim.common.block.AlfheimBlocks.irisLeaves1
-import alfheim.common.block.AlfheimBlocks.irisPlanks
-import alfheim.common.block.AlfheimBlocks.irisSapling
-import alfheim.common.block.AlfheimBlocks.irisSlabs
-import alfheim.common.block.AlfheimBlocks.irisStairs
-import alfheim.common.block.AlfheimBlocks.irisTallGrass0
-import alfheim.common.block.AlfheimBlocks.irisTallGrass1
-import alfheim.common.block.AlfheimBlocks.irisWood0
-import alfheim.common.block.AlfheimBlocks.irisWood1
-import alfheim.common.block.AlfheimBlocks.irisWood2
-import alfheim.common.block.AlfheimBlocks.irisWood3
 import alfheim.common.block.AlfheimBlocks.itemDisplay
 import alfheim.common.block.AlfheimBlocks.kindling
 import alfheim.common.block.AlfheimBlocks.lightningLeaves
@@ -483,7 +483,9 @@ object AlfheimTab {
 		*/
 		/* PORT: КТ-2
 		addBlock(amplifier)
+		*/
 		addBlock(irisLamp)
+		/* PORT: КТ-2
 		addBlock(kindling)
 		*/
 		addBlock(alfStorage)
@@ -836,53 +838,52 @@ object AlfheimTab {
 		addItem(carver)
 		*/
 		
-		/* PORT: КТ-2
+		// PORT: строки «//» — КТ-2: радужные и авроровые блоки, субспейсиан — партия 8б, семена ириса — со своими предметами
 		addBlock(irisDirt)
-		addBlock(rainbowDirt)
-		addBlock(auroraDirt)
+//		addBlock(rainbowDirt)
+//		addBlock(auroraDirt)
 		
 		addBlock(irisWood0)
 		addBlock(irisWood1)
 		addBlock(irisWood2)
 		addBlock(irisWood3)
-		addBlock(rainbowWood)
-		addBlock(auroraWood)
+//		addBlock(rainbowWood)
+//		addBlock(auroraWood)
 		
 		addBlock(irisPlanks)
-		addBlock(rainbowPlanks)
-		addBlock(auroraPlanks)
+//		addBlock(rainbowPlanks)
+//		addBlock(auroraPlanks)
 		
 		irisStairs.forEach { addBlock(it) }
-		addBlock(rainbowStairs)
-		addBlock(auroraStairs)
+//		addBlock(rainbowStairs)
+//		addBlock(auroraStairs)
 		
 		irisSlabs.forEach { addBlock(it) }
-		addBlock(rainbowSlab)
-		addBlock(auroraSlab)
+//		addBlock(rainbowSlab)
+//		addBlock(auroraSlab)
 		
 		addBlock(irisLeaves0)
 		addBlock(irisLeaves1)
-		addBlock(rainbowLeaves)
-		addBlock(auroraLeaves)
+//		addBlock(rainbowLeaves)
+//		addBlock(auroraLeaves)
 		
 		addBlock(irisGrass)
-		addBlock(rainbowGrass, 0)
-		addBlock(rainbowGrass, 1)
+//		addBlock(rainbowGrass, 0)
+//		addBlock(rainbowGrass, 1)
 		
 		addBlock(irisTallGrass0)
 		addBlock(irisTallGrass1)
-		addBlock(rainbowTallGrass, 0)
-		addBlock(rainbowTallGrass, 1)
+//		addBlock(rainbowTallGrass, 0)
+//		addBlock(rainbowTallGrass, 1)
 		
-		addBlock(rainbowTallFlower)
-		addBlock(rainbowGrass, 2)
-		addBlock(rainbowGrass, 3)
-		addBlock(rainbowMushroom)
-		addBlock(subspacian)
+//		addBlock(rainbowTallFlower)
+//		addBlock(rainbowGrass, 2)
+//		addBlock(rainbowGrass, 3)
+//		addBlock(rainbowMushroom)
+//		addBlock(subspacian)
 		
 		addBlock(irisSapling)
-		addItem(irisSeeds)
-		*/
+//		addItem(irisSeeds)
 		/* PORT: КТ-3
 		addItem(starPlacer)
 		addItem(starPlacer2)

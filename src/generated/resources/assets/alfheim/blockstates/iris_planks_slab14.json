@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/iris_planks_slab14"
+    },
+    "type=double": {
+      "model": "alfheim:block/iris_planks14"
+    },
+    "type=top": {
+      "model": "alfheim:block/iris_planks_slab14_top"
+    }
+  }
+}

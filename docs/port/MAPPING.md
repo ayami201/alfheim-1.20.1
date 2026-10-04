@@ -41,7 +41,7 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 |---|---|---|
 | `blocks`, `items`, `entities` | старое имя в реестре 1.7.10, `modid:name` | новый id; если вещь различалась metadata — объект `{"0": …, "1": …}`, ключ `"*"` — любая metadata |
 | | | к id блока можно дописать свойства состояния: `"alfheim:alt_wood[axis=y]"` |
-| `lang` | старый ключ перевода | новый ключ (`block.alfheim.<id>`, `item.alfheim.<id>`, `effect.alfheim.<id>`); применяет `tools/convert_lang.py` |
+| `lang` | старый ключ перевода | новый ключ (`block.alfheim.<id>`, `item.alfheim.<id>`, `effect.alfheim.<id>`); применяет `tools/convert_lang.py`. Если у вариантов было одно имя 1.7.10 (`tile.alfheim:irisWood.name`) — список новых ключей, текст получает каждый |
 
 Старый ключ предмета-блока: `tile.` + имя из `setBlockName`; `ItemBlockMetaName` дописывал номер варианта,
 `ItemBlockLeavesMod` — приставку `alfheim:` (`tile.alfheim:ElvenSand.name`). В 1.20.1 у предмета-блока ключ блока,
@@ -93,6 +93,8 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `Block.onBlockActivated` | `use` | |
 | `updateTick` | `tick` / `randomTick` | |
 | `onNeighborBlockChange` | `neighborChanged` | |
+| `onBlockAdded` | `onPlace` | ✓ 1.20.1 зовёт его и при смене состояния того же блока: код автора, который сверяет metadata, просто ничего не меняет |
+| `getLightValue(world, x, y, z)` — свечение по metadata | свечение состояний (`lightEmission`), записанное с создания блока по тому же правилу | ✓ `BlockColoredLamp`: свойство `power` |
 | `breakBlock` | `onRemove` | |
 | `getDrops` | таблица лута (datagen) | |
 | `TileEntity` | `BlockEntity` + `BlockEntityType` | |
@@ -150,6 +152,11 @@ Metadata поворота и половины (лестницы, плиты, с�
 | поворот столба в metadata (`BlockModRotatedPillar`: `meta and 12`, `onBlockPlaced`) | свойство состояния `axis`, `getStateForPlacement` — по стороне, на которую ставят | ✓ модель — как у бревна (`cube_column`, `cube_column_horizontal`) |
 | `IFuelHandler`, топливо | деревянный блок порта (материал `wood`) горит 300 тиков — `alfheim.port.legacy.Fuel1710` | ✓ печь 1.7.10 проверяла материал раньше обработчиков модов; обработчик топлива предмета — в КТ своего предмета |
 | `Block.stepSound` чужого блока | расширение `Block.stepSound` прослойки | ✓ у блока порта и блока Botania 1.7.10 (`Botania1710`) |
+| `Block.unlocalizedName` чужого блока (`source.unlocalizedName` у плит и лестниц) | расширение `Block.unlocalizedName` прослойки | ✓ `tile.` + имя из `setBlockName` |
+| `block == other`, когда у блока есть варианты metadata | `isSameBlock1710(other)` прослойки: в порту варианты — разные блоки с одним именем 1.7.10 | ✓ |
+| `world.getBlockMetadata(x, y, z)` у блока-варианта | `getBlockVariant(x, y, z)` прослойки — номер варианта блока в точке | ✓ metadata-состояние (поворот, рост, половина) — в состоянии блока, его читает код блока |
+| `ItemSubtypedBlockMod`, `ItemIridescentBlockMod`, `ItemSlabMod` — имя без номера варианта | ключ блока; старый ключ без номера → ключи всех блоков этого имени (`legacy_ids.json`, раздел `lang`) | ✓ текст у всех вариантов один, как в 1.7.10; цвет — в подсказке, как у автора |
+| `ItemSlab` 1.7.10 (одинарную плиту на одинарную ставил предмет) | обычный предмет-блок: плиты складывает сама плита 1.20.1 | ✓ |
 | `getIcon(world, x, y, z, side)` — иконка по координатам и стороне | модели вариантов; клиент выбирает грань по той же формуле (`alfheim.port.client.AlfheimModels`) | ✓ `BlockLivingCobble`, `BlockLivingMountain` и его плита |
 | текстура, которую автор грузил `InterpolatedIconHelper` (Botania `InterpolatedIcon`) | `"interpolate": true` в `.png.mcmeta` | ✓ `InterpolatedIcon` сглаживал кадры всегда; у части файлов автора ключ `"interpolated"` (1.7.10 его не читал) — исправляется на `"interpolate"` при переносе. У текстуры, которую автор грузил обычной иконкой, ключ `"interpolated"` остаётся: её кадры и в 1.7.10 не сглаживались (`netherwood_twig`) |
 
@@ -177,10 +184,42 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `stack.displayName` | `stack.hoverName.string` | ✓ `ItemStack.getDisplayName` 1.20.1 — другой метод (имя в скобках), он закрывает свойство прослойки |
 | `IFuelHandler.getBurnTime(fuel)` предмета | `getBurnTime(stack, recipeType)` предмета зовёт метод автора | ✓ |
 | `commandSenderName` игрока | `gameProfile.name` | ✓ |
-| `EntitySheep.fleeceColorTable` | `alfheim.port.legacy.Sheep1710.fleeceColorTable` | ✓ таблица 1.7.10: цвета красителей 1.20.1 другие |
+| `EntitySheep.fleeceColorTable` | `alfheim.port.legacy.Sheep1710.fleeceColorTable`; где строк с таблицей много — `import alfheim.port.legacy.Sheep1710 as EntitySheep` | ✓ таблица 1.7.10: цвета красителей 1.20.1 другие |
 | иконка на праздник (`AlfheimCore.jingleTheBells`) | вторая модель; нужную подставляет клиент при сборке моделей (`AlfheimModels`) | ✓ |
 | `getItemDropped` / `damageDropped` / `quantityDropped` блока | таблица лута из генерации данных по методам автора (`AlfheimBlockLoot`); `getItemDropped` возвращает предмет 1.20.1 | ✓ формула удачи 1.7.10 — `ApplyBonusCount.addOreBonusCount`; при взрыве каждая вещь — с шансом 1 / сила взрыва (`explosion_decay`) |
 | `getExpDrop(world, meta, fortune)` | `getExpDrop(state, level, random, pos, fortune, silkTouch)` зовёт метод автора; с шёлковым касанием — 0 | ✓ так считал опыт Forge 1.7.10 (`BlockEvent.BreakEvent`) |
+
+## Растения
+
+Растения, листва и деревья 1.7.10 — базовые классы порта `alfheim.port.legacy` поверх растений 1.20.1 той же формы:
+`Bush1710` (`BlockBush`, поверх `BushBlock`), `Sapling1710` (`BlockSapling`), `TallGrass1710` (`BlockTallGrass`),
+`DoublePlant1710` (`BlockDoublePlant`, поверх `DoublePlantBlock`), `Leaves1710` (`BlockLeaves`, поверх `LeavesBlock`),
+`WorldGenerator` и `WorldGenAbstractTree` (генераторы деревьев). Методы 1.7.10, которые переопределяет автор
+(`updateTick`, `canBlockStay`, `checkAndDropBlock`, `func_149851_a` …), остаются у автора как были; базовый класс
+вызывает их из методов 1.20.1. Проверяет GameTest `PortPlantsTest`.
+
+| Было | Стало | Примечание |
+|---|---|---|
+| `BlockBush` | `Bush1710` (`BushBlock`) | ✓ стоит, пока блок снизу держит растение (`canBlockStay`: `canSustainPlant` блока снизу); без опоры — лут и воздух (флаг 2); столкновений нет; рамка 0,3–0,7 по сторонам и 0,6 в высоту; тики случайные |
+| `canPlaceBlockAt` и `canBlockStay` растения | одно правило 1.20.1 — `canSurvive` (`Bush1710`: `canBlockStay` автора) | ✓ 1.7.10 при установке ещё требовал заменяемое место и `canSustainPlant` блока снизу — у растений автора это то же самое |
+| `updateTick` растения | и случайный (`randomTick`), и запланированный (`tick`) тик | ✓ |
+| `IGrowable`: `func_149851_a`, `func_149852_a`, `func_149853_b` | `IGrowable` прослойки (`BonemealableBlock`): `isValidBonemealTarget`, `isBonemealSuccess`, `performBonemeal` | ✓ имена методов автора те же; костная мука тратится, если удобрить можно, как в 1.7.10 |
+| `BlockSapling`, бит 8 metadata («готов расти») | `Sapling1710`, свойство `stage` | ✓ рамка 0,1–0,9 и 0,8; мука срабатывает с шансом 0,45 |
+| `BlockTallGrass` | `TallGrass1710` | ✓ материал лиан: заменяемая, горит; рамка 0,1–0,9 и 0,8. Лут — таблица: с ножницами — сама трава (`onSheared`), иначе с шансом 1/8 — пшеничные семена (`ForgeHooks.getGrassSeed`), удача не влияет. Семена других модов (`MinecraftForge.addGrassSeed` 1.7.10) в 1.20.1 добавляются модификаторами к таблице травы ванилы — к траве автора они не относятся. Не смещается: 1.7.10 смещал только траву ванилы |
+| `BlockDoublePlant`, бит 8 metadata (верхняя половина) | `DoublePlant1710` (`DoublePlantBlock`), свойство `half` | ✓ обе половины ставит `DoublePlantBlock.placeAt` 1.20.1, ломает 1.20.1: вторая половина исчезает без лута. Заменяемы только варианты 2 и 3, как в 1.7.10; костная мука — копия растения, кроме вариантов 2 и 3 |
+| смещение двойного растения при рисовании (`RenderBlocks.renderBlockDoublePlant`, `RenderBlockColoredDoubleGrass`) | `offsetFunction` состояний `DoublePlant1710` (открыт в `accesstransformer.cfg`) | ✓ ±0,15 блока по хэшу x и z — тому же, что у `Mth.getSeed`; у растений 1.20.1 — ±0,25 |
+| `BlockLeaves`, бит опадания metadata (`decayBit()`) | `Leaves1710` (`LeavesBlock`), свойство `persistent` | ✓ листва, которую поставил игрок, — `persistent`, как бит опадания от `ItemBlock.getMetadata` 1.7.10. Опадает по алгоритму автора (`updateTick`) на случайном тике; расстояние до бревна (`distance`) 1.20.1 считает сама — по нему листва ванилы находит бревно через листву автора. Держит воду, как листва 1.20.1: механика формы — 1.20.1, как у плит и лестниц |
+| лут листвы 1.7.10 (`getDrops`, `IShearable`) | таблица: с ножницами или шёлковым касанием — сама листва, иначе — `getItemDropped` с шансом по удаче | ✓ шансы автора (`BlockLeavesMod`), взрыв лут не уменьшает (`dropBlockAsItemWithChance` с шансом 1) |
+| листва при «быстрой» графике (`setGraphicsLevel`, иконка `_opaque`) | модель листвы и модель `_opaque`; при «быстрой» графике квадраты берутся из `_opaque` (`alfheim.port.client.AlfheimModels`) | ✓ сплошной или с отсечением листву рисует 1.20.1 по той же настройке |
+| `isLeaves`, `canSustainLeaves`, `isWood` | теги `minecraft:leaves` (вся листва порта — `Leaves1710`), `minecraft:logs` (Ore Dictionary `logWood`) | ✓ по этим тегам листву и брёвна находят и листва ванилы, и прослойка (`World.kt`) |
+| `beginLeavesDecay` — бревно сообщает соседней листве, что пора проверить опадание | не нужен | ✓ листва 1.20.1 пересчитывает расстояние сама, когда бревно убрали; у листвы автора `beginLeavesDecay` пустой |
+| `WorldGenerator.generate(world, random, x, y, z)`, `setBlockAndNotifyAdequately(…, meta)` | `WorldGenerator` прослойки; блок ставится с флагами 3 (генератор создан с `notify`) или 2 | ✓ metadata — 0: вариант — сам блок (SPEC, Р-5) |
+| `TerrainGen.saplingGrowTree` | `ForgeEventFactory.blockGrowFeature`: `DENY` — дерево не растёт | ✓ |
+| `onPlantGrow` (под выросшим деревом трава и пашня → земля) | `Block.onPlantGrow` прослойки; дерево ванилы на блоке порта — `onTreeGrow` блока = true | ✓ в 1.7.10 дерево меняло на землю только траву и пашню; 1.20.1 меняет всё, чего нет в `minecraft:dirt` |
+| высота мира 0–255 в генераторах | `minBuildHeight`, `maxBuildHeight` мира | ✓ мир 1.20.1 — от −64 до 320 |
+| `BiomeGenBase.plantFlower` (`world.getBiomeGenForCoords(x, z).plantFlower(…)`) | `Level.plantFlower(random, x, y, z)` прослойки | ✓ цветы биома 1.20.1 — его цветочные узоры генерации; ставится цветок первого, как от костной муки на траве 1.20.1 |
+| цвет блока (`getRenderColor`, `colorMultiplier`) | цвет блока на клиенте (`alfheim.port.client.AlfheimBlockColors`); модели — окрашенные копии шаблонов ванилы (`alfheim.port.data.TintedTemplates`), листва — `block/leaves`, крест — `block/tinted_cross` | ✓ metadata в `colorMultiplier` — номер варианта блока; у двойного растения у обеих половин он один. Предмет-блок 1.7.10 красил объёмную модель `getRenderColor` блока по metadata предмета (`ItemBlock` прослойки) |
+| `IIridescentSaplingVariant`, `addTreeVariant(soil, wood, leaves, …)` | те же имена; почва, бревно и листва — массивы блоков-вариантов, блок без вариантов — `arrayOf(блок)` | ✓ номер варианта почвы — её индекс в массиве; `getWood` и `getLeaves` отдают сам блок варианта, `getMeta` — 0 |
 
 ## Ore Dictionary
 
@@ -207,6 +246,9 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `essenceMuspelheim`, `essenceNiflheim`, `furFenrir`, `runePrimalA`, `runeMuspelheimA`, `runeNiflheimA`, `twigDreamwoodInfused` | `alfheim:<имя в snake_case>` | ✓ |
 | `twigThunderwood`, `splinterThunderwood`, `twigNetherwood`, `splinterNetherwood`, `coalFlame` | `alfheim:<имя в snake_case>` | ✓ |
 | `dyeRainbow`, `dyeFloralPowder`, `petalRainbow`, `quartzRainbow`, `petalMystic` | `alfheim:<имя в snake_case>` | ✓ в `dyeRainbow` — и блок радужного моста Botania |
+| `logWood`, `plankWood`, `slabWood`, `stairWood`, `treeSapling`, `treeLeaves` | `minecraft:logs`, `minecraft:planks`, `minecraft:wooden_slabs`, `minecraft:wooden_stairs`, `minecraft:saplings`, `minecraft:leaves` | ✓ имена Forge 1.7.10 для дерева: по ним брёвна держат листву, а доски идут в рецепты ванилы (палки, верстак, сундук), как рецепты Forge 1.7.10 с `plankWood` |
+| `irisWood`, `irisLeaves`, `irisDirt` и они же с цветом (`irisWoodWhite` …) | `alfheim:iris_wood`, `alfheim:iris_wood_white` … | ✓ |
+| `registerOre(name, block)`, `registerOre(name, item)` | `registerOre` прослойки: вещь блока или предмета | ✓ в 1.7.10 — с любой metadata; вариант в порту — свой блок |
 
 Имена, которые автор берёт у Forge и Botania 1.7.10, в рецептах переводит таблица `Ingredients1710.ore`
 (`alfheim.port.legacy.Recipes1710`): имя Forge — общий тег Forge или ванилы 1.20.1, если он есть, иначе предмет;
@@ -282,6 +324,11 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `player.capabilities.isCreativeMode` / `isFlying` / `allowFlying` / `disableDamage` | как есть — `Abilities` 1.20.1: `instabuild` / `flying` / `mayfly` / `invulnerable` (`Player1710`) | ✓ |
 | `GameRegistry.findUniqueIdentifierFor(block \| item).toString()` | как есть — ключ реестра (`modid:name`) | ✓ |
 | `nbt.hasNoTags()`, `world.removeTileEntity(x, y, z)` | `isEmpty`, `removeBlockEntity(pos)` | ✓ |
+| `checkChunksExist(…)`, `getBlockLightValue(x, y, z)`, `getStrongestIndirectPower(x, y, z)` | `hasChunksAt`, `getMaxLocalRawBrightness`, `getBestNeighborSignal` | ✓ |
+| `block.canSustainPlant(world, x, y, z, direction, plantable)`, `isLeaves`, `canSustainLeaves`, `isAir`, `isReplaceable`, `onPlantGrow`, `isNormalCube(world, x, y, z)` | у состояния в точке: `canSustainPlant`, теги `minecraft:leaves` и `minecraft:logs`, `isAir`, `canBeReplaced`, трава и пашня → земля, `isRedstoneConductor` | ✓ `isNormalCube` до 1.16 и назывался так |
+| `block.canBlockStay(world, x, y, z)`, `block.canPlaceBlockAt(world, x, y, z)` у любого блока | растение порта — своё правило (`Bush1710`, `DoublePlant1710`), прочие — `canSurvive` (и заменяемое место) | ✓ |
+| `world.getBiomeGenForCoords(x, z).plantFlower(world, random, x, y, z)` | `world.plantFlower(random, x, y, z)` | ✓ раздел «Растения» |
+| `GameRegistry.registerFuelHandler(handler)` | `Fuel1710.handlers` | ✓ раздел «Блоки и предметы» |
 
 ## Предметы, сущности, эффекты
 
@@ -297,7 +344,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `mountEntity(entity)` | `startRiding(entity, true)` | ✓ 1.7.10 сажал без проверок, кроме кольца из всадников; `force = true` — так же |
 | `EntityTameable.isTamed`, `func_152115_b(uuidString)` | `isTame`, `setOwnerUUID(uuid)` | ✓ |
 | `Items.stick`, `Blocks.grass` и др. | `Items.STICK`, `Blocks.GRASS_BLOCK` и др. | поля ванилы в 1.20.1 — заглавными; имя проверять по смыслу |
-| `Blocks.planks` 5, `Items.dye` 4 | `Blocks.DARK_OAK_PLANKS`, `Items.LAPIS_LAZULI` | ✓ вариант ванилы 1.7.10 — отдельный предмет 1.20.1 |
+| `Blocks.planks` 5, `Items.dye` 4, `Items.coal` 1 | `Blocks.DARK_OAK_PLANKS`, `Items.LAPIS_LAZULI`, `Items.CHARCOAL` | ✓ вариант ванилы 1.7.10 — отдельный предмет 1.20.1 |
 | `Items.skull` 3, `Items.cooked_fished` 0 | `Items.PLAYER_HEAD`, `Items.COOKED_COD` | ✓ |
 | `World` в сигнатурах автора | `import net.minecraft.world.level.Level as World` | ✓ |
 | `entityInit` + `DataWatcher` | `defineSynchedData` + `SynchedEntityData` | ✓ номер ячейки → ключ `SynchedEntityData.defineId(Класс::class.java, EntityDataSerializers.…)` в `companion object` класса; `addObject(n, v)` → `define(KEY, v)`, `getWatchableObject…(n)` / `updateObject(n, v)` → `get(KEY)` / `set(KEY, v)`; `setObjectWatched` не нужен |
@@ -391,6 +438,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 |---|---|---|
 | `Tessellator`, `GL11` | `PoseStack`, `MultiBufferSource`, `VertexConsumer`, `RenderType`, `RenderSystem` | |
 | `ISimpleBlockRenderingHandler` | JSON-модель, BakedModel или BlockEntityRenderer | SPEC, Р-13 |
+| рендер двойного растения автора (`RenderBlockColoredDoubleGrass`): крест половин с цветом нижней | окрашенные кресты половин из генерации данных; смещение по X и Z — `DoublePlant1710` | ✓ раздел «Растения» |
 | `IItemRenderer` | `BlockEntityWithoutLevelRenderer` через `IClientItemExtensions` | |
 | `ModelBase` / `ModelRenderer` | `EntityModel` / `ModelPart` + `LayerDefinition` | размеры, опоры, UV — авторские |
 | `RenderingRegistry.registerEntityRenderingHandler` | `EntityRenderersEvent.RegisterRenderers` (`alfheim.port.client.AlfheimEntityRenderers`) | ✓ событие идёт раньше postInit, где автор регистрировал рендер, поэтому пары «существо — рендер» собраны там; строки в `ClientProxy` помечены. У каждого существа нужен рендер: без него клиент падает |
