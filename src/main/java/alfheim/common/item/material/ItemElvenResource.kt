@@ -5,6 +5,8 @@ package alfheim.common.item.material
 import alexsocol.asjlib.*
 import alfheim.AlfheimCore
 import alfheim.api.*
+import alfheim.common.block.AlfheimBlocks
+import alfheim.common.block.colored.rainbow.BlockRainbowGrass
 import alfheim.common.item.*
 import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.common.item.material.ElvenResourcesMetas.Companion.of
@@ -20,12 +22,12 @@ import net.minecraft.world.entity.player.Player as EntityPlayer
 import net.minecraft.world.item.*
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.Level as World
+import vazkii.botania.common.lib.BotaniaTags
 import java.awt.Color
 import kotlin.math.sin
 //import alexsocol.patcher.asm.hook.ASJSuperWrapperHandler
 //import alfheim.api.lib.LibOreDict
 //import alfheim.common.block.*
-//import alfheim.common.block.colored.rainbow.BlockRainbowGrass
 //import alfheim.common.block.tile.*
 //import alfheim.common.block.tile.TileKudzuVine.Companion.EnumMutation
 //import alfheim.common.core.handler.*
@@ -378,19 +380,24 @@ class ItemElvenResource(val meta: Int): ItemMod("ElvenItems")/*, IElvenItem, IFl
 	
 	override fun getItemStackLimit(stack: ItemStack) = if (stack.meta in singles) 1 else 64
 	
-	/* PORT: КТ-3 — бассейн маны, композит и кудзу; КТ-2 — радужный цветок и закопанный лепесток (цветные блоки);
-	   КТ-6 — призыв Гайи в Альвхейме
+	// PORT: КТ-3 — бассейн маны, композит и кудзу; КТ-6 — призыв Гайи в Альвхейме: их ветки ниже закомментированы
 	override fun onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean {
 		val block = world.getBlock(x, y, z)
+		/*
 		// Fabulous manapool
 		if (block === ModBlocks.pool && world.getBlockMetadata(x, y, z) == 0 && stack.meta == RainbowDust.I) {
 			world.setBlockMetadataWithNotify(x, y, z, 3, 2)
 			stack.stackSize--
 			return true
 		} else
+		*/
 		// Rainbow flower
-		if (block === ModBlocks.flower && stack.meta == RainbowDust.I) {
-			world.setBlock(x, y, z, AlfheimBlocks.rainbowGrass, BlockRainbowGrass.FLOWER, 3)
+		// PORT: мистический цветок Botania (ModBlocks.flower) — 16 блоков с тегом botania:mystical_flowers; вариант радужной
+		// травы — блок массива (SPEC, Р-5)
+		if (block.defaultBlockState().`is`(BotaniaTags.Blocks.MYSTICAL_FLOWERS) && stack.meta == RainbowDust.I) {
+//		if (block === ModBlocks.flower && stack.meta == RainbowDust.I) {
+			world.setBlock(x, y, z, AlfheimBlocks.rainbowGrass[BlockRainbowGrass.FLOWER].defaultBlockState(), 3)
+//			world.setBlock(x, y, z, AlfheimBlocks.rainbowGrass, BlockRainbowGrass.FLOWER, 3)
 			for (i in 0..40) {
 				val color = Color.getHSBColor(Math.random().F + 1f / 2f, 1f, 1f)
 				Botania.proxy.wispFX(world,
@@ -399,16 +406,21 @@ class ItemElvenResource(val meta: Int): ItemMod("ElvenItems")/*, IElvenItem, IFl
 									 0.5f, 0f, 0.125f, 0f)
 			}
 			world.playSoundEffect(x.D, y.D, z.D, "botania:enchanterEnchant", 1f, 1f)
-			stack.stackSize--
+			stack.shrink(1)
+//			stack.stackSize--
 			return true
 		} else
 		// Burying petal
-		if (side == 1 && world.getBlock(x, y + 1, z).isAir(world, x, y + 1, z) && AlfheimBlocks.rainbowGrass.canBlockStay(world, x, y + 1, z) && stack.meta == RainbowPetal.I) {
-			if (!world.setBlock(x, y + 1, z, AlfheimBlocks.rainbowGrass, BlockRainbowGrass.BURIED, 3)) return false
+		if (side == 1 && world.getBlock(x, y + 1, z).isAir(world, x, y + 1, z) && AlfheimBlocks.rainbowGrass[BlockRainbowGrass.BURIED].canBlockStay(world, x, y + 1, z) && stack.meta == RainbowPetal.I) {
+//		if (side == 1 && world.getBlock(x, y + 1, z).isAir(world, x, y + 1, z) && AlfheimBlocks.rainbowGrass.canBlockStay(world, x, y + 1, z) && stack.meta == RainbowPetal.I) {
+			if (!world.setBlock(x, y + 1, z, AlfheimBlocks.rainbowGrass[BlockRainbowGrass.BURIED].defaultBlockState(), 3)) return false
+//			if (!world.setBlock(x, y + 1, z, AlfheimBlocks.rainbowGrass, BlockRainbowGrass.BURIED, 3)) return false
 			
-			stack.stackSize--
+			stack.shrink(1)
+//			stack.stackSize--
 			return true
 		} else
+		/*
 		// summon Gaia in Alfheim
 		if (block inl LibOreDict.beacons && stack.meta == ElvoriumIngot.I) {
 			return if (world.provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim) {
@@ -436,10 +448,10 @@ class ItemElvenResource(val meta: Int): ItemMod("ElvenItems")/*, IElvenItem, IFl
 			stack.stackSize--
 			return true
 		}
+		*/
 		return false
 	}
 	
-	*/
 	
 	/* PORT: КТ-3 — радужная овца (LensPaintExtender)
 	override fun itemInteractionForEntity(stack: ItemStack, player: EntityPlayer?, sheep: EntityLivingBase?): Boolean {

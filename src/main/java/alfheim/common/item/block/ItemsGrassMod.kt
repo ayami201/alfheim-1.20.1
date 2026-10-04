@@ -3,6 +3,7 @@ package alfheim.common.item.block
 // PORT: импорты 1.20.1; цвета шерсти 1.7.10 — Sheep1710
 import alexsocol.asjlib.meta
 import alfheim.api.ModInfo
+import alfheim.common.block.colored.rainbow.BlockRainbowGrass
 import alfheim.port.legacy.*
 import alfheim.port.legacy.Sheep1710 as EntitySheep
 import net.minecraft.network.chat.Component
@@ -52,17 +53,22 @@ open class ItemIridescentTallGrassMod0(par2Block: Block): ItemSubtypedBlockMod(p
 	}
 }
 
-/* PORT: КТ-2, партия 8б — радужная трава (BlockRainbowGrass), радужные двойные растения
+// PORT: ключ имени предмета-блока — ключ блока; старый ключ с номером варианта (tile.alfheim:rainbowGrass2.name)
+// переименован по legacy_ids.json (alfheim.port.data.LegacyIdsProvider). metadata вещи — номер варианта её блока
 open class ItemRainbowGrassMod(var par2Block: Block): ItemBlockWithMetadata(par2Block, par2Block) {
 	
+	/*
 	override fun getUnlocalizedNameInefficiently(par1ItemStack: ItemStack) =
 		super.getUnlocalizedNameInefficiently(par1ItemStack).replace("tile.", "tile.${ModInfo.MODID}:") + par1ItemStack.meta
+	*/
 	
-	fun addStringToTooltip(s: String, tooltip: MutableList<Any?>?) {
-		tooltip!!.add(s.replace("&".toRegex(), "\u00a7"))
+	// PORT: строка подсказки 1.20.1 — Component
+	fun addStringToTooltip(s: String, tooltip: MutableList<Component>?) {
+		tooltip!!.add(Component.literal(s.replace("&".toRegex(), "\u00a7")))
 	}
 	
-	override fun addInformation(par1ItemStack: ItemStack?, par2EntityPlayer: EntityPlayer?, par3List: MutableList<Any?>?, par4: Boolean) {
+	// PORT: addInformation → appendHoverText
+	override fun appendHoverText(par1ItemStack: ItemStack?, par2World: World?, par3List: MutableList<Component>, par4: TooltipFlag) {
 		if (par1ItemStack == null) return
 		val meta = par1ItemStack.meta
 		if (meta == BlockRainbowGrass.GRASS || meta == BlockRainbowGrass.AURORA)
@@ -72,9 +78,9 @@ open class ItemRainbowGrassMod(var par2Block: Block): ItemBlockWithMetadata(par2
 
 open class ItemRainbowDoubleGrassMod(par2Block: Block): ItemRainbowGrassMod(par2Block) {
 	
-	override fun getIcon(stack: ItemStack, pass: Int) = (par2Block as IDoublePlant).getTopIcon(stack.meta)
+	// PORT: иконка — модель предмета (alfheim.port.data.AlfheimBlockStates): верхняя половина растения
+//	override fun getIcon(stack: ItemStack, pass: Int) = (par2Block as IDoublePlant).getTopIcon(stack.meta)
 }
-*/
 
 open class ItemIridescentTallGrassMod1(par2Block: Block): ItemIridescentTallGrassMod0(par2Block) {
 	

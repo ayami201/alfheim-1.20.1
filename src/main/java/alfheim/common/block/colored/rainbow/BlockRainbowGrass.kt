@@ -1,43 +1,35 @@
 package alfheim.common.block.colored.rainbow
 
+// PORT: импорты 1.20.1; BlockTallGrass 1.7.10 — alfheim.port.legacy.TallGrass1710 (MAPPING.md, «Растения»); прокси
+// Botania 1.7.10 — alfheim.port.legacy.botania.Botania
 import alexsocol.asjlib.*
-import alfheim.client.core.helper.InterpolatedIconHelper
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.colored.BlockAuroraDirt
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.*
 import alfheim.common.item.block.ItemRainbowGrassMod
-import alfheim.common.item.material.ElvenResourcesMetas
-import alfheim.common.lexicon.AlfheimLexiconData
-import cpw.mods.fml.common.Optional
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.*
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.*
-import net.minecraft.util.IIcon
-import net.minecraft.world.*
-import net.minecraftforge.client.event.TextureStitchEvent
-import net.minecraftforge.common.MinecraftForge
-import thaumcraft.api.crafting.IInfusionStabiliser
-import vazkii.botania.api.lexicon.ILexiconable
-import vazkii.botania.common.Botania
-import vazkii.botania.common.achievement.*
-import vazkii.botania.common.block.ModBlocks
-import vazkii.botania.common.core.handler.ConfigHandler
-import vazkii.botania.common.lexicon.LexiconData
+import alfheim.port.legacy.*
+import alfheim.port.legacy.botania.Botania
+import net.minecraft.core.BlockPos
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.BlockGetter as IBlockAccess
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.*
+import net.minecraftforge.api.distmarker.*
+import vazkii.botania.xplat.BotaniaConfig
 import java.awt.Color
-import java.util.*
 
-@Optional.Interface(modid = "Thaumcraft", iface = "thaumcraft.api.crafting.IInfusionStabiliser", striprefs = true)
-class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement, IInfusionStabiliser {
+// PORT: вариант metadata — отдельный блок (SPEC, Р-5): номер варианта — meta (GRASS … BURIED ниже), создают массивом
+// `Array(5) { BlockRainbowGrass(it) }`. Thaumcraft выпал (SPEC, п. 7) — IInfusionStabiliser; КТ-9 — лексикон
+// (ILexiconable); IPickupAchievement — ниже, у getAchievementOnPickup
+//@Optional.Interface(modid = "Thaumcraft", iface = "thaumcraft.api.crafting.IInfusionStabiliser", striprefs = true)
+class BlockRainbowGrass(val meta: Int): TallGrass1710()/*, ILexiconable, IPickupAchievement, IInfusionStabiliser*/ {
 	
-	var flowerIcon: IIcon? = null
-	var glowingIcon: IIcon? = null
+	// PORT: иконки вариантов → модели (alfheim.port.data.AlfheimBlockStates); анимация — .mcmeta
+//	var flowerIcon: IIcon? = null
+//	var glowingIcon: IIcon? = null
+	
+	override val variant get() = meta
 	
 	companion object {
 		
@@ -52,16 +44,24 @@ class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement, IIn
 		setBlockName("rainbowGrass")
 		setCreativeTab(AlfheimTab)
 		setStepSound(soundTypeGrass)
-		if (ASJUtilities.isClient)
-			MinecraftForge.EVENT_BUS.register(this)
+		// PORT: анимированные текстуры 1.20.1 рисует сама по .mcmeta; подписка на TextureStitchEvent не нужна
+//		if (ASJUtilities.isClient)
+//			MinecraftForge.EVENT_BUS.register(this)
+		
+		// PORT: рамка и свечение по metadata у варианта постоянные — пишутся при создании блока (ниже)
+		setBlockBoundsBasedOnState()
+		for (state in stateDefinition.possibleStates) state.lightEmission = getLightValue()
 	}
 	
-	override fun canStabaliseInfusion(world: World, x: Int, y: Int, z: Int): Boolean {
-		return if (world.getBlockMetadata(x, y, z) == GLIMMER) ConfigHandler.enableThaumcraftStablizers else false
-	}
+	// PORT: Thaumcraft выпал (SPEC, п. 7)
+//	override fun canStabaliseInfusion(world: World, x: Int, y: Int, z: Int): Boolean {
+//		return if (world.getBlockMetadata(x, y, z) == GLIMMER) ConfigHandler.enableThaumcraftStablizers else false
+//	}
 	
-	override fun setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int) {
-		when (world.getBlockMetadata(x, y, z)) {
+	fun setBlockBoundsBasedOnState() {
+		when (meta) {
+//	override fun setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int) {
+//		when (world.getBlockMetadata(x, y, z)) {
 			GRASS, AURORA   -> setBlockBounds(0.1f, 0f, 0.1f, 0.9f, 0.8f, 0.9f)
 			FLOWER, GLIMMER -> setBlockBounds(0.3f, 0f, 0.3f, 0.8f, 1f, 0.8f)
 			BURIED          -> setBlockBounds(0f, 0f, 0f, 1f, 0.1f, 1f)
@@ -70,14 +70,18 @@ class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement, IIn
 	}
 	
 	override fun randomDisplayTick(world: World, x: Int, y: Int, z: Int, rand: Random) {
-		val meta = world.getBlockMetadata(x, y, z)
+		// PORT: metadata — номер варианта блока (SPEC, Р-5)
+		val meta = this.meta
+//		val meta = world.getBlockMetadata(x, y, z)
 		val color = Color(ItemIridescent.rainbowColor())
 		
 		Botania.proxy.setSparkleFXNoClip(true)
 		
 		when (meta) {
 			FLOWER, GLIMMER -> {
-				if (rand.nextDouble() < ConfigHandler.flowerParticleFrequency)
+				// PORT: настройка клиента Botania 1.20.1
+				if (rand.nextDouble() < BotaniaConfig.client().flowerParticleFrequency())
+//				if (rand.nextDouble() < ConfigHandler.flowerParticleFrequency)
 					Botania.proxy.sparkleFX(world, x.D + 0.3 + rand.nextFloat() * 0.5, y.D + 0.5 + rand.nextFloat() * 0.5, z.D + 0.3 + rand.nextFloat() * 0.5, color.red / 255f, color.green / 255f, color.blue / 255f, rand.nextFloat(), 5)
 			}
 			
@@ -87,39 +91,48 @@ class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement, IIn
 		Botania.proxy.setSparkleFXNoClip(false)
 	}
 	
-	override fun getLightValue(world: IBlockAccess, x: Int, y: Int, z: Int) = when (world.getBlockMetadata(x, y, z)) {
+	fun getLightValue() = when (meta) {
+//	override fun getLightValue(world: IBlockAccess, x: Int, y: Int, z: Int) = when (world.getBlockMetadata(x, y, z)) {
 		GLIMMER -> 15
 		BURIED  -> 3
 		else    -> 0
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun getBlockColor() = 0xFFFFFF
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun getRenderColor(meta: Int) = 0xFFFFFF
 	
-	@SideOnly(Side.CLIENT)
-	override fun colorMultiplier(world: IBlockAccess, x: Int, y: Int, z: Int) = if (world.getBlockMetadata(x, y, z) == AURORA) BlockAuroraDirt.getBlockColor(x, y, z) else 0xFFFFFF
+	// PORT: metadata — номер варианта блока (SPEC, Р-5)
+	@OnlyIn(Dist.CLIENT)
+	override fun colorMultiplier(world: IBlockAccess, x: Int, y: Int, z: Int) = if (meta == AURORA) BlockAuroraDirt.getBlockColor(x, y, z) else 0xFFFFFF
+//	override fun colorMultiplier(world: IBlockAccess, x: Int, y: Int, z: Int) = if (world.getBlockMetadata(x, y, z) == AURORA) BlockAuroraDirt.getBlockColor(x, y, z) else 0xFFFFFF
 	
 	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, remote: Boolean): Boolean {
-		val meta = world.getBlockMetadata(x, y, z)
+		val meta = this.meta
+//		val meta = world.getBlockMetadata(x, y, z)
 		return meta == GRASS || meta == AURORA || meta == FLOWER || meta == BURIED
 	}
 	
 	override fun func_149853_b(world: World, random: Random, x: Int, y: Int, z: Int) {
-		var meta = world.getBlockMetadata(x, y, z)
+		var meta = this.meta
+//		var meta = world.getBlockMetadata(x, y, z)
 		if (meta == GRASS || meta == AURORA || meta == FLOWER || meta == BURIED) {
-			var block = AlfheimBlocks.rainbowTallGrass
+			// PORT: двойная трава — массив вариантов (SPEC, Р-5); у двойного цветка вариант один, metadata FLOWER (2) в нём не
+			// хранится (BUGS.md, «Уже не воспроизводится в порту»). Обе половины ставит DoublePlantBlock.placeAt, флаги те же
+			var block = AlfheimBlocks.rainbowTallGrass.getOrNull(meta)
+//			var block = AlfheimBlocks.rainbowTallGrass
 			
 			if (meta == FLOWER || meta == BURIED) {
 				block = AlfheimBlocks.rainbowTallFlower
 				meta = FLOWER
 			}
 			
-			if (block.canPlaceBlockAt(world, x, y, z)) {
-				world.setBlock(x, y, z, block, meta, 2)
-				world.setBlock(x, y + 1, z, block, 8, 2)
+			if (block!!.canPlaceBlockAt(world, x, y, z)) {
+				DoublePlantBlock.placeAt(world, block.defaultBlockState(), BlockPos(x, y, z), 2)
+//				world.setBlock(x, y, z, block, meta, 2)
+//				world.setBlock(x, y + 1, z, block, 8, 2)
 			}
 		}
 	}
@@ -133,6 +146,8 @@ class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement, IIn
 		return super.setBlockName(par1Str)
 	}
 	
+	/* PORT: лут — таблица варианта (alfheim.port.data.AlfheimBlockLoot): трава и авроровая трава — как трава (с ножницами —
+	   сама, иначе семена), цветок и мерцающий цветок — сами, закопанные лепестки — радужный лепесток
 	override fun getDrops(world: World?, x: Int, y: Int, z: Int, meta: Int, fortune: Int): ArrayList<ItemStack>? {
 		return when (meta) {
 			GRASS, AURORA -> super.getDrops(world, x, y, z, meta, fortune)
@@ -158,6 +173,11 @@ class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement, IIn
 		meta == GRASS || meta == AURORA
 	}
 	
+	*/
+	
+	/* PORT: варианты во вкладке — отдельные блоки (AlfheimTab); иконки → модели вариантов (alfheim.port.data.AlfheimBlockStates):
+	   авроровая трава — текстура травы ириса, закопанные лепестки — без граней, одни искры: текстура закопанных лепестков
+	   Botania 1.7.10 полностью прозрачная, как и модель Botania 1.20.1
 	override fun getSubBlocks(item: Item?, tab: CreativeTabs?, list: MutableList<Any?>) {
 		for (i in 0..3)
 			list.add(ItemStack(item, 1, i))
@@ -186,7 +206,9 @@ class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement, IIn
 			else    -> blockIcon
 		}
 	}
+	*/
 	
+	/* PORT: КТ-9 — лексикон
 	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, stack: ItemStack?) =
 		when (world.getBlockMetadata(x, y, z)) {
 			GRASS, AURORA  -> AlfheimLexiconData.pastoralSeeds
@@ -194,6 +216,9 @@ class BlockRainbowGrass: BlockTallGrass(), ILexiconable, IPickupAchievement, IIn
 			GLIMMER        -> LexiconData.shinyFlowers
 			else           -> null
 		}
+	*/
 	
-	override fun getAchievementOnPickup(stack: ItemStack, player: EntityPlayer?, item: EntityItem?) = if (stack.meta == FLOWER) ModAchievements.flowerPickup else null
+	// PORT: в 1.7.10 не срабатывало: Botania спрашивает IPickupAchievement у предмета, а предмет травы
+	// (ItemRainbowGrassMod) его не реализует — достижения за подобранный радужный цветок не было (BUGS.md)
+//	override fun getAchievementOnPickup(stack: ItemStack, player: EntityPlayer?, item: EntityItem?) = if (stack.meta == FLOWER) ModAchievements.flowerPickup else null
 }

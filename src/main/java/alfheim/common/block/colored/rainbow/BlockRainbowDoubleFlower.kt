@@ -1,45 +1,35 @@
 package alfheim.common.block.colored.rainbow
 
-import alexsocol.asjlib.*
-import alfheim.api.lib.LibRenderIDs
-import alfheim.client.core.helper.InterpolatedIconHelper
+// PORT: импорты 1.20.1; BlockDoublePlant 1.7.10 — alfheim.port.legacy.DoublePlant1710 (MAPPING.md, «Растения»)
 import alfheim.common.block.base.IDoublePlant
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.ItemRainbowDoubleGrassMod
-import alfheim.common.lexicon.AlfheimLexiconData
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.*
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.*
-import net.minecraft.item.*
-import net.minecraft.stats.StatList
-import net.minecraft.util.IIcon
-import net.minecraft.world.*
-import net.minecraftforge.client.event.TextureStitchEvent
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.event.ForgeEventFactory
-import vazkii.botania.api.lexicon.ILexiconable
-import java.util.*
+import alfheim.port.legacy.*
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.BlockGetter as IBlockAccess
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.Block
+import net.minecraftforge.api.distmarker.*
 
-class BlockRainbowDoubleFlower: BlockDoublePlant(), ILexiconable, IDoublePlant {
+// PORT: верхняя половина (бит 8 metadata) — свойство half (DoublePlant1710). КТ-9 — лексикон (ILexiconable)
+class BlockRainbowDoubleFlower: DoublePlant1710(), IDoublePlant/*, ILexiconable*/ {
 	
 	val name = "rainbowDoubleFlower"
-	lateinit var topFlowerIcon: IIcon
-	lateinit var bottomFlowerIcon: IIcon
+	// PORT: иконки половин → модели (alfheim.port.data.AlfheimBlockStates): низ — rainbowDoubleFlower, верх —
+	// rainbowDoubleFlowerTop
+//	lateinit var topFlowerIcon: IIcon
+//	lateinit var bottomFlowerIcon: IIcon
 	
 	init {
 		setBlockNameSafe(name)
 		setCreativeTab(AlfheimTab)
 		setStepSound(soundTypeGrass)
-		if (ASJUtilities.isClient)
-			MinecraftForge.EVENT_BUS.register(this)
+		// PORT: анимированные текстуры 1.20.1 рисует сама по .mcmeta; подписка на TextureStitchEvent не нужна
+//		if (ASJUtilities.isClient)
+//			MinecraftForge.EVENT_BUS.register(this)
 	}
 	
+	/* PORT: иконки → модели (alfheim.port.data.AlfheimBlockStates); анимация — .mcmeta
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	fun loadTextures(event: TextureStitchEvent.Pre) {
@@ -48,6 +38,7 @@ class BlockRainbowDoubleFlower: BlockDoublePlant(), ILexiconable, IDoublePlant {
 			bottomFlowerIcon = InterpolatedIconHelper.forBlock(event.map, this)
 		}
 	}
+	*/
 	
 	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, isRemote: Boolean) = false
 	
@@ -62,17 +53,20 @@ class BlockRainbowDoubleFlower: BlockDoublePlant(), ILexiconable, IDoublePlant {
 		return super.setBlockName(par1Str)
 	}
 	
-	override fun setBlockName(par1Str: String) = null
+	// PORT: setBlockName прослойки возвращает блок — null не вернуть; имя ставит setBlockNameSafe, как у автора
+	override fun setBlockName(par1Str: String) = this
+//	override fun setBlockName(par1Str: String) = null
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun getBlockColor() = 0xFFFFFF
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun getRenderColor(meta: Int) = 0xFFFFFF
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	override fun colorMultiplier(world: IBlockAccess, x: Int, y: Int, z: Int) = 0xFFFFFF
 	
+	/* PORT: блок во вкладке — AlfheimTab; иконки → модели половин и предмета (alfheim.port.data.AlfheimBlockStates)
 	override fun getSubBlocks(item: Item?, tab: CreativeTabs?, list: MutableList<Any?>) {
 		list.add(ItemStack(item))
 	}
@@ -85,7 +79,12 @@ class BlockRainbowDoubleFlower: BlockDoublePlant(), ILexiconable, IDoublePlant {
 	
 	@SideOnly(Side.CLIENT)
 	override fun func_149888_a(top: Boolean, index: Int) = if (top) getTopIcon(index) else getBottomIcon(index)
+	*/
 	
+	/* PORT: поломку обеих половин ведёт DoublePlantBlock 1.20.1: вторая половина исчезает без лута, в творческом режиме
+	   нижняя тоже ничего не роняет (onBlockHarvested ниже). Лут — таблица (alfheim.port.data.AlfheimBlockLoot): с
+	   ножницами — сам цветок (onSheared), без них ничего (getItemDropped = null); шёлковое касание двойное растение 1.7.10
+	   не брало (canSilkHarvest: не обычный куб). Рисует модель (getRenderType)
 	override fun harvestBlock(world: World, player: EntityPlayer, x: Int, y: Int, z: Int, meta: Int) {
 		if (world.isRemote || player.currentEquippedItem == null || player.currentEquippedItem.item !== Items.shears || func_149887_c(meta)/*|| !dropBlock(world, x, y, z, meta, player)*/) {
 			superSuperHarvestBlock(world, player, x, y, z, meta)
@@ -153,10 +152,14 @@ class BlockRainbowDoubleFlower: BlockDoublePlant(), ILexiconable, IDoublePlant {
 	override fun getRenderType() = LibRenderIDs.idDoubleFlower
 	
 	override fun isShearable(item: ItemStack, world: IBlockAccess, x: Int, y: Int, z: Int) = true
+	*/
 	
-	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, stack: ItemStack?) = AlfheimLexiconData.rainbowFlora
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer?, stack: ItemStack?) = AlfheimLexiconData.rainbowFlora
 	
+	/* PORT: иконки половин → модели (alfheim.port.data.AlfheimBlockStates)
 	override fun getBottomIcon(lowerMeta: Int) = bottomFlowerIcon
 	
 	override fun getTopIcon(lowerMeta: Int) = topFlowerIcon
+	*/
 }

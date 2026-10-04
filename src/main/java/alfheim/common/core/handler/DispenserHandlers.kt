@@ -14,11 +14,11 @@ import net.minecraft.world.level.block.DispenserBlock
 import net.minecraft.world.level.block.LiquidBlock
 import net.minecraft.world.level.block.entity.DispenserBlockEntity as TileEntityDispenser
 import vazkii.botania.common.item.BotaniaItems as ModItems
-//import alfheim.common.block.AlfheimBlocks
-//import alfheim.common.item.material.ElvenResourcesMetas
+import alfheim.common.block.AlfheimBlocks
+import alfheim.common.item.material.ElvenResourcesMetas
+import vazkii.botania.common.lib.BotaniaTags
 //import vazkii.botania.common.block.ModBlocks
 
-/* PORT: КТ-2 — с радужной травой (block/colored): раздатчик сажает её из радужной пыли на цветок Botania
 /**
  * @author WireSegal
  * Created at 9:28 PM on 2/15/16.
@@ -27,27 +27,37 @@ object BifrostFlowerDispenserHandler: IBehaviorDispenseItem {
 	
 	private val defaultBehavior = BehaviorDefaultDispenseItem()
 	
+	// PORT: реестр поведения раздатчика 1.20.1 — DispenserBlock.registerBehavior; вариант metadata — отдельный предмет
+	// (SPEC, Р-5): поведение — у каждого эльфийского ресурса, как у предмета 1.7.10 со всеми metadata
 	init {
-		BlockDispenser.dispenseBehaviorRegistry.putObject(AlfheimItems.elvenResource, this)
+		AlfheimItems.elvenResource.forEach { DispenserBlock.registerBehavior(it, this) }
+//		BlockDispenser.dispenseBehaviorRegistry.putObject(AlfheimItems.elvenResource, this)
 	}
 	
-	override fun dispense(block: IBlockSource, stack: ItemStack): ItemStack? {
+	// PORT: сторона раздатчика 1.20.1 — в состоянии блока, а не в metadata; номера сторон те же
+	override fun dispense(block: IBlockSource, stack: ItemStack): ItemStack {
+//	override fun dispense(block: IBlockSource, stack: ItemStack): ItemStack? {
 		if (stack.meta != ElvenResourcesMetas.RainbowDust.I) return defaultBehavior.dispense(block, stack)
 		
-		val facing = ForgeDirection.getOrientation(BlockDispenser.func_149937_b(block.blockMetadata).ordinal)
+		val facing = ForgeDirection.getOrientation(block.blockState.getValue(DispenserBlock.FACING).ordinal)
+//		val facing = ForgeDirection.getOrientation(BlockDispenser.func_149937_b(block.blockMetadata).ordinal)
 		val x = block.xInt + facing.offsetX
 		val y = block.yInt + facing.offsetY
 		val z = block.zInt + facing.offsetZ
 		
-		if (block.world.getBlock(x, y, z) !== ModBlocks.flower) return stack
+		// PORT: мистический цветок Botania (ModBlocks.flower) — 16 блоков с тегом botania:mystical_flowers; вариант радужной
+		// травы — блок массива (SPEC, Р-5)
+		if (!block.world.getBlock(x, y, z).defaultBlockState().`is`(BotaniaTags.Blocks.MYSTICAL_FLOWERS)) return stack
+//		if (block.world.getBlock(x, y, z) !== ModBlocks.flower) return stack
 		
-		block.world.setBlock(x, y, z, AlfheimBlocks.rainbowGrass, 2, 3)
+		block.world.setBlock(x, y, z, AlfheimBlocks.rainbowGrass[2].defaultBlockState(), 3)
+//		block.world.setBlock(x, y, z, AlfheimBlocks.rainbowGrass, 2, 3)
 		block.world.playSoundEffect(x.D, y.D, z.D, "botania:enchanterEnchant", 1f, 1f)
-		stack.stackSize--
+		stack.shrink(1)
+//		stack.stackSize--
 		return stack
 	}
 }
-*/
 
 object ThrownPotionDispenserHandler: IBehaviorDispenseItem {
 	

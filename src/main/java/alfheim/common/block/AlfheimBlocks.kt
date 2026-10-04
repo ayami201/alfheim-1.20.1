@@ -122,15 +122,15 @@ object AlfheimBlocks {
 	val rainbowDirt: Block
 //	val rainbowFlame: Block // PORT: КТ-3
 //	val rainbowFlowerFloating: Block // PORT: КТ-3
-//	val rainbowGrass: Block // PORT: КТ-2
+	val rainbowGrass: Array<Block>
 	val rainbowLeaves: Block
 //	val rainbowMushroom: Block // PORT: КТ-2
 	val rainbowPlanks: Block
 	val rainbowSlab: Block
 	val rainbowSlabFull: Block
 	val rainbowStairs: Block
-//	val rainbowTallGrass: Block // PORT: КТ-2
-//	val rainbowTallFlower: Block // PORT: КТ-2
+	val rainbowTallGrass: Array<Block>
+	val rainbowTallFlower: Block
 	val rainbowWood: Block
 //	val realityAnchor: Block // PORT: КТ-3
 //	val redFlame: Block // PORT: КТ-2
@@ -319,7 +319,7 @@ object AlfheimBlocks {
 //		rainbowFlame = BlockRainbowManaFlame() // PORT: КТ-3
 //		rainbowFlowerFloating = BlockFloatingFlowerRainbow() // PORT: КТ-3
 		rainbowLeaves = BlockRainbowLeaves()
-//		rainbowGrass = BlockRainbowGrass() // PORT: КТ-2
+		rainbowGrass = Array(5) { BlockRainbowGrass(it) }
 //		rainbowMushroom = BlockRainbowMushroom() // PORT: КТ-2
 		rainbowPlanks = BlockRainbowPlanks()
 		rainbowSlab = BlockRainbowWoodSlab(false)
@@ -328,8 +328,8 @@ object AlfheimBlocks {
 		rainbowSlab.register()
 //		rainbowSlabFull.register()
 		rainbowStairs = BlockRainbowWoodStairs()
-//		rainbowTallGrass = BlockRainbowDoubleGrass() // PORT: КТ-2
-//		rainbowTallFlower = BlockRainbowDoubleFlower() // PORT: КТ-2
+		rainbowTallGrass = Array(2) { BlockRainbowDoubleGrass(it) }
+		rainbowTallFlower = BlockRainbowDoubleFlower()
 		rainbowWood = BlockRainbowWood()
 //		realityAnchor = BlockRealityAnchor() // PORT: КТ-3
 //		redFlame = BlockRedFlame() // PORT: КТ-2
@@ -531,8 +531,10 @@ object AlfheimBlocks {
 		
 		// ################
 		
-//		registerOre(LibOreDict.RAINBOW_FLOWER, ItemStack(rainbowGrass, 1, 2)) // PORT: КТ-2
-//		registerOre(LibOreDict.RAINBOW_DOUBLE_FLOWER, ItemStack(rainbowTallFlower)) // PORT: КТ-2
+		// PORT: вариант metadata — блок массива (SPEC, Р-5)
+		registerOre(LibOreDict.RAINBOW_FLOWER, ItemStack(rainbowGrass[2], 1))
+//		registerOre(LibOreDict.RAINBOW_FLOWER, ItemStack(rainbowGrass, 1, 2))
+		registerOre(LibOreDict.RAINBOW_DOUBLE_FLOWER, ItemStack(rainbowTallFlower))
 		
 //		registerOre(LibOreDict.MUSHROOM, ItemStack(ModBlocks.mushroom, 1, WILDCARD_VALUE)) // PORT: КТ-3
 //		registerOre(LibOreDict.MUSHROOM, ItemStack(rainbowMushroom)) // PORT: КТ-2
@@ -792,13 +794,16 @@ object AlfheimBlocks {
 //		setBurnable(lightningStairs, 5, 20) // PORT: КТ-2
 //		setBurnable(lightningWood, 5, 5) // PORT: КТ-2
 		
-//		setBurnable(rainbowGrass, 60, 100) // PORT: КТ-2
+		// PORT: блок с вариантами metadata — массив блоков (SPEC, Р-5): горит каждый вариант
+		rainbowGrass.forEach { setBurnable(it, 60, 100) }
+//		setBurnable(rainbowGrass, 60, 100)
 		setBurnable(rainbowLeaves, 30, 60)
 		setBurnable(rainbowPlanks, 5, 20)
 		setBurnable(rainbowSlab, 5, 20)
 		setBurnable(rainbowSlabFull, 5, 20)
 		setBurnable(rainbowStairs, 5, 20)
-//		setBurnable(rainbowTallGrass, 60, 100) // PORT: КТ-2
+		rainbowTallGrass.forEach { setBurnable(it, 60, 100) }
+//		setBurnable(rainbowTallGrass, 60, 100)
 		setBurnable(rainbowWood, 5, 5)
 		
 //		setBurnable(sealingLeaves, 30, 60) // PORT: КТ-2

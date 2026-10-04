@@ -29,10 +29,13 @@ import alfheim.common.block.AlfheimBlocks.irisWood2
 import alfheim.common.block.AlfheimBlocks.irisWood3
 import alfheim.common.block.AlfheimBlocks.livingcobble
 import alfheim.common.block.AlfheimBlocks.rainbowDirt
+import alfheim.common.block.AlfheimBlocks.rainbowGrass
 import alfheim.common.block.AlfheimBlocks.rainbowLeaves
 import alfheim.common.block.AlfheimBlocks.rainbowPlanks
 import alfheim.common.block.AlfheimBlocks.rainbowSlab
 import alfheim.common.block.AlfheimBlocks.rainbowStairs
+import alfheim.common.block.AlfheimBlocks.rainbowTallFlower
+import alfheim.common.block.AlfheimBlocks.rainbowTallGrass
 import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFenceGate
@@ -869,17 +872,17 @@ object AlfheimTab {
 		addBlock(auroraLeaves)
 		
 		addBlock(irisGrass)
-//		addBlock(rainbowGrass, 0)
-//		addBlock(rainbowGrass, 1)
+		addBlock(rainbowGrass, 0)
+		addBlock(rainbowGrass, 1)
 		
 		addBlock(irisTallGrass0)
 		addBlock(irisTallGrass1)
-//		addBlock(rainbowTallGrass, 0)
-//		addBlock(rainbowTallGrass, 1)
+		addBlock(rainbowTallGrass, 0)
+		addBlock(rainbowTallGrass, 1)
 		
-//		addBlock(rainbowTallFlower)
-//		addBlock(rainbowGrass, 2)
-//		addBlock(rainbowGrass, 3)
+		addBlock(rainbowTallFlower)
+		addBlock(rainbowGrass, 2)
+		addBlock(rainbowGrass, 3)
 //		addBlock(rainbowMushroom)
 //		addBlock(subspacian)
 		
@@ -928,6 +931,11 @@ object AlfheimTab {
 	// PORT: блок с вариантами metadata — массив блоков (SPEC, Р-5); getSubBlocks выдавал все варианты по порядку
 	fun addBlock(blocks: Array<Block>) {
 		blocks.forEach { addBlock(it) }
+	}
+	
+	// PORT: вариант metadata блока — блок массива (SPEC, Р-5)
+	fun addBlock(blocks: Array<Block>, meta: Int) {
+		addBlock(blocks[meta])
 	}
 	
 	// PORT: getSubItems — у предмета порта (Item1710); прочие выдают одну вещь
