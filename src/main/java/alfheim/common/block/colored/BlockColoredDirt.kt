@@ -53,8 +53,8 @@ class BlockColoredDirt(val meta: Int): BlockMod(Material.ground), IGrowable/*, I
 					k1 += random.nextInt(3) - 1
 					
 					// PORT: this 1.7.10 — цветная земля любого цвета: варианты в порту — разные блоки (isSameBlock1710);
-					// isNormalCube — с координатами (World.kt). КТ-2, партия 8б — радужная и авроровая земля
-					if ((world.getBlock(i1, j1 - 1, k1).isSameBlock1710(this)/* || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.rainbowDirt || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.auroraDirt*/) && !world.getBlock(i1, j1, k1).isNormalCube(world, i1, j1, k1)) {
+					// isNormalCube — с координатами (World.kt)
+					if ((world.getBlock(i1, j1 - 1, k1).isSameBlock1710(this) || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.rainbowDirt || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.auroraDirt) && !world.getBlock(i1, j1, k1).isNormalCube(world, i1, j1, k1)) {
 //					if ((world.getBlock(i1, j1 - 1, k1) == this || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.rainbowDirt || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.auroraDirt) && !world.getBlock(i1, j1, k1).isNormalCube) {
 						++l1
 						continue

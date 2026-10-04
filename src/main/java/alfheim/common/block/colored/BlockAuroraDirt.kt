@@ -1,25 +1,25 @@
 package alfheim.common.block.colored
 
+// PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md); ChunkCoordinates 1.7.10 — BlockPos
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.base.BlockMod
 import alfheim.common.item.block.ItemBlockAurora
-import alfheim.common.lexicon.AlfheimLexiconData
-import cpw.mods.fml.common.registry.GameRegistry
-import net.minecraft.block.*
-import net.minecraft.block.material.Material
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.util.ChunkCoordinates
-import net.minecraft.world.*
+import alfheim.port.legacy.*
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction as ForgeDirection
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.BlockGetter as IBlockAccess
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraftforge.api.distmarker.*
 import net.minecraftforge.common.IPlantable
-import net.minecraftforge.common.util.ForgeDirection
-import vazkii.botania.api.lexicon.ILexiconable
-import java.util.*
 import kotlin.math.roundToInt
 
-class BlockAuroraDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
+// PORT: КТ-9 — лексикон (ILexiconable)
+class BlockAuroraDirt: BlockMod(Material.ground), IGrowable/*, ILexiconable*/ {
 	
 	companion object {
 		private fun fromVec(vec: ChunkCoordinates): Int = (((vec.posX + 256) % 256) shl 16) or (((vec.posY + 256) % 256) shl 8) or ((vec.posZ + 256) % 256)
@@ -87,7 +87,10 @@ class BlockAuroraDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
 		
 		fun getBlockColor(x: Int, y: Int, z: Int) = fromVec(fromPos(x, y, z))
 		
-		fun getItemColor() = fromPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ)
+		// PORT-FIX: игрок клиента есть только на клиенте; без пометки выделенный сервер падал бы при загрузке класса
+		@OnlyIn(Dist.CLIENT)
+		fun getItemColor() = fromPos(mc.player!!.posX, mc.player!!.posY, mc.player!!.posZ)
+//		fun getItemColor() = fromPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ)
 	}
 	
 	init {
@@ -101,7 +104,9 @@ class BlockAuroraDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
 //		addToTooltip(tooltip, "misc.${LibMisc.MOD_ID}.color.aurora")
 //	}
 	
-	override fun isFertile(world: World?, x: Int, y: Int, z: Int) = true
+	// PORT: в 1.20.1 плодородие почвы спрашивают по состоянию и BlockPos
+	override fun isFertile(state: BlockState, world: IBlockAccess, pos: BlockPos) = true
+//	override fun isFertile(world: World?, x: Int, y: Int, z: Int) = true
 	
 	override fun shouldRegisterInNameSet() = false
 	
@@ -112,13 +117,16 @@ class BlockAuroraDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
 	
 	override fun colorMultiplier(world: IBlockAccess, x: Int, y: Int, z: Int) = getBlockColor(x, y, z)
 	
-	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.aurora
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.aurora
 	
 	override fun isToolEffective(type: String?, metadata: Int) = (type != null && type == "shovel")
 	
 	override fun getHarvestTool(metadata: Int) = "shovel"
 	
-	override fun canSustainPlant(world: IBlockAccess?, x: Int, y: Int, z: Int, direction: ForgeDirection?, plantable: IPlantable?) = true
+	// PORT: в 1.20.1 почву спрашивают по состоянию и BlockPos
+	override fun canSustainPlant(state: BlockState, world: IBlockAccess, pos: BlockPos, direction: ForgeDirection, plantable: IPlantable) = true
+//	override fun canSustainPlant(world: IBlockAccess?, x: Int, y: Int, z: Int, direction: ForgeDirection?, plantable: IPlantable?) = true
 	
 	override fun func_149851_a(world: World, x: Int, y: Int, z: Int, remote: Boolean) = true
 	
@@ -139,17 +147,22 @@ class BlockAuroraDirt: BlockMod(Material.ground), IGrowable, ILexiconable {
 					j1 += (random.nextInt(3) - 1) * random.nextInt(3) / 2
 					k1 += random.nextInt(3) - 1
 					
-					if ((world.getBlock(i1, j1 - 1, k1) == this || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.irisDirt || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.rainbowDirt) && !world.getBlock(i1, j1, k1).isNormalCube) {
+					// PORT: цветная земля — массив блоков-вариантов (SPEC, Р-5); isNormalCube — с координатами (World.kt)
+					if ((world.getBlock(i1, j1 - 1, k1) == this || world.getBlock(i1, j1 - 1, k1) in AlfheimBlocks.irisDirt || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.rainbowDirt) && !world.getBlock(i1, j1, k1).isNormalCube(world, i1, j1, k1)) {
+//					if ((world.getBlock(i1, j1 - 1, k1) == this || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.irisDirt || world.getBlock(i1, j1 - 1, k1) == AlfheimBlocks.rainbowDirt) && !world.getBlock(i1, j1, k1).isNormalCube) {
 						++l1
 						continue
 					}
 				} else if (world.getBlock(i1, j1, k1).isAir(world, i1, j1, k1)) {
 					if (random.nextInt(8) != 0) {
-						if (AlfheimBlocks.rainbowGrass.canBlockStay(world, i1, j1, k1)) {
-							world.setBlock(i1, j1, k1, AlfheimBlocks.rainbowGrass, 1, 3)
-						}
+						// PORT: КТ-2, партия 8б-2 — радужная трава (BlockRainbowGrass)
+//						if (AlfheimBlocks.rainbowGrass.canBlockStay(world, i1, j1, k1)) {
+//							world.setBlock(i1, j1, k1, AlfheimBlocks.rainbowGrass, 1, 3)
+//						}
 					} else {
-						world.getBiomeGenForCoords(i1, k1).plantFlower(world, random, i1, j1, k1)
+						// PORT: цветок биома — World.kt (plantFlower)
+						world.plantFlower(random, i1, j1, k1)
+//						world.getBiomeGenForCoords(i1, k1).plantFlower(world, random, i1, j1, k1)
 					}
 				}
 				

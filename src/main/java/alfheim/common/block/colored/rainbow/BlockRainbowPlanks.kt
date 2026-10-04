@@ -1,23 +1,14 @@
 package alfheim.common.block.colored.rainbow
 
-import alexsocol.asjlib.*
-import alfheim.common.block.AlfheimBlocks
+// PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
 import alfheim.common.block.base.BlockMod
-import alfheim.common.block.tile.TileTreeCrafter
 import alfheim.common.item.block.ItemIridescentBlockMod
-import alfheim.common.lexicon.AlfheimLexiconData
-import cpw.mods.fml.common.registry.GameRegistry
-import net.minecraft.block.Block
-import net.minecraft.block.material.Material
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.util.MovingObjectPosition
-import net.minecraft.world.World
-import vazkii.botania.api.lexicon.ILexiconable
-import vazkii.botania.api.wand.IWandable
-import java.util.*
+import alfheim.port.legacy.*
+import net.minecraft.world.level.block.Block
 
-class BlockRainbowPlanks: BlockMod(Material.wood), ILexiconable, IWandable {
+// PORT: переливающаяся текстура — .mcmeta. КТ-9 — лексикон (ILexiconable); КТ-3 — посох превращает доски в древесную
+// кузню (IWandable, TileTreeCrafter)
+class BlockRainbowPlanks: BlockMod(Material.wood)/*, ILexiconable, IWandable*/ {
 	
 	private val name = "rainbowPlanks"
 	
@@ -31,6 +22,7 @@ class BlockRainbowPlanks: BlockMod(Material.wood), ILexiconable, IWandable {
 	
 	override fun isInterpolated() = true
 	
+	/* PORT: КТ-3 — древесная кузня (TileTreeCrafter)
 	override fun onUsedByWand(p0: EntityPlayer?, p1: ItemStack?, p2: World?, p3: Int, p4: Int, p5: Int, p6: Int): Boolean {
 		if (p2 != null) {
 			if (TileTreeCrafter.canEnchanterExist(p2, p3, p4, p5)) {
@@ -43,6 +35,7 @@ class BlockRainbowPlanks: BlockMod(Material.wood), ILexiconable, IWandable {
 		
 		return false
 	}
+	*/
 	
 	override fun isToolEffective(type: String?, metadata: Int) = (type != null && type == "axe")
 	
@@ -50,25 +43,30 @@ class BlockRainbowPlanks: BlockMod(Material.wood), ILexiconable, IWandable {
 	
 	override fun shouldRegisterInNameSet() = false
 	
-	override fun damageDropped(par1: Int) = par1
+	// PORT: лут — сам блок (alfheim.port.data.AlfheimBlockLoot)
+//	override fun damageDropped(par1: Int) = par1
 	
 	override fun setBlockName(name: String): Block {
 		register(name)
 		return super.setBlockName(name)
 	}
 	
-	override fun quantityDropped(random: Random) = 1
-	
-	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = this.toItem()
+	// PORT: лут — сам блок, один (alfheim.port.data.AlfheimBlockLoot)
+//	override fun quantityDropped(random: Random) = 1
+//
+//	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = this.toItem()
 	
 	internal fun register(name: String) {
 		GameRegistry.registerBlock(this, ItemIridescentBlockMod::class.java, name)
 	}
 	
+	/* PORT: выбор колёсиком — предмет блока (getCloneItemStack 1.20.1)
 	override fun getPickBlock(target: MovingObjectPosition?, world: World, x: Int, y: Int, z: Int, player: EntityPlayer): ItemStack {
 		val meta = world.getBlockMetadata(x, y, z)
 		return ItemStack(this, 1, meta)
 	}
+	*/
 	
-	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.irisSapling
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.irisSapling
 }
