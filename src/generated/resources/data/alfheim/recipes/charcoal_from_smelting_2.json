@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.15,
+  "ingredient": [
+    {
+      "item": "alfheim:iris_wood10"
+    },
+    {
+      "item": "alfheim:iris_wood11"
+    },
+    {
+      "item": "alfheim:iris_wood12"
+    },
+    {
+      "item": "alfheim:iris_wood13"
+    }
+  ],
+  "result": "minecraft:charcoal"
+}

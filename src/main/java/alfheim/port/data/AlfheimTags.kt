@@ -60,7 +60,9 @@ object HarvestTags {
  * Теги формы, без которых блок 1.20.1 ведёт себя не так, как блок этой формы (MAPPING.md, «Блоки и предметы»): стена
  * соединяется со стенами и панелями из `minecraft:walls`, к забору из `minecraft:fences` привязывается поводок, через
  * люк из `minecraft:trapdoors` ходят мобы. Забор порта не в `minecraft:wooden_fences`: к нему не тянутся заборы
- * ванилы, как в 1.7.10 (сам он тянется к любому забору — `BlockModFence.connectsTo`)
+ * ванилы, как в 1.7.10 (сам он тянется к любому забору — `BlockModFence.connectsTo`). Листва 1.7.10 (`BlockLeaves`) —
+ * в `minecraft:leaves`: её `isLeaves` всегда отвечал «да», а в 1.20.1 листву узнают по этому тегу (листва ванилы, ножницы,
+ * меч, деревья, `isLeaves` прослойки)
  */
 object ShapeTags {
 
@@ -68,6 +70,7 @@ object ShapeTags {
 		is Wall1710     -> BlockTags.WALLS
 		is Fence1710    -> BlockTags.FENCES
 		is TrapDoor1710 -> BlockTags.TRAPDOORS
+		is Leaves1710   -> BlockTags.LEAVES
 		else            -> null
 	}
 }
@@ -115,7 +118,17 @@ object OreDictTags {
 		LibOreDict.RAINBOW_PETAL to alfheim(LibOreDict.RAINBOW_PETAL),
 		LibOreDict.RAINBOW_QUARTZ to alfheim(LibOreDict.RAINBOW_QUARTZ),
 		LibOreDict.PETAL_ANY to alfheim(LibOreDict.PETAL_ANY),
-	)
+		// имена Forge 1.7.10 для дерева — теги ванилы 1.20.1: по ним брёвна держат листву, а доски идут в рецепты ванилы
+		"logWood" to ResourceLocation("minecraft", "logs"),
+		"plankWood" to ResourceLocation("minecraft", "planks"),
+		"slabWood" to ResourceLocation("minecraft", "wooden_slabs"),
+		"stairWood" to ResourceLocation("minecraft", "wooden_stairs"),
+		"treeSapling" to ResourceLocation("minecraft", "saplings"),
+		"treeLeaves" to ResourceLocation("minecraft", "leaves"),
+		LibOreDict.IRIS_WOOD to alfheim(LibOreDict.IRIS_WOOD),
+		LibOreDict.IRIS_LEAVES to alfheim(LibOreDict.IRIS_LEAVES),
+		LibOreDict.IRIS_DIRT to alfheim(LibOreDict.IRIS_DIRT),
+	) + (LibOreDict.WOOD + LibOreDict.LEAVES + LibOreDict.DIRT).associateWith { alfheim(it) }
 
 	/** Общий тег Forge: `forge:ingots/elvorium` — так материалы называют и Botania 1.20.1, и другие моды */
 	private fun forge(path: String) = ResourceLocation("forge", path)
@@ -136,20 +149,27 @@ object OreDictTags {
 
 class AlfheimBlockTags(output: PackOutput, lookup: CompletableFuture<HolderLookup.Provider>, files: ExistingFileHelper): BlockTagsProvider(output, lookup, MODID, files) {
 
+	/** Пары «тег — блок», уже записанные: правило порта и Ore Dictionary могут назвать одну пару дважды */
+	private val added = HashSet<Pair<TagKey<Block>, Block>>()
+
+	private fun add(tag: TagKey<Block>, block: Block) {
+		if (added.add(tag to block)) tag(tag).add(block)
+	}
+
 	override fun addTags(provider: HolderLookup.Provider) {
 		for (block in LegacyRegistration.blocks.keys) {
 			if (block !is LegacyBlock) continue
-			HarvestTags.tools(block).forEach { tag(it).add(block) }
-			HarvestTags.tier(block)?.let { tag(it).add(block) }
-			if (block.isBeaconBase(null, 0, 0, 0, 0, 0, 0)) tag(BlockTags.BEACON_BASE_BLOCKS).add(block)
-			ShapeTags.tag(block)?.let { tag(it).add(block) }
+			HarvestTags.tools(block).forEach { add(it, block) }
+			HarvestTags.tier(block)?.let { add(it, block) }
+			if (block.isBeaconBase(null, 0, 0, 0, 0, 0, 0)) add(BlockTags.BEACON_BASE_BLOCKS, block)
+			ShapeTags.tag(block)?.let { add(it, block) }
 		}
 
 		// блок — вещь-блок 1.7.10 (ItemBlock). Предмет, который ставит блок под своим именем (ItemNameBlockItem: семена,
 		// лепестки Botania), в 1.7.10 был простым предметом
 		for ((name, stack) in OreDictTags.entries()) {
 			val item = stack.item as? BlockItem ?: continue
-			if (item !is ItemNameBlockItem) tag(BlockTags.create(OreDictTags.tag(name))).add(item.block)
+			if (item !is ItemNameBlockItem) add(BlockTags.create(OreDictTags.tag(name)), item.block)
 		}
 	}
 }
@@ -157,7 +177,8 @@ class AlfheimBlockTags(output: PackOutput, lookup: CompletableFuture<HolderLooku
 class AlfheimItemTags(output: PackOutput, lookup: CompletableFuture<HolderLookup.Provider>, blockTags: CompletableFuture<TagsProvider.TagLookup<Block>>, files: ExistingFileHelper): ItemTagsProvider(output, lookup, blockTags, MODID, files) {
 
 	override fun addTags(provider: HolderLookup.Provider) {
+		val added = HashSet<Pair<ResourceLocation, Item>>()
 		for ((name, stack) in OreDictTags.entries())
-			tag(ItemTags.create(OreDictTags.tag(name))).add(stack.item)
+			if (added.add(OreDictTags.tag(name) to stack.item)) tag(ItemTags.create(OreDictTags.tag(name))).add(stack.item)
 	}
 }

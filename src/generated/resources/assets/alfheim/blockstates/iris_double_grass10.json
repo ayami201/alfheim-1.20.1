@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "alfheim:block/iris_double_grass10_bottom"
+    },
+    "half=upper": {
+      "model": "alfheim:block/iris_double_grass10_top"
+    }
+  }
+}

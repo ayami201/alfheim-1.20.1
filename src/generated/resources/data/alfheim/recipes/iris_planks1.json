@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "P": {
+      "item": "alfheim:iris_planks_slab1"
+    }
+  },
+  "pattern": [
+    "P",
+    "P"
+  ],
+  "result": {
+    "item": "alfheim:iris_planks1"
+  }
+}

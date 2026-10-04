@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "D": {
+      "item": "minecraft:dirt"
+    },
+    "P": {
+      "tag": "forge:dyes/lime"
+    }
+  },
+  "pattern": [
+    "DDD",
+    "DPD",
+    "DDD"
+  ],
+  "result": {
+    "count": 8,
+    "item": "alfheim:colored_dirt5"
+  }
+}

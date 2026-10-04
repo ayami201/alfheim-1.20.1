@@ -5,6 +5,7 @@ import alfheim.api.ModInfo.MODID
 import alfheim.common.block.*
 import alfheim.common.block.alt.BlockYggDecor
 import alfheim.common.block.base.*
+import alfheim.common.block.colored.*
 import alfheim.port.legacy.*
 import alfheim.port.legacy.botania.*
 import alfheim.port.registry.LegacyRegistration
@@ -14,6 +15,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.RotatedPillarBlock.AXIS
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraftforge.client.model.generators.*
 import net.minecraftforge.common.data.ExistingFileHelper
 
@@ -29,6 +31,9 @@ import net.minecraftforge.common.data.ExistingFileHelper
  * Лестница, плита и стена 1.7.10 рисовали каждую грань иконкой блока-источника для этой стороны (`getIcon(side, meta)`
  * источника): у них бок, верх и низ — как у источника ([faces]). Модели формы — шаблоны ванилы 1.20.1; у стены свои
  * шаблоны с разными текстурами граней ([wallTemplates]): в шаблоне ванилы у стены одна текстура.
+ *
+ * Блок, которого красил класс автора (`colorMultiplier`, `getRenderColor`; [LegacyBlock.isTinted]), — по окрашенной копии
+ * шаблона ([TintedTemplates]), листва — по `block/leaves`, растение-крест — по `block/tinted_cross` ванилы.
  */
 class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockStateProvider(output, MODID, files) {
 
@@ -42,9 +47,15 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			is BlockLivingMountain   -> livingMountain(block)
 			is BlockYggDecor         -> yggDecor(block)
 			is BlockDwarfLantern     -> dwarfLantern(block)
+			is BlockColoredLamp      -> irisLamp(block)
+			is BlockLeavesMod        -> leaves(block)
+			is BlockColoredSapling   -> plant(block, legacyTexture(icon(block)))
+			is BlockColoredGrass     -> plant(block, legacyTexture(icon(block)))
+			is BlockColoredDoubleGrass -> irisDoubleGrass(block)
 			is BlockModRotatedPillar -> pillar(block)
 			is Stairs1710            -> stairs(block)
-			is BlockLivingSlab       -> slab(block)
+			is BlockLivingSlab       -> slab(block, block.source)
+			is BlockSlabMod          -> slab(block, block.source)
 			is Wall1710              -> wall(block)
 			is Fence1710             -> fence(block)
 			is FenceGate1710         -> fenceGate(block)
@@ -65,7 +76,16 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 	/** Модель этого же генератора: файла ещё может не быть на диске */
 	private fun generated(name: String) = ModelFile.UncheckedModelFile(modLoc("block/$name"))
 
-	private fun cubeAll(block: Block, texture: ResourceLocation, name: String = name(block)) = models().cubeAll(name, texture).renderType(block)
+	private fun cubeAll(block: Block, texture: ResourceLocation, name: String = name(block)) =
+		(if (block.tinted) tinted(name, "cube_all").texture("all", texture) else models().cubeAll(name, texture)).renderType(block)
+
+	/** Окрашенная копия шаблона ванилы [template] ([TintedTemplates]): её строит этот же запуск генерации */
+	private fun tinted(name: String, template: String) = models().getBuilder(name).parent(generated(TintedTemplates.PREFIX + template))
+
+	private val Block.tinted get() = (this as? LegacyBlock)?.isTinted == true
+
+	/** Иконка блока по имени, как `IconHelper.forBlock(reg, block, suffix)` автора: `alfheim:<имя блока><suffix>` */
+	private fun icon(block: Block, suffix: String = "") = MODID + ":" + (block as LegacyBlock).legacy.unlocalizedName.removePrefix("tile.") + suffix
 
 	private fun <T: ModelBuilder<T>> T.renderType(block: Block): T {
 		val legacy = block as? LegacyBlock ?: return this
@@ -161,15 +181,18 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 	private fun dwarfLantern(block: BlockDwarfLantern) =
 		block(block, models().cubeColumn(name(block), legacyTexture("$MODID:decor/DwarfLantern"), legacyTexture("$MODID:decor/DwarfLanternTop")))
 
-	/** `BlockModRotatedPillar.getIcon` (рендер 31 — столб, как бревно): торцы по оси столба */
+	/**
+	 * `BlockModRotatedPillar.getIcon` (рендер 31 — столб, как бревно): торцы по оси столба. Иконки —
+	 * `BlockModRotatedPillar.registerBlockIcons`: `<имя блока>Side` и `<имя блока>Top`
+	 */
 	private fun pillar(block: BlockModRotatedPillar) {
 		val (side, end) = when (block) {
 			// BlockShrinePillar.registerBlockIcons
 			is BlockShrinePillar -> legacyTexture("$MODID:decor/ShrinePillar") to legacyTexture("$MODID:decor/ShrinePillarTop")
-			else                 -> throw IllegalStateException("No 1.7.10 icons for pillar ${block.javaClass.name}")
+			else                 -> legacyTexture(icon(block, "Side")) to legacyTexture(icon(block, "Top"))
 		}
-		val vertical = models().cubeColumn(name(block), side, end)
-		val horizontal = models().cubeColumnHorizontal(name(block) + "_horizontal", side, end)
+		val vertical = if (block.tinted) tinted(name(block), "cube_column").texture("side", side).texture("end", end) else models().cubeColumn(name(block), side, end)
+		val horizontal = if (block.tinted) tinted(name(block) + "_horizontal", "cube_column_horizontal").texture("side", side).texture("end", end) else models().cubeColumnHorizontal(name(block) + "_horizontal", side, end)
 		getVariantBuilder(block)
 			.partialState().with(AXIS, Direction.Axis.Y).modelForState().modelFile(vertical).addModel()
 			.partialState().with(AXIS, Direction.Axis.Z).modelForState().modelFile(horizontal).rotationX(90).addModel()
@@ -181,17 +204,21 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 		val name = name(block)
 		val source = block.legacySource
 		val faces = faces(source)
-		val stairs = models().stairs(name, faces.side, faces.bottom, faces.top).renderType(source)
-		val inner = models().stairsInner(name + "_inner", faces.side, faces.bottom, faces.top).renderType(source)
-		val outer = models().stairsOuter(name + "_outer", faces.side, faces.bottom, faces.top).renderType(source)
+		fun model(suffix: String, template: String, vanilla: (String) -> BlockModelBuilder) =
+			(if (block.tinted) tinted(name + suffix, template).texture("side", faces.side).texture("bottom", faces.bottom).texture("top", faces.top) else vanilla(name + suffix)).renderType(source)
+		val stairs = model("", "stairs") { models().stairs(it, faces.side, faces.bottom, faces.top) }
+		val inner = model("_inner", "inner_stairs") { models().stairsInner(it, faces.side, faces.bottom, faces.top) }
+		val outer = model("_outer", "outer_stairs") { models().stairsOuter(it, faces.side, faces.bottom, faces.top) }
 		stairsBlock(block, stairs, inner, outer)
 		simpleBlockItem(block, stairs)
 	}
 
-	/** Плита Botania 1.7.10 (`BlockLivingSlab`): грани — блока-источника; двойная — как сам блок-источник */
-	private fun slab(block: BlockLivingSlab) {
+	/**
+	 * Плита Botania 1.7.10 (`BlockLivingSlab`) и автора (`BlockSlabMod`): грани — блока-источника; двойная — как сам
+	 * блок-источник
+	 */
+	private fun slab(block: Slab1710, source: Block) {
 		val name = name(block)
-		val source = block.source
 		val faces = faces(source)
 
 		when (block) {
@@ -210,10 +237,58 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			}
 		}
 
-		val bottom = models().slab(name, faces.side, faces.bottom, faces.top).renderType(source)
-		val top = models().slabTop(name + "_top", faces.side, faces.bottom, faces.top).renderType(source)
+		fun model(suffix: String, template: String, vanilla: (String) -> BlockModelBuilder) =
+			(if (block.tinted) tinted(name + suffix, template).texture("side", faces.side).texture("bottom", faces.bottom).texture("top", faces.top) else vanilla(name + suffix)).renderType(source)
+		val bottom = model("", "slab") { models().slab(it, faces.side, faces.bottom, faces.top) }
+		val top = model("_top", "slab_top") { models().slabTop(it, faces.side, faces.bottom, faces.top) }
 		slabBlock(block, bottom, top, generated(name(source)))
 		simpleBlockItem(block, bottom)
+	}
+
+	/**
+	 * `BlockColoredLamp.getIcon`: при силе сигнала 15 (`meta > 14`) — переливающаяся иконка `irisLampRB`, иначе —
+	 * иконка блока; предмет — лампа без сигнала
+	 */
+	private fun irisLamp(block: BlockColoredLamp) {
+		val normal = cubeAll(block, texture(block))
+		val rainbow = cubeAll(block, legacyTexture(icon(block, "RB")), name(block) + "_rb")
+		getVariantBuilder(block).forAllStates { ConfiguredModel.builder().modelFile(if (it.getValue(BlockColoredLamp.POWER) > 14) rainbow else normal).build() }
+		simpleBlockItem(block, normal)
+	}
+
+	/**
+	 * `BlockLeavesMod.registerBlockIcons` и `getIcon`: иконка по имени блока, при «быстрой» графике — `_opaque` (её модель
+	 * подставляет клиент, alfheim.port.client.AlfheimModels). Модель — листва ванилы `block/leaves`: окрашенный куб,
+	 * сплошным или с отсечением его рисует 1.20.1 по настройке графики (LeavesBlock)
+	 */
+	private fun leaves(block: BlockLeavesMod) {
+		models().withExistingParent(name(block) + "_opaque", mcLoc("block/leaves")).texture("all", legacyTexture(icon(block, "_opaque")))
+		block(block, models().withExistingParent(name(block), mcLoc("block/leaves")).texture("all", legacyTexture(icon(block))))
+	}
+
+	/** Растение 1.7.10 с рендером 1 — крест (окрашенный у блока, которого красит класс автора), с отсечением прозрачного */
+	private fun cross(block: Block, texture: ResourceLocation, name: String = name(block)) =
+		models().withExistingParent(name, mcLoc(if (block.tinted) "block/tinted_cross" else "block/cross")).texture("cross", texture).renderType("cutout")
+
+	/** Растение-крест: предмет 1.7.10 рисовал его иконку плоской (`item/generated`) */
+	private fun plant(block: Block, texture: ResourceLocation) {
+		simpleBlock(block, cross(block, texture))
+		itemModels().withExistingParent(name(block), mcLoc("item/generated")).texture("layer0", texture)
+	}
+
+	/**
+	 * `BlockColoredDoubleGrass.registerBlockIcons`: низ — `irisDoubleGrass`, верх — `irisDoubleGrassTop`
+	 * (`func_149888_a`); предмет — верх (`ItemIridescentTallGrassMod0.getIcon`)
+	 */
+	private fun irisDoubleGrass(block: BlockColoredDoubleGrass) {
+		val bottom = legacyTexture("$MODID:irisDoubleGrass")
+		val top = legacyTexture("$MODID:irisDoubleGrassTop")
+		val lower = cross(block, bottom, name(block) + "_bottom")
+		val upper = cross(block, top, name(block) + "_top")
+		getVariantBuilder(block)
+			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).modelForState().modelFile(lower).addModel()
+			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState().modelFile(upper).addModel()
+		itemModels().withExistingParent(name(block), mcLoc("item/generated")).texture("layer0", top)
 	}
 
 	/** Шаблоны стены ванилы (`template_wall_post`, `_side`, `_side_tall`, `wall_inventory`) с текстурами side, top, bottom */

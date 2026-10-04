@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "tag": "alfheim:dye_rainbow"
+    },
+    "L": {
+      "item": "minecraft:redstone_lamp"
+    }
+  },
+  "pattern": [
+    " B ",
+    "BLB",
+    " B "
+  ],
+  "result": {
+    "item": "alfheim:iris_lamp"
+  }
+}
