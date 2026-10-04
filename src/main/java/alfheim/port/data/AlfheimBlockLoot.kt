@@ -3,6 +3,9 @@ package alfheim.port.data
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.BlockElvenOre
 import alfheim.common.block.colored.BlockColoredDoubleGrass
+import alfheim.common.block.colored.rainbow.*
+import alfheim.common.item.AlfheimItems
+import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.port.legacy.*
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.advancements.critereon.*
@@ -12,6 +15,7 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.flag.FeatureFlags
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.DoublePlantBlock
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
@@ -39,8 +43,12 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 			block is Pane1710 && !block.canDrop    -> dropWhenSilkTouch(block)
 			block is BlockElvenOre                 -> add(block, elvenOre(block))
 			block is Leaves1710                    -> add(block, leaves(block))
+			block is BlockRainbowGrass             -> add(block, rainbowGrass(block))
 			block is TallGrass1710                 -> add(block, tallGrass(block))
 			block is BlockColoredDoubleGrass       -> add(block, irisDoubleGrass(block))
+			block is BlockRainbowDoubleGrass       -> add(block, shearedDoublePlant(block, AlfheimBlocks.rainbowGrass[block.meta], 2f, true))
+			// onSheared — сам цветок, у любой половины
+			block is BlockRainbowDoubleFlower      -> add(block, shearedDoublePlant(block, block, 1f, false))
 			else                                   -> dropSelf(block)
 		}
 	}
@@ -87,13 +95,34 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 	 * `BlockColoredDoubleGrass.onSheared`: с ножницами — две травы ириса цвета растения; верхняя половина — если под ней
 	 * нижняя. Без ножниц — ничего (`getItemDropped` — null). Ломается одна половина, вторую 1.20.1 убирает без лута
 	 */
-	private fun irisDoubleGrass(block: BlockColoredDoubleGrass): LootTable.Builder {
-		val grass = LootItem.lootTableItem(AlfheimBlocks.irisGrass[block.TYPES * block.colorSet + block.meta]).apply(SetItemCountFunction.setCount(ConstantValue.exactly(2f))).`when`(SHEARS)
+	private fun irisDoubleGrass(block: BlockColoredDoubleGrass) =
+		shearedDoublePlant(block, AlfheimBlocks.irisGrass[block.TYPES * block.colorSet + block.meta], 2f, true)
+
+	/**
+	 * Двойное растение автора: с ножницами — [count] × [item] (`onSheared`), у верхней половины — только если под ней
+	 * нижняя ([lowerBelow], проверка из `onSheared` автора). Без ножниц — ничего (`getItemDropped` — null). Ломается одна
+	 * половина, вторую 1.20.1 убирает без лута
+	 */
+	private fun shearedDoublePlant(block: Block, item: ItemLike, count: Float, lowerBelow: Boolean): LootTable.Builder {
+		val entry = LootItem.lootTableItem(item)
+		if (count != 1f) entry.apply(SetItemCountFunction.setCount(ConstantValue.exactly(count)))
+		val drop = entry.`when`(SHEARS)
+		if (!lowerBelow) return LootTable.lootTable().withPool(LootPool.lootPool().add(drop))
 		fun half(half: DoubleBlockHalf) = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, half))
-		val lowerBelow = LocationCheck.checkLocation(LocationPredicate.Builder.location().setBlock(BlockPredicate.Builder.block().of(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).build()).build()), BlockPos(0, -1, 0))
+		val lower = LocationCheck.checkLocation(LocationPredicate.Builder.location().setBlock(BlockPredicate.Builder.block().of(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).build()).build()), BlockPos(0, -1, 0))
 		return LootTable.lootTable()
-			.withPool(LootPool.lootPool().add(grass).`when`(half(DoubleBlockHalf.LOWER)))
-			.withPool(LootPool.lootPool().add(grass).`when`(half(DoubleBlockHalf.UPPER)).`when`(lowerBelow))
+			.withPool(LootPool.lootPool().add(drop).`when`(half(DoubleBlockHalf.LOWER)))
+			.withPool(LootPool.lootPool().add(drop).`when`(half(DoubleBlockHalf.UPPER)).`when`(lower))
+	}
+
+	/**
+	 * `BlockRainbowGrass.getDrops`, `onSheared`: трава и авроровая трава — как трава ([tallGrass]); цветок и мерцающий
+	 * цветок — сами; закопанные лепестки — радужный лепесток. При взрыве — с шансом 1 / сила взрыва
+	 */
+	private fun rainbowGrass(block: BlockRainbowGrass) = when (block.meta) {
+		BlockRainbowGrass.GRASS, BlockRainbowGrass.AURORA -> tallGrass(block)
+		BlockRainbowGrass.BURIED                          -> createSingleItemTable(AlfheimItems.elvenResource[ElvenResourcesMetas.RainbowPetal.I])
+		else                                              -> createSingleItemTable(block)
 	}
 
 	override fun getKnownBlocks(): Iterable<Block> = LegacyRegistration.blocks.keys

@@ -80,7 +80,8 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 		 * `ItemBlockWithMetadataAndName` Botania — `botania:` и номер варианта.
 		 * `ItemSubtypedBlockMod`, `ItemIridescentBlockMod` и `ItemSlabMod` — приставку `alfheim:` и убирали номер в конце
 		 * имени (у всех цветов одно имя), `ItemUniqueSubtypedBlockMod` — дописывал номер варианта по модулю числа видов,
-		 * `ItemMetaSlabMod` — номер варианта без бита 8. Предмет 1.20.1 берёт ключ блока, поэтому старый ключ
+		 * `ItemMetaSlabMod` — номер варианта без бита 8, `ItemRainbowGrassMod` — приставку `alfheim:` и номер варианта (у
+		 * блока без вариантов — 0). Предмет 1.20.1 берёт ключ блока, поэтому старый ключ
 		 * переименовывается в ключ блока
 		 */
 		fun legacyLangKey(block: Block): String? {
@@ -95,6 +96,7 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 			if (item is ItemSubtypedBlockMod || item is ItemIridescentBlockMod || item is ItemSlabMod) key = key.replace("tile.", "tile.$MODID:").replace(Regex("\\d+$"), "")
 			if (item is ItemUniqueSubtypedBlockMod) key = key.replace("tile.", "tile.$MODID:") + variant % item.subtypes.toInt()
 			if (item is ItemMetaSlabMod) key = key.replace("tile.", "tile.$MODID:") + (variant and 0x8.inv())
+			if (item is ItemRainbowGrassMod) key = key.replace("tile.", "tile.$MODID:") + variant
 			return "$key.name"
 		}
 

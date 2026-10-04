@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "forge:dusts/redstone"
+    },
+    {
+      "item": "alfheim:iris_grass12"
+    }
+  ],
+  "result": {
+    "item": "botania:redstone_root"
+  }
+}

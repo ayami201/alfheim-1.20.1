@@ -54,6 +54,8 @@ REMOVED = [
     ("elementiumClusterMeta", "подпись удалённой настройки (MAPPING.md)"),
     ("overrideCoFHCollisionCheck", "подпись удалённой настройки (MAPPING.md)"),
     ("tile.*Slab*Full*.name", "двойная плита — состояние type=double одинарной, своего предмета и имени у неё нет (MAPPING.md)"),
+    ("tile.alfheim:rainbowDouble*[89].name", "верхняя половина двойного растения — состояние half нижней, своего предмета и имени у неё нет (MAPPING.md)"),
+    ("tile.alfheim:rainbowDouble*1[01].name", "верхняя половина двойного растения — состояние half нижней, своего предмета и имени у неё нет (MAPPING.md)"),
     ("tile.botania:livingrock1Wall.name", "стену автора из кирпичей живого камня заменила стена Botania 1.20.1 со своим именем (решение автора, TASKS.md)"),
 ]
 

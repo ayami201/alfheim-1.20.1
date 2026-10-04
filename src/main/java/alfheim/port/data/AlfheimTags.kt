@@ -116,6 +116,8 @@ object OreDictTags {
 		LibOreDict.DYES(LibOreDict.Color.Rainbow) to alfheim(LibOreDict.DYES(LibOreDict.Color.Rainbow)),
 		LibOreDict.FLORAL_POWDER to alfheim(LibOreDict.FLORAL_POWDER),
 		LibOreDict.RAINBOW_PETAL to alfheim(LibOreDict.RAINBOW_PETAL),
+		LibOreDict.RAINBOW_FLOWER to alfheim(LibOreDict.RAINBOW_FLOWER),
+		LibOreDict.RAINBOW_DOUBLE_FLOWER to alfheim(LibOreDict.RAINBOW_DOUBLE_FLOWER),
 		LibOreDict.RAINBOW_QUARTZ to alfheim(LibOreDict.RAINBOW_QUARTZ),
 		LibOreDict.PETAL_ANY to alfheim(LibOreDict.PETAL_ANY),
 		// имена Forge 1.7.10 для дерева — теги ванилы 1.20.1: по ним брёвна держат листву, а доски идут в рецепты ванилы

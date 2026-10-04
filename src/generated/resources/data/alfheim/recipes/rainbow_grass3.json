@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "forge:dusts/glowstone"
+    },
+    {
+      "tag": "forge:dusts/glowstone"
+    },
+    {
+      "item": "alfheim:rainbow_grass2"
+    }
+  ],
+  "result": {
+    "item": "alfheim:rainbow_grass3"
+  }
+}

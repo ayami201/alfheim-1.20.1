@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "alfheim:mystic_flower_rainbow_double"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "alfheim:rainbow_petal"
+  }
+}

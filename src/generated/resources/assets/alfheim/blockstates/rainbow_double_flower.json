@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "alfheim:block/rainbow_double_flower_bottom"
+    },
+    "half=upper": {
+      "model": "alfheim:block/rainbow_double_flower_top"
+    }
+  }
+}

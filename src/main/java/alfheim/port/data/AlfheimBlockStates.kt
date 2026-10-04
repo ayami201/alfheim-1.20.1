@@ -6,6 +6,7 @@ import alfheim.common.block.*
 import alfheim.common.block.alt.BlockYggDecor
 import alfheim.common.block.base.*
 import alfheim.common.block.colored.*
+import alfheim.common.block.colored.rainbow.*
 import alfheim.port.legacy.*
 import alfheim.port.legacy.botania.*
 import alfheim.port.registry.LegacyRegistration
@@ -52,6 +53,9 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			is BlockColoredSapling   -> plant(block, legacyTexture(icon(block)))
 			is BlockColoredGrass     -> plant(block, legacyTexture(icon(block)))
 			is BlockColoredDoubleGrass -> irisDoubleGrass(block)
+			is BlockRainbowGrass       -> rainbowGrass(block)
+			is BlockRainbowDoubleGrass -> rainbowDoubleGrass(block)
+			is BlockRainbowDoubleFlower -> doublePlant(block, legacyTexture("$MODID:rainbowDoubleFlower"), legacyTexture("$MODID:rainbowDoubleFlowerTop"))
 			is BlockModRotatedPillar -> pillar(block)
 			is Stairs1710            -> stairs(block)
 			is BlockLivingSlab       -> slab(block, block.source)
@@ -280,15 +284,44 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 	 * `BlockColoredDoubleGrass.registerBlockIcons`: низ — `irisDoubleGrass`, верх — `irisDoubleGrassTop`
 	 * (`func_149888_a`); предмет — верх (`ItemIridescentTallGrassMod0.getIcon`)
 	 */
-	private fun irisDoubleGrass(block: BlockColoredDoubleGrass) {
-		val bottom = legacyTexture("$MODID:irisDoubleGrass")
-		val top = legacyTexture("$MODID:irisDoubleGrassTop")
+	private fun irisDoubleGrass(block: BlockColoredDoubleGrass) =
+		doublePlant(block, legacyTexture("$MODID:irisDoubleGrass"), legacyTexture("$MODID:irisDoubleGrassTop"))
+
+	/** Двойное растение 1.7.10: у половин свои кресты (`func_149888_a`), предмет — верхняя половина */
+	private fun doublePlant(block: Block, bottom: ResourceLocation, top: ResourceLocation) {
 		val lower = cross(block, bottom, name(block) + "_bottom")
 		val upper = cross(block, top, name(block) + "_top")
 		getVariantBuilder(block)
 			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).modelForState().modelFile(lower).addModel()
 			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState().modelFile(upper).addModel()
 		itemModels().withExistingParent(name(block), mcLoc("item/generated")).texture("layer0", top)
+	}
+
+	/**
+	 * `BlockRainbowGrass.getIcon` по варианту: трава — `rainbowGrass`, авроровая трава — иконка травы ириса, цветок —
+	 * `rainbowGrassFlower`, мерцающий цветок — `rainbowGrassFlowerGlimmer` (анимации — .mcmeta). Закопанные лепестки —
+	 * иконка закопанных лепестков Botania 1.7.10, а она полностью прозрачная: у модели нет граней, частицы поломки и
+	 * предмет прозрачные (`blocks/port/transparent`)
+	 */
+	private fun rainbowGrass(block: BlockRainbowGrass) {
+		if (block.meta == BlockRainbowGrass.BURIED) {
+			val transparent = modLoc("blocks/port/transparent")
+			simpleBlock(block, models().getBuilder(name(block)).texture("particle", transparent))
+			itemModels().withExistingParent(name(block), mcLoc("item/generated")).texture("layer0", transparent)
+			return
+		}
+		plant(block, legacyTexture(when (block.meta) {
+			BlockRainbowGrass.AURORA  -> "$MODID:irisGrass"
+			BlockRainbowGrass.FLOWER  -> "$MODID:rainbowGrassFlower"
+			BlockRainbowGrass.GLIMMER -> "$MODID:rainbowGrassFlowerGlimmer"
+			else                      -> "$MODID:rainbowGrass"
+		}))
+	}
+
+	/** `BlockRainbowDoubleGrass.getBottomIcon` / `getTopIcon`: радужная — `rainbowDoubleGrass`, авроровая — иконки двойной травы ириса */
+	private fun rainbowDoubleGrass(block: BlockRainbowDoubleGrass) {
+		val name = if (block.meta == block.AURORA) "irisDoubleGrass" else "rainbowDoubleGrass"
+		doublePlant(block, legacyTexture("$MODID:$name"), legacyTexture("$MODID:${name}Top"))
 	}
 
 	/** Шаблоны стены ванилы (`template_wall_post`, `_side`, `_side_tall`, `wall_inventory`) с текстурами side, top, bottom */

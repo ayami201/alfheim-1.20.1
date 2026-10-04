@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "action": "shears_dig",
+              "condition": "forge:can_tool_perform_action"
+            }
+          ],
+          "name": "alfheim:rainbow_double_flower"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "alfheim:blocks/rainbow_double_flower"
+}

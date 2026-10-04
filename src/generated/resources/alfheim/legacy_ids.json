@@ -331,6 +331,18 @@
     "alfheim:livingrock1Wall": "botania:livingrock_bricks_wall",
     "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall",
     "alfheim:rainbowDirt": "alfheim:rainbow_dirt",
+    "alfheim:rainbowDoubleFlower": "alfheim:rainbow_double_flower",
+    "alfheim:rainbowDoubleGrass": {
+      "0": "alfheim:rainbow_double_grass0",
+      "1": "alfheim:rainbow_double_grass1"
+    },
+    "alfheim:rainbowGrass": {
+      "0": "alfheim:rainbow_grass0",
+      "1": "alfheim:rainbow_grass1",
+      "2": "alfheim:rainbow_grass2",
+      "3": "alfheim:rainbow_grass3",
+      "4": "alfheim:rainbow_grass4"
+    },
     "alfheim:rainbowLeaves": "alfheim:rainbow_leaves",
     "alfheim:rainbowPlanks": "alfheim:rainbow_planks",
     "alfheim:rainbowPlanksSlab": "alfheim:rainbow_planks_slab",
@@ -714,6 +726,18 @@
     "alfheim:livingrock1Wall": "botania:livingrock_bricks_wall",
     "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall",
     "alfheim:rainbowDirt": "alfheim:rainbow_dirt",
+    "alfheim:rainbowDoubleFlower": "alfheim:rainbow_double_flower",
+    "alfheim:rainbowDoubleGrass": {
+      "0": "alfheim:rainbow_double_grass0",
+      "1": "alfheim:rainbow_double_grass1"
+    },
+    "alfheim:rainbowGrass": {
+      "0": "alfheim:rainbow_grass0",
+      "1": "alfheim:rainbow_grass1",
+      "2": "alfheim:rainbow_grass2",
+      "3": "alfheim:rainbow_grass3",
+      "4": "alfheim:rainbow_grass4"
+    },
     "alfheim:rainbowLeaves": "alfheim:rainbow_leaves",
     "alfheim:rainbowPlanks": "alfheim:rainbow_planks",
     "alfheim:rainbowPlanksSlab": "alfheim:rainbow_planks_slab",
@@ -1071,6 +1095,14 @@
       "block.alfheim.iris_wood33"
     ],
     "tile.alfheim:rainbowDirt.name": "block.alfheim.rainbow_dirt",
+    "tile.alfheim:rainbowDoubleFlower0.name": "block.alfheim.rainbow_double_flower",
+    "tile.alfheim:rainbowDoubleGrass0.name": "block.alfheim.rainbow_double_grass0",
+    "tile.alfheim:rainbowDoubleGrass1.name": "block.alfheim.rainbow_double_grass1",
+    "tile.alfheim:rainbowGrass0.name": "block.alfheim.rainbow_grass0",
+    "tile.alfheim:rainbowGrass1.name": "block.alfheim.rainbow_grass1",
+    "tile.alfheim:rainbowGrass2.name": "block.alfheim.rainbow_grass2",
+    "tile.alfheim:rainbowGrass3.name": "block.alfheim.rainbow_grass3",
+    "tile.alfheim:rainbowGrass4.name": "block.alfheim.rainbow_grass4",
     "tile.alfheim:rainbowLeaves.name": "block.alfheim.rainbow_leaves",
     "tile.alfheim:rainbowPlanks.name": "block.alfheim.rainbow_planks",
     "tile.alfheim:rainbowPlanksSlab.name": "block.alfheim.rainbow_planks_slab",
