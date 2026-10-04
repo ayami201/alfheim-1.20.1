@@ -56,9 +56,12 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			is BlockRainbowGrass       -> rainbowGrass(block)
 			is BlockRainbowDoubleGrass -> rainbowDoubleGrass(block)
 			is BlockRainbowDoubleFlower -> doublePlant(block, legacyTexture("$MODID:rainbowDoubleFlower"), legacyTexture("$MODID:rainbowDoubleFlowerTop"))
+			is BlockRainbowMushroom  -> plant(block, legacyTexture(icon(block)))
+			is BlockShimmerQuartz    -> shimmerQuartz(block)
 			is BlockModRotatedPillar -> pillar(block)
 			is Stairs1710            -> stairs(block)
 			is BlockLivingSlab       -> slab(block, block.source)
+			is BlockSpecialQuartzSlab -> slab(block, block.source)
 			is BlockSlabMod          -> slab(block, block.source)
 			is Wall1710              -> wall(block)
 			is Fence1710             -> fence(block)
@@ -195,6 +198,11 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			is BlockShrinePillar -> legacyTexture("$MODID:decor/ShrinePillar") to legacyTexture("$MODID:decor/ShrinePillarTop")
 			else                 -> legacyTexture(icon(block, "Side")) to legacyTexture(icon(block, "Top"))
 		}
+		pillar(block, side, end)
+	}
+
+	/** Столб со свойством `axis`: бока — [side], торцы по оси — [end]; предмет — стоячий столб */
+	private fun pillar(block: Block, side: ResourceLocation, end: ResourceLocation) {
 		val vertical = if (block.tinted) tinted(name(block), "cube_column").texture("side", side).texture("end", end) else models().cubeColumn(name(block), side, end)
 		val horizontal = if (block.tinted) tinted(name(block) + "_horizontal", "cube_column_horizontal").texture("side", side).texture("end", end) else models().cubeColumnHorizontal(name(block) + "_horizontal", side, end)
 		getVariantBuilder(block)
@@ -202,6 +210,20 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			.partialState().with(AXIS, Direction.Axis.Z).modelForState().modelFile(horizontal).rotationX(90).addModel()
 			.partialState().with(AXIS, Direction.Axis.X).modelForState().modelFile(horizontal).rotationX(90).rotationY(90).addModel()
 		simpleBlockItem(block, vertical)
+	}
+
+	/**
+	 * `BlockSpecialQuartz.getIcon` с иконками `BlockShimmerQuartz.registerIcons` (папка decor): бока варианта —
+	 * `iconNames`; верх и низ блока — его же иконка, резного — `chiseled<вид>Quartz1`, колонны (рендер 39 — по оси) —
+	 * `pillar<вид>Quartz1`
+	 */
+	private fun shimmerQuartz(block: BlockShimmerQuartz) {
+		val side = texture(block)
+		when (block.meta) {
+			BlockSpecialQuartz.PILLAR -> pillar(block, side, legacyTexture("$MODID:decor/pillar${block.type}Quartz1"))
+			1                         -> block(block, models().cubeColumn(name(block), side, legacyTexture("$MODID:decor/chiseled${block.type}Quartz1")))
+			else                      -> block(block, cubeAll(block, side))
+		}
 	}
 
 	private fun stairs(block: Stairs1710) {
@@ -439,6 +461,8 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 		/** Текстура блока, которую регистрировал его базовый класс в 1.7.10 */
 		fun texture(block: Block): ResourceLocation = legacyTexture(when {
 			block is BlockModMeta                             -> "${block.modid}:${block.folder}${block.name}${block.variant ?: ""}"
+			// BlockShimmerQuartz.registerIcons: иконка варианта из iconNames, папка decor
+			block is BlockShimmerQuartz                       -> "$MODID:decor/" + block.iconNames[block.meta]!!.replace("decor/", "")
 			(block as LegacyBlock).legacy.textureName != null -> block.legacy.textureName!!
 			block is BlockMod                                 -> MODID + ":" + block.legacy.unlocalizedName.removePrefix("tile.")
 			else                                              -> throw IllegalStateException("No 1.7.10 texture rule for ${block.javaClass.name}")

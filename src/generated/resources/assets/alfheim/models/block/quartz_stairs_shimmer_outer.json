@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "alfheim:blocks/decor/block_shimmer_quartz0",
+    "side": "alfheim:blocks/decor/block_shimmer_quartz0",
+    "top": "alfheim:blocks/decor/block_shimmer_quartz0"
+  }
+}

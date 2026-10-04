@@ -329,7 +329,15 @@
       "3": "alfheim:iris_wood33"
     },
     "alfheim:livingrock1Wall": "botania:livingrock_bricks_wall",
+    "alfheim:quartzSlabShimmerFull": "alfheim:quartz_slab_shimmer_half[type=double]",
+    "alfheim:quartzSlabShimmerHalf": "alfheim:quartz_slab_shimmer_half",
+    "alfheim:quartzStairsShimmer": "alfheim:quartz_stairs_shimmer",
     "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall",
+    "alfheim:quartzTypeShimmer": {
+      "0": "alfheim:quartz_type_shimmer0",
+      "1": "alfheim:quartz_type_shimmer1",
+      "2": "alfheim:quartz_type_shimmer2"
+    },
     "alfheim:rainbowDirt": "alfheim:rainbow_dirt",
     "alfheim:rainbowDoubleFlower": "alfheim:rainbow_double_flower",
     "alfheim:rainbowDoubleGrass": {
@@ -344,11 +352,18 @@
       "4": "alfheim:rainbow_grass4"
     },
     "alfheim:rainbowLeaves": "alfheim:rainbow_leaves",
+    "alfheim:rainbowMushroom": "alfheim:rainbow_mushroom",
     "alfheim:rainbowPlanks": "alfheim:rainbow_planks",
     "alfheim:rainbowPlanksSlab": "alfheim:rainbow_planks_slab",
     "alfheim:rainbowPlanksSlabFull": "alfheim:rainbow_planks_slab[type=double]",
     "alfheim:rainbowPlanksStairs": "alfheim:rainbow_planks_stairs",
-    "alfheim:rainbowWood": "alfheim:rainbow_wood"
+    "alfheim:rainbowWood": "alfheim:rainbow_wood",
+    "alfheim:softStorage": {
+      "0": "alfheim:soft_storage0",
+      "1": "alfheim:soft_storage1",
+      "2": "alfheim:soft_storage2",
+      "3": "alfheim:soft_storage3"
+    }
   },
   "entities": {
     "alfheim:ThrownItem": "alfheim:thrown_item",
@@ -724,7 +739,14 @@
       "3": "alfheim:iris_wood33"
     },
     "alfheim:livingrock1Wall": "botania:livingrock_bricks_wall",
+    "alfheim:quartzSlabShimmerHalf": "alfheim:quartz_slab_shimmer_half",
+    "alfheim:quartzStairsShimmer": "alfheim:quartz_stairs_shimmer",
     "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall",
+    "alfheim:quartzTypeShimmer": {
+      "0": "alfheim:quartz_type_shimmer0",
+      "1": "alfheim:quartz_type_shimmer1",
+      "2": "alfheim:quartz_type_shimmer2"
+    },
     "alfheim:rainbowDirt": "alfheim:rainbow_dirt",
     "alfheim:rainbowDoubleFlower": "alfheim:rainbow_double_flower",
     "alfheim:rainbowDoubleGrass": {
@@ -739,10 +761,17 @@
       "4": "alfheim:rainbow_grass4"
     },
     "alfheim:rainbowLeaves": "alfheim:rainbow_leaves",
+    "alfheim:rainbowMushroom": "alfheim:rainbow_mushroom",
     "alfheim:rainbowPlanks": "alfheim:rainbow_planks",
     "alfheim:rainbowPlanksSlab": "alfheim:rainbow_planks_slab",
     "alfheim:rainbowPlanksStairs": "alfheim:rainbow_planks_stairs",
     "alfheim:rainbowWood": "alfheim:rainbow_wood",
+    "alfheim:softStorage": {
+      "0": "alfheim:soft_storage0",
+      "1": "alfheim:soft_storage1",
+      "2": "alfheim:soft_storage2",
+      "3": "alfheim:soft_storage3"
+    },
     "alfheim:splashPotion": "alfheim:splash_potion",
     "alfheim:wiltedLotus": {
       "0": "alfheim:wilted_lotus0",
@@ -1094,6 +1123,8 @@
       "block.alfheim.iris_wood32",
       "block.alfheim.iris_wood33"
     ],
+    "tile.alfheim:quartzSlabShimmerHalf.name": "block.alfheim.quartz_slab_shimmer_half",
+    "tile.alfheim:quartzStairsShimmer.name": "block.alfheim.quartz_stairs_shimmer",
     "tile.alfheim:rainbowDirt.name": "block.alfheim.rainbow_dirt",
     "tile.alfheim:rainbowDoubleFlower0.name": "block.alfheim.rainbow_double_flower",
     "tile.alfheim:rainbowDoubleGrass0.name": "block.alfheim.rainbow_double_grass0",
@@ -1104,6 +1135,7 @@
     "tile.alfheim:rainbowGrass3.name": "block.alfheim.rainbow_grass3",
     "tile.alfheim:rainbowGrass4.name": "block.alfheim.rainbow_grass4",
     "tile.alfheim:rainbowLeaves.name": "block.alfheim.rainbow_leaves",
+    "tile.alfheim:rainbowMushroom.name": "block.alfheim.rainbow_mushroom",
     "tile.alfheim:rainbowPlanks.name": "block.alfheim.rainbow_planks",
     "tile.alfheim:rainbowPlanksSlab.name": "block.alfheim.rainbow_planks_slab",
     "tile.alfheim:rainbowPlanksStairs.name": "block.alfheim.rainbow_planks_stairs",
@@ -1143,7 +1175,14 @@
     "tile.botania:LivingCobbleStairs2.name": "block.alfheim.living_cobble_stairs2",
     "tile.botania:LivingMountain0Slab.name": "block.alfheim.living_mountain0_slab",
     "tile.botania:ShrineRock0Slab.name": "block.alfheim.shrine_rock0_slab",
+    "tile.botania:blockShimmerQuartz.name": "block.alfheim.quartz_type_shimmer0",
+    "tile.botania:chiseledShimmerQuartz.name": "block.alfheim.quartz_type_shimmer1",
     "tile.botania:customBrick3.name": "block.alfheim.custom_brick3",
-    "tile.botania:quartzTypeElf0Wall.name": "block.alfheim.quartz_type_elf0_wall"
+    "tile.botania:pillarShimmerQuartz.name": "block.alfheim.quartz_type_shimmer2",
+    "tile.botania:quartzTypeElf0Wall.name": "block.alfheim.quartz_type_elf0_wall",
+    "tile.softStorage0.name": "block.alfheim.soft_storage0",
+    "tile.softStorage1.name": "block.alfheim.soft_storage1",
+    "tile.softStorage2.name": "block.alfheim.soft_storage2",
+    "tile.softStorage3.name": "block.alfheim.soft_storage3"
   }
 }

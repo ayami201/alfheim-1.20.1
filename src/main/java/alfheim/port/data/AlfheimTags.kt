@@ -119,6 +119,8 @@ object OreDictTags {
 		LibOreDict.RAINBOW_FLOWER to alfheim(LibOreDict.RAINBOW_FLOWER),
 		LibOreDict.RAINBOW_DOUBLE_FLOWER to alfheim(LibOreDict.RAINBOW_DOUBLE_FLOWER),
 		LibOreDict.RAINBOW_QUARTZ to alfheim(LibOreDict.RAINBOW_QUARTZ),
+		LibOreDict.RAINBOW_QUARTZ_BLOCK to alfheim(LibOreDict.RAINBOW_QUARTZ_BLOCK),
+		LibOreDict.MUSHROOM to alfheim(LibOreDict.MUSHROOM),
 		LibOreDict.PETAL_ANY to alfheim(LibOreDict.PETAL_ANY),
 		// имена Forge 1.7.10 для дерева — теги ванилы 1.20.1: по ним брёвна держат листву, а доски идут в рецепты ванилы
 		"logWood" to ResourceLocation("minecraft", "logs"),

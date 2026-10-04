@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "alfheim:block/quartz_type_shimmer2_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "alfheim:block/quartz_type_shimmer2"
+    },
+    "axis=z": {
+      "model": "alfheim:block/quartz_type_shimmer2_horizontal",
+      "x": 90
+    }
+  }
+}
