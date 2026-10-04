@@ -32,20 +32,35 @@ import net.minecraftforge.registries.RegisterEvent
  */
 object LegacyRegistration {
 
-	/** Новый id и имя 1.7.10; [oldMeta] — metadata варианта, `null` — вещь без вариантов */
-	class Entry(val id: ResourceLocation, val oldName: String, val oldMeta: Int?)
+	/**
+	 * Новый id и имя 1.7.10; [oldMeta] — metadata варианта, `null` — вещь без вариантов. Имя с `modid:` — вещь другого
+	 * мода 1.7.10, которую вернул порт (`Botania:customBrick`, `alfheim.port.legacy.botania.BotaniaBlocks1710`)
+	 */
+	class Entry(val id: ResourceLocation, val oldName: String, val oldMeta: Int?) {
+
+		/** Имя в реестре 1.7.10: `alfheim:` + имя автора или имя вещи другого мода с его modid */
+		val legacyId get() = if (':' in oldName) oldName else "$MODID:$oldName"
+	}
 
 	/**
 	 * Блок 1.7.10, у которого в 1.20.1 нет своего блока, — состояние другого блока: двойная плита — `type=double` плиты.
 	 * [state] — свойства состояния, как в `legacy_ids.json`: `type=double`
 	 */
 	class Alias(val oldName: String, val block: Block, val state: String)
-	
+
+	/**
+	 * Блок автора, вместо которого в порту — такой же блок другого мода (решение автора, TASKS.md, журнал решений): своего
+	 * блока и предмета у старого имени [oldName] нет, в `legacy_ids.json` оно ведёт на [block] — его ставит загрузчик
+	 * построек
+	 */
+	class Replacement(val oldName: String, val block: Block)
+
 	val blocks = LinkedHashMap<Block, Entry>()
 	val items = LinkedHashMap<Item, Entry>()
 	val effects = LinkedHashMap<MobEffect, Entry>()
 	val entities = LinkedHashMap<EntityType<*>, Entry>()
 	val aliases = ArrayList<Alias>()
+	val replacements = ArrayList<Replacement>()
 	
 	private val entityTypes = HashMap<Class<out Entity>, EntityType<*>>()
 	private val pendingEntities = ArrayList<Triple<Class<out Entity>, String, MobCategory>>()
@@ -123,6 +138,13 @@ object LegacyRegistration {
 		check(block in blocks) { "Alias $name: block is not registered" }
 		check(aliases.none { it.oldName == name }) { "Alias $name is registered twice" }
 		aliases += Alias(name, block, state)
+	}
+
+	/** Старое имя [name] — блок другого мода [block] ([Replacement]) */
+	fun replace(name: String, block: Block) {
+		check(blocks.values.none { it.oldName == name } && aliases.none { it.oldName == name }) { "Replacement $name: the name is registered" }
+		check(replacements.none { it.oldName == name }) { "Replacement $name is registered twice" }
+		replacements += Replacement(name, block)
 	}
 	
 	/**

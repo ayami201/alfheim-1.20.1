@@ -2,6 +2,7 @@ package alfheim.port.legacy
 
 import alfheim.api.ModInfo.MODID
 import alfheim.port.data.OreDictTags
+import alfheim.port.legacy.botania.LibOreDict
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import net.minecraft.core.NonNullList
@@ -135,6 +136,7 @@ object Ingredients1710 {
 			"gemQuartz" to forge("gems/quartz"),
 			"glowstone" to Blocks.GLOWSTONE,
 			"ingotGold" to forge("ingots/gold"),
+			"ingotBrick" to forge("ingots/brick"),
 			"ingotBrickNether" to forge("ingots/nether_brick"),
 			"nuggetGold" to forge("nuggets/gold"),
 			"stickWood" to forge("rods/wooden"),
@@ -284,8 +286,11 @@ open class ShapelessOreRecipe(result: ItemStack?, vararg recipe: Any?): IRecipe 
 
 	val output: ItemStack? = result?.copy()
 
-	/** Ингредиенты 1.7.10, как их передал автор */
-	val inputs: List<Any?> = recipe.toList()
+	/**
+	 * Ингредиенты 1.7.10, как их передал автор, без ступки Botania (`pestleAndMortar`): в Botania 1.20.1 её нет, рецепт
+	 * со ступкой — тот же рецепт без неё (решение автора, TASKS.md, журнал решений)
+	 */
+	val inputs: List<Any?> = recipe.filter { it != LibOreDict.PESTLE_AND_MORTAR }
 
 	init {
 		require(inputs.size in 1..9) { "Invalid 1.7.10 shapeless recipe $inputs for $result" }

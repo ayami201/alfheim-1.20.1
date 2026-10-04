@@ -8,6 +8,7 @@ import alfheim.port.legacy.*
 import alfheim.port.legacy.botania.*
 import alfheim.port.registry.LegacyRegistration
 import com.google.gson.*
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.*
 import net.minecraft.world.item.*
 import net.minecraft.world.level.block.Block
@@ -30,8 +31,14 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 			// блок 1.7.10, который в 1.20.1 — состояние другого блока (двойная плита)
 			for (alias in LegacyRegistration.aliases)
 				addProperty("$MODID:${alias.oldName}", "${LegacyRegistration.blocks[alias.block]!!.id}[${alias.state}]")
+			// блок автора, вместо которого блок другого мода
+			for (replacement in LegacyRegistration.replacements)
+				addProperty("$MODID:${replacement.oldName}", BuiltInRegistries.BLOCK.getKey(replacement.block).toString())
 		})
-		json.add("items", ids(LegacyRegistration.items.values))
+		json.add("items", ids(LegacyRegistration.items.values).apply {
+			for (replacement in LegacyRegistration.replacements)
+				addProperty("$MODID:${replacement.oldName}", BuiltInRegistries.ITEM.getKey(replacement.block.asItem()).toString())
+		})
 		json.add("entities", ids(LegacyRegistration.entities.values))
 		json.add("lang", JsonObject().apply {
 			// у вариантов с общим именем 1.7.10 (tile.alfheim:irisWood.name) старый ключ один, новых — по ключу на блок
@@ -55,7 +62,7 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 
 	/** Старое имя → новый id, у вариантов metadata — объект «metadata → новый id» */
 	private fun ids(entries: Collection<LegacyRegistration.Entry>) = JsonObject().apply {
-		for ((oldName, group) in entries.groupBy { "$MODID:${it.oldName}" }) {
+		for ((oldName, group) in entries.groupBy { it.legacyId }) {
 			if (group.size == 1 && group[0].oldMeta == null)
 				addProperty(oldName, group[0].id.toString())
 			else
@@ -69,7 +76,8 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 
 		/**
 		 * Ключ перевода предмета-блока в 1.7.10: `tile.` + имя блока; `ItemBlockMetaName` дописывал номер варианта,
-		 * `ItemBlockLeavesMod` — приставку `alfheim:`, `ItemBlockMod` и `ItemBlockModSlab` Botania — `botania:`.
+		 * `ItemBlockLeavesMod` — приставку `alfheim:`, `ItemBlockMod` и `ItemBlockModSlab` Botania — `botania:`,
+		 * `ItemBlockWithMetadataAndName` Botania — `botania:` и номер варианта.
 		 * `ItemSubtypedBlockMod`, `ItemIridescentBlockMod` и `ItemSlabMod` — приставку `alfheim:` и убирали номер в конце
 		 * имени (у всех цветов одно имя), `ItemUniqueSubtypedBlockMod` — дописывал номер варианта по модулю числа видов,
 		 * `ItemMetaSlabMod` — номер варианта без бита 8. Предмет 1.20.1 берёт ключ блока, поэтому старый ключ
@@ -83,6 +91,7 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 			if (item is ItemBlockMetaName && ((block as? BlockModMeta)?.subtypes ?: 16) > 1) key += variant
 			if (item is ItemBlockLeavesMod) key = key.replace("tile.", "tile.$MODID:")
 			if (item is ItemBlockMod || item is ItemBlockModSlab) key = key.replace("tile.", "tile.botania:")
+			if (item is ItemBlockWithMetadataAndName) key = key.replace("tile.", "tile.botania:") + variant
 			if (item is ItemSubtypedBlockMod || item is ItemIridescentBlockMod || item is ItemSlabMod) key = key.replace("tile.", "tile.$MODID:").replace(Regex("\\d+$"), "")
 			if (item is ItemUniqueSubtypedBlockMod) key = key.replace("tile.", "tile.$MODID:") + variant % item.subtypes.toInt()
 			if (item is ItemMetaSlabMod) key = key.replace("tile.", "tile.$MODID:") + (variant and 0x8.inv())

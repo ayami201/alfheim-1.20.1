@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "alfheim:dream_cherry"
+    },
+    {
+      "item": "alfheim:dream_cherry"
+    },
+    {
+      "item": "alfheim:dream_cherry"
+    }
+  ],
+  "result": {
+    "item": "minecraft:glowstone_dust"
+  }
+}

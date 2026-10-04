@@ -53,6 +53,10 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 
 Блок 1.7.10, у которого в 1.20.1 нет своего блока, записывается как состояние другого: двойная плита
 `"alfheim:LivingCobble0SlabFull": "alfheim:living_cobble0_slab[type=double]"` (`LegacyRegistration.alias`).
+Блок автора, вместо которого в порту блок другого мода (решение автора), ведёт на этот блок:
+`"alfheim:livingrock1Wall": "botania:livingrock_bricks_wall"` (`LegacyRegistration.replace`); своего id и имени у
+него нет. Блок другого мода 1.7.10, который вернул порт, записан под своим старым именем с modid:
+`"Botania:customBrick": {"3": "alfheim:custom_brick3"}` (`LegacyRegistration.Entry.legacyId`).
 Metadata поворота и половины (лестницы, плиты, столбы) — состояние: его переводит загрузчик построек (КТ-6).
 
 ## Переводы
@@ -62,6 +66,7 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `assets/<ns>/lang/en_US.lang` | `assets/<ns>/lang/en_us.json` | ✓ собирает `tools/convert_lang.py` из `.lang` в `legacy/`; руками `.json` не правится |
 | значения с `%d`, `%.1f` | как есть | ✓ и 1.7.10, и 1.20.1 при загрузке заменяют их на `%s` |
 | ключи удалённых вещей | не переносятся | ✓ список с причинами — `REMOVED` в `tools/convert_lang.py` |
+| имя блока Botania 1.7.10, который вернул порт (`tile.botania:customBrick3.name`) | ключ блока (`block.alfheim.custom_brick3`) | ✓ тексты — из `.lang` Botania r1.8-249 (`BOTANIA_1710` в `tools/convert_lang.py`), автор Vazkii (README.md); ключ предмета `ItemBlockWithMetadataAndName` — `tile.botania:` + имя + номер варианта |
 | ключ предмета Botania `ItemBlockMod`, `ItemBlockModSlab` (`tile.botania:…`) | ключ блока | ✓ `ItemBlockMod` 1.7.10 менял `tile.` на `tile.botania:` — так эти ключи записаны в переводах Alfheim; ключи двойных плит (`…SlabFull`) не переносятся: своего предмета у двойной плиты нет |
 | `StatCollector.translateToLocal` / `translateToLocalFormatted` | `alfheim.port.legacy.StatCollector` там, где автору нужен готовый текст на этой стороне; `Component.translatable` — для текста, который уходит игроку | ✓ прослойка поверх `Language.getInstance()`: на сервере — английский, как в 1.7.10; при ошибке формата — «Format error: …». Ключи те же, пока их не переименует `legacy_ids.json` |
 
@@ -96,6 +101,7 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `onNeighborBlockChange` | `neighborChanged` | |
 | `onBlockAdded` | `onPlace` | ✓ 1.20.1 зовёт его и при смене состояния того же блока: код автора, который сверяет metadata, просто ничего не меняет |
 | `getLightValue(world, x, y, z)` — свечение по metadata | свечение состояний (`lightEmission`), записанное с создания блока по тому же правилу | ✓ `BlockColoredLamp`: свойство `power` |
+| цвет света для Easy Colored Lights (`getLightValue` с цветом, `Loader.isModLoaded("easycoloredlights")`) | `assets/alfheim/light/emitters.json` для мода Colorful Lighting: цвет по состояниям блока (`"power=5": "#80FF00"`) | ✓ файл строит генерация данных (`alfheim.port.data.ColoredLights`) по коду цвета автора; ветка Easy Colored Lights остаётся закомментированной. Яркость — своя у блока |
 | `breakBlock` | `onRemove` | |
 | `getDrops` | таблица лута (datagen) | |
 | `TileEntity` | `BlockEntity` + `BlockEntityType` | |
@@ -260,7 +266,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 
 | Имя 1.7.10 | Ингредиент 1.20.1 | Примечание |
 |---|---|---|
-| `ingotGold`, `nuggetGold`, `ingotBrickNether`, `gemQuartz`, `gemEmerald`, `dustRedstone`, `dustGlowstone`, `blockRedstone`, `cobblestone`, `stickWood` | `forge:ingots/gold`, `forge:nuggets/gold`, `forge:ingots/nether_brick`, `forge:gems/quartz`, `forge:gems/emerald`, `forge:dusts/redstone`, `forge:dusts/glowstone`, `forge:storage_blocks/redstone`, `forge:cobblestone`, `forge:rods/wooden` | ✓ имена Forge 1.7.10 |
+| `ingotGold`, `nuggetGold`, `ingotBrick`, `ingotBrickNether`, `gemQuartz`, `gemEmerald`, `dustRedstone`, `dustGlowstone`, `blockRedstone`, `cobblestone`, `stickWood` | `forge:ingots/gold`, `forge:nuggets/gold`, `forge:ingots/brick`, `forge:ingots/nether_brick`, `forge:gems/quartz`, `forge:gems/emerald`, `forge:dusts/redstone`, `forge:dusts/glowstone`, `forge:storage_blocks/redstone`, `forge:cobblestone`, `forge:rods/wooden` | ✓ имена Forge 1.7.10 |
 | `dye<Цвет>`, `blockGlass<Цвет>` | `forge:dyes/<цвет>`, `forge:glass/<цвет>` | ✓ белый краситель 1.20.1 — не костная мука, как в 1.7.10 |
 | `treeSapling`, `glowstone` | `minecraft:saplings`, предмет `minecraft:glowstone` | ✓ |
 | `livingwood`, `dreamwood`, `ingotManasteel`, `manaDiamond`, `ingotTerrasteel`, `ingotElvenElementium`, `elvenDragonstone`, `nuggetManasteel`, `nuggetTerrasteel`, `nuggetElvenElementium`, `powderMana`, `petal<Цвет>` | `botania:livingwood_logs`, `botania:dreamwood_logs`, `botania:manasteel_ingots`, `botania:mana_diamond_gems`, `botania:terrasteel_ingots`, `botania:elementium_ingots`, `botania:dragonstone_gems`, `botania:manasteel_nuggets`, `botania:terrasteel_nuggets`, `botania:elementium_nuggets`, `botania:mana_dusts`, `botania:petals/<цвет>` | ✓ теги Botania 1.20.1 |
@@ -268,7 +274,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `rune<Имя>B`, `mysticFlower<Цвет>`, `mysticFlower<Цвет>Double`, `quartz<Имя>` | руны, цветы и кварц Botania 1.20.1 | ✓ |
 | `shardPrismarine` | `minecraft:prismarine_shard` | ✓ осколок призмарина Botania 1.7.10 в 1.20.1 — предмет ванилы |
 | `dirt`, `slabCobblestone`, `powderBlaze`, `rodBlaze` | `minecraft:dirt`, `minecraft:cobblestone_slab`, `minecraft:blaze_powder`, `forge:rods/blaze` | ✓ их регистрировала Botania 1.7.10 |
-| `pestleAndMortar` | — | в Botania 1.20.1 ступки нет: рецепты автора с ней ждут решения владельца (TASKS.md) |
+| `pestleAndMortar` | — | ✓ в Botania 1.20.1 ступки нет: рецепт со ступкой — тот же рецепт без неё (решение автора). Ступку из ингредиентов рецепта без формы убирает прослойка (`ShapelessOreRecipe`, `Recipes1710.kt`); код автора не меняется. Пересечений с рецептами ванилы и Botania нет — проверяет GameTest `recipesDoNotOverlap` |
 
 ## Рецепты
 
@@ -505,7 +511,8 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `ModFluffBlocks.livingrockStairs`, `livingrockBrickStairs`, `livingrockSlab`, `livingrockBrickSlab`, `livingrockWall` | `BotaniaBlocks` — те же имена | ✓ |
 | `ModBlocks.mushroom` с metadata цвета | грибы Botania 1.20.1 по цвету: `BotaniaBlocks.whiteMushroom` … (`getMushroom(DyeColor)`) | ✓ |
 | `ModFluffBlocks.elfQuartz` и др. кварцевые блоки | `BotaniaBlocks.elfQuartz` и др. | ✓ так же в Botania 1.20.1 называются предметы кварца — в коде автора явный импорт блока |
-| `ModBlocks.customBrick` 3 (черепица) | — | в Botania 1.20.1 нет: рецепты черепицы автора ждут решения владельца (TASKS.md) |
+| `ModBlocks.customBrick` 3 (черепица) | `alfheim.port.legacy.botania.BotaniaBlocks1710.roofTile` (`alfheim:custom_brick3`) | ✓ в Botania 1.20.1 черепицы нет — порт вернул блок Botania 1.7.10 с его свойствами, текстурой, именем, рецептом (6 кирпичей → 4) и местом во вкладке Botania (решение автора) |
+| стена автора `livingrockBrickWall` (`livingrock1Wall`) | `BotaniaBlocks.livingrockBrickWall` | ✓ решение автора: такая же стена Botania 1.20.1 с тем же рецептом; поле автора указывает на неё, её рецепт автора и место во вкладке Alfheim убраны |
 | `ModItems.brewVial` (`ItemBrewVial`), `BotaniaAPI.fallbackBrew` | `BotaniaItems.brewVial` (`BaseBrewItem`), `BotaniaBrews.fallbackBrew` | ✓ |
 | `ModItems.petal` с metadata цвета | `BotaniaItems.getPetal(DyeColor)` | ✓ |
 | `ModItems.dye` (цветочная пыль) | краситель ванилы (`DyeItem.byColor`) | ✓ в Botania 1.20.1 цветочной пыли нет: лепестки дают краситель ванилы |

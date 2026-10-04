@@ -89,7 +89,8 @@ class BlockColoredLamp: BlockMod(Material.redstoneLight)/*, ILexiconable*/ {
 	*/
 	
 	// PORT: свечение по координатам — по состоянию (init выше). Цветной свет Easy Colored Lights: мода нет на 1.20.1,
-	// ветка не выполняется — как у автора без мода (TASKS.md, «Вопросы к владельцу»)
+	// ветка не выполняется — как у автора без мода; цвет света по силе сигнала даёт мод Colorful Lighting по файлу
+	// light/emitters.json (alfheim.port.data.ColoredLights)
 	fun getLightValue(state: BlockState): Int {
 		val lvl = state.getValue(POWER)
 //	override fun getLightValue(world: IBlockAccess, x: Int, y: Int, z: Int): Int {

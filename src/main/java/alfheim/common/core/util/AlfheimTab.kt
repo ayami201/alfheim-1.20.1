@@ -800,7 +800,8 @@ object AlfheimTab {
 		addBlock(livingcobbleSlab1)
 		addBlock(livingcobbleSlab2)
 		addBlock(livingcobbleWall)
-		addBlock(livingrockBrickWall)
+		// PORT: стену автора заменила стена Botania 1.20.1 (AlfheimFluffBlocks) — она во вкладке Botania
+//		addBlock(livingrockBrickWall)
 		
 		addBlock(elvenSand)
 		addBlock(elvenSandstone)

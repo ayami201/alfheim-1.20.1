@@ -184,7 +184,6 @@
 	"block.alfheim.living_cobble0_wall": "活性鹅卵石墙",
 	"block.alfheim.living_mountain": "活石高山岩",
 	"block.alfheim.living_mountain0_slab": "活石高山岩半砖",
-	"block.alfheim.livingrock1_wall": "活石砖墙",
 	"block.alfheim.livingwood_bark_fence": "活木栅栏",
 	"block.alfheim.livingwood_bark_fence_gate": "活木栅栏门",
 	"block.alfheim.livingwood_fence": "活木板栅栏",
@@ -1775,5 +1774,6 @@
 	"alfheim.tagline.WOTW": "寒冬将至(美好世界)",
 	"alfheim.page.WOTW0": "寒冬...一方面,这是孩子们 在雪地里玩游戏和堆雪人的 绝佳时机,但是另一方面,暴风 雪会摧毁不够坚固的建筑和 作物,并带来刺骨的霜冻",
 	"alfheim.page.WOTW1": "也许每个人,无论是人还是精 灵,一生中至少堆过一个雪人 尽管对精灵来说那是一个长 着翅膀的雪球. 但是仍有少数经验丰富的探 险家,他们仍然有着无畏的精 神,他们梦想着战胜残酷的凛 冬",
-	"alfheim.page.WOTW2": "但不幸的是,有关冬将军所有 的传闻和故事都会让所有人 对此望而却步. 尽管,,,没有人知道,凛冬的 怒火随时可能降临到不对寒 冬生物\"雪精灵\"保持敬畏的人 身上. <br><br><br>和真!你在干什么呀和真!!"
+	"alfheim.page.WOTW2": "但不幸的是,有关冬将军所有 的传闻和故事都会让所有人 对此望而却步. 尽管,,,没有人知道,凛冬的 怒火随时可能降临到不对寒 冬生物\"雪精灵\"保持敬畏的人 身上. <br><br><br>和真!你在干什么呀和真!!",
+	"block.alfheim.custom_brick3": "瓦块"
 }

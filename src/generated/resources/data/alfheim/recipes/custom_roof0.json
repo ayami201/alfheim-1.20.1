@@ -1,14 +1,16 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "building",
-  "key": {
-    "R": {
-      "item": "alfheim:custom_roof0_slab"
+  "ingredients": [
+    {
+      "item": "alfheim:custom_brick3"
+    },
+    {
+      "tag": "forge:dyes/purple"
+    },
+    {
+      "tag": "forge:dyes/gray"
     }
-  },
-  "pattern": [
-    "R",
-    "R"
   ],
   "result": {
     "item": "alfheim:custom_roof0"

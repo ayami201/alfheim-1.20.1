@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "alfheim:iris_leaves_rainbow"
+    }
+  ],
+  "result": {
+    "item": "alfheim:rainbow_dust"
+  }
+}

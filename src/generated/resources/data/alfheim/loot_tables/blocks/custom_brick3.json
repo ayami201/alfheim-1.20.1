@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "alfheim:livingrock1_wall"
+          "name": "alfheim:custom_brick3"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "alfheim:blocks/livingrock1_wall"
+  "random_sequence": "alfheim:blocks/custom_brick3"
 }

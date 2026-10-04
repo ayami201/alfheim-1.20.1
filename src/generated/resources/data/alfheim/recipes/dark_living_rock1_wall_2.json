@@ -3,7 +3,7 @@
   "category": "building",
   "ingredients": [
     {
-      "item": "alfheim:livingrock1_wall"
+      "item": "botania:livingrock_bricks_wall"
     },
     {
       "tag": "minecraft:coals"

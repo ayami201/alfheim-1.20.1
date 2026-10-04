@@ -4,6 +4,7 @@ package alfheim.common.block
 // alfheim.port.legacy, базовые классы декора Botania 1.7.10 — alfheim.port.legacy.botania (MAPPING.md)
 import alfheim.port.legacy.*
 import alfheim.port.legacy.botania.*
+import alfheim.port.registry.LegacyRegistration
 import net.minecraft.world.level.block.Block
 import vazkii.botania.client.lib.ResourcesLib as LibResources
 import vazkii.botania.common.block.BotaniaBlocks
@@ -232,10 +233,13 @@ object AlfheimFluffBlocks {
 			.setCreativeTab(AlfheimTab)
 			.setHarvestLevelI("pickaxe", 2)
 		
-		// PORT: ModBlocks.livingrock, 1 (кирпичи живого камня) → BotaniaBlocks.livingrockBrick (MAPPING.md, «Botania»)
-		livingrockBrickWall = BlockModWall(BotaniaBlocks.livingrockBrick, 1)
-			.setCreativeTab(AlfheimTab)
-			.setHarvestLevelI("pickaxe", 2)
+		// PORT: стены автора нет — её заменяет такая же стена Botania 1.20.1 из кирпичей живого камня (решение автора,
+		// TASKS.md, журнал решений): она в рецептах автора, на неё ведёт старое имя (legacy_ids.json)
+		livingrockBrickWall = BotaniaBlocks.livingrockBrickWall
+		LegacyRegistration.replace("livingrock1Wall", livingrockBrickWall)
+//		livingrockBrickWall = BlockModWall(ModBlocks.livingrock, 1)
+//			.setCreativeTab(AlfheimTab)
+//			.setHarvestLevelI("pickaxe", 2)
 		
 		// PORT: ModBlocks.livingwood, ModBlocks.dreamwood: вариант 0 (кора) → BotaniaBlocks.livingwood, BotaniaBlocks.dreamwood,
 		// вариант 1 (доски) → …Planks (MAPPING.md, «Botania»)
