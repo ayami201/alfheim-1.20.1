@@ -20,8 +20,9 @@ import java.util.concurrent.CompletableFuture
 /**
  * Инструмент добычи 1.7.10 → теги 1.20.1 (MAPPING.md, «Блоки и предметы»).
  *
- * Чем блок добывается быстро: инструмент из `setHarvestLevel` и, как у кирки и топора 1.7.10, ещё и по материалу —
- * кирка быстра на камне, железе и наковальне, топор — на дереве и растениях. Уровень добычи 1, 2, 3 — теги
+ * Чем блок добывается быстро: инструмент из `setHarvestLevel` или `getHarvestTool` блока и, как у кирки и топора
+ * 1.7.10, ещё и по материалу — кирка быстра на камне, железе и наковальне, топор — на дереве и растениях. Уровень
+ * добычи 1, 2, 3 — теги
  * «нужен каменный, железный, алмазный инструмент», 4 и выше — незеритовый. Без нужного инструмента блок
  * ничего не роняет, только если этого требует материал (`requiresCorrectToolForDrops`, как в 1.7.10).
  */
@@ -29,12 +30,12 @@ object HarvestTags {
 
 	fun tools(block: LegacyBlock): Set<TagKey<Block>> {
 		val tools = LinkedHashSet<TagKey<Block>>()
-		when (block.legacy.harvestTool) {
+		when (val tool = block.getHarvestTool(block.variant ?: 0)) {
 			"pickaxe" -> tools += BlockTags.MINEABLE_WITH_PICKAXE
 			"axe"     -> tools += BlockTags.MINEABLE_WITH_AXE
 			"shovel"  -> tools += BlockTags.MINEABLE_WITH_SHOVEL
 			null      -> Unit
-			else      -> throw IllegalStateException("Unknown 1.7.10 harvest tool ${block.legacy.harvestTool}")
+			else      -> throw IllegalStateException("Unknown 1.7.10 harvest tool $tool")
 		}
 		when (block.blockMaterial) {
 			Material.rock, Material.iron, Material.anvil   -> tools += BlockTags.MINEABLE_WITH_PICKAXE
@@ -44,7 +45,7 @@ object HarvestTags {
 	}
 
 	fun tier(block: LegacyBlock): TagKey<Block>? {
-		if (block.legacy.harvestTool == null) return null
+		if (block.getHarvestTool(block.variant ?: 0) == null) return null
 		return when (block.legacy.harvestLevel) {
 			in Int.MIN_VALUE..0 -> null
 			1                   -> BlockTags.NEEDS_STONE_TOOL

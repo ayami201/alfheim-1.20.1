@@ -6,6 +6,9 @@ import alfheim.common.block.*
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.*
 import alfheim.port.data.AlfheimItemModels
+import alfheim.port.legacy.Leaves1710
+import alfheim.port.registry.LegacyRegistration
+import net.minecraft.client.renderer.ItemBlockRenderTypes
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.block.BlockModelShaper
 import net.minecraft.client.renderer.block.model.BakedQuad
@@ -15,6 +18,7 @@ import net.minecraft.core.*
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.state.BlockState
@@ -53,7 +57,14 @@ object AlfheimModels {
 		e.register(model("living_cobble3_alt"))
 		for (i in 2..4) for (name in listOf("living_mountain", "living_mountain0_slab", "living_mountain0_slab_top")) e.register(model("${name}_icon$i"))
 		e.register(ResourceLocation(MODID, "item/${AlfheimItemModels.INFUSED_CANDY}"))
+		for (leaves in leaves()) e.register(model(opaque(leaves)))
 	}
+	
+	/** Листва автора ([Leaves1710]) */
+	private fun leaves() = LegacyRegistration.blocks.keys.filterIsInstance<Leaves1710>()
+	
+	/** Модель листвы с непрозрачной текстурой `_opaque` (`BlockLeavesMod.registerBlockIcons`) */
+	private fun opaque(leaves: Leaves1710) = LegacyRegistration.blocks[leaves]!!.id.path + "_opaque"
 	
 	private fun modifyBakingResult(e: ModelEvent.ModifyBakingResult) {
 		val models = e.models
@@ -87,6 +98,18 @@ object AlfheimModels {
 				val icons = listOf(models[stateLocation]) + (2..4).map { models[model("${name}_icon$it")] }
 				if (icons.all { it != null }) models[stateLocation] = IconByPosition(icons.map { it!! }, ::livingMountainIcon)
 			}
+		
+		// BlockLeavesMod.getIcon: при «быстрой» графике (`setGraphicsLevel`) — непрозрачная текстура `_opaque`, и в мире,
+		// и в инвентаре. Сплошной листву рисует 1.20.1 сама (LeavesBlock)
+		for (leaves in leaves()) {
+			val opaque = models[model(opaque(leaves))] ?: continue
+			for (state in leaves.stateDefinition.possibleStates) {
+				val location = BlockModelShaper.stateToModelLocation(state)
+				models[location]?.let { models[location] = FancyGraphics(it, opaque) }
+			}
+			val item = ModelResourceLocation(BuiltInRegistries.BLOCK.getKey(leaves), "inventory")
+			models[item]?.let { models[item] = FancyGraphics(it, opaque) }
+		}
 		
 		// ItemElvenResource.getIcon: на праздник (AlfheimCore.jingleTheBells) прутик рисуется конфетой
 		if (AlfheimCore.jingleTheBells) {
@@ -129,6 +152,20 @@ object AlfheimModels {
 			
 			val POS = ModelProperty<BlockPos>()
 		}
+	}
+	
+	/**
+	 * Модель, у которой при «быстрой» графике квадраты модели [fast] — как иконка, которую 1.7.10 выбирал по настройке
+	 * графики. Настройку игра меняет с пересборкой чанков, модели при этом не перезагружаются — поэтому выбор здесь, при
+	 * каждой сборке
+	 */
+	private class FancyGraphics(fancy: BakedModel, private val fast: BakedModel): BakedModelWrapper<BakedModel>(fancy) {
+		
+		override fun getQuads(state: BlockState?, side: Direction?, rand: RandomSource, extraData: ModelData, renderType: RenderType?): List<BakedQuad> =
+			if (ItemBlockRenderTypes.isFancy()) super.getQuads(state, side, rand, extraData, renderType) else fast.getQuads(state, side, rand, extraData, renderType)
+		
+		// предмет рисуется своими проходами: у обёртки 1.20.1 это модель внутри неё, мимо getQuads выше
+		override fun getRenderPasses(itemStack: ItemStack, fabulous: Boolean): List<BakedModel> = listOf(this)
 	}
 	
 	/** Модель, у которой на части координат квадраты другой модели — как `getIcon(world, x, y, z, side)` 1.7.10 */

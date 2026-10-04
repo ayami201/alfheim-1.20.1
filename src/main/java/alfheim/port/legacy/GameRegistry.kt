@@ -28,6 +28,12 @@ object GameRegistry {
 		return block
 	}
 
+	/** Обработчик топлива 1.7.10 ([Fuel1710]) */
+	@JvmStatic
+	fun registerFuelHandler(handler: IFuelHandler) {
+		Fuel1710.handlers += handler
+	}
+
 	@JvmStatic
 	fun registerItem(item: Item, name: String): Item {
 		LegacyRegistration.item(item, name)

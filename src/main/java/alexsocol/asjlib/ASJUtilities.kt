@@ -50,6 +50,9 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.FireBlock
 import net.minecraft.world.level.portal.PortalInfo
 import net.minecraft.world.phys.*
 import net.minecraftforge.common.util.ITeleporter
@@ -99,15 +102,20 @@ object ASJUtilities {
 	 */
 	@JvmStatic
 	fun register(item: Item) = GameRegistry.registerItem(item, getItemName(item))
+	*/
 	
 	/**
 	 * Registers this block as burnable
 	 */
+	// PORT: Blocks.fire.setFireInfo → FireBlock.setFlammable 1.20.1 (открыт access transformer), те же числа:
+	// encouragement — как легко блок загорается от огня рядом, flammability — как быстро сгорает
 	@JvmStatic
 	fun setBurnable(block: Block, encouragement: Int, flammablility: Int) {
-		Blocks.fire.setFireInfo(block, encouragement, flammablility)
+		(Blocks.FIRE as FireBlock).setFlammable(block, encouragement, flammablility)
+//		Blocks.fire.setFireInfo(block, encouragement, flammablility)
 	}
 	
+	/* PORT: по мере надобности (продолжение)
 	/**
 	 * Returns String ID of the mod this block/item is registered in
 	 * @param stack ItemStack with block/item for analysis
