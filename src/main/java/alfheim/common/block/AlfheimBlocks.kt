@@ -124,7 +124,7 @@ object AlfheimBlocks {
 //	val rainbowFlowerFloating: Block // PORT: КТ-3
 	val rainbowGrass: Array<Block>
 	val rainbowLeaves: Block
-//	val rainbowMushroom: Block // PORT: КТ-2
+	val rainbowMushroom: Block
 	val rainbowPlanks: Block
 	val rainbowSlab: Block
 	val rainbowSlabFull: Block
@@ -146,15 +146,15 @@ object AlfheimBlocks {
 //	val schemaFiller: Block // PORT: КТ-6
 //	val schemaGenerator: Block // PORT: КТ-6
 //	val schemaMarker: Block // PORT: КТ-6
-//	val shimmerQuartz: Block // PORT: КТ-2
-//	val shimmerQuartzSlab: Block // PORT: КТ-2
-//	val shimmerQuartzSlabFull: Block // PORT: КТ-2
-//	val shimmerQuartzStairs: Block // PORT: КТ-2
+	val shimmerQuartz: Array<Block>
+	val shimmerQuartzSlab: Block
+	val shimmerQuartzSlabFull: Block
+	val shimmerQuartzStairs: Block
 //	val snakeBody: Block // PORT: КТ-2
 //	val snakeObject: Block // PORT: КТ-2
 //	val snowGrass: Block // PORT: КТ-2
 //	val snowLayer: Block // PORT: КТ-2
-//	val softStorage: Block // PORT: КТ-2
+	val softStorage: Array<Block>
 //	val spire: Block // PORT: КТ-3
 //	val starBlock: Block // PORT: КТ-3
 //	val starBlock2: Block // PORT: КТ-3
@@ -320,7 +320,7 @@ object AlfheimBlocks {
 //		rainbowFlowerFloating = BlockFloatingFlowerRainbow() // PORT: КТ-3
 		rainbowLeaves = BlockRainbowLeaves()
 		rainbowGrass = Array(5) { BlockRainbowGrass(it) }
-//		rainbowMushroom = BlockRainbowMushroom() // PORT: КТ-2
+		rainbowMushroom = BlockRainbowMushroom()
 		rainbowPlanks = BlockRainbowPlanks()
 		rainbowSlab = BlockRainbowWoodSlab(false)
 		rainbowSlabFull = rainbowSlab // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
@@ -345,17 +345,22 @@ object AlfheimBlocks {
 //		schemaFiller = BlockSchemaFiller() // PORT: КТ-6
 //		schemaGenerator = BlockSchemaGenerator() // PORT: КТ-6
 //		schemaMarker = BlockSchemaMarker() // PORT: КТ-6
-//		shimmerQuartz = BlockShimmerQuartz() // PORT: КТ-2
-//		shimmerQuartzSlab = BlockShimmerQuartzSlab(shimmerQuartz, false) // PORT: КТ-2
-//		shimmerQuartzSlabFull = BlockShimmerQuartzSlab(shimmerQuartz, true) // PORT: КТ-2
-//		shimmerQuartzSlab.register() // PORT: КТ-2
-//		shimmerQuartzSlabFull.register() // PORT: КТ-2
-//		shimmerQuartzStairs = BlockShimmerQuartzStairs(shimmerQuartz) // PORT: КТ-2
+		// PORT: варианты кварца — массив (SPEC, Р-5); плита и лестница — из варианта 0 (блок), как в 1.7.10
+		shimmerQuartz = Array(3) { BlockShimmerQuartz(it) }
+		shimmerQuartzSlab = BlockShimmerQuartzSlab(shimmerQuartz[0] as BlockShimmerQuartz, false)
+		shimmerQuartzSlabFull = shimmerQuartzSlab // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
+//		shimmerQuartz = BlockShimmerQuartz()
+//		shimmerQuartzSlab = BlockShimmerQuartzSlab(shimmerQuartz, false)
+//		shimmerQuartzSlabFull = BlockShimmerQuartzSlab(shimmerQuartz, true)
+		shimmerQuartzSlab.register()
+//		shimmerQuartzSlabFull.register()
+		shimmerQuartzStairs = BlockShimmerQuartzStairs(shimmerQuartz[0] as BlockShimmerQuartz)
+//		shimmerQuartzStairs = BlockShimmerQuartzStairs(shimmerQuartz)
 //		snakeBody = BlockSnakeBody() // PORT: КТ-2
 //		snakeObject = BlockSnakeObject() // PORT: КТ-2
 //		snowGrass = BlockSnowGrass() // PORT: КТ-2
 //		snowLayer = BlockSnowLayer() // PORT: КТ-2
-//		softStorage = BlockSoftStorage() // PORT: КТ-2
+		softStorage = Array(4) { BlockSoftStorage(it) }
 //		spire = BlockSpire() // PORT: КТ-3
 //		starBlock = BlockStar() // PORT: КТ-3
 //		starBlock2 = BlockCracklingStar() // PORT: КТ-3
@@ -520,7 +525,9 @@ object AlfheimBlocks {
 //		BLibOreDict.QUARTZ.forEachIndexed { id, it -> // PORT: КТ-2
 //			registerOre("block${it.capitalized()}", ItemStack(quartzs[id] ?: return@forEachIndexed))
 //		}
-//		registerOre(LibOreDict.RAINBOW_QUARTZ_BLOCK, ItemStack(shimmerQuartz)) // PORT: КТ-2
+		// PORT: вариант metadata — блок массива (SPEC, Р-5)
+		registerOre(LibOreDict.RAINBOW_QUARTZ_BLOCK, ItemStack(shimmerQuartz[0]))
+//		registerOre(LibOreDict.RAINBOW_QUARTZ_BLOCK, ItemStack(shimmerQuartz))
 		
 		registerOre("sand", ItemStack(elvenSand))
 		
@@ -537,7 +544,7 @@ object AlfheimBlocks {
 		registerOre(LibOreDict.RAINBOW_DOUBLE_FLOWER, ItemStack(rainbowTallFlower))
 		
 //		registerOre(LibOreDict.MUSHROOM, ItemStack(ModBlocks.mushroom, 1, WILDCARD_VALUE)) // PORT: КТ-3
-//		registerOre(LibOreDict.MUSHROOM, ItemStack(rainbowMushroom)) // PORT: КТ-2
+		registerOre(LibOreDict.MUSHROOM, ItemStack(rainbowMushroom))
 		
 		registerOre("treeSapling", irisSapling)
 		

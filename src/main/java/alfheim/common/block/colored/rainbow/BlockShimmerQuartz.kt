@@ -1,35 +1,33 @@
 package alfheim.common.block.colored.rainbow
 
-import alexsocol.asjlib.ASJUtilities
-import alfheim.client.core.helper.InterpolatedIconHelper
+// PORT: импорты 1.20.1; кварц Botania 1.7.10 (блок, плита, лестница) — alfheim.port.legacy.botania (MAPPING.md, «Botania»)
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.*
-import alfheim.common.lexicon.AlfheimLexiconData
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.*
-import net.minecraft.block.*
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.world.World
-import net.minecraftforge.client.event.TextureStitchEvent
-import net.minecraftforge.common.MinecraftForge
-import vazkii.botania.common.block.decor.quartz.*
+import alfheim.port.legacy.*
+import alfheim.port.legacy.botania.*
+import alfheim.port.registry.LegacyRegistration
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.SlabBlock as BlockSlab
 
 /**
  * @author WireSegal
  * Created at 7:59 PM on 2/13/16.
  */
-class BlockShimmerQuartz: BlockSpecialQuartz("Shimmer") {
+// PORT: вариант metadata — отдельный блок (SPEC, Р-5): 0 — блок, 1 — резной, 2 — колонна; создают массивом
+// `Array(3) { BlockShimmerQuartz(it) }`
+class BlockShimmerQuartz(meta: Int): BlockSpecialQuartz("Shimmer", meta) {
+//class BlockShimmerQuartz: BlockSpecialQuartz("Shimmer") {
 	
 	init {
 		setCreativeTab(AlfheimTab)
-		if (ASJUtilities.isClient)
-			MinecraftForge.EVENT_BUS.register(this)
+		// PORT: анимированные текстуры 1.20.1 рисует сама по .mcmeta; подписка на TextureStitchEvent не нужна
+//		if (ASJUtilities.isClient)
+//			MinecraftForge.EVENT_BUS.register(this)
 	}
 	
+	/* PORT: иконки → модели вариантов (alfheim.port.data.AlfheimBlockStates): бока — iconNames; торцы блока — его же
+	   иконка, резного и колонны — chiseledShimmerQuartz1 и pillarShimmerQuartz1; анимация — .mcmeta
 	@SubscribeEvent
 	fun registerIcons(e: TextureStitchEvent.Pre) {
 		if (e.map.textureType == 0) {
@@ -50,10 +48,14 @@ class BlockShimmerQuartz: BlockSpecialQuartz("Shimmer") {
 	
 	@SideOnly(Side.CLIENT)
 	override fun registerBlockIcons(par1IconRegister: IIconRegister) = Unit
+	*/
 	
-	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.shimmer
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.shimmer
 }
 
+// PORT: двойная плита 1.7.10 (full) — состояние type=double одинарной (BlockModSlab): getFullBlock и getSingleBlock
+// возвращают одну и ту же плиту
 class BlockShimmerQuartzSlab(val block: BlockShimmerQuartz, val full: Boolean): BlockSpecialQuartzSlab(block, full) {
 	
 	init {
@@ -64,10 +66,13 @@ class BlockShimmerQuartzSlab(val block: BlockShimmerQuartz, val full: Boolean): 
 	
 	override fun getFullBlock() = AlfheimBlocks.shimmerQuartzSlabFull as BlockSlab
 	
-	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = block.getEntry(world, x, y, z, player, lexicon)
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = block.getEntry(world, x, y, z, player, lexicon)
 	
 	override fun register() {
 		GameRegistry.registerBlock(this, ItemShimmerSlabMod::class.java, "quartzSlab${block.type}${if (full) "Full" else "Half"}")
+		// PORT: двойная плита 1.7.10 — состояние type=double этой плиты (BlockModSlab); её старое имя — quartzSlabShimmerFull
+		LegacyRegistration.alias("quartzSlab${block.type}Full", this, "type=double")
 	}
 }
 
@@ -87,7 +92,8 @@ class BlockShimmerQuartzStairs(val block: BlockShimmerQuartz): BlockSpecialQuart
 	
 	override fun getUnlocalizedName() = unlocName
 	
-	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = block.getEntry(world, x, y, z, player, lexicon)
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = block.getEntry(world, x, y, z, player, lexicon)
 }
 
 

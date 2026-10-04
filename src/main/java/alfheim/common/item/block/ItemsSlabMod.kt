@@ -35,13 +35,16 @@ open class ItemSlabMod(block: Block): ItemBlock(block) {
 	*/
 }
 
-/* PORT: КТ-2, партия 8б — мерцающий кварц (BlockShimmerQuartzSlab)
-open class ItemShimmerSlabMod(val block: Block): ItemSlab(block, (block as BlockShimmerQuartzSlab).singleBlock, block.fullBlock, false) {
+// PORT: ItemSlab 1.7.10 → обычный предмет-блок (см. ItemSlabMod). Ключ имени — ключ блока; старый ключ без номера
+// (getUnlocalizedName ниже) переименован по legacy_ids.json (alfheim.port.data.LegacyIdsProvider)
+open class ItemShimmerSlabMod(block: Block): ItemBlock(block) {
+//open class ItemShimmerSlabMod(val block: Block): ItemSlab(block, (block as BlockShimmerQuartzSlab).singleBlock, block.fullBlock, false) {
 	
+	/*
 	override fun getUnlocalizedName(stack: ItemStack) =
 		field_150939_a.unlocalizedName.replace("tile.".toRegex(), "tile.${ModInfo.MODID}:").replace("\\d+$".toRegex(), "")
+	*/
 }
-*/
 
 // PORT: ItemSlab 1.7.10 → обычный предмет-блок (см. ItemSlabMod). Ключ имени — ключ блока; старый ключ с номером
 // варианта (getUnlocalizedName ниже) переименован по legacy_ids.json (alfheim.port.data.LegacyIdsProvider)
