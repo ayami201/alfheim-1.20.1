@@ -35,18 +35,18 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 223 | 19 303 | 138 | 84 | 1 |  |
+| КТ-2 | 224 | 19 401 | 118 | 104 | 2 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
-| КТ-6 | 107 | 12 508 | 107 |  |  |  |
+| КТ-6 | 106 | 12 410 | 106 |  |  |  |
 | КТ-7 | 139 | 10 888 | 139 |  |  |  |
 | КТ-8 | 95 | 13 066 | 95 |  |  |  |
 | КТ-9 | 19 | 2 559 | 19 |  |  |  |
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **964** | **116** | **61** | **12** |
+| **всего** | **1153** | **124 643** | **943** | **136** | **62** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -317,8 +317,8 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `IIridescentSaplingVariant.kt` | 15 | КТ-2 | ждёт |  |
-| `IridescentSaplingBaseVariant.kt` | 44 | КТ-2 | ждёт |  |
+| `IIridescentSaplingVariant.kt` | 15 | КТ-2 | перенесено | → `src/main/java/alfheim/api/trees/IIridescentSaplingVariant.kt`; блок с вариантами — массив блоков-вариантов, getMeta — 0 |
+| `IridescentSaplingBaseVariant.kt` | 44 | КТ-2 | перенесено | → `src/main/java/alfheim/api/trees/IridescentSaplingBaseVariant.kt`; почва, бревно, листва — массивы, номер варианта почвы — её индекс в массиве |
 
 ### `legacy/src/main/java/alfheim/api/world/domain/`
 
@@ -458,7 +458,7 @@ python3 tools/check_inventory.py
 | `RenderBlockAnyavil.kt` | 30 | КТ-3 | ждёт |  |
 | `RenderBlockBarrel.kt` | 26 | КТ-3 | ждёт |  |
 | `RenderBlockChair.kt` | 102 | КТ-3 | ждёт |  |
-| `RenderBlockColoredDoubleGrass.kt` | 56 | КТ-2 | ждёт |  |
+| `RenderBlockColoredDoubleGrass.kt` | 56 | КТ-2 | выпало (заменён моделью: окрашенный крест половин из генерации данных, SPEC Р-13; смещение по X и Z на ±0,15 — `DoublePlant1710`) | `BlockColoredDoubleGrass` |
 | `RenderBlockComposite.kt` | 179 | КТ-3 | ждёт |  |
 | `RenderBlockDomainLobby.kt` | 32 | КТ-6 | ждёт |  |
 | `RenderBlockDoubleBlock.kt` | 42 | КТ-3 | ждёт |  |
@@ -728,13 +728,13 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `BlockContainerMod.kt` | 55 | КТ-2 | ждёт |  |
-| `BlockLeavesMod.kt` | 209 | КТ-2 | ждёт |  |
+| `BlockLeavesMod.kt` | 209 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockLeavesMod.kt`; опадание — алгоритм автора на случайном тике, бит опадания — свойство `persistent` (`Leaves1710`), лут — таблица листвы |
 | `BlockMod.kt` | 49 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockMod.kt` |
-| `BlockModRotatedPillar.kt` | 92 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockModRotatedPillar.kt`; поворот — свойство состояния `axis`; `register` по умолчанию ждёт `ItemIridescentBlockMod` (цветные деревья) |
+| `BlockModRotatedPillar.kt` | 92 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockModRotatedPillar.kt`; поворот — свойство состояния `axis` |
 | `BlockRainbowManaFlame.kt` | 85 | КТ-3 | ждёт | с блок-сущностью |
-| `BlockSlabMod.kt` | 53 | КТ-2 | ждёт |  |
-| `BlockStairsMod.kt` | 31 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockStairsMod.kt`; `register` по умолчанию ждёт `ItemIridescentBlockMod` (цветные деревья) |
-| `IDoublePlant.kt` | 13 | КТ-2 | ждёт |  |
+| `BlockSlabMod.kt` | 53 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockSlabMod.kt`; двойная плита — состояние `type=double`, твёрдость блока-источника — в состояниях |
+| `BlockStairsMod.kt` | 31 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockStairsMod.kt` |
+| `IDoublePlant.kt` | 13 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/IDoublePlant.kt`; иконки половин — модели половин |
 | `IMultipassRenderer.kt` | 10 | КТ-3 | ждёт | основа маскирующихся блоков с блок-сущностью |
 
 ### `legacy/src/main/java/alfheim/common/block/colored/`
@@ -746,16 +746,16 @@ python3 tools/check_inventory.py
 | `BlockAuroraPlanks.kt` | 64 | КТ-2 | ждёт |  |
 | `BlockAuroraWood.kt` | 52 | КТ-2 | ждёт |  |
 | `BlockAuroraWoodPartials.kt` | 54 | КТ-2 | ждёт |  |
-| `BlockColoredDirt.kt` | 125 | КТ-2 | ждёт |  |
-| `BlockColoredDoubleGrass.kt` | 177 | КТ-2 | ждёт |  |
-| `BlockColoredGrass.kt` | 100 | КТ-2 | ждёт |  |
-| `BlockColoredLamp.kt` | 90 | КТ-2 | ждёт |  |
-| `BlockColoredLeaves.kt` | 65 | КТ-2 | ждёт |  |
-| `BlockColoredPlanks.kt` | 106 | КТ-2 | ждёт |  |
-| `BlockColoredSapling.kt` | 155 | КТ-2 | ждёт |  |
-| `BlockColoredWood.kt` | 87 | КТ-2 | ждёт |  |
-| `BlockColoredWoodSlab.kt` | 49 | КТ-2 | ждёт |  |
-| `BlockColoredWoodStairs.kt` | 35 | КТ-2 | ждёт |  |
+| `BlockColoredDirt.kt` | 125 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredDirt.kt`; 16 блоков-вариантов `colored_dirt0`–`15`; цветок биома от костной муки — `plantFlower` прослойки |
+| `BlockColoredDoubleGrass.kt` | 177 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredDoubleGrass.kt`; 16 блоков-вариантов `iris_double_grass00`–`17`; поломка половин — `DoublePlantBlock` 1.20.1, лут с ножницами — таблица |
+| `BlockColoredGrass.kt` | 100 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredGrass.kt`; 16 блоков-вариантов `iris_grass0`–`15` |
+| `BlockColoredLamp.kt` | 90 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredLamp.kt`; metadata — свойство `power`, свечение — в состояниях; ветка Easy Colored Lights не выполняется (TASKS.md, «Вопросы к владельцу») |
+| `BlockColoredLeaves.kt` | 65 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredLeaves.kt`; 16 блоков-вариантов `iris_leaves00`–`17` |
+| `BlockColoredPlanks.kt` | 106 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredPlanks.kt`; 16 блоков-вариантов `iris_planks0`–`15`; превращение посохом в древесную кузню — КТ-3 |
+| `BlockColoredSapling.kt` | 155 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredSapling.kt`; бит 8 — свойство `stage`; дерево — `SimpleTreeGen` |
+| `BlockColoredWood.kt` | 87 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredWood.kt`; 16 блоков-вариантов `iris_wood00`–`33`, поворот — свойство `axis` |
+| `BlockColoredWoodSlab.kt` | 49 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredWoodSlab.kt`; 16 плит `iris_planks_slab0`–`15` |
+| `BlockColoredWoodStairs.kt` | 35 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/BlockColoredWoodStairs.kt`; 16 ступенек `iris_planks_stairs0`–`15` |
 | `BlockFloatingFlowerRainbow.kt` | 32 | КТ-3 | ждёт | с блок-сущностью |
 
 ### `legacy/src/main/java/alfheim/common/block/colored/rainbow/`
@@ -1494,10 +1494,10 @@ python3 tools/check_inventory.py
 | `ItemBlockMetaSapling.kt` | 12 | КТ-2 | ждёт |  |
 | `ItemBlockNidhoggTooth.kt` | 33 | КТ-2 | ждёт |  |
 | `ItemBlockSubspacian.kt` | 34 | КТ-2 | ждёт |  |
-| `ItemsGrassMod.kt` | 79 | КТ-2 | ждёт |  |
-| `ItemsIridescentMod.kt` | 55 | КТ-2 | ждёт |  |
-| `ItemsSlabMod.kt` | 41 | КТ-2 | ждёт |  |
-| `ItemsSubtypeMod.kt` | 42 | КТ-2 | ждёт |  |
+| `ItemsGrassMod.kt` | 79 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/block/ItemsGrassMod.kt`; предметы радужной травы закомментированы до её партии (КТ-2, 8б) |
+| `ItemsIridescentMod.kt` | 55 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/block/ItemsIridescentMod.kt`; подсказка цвета — `appendHoverText` |
+| `ItemsSlabMod.kt` | 41 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/block/ItemsSlabMod.kt`; предмет плиты — обычный предмет-блок; плита мерцающего кварца — с её партией (КТ-2, 8б) |
+| `ItemsSubtypeMod.kt` | 42 | КТ-2 | перенесено | → `src/main/java/alfheim/common/item/block/ItemsSubtypeMod.kt` |
 | `ItemStarPlacer.kt` | 103 | КТ-3 | ждёт |  |
 | `ItemStarPlacer2.kt` | 104 | КТ-3 | ждёт |  |
 
@@ -2082,7 +2082,7 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `HeartWoodTreeGen.kt` | 94 | КТ-6 | ждёт |  |
-| `SimpleTreeGen.kt` | 98 | КТ-6 | ждёт |  |
+| `SimpleTreeGen.kt` | 98 | КТ-2 | перенесено | → `src/main/java/alfheim/common/world/gen/SimpleTreeGen.kt`; перенесён в КТ-2: им растёт радужный саженец (`BlockColoredSapling.getGenerator`) |
 
 ### `legacy/src/main/java/alfheim/common/world/mobspawn/`
 
