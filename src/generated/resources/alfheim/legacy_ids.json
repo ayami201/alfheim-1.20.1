@@ -150,6 +150,13 @@
       "4": "alfheim:alf_storage4",
       "5": "alfheim:alf_storage5"
     },
+    "alfheim:auroraDirt": "alfheim:aurora_dirt",
+    "alfheim:auroraLeaves": "alfheim:aurora_leaves",
+    "alfheim:auroraPlanks": "alfheim:aurora_planks",
+    "alfheim:auroraPlanksSlab17": "alfheim:aurora_planks_slab17",
+    "alfheim:auroraPlanksSlabFull17": "alfheim:aurora_planks_slab17[type=double]",
+    "alfheim:auroraPlanksStairs17": "alfheim:aurora_planks_stairs17",
+    "alfheim:auroraWood": "alfheim:aurora_wood",
     "alfheim:coloredDirt": {
       "0": "alfheim:colored_dirt0",
       "1": "alfheim:colored_dirt1",
@@ -319,7 +326,14 @@
       "3": "alfheim:iris_wood33"
     },
     "alfheim:livingrock1Wall": "alfheim:livingrock1_wall",
-    "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall"
+    "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall",
+    "alfheim:rainbowDirt": "alfheim:rainbow_dirt",
+    "alfheim:rainbowLeaves": "alfheim:rainbow_leaves",
+    "alfheim:rainbowPlanks": "alfheim:rainbow_planks",
+    "alfheim:rainbowPlanksSlab": "alfheim:rainbow_planks_slab",
+    "alfheim:rainbowPlanksSlabFull": "alfheim:rainbow_planks_slab[type=double]",
+    "alfheim:rainbowPlanksStairs": "alfheim:rainbow_planks_stairs",
+    "alfheim:rainbowWood": "alfheim:rainbow_wood"
   },
   "entities": {
     "alfheim:ThrownItem": "alfheim:thrown_item",
@@ -532,6 +546,12 @@
       "4": "alfheim:alf_storage4",
       "5": "alfheim:alf_storage5"
     },
+    "alfheim:auroraDirt": "alfheim:aurora_dirt",
+    "alfheim:auroraLeaves": "alfheim:aurora_leaves",
+    "alfheim:auroraPlanks": "alfheim:aurora_planks",
+    "alfheim:auroraPlanksSlab17": "alfheim:aurora_planks_slab17",
+    "alfheim:auroraPlanksStairs17": "alfheim:aurora_planks_stairs17",
+    "alfheim:auroraWood": "alfheim:aurora_wood",
     "alfheim:coloredDirt": {
       "0": "alfheim:colored_dirt0",
       "1": "alfheim:colored_dirt1",
@@ -687,6 +707,12 @@
     },
     "alfheim:livingrock1Wall": "alfheim:livingrock1_wall",
     "alfheim:quartzTypeElf0Wall": "alfheim:quartz_type_elf0_wall",
+    "alfheim:rainbowDirt": "alfheim:rainbow_dirt",
+    "alfheim:rainbowLeaves": "alfheim:rainbow_leaves",
+    "alfheim:rainbowPlanks": "alfheim:rainbow_planks",
+    "alfheim:rainbowPlanksSlab": "alfheim:rainbow_planks_slab",
+    "alfheim:rainbowPlanksStairs": "alfheim:rainbow_planks_stairs",
+    "alfheim:rainbowWood": "alfheim:rainbow_wood",
     "alfheim:splashPotion": "alfheim:splash_potion",
     "alfheim:wiltedLotus": {
       "0": "alfheim:wilted_lotus0",
@@ -890,6 +916,8 @@
     "tile.alfheim:ManaIce.name": "block.alfheim.mana_ice",
     "tile.alfheim:ShrinePillar.name": "block.alfheim.shrine_pillar",
     "tile.alfheim:ShrineRockWhiteStairs.name": "block.alfheim.shrine_rock_white_stairs",
+    "tile.alfheim:auroraPlanksSlab.name": "block.alfheim.aurora_planks_slab17",
+    "tile.alfheim:auroraPlanksStairs.name": "block.alfheim.aurora_planks_stairs17",
     "tile.alfheim:coloredDirt.name": [
       "block.alfheim.colored_dirt0",
       "block.alfheim.colored_dirt1",
@@ -1036,6 +1064,16 @@
       "block.alfheim.iris_wood32",
       "block.alfheim.iris_wood33"
     ],
+    "tile.alfheim:rainbowDirt.name": "block.alfheim.rainbow_dirt",
+    "tile.alfheim:rainbowLeaves.name": "block.alfheim.rainbow_leaves",
+    "tile.alfheim:rainbowPlanks.name": "block.alfheim.rainbow_planks",
+    "tile.alfheim:rainbowPlanksSlab.name": "block.alfheim.rainbow_planks_slab",
+    "tile.alfheim:rainbowPlanksStairs.name": "block.alfheim.rainbow_planks_stairs",
+    "tile.alfheim:rainbowWood.name": "block.alfheim.rainbow_wood",
+    "tile.auroraDirt.name": "block.alfheim.aurora_dirt",
+    "tile.auroraLeaves.name": "block.alfheim.aurora_leaves",
+    "tile.auroraPlanks.name": "block.alfheim.aurora_planks",
+    "tile.auroraWood.name": "block.alfheim.aurora_wood",
     "tile.botania:CustomRoof0Slab.name": "block.alfheim.custom_roof0_slab",
     "tile.botania:CustomRoof1Slab.name": "block.alfheim.custom_roof1_slab",
     "tile.botania:CustomRoof2Slab.name": "block.alfheim.custom_roof2_slab",

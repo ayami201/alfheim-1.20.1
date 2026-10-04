@@ -1,5 +1,6 @@
 {
   "values": [
+    "alfheim:aurora_dirt",
     "alfheim:elven_sand",
     "alfheim:colored_dirt0",
     "alfheim:colored_dirt1",
@@ -16,6 +17,7 @@
     "alfheim:colored_dirt12",
     "alfheim:colored_dirt13",
     "alfheim:colored_dirt14",
-    "alfheim:colored_dirt15"
+    "alfheim:colored_dirt15",
+    "alfheim:rainbow_dirt"
   ]
 }

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "alfheim:block/aurora_wood_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "alfheim:block/aurora_wood"
+    },
+    "axis=z": {
+      "model": "alfheim:block/aurora_wood_horizontal",
+      "x": 90
+    }
+  }
+}

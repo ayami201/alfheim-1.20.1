@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/aurora_planks_slab17"
+    },
+    "type=double": {
+      "model": "alfheim:block/aurora_planks"
+    },
+    "type=top": {
+      "model": "alfheim:block/aurora_planks_slab17_top"
+    }
+  }
+}

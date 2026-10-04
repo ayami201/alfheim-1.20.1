@@ -1,5 +1,6 @@
 {
   "values": [
+    "alfheim:aurora_leaves",
     "alfheim:iris_leaves00",
     "alfheim:iris_leaves01",
     "alfheim:iris_leaves02",
@@ -15,6 +16,7 @@
     "alfheim:iris_leaves14",
     "alfheim:iris_leaves15",
     "alfheim:iris_leaves16",
-    "alfheim:iris_leaves17"
+    "alfheim:iris_leaves17",
+    "alfheim:rainbow_leaves"
   ]
 }

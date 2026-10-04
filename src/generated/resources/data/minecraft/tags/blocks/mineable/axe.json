@@ -1,5 +1,9 @@
 {
   "values": [
+    "alfheim:aurora_planks",
+    "alfheim:aurora_planks_slab17",
+    "alfheim:aurora_planks_stairs17",
+    "alfheim:aurora_wood",
     "alfheim:iris_grass0",
     "alfheim:iris_grass1",
     "alfheim:iris_grass2",
@@ -97,6 +101,10 @@
     "alfheim:iris_wood31",
     "alfheim:iris_wood32",
     "alfheim:iris_wood33",
+    "alfheim:rainbow_planks",
+    "alfheim:rainbow_planks_slab",
+    "alfheim:rainbow_planks_stairs",
+    "alfheim:rainbow_wood",
     "alfheim:wisdomwood0",
     "alfheim:wisdomwood1",
     "alfheim:wisdomwood2",
