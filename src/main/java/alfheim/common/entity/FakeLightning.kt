@@ -1,10 +1,13 @@
 package alfheim.common.entity
 
-import net.minecraft.entity.effect.EntityWeatherEffect
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.world.World
+// PORT: импорты 1.20.1 (погодный эффект 1.7.10 — alfheim.port.legacy.EntityWeatherEffect, MAPPING.md)
+import alfheim.port.legacy.*
+import net.minecraft.nbt.CompoundTag as NBTTagCompound
+import net.minecraft.world.level.Level as World
 
-class FakeLightning(world: World): EntityWeatherEffect(world) {
+// PORT: тип существа 1.20.1 — первый аргумент конструктора (alfheim.port.legacy.legacyType)
+class FakeLightning(world: World): EntityWeatherEffect(legacyType<FakeLightning>(), world) {
+//class FakeLightning(world: World): EntityWeatherEffect(world) {
 	
 	/** Declares which state the lightning bolt is in. Whether it's in the air, hit the ground, etc.  */
 	var lightningState = 0
@@ -33,8 +36,10 @@ class FakeLightning(world: World): EntityWeatherEffect(world) {
 		
 		--lightningState
 		
+		// PORT: вспышка неба от молнии (lastLightningBolt 1.7.10) — setSkyFlashTime мира клиента
 		if (lightningState >= 0 && worldObj.isRemote)
-			worldObj.lastLightningBolt = 2
+			worldObj.setSkyFlashTime(2)
+//			worldObj.lastLightningBolt = 2
 		
 		if (lightningState >= 0) return
 		if (boltLivingTime == 0) return setDead()

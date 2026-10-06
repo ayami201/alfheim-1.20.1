@@ -1,24 +1,39 @@
 package alfheim.client.render.entity
 
+// PORT: импорты 1.20.1. Render 1.7.10 → EntityRenderer 1.20.1 (MAPPING.md, «Рендер»): рендер создаётся с контекстом,
+// регистрация — alfheim.port.client.AlfheimEntityRenderers
 import alexsocol.asjlib.D
 import alfheim.common.entity.FakeLightning
-import net.minecraft.client.renderer.Tessellator
-import net.minecraft.client.renderer.entity.Render
-import net.minecraft.entity.Entity
-import org.lwjgl.opengl.GL11.*
+import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.entity.EntityRenderer
+import net.minecraft.client.renderer.entity.EntityRendererProvider
+import net.minecraft.client.renderer.texture.TextureAtlas
+import net.minecraft.resources.ResourceLocation
 import java.util.*
 
-object RenderFakeLightning: Render() {
+class RenderFakeLightning(context: EntityRendererProvider.Context): EntityRenderer<FakeLightning>(context) {
+//object RenderFakeLightning: Render() {
 	
 	// not gonna prettify this mess
-	override fun doRender(entity: Entity, x: Double, y: Double, z: Double, yaw: Float, ticks: Float) {
-		entity as FakeLightning
+	// PORT: doRender(entity, x, y, z, yaw, ticks) → render: смещение к существу уже в матрице, поэтому x, y, z — 0. Без
+	// текстуры и света, смешение GL_SRC_ALPHA, GL_ONE — вид отрисовки молнии 1.20.1 (RenderType.lightning)
+	override fun render(entity: FakeLightning, yaw: Float, ticks: Float, ms: PoseStack, buffers: MultiBufferSource, light: Int) {
+//	override fun doRender(entity: Entity, x: Double, y: Double, z: Double, yaw: Float, ticks: Float) {
+//		entity as FakeLightning
 		
-		val tessellator = Tessellator.instance
-		glDisable(GL_TEXTURE_2D)
-		glDisable(GL_LIGHTING)
-		glEnable(GL_BLEND)
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE)
+		val x = 0.0
+		val y = 0.0
+		val z = 0.0
+		val buffer = buffers.getBuffer(RenderType.lightning())
+		val matrix = ms.last().pose()
+		val strip = FloatArray(30)
+//		val tessellator = Tessellator.instance
+//		glDisable(GL_TEXTURE_2D)
+//		glDisable(GL_LIGHTING)
+//		glEnable(GL_BLEND)
+//		glBlendFunc(GL_SRC_ALPHA, GL_ONE)
 		val adouble = DoubleArray(8)
 		val adouble1 = DoubleArray(8)
 		var d3 = 0.0
@@ -53,9 +68,9 @@ object RenderFakeLightning: Render() {
 						d5 += (random1.nextInt(31) - 15).D
 						d6 += (random1.nextInt(31) - 15).D
 					}
-					tessellator.startDrawing(5)
+//					tessellator.startDrawing(5)
 					val f2 = 0.5f
-					tessellator.setColorRGBA_F(0.9f * f2, 0.9f * f2, 1.0f * f2, 0.3f)
+//					tessellator.setColorRGBA_F(0.9f * f2, 0.9f * f2, 1.0f * f2, 0.3f)
 					var d9 = 0.1 + k1.D * 0.2
 					if (j == 0) {
 						d9 *= i1.D * 0.1 + 1.0
@@ -81,17 +96,40 @@ object RenderFakeLightning: Render() {
 						if (j1 == 2 || j1 == 3) {
 							d14 += d10 * 2.0
 						}
-						tessellator.addVertex(d13 + d5, y + (i1 * 16).D, d14 + d6)
-						tessellator.addVertex(d11 + d7, y + ((i1 + 1) * 16).D, d12 + d8)
+						// PORT: вершины полосы треугольников (startDrawing(5)) — в массив, низ и верх по очереди
+						strip.vertex(j1 * 2, d13 + d5, y + (i1 * 16).D, d14 + d6)
+						strip.vertex(j1 * 2 + 1, d11 + d7, y + ((i1 + 1) * 16).D, d12 + d8)
+//						tessellator.addVertex(d13 + d5, y + (i1 * 16).D, d14 + d6)
+//						tessellator.addVertex(d11 + d7, y + ((i1 + 1) * 16).D, d12 + d8)
 					}
-					tessellator.draw()
+					// PORT: полоса из пяти пар вершин — четыре четырёхугольника между соседними парами, как у молнии ванилы 1.20.1
+					for (q in 0..3) for (v in QUAD) {
+						val i = (q * 2 + v) * 3
+						buffer.vertex(matrix, strip[i], strip[i + 1], strip[i + 2]).color(0.9f * f2, 0.9f * f2, 1.0f * f2, 0.3f).endVertex()
+					}
+//					tessellator.draw()
 				}
 			}
 		}
-		glDisable(GL_BLEND)
-		glEnable(GL_LIGHTING)
-		glEnable(GL_TEXTURE_2D)
+//		glDisable(GL_BLEND)
+//		glEnable(GL_LIGHTING)
+//		glEnable(GL_TEXTURE_2D)
 	}
 	
-	override fun getEntityTexture(entity: Entity?) = null
+	// PORT: текстуры у молнии нет, а 1.20.1 требует её имя — атлас блоков, как у молнии ванилы
+	override fun getTextureLocation(entity: FakeLightning): ResourceLocation = TextureAtlas.LOCATION_BLOCKS
+//	override fun getEntityTexture(entity: Entity?) = null
+	
+	/** Вершина [index] полосы — три числа подряд */
+	private fun FloatArray.vertex(index: Int, x: Double, y: Double, z: Double) {
+		this[index * 3] = x.toFloat()
+		this[index * 3 + 1] = y.toFloat()
+		this[index * 3 + 2] = z.toFloat()
+	}
+	
+	companion object {
+		
+		/** Вершины четырёхугольника полосы от пары q: низ q, верх q, верх q + 1, низ q + 1 */
+		private val QUAD = intArrayOf(0, 1, 3, 2)
+	}
 }

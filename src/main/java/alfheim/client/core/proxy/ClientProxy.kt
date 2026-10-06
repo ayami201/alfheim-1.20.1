@@ -203,6 +203,7 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityElvenChakram::class.java, RenderEntityElvenChakram)
 		RenderingRegistry.registerEntityRenderingHandler(EntityVoidCreeper::class.java, RenderEntityManaCreeper)
 		RenderingRegistry.registerEntityRenderingHandler(EntityWarBanner::class.java, RenderEntityWarBanner)
+		// PORT: перенесён — alfheim.port.client.AlfheimEntityRenderers
 		RenderingRegistry.registerEntityRenderingHandler(FakeLightning::class.java, RenderFakeLightning)
 		
 		RenderingRegistry.registerBlockHandler(RenderBlockColoredDoubleGrass)

@@ -1,16 +1,23 @@
 package alfheim.common.block.tile
 
+// PORT: импорты 1.20.1 (блок-сущность 1.7.10 — alfheim.port.legacy, MAPPING.md)
 import alexsocol.asjlib.*
 import alexsocol.asjlib.extendables.block.ASJTile
 import alexsocol.asjlib.math.Vector3
 import alfheim.common.core.handler.AlfheimConfigHandler
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.player.*
-import net.minecraft.nbt.*
-import net.minecraft.network.play.server.S12PacketEntityVelocity
-import net.minecraftforge.common.util.Constants
+import alfheim.port.legacy.*
+import net.minecraft.core.BlockPos
+import net.minecraft.nbt.CompoundTag as NBTTagCompound
+import net.minecraft.nbt.ListTag as NBTTagList
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket as S12PacketEntityVelocity
+import net.minecraft.server.level.ServerPlayer as EntityPlayerMP
+import net.minecraft.world.entity.LivingEntity as EntityLivingBase
+import net.minecraft.world.entity.player.Player as EntityPlayer
+import net.minecraft.world.level.block.state.BlockState
 
-class TileTreeWind: ASJTile() {
+// PORT: блок-сущность 1.20.1 создаётся сразу в своей точке и со своим типом (alfheim.port.legacy.TileEntity)
+class TileTreeWind(pos: BlockPos, state: BlockState): ASJTile(legacyTileType<TileTreeWind>(), pos, state) {
+//class TileTreeWind: ASJTile() {
 
 	var firstTick = true
 	var friends = HashSet<String>()
@@ -59,3 +66,6 @@ class TileTreeWind: ASJTile() {
 		const val RANGE = 10
 	}
 }
+
+// PORT: имя игрока 1.7.10 (commandSenderName) — имя его профиля (MAPPING.md)
+private val EntityPlayer.commandSenderName: String get() = gameProfile.name

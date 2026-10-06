@@ -2,6 +2,7 @@ package alexsocol.asjlib
 
 // PORT: импорты 1.7.10 заменены на 1.20.1. Функции, которые порту ещё не понадобились, закомментированы блоками
 // «PORT: по мере надобности»: их переносит КТ, которой они нужны, и сверяет смысл с 1.20.1
+import alexsocol.asjlib.math.Vector3
 import alfheim.port.legacy.Block1710
 import alfheim.port.legacy.CraftingManager
 import alfheim.port.legacy.Material
@@ -39,6 +40,13 @@ import alfheim.port.legacy.StatCollector
 import alfheim.port.legacy.MovingObjectPosition
 import alfheim.port.legacy.ShapedOreRecipe
 import alfheim.port.legacy.ShapelessOreRecipe
+import alfheim.port.legacy.descriptionPacket
+import alfheim.port.legacy.getTileEntity
+import alfheim.port.legacy.playerEntities
+import alfheim.port.legacy.playerNetServerHandler
+import alfheim.port.legacy.posX
+import alfheim.port.legacy.posZ
+import alfheim.port.legacy.sendPacket
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
@@ -53,6 +61,7 @@ import net.minecraft.world.level.Level as World
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FireBlock
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.portal.PortalInfo
 import net.minecraft.world.phys.*
 import net.minecraftforge.common.util.ITeleporter
@@ -167,7 +176,27 @@ object ASJUtilities {
 		})
 	}
 	
-	/* PORT: по мере надобности (продолжение); выше — перенесённая функция, здесь — её код 1.7.10
+	// PORT: блок-сущность 1.7.10 — любая блок-сущность 1.20.1 (BlockEntity): мир и точку берёт у неё
+	/**
+	 * Sends data about [tile] to client
+	 * @author Vazkii
+	 */
+	fun dispatchTEToNearbyPlayers(tile: BlockEntity) {
+		val players = tile.level?.playerEntities ?: return
+		for (player in players)
+			if (player is ServerPlayer && Vector3.pointDistancePlane(player.posX, player.posZ, tile.blockPos.x + 0.5, tile.blockPos.z + 0.5) < 64)
+				tile.descriptionPacket?.let { player.playerNetServerHandler.sendPacket(it) }
+	}
+	
+	/**
+	 * Sends data about tile at [x] [y] [z] to client
+	 * @author Vazkii
+	 */
+	fun dispatchTEToNearbyPlayers(world: World, x: Int, y: Int, z: Int) {
+		world.getTileEntity(x, y, z)?.let { dispatchTEToNearbyPlayers(it) }
+	}
+	
+	/* PORT: по мере надобности (продолжение); выше — перенесённые функции, здесь — их код 1.7.10
 	@JvmStatic
 	fun sendToDimensionWithoutPortal(target: Entity, dimTo: Int, x: Double, y: Double, z: Double) {
 		if (target.worldObj.isRemote || target.isDead) return

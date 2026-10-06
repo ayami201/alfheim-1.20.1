@@ -9,8 +9,7 @@ import alfheim.api.*
 //import alfheim.api.block.tile.SubTileAnomalyBase.EnumAnomalyRarity.*
 //import alfheim.api.entity.IAlfheimMob
 //import alfheim.common.block.*
-//import alfheim.common.block.tile.*
-import alfheim.common.block.tile.TileTreeBerry
+import alfheim.common.block.tile.*
 //import alfheim.common.block.tile.TileChair.Companion.EntitySit
 //import alfheim.common.block.tile.corporea.*
 //import alfheim.common.block.tile.sub.anomaly.*
@@ -228,7 +227,9 @@ object AlfheimRegistry {
 		registerEntity(EntityMagicArrow::class.java, "MagicArrow", nextEntityID)
 		registerEntity(EntitySubspace::class.java, "Subspace", nextEntityID)
 		registerEntity(EntitySubspaceSpear::class.java, "SubspaceSpear", nextEntityID)
+		*/
 		registerEntity(FakeLightning::class.java, "FakeLightning", nextEntityID)
+		/*
 		
 		registerEntity(EntitySpellAcidMyst::class.java, "SpellAcidMyst", nextEntityID)
 		registerEntity(EntitySpellAquaStream::class.java, "SpellAquaStream", nextEntityID)
@@ -319,15 +320,19 @@ object AlfheimRegistry {
 		registerTile<TileCracklingStar>()
 		registerTile<TileStar>()
 		registerTile<TileItemDisplay>()
+		*/
 		registerTile<TileLightningTreeTop>()
+		/* PORT: КТ своих блоков (по описи)
 		registerTile<TileLivingwoodFunnel>()
 		registerTile<TileRainbowManaFlame>()
 		registerTile<TileSchemaController>()
 		registerTile<TileSchemaAnnihilator>()
-		registerTile<TileTreeCook>()
-		registerTile<TileTreeCrafter>()
-		registerTile<TileTreeWind>()
 		*/
+		registerTile<TileTreeCook>()
+		/* PORT: КТ своих блоков (по описи)
+		registerTile<TileTreeCrafter>()
+		*/
+		registerTile<TileTreeWind>()
 	}
 	
 	private inline fun <reified T: TileEntity> registerTile() {

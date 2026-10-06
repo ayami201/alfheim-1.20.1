@@ -3,15 +3,17 @@ package alfheim.common.block.magtrees.nether
 // PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
 import alexsocol.asjlib.toItem
 import alfheim.common.block.base.BlockModRotatedPillar
+import alfheim.common.block.tile.TileTreeCook
 import alfheim.common.item.block.ItemBlockLeavesMod
 import alfheim.port.legacy.*
+import net.minecraft.core.BlockPos
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.Level as World
 
 // PORT: вариант metadata (meta and 3: 0 — бревно, 1 — сердцевина) — отдельный блок (SPEC, Р-5): номер варианта — meta,
-// создают массивом `Array(2) { BlockNetherWood(it) }`; поворот (meta and 12) — свойство axis (BlockModRotatedPillar).
-// КТ-2 (партия 8в-3) — сердцевина с TileTreeCook (ITileEntityProvider)
-class BlockNetherWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*, ITileEntityProvider*/, IFuelHandler {
+// создают массивом `Array(2) { BlockNetherWood(it) }`; поворот (meta and 12) — свойство axis (BlockModRotatedPillar)
+class BlockNetherWood(val meta: Int): BlockModRotatedPillar(Material.wood), ITileEntityProvider, IFuelHandler {
 	
 	override val variant get() = meta
 	
@@ -71,11 +73,12 @@ class BlockNetherWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*, IT
 	
 	fun isHeartWood(meta: Int) = meta and 3 == 1
 	
-	/* PORT: КТ-2 (партия 8в-3) — сердцевина с TileTreeCook
-	override fun hasTileEntity(metadata: Int) = isHeartWood(metadata)
-	
-	override fun createNewTileEntity(world: World?, meta: Int) = TileTreeCook()
-	*/
+	// PORT: блок-сущность 1.20.1 создаётся сразу в своей точке (ITileEntityProvider прослойки); есть ли она у блока
+	// (hasTileEntity по metadata 1.7.10) — по варианту: сердцевина — вариант 1
+	override fun newBlockEntity(pos: BlockPos, state: BlockState) = if (isHeartWood(meta)) TileTreeCook(pos, state) else null
+//	override fun hasTileEntity(metadata: Int) = isHeartWood(metadata)
+//
+//	override fun createNewTileEntity(world: World?, meta: Int) = TileTreeCook()
 	
 	// PORT: КТ-9 — лексикон
 //	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.netherSapling
