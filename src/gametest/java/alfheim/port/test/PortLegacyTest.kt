@@ -182,6 +182,7 @@ object PortLegacyTest {
 		helper.assertTrue(type.isValid(state) && !type.isValid(Blocks.STONE.defaultBlockState()), "the type knows its blocks")
 		// ягода не тикает (canUpdate = false): 1.7.10 не ставил такую блок-сущность в список тикающих
 		helper.assertTrue(!tile.canUpdate() && state.getTicker(helper.level, type) == null, "a tile entity that does not update has no ticker")
+		helper.assertTrue(tile !in helper.level.loadedTileEntityList, "a tile entity that does not update is not a ticking tile entity of the world")
 		helper.assertTrue(tile.saveWithFullMetadata().getString("id") == "$MODID:tree_berry", "saved id")
 		helper.succeed()
 	}

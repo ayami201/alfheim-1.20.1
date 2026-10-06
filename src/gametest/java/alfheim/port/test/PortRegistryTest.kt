@@ -51,6 +51,8 @@ object PortRegistryTest {
 			if (!BuiltInRegistries.ITEM.containsKey(target.id)) missing += "item $old:$meta -> ${target.id}"
 		for ((old, metas) in LegacyIds.entities) for ((meta, target) in metas)
 			if (!BuiltInRegistries.ENTITY_TYPE.containsKey(target.id)) missing += "entity $old:$meta -> ${target.id}"
+		for ((old, metas) in LegacyIds.blockEntities) for ((meta, target) in metas)
+			if (!BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(target.id)) missing += "block entity $old:$meta -> ${target.id}"
 		helper.assertTrue(missing.isEmpty(), "legacy_ids.json points to things that are not registered: $missing")
 		helper.succeed()
 	}
