@@ -179,54 +179,54 @@ object AlfheimBlocks {
 //	val altWood1: Block // PORT: КТ-2
 	
 	val barrierLeaves: Block
-//	val barrierBerry: Block // PORT: КТ-2
+	val barrierBerry: Block
 	val barrierPlanks: Block
-//	val barrierSapling: Block // PORT: КТ-2
+	val barrierSapling: Block
 	val barrierSlabs: Block
 	val barrierSlabFull: Block
 	val barrierStairs: Block
 	val barrierWood: Array<Block>
 	
 	val calicoLeaves: Block
-//	val calicoBerry: Block // PORT: КТ-2
+	val calicoBerry: Block
 	val calicoPlanks: Block
-//	val calicoSapling: Block // PORT: КТ-2
+	val calicoSapling: Block
 	val calicoSlabs: Block
 	val calicoSlabFull: Block
 	val calicoStairs: Block
 	val calicoWood: Block
 	
 	val circuitLeaves: Block
-//	val circuitBerry: Block // PORT: КТ-2
+	val circuitBerry: Block
 	val circuitPlanks: Block
-//	val circuitSapling: Block // PORT: КТ-2
+	val circuitSapling: Block
 	val circuitSlabs: Block
 	val circuitSlabFull: Block
 	val circuitStairs: Block
 	val circuitWood: Block
 	
 	val lightningLeaves: Block
-//	val lightningBerry: Block // PORT: КТ-2
+	val lightningBerry: Block
 	val lightningPlanks: Block
-//	val lightningSapling: Block // PORT: КТ-2
+	val lightningSapling: Block
 	val lightningSlabs: Block
 	val lightningSlabFull: Block
 	val lightningStairs: Block
 	val lightningWood: Array<Block>
 	
 	val netherLeaves: Block
-//	val netherBerry: Block // PORT: КТ-2
+	val netherBerry: Block
 	val netherPlanks: Block
-//	val netherSapling: Block // PORT: КТ-2
+	val netherSapling: Block
 	val netherSlabs: Block
 	val netherSlabFull: Block
 	val netherStairs: Block
 	val netherWood: Array<Block>
 	
 	val sealingLeaves: Block
-//	val sealingBerry: Block // PORT: КТ-2
+	val sealingBerry: Block
 	val sealingPlanks: Block
-//	val sealingSapling: Block // PORT: КТ-2
+	val sealingSapling: Block
 	val sealingSlabs: Block
 	val sealingSlabFull: Block
 	val sealingStairs: Block
@@ -387,9 +387,9 @@ object AlfheimBlocks {
 //		altWood1 = BlockAltWood(1) // PORT: КТ-2
 		
 		barrierLeaves = BlockBarrierLeaves()
-//		barrierBerry = BlockTreeBerry(barrierLeaves, 0) // PORT: КТ-2
+		barrierBerry = BlockTreeBerry(barrierLeaves, 0)
 		barrierPlanks = BlockBarrierPlanks()
-//		barrierSapling = BlockBarrierSapling() // PORT: КТ-2
+		barrierSapling = BlockBarrierSapling()
 		barrierSlabs = BlockBarrierWoodSlab(false)
 		barrierSlabFull = barrierSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
 //		barrierSlabFull = BlockBarrierWoodSlab(true)
@@ -400,9 +400,9 @@ object AlfheimBlocks {
 //		barrierWood = BlockBarrierWood()
 		
 		calicoLeaves = BlockCalicoLeaves()
-//		calicoBerry = BlockTreeBerry(calicoLeaves, 1) // PORT: КТ-2
+		calicoBerry = BlockTreeBerry(calicoLeaves, 1)
 		calicoPlanks = BlockCalicoPlanks()
-//		calicoSapling = BlockCalicoSapling() // PORT: КТ-2
+		calicoSapling = BlockCalicoSapling()
 		calicoSlabs = BlockCalicoWoodSlab(false)
 		calicoSlabFull = calicoSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
 //		calicoSlabFull = BlockCalicoWoodSlab(true)
@@ -412,9 +412,9 @@ object AlfheimBlocks {
 		calicoWood = BlockCalicoWood()
 		
 		circuitLeaves = BlockCircuitLeaves()
-//		circuitBerry = BlockTreeBerry(circuitLeaves, 2) // PORT: КТ-2
+		circuitBerry = BlockTreeBerry(circuitLeaves, 2)
 		circuitPlanks = BlockCircuitPlanks()
-//		circuitSapling = BlockCircuitSapling() // PORT: КТ-2
+		circuitSapling = BlockCircuitSapling()
 		circuitSlabs = BlockCircuitWoodSlab(false)
 		circuitSlabFull = circuitSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
 //		circuitSlabFull = BlockCircuitWoodSlab(true)
@@ -424,9 +424,9 @@ object AlfheimBlocks {
 		circuitWood = BlockCircuitWood()
 		
 		lightningLeaves = BlockLightningLeaves()
-//		lightningBerry = BlockTreeBerry(lightningLeaves, 3) // PORT: КТ-2
+		lightningBerry = BlockTreeBerry(lightningLeaves, 3)
 		lightningPlanks = BlockLightningPlanks()
-//		lightningSapling = BlockLightningSapling() // PORT: КТ-2
+		lightningSapling = BlockLightningSapling()
 		lightningSlabs = BlockLightningWoodSlab(false)
 		lightningSlabFull = lightningSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
 //		lightningSlabFull = BlockLightningWoodSlab(true)
@@ -437,9 +437,9 @@ object AlfheimBlocks {
 //		lightningWood = BlockLightningWood()
 		
 		netherLeaves = BlockNetherLeaves()
-//		netherBerry = BlockTreeBerry(netherLeaves, 4) // PORT: КТ-2
+		netherBerry = BlockTreeBerry(netherLeaves, 4)
 		netherPlanks = BlockNetherPlanks()
-//		netherSapling = BlockNetherSapling() // PORT: КТ-2
+		netherSapling = BlockNetherSapling()
 		netherSlabs = BlockNetherWoodSlab(false)
 		netherSlabFull = netherSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
 //		netherSlabFull = BlockNetherWoodSlab(true)
@@ -450,9 +450,9 @@ object AlfheimBlocks {
 //		netherWood = BlockNetherWood()
 		
 		sealingLeaves = BlockSealingLeaves()
-//		sealingBerry = BlockTreeBerry(sealingLeaves, 5) // PORT: КТ-2
+		sealingBerry = BlockTreeBerry(sealingLeaves, 5)
 		sealingPlanks = BlockSealingPlanks()
-//		sealingSapling = BlockSealingSapling() // PORT: КТ-2
+		sealingSapling = BlockSealingSapling()
 		sealingSlabs = BlockSealingWoodSlab(false)
 		sealingSlabFull = sealingSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
 //		sealingSlabFull = BlockSealingWoodSlab(true)
@@ -559,42 +559,42 @@ object AlfheimBlocks {
 		
 		registerOre("treeLeaves", ItemStack(lightningLeaves))
 		registerOre("plankWood", ItemStack(lightningPlanks))
-//		registerOre("treeSapling", ItemStack(lightningSapling)) // PORT: КТ-2
+		registerOre("treeSapling", ItemStack(lightningSapling))
 		
 		registerOre("slabWood", ItemStack(lightningSlabs))
 		registerOre("stairWood", ItemStack(lightningStairs))
 		
 		registerOre("treeLeaves", ItemStack(calicoLeaves))
 		registerOre("plankWood", ItemStack(calicoPlanks))
-//		registerOre("treeSapling", ItemStack(calicoSapling)) // PORT: КТ-2
+		registerOre("treeSapling", ItemStack(calicoSapling))
 		
 		registerOre("slabWood", ItemStack(calicoSlabs))
 		registerOre("stairWood", ItemStack(calicoStairs))
 		
 		registerOre("treeLeaves", ItemStack(circuitLeaves))
 		registerOre("plankWood", ItemStack(circuitPlanks))
-//		registerOre("treeSapling", ItemStack(circuitSapling)) // PORT: КТ-2
+		registerOre("treeSapling", ItemStack(circuitSapling))
 		
 		registerOre("slabWood", ItemStack(circuitSlabs))
 		registerOre("stairWood", ItemStack(circuitStairs))
 		
 		registerOre("treeLeaves", ItemStack(netherLeaves))
 		registerOre("plankWood", ItemStack(netherPlanks))
-//		registerOre("treeSapling", ItemStack(netherSapling)) // PORT: КТ-2
+		registerOre("treeSapling", ItemStack(netherSapling))
 		
 		registerOre("slabWood", ItemStack(netherSlabs))
 		registerOre("stairWood", ItemStack(netherStairs))
 		
 		registerOre("treeLeaves", ItemStack(sealingLeaves))
 		registerOre("plankWood", ItemStack(sealingPlanks))
-//		registerOre("treeSapling", ItemStack(sealingSapling)) // PORT: КТ-2
+		registerOre("treeSapling", ItemStack(sealingSapling))
 		
 		registerOre("slabWood", ItemStack(sealingSlabs))
 		registerOre("stairWood", ItemStack(sealingStairs))
 		
 		registerOre("treeLeaves", ItemStack(barrierLeaves))
 		registerOre("plankWood", ItemStack(barrierPlanks))
-//		registerOre("treeSapling", ItemStack(barrierSapling)) // PORT: КТ-2
+		registerOre("treeSapling", ItemStack(barrierSapling))
 		
 		registerOre("slabWood", ItemStack(barrierSlabs))
 		registerOre("stairWood", ItemStack(barrierStairs))
@@ -678,19 +678,19 @@ object AlfheimBlocks {
 //		registerOre("plankWood", ItemStack(altPlanks, 1, WILDCARD_VALUE)) // PORT: КТ-2
 		registerOre("plankWood", ItemStack(rainbowPlanks, 1, WILDCARD_VALUE))
 		registerOre("plankWood", ItemStack(auroraPlanks, 1, WILDCARD_VALUE))
-
+		
 		irisStairs.forEach {
 			registerOre("stairWood", it)
 		}
 		registerOre("stairWood", rainbowStairs)
 		registerOre("stairWood", auroraStairs)
-
+		
 		irisSlabs.forEach {
 			registerOre("slabWood", ItemStack(it, 1, WILDCARD_VALUE))
 		}
 		registerOre("slabWood", rainbowSlab)
 		registerOre("slabWood", auroraSlab)
-
+		
 //		for (i in 0..15) { // PORT: КТ-2
 //			if (i !in arrayOf(2, 6, 10, 14)) { // Yggdrasil metas
 //				t = ItemStack(altWood1, 1, i)

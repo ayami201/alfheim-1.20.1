@@ -10,6 +10,7 @@ import alfheim.api.*
 //import alfheim.api.entity.IAlfheimMob
 //import alfheim.common.block.*
 //import alfheim.common.block.tile.*
+import alfheim.common.block.tile.TileTreeBerry
 //import alfheim.common.block.tile.TileChair.Companion.EntitySit
 //import alfheim.common.block.tile.corporea.*
 //import alfheim.common.block.tile.sub.anomaly.*
@@ -36,6 +37,8 @@ import alfheim.common.potion.berries.*
 //import alfheim.common.spell.wind.*
 //import alfheim.common.world.dim.alfheim.biome.*
 //import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim.Companion.addEntry
+import alfheim.port.legacy.TileEntity
+import alfheim.port.legacy.registerTileEntity
 //import cpw.mods.fml.common.registry.EntityRegistry
 //import cpw.mods.fml.common.registry.GameRegistry.registerTileEntity
 //import net.minecraft.entity.*
@@ -59,7 +62,7 @@ object AlfheimRegistry {
 		// PORT: существа и блок-сущности — в КТ каждого (по описи)
 		registerPotions()
 		registerEntities()
-//		registerTileEntities()
+		registerTileEntities()
 	}
 	
 	fun init() {
@@ -260,8 +263,9 @@ object AlfheimRegistry {
 	}
 	*/
 	
-	/* PORT: блок-сущности — в КТ каждой (по описи), BlockEntityType через DeferredRegister; аномалии — КТ-3
+	// PORT: блок-сущности — в КТ каждой (по описи); тип 1.20.1 создаёт регистрация порта (GameRegistry прослойки)
 	private fun registerTileEntities() {
+		/* PORT: КТ своих блоков (по описи)
 		registerTile<TileAlfheimPortal>()
 		registerTile<TileAlfheimPylon>()
 		registerTile<TileAnimatedTorch>()
@@ -303,7 +307,9 @@ object AlfheimRegistry {
 		registerTile<TileSpire>()
 		registerTile<TileTable>()
 		registerTile<TileTradePortal>()
+		*/
 		registerTile<TileTreeBerry>()
+		/* PORT: КТ своих блоков (по описи); аномалии — КТ-3
 		registerTile<TileVafthrudnirSoul>()
 		registerTile<TileWorldTree>()
 		registerTile<TileYggFlower>()
@@ -321,6 +327,7 @@ object AlfheimRegistry {
 		registerTile<TileTreeCook>()
 		registerTile<TileTreeCrafter>()
 		registerTile<TileTreeWind>()
+		*/
 	}
 	
 	private inline fun <reified T: TileEntity> registerTile() {
@@ -328,6 +335,7 @@ object AlfheimRegistry {
 		registerTileEntity(clazz, "${ModInfo.MODID}:${clazz.simpleName.replace("Tile", "")}")
 	}
 	
+	/* PORT: КТ-3 — аномалии
 	private fun registerAnomalies() {
 		registerAnomaly<SubTileAntigrav>("Antigrav", COMMON, 7, 0x7FE6FF)
 		registerAnomaly<SubTileGravity>("Gravity", COMMON, 0, 0xEDEDED)

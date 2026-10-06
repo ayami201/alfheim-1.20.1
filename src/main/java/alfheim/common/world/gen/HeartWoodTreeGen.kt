@@ -1,18 +1,22 @@
 package alfheim.common.world.gen
 
-import net.minecraft.block.Block
-import net.minecraft.world.World
-import net.minecraft.world.gen.feature.WorldGenAbstractTree
-import java.util.*
+// PORT: импорты 1.20.1; WorldGenAbstractTree 1.7.10 — alfheim.port.legacy.WorldGenAbstractTree (MAPPING.md, «Растения»)
+import alfheim.port.legacy.*
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.Block
 import kotlin.math.abs
 
+// PORT: бревно и сердцевина — блоки вариантов, их metadata — 0 (SPEC, Р-5; саженцы автора); высота мира 1.7.10 (0–255) —
+// границы мира 1.20.1 (minBuildHeight, maxBuildHeight)
 class HeartWoodTreeGen(val minTreeHeight: Int, val regWood: Block, val regMeta: Int, val heartWood: Block, val heartMeta: Int, val leaves: Block, val leavesMeta: Int, val berry: Block): WorldGenAbstractTree(true) {
 	
 	override fun generate(world: World, random: Random, x: Int, y: Int, z: Int): Boolean {
 		val height = random.nextInt(3) + minTreeHeight
 		var flag = true
 		
-		if (y < 1 || y + height + 1 > 256) return false
+		if (y < world.minBuildHeight + 1 || y + height + 1 > world.maxBuildHeight) return false
+//		if (y < 1 || y + height + 1 > 256) return false
 		
 		var b0: Byte
 		
@@ -24,7 +28,8 @@ class HeartWoodTreeGen(val minTreeHeight: Int, val regWood: Block, val regMeta: 
 			
 			for (i in (x - b0)..(x + b0)) {
 				for (k in (z - b0)..(z + b0)) {
-					if (j in 0..255) {
+					if (j in world.minBuildHeight until world.maxBuildHeight) {
+//					if (j in 0..255) {
 						val block = world.getBlock(i, j, k)
 						
 						if (block.isReplaceable(world, i, j, k) || block.isLeaves(world, i, j, k) || block == regWood || block == heartWood) continue
@@ -40,7 +45,8 @@ class HeartWoodTreeGen(val minTreeHeight: Int, val regWood: Block, val regMeta: 
 		}
 		
 		if (!flag) return false
-		if (y >= 256 - height - 1) return false
+		if (y >= world.maxBuildHeight - height - 1) return false
+//		if (y >= 256 - height - 1) return false
 		
 		world.getBlock(x, y - 1, z).onPlantGrow(world, x, y - 1, z, x, y, z)
 		

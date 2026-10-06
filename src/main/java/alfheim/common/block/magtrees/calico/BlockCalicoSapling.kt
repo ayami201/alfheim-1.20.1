@@ -1,14 +1,13 @@
 package alfheim.common.block.magtrees.calico
 
+// PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.colored.BlockColoredSapling
-import alfheim.common.lexicon.AlfheimLexiconData
 import alfheim.common.world.gen.HeartWoodTreeGen
-import net.minecraft.block.Block
-import net.minecraft.block.material.Material
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.world.*
+import alfheim.port.legacy.*
+import net.minecraft.world.level.Explosion
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.Block
 
 class BlockCalicoSapling: BlockColoredSapling("calicoSapling"), IExplosionDampener {
 	
@@ -17,7 +16,8 @@ class BlockCalicoSapling: BlockColoredSapling("calicoSapling"), IExplosionDampen
 	override fun canGrowHere(block: Block) =
 		block.material == Material.ground || block.material == Material.grass
 	
-	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.calicoSapling
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.calicoSapling
 	
 	// ####
 	
