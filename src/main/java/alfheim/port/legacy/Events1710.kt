@@ -3,8 +3,10 @@ package alfheim.port.legacy
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
 import net.minecraftforge.event.entity.living.*
 import net.minecraftforge.event.entity.player.PlayerEvent
+import net.minecraftforge.event.level.ExplosionEvent
 
 /*
  * Имена полей событий Forge и существ 1.7.10 (SPEC, Р-4; MAPPING.md, «Прослойка `alfheim.port.legacy`»): смысл тот же,
@@ -33,6 +35,9 @@ var PlayerEvent.HarvestCheck.success: Boolean
 	set(value) {
 		setCanHarvest(value)
 	}
+
+/** `ExplosionEvent.world` 1.7.10 */
+val ExplosionEvent.world: Level get() = level
 
 /** `DamageSource.damageType` 1.7.10 — имя источника урона; у источников ванилы имена те же (`inFire`, `lava`, `drown`…) */
 val DamageSource.damageType: String get() = msgId

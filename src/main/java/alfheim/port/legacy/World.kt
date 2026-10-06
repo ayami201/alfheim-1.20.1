@@ -2,6 +2,7 @@ package alfheim.port.legacy
 
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.core.BlockPos
+import net.minecraft.core.SectionPos
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.chunk.ChunkStatus
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration
 import net.minecraftforge.common.IPlantable
 
@@ -162,3 +164,23 @@ fun BlockGetter.getBlockVariant(x: Int, y: Int, z: Int) = (getBlock(x, y, z) as?
  */
 fun Block.isSameBlock1710(other: Block) =
 	this === other || LegacyRegistration.blocks[this]?.oldName.let { it != null && it == LegacyRegistration.blocks[other]?.oldName }
+
+/**
+ * Может ли в кубе с центром ([x], [y], [z]) и полустороной [range] быть блок, состояние которого подходит под
+ * [predicate]: смотрит палитры секций загруженных чанков, сами блоки не перебирает. `false` — такого блока там точно
+ * нет: обход автора по всем блокам куба можно пропустить (PORT-OPT). Незагруженный чанк — без блоков, как у
+ * `getBlock` (воздух)
+ */
+fun Level.mayContain(x: Int, y: Int, z: Int, range: Int, predicate: (BlockState) -> Boolean): Boolean {
+	for (cx in SectionPos.blockToSectionCoord(x - range)..SectionPos.blockToSectionCoord(x + range))
+		for (cz in SectionPos.blockToSectionCoord(z - range)..SectionPos.blockToSectionCoord(z + range)) {
+			val chunk = getChunk(cx, cz, ChunkStatus.FULL, false) ?: continue
+			for (cy in SectionPos.blockToSectionCoord(y - range)..SectionPos.blockToSectionCoord(y + range)) {
+				val index = chunk.getSectionIndexFromSectionY(cy)
+				if (index < 0 || index >= chunk.sectionsCount) continue
+				val section = chunk.getSection(index)
+				if (!section.hasOnlyAir() && section.maybeHas(predicate)) return true
+			}
+		}
+	return false
+}

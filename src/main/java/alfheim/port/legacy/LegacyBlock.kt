@@ -1,8 +1,11 @@
 package alfheim.port.legacy
 
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.*
@@ -198,6 +201,18 @@ fun Block.setTickRandomly(tick: Boolean) = (this as LegacyBlock).setTickRandomly
 fun Block.setHarvestLevel(toolClass: String?, level: Int) = (this as LegacyBlock).setHarvestLevel(toolClass, level)
 fun Block.setHarvestLevel(toolClass: String?, level: Int, metadata: Int) = (this as LegacyBlock).setHarvestLevel(toolClass, level, metadata)
 
+/**
+ * `block.updateTick(world, x, y, z, random)` 1.7.10 у блока из мира (`world.getBlock`): у блока порта — его метод 1.7.10
+ * ([LegacyBlockMethods]), у прочих — тик 1.20.1 их состояния в точке (на сервере)
+ */
+fun Block.updateTick(world: Level, x: Int, y: Int, z: Int, random: RandomSource) {
+	val legacy = this as? LegacyBlockMethods
+	if (legacy != null) return legacy.updateTick(world, x, y, z, random)
+	val pos = BlockPos(x, y, z)
+	val state = world.getBlockState(pos)
+	if (world is ServerLevel && state.block === this) state.tick(world, pos, random)
+}
+
 /** Имена звуков блока 1.7.10 (`soundTypeStone` и др.) внутри классов блоков, как в 1.7.10 */
 interface SoundTypes1710 {
 
@@ -244,6 +259,34 @@ open class Block1710(material: Material): Block(material.properties()), LegacyBl
 	 * (`onPlantGrow` Forge). 1.20.1 делает землёй всё, чего нет в теге `minecraft:dirt`
 	 */
 	override fun onTreeGrow(state: BlockState, level: LevelReader, placeFunction: BiConsumer<BlockPos, BlockState>, randomSource: RandomSource, pos: BlockPos, config: TreeConfiguration) = true
+
+	// Методы 1.7.10 класса автора ([LegacyBlockMethods]) из методов 1.20.1: тик, установка и снятие, взрыв, сигнал, огонь
+
+	@Deprecated("Deprecated in Java")
+	override fun tick(state: BlockState, level: ServerLevel, pos: BlockPos, random: RandomSource) = updateTick(level, pos.x, pos.y, pos.z, random)
+
+	@Deprecated("Deprecated in Java")
+	override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
+		super.onPlace(state, level, pos, oldState, isMoving)
+		onBlockAdded(level, pos.x, pos.y, pos.z)
+	}
+
+	@Deprecated("Deprecated in Java")
+	override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
+		breakBlock(level, pos.x, pos.y, pos.z, this, variant ?: 0)
+		super.onRemove(state, level, pos, newState, isMoving)
+	}
+
+	override fun onBlockExploded(state: BlockState, level: Level, pos: BlockPos, explosion: Explosion) = onBlockExploded(level, pos.x, pos.y, pos.z, explosion)
+
+	@Deprecated("Deprecated in Java")
+	override fun isSignalSource(state: BlockState) = canProvidePower()
+
+	@Deprecated("Deprecated in Java")
+	override fun getSignal(state: BlockState, level: BlockGetter, pos: BlockPos, direction: Direction) = isProvidingWeakPower(level, pos.x, pos.y, pos.z, direction.get3DDataValue())
+
+	override fun isFireSource(state: BlockState, level: LevelReader, pos: BlockPos, direction: Direction) =
+		level is Level && isFireSource(level, pos.x, pos.y, pos.z, ForgeDirection.getOrientation(direction.get3DDataValue())) || super<Block>.isFireSource(state, level, pos, direction)
 
 	companion object: SoundTypes1710
 }

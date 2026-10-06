@@ -1,6 +1,13 @@
 package alfheim.port.legacy
 
 import alfheim.port.legacy.botania.Botania1710
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.util.RandomSource
+import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.Explosion
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.*
@@ -29,7 +36,11 @@ var Block.stepSound: SoundType?
 val Block.unlocalizedName: String
 	get() = if (this is LegacyBlock) getUnlocalizedName() else legacyProps(this).unlocalizedName
 
-/** `net.minecraft.block.BlockStairs` 1.7.10: материал, твёрдость, взрывоустойчивость и звук — от блока-источника */
+/**
+ * `net.minecraft.block.BlockStairs` 1.7.10: материал, твёрдость, взрывоустойчивость и звук — от блока-источника. Тик,
+ * установку и снятие лестница 1.7.10 передавала блоку-источнику (его `updateTick`, `onBlockAdded`, `breakBlock` в
+ * точке лестницы) — так же и здесь, если класс автора их не переопределил
+ */
 open class Stairs1710(val legacySource: Block, @Suppress("UNUSED_PARAMETER") meta: Int): StairBlock(Supplier { legacySource.defaultBlockState() }, legacyProps(legacySource).material.properties()), LegacyBlock {
 
 	final override val legacy = BlockProps(legacyProps(legacySource).material)
@@ -41,7 +52,7 @@ open class Stairs1710(val legacySource: Block, @Suppress("UNUSED_PARAMETER") met
 		setStepSound(props.stepSound)
 	}
 
-	// взрывоустойчивость, случайные тики и эффекты лестница берёт у блока-источника — и в 1.7.10, и в 1.20.1
+	// взрывоустойчивость и эффекты лестница берёт у блока-источника — и в 1.7.10, и в 1.20.1
 
 	override fun isOpaqueCube() = false
 
@@ -49,6 +60,54 @@ open class Stairs1710(val legacySource: Block, @Suppress("UNUSED_PARAMETER") met
 
 	@Deprecated("Deprecated in Java")
 	override fun getSoundType(state: BlockState) = legacy.stepSound ?: SoundType.STONE
+
+	/**
+	 * Случайные тики — свои, как у лестницы 1.7.10: ей их никто не включал, даже если их получал блок-источник
+	 * (лестница 1.20.1 берёт их у источника)
+	 */
+	override fun isRandomlyTicking(state: BlockState) = legacy.needsRandomTick
+
+	@Deprecated("Deprecated in Java")
+	override fun randomTick(state: BlockState, level: ServerLevel, pos: BlockPos, random: RandomSource) = updateTick(level, pos.x, pos.y, pos.z, random)
+
+	@Deprecated("Deprecated in Java")
+	override fun tick(state: BlockState, level: ServerLevel, pos: BlockPos, random: RandomSource) = updateTick(level, pos.x, pos.y, pos.z, random)
+
+	@Deprecated("Deprecated in Java")
+	override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
+		super.onPlace(state, level, pos, oldState, isMoving)
+		onBlockAdded(level, pos.x, pos.y, pos.z)
+	}
+
+	/**
+	 * Без `onRemove` лестницы 1.20.1: она зовёт `onRemove` блока-источника, то есть его `breakBlock` — второй раз после
+	 * [breakBlock] лестницы. Своих данных блока (BlockEntity) у лестницы нет
+	 */
+	@Deprecated("Deprecated in Java")
+	override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) =
+		breakBlock(level, pos.x, pos.y, pos.z, this, variant ?: 0)
+
+	override fun onBlockExploded(state: BlockState, level: Level, pos: BlockPos, explosion: Explosion) = onBlockExploded(level, pos.x, pos.y, pos.z, explosion)
+
+	@Deprecated("Deprecated in Java")
+	override fun isSignalSource(state: BlockState) = canProvidePower()
+
+	@Deprecated("Deprecated in Java")
+	override fun getSignal(state: BlockState, level: BlockGetter, pos: BlockPos, direction: Direction) = isProvidingWeakPower(level, pos.x, pos.y, pos.z, direction.get3DDataValue())
+
+	// BlockStairs 1.7.10: тик, установка и снятие — у блока-источника
+
+	override fun updateTick(world: Level, x: Int, y: Int, z: Int, random: RandomSource) {
+		(legacySource as? LegacyBlockMethods)?.updateTick(world, x, y, z, random)
+	}
+
+	override fun onBlockAdded(world: Level, x: Int, y: Int, z: Int) {
+		(legacySource as? LegacyBlockMethods)?.onBlockAdded(world, x, y, z)
+	}
+
+	override fun breakBlock(world: Level, x: Int, y: Int, z: Int, block: Block?, meta: Int) {
+		(legacySource as? LegacyBlockMethods)?.breakBlock(world, x, y, z, block, meta)
+	}
 
 	companion object: SoundTypes1710
 }
@@ -71,6 +130,31 @@ open class Slab1710(@Suppress("UNUSED_PARAMETER") full: Boolean, material: Mater
 	override fun getSoundType(state: BlockState) = legacy.stepSound ?: SoundType.STONE
 
 	override fun isRandomlyTicking(state: BlockState) = legacy.needsRandomTick
+
+	// Методы 1.7.10 класса автора ([LegacyBlockMethods]) из методов 1.20.1 — как у Block1710
+
+	@Deprecated("Deprecated in Java")
+	override fun tick(state: BlockState, level: ServerLevel, pos: BlockPos, random: RandomSource) = updateTick(level, pos.x, pos.y, pos.z, random)
+
+	@Deprecated("Deprecated in Java")
+	override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
+		super.onPlace(state, level, pos, oldState, isMoving)
+		onBlockAdded(level, pos.x, pos.y, pos.z)
+	}
+
+	@Deprecated("Deprecated in Java")
+	override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
+		breakBlock(level, pos.x, pos.y, pos.z, this, variant ?: 0)
+		super.onRemove(state, level, pos, newState, isMoving)
+	}
+
+	override fun onBlockExploded(state: BlockState, level: Level, pos: BlockPos, explosion: Explosion) = onBlockExploded(level, pos.x, pos.y, pos.z, explosion)
+
+	@Deprecated("Deprecated in Java")
+	override fun isSignalSource(state: BlockState) = canProvidePower()
+
+	@Deprecated("Deprecated in Java")
+	override fun getSignal(state: BlockState, level: BlockGetter, pos: BlockPos, direction: Direction) = isProvidingWeakPower(level, pos.x, pos.y, pos.z, direction.get3DDataValue())
 
 	companion object: SoundTypes1710
 }
