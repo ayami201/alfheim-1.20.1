@@ -52,6 +52,12 @@ abstract class TileEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockS
 
 	/** `canUpdate()` 1.7.10: тикать ли блок-сущность ([updateEntity]) */
 	open fun canUpdate() = true
+	
+	/** Мир 1.7.10 спрашивал [canUpdate], когда блок-сущность попадала в мир; ответ запоминает её тип (`getTicker` блока) */
+	override fun setLevel(level: Level) {
+		super.setLevel(level)
+		LegacyRegistration.tileLoaded(type, level.isClientSide, canUpdate())
+	}
 
 	/** `readFromNBT(nbt)` 1.7.10 — данные блок-сущности при загрузке */
 	open fun readFromNBT(nbt: CompoundTag) = Unit

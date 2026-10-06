@@ -73,6 +73,7 @@ object LegacyRegistration {
 	
 	private val tileTypes = HashMap<Class<out BlockEntity>, BlockEntityType<*>>()
 	private val tileBlocks = HashMap<BlockEntityType<*>, MutableSet<Block>>()
+	private val tileUpdates = ConcurrentHashMap<Pair<BlockEntityType<*>, Boolean>, Boolean>()
 	private val pendingTiles = ArrayList<Pair<Class<out BlockEntity>, String>>()
 
 	private val pendingItems = ArrayList<Pair<Item, String>>()
@@ -241,6 +242,20 @@ object LegacyRegistration {
 	fun tileCreated(type: BlockEntityType<*>, block: Block) {
 		tileBlocks[type]?.add(block)
 	}
+	
+	/**
+	 * Блок-сущность типа [type] попала в мир на клиенте ([client]) или сервере и ответила `canUpdate()` 1.7.10
+	 * [canUpdate]. Мир 1.7.10 спрашивал об этом каждую блок-сущность и не тикал ту, что ответила `false`; 1.20.1 решает,
+	 * тикать ли, по типу и состоянию блока (`getTicker`). У блок-сущностей автора ответ зависит только от класса и
+	 * стороны (`TileItemDisplay` тикает только на сервере), поэтому тип запоминает ответ первой своей блок-сущности на
+	 * каждой стороне
+	 */
+	fun tileLoaded(type: BlockEntityType<*>, client: Boolean, canUpdate: Boolean) {
+		tileUpdates.putIfAbsent(type to client, canUpdate)
+	}
+	
+	/** Тикают ли блок-сущности типа [type] на клиенте ([client]) или сервере ([tileLoaded]); пока ни одной не было — да */
+	fun tileUpdates(type: BlockEntityType<*>, client: Boolean) = tileUpdates[type to client] ?: true
 	
 	private fun registerTiles(e: RegisterEvent) {
 		for ((clazz, name) in pendingTiles) {

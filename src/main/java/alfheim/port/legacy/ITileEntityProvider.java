@@ -1,5 +1,6 @@
 package alfheim.port.legacy;
 
+import alfheim.port.registry.LegacyRegistration;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -14,12 +15,14 @@ import net.minecraft.world.level.block.state.BlockState;
  * {@code hasTileEntity(meta) = false}) возвращает {@code null}.
  * <p>
  * Блок-сущности 1.7.10 мир тикал сам — и на сервере, и на клиенте, если {@code canUpdate()}; в 1.20.1 тик даёт блок
- * ({@link #getTicker}).
+ * ({@link #getTicker}). Блок-сущность, которая не тикает ({@code canUpdate() = false}), 1.7.10 в список тикающих не
+ * ставил, и здесь тика у неё нет ({@code LegacyRegistration.tileUpdates}).
  */
 public interface ITileEntityProvider extends EntityBlock {
 
 	@Override
 	default <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		if (!LegacyRegistration.INSTANCE.tileUpdates(type, level.isClientSide)) return null;
 		return (tickLevel, pos, tickState, be) -> {
 			if (be instanceof TileEntity tile && tile.canUpdate()) tile.updateEntity();
 		};
