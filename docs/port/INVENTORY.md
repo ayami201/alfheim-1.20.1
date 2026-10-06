@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 224 | 19 401 | 104 | 118 | 2 |  |
+| КТ-2 | 224 | 19 401 | 100 | 122 | 2 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **929** | **150** | **62** | **12** |
+| **всего** | **1153** | **124 643** | **925** | **154** | **62** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -767,12 +767,12 @@ python3 tools/check_inventory.py
 | `BlockRainbowDoubleGrass.kt` | 185 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowDoubleGrass.kt`; варианты 0–1 — массив блоков, половина — свойство `half`; авроровая — цвет по координатам нижней половины, как рисовал рендер автора |
 | `BlockRainbowGrass.kt` | 199 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowGrass.kt`; варианты 0–4 (трава, авроровая трава, цветок, мерцающий цветок, закопанные лепестки) — массив блоков; свет и рамка — по варианту; закопанные лепестки без граней, как у автора (прозрачная иконка Botania 1.7.10) |
 | `BlockRainbowLeaves.kt` | 35 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowLeaves.kt`; бит опадания (0x1) — свойство `persistent` |
-| `BlockRainbowMushroom.kt` | 106 | КТ-2 | ждёт |  |
+| `BlockRainbowMushroom.kt` | 106 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowMushroom.kt`; гриб 1.7.10 — `Mushroom1710`; рог Botania его не ломает (`IHornHarvestable` → capability `HORN_HARVEST`); цвет света Easy Colored Lights — белый, в `light/emitters.json` |
 | `BlockRainbowPlanks.kt` | 74 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowPlanks.kt`; превращение посохом в древесную кузню — КТ-3 |
 | `BlockRainbowWood.kt` | 51 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowWood.kt` |
 | `BlockRainbowWoodPartials.kt` | 42 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockRainbowWoodPartials.kt`; плита `rainbow_planks_slab` (двойная — её состояние `type=double`), ступеньки `rainbow_planks_stairs` |
-| `BlockShimmerQuartz.kt` | 93 | КТ-2 | ждёт |  |
-| `BlockSoftStorage.kt` | 61 | КТ-2 | ждёт |  |
+| `BlockShimmerQuartz.kt` | 93 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockShimmerQuartz.kt`; кварц Botania 1.7.10 — `BlockSpecialQuartz` прослойки; варианты 0–2 — массив блоков, у колонны — свойство `axis`; двойная плита — состояние `type=double`; варианты 5–6 врезки `QuartzExtender` — КТ-3 |
+| `BlockSoftStorage.kt` | 61 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/colored/rainbow/BlockSoftStorage.kt`; варианты 0–3 — массив блоков (`BlockModMeta`) |
 
 ### `legacy/src/main/java/alfheim/common/block/compat/thaumcraft/`
 
@@ -1174,7 +1174,7 @@ python3 tools/check_inventory.py
 | `RecipeAesirCloak.kt` | 44 | КТ-4 | ждёт |  |
 | `RecipeCleanRelic.kt` | 66 | КТ-4 | ждёт |  |
 | `RecipeClearLoki.kt` | 54 | КТ-4 | ждёт |  |
-| `RecipeElvenWeed.kt` | 59 | КТ-2 | ждёт |  |
+| `RecipeElvenWeed.kt` | 59 | КТ-2 | перенесено | → `src/main/java/alfheim/common/crafting/recipe/workbench/RecipeElvenWeed.kt`; особый рецепт `alfheim:elvenweed`; мана-гриба Thaumcraft нет (SPEC, п. 7) — как у автора без Thaumcraft |
 | `RecipeHelmRevealingAlfheim.kt` | 59 | — | выпало (Thaumcraft: мод отсутствует на 1.20.1) | очки Thaumcraft + шлем |
 | `RecipeLensPurification.kt` | 42 | КТ-3 | ждёт |  |
 | `RecipeLensSplit.kt` | 29 | КТ-3 | ждёт |  |
@@ -2112,8 +2112,8 @@ python3 tools/check_inventory.py
 | `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
-| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 77 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
-| `alfheim/textures/blocks/decor/` | 83 | КТ-2 | ждёт | перенесено 69 — декор `AlfheimFluffBlocks`; осталась мерцающая кварцевая плитка (`*ShimmerQuartz*`, 14 файлов) — с блоками `shimmerQuartz` |
+| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 85 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
+| `alfheim/textures/blocks/decor/` | 83 | КТ-3 | ждёт | перенесено 79 — декор `AlfheimFluffBlocks` и мерцающий кварц (`shimmerQuartz`); остались 4 файла (`blockInsertShimmerQuartz`, `blockSmoothShimmerQuartz` с .mcmeta) — варианты 5 и 6 кварца, их добавляет врезка `QuartzExtender` (КТ-3) |
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
 | `alfheim/textures/environment/` | 1 | КТ-6 | ждёт | небо миров |

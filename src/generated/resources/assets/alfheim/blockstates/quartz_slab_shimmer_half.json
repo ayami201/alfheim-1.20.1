@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/quartz_slab_shimmer_half"
+    },
+    "type=double": {
+      "model": "alfheim:block/quartz_type_shimmer0"
+    },
+    "type=top": {
+      "model": "alfheim:block/quartz_slab_shimmer_half_top"
+    }
+  }
+}

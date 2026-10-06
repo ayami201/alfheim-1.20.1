@@ -31,12 +31,17 @@ import alfheim.common.block.AlfheimBlocks.livingcobble
 import alfheim.common.block.AlfheimBlocks.rainbowDirt
 import alfheim.common.block.AlfheimBlocks.rainbowGrass
 import alfheim.common.block.AlfheimBlocks.rainbowLeaves
+import alfheim.common.block.AlfheimBlocks.rainbowMushroom
 import alfheim.common.block.AlfheimBlocks.rainbowPlanks
 import alfheim.common.block.AlfheimBlocks.rainbowSlab
 import alfheim.common.block.AlfheimBlocks.rainbowStairs
 import alfheim.common.block.AlfheimBlocks.rainbowTallFlower
 import alfheim.common.block.AlfheimBlocks.rainbowTallGrass
 import alfheim.common.block.AlfheimBlocks.rainbowWood
+import alfheim.common.block.AlfheimBlocks.shimmerQuartz
+import alfheim.common.block.AlfheimBlocks.shimmerQuartzSlab
+import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
+import alfheim.common.block.AlfheimBlocks.softStorage
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFenceGate
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFence
@@ -492,9 +497,7 @@ object AlfheimTab {
 		addBlock(kindling)
 		*/
 		addBlock(alfStorage)
-		/* PORT: КТ-2
 		addBlock(softStorage)
-		*/
 		/* PORT: КТ-3
 		addBlock(barrel)
 		*/
@@ -774,11 +777,9 @@ object AlfheimTab {
 		livingrockDarkStairs.forEach { addBlock(it) }
 		livingrockDarkSlabs.forEach { addBlock(it) }
 		livingrockDarkWalls.forEach { addBlock(it) }
-		/* PORT: КТ-2
 		addBlock(shimmerQuartz)
 		addBlock(shimmerQuartzStairs)
 		addBlock(shimmerQuartzSlab)
-		*/
 		addBlock(shrineLight)
 		addBlock(shrineGlass)
 		addBlock(shrinePanel)
@@ -883,7 +884,7 @@ object AlfheimTab {
 		addBlock(rainbowTallFlower)
 		addBlock(rainbowGrass, 2)
 		addBlock(rainbowGrass, 3)
-//		addBlock(rainbowMushroom)
+		addBlock(rainbowMushroom)
 //		addBlock(subspacian)
 		
 		addBlock(irisSapling)

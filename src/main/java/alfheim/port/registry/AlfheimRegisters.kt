@@ -8,6 +8,7 @@ import alfheim.port.data.AlfheimData
 import alfheim.port.hook.CreativeTabHooks
 import alfheim.port.legacy.Fuel1710
 import alfheim.port.legacy.botania.BotaniaBlocks1710
+import alfheim.port.legacy.botania.HornHarvest1710
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.fml.DistExecutor
 import net.minecraft.core.registries.Registries
@@ -51,6 +52,8 @@ object AlfheimRegisters {
 		// врезки автора во вкладки творческого режима (HOOKS.md)
 		CreativeTabHooks.register(bus)
 		BotaniaBlocks1710.register(bus)
+		// блоки автора, которые сами решают, что с ними делает рог Botania (IHornHarvestable 1.7.10)
+		HornHarvest1710.register(bus)
 		// особые рецепты автора — свой сериализатор у каждого, ингредиент «предмет с metadata»; обычные рецепты — данные
 		LegacySpecialRecipes.register(bus)
 		// модели, лут, теги, рецепты и legacy_ids.json — генерация данных (./gradlew runData)

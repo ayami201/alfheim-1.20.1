@@ -228,6 +228,41 @@ object PortRecipesTest {
 	}
 
 	/**
+	 * Рецепты партии 8б-3: красный или коричневый гриб и радужная пыль → радужный гриб, два радужных гриба и миска →
+	 * грибной суп; 9 радужных лепестков, пыльцы фей, пыли иффесаля или эссенции жизни → мягкий блок, и обратно. Мерцающий
+	 * кварц (`addQuartzRecipes`): 4 мерцающих кварца → блок; два любых блока мерцающего кварца друг на друге → 2 колонны,
+	 * две плиты → резной блок; 3 блока → 6 плит, лесенкой → 4 ступеньки; 8 кварца вокруг радужной пыли → 8 мерцающих кварцев
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun shimmerAndSoftStorageRecipes(helper: GameTestHelper) {
+		val dust = RainbowDust.stack
+		val mushroom = ItemStack(AlfheimBlocks.rainbowMushroom)
+		assertCraft(helper, grid(ItemStack(Items.RED_MUSHROOM), dust), mushroom, "rainbow mushroom from a red one")
+		assertCraft(helper, grid(ItemStack(Items.BROWN_MUSHROOM), dust), mushroom, "rainbow mushroom from a brown one")
+		assertCraft(helper, grid(mushroom, mushroom, ItemStack(Items.BOWL)), ItemStack(Items.MUSHROOM_STEW), "mushroom stew")
+
+		val soft = AlfheimBlocks.softStorage
+		for ((meta, stuff) in listOf(RainbowPetal.stack, ItemStack(BotaniaItems.pixieDust), IffesalDust.stack, ItemStack(BotaniaItems.lifeEssence)).withIndex()) {
+			assertCraft(helper, grid(*Array(9) { stuff }), ItemStack(soft[meta]), "soft storage $meta")
+			assertCraft(helper, grid(ItemStack(soft[meta])), stuff.copyWithCount(9), "soft storage $meta back")
+		}
+
+		val quartz = AlfheimBlocks.shimmerQuartz.map { ItemStack(it) }
+		val shimmer = RainbowQuartz.stack
+		assertCraft(helper, grid(shimmer, shimmer, null, shimmer, shimmer), quartz[0], "shimmer quartz block")
+		for (top in quartz) for (bottom in quartz)
+			assertCraft(helper, grid(top, null, null, bottom), quartz[2].copyWithCount(2), "pillars from ${top.item} and ${bottom.item}")
+		val slab = ItemStack(AlfheimBlocks.shimmerQuartzSlab)
+		assertCraft(helper, grid(slab, null, null, slab), quartz[1], "chiseled shimmer quartz")
+		assertCraft(helper, grid(quartz[0], quartz[0], quartz[0]), slab.copyWithCount(6), "shimmer quartz slabs")
+		assertCraft(helper, grid(quartz[0], null, null, quartz[0], quartz[0], null, quartz[0], quartz[0], quartz[0]), ItemStack(AlfheimBlocks.shimmerQuartzStairs, 4), "shimmer quartz stairs")
+		val q = ItemStack(Items.QUARTZ)
+		assertCraft(helper, grid(q, q, q, q, dust, q, q, q, q), RainbowQuartz.stack(8), "shimmer quartz from quartz")
+		helper.succeed()
+	}
+
+	/**
 	 * Гиперведро: уровень — metadata 1.7.10 (повреждение стака). Уровни 0–2 улучшает слиток мауфтрия, 3–5 — блок
 	 * мауфтрия; ведро другого уровня в рецепт не подходит
 	 */
@@ -266,6 +301,27 @@ object PortRecipesTest {
 		helper.assertTrue(!recipe!!.matches(grid(vial, ItemStack(Items.GUNPOWDER), ItemStack(Items.DIRT)), helper.level), "an extra item breaks the recipe")
 		val fallback = ItemStack(BotaniaItems.brewVial).also { BaseBrewItem.setBrew(it, BotaniaBrews.fallbackBrew) }
 		helper.assertTrue(recipe.assemble(grid(fallback, ItemStack(Items.GUNPOWDER)), helper.level.registryAccess()).isEmpty, "no splash potion of the fallback brew")
+		helper.succeed()
+	}
+
+	/**
+	 * Эльфийская трава (`RecipeElvenWeed`): пыль иффесаля, пыльца фей, радужный гриб и бумага в любом месте сетки, каждого
+	 * по одному; лишний или повторный предмет ломает рецепт. Мана-гриба Thaumcraft нет (SPEC, п. 7)
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun elvenWeedRecipe(helper: GameTestHelper) {
+		val iffesal = IffesalDust.stack
+		val pixie = ItemStack(BotaniaItems.pixieDust)
+		val mushroom = ItemStack(AlfheimBlocks.rainbowMushroom)
+		val paper = ItemStack(Items.PAPER)
+		val weed = AlfheimItems.elvenResource[ElvenWeed.I]
+		helper.assertTrue(craft(helper, grid(iffesal, pixie, mushroom, paper)).`is`(weed), "elven weed")
+		helper.assertTrue(craft(helper, grid(null, paper, null, mushroom, null, pixie, null, iffesal)).`is`(weed), "elven weed from a scattered grid")
+		helper.assertTrue(craft(helper, grid(iffesal, pixie, mushroom)).isEmpty, "no elven weed without paper")
+		helper.assertTrue(craft(helper, grid(iffesal, pixie, mushroom, paper, paper)).isEmpty, "a second paper breaks the recipe")
+		helper.assertTrue(craft(helper, grid(iffesal, pixie, mushroom, paper, ItemStack(Items.DIRT))).isEmpty, "an extra item breaks the recipe")
+		helper.assertTrue(helper.level.recipeManager.byKey(ResourceLocation(MODID, "elvenweed")).orElse(null) is CustomRecipe, "alfheim:elvenweed is a special recipe")
 		helper.succeed()
 	}
 

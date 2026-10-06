@@ -27,7 +27,7 @@ var Block.stepSound: SoundType?
 
 /** Имя блока 1.7.10 (`getUnlocalizedName`: `tile.` + имя из `setBlockName`) — у блока порта или блока Botania ([legacyProps]) */
 val Block.unlocalizedName: String
-	get() = legacyProps(this).unlocalizedName
+	get() = if (this is LegacyBlock) getUnlocalizedName() else legacyProps(this).unlocalizedName
 
 /** `net.minecraft.block.BlockStairs` 1.7.10: материал, твёрдость, взрывоустойчивость и звук — от блока-источника */
 open class Stairs1710(val legacySource: Block, @Suppress("UNUSED_PARAMETER") meta: Int): StairBlock(Supplier { legacySource.defaultBlockState() }, legacyProps(legacySource).material.properties()), LegacyBlock {

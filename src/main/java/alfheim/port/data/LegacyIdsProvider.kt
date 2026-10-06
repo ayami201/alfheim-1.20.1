@@ -77,8 +77,9 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 		/**
 		 * Ключ перевода предмета-блока в 1.7.10: `tile.` + имя блока; `ItemBlockMetaName` дописывал номер варианта,
 		 * `ItemBlockLeavesMod` — приставку `alfheim:`, `ItemBlockMod` и `ItemBlockModSlab` Botania — `botania:`,
-		 * `ItemBlockWithMetadataAndName` Botania — `botania:` и номер варианта.
-		 * `ItemSubtypedBlockMod`, `ItemIridescentBlockMod` и `ItemSlabMod` — приставку `alfheim:` и убирали номер в конце
+		 * `ItemBlockWithMetadataAndName` Botania — `botania:` и номер варианта, `ItemBlockSpecialQuartz` Botania — имя
+		 * варианта из `getNames` блока. `ItemSubtypedBlockMod`, `ItemIridescentBlockMod`, `ItemSlabMod` и
+		 * `ItemShimmerSlabMod` — приставку `alfheim:` и убирали номер в конце
 		 * имени (у всех цветов одно имя), `ItemUniqueSubtypedBlockMod` — дописывал номер варианта по модулю числа видов,
 		 * `ItemMetaSlabMod` — номер варианта без бита 8, `ItemRainbowGrassMod` — приставку `alfheim:` и номер варианта (у
 		 * блока без вариантов — 0). Предмет 1.20.1 берёт ключ блока, поэтому старый ключ
@@ -87,13 +88,14 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 		fun legacyLangKey(block: Block): String? {
 			val legacy = block as? LegacyBlock ?: return null
 			val item = block.asItem()
-			var key = legacy.legacy.unlocalizedName
+			var key = legacy.getUnlocalizedName()
 			val variant = legacy.variant ?: 0
 			if (item is ItemBlockMetaName && ((block as? BlockModMeta)?.subtypes ?: 16) > 1) key += variant
 			if (item is ItemBlockLeavesMod) key = key.replace("tile.", "tile.$MODID:")
 			if (item is ItemBlockMod || item is ItemBlockModSlab) key = key.replace("tile.", "tile.botania:")
 			if (item is ItemBlockWithMetadataAndName) key = key.replace("tile.", "tile.botania:") + variant
-			if (item is ItemSubtypedBlockMod || item is ItemIridescentBlockMod || item is ItemSlabMod) key = key.replace("tile.", "tile.$MODID:").replace(Regex("\\d+$"), "")
+			if (item is ItemBlockSpecialQuartz) key = (block as BlockSpecialQuartz).getNames()[variant]
+			if (item is ItemSubtypedBlockMod || item is ItemIridescentBlockMod || item is ItemSlabMod || item is ItemShimmerSlabMod) key = key.replace("tile.", "tile.$MODID:").replace(Regex("\\d+$"), "")
 			if (item is ItemUniqueSubtypedBlockMod) key = key.replace("tile.", "tile.$MODID:") + variant % item.subtypes.toInt()
 			if (item is ItemMetaSlabMod) key = key.replace("tile.", "tile.$MODID:") + (variant and 0x8.inv())
 			if (item is ItemRainbowGrassMod) key = key.replace("tile.", "tile.$MODID:") + variant

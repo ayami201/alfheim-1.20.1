@@ -124,7 +124,7 @@ import alfheim.common.block.AlfheimBlocks.manaIce
 import alfheim.common.block.AlfheimBlocks.rainbowDirt
 //import alfheim.common.block.AlfheimBlocks.rainbowFlowerFloating // PORT: КТ-3
 import alfheim.common.block.AlfheimBlocks.rainbowGrass
-//import alfheim.common.block.AlfheimBlocks.rainbowMushroom // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.rainbowMushroom
 import alfheim.common.block.AlfheimBlocks.rainbowPlanks
 import alfheim.common.block.AlfheimBlocks.rainbowSlab
 import alfheim.common.block.AlfheimBlocks.rainbowStairs
@@ -140,11 +140,11 @@ import alfheim.common.block.AlfheimBlocks.rainbowWood
 //import alfheim.common.block.AlfheimBlocks.sealingSlabs // PORT: КТ-2
 //import alfheim.common.block.AlfheimBlocks.sealingStairs // PORT: КТ-2
 //import alfheim.common.block.AlfheimBlocks.sealingWood // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.shimmerQuartz // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.shimmerQuartzSlab // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.shimmerQuartz
+import alfheim.common.block.AlfheimBlocks.shimmerQuartzSlab
+import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
 //import alfheim.common.block.AlfheimBlocks.snakeObject // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.softStorage // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.softStorage
 //import alfheim.common.block.AlfheimBlocks.spire // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.subspacian // PORT: КТ-2
 //import alfheim.common.block.AlfheimBlocks.tradePortal // PORT: КТ-3
@@ -2579,9 +2579,13 @@ object AlfheimRecipes {
 		
 		addShapelessOreDictRecipe(ItemStack(manaRingGod, 1, WILDCARD_VALUE), MAUFTRIUM_INGOT, manaStoneGreater)
 		recipeManaRingGod = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
-		addShapelessOreDictRecipe(ItemStack(mushroom_stew), rainbowMushroom, rainbowMushroom, ItemStack(bowl))
+		// PORT: поля ванилы 1.20.1 — заглавными
+		addShapelessOreDictRecipe(ItemStack(Items.MUSHROOM_STEW), rainbowMushroom, rainbowMushroom, ItemStack(Items.BOWL))
+//		addShapelessOreDictRecipe(ItemStack(mushroom_stew), rainbowMushroom, rainbowMushroom, ItemStack(bowl))
 		
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(netherPlanks, 4), netherWood)
 		recipeInfernalPlanks = BotaniaAPI.getLatestAddedRecipe()
 		*/
@@ -2603,26 +2607,38 @@ object AlfheimRecipes {
 		// PORT: КТ-9 — рецепты страницы лексикона Botania «Мерцающие цветы»
 //		ModCraftingRecipes.recipesShinyFlowers?.add(BotaniaAPI.getLatestAddedRecipe())
 		
-		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
-		addShapelessRecipe(ItemStack(rainbowMushroom), ItemStack(red_mushroom), RainbowDust.stack)
-		addShapelessRecipe(ItemStack(rainbowMushroom), ItemStack(brown_mushroom), RainbowDust.stack)
-		ModCraftingRecipes.recipesMushrooms?.addAll(BotaniaAPI.getLatestAddedRecipes(2))
+		// PORT: поля ванилы 1.20.1 — заглавными
+		addShapelessRecipe(ItemStack(rainbowMushroom), ItemStack(Blocks.RED_MUSHROOM), RainbowDust.stack)
+		addShapelessRecipe(ItemStack(rainbowMushroom), ItemStack(Blocks.BROWN_MUSHROOM), RainbowDust.stack)
+//		addShapelessRecipe(ItemStack(rainbowMushroom), ItemStack(red_mushroom), RainbowDust.stack)
+//		addShapelessRecipe(ItemStack(rainbowMushroom), ItemStack(brown_mushroom), RainbowDust.stack)
+		// PORT: КТ-9 — рецепты страницы лексикона Botania «Мерцающие грибы»
+//		ModCraftingRecipes.recipesMushrooms?.addAll(BotaniaAPI.getLatestAddedRecipes(2))
 		
-		addOreDictRecipe(ItemStack(softStorage), "PPP", "PPP", "PPP", 'P', RAINBOW_PETAL)
+		// PORT: вариант metadata — блок массива (SPEC, Р-5)
+		addOreDictRecipe(ItemStack(softStorage[0]), "PPP", "PPP", "PPP", 'P', RAINBOW_PETAL)
 		recipeRainbowPetalBlock = BotaniaAPI.getLatestAddedRecipe()
-		addOreDictRecipe(ItemStack(softStorage, 1, 1), "PPP", "PPP", "PPP", 'P', PIXIE_DUST)
-		addOreDictRecipe(ItemStack(softStorage, 1, 2), "PPP", "PPP", "PPP", 'P', IFFESAL_DUST)
-		addOreDictRecipe(ItemStack(softStorage, 1, 3), "PPP", "PPP", "PPP", 'P', LIFE_ESSENCE)
+		addOreDictRecipe(ItemStack(softStorage[1], 1), "PPP", "PPP", "PPP", 'P', PIXIE_DUST)
+		addOreDictRecipe(ItemStack(softStorage[2], 1), "PPP", "PPP", "PPP", 'P', IFFESAL_DUST)
+		addOreDictRecipe(ItemStack(softStorage[3], 1), "PPP", "PPP", "PPP", 'P', LIFE_ESSENCE)
+//		addOreDictRecipe(ItemStack(softStorage), "PPP", "PPP", "PPP", 'P', RAINBOW_PETAL)
+//		recipeRainbowPetalBlock = BotaniaAPI.getLatestAddedRecipe()
+//		addOreDictRecipe(ItemStack(softStorage, 1, 1), "PPP", "PPP", "PPP", 'P', PIXIE_DUST)
+//		addOreDictRecipe(ItemStack(softStorage, 1, 2), "PPP", "PPP", "PPP", 'P', IFFESAL_DUST)
+//		addOreDictRecipe(ItemStack(softStorage, 1, 3), "PPP", "PPP", "PPP", 'P', LIFE_ESSENCE)
 		
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(sealingPlanks, 4), sealingWood)
 		recipeSealingPlanks = BotaniaAPI.getLatestAddedRecipe()
 		
 		addShapelessOreDictRecipe(ItemStack(shimmerrock), "livingrock", DYES[16])
 		ModCraftingRecipes.recipeShimmerrock?.let { CraftingManager.getInstance().recipeList.remove(it) }
 		ModCraftingRecipes.recipeShimmerrock = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		recipeShimmerQuartz = addQuartzRecipes(shimmerQuartz, shimmerQuartzStairs, shimmerQuartzSlab)
 		
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(shimmerwoodPlanks), ItemStack(dreamwood, 1, 1), DYES[16])
 		ModCraftingRecipes.recipeShimmerwoodPlanks?.let { CraftingManager.getInstance().recipeList.remove(it) }
 		ModCraftingRecipes.recipeShimmerwoodPlanks = BotaniaAPI.getLatestAddedRecipe()
@@ -2657,12 +2673,18 @@ object AlfheimRecipes {
 		}
 		*/
 		
-		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
-		addShapelessRecipe(RainbowPetal.stack(9), ItemStack(softStorage))
-		addShapelessRecipe(ItemStack(manaResource, 9, 8), ItemStack(softStorage, 1, 1))
-		addShapelessRecipe(IffesalDust.stack(9), ItemStack(softStorage, 1, 2))
-		addShapelessRecipe(ItemStack(manaResource, 9, 5), ItemStack(softStorage, 1, 3))
+		// PORT: вариант metadata — блок массива (SPEC, Р-5); ModItems.manaResource 8 (пыльца фей), 5 (эссенция жизни) →
+		// pixieDust, lifeEssence
+		addShapelessRecipe(RainbowPetal.stack(9), ItemStack(softStorage[0]))
+		addShapelessRecipe(ItemStack(pixieDust, 9), ItemStack(softStorage[1], 1))
+		addShapelessRecipe(IffesalDust.stack(9), ItemStack(softStorage[2], 1))
+		addShapelessRecipe(ItemStack(lifeEssence, 9), ItemStack(softStorage[3], 1))
+//		addShapelessRecipe(RainbowPetal.stack(9), ItemStack(softStorage))
+//		addShapelessRecipe(ItemStack(manaResource, 9, 8), ItemStack(softStorage, 1, 1))
+//		addShapelessRecipe(IffesalDust.stack(9), ItemStack(softStorage, 1, 2))
+//		addShapelessRecipe(ItemStack(manaResource, 9, 5), ItemStack(softStorage, 1, 3))
 		
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessRecipe(Stencil.stack, paper, carver)
 		recipeStencil = BotaniaAPI.getLatestAddedRecipe()
 		*/
@@ -3021,9 +3043,9 @@ object AlfheimRecipes {
 		*/
 		addRecipe(RecipeThrowablePotion)
 		RecipeSorter.register("${ModInfo.MODID}:throwpotion", RecipeThrowablePotion::class.java, RecipeSorter.Category.SHAPELESS, "")
-		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addRecipe(RecipeElvenWeed)
 		RecipeSorter.register("${ModInfo.MODID}:elvenweed", RecipeElvenWeed::class.java, RecipeSorter.Category.SHAPELESS, "")
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addRecipe(RecipeAesirCloak)
 		RecipeSorter.register("${ModInfo.MODID}:aesirCloak", RecipeAesirCloak::class.java, RecipeSorter.Category.SHAPED, "")
 		addRecipe(RecipeLensSplit)
@@ -3260,25 +3282,32 @@ object AlfheimRecipes {
 	}
 	*/
 	
-	/* PORT: КТ-2, КТ-3 — мерцающий кварц, алхимия маны
-	private fun addQuartzRecipes(block: Block, stairs: Block, slab: Block): IRecipe {
-		addRecipe(ItemStack(block),
+	// PORT: варианты кварца — массив блоков (SPEC, Р-5): block[0] — блок, [1] — резной, [2] — колонна. Массив в рецепте по
+	// шаблону — любой вариант, как Block 1.7.10 (MAPPING.md, «Рецепты»)
+	private fun addQuartzRecipes(block: Array<Block>, stairs: Block, slab: Block): IRecipe {
+//	private fun addQuartzRecipes(block: Block, stairs: Block, slab: Block): IRecipe {
+		addRecipe(ItemStack(block[0]),
+//		addRecipe(ItemStack(block),
 				  "QQ",
 				  "QQ",
 				  'Q', RainbowQuartz.stack)
 		
-		BotaniaAPI.registerManaAlchemyRecipe(RainbowQuartz.stack(4), ItemStack(block, 1, 32767), 25)
+		// PORT: КТ-3 — рецепты типов Botania (алхимия маны)
+//		BotaniaAPI.registerManaAlchemyRecipe(RainbowQuartz.stack(4), ItemStack(block, 1, 32767), 25)
 		
-		addRecipe(ItemStack(block, 2, 2),
+		addRecipe(ItemStack(block[2], 2),
+//		addRecipe(ItemStack(block, 2, 2),
 				  "Q",
 				  "Q",
 				  'Q', block)
 		
-		addRecipe(ItemStack(block, 1, 1),
+		addRecipe(ItemStack(block[1], 1),
+//		addRecipe(ItemStack(block, 1, 1),
 				  "Q",
 				  "Q",
 				  'Q', slab)
-		addStairsAndSlabs(block, 0, stairs, slab)
+		addStairsAndSlabs(block[0], 0, stairs, slab)
+//		addStairsAndSlabs(block, 0, stairs, slab)
 		
 		addRecipe(ShapedOreRecipe(RainbowQuartz.stack(8),
 								  "QQQ",
@@ -3288,7 +3317,6 @@ object AlfheimRecipes {
 								  'C', DYES[16]))
 		return BotaniaAPI.getLatestAddedRecipe()
 	}
-	*/
 	
 	private fun addStairsAndSlabs(block: Block, meta: Int, stairs: Block, slab: Block) {
 		// PORT: вариант metadata — сам блок (block), номер варианта остаётся параметром (MAPPING.md, «Блоки и предметы»)

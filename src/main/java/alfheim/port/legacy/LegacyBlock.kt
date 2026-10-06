@@ -77,6 +77,9 @@ interface LegacyBlock: LegacyBlockMethods {
 		return self
 	}
 
+	/** `getUnlocalizedName` 1.7.10: имя из `setBlockName`; класс автора может вернуть своё */
+	fun getUnlocalizedName(): String = legacy.unlocalizedName
+
 	fun setBlockTextureName(name: String): Block {
 		legacy.textureName = name
 		return self

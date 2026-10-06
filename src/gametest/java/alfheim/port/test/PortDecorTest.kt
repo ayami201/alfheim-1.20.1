@@ -56,8 +56,9 @@ object PortDecorTest {
 		helper.assertTrue(ids.size == 87, "ids: ${ids.size}")
 		for (id in ids) helper.assertTrue(BuiltInRegistries.BLOCK.containsKey(ResourceLocation(MODID, id)), "$MODID:$id is not registered")
 		// 104 блока партий 1 и 2, 6 вариантов эльфийской руды партии 3, 130 цветных блоков партии 8а, 12 радужных и
-		// авроровых блоков партии 8б-1, 8 радужных растений партии 8б-2 и черепица Botania 1.7.10
-		helper.assertTrue(LegacyRegistration.blocks.size == 261, "blocks of the author: ${LegacyRegistration.blocks.size}")
+		// авроровых блоков партии 8б-1, 8 радужных растений партии 8б-2, 10 блоков партии 8б-3 (гриб, 3 варианта
+		// мерцающего кварца, его плита и лестница, 4 мягких блока) и черепица Botania 1.7.10
+		helper.assertTrue(LegacyRegistration.blocks.size == 271, "blocks of the author: ${LegacyRegistration.blocks.size}")
 		helper.succeed()
 	}
 

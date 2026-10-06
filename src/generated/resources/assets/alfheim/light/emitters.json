@@ -18,5 +18,8 @@
       "power=8": "#00FF9F",
       "power=9": "#00FFFF"
     }
+  },
+  "alfheim:rainbow_mushroom": {
+    "default": "#FFFFFF"
   }
 }

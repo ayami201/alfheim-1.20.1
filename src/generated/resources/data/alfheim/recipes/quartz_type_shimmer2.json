@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "Q": [
+      {
+        "item": "alfheim:quartz_type_shimmer0"
+      },
+      {
+        "item": "alfheim:quartz_type_shimmer1"
+      },
+      {
+        "item": "alfheim:quartz_type_shimmer2"
+      }
+    ]
+  },
+  "pattern": [
+    "Q",
+    "Q"
+  ],
+  "result": {
+    "count": 2,
+    "item": "alfheim:quartz_type_shimmer2"
+  }
+}

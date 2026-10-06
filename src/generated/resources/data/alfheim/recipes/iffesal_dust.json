@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "alfheim:soft_storage2"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "alfheim:iffesal_dust"
+  }
+}
