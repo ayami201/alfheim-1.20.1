@@ -18,7 +18,11 @@ GameTest-ы идут в среде разработки: там у методо�
 7. раздатчик со склянкой мода бросает летящее зелье (поведение раздатчика регистрируется в `FMLCommonSetupEvent`);
 8. рецепты мода загружены без ошибок разбора — в том числе особый рецепт `alfheim:throwpotion` со своим сериализатором;
 9. блок-сущность мода: ягода магического дерева под своей листвой создаёт блок-сущность `alfheim:tree_berry` (тип
-   по классу автора, методы блок-сущности 1.7.10 прослойки у игроков — с именами SRG).
+   по классу автора, методы блок-сущности 1.7.10 прослойки у игроков — с именами SRG);
+10. блок-сущность мода тикает и сохраняет данные: сердцевина барьерного дерева после первого тика пишет в NBT
+    `firstTick: 0b` (`updateEntity`, `writeToNBT` прослойки);
+11. громоотвод: молнию у сердцевины грозового дерева в начале следующего тика сменяет ложная молния мода
+    (`alfheim:fake_lightning`; событие тика мира, погодные эффекты прослойки).
 
 Команды идут по RCON (удалённая консоль сервера): скрипт сам включает его в `server.properties`
 (порт 25575, пароль `alfcheck`). Существа появляются в точке появления мира с меткой `alfcheck` и
@@ -216,6 +220,23 @@ def main():
         r("setblock ~4 ~1 ~-2 alfheim:tree_berry2[age=2]")
         tile = r("data get block ~4 ~1 ~-2")
         check("Блок-сущность мода создаётся (alfheim:tree_berry)", 'id: "alfheim:tree_berry"' in tile, tile)
+
+        # 10. Сердцевина барьерного дерева тикает (первый тик снимает firstTick) и сохраняет свои данные; она толкает
+        # существ рядом — хасков проверок выше, поэтому стоит полсекунды и убирается
+        r("setblock ~6 ~1 ~-2 alfheim:barrier_wood1")
+        time.sleep(0.5)
+        wind = r("data get block ~6 ~1 ~-2")
+        r("setblock ~6 ~1 ~-2 minecraft:air")
+        check("Блок-сущность мода тикает и сохраняет данные (alfheim:tree_wind)", 'id: "alfheim:tree_wind"' in wind and "firstTick: 0b" in wind, wind)
+
+        # 11. Молния в 3 блоках от сердцевины грозового дерева: в начале следующего тика её сменяет ложная молния мода
+        r("setblock ~8 ~1 ~-2 alfheim:lightning_wood1")
+        r("summon minecraft:lightning_bolt ~8 ~1 ~1")
+        time.sleep(0.2)
+        fake = r("execute if entity @e[type=alfheim:fake_lightning]")
+        bolt = r("execute if entity @e[type=minecraft:lightning_bolt]")
+        r("setblock ~8 ~1 ~-2 minecraft:air")
+        check("Молнию у грозового дерева сменяет ложная (alfheim:fake_lightning)", "Test passed" in fake and "Test failed" in bolt, f"{fake}; {bolt}")
 
         r("kill @e[tag=alfcheck]")
         r("stop")
