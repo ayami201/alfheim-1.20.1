@@ -7,24 +7,34 @@ import alfheim.common.block.colored.BlockColoredSapling
 import alfheim.common.block.magtrees.calico.IExplosionDampener
 import alfheim.common.block.magtrees.sealing.EventHandlerSealingOak
 import alfheim.common.block.magtrees.sealing.ISoundSilencer
+import alfheim.common.block.tile.TileLightningTreeTop
+import alfheim.common.block.tile.TileTreeCook
+import alfheim.common.block.tile.TileTreeWind
+import alfheim.common.entity.FakeLightning
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenFoodMetas
 import alfheim.common.item.material.ElvenResourcesMetas.*
 import alfheim.port.legacy.*
 import alfheim.port.registry.LegacyIds
+import com.mojang.authlib.GameProfile
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.gametest.framework.*
+import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.SimpleContainer
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.*
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.properties.SlabType
 import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
@@ -32,13 +42,16 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.common.ForgeHooks
+import net.minecraftforge.common.util.FakePlayerFactory
 import net.minecraftforge.gametest.GameTestHolder
 import net.minecraftforge.gametest.PrefixGameTestTemplate
+import java.util.*
 
 /**
- * КТ-2, партии 8в-1 и 8в-2: блоки шести магических деревьев — барьерного, кошачьего, грозового, адского, уплотнённого
- * деревьев и схемодрева — и их механики, саженцы и рост деревьев, ягоды. Числа и правила — из классов автора (`alfheim.common.block.magtrees`) и правил 1.7.10
- * (MAPPING.md)
+ * КТ-2, партии 8в-1, 8в-2 и 8в-3: блоки шести магических деревьев — барьерного, кошачьего, грозового, адского, уплотнённого
+ * деревьев и схемодрева — и их механики, саженцы и рост деревьев, ягоды, блок-сущности сердцевин. Числа и правила — из классов автора (`alfheim.common.block.magtrees`) и правил 1.7.10
+ * (MAPPING.md). Сердцевины действуют на всё вокруг (толкают существ, жарят еду, перехватывают молнии), поэтому их тесты
+ * — в своей партии тестов (`heart_wood`), а сердцевина убирается в конце теста
  */
 @GameTestHolder(MODID)
 @PrefixGameTestTemplate(false)
@@ -117,7 +130,7 @@ object PortMagicTreesTest {
 
 	/**
 	 * Лут, теги и топливо: сердцевина роняет обычное бревно (`damageDropped` — 0), двойная плита — две плиты, листва с
-	 * ножницами — себя (саженец без ножниц — партия 8в-2). Деревянный блок в печи горит 300 тиков: 2000 адских блоков у
+	 * ножницами — себя, без ножниц — иногда свой саженец. Деревянный блок в печи горит 300 тиков: 2000 адских блоков у
 	 * автора не срабатывали (B-027)
 	 */
 	@JvmStatic
@@ -138,7 +151,9 @@ object PortMagicTreesTest {
 		only(pos, ItemStack.EMPTY, b.circuitSlabs.asItem(), 2, "double circuit slab")
 		helper.setBlock(pos, b.calicoLeaves)
 		only(pos, ItemStack(Items.SHEARS), b.calicoLeaves.asItem(), 1, "calico leaves with shears")
-		helper.assertTrue(drops(pos, ItemStack.EMPTY).isEmpty(), "calico leaves without shears")
+		// без ножниц — только саженец, и то не всегда (шанс 1/20, magicLeavesDropSaplings)
+		val noShears = drops(pos, ItemStack.EMPTY)
+		helper.assertTrue(noShears.all { it.item === b.calicoSapling.asItem() }, "calico leaves without shears drop $noShears")
 
 		for (wood in b.barrierWood + b.lightningWood + b.netherWood + b.calicoWood + b.circuitWood + b.sealingWood) helper.assertTrue(wood.defaultBlockState().`is`(BlockTags.LOGS), "$wood → minecraft:logs")
 		for (tree in trees) {
@@ -309,6 +324,8 @@ object PortMagicTreesTest {
 			leaves++
 		}
 		helper.assertTrue(leaves > 10, "leaves: $leaves")
+		// сердцевина толкала бы существ соседних тестов (TileTreeWind)
+		helper.setBlock(soil.above(height), Blocks.AIR)
 		helper.succeed()
 	}
 
@@ -404,5 +421,134 @@ object PortMagicTreesTest {
 		} }
 		helper.assertTrue(saplings in 8..36, "saplings in 400 tries: $saplings")
 		helper.succeed()
+	}
+
+	/**
+	 * Сердцевины барьерного, адского и грозового деревьев (вариант 1 бревна) — с блок-сущностью автора, бревно (вариант 0)
+	 * — без; id типов — имена автора в snake_case, старые имена — в `legacy_ids.json`. Все три тикают (`canUpdate` у них
+	 * не переопределён) и стоят в списке тикающих блок-сущностей мира (`loadedTileEntityList`); блок-сущность уходит с
+	 * блоком
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun heartWoodTiles(helper: GameTestHelper) {
+		val pos = BlockPos(1, 1, 1)
+		fun check(wood: Array<Block>, clazz: Class<out BlockEntity>, id: String, legacy: String) {
+			helper.setBlock(pos, wood[0])
+			helper.assertTrue(helper.getBlockEntity(pos) == null, "${wood[0]} has no tile entity")
+			helper.setBlock(pos, wood[1])
+			val tile = helper.getBlockEntity(pos) ?: throw GameTestAssertException("${wood[1]} has no tile entity")
+			helper.assertTrue(clazz.isInstance(tile), "${wood[1]} tile: $tile")
+			helper.assertTrue(BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(tile.type) == ResourceLocation(MODID, id), "$id type")
+			helper.assertTrue(LegacyIds.blockEntities["$MODID:$legacy"]?.get("*")?.id == ResourceLocation(MODID, id), "legacy id $legacy")
+			helper.assertTrue(helper.getBlockState(pos).getTicker(helper.level, tile.type) != null, "$id ticks")
+			helper.assertTrue(tile in helper.level.loadedTileEntityList, "$id is a ticking tile entity of the world")
+			helper.setBlock(pos, Blocks.AIR)
+			helper.assertTrue(tile.isRemoved && tile !in helper.level.loadedTileEntityList, "$id is removed with its block")
+		}
+		check(AlfheimBlocks.barrierWood, TileTreeWind::class.java, "tree_wind", "TreeWind")
+		check(AlfheimBlocks.netherWood, TileTreeCook::class.java, "tree_cook", "TreeCook")
+		check(AlfheimBlocks.lightningWood, TileLightningTreeTop::class.java, "lightning_tree_top", "LightningTreeTop")
+		helper.succeed()
+	}
+
+	/**
+	 * Ветер барьерного дерева (`TileTreeWind`): игроки в 10 блоках в первый тик сердцевины — её друзья. Живых существ
+	 * и чужих игроков (не в творческом режиме) в 10 блоках сердцевина толкает от себя каждый тик — на 1 блок за тик;
+	 * игроку шлёт его новую скорость. Друзья сохраняются в NBT
+	 */
+	@JvmStatic
+	@GameTest(template = "empty", batch = "heart_wood")
+	fun barrierTreeWind(helper: GameTestHelper) {
+		val wood = BlockPos(1, 2, 1)
+		helper.setBlock(BlockPos(3, 1, 1), Blocks.STONE)
+		helper.setBlock(BlockPos(1, 1, 3), Blocks.STONE)
+		// игрок сервера без клиента (FakePlayer Forge: пакеты ему никуда не уходят, сам он не двигается), не в творческом режиме
+		val player = FakePlayerFactory.get(helper.level, GameProfile(UUID.randomUUID(), "alfheim-wind-friend"))
+		val at = helper.absoluteVec(Vec3(3.5, 2.0, 1.5))
+		player.moveTo(at.x, at.y, at.z)
+		helper.level.addNewPlayer(player)
+		helper.setBlock(wood, AlfheimBlocks.barrierWood[1])
+		val tile = helper.getBlockEntity(wood) as? TileTreeWind ?: throw GameTestAssertException("no barrier heart wood tile")
+		val pig = helper.spawnWithNoFreeWill(EntityType.PIG, BlockPos(1, 2, 3))
+		helper.startSequence().thenExecuteAfter(2) {
+			helper.assertTrue(!tile.firstTick && tile.friends == setOf(player.gameProfile.name), "friends: ${tile.friends}")
+			helper.assertTrue(pig.deltaMovement.z > 0.5, "the pig is blown away: ${pig.deltaMovement}")
+			helper.assertTrue(kotlin.math.abs(player.deltaMovement.x) < 0.1, "a friend is not blown away: ${player.deltaMovement}")
+			val nbt = tile.saveWithoutMetadata()
+			val friends = nbt.getList("friends", Tag.TAG_STRING.toInt())
+			helper.assertTrue(friends.size == 1 && friends.getString(0) == player.gameProfile.name && !nbt.getBoolean("firstTick"), "saved: $nbt")
+			val copy = TileTreeWind(helper.absolutePos(wood), helper.getBlockState(wood)).apply { load(nbt) }
+			helper.assertTrue(copy.friends == tile.friends && !copy.firstTick, "loaded: ${copy.friends}")
+			tile.friends.clear()
+		}.thenExecuteAfter(2) {
+			helper.assertTrue(player.deltaMovement.x > 0.5, "a stranger is blown away: ${player.deltaMovement}")
+		}.thenExecute {
+			helper.level.removePlayerImmediately(player, Entity.RemovalReason.DISCARDED)
+			pig.discard()
+			helper.setBlock(wood, Blocks.AIR)
+		}.thenSucceed()
+	}
+
+	/**
+	 * Жаровня адского дерева (`TileTreeCook`): когда время мира кратно 20 тикам, первая еда на земле в 8 блоках, которую
+	 * печь делает едой, жарится — рядом появляется одна жареная, сырой становится на одну меньше. Руда — не еда
+	 */
+	@JvmStatic
+	@GameTest(template = "empty", batch = "heart_wood")
+	fun netherTreeCooks(helper: GameTestHelper) {
+		val wood = BlockPos(1, 2, 1)
+		helper.setBlock(wood, AlfheimBlocks.netherWood[1])
+		helper.setBlock(BlockPos(1, 0, 3), Blocks.STONE)
+		helper.setBlock(BlockPos(3, 0, 1), Blocks.STONE)
+		fun drop(item: Item, count: Int, at: BlockPos): ItemEntity {
+			val pos = helper.absoluteVec(Vec3.atBottomCenterOf(at))
+			return ItemEntity(helper.level, pos.x, pos.y, pos.z, ItemStack(item, count)).apply {
+				setDeltaMovement(0.0, 0.0, 0.0)
+				helper.level.addFreshEntity(this)
+			}
+		}
+		val beef = drop(Items.BEEF, 3, BlockPos(1, 1, 3))
+		val iron = drop(Items.RAW_IRON, 1, BlockPos(3, 1, 1))
+		fun count(item: Item) = helper.level.getEntitiesOfClass(ItemEntity::class.java, AABB(helper.absolutePos(wood)).inflate(9.0)).filter { it.item.`is`(item) }.sumOf { it.item.count }
+		helper.succeedWhen {
+			val cooked = count(Items.COOKED_BEEF)
+			helper.assertTrue(cooked >= 1, "cooked beef")
+			helper.assertTrue(beef.item.count + cooked == 3, "one raw beef for one cooked: ${beef.item.count} raw, $cooked cooked")
+			helper.assertTrue(iron.item.count == 1 && count(Items.IRON_INGOT) == 0, "raw iron is not food")
+			helper.setBlock(wood, Blocks.AIR)
+			helper.killAllEntities()
+		}
+	}
+
+	/**
+	 * Громоотвод грозового дерева (`TileLightningTreeTop`): молнию в 64 блоках от сердцевины мир в начале следующего тика
+	 * заменяет ложной (`FakeLightning`) на 1,5 блока выше сердцевины — только видимость и гром. Молнии — погодные
+	 * эффекты мира (`weatherEffects`). Ложную молнию мир не сохраняет, клиент видит её за 16 чанков, как молнию 1.20.1
+	 */
+	@JvmStatic
+	@GameTest(template = "empty", batch = "heart_wood")
+	fun lightningTreeRod(helper: GameTestHelper) {
+		val type = legacyType<FakeLightning>()
+		helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.getKey(type) == ResourceLocation(MODID, "fake_lightning"), "fake lightning id")
+		helper.assertTrue(LegacyIds.entities["$MODID:FakeLightning"]?.get("*")?.id == ResourceLocation(MODID, "fake_lightning"), "fake lightning legacy id")
+		helper.assertTrue(!type.canSerialize() && type.clientTrackingRange() == 16 && type.updateInterval() == Int.MAX_VALUE, "fake lightning is a weather effect")
+
+		val wood = BlockPos(1, 1, 1)
+		helper.setBlock(wood, AlfheimBlocks.lightningWood[1])
+		val rod = helper.absolutePos(wood)
+		val bolt = EntityType.LIGHTNING_BOLT.create(helper.level)!!
+		bolt.moveTo(helper.absoluteVec(Vec3(3.5, 1.0, 3.5)))
+		bolt.setVisualOnly(true)
+		helper.level.addFreshEntity(bolt)
+		helper.assertTrue(bolt in helper.level.weatherEffects, "the bolt is a weather effect")
+		helper.succeedWhen {
+			helper.assertTrue(bolt.isRemoved && bolt !in helper.level.weatherEffects, "the bolt is replaced")
+			val fakes = helper.level.getEntitiesOfClass(FakeLightning::class.java, AABB(rod).inflate(3.0))
+			helper.assertTrue(fakes.any { it.x == rod.x.toDouble() && it.y == rod.y + 1.5 && it.z == rod.z.toDouble() && it in helper.level.weatherEffects },
+				"fake lightning above the heart wood: ${fakes.map { it.position() }}")
+			helper.setBlock(wood, Blocks.AIR)
+			fakes.forEach { it.discard() }
+		}
 	}
 }

@@ -3,6 +3,8 @@ package alfheim.port.legacy
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.*
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.entity.projectile.ThrowableProjectile
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.HitResult
@@ -88,6 +90,9 @@ fun Entity.setLocationAndAngles(x: Double, y: Double, z: Double, yaw: Float, pit
 
 /** `setPosition(x, y, z)` 1.7.10 */
 fun Entity.setPosition(x: Double, y: Double, z: Double) = setPos(x, y, z)
+
+/** `entityItem` 1.7.10 — стак предмета, который лежит на земле */
+val ItemEntity.entityItem: ItemStack get() = item
 
 /**
  * `EntityThrowable` 1.7.10 поверх `ThrowableProjectile` 1.20.1. Полёт, сопротивление воздуха и воды, поиск удара — 1.20.1;

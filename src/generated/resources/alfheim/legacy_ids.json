@@ -5,7 +5,10 @@
     "перевод ключей lang (tools/convert_lang.py), лексикон, тесты паритета. Формат — docs/port/MAPPING.md, раздел «legacy_ids.json»."
   ],
   "block_entities": {
-    "alfheim:TreeBerry": "alfheim:tree_berry"
+    "alfheim:LightningTreeTop": "alfheim:lightning_tree_top",
+    "alfheim:TreeBerry": "alfheim:tree_berry",
+    "alfheim:TreeCook": "alfheim:tree_cook",
+    "alfheim:TreeWind": "alfheim:tree_wind"
   },
   "blocks": {
     "Botania:customBrick": {
@@ -426,6 +429,7 @@
     }
   },
   "entities": {
+    "alfheim:FakeLightning": "alfheim:fake_lightning",
     "alfheim:ThrownItem": "alfheim:thrown_item",
     "alfheim:ThrownPotion": "alfheim:thrown_potion"
   },
@@ -933,6 +937,7 @@
     "alfheim.potion.wellolife": "effect.alfheim.wellolife",
     "alfheim.potion.whiteWine": "effect.alfheim.white_wine",
     "alfheim.potion.wisdom": "effect.alfheim.wisdom",
+    "entity.alfheim.FakeLightning.name": "entity.alfheim.fake_lightning",
     "entity.alfheim.ThrownItem.name": "entity.alfheim.thrown_item",
     "entity.alfheim.ThrownPotion.name": "entity.alfheim.thrown_potion",
     "item.alfheim:Armilla.name": "item.alfheim.armilla",

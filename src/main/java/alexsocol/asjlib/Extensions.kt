@@ -152,6 +152,9 @@ operator fun ChunkCoordinates.component3() = posZ
 // PORT: World → Level (worldObj и spawnEntityInWorld — alfheim.port.legacy)
 fun Entity.spawn(world: Level = this.worldObj) = world.spawnEntityInWorld(this)
 
+// PORT: блок-сущность 1.7.10 — alfheim.port.legacy.TileEntity
+fun TileEntity.boundingBox(range: Number = 0) = getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(range)
+
 /* PORT: по мере надобности — DataWatcher, AxisAlignedBB, ChunkCoordinates, Vec3, metadata, IInventory, OreDictionary
 fun DataWatcher.getWatchableObjectChunkCoordinates(id: Int): ChunkCoordinates {
 	return getWatchedObject(id).`object` as ChunkCoordinates? ?: ChunkCoordinates()
@@ -175,7 +178,8 @@ fun <E: Any> selectEntitiesWithinAABB(world: World, clazz: Class<E>, aabb: AxisA
 //
 //fun getBoundingBox(x1: Number, y1: Number, z1: Number, x2: Number, y2: Number, z2: Number) = AxisAlignedBB.getBoundingBox(x1.D, y1.D, z1.D, x2.D, y2.D, z2.D)!!
 
-fun TileEntity.boundingBox(range: Number = 0) = getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(range)
+// PORT: перенесена выше
+//fun TileEntity.boundingBox(range: Number = 0) = getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(range)
 
 //fun Entity.boundingBox(range: Number = 0) = getBoundingBox(posX, posY, posZ, posX + width, posY + height, posZ + width).offset(width / -2.0, 0.0, width / -2.0).expand(range)
 //

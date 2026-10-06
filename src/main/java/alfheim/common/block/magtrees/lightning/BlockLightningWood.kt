@@ -2,19 +2,22 @@ package alfheim.common.block.magtrees.lightning
 
 // PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
 import alfheim.common.block.base.BlockModRotatedPillar
+import alfheim.common.block.tile.TileLightningTreeTop
 import alfheim.common.item.block.ItemBlockLeavesMod
 import alfheim.port.legacy.*
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.state.BlockState
 
 // PORT: вариант metadata (meta and 3: 0 — бревно, 1 — сердцевина) — отдельный блок (SPEC, Р-5): номер варианта — meta,
-// создают массивом `Array(2) { BlockLightningWood(it) }`; поворот (meta and 12) — свойство axis (BlockModRotatedPillar).
-// КТ-2 (партия 8в-3) — сердцевина с TileLightningTreeTop (ITileEntityProvider)
-class BlockLightningWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*, ITileEntityProvider*/ {
+// создают массивом `Array(2) { BlockLightningWood(it) }`; поворот (meta and 12) — свойство axis (BlockModRotatedPillar)
+class BlockLightningWood(val meta: Int): BlockModRotatedPillar(Material.wood), ITileEntityProvider {
 	
 	override val variant get() = meta
 	
 	init {
 		setBlockName("lightningWood")
-		// PORT: КТ-2 (партия 8в-3) — у сердцевины TileEntity (isBlockContainer 1.7.10)
+		// PORT: блок с блок-сущностью 1.20.1 — EntityBlock (ITileEntityProvider прослойки); флага isBlockContainer нет
 //		isBlockContainer = true
 		blockHardness = 2f
 	}
@@ -48,15 +51,25 @@ class BlockLightningWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*,
 	}
 	*/
 	
-	/* PORT: КТ-2 (партия 8в-3) — сердцевина с TileLightningTreeTop
-	override fun onBlockEventReceived(world: World?, x: Int, y: Int, z: Int, event: Int, eventArg: Int): Boolean {
-		super.onBlockEventReceived(world, x, y, z, event, eventArg)
-		val tileentity = world!!.getTileEntity(x, y, z)
-		return tileentity?.receiveClientEvent(event, eventArg) ?: false
+	// PORT: событие блока (onBlockEventReceived 1.7.10) — triggerEvent 1.20.1; блок-сущности оно приходит её triggerEvent
+	// (receiveClientEvent 1.7.10, alfheim.port.legacy.TileEntity)
+	@Deprecated("Deprecated in Java")
+	override fun triggerEvent(state: BlockState, world: World, pos: BlockPos, event: Int, eventArg: Int): Boolean {
+		@Suppress("DEPRECATION")
+		super.triggerEvent(state, world, pos, event, eventArg)
+		val tileentity = world.getBlockEntity(pos)
+		return tileentity?.triggerEvent(event, eventArg) ?: false
 	}
+//	override fun onBlockEventReceived(world: World?, x: Int, y: Int, z: Int, event: Int, eventArg: Int): Boolean {
+//		super.onBlockEventReceived(world, x, y, z, event, eventArg)
+//		val tileentity = world!!.getTileEntity(x, y, z)
+//		return tileentity?.receiveClientEvent(event, eventArg) ?: false
+//	}
 	
-	override fun createNewTileEntity(world: World?, meta: Int) = TileLightningTreeTop()
-	*/
+	// PORT: блок-сущность 1.20.1 создаётся сразу в своей точке (ITileEntityProvider прослойки); есть ли она у блока
+	// (hasTileEntity по metadata 1.7.10, ниже) — по варианту: сердцевина — вариант 1
+	override fun newBlockEntity(pos: BlockPos, state: BlockState) = if (isHeartWood(meta)) TileLightningTreeTop(pos, state) else null
+//	override fun createNewTileEntity(world: World?, meta: Int) = TileLightningTreeTop()
 	
 	fun isHeartWood(meta: Int) = meta and 3 == 1
 	
@@ -66,7 +79,7 @@ class BlockLightningWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*,
 	
 //	override fun quantityDropped(random: Random) = 1
 	
-	// PORT: КТ-2 (партия 8в-3) — сердцевина с TileLightningTreeTop
+	// PORT: есть ли блок-сущность — по варианту блока (newBlockEntity выше)
 //	override fun hasTileEntity(metadata: Int) = isHeartWood(metadata)
 	
 	override fun register(name: String) {

@@ -1,6 +1,7 @@
 package alfheim.port.registry
 
 import alfheim.api.ModInfo.MODID
+import alfheim.port.legacy.EntityWeatherEffect
 import alfheim.port.legacy.LegacyItem
 import alfheim.port.legacy.Potion1710
 import net.minecraft.core.BlockPos
@@ -208,11 +209,16 @@ object LegacyRegistration {
 			val entry = Entry(id(name, null), name, null)
 			check(entities.values.none { it.id == entry.id }) { "Entity id ${entry.id} is registered twice" }
 			val constructor = clazz.getConstructor(Level::class.java)
-			val type = EntityType.Builder.of<Entity>({ _, level -> constructor.newInstance(level) }, category)
-				.clientTrackingRange(8) // 128 блоков
-				.updateInterval(1)
-				.setShouldReceiveVelocityUpdates(true)
-				.build(entry.id.toString())
+			val builder = EntityType.Builder.of<Entity>({ _, level -> constructor.newInstance(level) }, category)
+			if (EntityWeatherEffect::class.java.isAssignableFrom(clazz))
+				// погодный эффект 1.7.10 — как молния 1.20.1: мир его не сохраняет, клиент видит его за 16 чанков, а
+				// положение после появления сервер не шлёт — эффект стоит на месте
+				builder.noSave().clientTrackingRange(16).updateInterval(Int.MAX_VALUE)
+			else
+				builder.clientTrackingRange(8) // 128 блоков
+					.updateInterval(1)
+					.setShouldReceiveVelocityUpdates(true)
+			val type = builder.build(entry.id.toString())
 			entityTypes[clazz] = type
 			entities[type] = entry
 			e.register(Registries.ENTITY_TYPE, entry.id) { type }

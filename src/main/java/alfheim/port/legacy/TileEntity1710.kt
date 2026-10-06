@@ -3,6 +3,8 @@ package alfheim.port.legacy
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -21,6 +23,9 @@ import net.minecraft.world.level.block.state.BlockState
 
 /** Тип 1.20.1 блок-сущности автора [T] */
 inline fun <reified T: BlockEntity> legacyTileType(): BlockEntityType<T> = LegacyRegistration.tileType(T::class.java)
+
+/** `getDescriptionPacket()` 1.7.10 — данные блок-сущности для клиента (`getUpdatePacket` 1.20.1); `null` — нечего слать */
+val BlockEntity.descriptionPacket: Packet<ClientGamePacketListener>? get() = updatePacket
 
 /**
  * `net.minecraft.tileentity.TileEntity` 1.7.10. Методы, которые переопределяет автор: [updateEntity] — каждый тик и на

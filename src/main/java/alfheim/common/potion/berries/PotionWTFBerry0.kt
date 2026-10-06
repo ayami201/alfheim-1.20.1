@@ -1,8 +1,9 @@
 package alfheim.common.potion.berries
 
-// PORT: импорты 1.20.1 (MAPPING.md); дерево-барьер (TileTreeWind) переносится с деревьями КТ-2
+// PORT: импорты 1.20.1 (MAPPING.md)
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
+import alfheim.common.block.tile.TileTreeWind
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.potion.PotionAlfheim
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket as S12PacketEntityVelocity
@@ -14,15 +15,13 @@ import net.minecraft.world.entity.item.ItemEntity as EntityItem
 import net.minecraft.world.entity.player.Player as EntityPlayer
 import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
-//import alfheim.common.block.tile.TileTreeWind
 
 object PotionWTFBerry0: PotionAlfheim(AlfheimConfigHandler.potionIDWtfBerry0, "WTFBerry0", false, 0x99D9BC) {
 	
 	override fun isReady(dur: Int, amp: Int) = true
 	
 	override fun performEffect(target: EntityLivingBase, amp: Int) {
-		// PORT: КТ-2 — TileTreeWind.RANGE (дерево-барьер); пока — её значение
-		getEntitiesWithinAABB(target.worldObj, Entity::class.java, target.boundingBox(/*TileTreeWind.RANGE*/ 10)).forEach {
+		getEntitiesWithinAABB(target.worldObj, Entity::class.java, target.boundingBox(TileTreeWind.RANGE)).forEach {
 			if (it === target) return@forEach
 			if (abs(it.motionX) < 0.0001 && abs(it.motionZ) < 0.0001) return@forEach
 			if (it is EntityItem || it is EntityXPOrb) return@forEach

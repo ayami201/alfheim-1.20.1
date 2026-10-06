@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
@@ -55,6 +56,20 @@ fun LevelAccessor.scheduleBlockUpdate(x: Int, y: Int, z: Int, block: Block, dela
 fun Level.spawnEntityInWorld(entity: Entity) = addFreshEntity(entity)
 
 val Level.isRemote: Boolean get() = isClientSide
+
+/** `totalWorldTime` 1.7.10 — тики мира с его создания */
+val Level.totalWorldTime: Long get() = gameTime
+
+/** `playerEntities` 1.7.10 — игроки мира */
+val Level.playerEntities: List<Player> get() = players()
+
+/**
+ * `loadedTileEntityList` 1.7.10 — блок-сущности мира, которые тикают (в 1.7.10 — с `canUpdate`, в 1.20.1 — с тиком от
+ * `getTicker` блока). Мир 1.20.1 хранит не их, а их тики (`blockEntityTickers`, открыт преобразователем доступа):
+ * блок-сущность берётся по точке тика. Список собирается заново при каждом вызове — для редких проверок, как у автора
+ */
+val Level.loadedTileEntityList: List<BlockEntity>
+	get() = (blockEntityTickers + pendingBlockEntityTickers).filter { !it.isRemoved }.mapNotNull { getBlockEntity(it.pos) }
 
 /** Номера измерения 1.7.10 (`dimension`) в 1.20.1 нет: измерение хранится строкой — id мира, `minecraft:overworld` */
 val Level.dimensionId: String get() = dimension().location().toString()

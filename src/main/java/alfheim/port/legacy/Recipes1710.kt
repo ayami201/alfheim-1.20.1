@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.GsonHelper
 import net.minecraft.world.Container
+import net.minecraft.world.SimpleContainer
 import net.minecraft.world.inventory.CraftingContainer
 import net.minecraft.world.item.*
 import net.minecraft.world.item.crafting.*
@@ -346,6 +347,13 @@ object FurnaceRecipes {
 	fun addSmelting(input: Any, output: ItemStack, experience: Float) {
 		smeltingList += Smelting1710(input, output.copy(), experience)
 	}
+
+	/**
+	 * `getSmeltingResult(stack)` 1.7.10 — что печь делает из [stack]; нет рецепта — `null`. Рецепты 1.20.1 — у мира
+	 * [world] (у сервера и у клиента, которому сервер их прислал), поэтому мир — второй параметр
+	 */
+	fun getSmeltingResult(stack: ItemStack, world: Level): ItemStack? =
+		world.recipeManager.getRecipeFor(RecipeType.SMELTING, SimpleContainer(stack), world).map { it.getResultItem(world.registryAccess()) }.orElse(null)
 }
 
 /**
