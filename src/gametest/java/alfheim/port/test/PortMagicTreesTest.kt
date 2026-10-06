@@ -130,7 +130,7 @@ object PortMagicTreesTest {
 
 	/**
 	 * Лут, теги и топливо: сердцевина роняет обычное бревно (`damageDropped` — 0), двойная плита — две плиты, листва с
-	 * ножницами — себя (саженец без ножниц — партия 8в-2). Деревянный блок в печи горит 300 тиков: 2000 адских блоков у
+	 * ножницами — себя, без ножниц — иногда свой саженец. Деревянный блок в печи горит 300 тиков: 2000 адских блоков у
 	 * автора не срабатывали (B-027)
 	 */
 	@JvmStatic
@@ -151,7 +151,9 @@ object PortMagicTreesTest {
 		only(pos, ItemStack.EMPTY, b.circuitSlabs.asItem(), 2, "double circuit slab")
 		helper.setBlock(pos, b.calicoLeaves)
 		only(pos, ItemStack(Items.SHEARS), b.calicoLeaves.asItem(), 1, "calico leaves with shears")
-		helper.assertTrue(drops(pos, ItemStack.EMPTY).isEmpty(), "calico leaves without shears")
+		// без ножниц — только саженец, и то не всегда (шанс 1/20, magicLeavesDropSaplings)
+		val noShears = drops(pos, ItemStack.EMPTY)
+		helper.assertTrue(noShears.all { it.item === b.calicoSapling.asItem() }, "calico leaves without shears drop $noShears")
 
 		for (wood in b.barrierWood + b.lightningWood + b.netherWood + b.calicoWood + b.circuitWood + b.sealingWood) helper.assertTrue(wood.defaultBlockState().`is`(BlockTags.LOGS), "$wood → minecraft:logs")
 		for (tree in trees) {
