@@ -97,9 +97,12 @@ fun Block.isLeaves(world: BlockGetter, x: Int, y: Int, z: Int) = builtInRegistry
 @Suppress("UNUSED_PARAMETER")
 fun Block.isAir(world: BlockGetter, x: Int, y: Int, z: Int) = world.getBlockState(BlockPos(x, y, z)).isAir
 
-/** `isReplaceable(world, x, y, z)` Forge 1.7.10 — блок в точке можно заменить (заменяемый материал) */
-@Suppress("UNUSED_PARAMETER")
-fun Block.isReplaceable(world: BlockGetter, x: Int, y: Int, z: Int) = world.getBlockState(BlockPos(x, y, z)).canBeReplaced()
+/**
+ * `isReplaceable(world, x, y, z)` Forge 1.7.10 — блок в точке можно заменить: у блока порта — его метод 1.7.10
+ * ([LegacyBlockMethods.isReplaceable]), у прочих — заменяемый материал
+ */
+fun Block.isReplaceable(world: BlockGetter, x: Int, y: Int, z: Int) =
+	if (this is LegacyBlockMethods) (this as LegacyBlockMethods).isReplaceable(world, x, y, z) else world.getBlockState(BlockPos(x, y, z)).canBeReplaced()
 
 /**
  * `onPlantGrow` Forge 1.7.10: под выросшим деревом трава и пашня становятся землёй (флаг 2), прочие блоки — как

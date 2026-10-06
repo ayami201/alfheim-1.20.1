@@ -7,6 +7,7 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
 
 /**
  * `GameRegistry` 1.7.10 (SPEC, Р-4): регистрация блока или предмета под именем автора. Блок и предмет попадают в
@@ -28,6 +29,10 @@ object GameRegistry {
 		return block
 	}
 
+	/** Блок-сущность 1.7.10 под именем [name] ([LegacyRegistration.tile]) */
+	@JvmStatic
+	fun registerTileEntity(clazz: Class<out BlockEntity>, name: String) = LegacyRegistration.tile(clazz, name)
+	
 	/** Обработчик топлива 1.7.10 ([Fuel1710]) */
 	@JvmStatic
 	fun registerFuelHandler(handler: IFuelHandler) {
@@ -88,6 +93,8 @@ object GameRegistry {
 }
 
 // Вызовы из `import cpw.mods.fml.common.registry.GameRegistry.*`
+
+fun registerTileEntity(clazz: Class<out BlockEntity>, name: String) = GameRegistry.registerTileEntity(clazz, name)
 
 fun addRecipe(output: ItemStack, vararg params: Any?) = GameRegistry.addRecipe(output, *params)
 

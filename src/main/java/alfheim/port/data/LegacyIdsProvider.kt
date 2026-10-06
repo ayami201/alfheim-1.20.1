@@ -40,6 +40,7 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 				addProperty("$MODID:${replacement.oldName}", BuiltInRegistries.ITEM.getKey(replacement.block.asItem()).toString())
 		})
 		json.add("entities", ids(LegacyRegistration.entities.values))
+		json.add("block_entities", ids(LegacyRegistration.tiles.values))
 		json.add("lang", JsonObject().apply {
 			// у вариантов с общим именем 1.7.10 (tile.alfheim:irisWood.name) старый ключ один, новых — по ключу на блок
 			val lang = LinkedHashMap<String, MutableList<String>>()
