@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "alfheim:blocks/nether_wood_top",
+    "side": "alfheim:blocks/nether_wood_side"
+  }
+}

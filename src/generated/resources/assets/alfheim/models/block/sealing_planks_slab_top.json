@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "alfheim:blocks/sealing_planks",
+    "side": "alfheim:blocks/sealing_planks",
+    "top": "alfheim:blocks/sealing_planks"
+  }
+}

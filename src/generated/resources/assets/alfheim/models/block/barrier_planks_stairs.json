@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "alfheim:blocks/barrier_planks",
+    "side": "alfheim:blocks/barrier_planks",
+    "top": "alfheim:blocks/barrier_planks"
+  }
+}

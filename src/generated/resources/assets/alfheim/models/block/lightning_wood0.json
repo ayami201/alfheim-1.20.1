@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "alfheim:blocks/lightning_wood_top",
+    "side": "alfheim:blocks/lightning_wood_side"
+  }
+}

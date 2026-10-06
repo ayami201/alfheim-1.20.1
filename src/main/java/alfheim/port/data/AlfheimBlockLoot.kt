@@ -4,6 +4,9 @@ import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.BlockElvenOre
 import alfheim.common.block.colored.BlockColoredDoubleGrass
 import alfheim.common.block.colored.rainbow.*
+import alfheim.common.block.magtrees.barrier.BlockBarrierWood
+import alfheim.common.block.magtrees.lightning.BlockLightningWood
+import alfheim.common.block.magtrees.nether.BlockNetherWood
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.port.legacy.*
@@ -49,6 +52,10 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 			block is BlockRainbowDoubleGrass       -> add(block, shearedDoublePlant(block, AlfheimBlocks.rainbowGrass[block.meta], 2f, true))
 			// onSheared — сам цветок, у любой половины
 			block is BlockRainbowDoubleFlower      -> add(block, shearedDoublePlant(block, block, 1f, false))
+			// бревно барьерного, грозового и адского деревьев — вариант damageDropped: сердцевина роняет обычное бревно
+			block is BlockBarrierWood              -> add(block, createSingleItemTable(AlfheimBlocks.barrierWood[block.damageDropped(block.meta)]))
+			block is BlockLightningWood            -> add(block, createSingleItemTable(AlfheimBlocks.lightningWood[block.damageDropped(block.meta)]))
+			block is BlockNetherWood               -> add(block, createSingleItemTable(AlfheimBlocks.netherWood[block.damageDropped(block.meta)]))
 			else                                   -> dropSelf(block)
 		}
 	}

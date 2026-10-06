@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "alfheim:sealing_wood"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "alfheim:sealing_planks"
+  }
+}

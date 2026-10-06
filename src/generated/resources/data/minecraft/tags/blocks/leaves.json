@@ -17,6 +17,12 @@
     "alfheim:iris_leaves15",
     "alfheim:iris_leaves16",
     "alfheim:iris_leaves17",
-    "alfheim:rainbow_leaves"
+    "alfheim:rainbow_leaves",
+    "alfheim:barrier_leaves",
+    "alfheim:calico_leaves",
+    "alfheim:circuit_leaves",
+    "alfheim:lightning_leaves",
+    "alfheim:nether_leaves",
+    "alfheim:sealing_leaves"
   ]
 }

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "alfheim:blocks/calico_wood_top",
+    "side": "alfheim:blocks/calico_wood_side"
+  }
+}

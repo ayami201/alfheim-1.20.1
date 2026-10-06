@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/lightning_planks_slab"
+    },
+    "type=double": {
+      "model": "alfheim:block/lightning_planks"
+    },
+    "type=top": {
+      "model": "alfheim:block/lightning_planks_slab_top"
+    }
+  }
+}

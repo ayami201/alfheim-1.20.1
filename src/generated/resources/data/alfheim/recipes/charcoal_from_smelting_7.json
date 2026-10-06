@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.15,
+  "ingredient": [
+    {
+      "item": "alfheim:lightning_wood0"
+    },
+    {
+      "item": "alfheim:lightning_wood1"
+    }
+  ],
+  "result": "minecraft:charcoal"
+}

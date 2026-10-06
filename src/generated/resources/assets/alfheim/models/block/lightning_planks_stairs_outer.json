@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "alfheim:blocks/lightning_planks",
+    "side": "alfheim:blocks/lightning_planks",
+    "top": "alfheim:blocks/lightning_planks"
+  }
+}
