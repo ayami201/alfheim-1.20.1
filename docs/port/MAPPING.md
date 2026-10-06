@@ -115,6 +115,12 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `readFromNBT` / `writeToNBT` | `load` / `saveAdditional` | ✓ методы автора остаются, их зовёт `TileEntity` прослойки; id и координаты 1.20.1 пишет сама |
 | `getDescriptionPacket` / `onDataPacket` | `getUpdatePacket` / `getUpdateTag` / `onDataPacket` | ✓ `ASJTile`: данные пакета описания (`writeCustomNBT`) клиент получает с чанком (`getUpdateTag` → `handleUpdateTag`) и при обновлении блока (`getUpdatePacket` → `onDataPacket`). `onDataPacket` 1.20.1 по умолчанию загружает тег целиком (`load`), 1.7.10 — ничего: `super` не зовётся |
 | `receiveClientEvent(id, param)` (событие блока `addBlockEvent`) | `triggerEvent` блок-сущности; `BlockContainer` прослойки передаёт ей событие блока | ✓ |
+| `onBlockEventReceived(world, x, y, z, event, arg)` блока, у которого есть блок-сущность | `triggerEvent(state, level, pos, event, arg)` | ✓ блок-сущности событие приходит её `triggerEvent` (`receiveClientEvent` 1.7.10) |
+| `world.loadedTileEntityList` | `loadedTileEntityList` прослойки (`World.kt`) | ✓ тикающие блок-сущности мира: в 1.20.1 — блок-сущности тиков мира (`blockEntityTickers`, `pendingBlockEntityTickers`, открыты преобразователем доступа). Список собирается при каждом вызове — для редких проверок, как у автора |
+| `world.weatherEffects`, `world.addWeatherEffect(entity)` | `weatherEffects`, `addWeatherEffect` прослойки (`Weather1710.kt`) | ✓ молния 1.20.1 — существо мира; список погодных эффектов мира (молнии и `EntityWeatherEffect`) прослойка ведёт по `EntityJoinLevelEvent` и `EntityLeaveLevelEvent`; эффект появляется в мире как существо (`addFreshEntity`) |
+| `EntityWeatherEffect` | `EntityWeatherEffect` прослойки: `Entity` с методами 1.7.10 (`onUpdate`, `entityInit`, `readEntityFromNBT`, `writeEntityToNBT`, `rand`) | ✓ тип — как у молнии 1.20.1: мир его не сохраняет, клиент видит за 16 чанков, положение после появления не шлётся; рисуется, даже если его точка за краем экрана (`noCulling`), — 1.7.10 рисовал погодные эффекты без этой проверки |
+| `EntityLightningBolt`; `lightningState`, `boltLivingTime` чужой молнии | `LightningBolt`; поля закрыты | ✓ молния, которую убрали (`setDead` → `discard`), больше не тикает — сбрасывать её состояние не нужно |
+| `world.lastLightningBolt = n` (вспышка неба) | `level.setSkyFlashTime(n)` | ✓ у мира сервера метод пустой, как в 1.7.10 поле сервера ни на что не влияло |
 | `AxisAlignedBB`, `MathHelper`, `MovingObjectPosition` | `AABB`, `Mth`, `HitResult` | |
 | `block.material.isLiquid` | `state.liquid()` | ✓ |
 | `Blocks.water` и `flowing_water`, `lava` и `flowing_lava` | `Blocks.WATER`, `Blocks.LAVA` | ✓ стоячая и текучая жидкость — один блок, уровень — свойство состояния: сравнения автора «стоячая — текучая» сводятся к одному блоку |
@@ -202,6 +208,7 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `onItemRightClick` / `setItemInUse` / `getMaxItemUseDuration` / `getItemUseAction` / `onEaten` | `use` / `startUsingItem(hand)` / `getUseDuration` / `getUseAnimation` (`EnumAction.bow` → `UseAnim.BOW`) / `finishUsingItem` | ✓ |
 | `stack.stackSize--`, `foodStats.addStats(f, s)`, `isBadEffect` | `stack.shrink(1)`, `foodData.eat(f, s)`, `effect.category == HARMFUL` | ✓ |
 | `ItemFood(heal, saturation, wolfMeat)`: `func_150905_g(stack)`, `func_150906_h(stack)`, `onEaten`, `setAlwaysEdible` | `alfheim.port.legacy.ItemFood1710`: те же методы сытости и насыщения; `onEaten` → `finishUsingItem` (минус один, `foodData.eat`, отрыжка) | ✓ сытость спрашивается у стака, как в 1.7.10; в 1.20.1 пустой стак теряет свой предмет, поэтому всё, что зависит от варианта (`stack.meta`), берётся до того, как стак уменьшен. `player.canEat` — метод 1.20.1: в творческом режиме есть можно всегда |
+| `item is ItemFood` (вещь — еда) | `item.isEdible` | ✓ еда 1.20.1 — свойство предмета, а не класс |
 | `stack.displayName` | `stack.hoverName.string` | ✓ `ItemStack.getDisplayName` 1.20.1 — другой метод (имя в скобках), он закрывает свойство прослойки |
 | `IFuelHandler.getBurnTime(fuel)` предмета | `getBurnTime(stack, recipeType)` предмета зовёт метод автора | ✓ |
 | `commandSenderName` игрока | `gameProfile.name` | ✓ |
@@ -347,6 +354,11 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `player.capabilities.isCreativeMode` / `isFlying` / `allowFlying` / `disableDamage` | как есть — `Abilities` 1.20.1: `instabuild` / `flying` / `mayfly` / `invulnerable` (`Player1710`) | ✓ |
 | `GameRegistry.findUniqueIdentifierFor(block \| item).toString()` | как есть — ключ реестра (`modid:name`) | ✓ |
 | `nbt.hasNoTags()`, `world.removeTileEntity(x, y, z)` | `isEmpty`, `removeBlockEntity(pos)` | ✓ |
+| `Constants.NBT.TAG_…`, `nbt.getTagList(key, type)`, `tagCount()`, `getStringTagAt(i)`, `appendTag(tag)`, `NBTTagString(s)` | `Tag.TAG_…` (те же числа), `getList`, `size`, `getString`, `add`, `StringTag.valueOf` (`NBT1710.kt`) | ✓ |
+| `entityItem` (предмет на земле), `world.totalWorldTime`, `world.playerEntities` | `item`, `gameTime`, `players()` | ✓ |
+| `player.playerNetServerHandler.sendPacket(packet)` | `connection.send(packet)` (`Player1710.kt`) | ✓ |
+| `tile.getDescriptionPacket()` (вызов) | `descriptionPacket` прослойки — `getUpdatePacket()` | ✓ |
+| `FurnaceRecipes.smelting().getSmeltingResult(stack)` | `getSmeltingResult(stack, world)` прослойки | ✓ рецепты 1.20.1 — у мира (у сервера и у клиента, которому сервер их прислал): мир — второй параметр, вызов меняется на месте |
 | `checkChunksExist(…)`, `getBlockLightValue(x, y, z)`, `getStrongestIndirectPower(x, y, z)` | `hasChunksAt`, `getMaxLocalRawBrightness`, `getBestNeighborSignal` | ✓ |
 | `block.canSustainPlant(world, x, y, z, direction, plantable)`, `isLeaves`, `canSustainLeaves`, `isAir`, `isReplaceable`, `onPlantGrow`, `isNormalCube(world, x, y, z)` | у состояния в точке: `canSustainPlant`, теги `minecraft:leaves` и `minecraft:logs`, `isAir`, `canBeReplaced`, трава и пашня → земля, `isRedstoneConductor` | ✓ `isNormalCube` до 1.16 и назывался так |
 | `block.material` у любого блока | `Block.material` прослойки (`Materials1710.kt`): у блока порта — его материал; у блоков ванилы и Botania — материал того же блока 1.7.10 по таблице; воздух, вода и лава — свои | ✓ блок 1.20.1, которого в 1.7.10 не было, с тегом `minecraft:dirt` — земля, прочие — камень; таблица дополняется, когда коду автора нужен материал ещё одного блока |
@@ -443,6 +455,8 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `MinecraftServer.getServer().configurationManager.playerEntityList` | `ServerLifecycleHooks.getCurrentServer().playerList.players` | ✓ |
 | `PlayerEvent.PlayerLoggedInEvent` / `PlayerLoggedOutEvent` (FML) `.player` | `PlayerEvent.PlayerLoggedInEvent` / `PlayerLoggedOutEvent` (Forge) `.entity` | ✓ |
 | `TickEvent` (FML) | `net.minecraftforge.event.TickEvent` | ✓ на шине Forge |
+| `WorldTickEvent` (`e.world`) | `TickEvent.LevelTickEvent` (`e.level`) | ✓ `WorldTickEvent` 1.7.10 шёл только на сервере, `LevelTickEvent` 1.20.1 — и на клиенте: обработчик проверяет `e.side == LogicalSide.SERVER` |
+| `S12PacketEntityVelocity(entity)` | `ClientboundSetEntityMotionPacket(entity)` | ✓ |
 | своё событие без конструктора без аргументов | как есть | ✓ шина Forge дописывает его сама, как FML 1.7.10 (`PortNetworkTest.eventsAcceptListeners`) |
 | `javax.xml.bind…HexBinaryAdapter().marshal(bytes)` | `HexFormat.of().withUpperCase().formatHex(bytes)` | ✓ JAXB убран из Java 11 |
 | `Configuration` | `ForgeConfigSpec` через прослойку `alfheim.port.config.Configuration` | ✓ SPEC, Р-12; подробности — раздел «Файлы конфига» |
@@ -480,6 +494,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `EntityFX.setRBGColorF(r, g, b)`, `multiplyVelocity(m)` | `Particle.setColor(r, g, b)`, `setPower(m)` | ✓ |
 | частица `iconcrack_<id>_<meta>` | `ItemParticleOption(ParticleTypes.ITEM, ItemStack(предмет))` | ✓ рисунок — частица модели предмета (слой 0), как иконка прохода 0 в 1.7.10 |
 | `bindTileEntitySpecialRenderer` | `EntityRenderersEvent.RegisterRenderers` (`registerBlockEntityRenderer`, `alfheim.port.client.AlfheimEntityRenderers`) | ✓ с тем же условием, что у автора (`RenderTileTreeBerry` — без опции minimalGraphics); строка в `ClientProxy` помечена |
+| рендер молнии 1.7.10 (`RenderLightningBolt`, у автора — `RenderFakeLightning`): полосы треугольников `startDrawing(5)`, `glBlendFunc(GL_SRC_ALPHA, GL_ONE)` без текстуры и света | четырёхугольники вида отрисовки молнии `RenderType.lightning()` | ✓ полоса из пяти пар вершин — четыре четырёхугольника между соседними парами, как в `LightningBoltRenderer` 1.20.1; числа и цвет — автора |
 | `TileEntitySpecialRenderer.renderTileEntityAt(tile, x, y, z, ticks)` | `BlockEntityRenderer<T>.render(tile, partialTicks, poseStack, buffers, light, overlay)` | ✓ смещение к блоку уже в матрице, свет блока — `light`; `setTwoside` (грани с двух сторон) и отсечение прозрачного — вид отрисовки `RenderType.entityCutoutNoCull(InventoryMenu.BLOCK_ATLAS)` |
 | OBJ-модель: `AdvancedModelLoader.loadModel(путь .obj)`, `IModelCustom.renderAll()` с текстурой `bindTexture` | модель загрузчика OBJ Forge (`"loader": "forge:obj"`) из генерации данных; клиент запекает её с ресурсами (`ModelEvent.RegisterAdditional`, `alfheim.port.client.AlfheimModels`), рендер рисует `modelRenderer.renderModel` | ✓ `.obj` автора не меняется (имя — snake_case); текстура — параметр модели `texture`, материал — `model/port/<имя>.mtl` (`map_Kd #texture`), `flip_v: true` — загрузчик OBJ Forge 1.7.10 переворачивал координату текстуры (`1 − v`). Модель, которую загрузчик не прочитал, клиент заменяет «нет модели»: проверка автора на ошибку загрузки — сравнение с `missingModel` |
 | `ASJShaderHelper` + шейдеры автора | core shaders через `RegisterShadersEvent` + свой `RenderType` | |
