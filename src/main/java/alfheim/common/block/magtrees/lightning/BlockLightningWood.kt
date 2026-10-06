@@ -7,14 +7,14 @@ import alfheim.port.legacy.*
 
 // PORT: вариант metadata (meta and 3: 0 — бревно, 1 — сердцевина) — отдельный блок (SPEC, Р-5): номер варианта — meta,
 // создают массивом `Array(2) { BlockLightningWood(it) }`; поворот (meta and 12) — свойство axis (BlockModRotatedPillar).
-// КТ-2 (партия 8в-2) — сердцевина с TileLightningTreeTop (ITileEntityProvider)
+// КТ-2 (партия 8в-3) — сердцевина с TileLightningTreeTop (ITileEntityProvider)
 class BlockLightningWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*, ITileEntityProvider*/ {
 	
 	override val variant get() = meta
 	
 	init {
 		setBlockName("lightningWood")
-		// PORT: КТ-2 (партия 8в-2) — у сердцевины TileEntity (isBlockContainer 1.7.10)
+		// PORT: КТ-2 (партия 8в-3) — у сердцевины TileEntity (isBlockContainer 1.7.10)
 //		isBlockContainer = true
 		blockHardness = 2f
 	}
@@ -48,7 +48,7 @@ class BlockLightningWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*,
 	}
 	*/
 	
-	/* PORT: КТ-2 (партия 8в-2) — сердцевина с TileLightningTreeTop
+	/* PORT: КТ-2 (партия 8в-3) — сердцевина с TileLightningTreeTop
 	override fun onBlockEventReceived(world: World?, x: Int, y: Int, z: Int, event: Int, eventArg: Int): Boolean {
 		super.onBlockEventReceived(world, x, y, z, event, eventArg)
 		val tileentity = world!!.getTileEntity(x, y, z)
@@ -66,7 +66,7 @@ class BlockLightningWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*,
 	
 //	override fun quantityDropped(random: Random) = 1
 	
-	// PORT: КТ-2 (партия 8в-2) — сердцевина с TileLightningTreeTop
+	// PORT: КТ-2 (партия 8в-3) — сердцевина с TileLightningTreeTop
 //	override fun hasTileEntity(metadata: Int) = isHeartWood(metadata)
 	
 	override fun register(name: String) {
