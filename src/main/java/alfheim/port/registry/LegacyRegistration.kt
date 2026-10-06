@@ -3,6 +3,7 @@ package alfheim.port.registry
 import alfheim.api.ModInfo.MODID
 import alfheim.port.legacy.LegacyItem
 import alfheim.port.legacy.Potion1710
+import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.effect.MobEffect
@@ -12,10 +13,14 @@ import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.registries.RegisterEvent
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Регистрация блоков и предметов автора (SPEC, Р-5; MAPPING.md, «Блоки и предметы»).
@@ -59,11 +64,17 @@ object LegacyRegistration {
 	val items = LinkedHashMap<Item, Entry>()
 	val effects = LinkedHashMap<MobEffect, Entry>()
 	val entities = LinkedHashMap<EntityType<*>, Entry>()
+	val tiles = LinkedHashMap<BlockEntityType<*>, Entry>()
 	val aliases = ArrayList<Alias>()
 	val replacements = ArrayList<Replacement>()
 	
 	private val entityTypes = HashMap<Class<out Entity>, EntityType<*>>()
 	private val pendingEntities = ArrayList<Triple<Class<out Entity>, String, MobCategory>>()
+	
+	private val tileTypes = HashMap<Class<out BlockEntity>, BlockEntityType<*>>()
+	private val tileBlocks = HashMap<BlockEntityType<*>, MutableSet<Block>>()
+	private val tileUpdates = ConcurrentHashMap<Pair<BlockEntityType<*>, Boolean>, Boolean>()
+	private val pendingTiles = ArrayList<Pair<Class<out BlockEntity>, String>>()
 
 	private val pendingItems = ArrayList<Pair<Item, String>>()
 	private val pendingEffects = ArrayList<Potion1710>()
@@ -92,6 +103,7 @@ object LegacyRegistration {
 	private fun onRegister(e: RegisterEvent) {
 		if (e.registryKey == Registries.MOB_EFFECT) return registerEffects(e)
 		if (e.registryKey == Registries.ENTITY_TYPE) return registerEntities(e)
+		if (e.registryKey == Registries.BLOCK_ENTITY_TYPE) return registerTiles(e)
 		
 		val sources = when (e.registryKey) {
 			Registries.BLOCK -> blockSources
@@ -206,6 +218,59 @@ object LegacyRegistration {
 			e.register(Registries.ENTITY_TYPE, entry.id) { type }
 		}
 		pendingEntities.clear()
+	}
+	
+	/**
+	 * Блок-сущность автора под именем [name] (`GameRegistry.registerTileEntity(класс, имя)` 1.7.10, имя — с `modid:`).
+	 * Создаётся конструктором `(BlockPos, BlockState)` (`alfheim.port.legacy.TileEntity`). Id — имя без `modid:` в
+	 * snake_case: `alfheim:TreeBerry` → `alfheim:tree_berry`
+	 */
+	fun tile(clazz: Class<out BlockEntity>, name: String) {
+		check(pendingTiles.none { it.first == clazz } && clazz !in tileTypes) { "Block entity $name is registered twice" }
+		pendingTiles += clazz to name
+	}
+	
+	/** Тип 1.20.1 блок-сущности автора: конструктор блок-сущности 1.20.1 принимает его первым аргументом */
+	@Suppress("UNCHECKED_CAST")
+	fun <T: BlockEntity> tileType(clazz: Class<T>) = tileTypes[clazz] as BlockEntityType<T>? ?: throw IllegalStateException("Block entity ${clazz.name} is not registered: GameRegistry.registerTileEntity")
+	
+	/**
+	 * Блок-сущность типа [type] создана в блоке [block]. Блок-сущность 1.7.10 не знала свой блок заранее, поэтому тип
+	 * 1.20.1 считает своими блоки, в которых его блок-сущности создавались: тикает и рисует блок-сущность, только если
+	 * она стоит в таком блоке (`BlockEntityType.isValid`)
+	 */
+	fun tileCreated(type: BlockEntityType<*>, block: Block) {
+		tileBlocks[type]?.add(block)
+	}
+	
+	/**
+	 * Блок-сущность типа [type] попала в мир на клиенте ([client]) или сервере и ответила `canUpdate()` 1.7.10
+	 * [canUpdate]. Мир 1.7.10 спрашивал об этом каждую блок-сущность и не тикал ту, что ответила `false`; 1.20.1 решает,
+	 * тикать ли, по типу и состоянию блока (`getTicker`). У блок-сущностей автора ответ зависит только от класса и
+	 * стороны (`TileItemDisplay` тикает только на сервере), поэтому тип запоминает ответ первой своей блок-сущности на
+	 * каждой стороне
+	 */
+	fun tileLoaded(type: BlockEntityType<*>, client: Boolean, canUpdate: Boolean) {
+		tileUpdates.putIfAbsent(type to client, canUpdate)
+	}
+	
+	/** Тикают ли блок-сущности типа [type] на клиенте ([client]) или сервере ([tileLoaded]); пока ни одной не было — да */
+	fun tileUpdates(type: BlockEntityType<*>, client: Boolean) = tileUpdates[type to client] ?: true
+	
+	private fun registerTiles(e: RegisterEvent) {
+		for ((clazz, name) in pendingTiles) {
+			val entry = Entry(id(name, null), name, null)
+			check(tiles.values.none { it.id == entry.id }) { "Block entity id ${entry.id} is registered twice" }
+			val constructor = clazz.getConstructor(BlockPos::class.java, BlockState::class.java)
+			// блок-сущности создаются и в потоках загрузки чанков
+			val blocks = ConcurrentHashMap.newKeySet<Block>()
+			val type = BlockEntityType({ pos, state -> constructor.newInstance(pos, state) }, blocks, null)
+			tileTypes[clazz] = type
+			tileBlocks[type] = blocks
+			tiles[type] = entry
+			e.register(Registries.BLOCK_ENTITY_TYPE, entry.id) { type }
+		}
+		pendingTiles.clear()
 	}
 	
 	private fun item(item: Item, entry: Entry) {

@@ -215,6 +215,7 @@ object ClientProxy : CommonProxy() {
 		if (!AlfheimConfigHandler.minimalGraphics) {
 			MinecraftForgeClient.registerItemRenderer(AlfheimItems.mjolnir, RenderItemMjolnir)
 			MinecraftForgeClient.registerItemRenderer(AlfheimItems.snowSword, RenderItemSnowSword)
+			// PORT: перенесён — alfheim.port.client.AlfheimEntityRenderers
 			ClientRegistry.bindTileEntitySpecialRenderer(TileTreeBerry::class.java, RenderTileTreeBerry)
 		}
 		*/

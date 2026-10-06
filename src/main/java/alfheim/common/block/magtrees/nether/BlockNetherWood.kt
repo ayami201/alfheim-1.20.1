@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level as World
 
 // PORT: вариант metadata (meta and 3: 0 — бревно, 1 — сердцевина) — отдельный блок (SPEC, Р-5): номер варианта — meta,
 // создают массивом `Array(2) { BlockNetherWood(it) }`; поворот (meta and 12) — свойство axis (BlockModRotatedPillar).
-// КТ-2 (партия 8в-2) — сердцевина с TileTreeCook (ITileEntityProvider)
+// КТ-2 (партия 8в-3) — сердцевина с TileTreeCook (ITileEntityProvider)
 class BlockNetherWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*, ITileEntityProvider*/, IFuelHandler {
 	
 	override val variant get() = meta
@@ -71,7 +71,7 @@ class BlockNetherWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*, IT
 	
 	fun isHeartWood(meta: Int) = meta and 3 == 1
 	
-	/* PORT: КТ-2 (партия 8в-2) — сердцевина с TileTreeCook
+	/* PORT: КТ-2 (партия 8в-3) — сердцевина с TileTreeCook
 	override fun hasTileEntity(metadata: Int) = isHeartWood(metadata)
 	
 	override fun createNewTileEntity(world: World?, meta: Int) = TileTreeCook()

@@ -7,7 +7,7 @@ import alfheim.port.legacy.*
 
 // PORT: вариант metadata (meta and 3: 0 — бревно, 1 — сердцевина) — отдельный блок (SPEC, Р-5): номер варианта — meta,
 // создают массивом `Array(2) { BlockBarrierWood(it) }`; поворот (meta and 12) — свойство axis (BlockModRotatedPillar).
-// КТ-2 (партия 8в-2) — сердцевина с TileTreeWind (ITileEntityProvider)
+// КТ-2 (партия 8в-3) — сердцевина с TileTreeWind (ITileEntityProvider)
 class BlockBarrierWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*, ITileEntityProvider*/ {
 	
 	override val variant get() = meta
@@ -57,7 +57,7 @@ class BlockBarrierWood(val meta: Int): BlockModRotatedPillar(Material.wood)/*, I
 	
 	fun isHeartWood(meta: Int) = meta and 3 == 1
 	
-	/* PORT: КТ-2 (партия 8в-2) — сердцевина с TileTreeWind
+	/* PORT: КТ-2 (партия 8в-3) — сердцевина с TileTreeWind
 	override fun hasTileEntity(metadata: Int) = isHeartWood(metadata)
 	
 	override fun createNewTileEntity(world: World?, meta: Int) = TileTreeWind()

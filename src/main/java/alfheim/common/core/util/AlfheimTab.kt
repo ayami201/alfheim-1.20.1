@@ -12,16 +12,19 @@ import alfheim.common.block.AlfheimBlocks.auroraStairs
 import alfheim.common.block.AlfheimBlocks.auroraWood
 import alfheim.common.block.AlfheimBlocks.barrierLeaves
 import alfheim.common.block.AlfheimBlocks.barrierPlanks
+import alfheim.common.block.AlfheimBlocks.barrierSapling
 import alfheim.common.block.AlfheimBlocks.barrierSlabs
 import alfheim.common.block.AlfheimBlocks.barrierStairs
 import alfheim.common.block.AlfheimBlocks.barrierWood
 import alfheim.common.block.AlfheimBlocks.calicoLeaves
 import alfheim.common.block.AlfheimBlocks.calicoPlanks
+import alfheim.common.block.AlfheimBlocks.calicoSapling
 import alfheim.common.block.AlfheimBlocks.calicoSlabs
 import alfheim.common.block.AlfheimBlocks.calicoStairs
 import alfheim.common.block.AlfheimBlocks.calicoWood
 import alfheim.common.block.AlfheimBlocks.circuitLeaves
 import alfheim.common.block.AlfheimBlocks.circuitPlanks
+import alfheim.common.block.AlfheimBlocks.circuitSapling
 import alfheim.common.block.AlfheimBlocks.circuitSlabs
 import alfheim.common.block.AlfheimBlocks.circuitStairs
 import alfheim.common.block.AlfheimBlocks.circuitWood
@@ -44,12 +47,14 @@ import alfheim.common.block.AlfheimBlocks.irisWood2
 import alfheim.common.block.AlfheimBlocks.irisWood3
 import alfheim.common.block.AlfheimBlocks.lightningLeaves
 import alfheim.common.block.AlfheimBlocks.lightningPlanks
+import alfheim.common.block.AlfheimBlocks.lightningSapling
 import alfheim.common.block.AlfheimBlocks.lightningSlabs
 import alfheim.common.block.AlfheimBlocks.lightningStairs
 import alfheim.common.block.AlfheimBlocks.lightningWood
 import alfheim.common.block.AlfheimBlocks.livingcobble
 import alfheim.common.block.AlfheimBlocks.netherLeaves
 import alfheim.common.block.AlfheimBlocks.netherPlanks
+import alfheim.common.block.AlfheimBlocks.netherSapling
 import alfheim.common.block.AlfheimBlocks.netherSlabs
 import alfheim.common.block.AlfheimBlocks.netherStairs
 import alfheim.common.block.AlfheimBlocks.netherWood
@@ -65,6 +70,7 @@ import alfheim.common.block.AlfheimBlocks.rainbowTallGrass
 import alfheim.common.block.AlfheimBlocks.rainbowWood
 import alfheim.common.block.AlfheimBlocks.sealingLeaves
 import alfheim.common.block.AlfheimBlocks.sealingPlanks
+import alfheim.common.block.AlfheimBlocks.sealingSapling
 import alfheim.common.block.AlfheimBlocks.sealingSlabs
 import alfheim.common.block.AlfheimBlocks.sealingStairs
 import alfheim.common.block.AlfheimBlocks.sealingWood
@@ -155,10 +161,7 @@ import alfheim.common.block.AlfheimBlocks.animatedTorch
 import alfheim.common.block.AlfheimBlocks.anomalyHarvester
 import alfheim.common.block.AlfheimBlocks.anyavil
 import alfheim.common.block.AlfheimBlocks.barrel
-import alfheim.common.block.AlfheimBlocks.barrierSapling
 import alfheim.common.block.AlfheimBlocks.bottomlessChest
-import alfheim.common.block.AlfheimBlocks.calicoSapling
-import alfheim.common.block.AlfheimBlocks.circuitSapling
 import alfheim.common.block.AlfheimBlocks.corporeaAutocrafter
 import alfheim.common.block.AlfheimBlocks.corporeaInjector
 import alfheim.common.block.AlfheimBlocks.corporeaRatBase
@@ -171,13 +174,11 @@ import alfheim.common.block.AlfheimBlocks.grapesWhite
 import alfheim.common.block.AlfheimBlocks.icicle
 import alfheim.common.block.AlfheimBlocks.itemDisplay
 import alfheim.common.block.AlfheimBlocks.kindling
-import alfheim.common.block.AlfheimBlocks.lightningSapling
 import alfheim.common.block.AlfheimBlocks.livingwoodFunnel
 import alfheim.common.block.AlfheimBlocks.manaAccelerator
 import alfheim.common.block.AlfheimBlocks.manaInfuser
 import alfheim.common.block.AlfheimBlocks.manaReflector
 import alfheim.common.block.AlfheimBlocks.manaTuner
-import alfheim.common.block.AlfheimBlocks.netherSapling
 import alfheim.common.block.AlfheimBlocks.nidhoggTooth
 import alfheim.common.block.AlfheimBlocks.niflheimBlock
 import alfheim.common.block.AlfheimBlocks.powerStone
@@ -197,7 +198,6 @@ import alfheim.common.block.AlfheimBlocks.schemaController
 import alfheim.common.block.AlfheimBlocks.schemaFiller
 import alfheim.common.block.AlfheimBlocks.schemaGenerator
 import alfheim.common.block.AlfheimBlocks.schemaMarker
-import alfheim.common.block.AlfheimBlocks.sealingSapling
 import alfheim.common.block.AlfheimBlocks.shimmerQuartz
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzSlab
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
@@ -732,6 +732,7 @@ object AlfheimTab {
 		addBlock(barrierLeaves)
 		/* PORT: КТ-2
 		addBlock(altLeaves)
+		*/
 		
 		addBlock(lightningSapling)
 		addBlock(netherSapling)
@@ -739,6 +740,7 @@ object AlfheimTab {
 		addBlock(calicoSapling)
 		addBlock(sealingSapling)
 		addBlock(barrierSapling)
+		/* PORT: КТ-2
 		addBlock(dreamSapling)
 		addBlock(tunedSapling)
 		

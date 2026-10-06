@@ -4,6 +4,9 @@
     "по блокам и предметам, зарегистрированным в порту; руками не правится. Из него читают все: загрузчик построек,",
     "перевод ключей lang (tools/convert_lang.py), лексикон, тесты паритета. Формат — docs/port/MAPPING.md, раздел «legacy_ids.json»."
   ],
+  "block_entities": {
+    "alfheim:TreeBerry": "alfheim:tree_berry"
+  },
   "blocks": {
     "Botania:customBrick": {
       "3": "alfheim:custom_brick3"
@@ -140,6 +143,12 @@
     "alfheim:ShrineRock0Slab": "alfheim:shrine_rock0_slab",
     "alfheim:ShrineRock0SlabFull": "alfheim:shrine_rock0_slab[type=double]",
     "alfheim:ShrineRockWhiteStairs": "alfheim:shrine_rock_white_stairs",
+    "alfheim:TreeBerry0": "alfheim:tree_berry0",
+    "alfheim:TreeBerry1": "alfheim:tree_berry1",
+    "alfheim:TreeBerry2": "alfheim:tree_berry2",
+    "alfheim:TreeBerry3": "alfheim:tree_berry3",
+    "alfheim:TreeBerry4": "alfheim:tree_berry4",
+    "alfheim:TreeBerry5": "alfheim:tree_berry5",
     "alfheim:Wisdomwood": {
       "0": "alfheim:wisdomwood0",
       "1": "alfheim:wisdomwood1",
@@ -165,6 +174,7 @@
     "alfheim:barrierPlanksSlab": "alfheim:barrier_planks_slab",
     "alfheim:barrierPlanksSlabFull": "alfheim:barrier_planks_slab[type=double]",
     "alfheim:barrierPlanksStairs": "alfheim:barrier_planks_stairs",
+    "alfheim:barrierSapling": "alfheim:barrier_sapling",
     "alfheim:barrierWood": {
       "0": "alfheim:barrier_wood0",
       "1": "alfheim:barrier_wood1"
@@ -174,12 +184,14 @@
     "alfheim:calicoPlanksSlab": "alfheim:calico_planks_slab",
     "alfheim:calicoPlanksSlabFull": "alfheim:calico_planks_slab[type=double]",
     "alfheim:calicoPlanksStairs": "alfheim:calico_planks_stairs",
+    "alfheim:calicoSapling": "alfheim:calico_sapling",
     "alfheim:calicoWood": "alfheim:calico_wood",
     "alfheim:circuitLeaves": "alfheim:circuit_leaves",
     "alfheim:circuitPlanks": "alfheim:circuit_planks",
     "alfheim:circuitPlanksSlab": "alfheim:circuit_planks_slab",
     "alfheim:circuitPlanksSlabFull": "alfheim:circuit_planks_slab[type=double]",
     "alfheim:circuitPlanksStairs": "alfheim:circuit_planks_stairs",
+    "alfheim:circuitSapling": "alfheim:circuit_sapling",
     "alfheim:circuitWood": "alfheim:circuit_wood",
     "alfheim:coloredDirt": {
       "0": "alfheim:colored_dirt0",
@@ -354,6 +366,7 @@
     "alfheim:lightningPlanksSlab": "alfheim:lightning_planks_slab",
     "alfheim:lightningPlanksSlabFull": "alfheim:lightning_planks_slab[type=double]",
     "alfheim:lightningPlanksStairs": "alfheim:lightning_planks_stairs",
+    "alfheim:lightningSapling": "alfheim:lightning_sapling",
     "alfheim:lightningWood": {
       "0": "alfheim:lightning_wood0",
       "1": "alfheim:lightning_wood1"
@@ -364,6 +377,7 @@
     "alfheim:netherPlanksSlab": "alfheim:nether_planks_slab",
     "alfheim:netherPlanksSlabFull": "alfheim:nether_planks_slab[type=double]",
     "alfheim:netherPlanksStairs": "alfheim:nether_planks_stairs",
+    "alfheim:netherSapling": "alfheim:nether_sapling",
     "alfheim:netherWood": {
       "0": "alfheim:nether_wood0",
       "1": "alfheim:nether_wood1"
@@ -402,6 +416,7 @@
     "alfheim:sealingPlanksSlab": "alfheim:sealing_planks_slab",
     "alfheim:sealingPlanksSlabFull": "alfheim:sealing_planks_slab[type=double]",
     "alfheim:sealingPlanksStairs": "alfheim:sealing_planks_stairs",
+    "alfheim:sealingSapling": "alfheim:sealing_sapling",
     "alfheim:sealingWood": "alfheim:sealing_wood",
     "alfheim:softStorage": {
       "0": "alfheim:soft_storage0",
@@ -610,6 +625,12 @@
     "alfheim:ShrineRock0Slab": "alfheim:shrine_rock0_slab",
     "alfheim:ShrineRockWhiteStairs": "alfheim:shrine_rock_white_stairs",
     "alfheim:SoulHorn": "alfheim:soul_horn",
+    "alfheim:TreeBerry0": "alfheim:tree_berry0",
+    "alfheim:TreeBerry1": "alfheim:tree_berry1",
+    "alfheim:TreeBerry2": "alfheim:tree_berry2",
+    "alfheim:TreeBerry3": "alfheim:tree_berry3",
+    "alfheim:TreeBerry4": "alfheim:tree_berry4",
+    "alfheim:TreeBerry5": "alfheim:tree_berry5",
     "alfheim:Triquetrum": "alfheim:triquetrum",
     "alfheim:Wisdomwood": {
       "0": "alfheim:wisdomwood0",
@@ -634,6 +655,7 @@
     "alfheim:barrierPlanks": "alfheim:barrier_planks",
     "alfheim:barrierPlanksSlab": "alfheim:barrier_planks_slab",
     "alfheim:barrierPlanksStairs": "alfheim:barrier_planks_stairs",
+    "alfheim:barrierSapling": "alfheim:barrier_sapling",
     "alfheim:barrierWood": {
       "0": "alfheim:barrier_wood0",
       "1": "alfheim:barrier_wood1"
@@ -642,11 +664,13 @@
     "alfheim:calicoPlanks": "alfheim:calico_planks",
     "alfheim:calicoPlanksSlab": "alfheim:calico_planks_slab",
     "alfheim:calicoPlanksStairs": "alfheim:calico_planks_stairs",
+    "alfheim:calicoSapling": "alfheim:calico_sapling",
     "alfheim:calicoWood": "alfheim:calico_wood",
     "alfheim:circuitLeaves": "alfheim:circuit_leaves",
     "alfheim:circuitPlanks": "alfheim:circuit_planks",
     "alfheim:circuitPlanksSlab": "alfheim:circuit_planks_slab",
     "alfheim:circuitPlanksStairs": "alfheim:circuit_planks_stairs",
+    "alfheim:circuitSapling": "alfheim:circuit_sapling",
     "alfheim:circuitWood": "alfheim:circuit_wood",
     "alfheim:coloredDirt": {
       "0": "alfheim:colored_dirt0",
@@ -805,6 +829,7 @@
     "alfheim:lightningPlanks": "alfheim:lightning_planks",
     "alfheim:lightningPlanksSlab": "alfheim:lightning_planks_slab",
     "alfheim:lightningPlanksStairs": "alfheim:lightning_planks_stairs",
+    "alfheim:lightningSapling": "alfheim:lightning_sapling",
     "alfheim:lightningWood": {
       "0": "alfheim:lightning_wood0",
       "1": "alfheim:lightning_wood1"
@@ -814,6 +839,7 @@
     "alfheim:netherPlanks": "alfheim:nether_planks",
     "alfheim:netherPlanksSlab": "alfheim:nether_planks_slab",
     "alfheim:netherPlanksStairs": "alfheim:nether_planks_stairs",
+    "alfheim:netherSapling": "alfheim:nether_sapling",
     "alfheim:netherWood": {
       "0": "alfheim:nether_wood0",
       "1": "alfheim:nether_wood1"
@@ -849,6 +875,7 @@
     "alfheim:sealingPlanks": "alfheim:sealing_planks",
     "alfheim:sealingPlanksSlab": "alfheim:sealing_planks_slab",
     "alfheim:sealingPlanksStairs": "alfheim:sealing_planks_stairs",
+    "alfheim:sealingSapling": "alfheim:sealing_sapling",
     "alfheim:sealingWood": "alfheim:sealing_wood",
     "alfheim:softStorage": {
       "0": "alfheim:soft_storage0",
@@ -1059,12 +1086,19 @@
     "tile.alfheim:ManaIce.name": "block.alfheim.mana_ice",
     "tile.alfheim:ShrinePillar.name": "block.alfheim.shrine_pillar",
     "tile.alfheim:ShrineRockWhiteStairs.name": "block.alfheim.shrine_rock_white_stairs",
+    "tile.alfheim:TreeBerry0.name": "block.alfheim.tree_berry0",
+    "tile.alfheim:TreeBerry1.name": "block.alfheim.tree_berry1",
+    "tile.alfheim:TreeBerry2.name": "block.alfheim.tree_berry2",
+    "tile.alfheim:TreeBerry3.name": "block.alfheim.tree_berry3",
+    "tile.alfheim:TreeBerry4.name": "block.alfheim.tree_berry4",
+    "tile.alfheim:TreeBerry5.name": "block.alfheim.tree_berry5",
     "tile.alfheim:auroraPlanksSlab.name": "block.alfheim.aurora_planks_slab17",
     "tile.alfheim:auroraPlanksStairs.name": "block.alfheim.aurora_planks_stairs17",
     "tile.alfheim:barrierLeaves.name": "block.alfheim.barrier_leaves",
     "tile.alfheim:barrierPlanks.name": "block.alfheim.barrier_planks",
     "tile.alfheim:barrierPlanksSlab.name": "block.alfheim.barrier_planks_slab",
     "tile.alfheim:barrierPlanksStairs.name": "block.alfheim.barrier_planks_stairs",
+    "tile.alfheim:barrierSapling.name": "block.alfheim.barrier_sapling",
     "tile.alfheim:barrierWood.name": [
       "block.alfheim.barrier_wood0",
       "block.alfheim.barrier_wood1"
@@ -1073,11 +1107,13 @@
     "tile.alfheim:calicoPlanks.name": "block.alfheim.calico_planks",
     "tile.alfheim:calicoPlanksSlab.name": "block.alfheim.calico_planks_slab",
     "tile.alfheim:calicoPlanksStairs.name": "block.alfheim.calico_planks_stairs",
+    "tile.alfheim:calicoSapling.name": "block.alfheim.calico_sapling",
     "tile.alfheim:calicoWood.name": "block.alfheim.calico_wood",
     "tile.alfheim:circuitLeaves.name": "block.alfheim.circuit_leaves",
     "tile.alfheim:circuitPlanks.name": "block.alfheim.circuit_planks",
     "tile.alfheim:circuitPlanksSlab.name": "block.alfheim.circuit_planks_slab",
     "tile.alfheim:circuitPlanksStairs.name": "block.alfheim.circuit_planks_stairs",
+    "tile.alfheim:circuitSapling.name": "block.alfheim.circuit_sapling",
     "tile.alfheim:circuitWood.name": "block.alfheim.circuit_wood",
     "tile.alfheim:coloredDirt.name": [
       "block.alfheim.colored_dirt0",
@@ -1229,6 +1265,7 @@
     "tile.alfheim:lightningPlanks.name": "block.alfheim.lightning_planks",
     "tile.alfheim:lightningPlanksSlab.name": "block.alfheim.lightning_planks_slab",
     "tile.alfheim:lightningPlanksStairs.name": "block.alfheim.lightning_planks_stairs",
+    "tile.alfheim:lightningSapling.name": "block.alfheim.lightning_sapling",
     "tile.alfheim:lightningWood.name": [
       "block.alfheim.lightning_wood0",
       "block.alfheim.lightning_wood1"
@@ -1237,6 +1274,7 @@
     "tile.alfheim:netherPlanks.name": "block.alfheim.nether_planks",
     "tile.alfheim:netherPlanksSlab.name": "block.alfheim.nether_planks_slab",
     "tile.alfheim:netherPlanksStairs.name": "block.alfheim.nether_planks_stairs",
+    "tile.alfheim:netherSapling.name": "block.alfheim.nether_sapling",
     "tile.alfheim:netherWood.name": [
       "block.alfheim.nether_wood0",
       "block.alfheim.nether_wood1"
@@ -1262,6 +1300,7 @@
     "tile.alfheim:sealingPlanks.name": "block.alfheim.sealing_planks",
     "tile.alfheim:sealingPlanksSlab.name": "block.alfheim.sealing_planks_slab",
     "tile.alfheim:sealingPlanksStairs.name": "block.alfheim.sealing_planks_stairs",
+    "tile.alfheim:sealingSapling.name": "block.alfheim.sealing_sapling",
     "tile.alfheim:sealingWood.name": "block.alfheim.sealing_wood",
     "tile.auroraDirt.name": "block.alfheim.aurora_dirt",
     "tile.auroraLeaves.name": "block.alfheim.aurora_leaves",

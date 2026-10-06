@@ -2,6 +2,7 @@ package alfheim.port.client
 
 import alfheim.AlfheimCore
 import alfheim.api.ModInfo.MODID
+import alfheim.client.render.tile.RenderTileTreeBerry
 import alfheim.common.block.*
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.*
@@ -58,6 +59,8 @@ object AlfheimModels {
 		for (i in 2..4) for (name in listOf("living_mountain", "living_mountain0_slab", "living_mountain0_slab_top")) e.register(model("${name}_icon$i"))
 		e.register(ResourceLocation(MODID, "item/${AlfheimItemModels.INFUSED_CANDY}"))
 		for (leaves in leaves()) e.register(model(opaque(leaves)))
+		// RenderTileTreeBerry: OBJ-модели ягод (виды 2–4, зрелость 0–2) рисует рендер блок-сущности, а не состояние блока
+		for (type in RenderTileTreeBerry.hasModels) for (meta in 0..2) e.register(model("tree_berry$type${meta}_obj"))
 	}
 	
 	/** Листва автора ([Leaves1710]) */

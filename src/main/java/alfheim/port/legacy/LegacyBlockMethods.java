@@ -10,9 +10,10 @@ import net.minecraft.world.level.block.Blocks;
 
 /**
  * Методы блока 1.7.10, которые переопределяет автор и которые 1.20.1 зовёт через порт (MAPPING.md, «Блоки и
- * предметы»): цвет блока, инструмент добычи, тики, установка и снятие блока, взрыв, сигнал красного камня, вечный огонь.
+ * предметы»): цвет блока, инструмент добычи, тики, установка и снятие блока, взрыв, сигнал красного камня, вечный огонь,
+ * замена блока.
  * Их наследует {@link LegacyBlock}. Методы 1.20.1, из которых они вызываются, переопределяют базовые классы порта:
- * {@code Block1710}, {@code Slab1710}, {@code Stairs1710}, {@code Leaves1710}.
+ * {@code Block1710}, {@code Slab1710}, {@code Stairs1710}, {@code Leaves1710}, {@code Bush1710}.
  * <p>
  * Интерфейс написан на Java, как {@code Block} 1.7.10: переопределения автора объявляют параметры кто nullable, кто
  * нет ({@code IBlockAccess} и {@code IBlockAccess?}), а Kotlin принимает оба варианта только у метода Java.
@@ -100,5 +101,13 @@ public interface LegacyBlockMethods {
 	 */
 	default boolean isFireSource(Level world, int x, int y, int z, ForgeDirection side) {
 		return false;
+	}
+
+	/**
+	 * {@code isReplaceable} Forge 1.7.10: блок в точке можно заменить — поставить в его место другой блок, вырастить
+	 * сквозь него дерево; по умолчанию — заменяемый материал ({@code canBeReplaced} состояния 1.20.1)
+	 */
+	default boolean isReplaceable(BlockGetter world, int x, int y, int z) {
+		return world.getBlockState(new BlockPos(x, y, z)).canBeReplaced();
 	}
 }

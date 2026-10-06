@@ -1,5 +1,11 @@
 {
   "values": [
-    "alfheim:iris_sapling"
+    "alfheim:iris_sapling",
+    "alfheim:lightning_sapling",
+    "alfheim:calico_sapling",
+    "alfheim:circuit_sapling",
+    "alfheim:nether_sapling",
+    "alfheim:sealing_sapling",
+    "alfheim:barrier_sapling"
   ]
 }

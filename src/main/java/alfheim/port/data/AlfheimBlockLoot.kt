@@ -2,6 +2,7 @@ package alfheim.port.data
 
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.BlockElvenOre
+import alfheim.common.block.BlockTreeBerry
 import alfheim.common.block.colored.BlockColoredDoubleGrass
 import alfheim.common.block.colored.rainbow.*
 import alfheim.common.block.magtrees.barrier.BlockBarrierWood
@@ -56,6 +57,7 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 			block is BlockBarrierWood              -> add(block, createSingleItemTable(AlfheimBlocks.barrierWood[block.damageDropped(block.meta)]))
 			block is BlockLightningWood            -> add(block, createSingleItemTable(AlfheimBlocks.lightningWood[block.damageDropped(block.meta)]))
 			block is BlockNetherWood               -> add(block, createSingleItemTable(AlfheimBlocks.netherWood[block.damageDropped(block.meta)]))
+			block is BlockTreeBerry                -> add(block, treeBerry(block))
 			else                                   -> dropSelf(block)
 		}
 	}
@@ -130,6 +132,15 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 		BlockRainbowGrass.GRASS, BlockRainbowGrass.AURORA -> tallGrass(block)
 		BlockRainbowGrass.BURIED                          -> createSingleItemTable(AlfheimItems.elvenResource[ElvenResourcesMetas.RainbowPetal.I])
 		else                                              -> createSingleItemTable(block)
+	}
+
+	/**
+	 * `BlockTreeBerry.getDrops`: зрелая ягода (зрелость 2) — одна ягода своего дерева (`getItemDropped`,
+	 * `quantityDropped`), незрелая — ничего; при взрыве — с шансом 1 / сила взрыва
+	 */
+	private fun treeBerry(block: BlockTreeBerry): LootTable.Builder {
+		val ripe = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockTreeBerry.AGE, 2))
+		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().`when`(ripe).add(LootItem.lootTableItem(block.getItemDropped(2, null, 0)!!))))
 	}
 
 	override fun getKnownBlocks(): Iterable<Block> = LegacyRegistration.blocks.keys

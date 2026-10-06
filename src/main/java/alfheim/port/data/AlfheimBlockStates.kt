@@ -2,6 +2,7 @@ package alfheim.port.data
 
 import alexsocol.asjlib.extendables.block.*
 import alfheim.api.ModInfo.MODID
+import alfheim.client.render.tile.RenderTileTreeBerry
 import alfheim.common.block.*
 import alfheim.common.block.alt.BlockYggDecor
 import alfheim.common.block.base.*
@@ -18,6 +19,7 @@ import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.RotatedPillarBlock.AXIS
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraftforge.client.model.generators.*
+import net.minecraftforge.client.model.generators.loaders.ObjModelBuilder
 import net.minecraftforge.common.data.ExistingFileHelper
 
 /**
@@ -57,6 +59,7 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			is BlockRainbowDoubleGrass -> rainbowDoubleGrass(block)
 			is BlockRainbowDoubleFlower -> doublePlant(block, legacyTexture("$MODID:rainbowDoubleFlower"), legacyTexture("$MODID:rainbowDoubleFlowerTop"))
 			is BlockRainbowMushroom  -> plant(block, legacyTexture(icon(block)))
+			is BlockTreeBerry        -> treeBerry(block)
 			is BlockShimmerQuartz    -> shimmerQuartz(block)
 			is BlockModRotatedPillar -> pillar(block)
 			is Stairs1710            -> stairs(block)
@@ -300,6 +303,25 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 	private fun plant(block: Block, texture: ResourceLocation) {
 		simpleBlock(block, cross(block, texture))
 		itemModels().withExistingParent(name(block), mcLoc("item/generated")).texture("layer0", texture)
+	}
+
+	/**
+	 * `BlockTreeBerry.getIcon`: иконка зрелости `TreeBerry<вид><зрелость>`, рендер 1 — крест; предмет — иконка зрелости 0.
+	 * Ягоды видов 2–4 без опции minimalGraphics рисует OBJ-моделью `RenderTileTreeBerry`: модель загрузчика OBJ Forge с
+	 * той же текстурой (материал `model/port/tree_berry.mtl`), координаты текстуры перевёрнуты по вертикали, как у
+	 * загрузчика OBJ Forge 1.7.10
+	 */
+	private fun treeBerry(block: BlockTreeBerry) {
+		val textures = Array(3) { legacyTexture(icon(block, it.toString())) }
+		val states = getVariantBuilder(block)
+		for (age in 0..2)
+			states.partialState().with(BlockTreeBerry.AGE, age).modelForState().modelFile(cross(block, textures[age], "tree_berry${block.type}$age")).addModel()
+		itemModels().withExistingParent(name(block), mcLoc("item/generated")).texture("layer0", textures[0])
+		if (block.type !in RenderTileTreeBerry.hasModels) return
+		for (age in 0..2)
+			models().getBuilder("tree_berry${block.type}${age}_obj").customLoader { builder, helper -> ObjModelBuilder.begin(builder, helper) }
+				.modelLocation(modLoc("model/tree_berry${block.type}$age.obj")).flipV(true).overrideMaterialLibrary(modLoc("model/port/tree_berry.mtl")).end()
+				.texture("texture", textures[age]).texture("particle", textures[age])
 	}
 
 	/**

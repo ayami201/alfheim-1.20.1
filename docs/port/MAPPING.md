@@ -40,7 +40,7 @@ Botania 456 и ставят ✓. Если оказалось иначе — ст
 
 | Раздел | Ключ | Значение |
 |---|---|---|
-| `blocks`, `items`, `entities` | старое имя в реестре 1.7.10, `modid:name` | новый id; если вещь различалась metadata — объект `{"0": …, "1": …}`, ключ `"*"` — любая metadata |
+| `blocks`, `items`, `entities`, `block_entities` | старое имя в реестре 1.7.10, `modid:name` (у блок-сущности — имя из `GameRegistry.registerTileEntity`, оно же поле `id` её NBT) | новый id; если вещь различалась metadata — объект `{"0": …, "1": …}`, ключ `"*"` — любая metadata |
 | | | к id блока можно дописать свойства состояния: `"alfheim:alt_wood[axis=y]"` |
 | `lang` | старый ключ перевода | новый ключ (`block.alfheim.<id>`, `item.alfheim.<id>`, `effect.alfheim.<id>`); применяет `tools/convert_lang.py`. Если у вариантов было одно имя 1.7.10 (`tile.alfheim:irisWood.name`) — список новых ключей, текст получает каждый |
 
@@ -110,16 +110,18 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `tickRate(world)` | — | ✓ задержку запланированного тика 1.20.1 передаёт вызов `scheduleTick`; у блока, которому никто не ставит запланированный тик, метод закомментирован |
 | `isSideSolid(world, x, y, z, side) = true` у полного куба | `isFaceSturdy` по форме блока | ✓ у полного куба грань твёрдая и так; метод закомментирован |
 | `getDrops` | таблица лута (datagen) | |
-| `TileEntity` | `BlockEntity` + `BlockEntityType` | |
-| `updateEntity` | `BlockEntityTicker` | |
-| `readFromNBT` / `writeToNBT` | `load` / `saveAdditional` | |
-| `getDescriptionPacket` / `onDataPacket` | `getUpdatePacket` / `getUpdateTag` / `onDataPacket` | |
+| `TileEntity`: класс автора с конструктором `()`, `super()` | `TileEntity` прослойки (`BlockEntity`): конструктор `(pos, state)`, `super(legacyTileType<Класс>(), pos, state)` | ✓ блок-сущность 1.20.1 создаётся сразу в своей точке; `worldObj`, `xCoord`, `getBlockType()`, `markDirty()` — свойства и методы прослойки. Тип — по классу из `GameRegistry.registerTileEntity(класс, имя)` (`LegacyRegistration.tile`); id — имя автора без `modid:` в snake_case (`alfheim:TreeBerry` → `alfheim:tree_berry`), старое — в `legacy_ids.json`. Тип считает своими блоки, в которых создавались его блок-сущности (`isValid`): в чужом блоке 1.20.1 блок-сущность не тикает и не рисует |
+| `updateEntity`, `canUpdate` | `BlockEntityTicker` из `getTicker` блока (`ITileEntityProvider` прослойки) | ✓ методы автора остаются; тик — и на сервере, и на клиенте, как в 1.7.10. Блок-сущность с `canUpdate() = false` тика не получает: 1.7.10 не ставил её в список тикающих (тип запоминает ответ первой своей блок-сущности на каждой стороне — у автора ответ зависит только от класса и стороны) |
+| `readFromNBT` / `writeToNBT` | `load` / `saveAdditional` | ✓ методы автора остаются, их зовёт `TileEntity` прослойки; id и координаты 1.20.1 пишет сама |
+| `getDescriptionPacket` / `onDataPacket` | `getUpdatePacket` / `getUpdateTag` / `onDataPacket` | ✓ `ASJTile`: данные пакета описания (`writeCustomNBT`) клиент получает с чанком (`getUpdateTag` → `handleUpdateTag`) и при обновлении блока (`getUpdatePacket` → `onDataPacket`). `onDataPacket` 1.20.1 по умолчанию загружает тег целиком (`load`), 1.7.10 — ничего: `super` не зовётся |
+| `receiveClientEvent(id, param)` (событие блока `addBlockEvent`) | `triggerEvent` блок-сущности; `BlockContainer` прослойки передаёт ей событие блока | ✓ |
 | `AxisAlignedBB`, `MathHelper`, `MovingObjectPosition` | `AABB`, `Mth`, `HitResult` | |
 | `block.material.isLiquid` | `state.liquid()` | ✓ |
 | `Blocks.water` и `flowing_water`, `lava` и `flowing_lava` | `Blocks.WATER`, `Blocks.LAVA` | ✓ стоячая и текучая жидкость — один блок, уровень — свойство состояния: сравнения автора «стоячая — текучая» сводятся к одному блоку |
 | `IFluidBlock.canDrain(world, x, y, z)`, `drain(world, x, y, z, true)` | `canDrain(level, pos)`, `drain(level, pos, FluidAction.EXECUTE)` | ✓ |
 | `block.getBlockHardness(world, x, y, z)`, `block.canPlaceBlockAt(world, x, y, z)` | `state.getDestroySpeed(level, pos)`, `state.canSurvive(level, pos)` | ✓ |
-| `ITileEntityProvider` | `EntityBlock` | ✓ |
+| `ITileEntityProvider`, `createNewTileEntity(world, meta)` | `ITileEntityProvider` прослойки (`EntityBlock`), `newBlockEntity(pos, state)` | ✓ нет блок-сущности в этом состоянии (`hasTileEntity(meta) = false`) — `null`; тик даёт `getTicker` прослойки |
+| `BlockContainer` | `BlockContainer` прослойки (`Block1710` + `ITileEntityProvider`) | ✓ блок рисуется своей моделью, как в 1.7.10 (`BaseEntityBlock` 1.20.1 по умолчанию модели не рисует); блок-сущность убирает `onRemove` 1.20.1 при смене блока |
 | `te.writeToNBT(nbt)`; `TileEntity.createAndLoadEntity(nbt)` + `xCoord` / `yCoord` / `zCoord` + `world.setTileEntity(x, y, z, te)` | `be.saveWithFullMetadata()`; `BlockEntity.loadStatic(pos, state, nbt)` + `level.setBlockEntity(be)` | ✓ блок-сущность 1.20.1 создаётся сразу в своей точке |
 | «точки нет» — `y = -1` в NBT предмета | `Int.MIN_VALUE` (или нет записи) | ✓ мир 1.20.1 бывает ниже нуля, блок на −1 — обычный; так же у секстанта Botania 1.20.1 |
 
@@ -139,6 +141,10 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `setLightLevel(f)` | свечение `(int) (15 * f)`, пишется в состояния | ✓ |
 | `setLightOpacity(o)`; без него — 255 у непрозрачного куба, 0 у прочих | `getLightBlock` = `min(o, 15)`; при 0 свет неба проходит не ослабевая | ✓ |
 | `isOpaqueCube() = false` | как есть: блок не скрывает грани соседей и не сплошной для света (`getOcclusionShape` пуст) | ✓ |
+| `getRenderType()`: `1` — крест, `-1` — блок не рисуется (его рисует рендер блок-сущности) | модель креста из генерации данных; `getRenderShape` = `RenderShape.MODEL` / `RenderShape.INVISIBLE` | ✓ условие автора остаётся (`BlockTreeBerry`: опция minimalGraphics, ошибка модели); модель для частиц и предмета у блока есть и при `INVISIBLE` |
+| `setBlockBoundsBasedOnState` (рамка по metadata), `getCollisionBoundingBoxFromPool = null` | `getShape` по состоянию — рамки автора массивом форм; `getCollisionShape = Shapes.empty()` | ✓ |
+| `canBlockStay` / `canPlaceBlockAt` / `onNeighborBlockChange` автора у блока, который не растение порта | `canSurvive(state, level, pos)` зовёт `canBlockStay` автора (параметр — `IBlockAccess`: 1.20.1 спрашивает и мир генерации); `neighborChanged` | ✓ `BlockTreeBerry` |
+| `isReplaceable(world, x, y, z)` (Forge) | метод автора остаётся (`LegacyBlockMethods`, по умолчанию — заменяемость состояния); `canBeReplaced` базовых классов порта зовёт его | ✓ тем же блоком, что в руке, место не заменяется — правило 1.20.1; дерево автора растёт сквозь заменяемые блоки (`isReplaceable` блока в точке) |
 | `slipperiness`, `setStepSound`, `setTickRandomly` | как есть; 1.20.1 читает их методами блока | ✓ звук `null` (в 1.7.10 ронял игру при шаге) — звук камня |
 | `setHarvestLevel(tool, level)` | теги из генерации данных: `minecraft:mineable/<tool>`; уровень 1, 2, 3 — `needs_stone_tool`, `needs_iron_tool`, `needs_diamond_tool`; 4 и выше — `forge:needs_netherite_tool` | ✓ кирка быстра и на блоках из камня, железа, наковальни, топор — из дерева и растений, как в 1.7.10. Отличие 1.20.1: кирка ниже уровня копает быстро, но блок не роняет |
 | `setHarvestLevel(tool, level, meta)` | для варианта с этим номером; у блока без вариантов — для всех состояний | ✓ |
@@ -343,6 +349,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `nbt.hasNoTags()`, `world.removeTileEntity(x, y, z)` | `isEmpty`, `removeBlockEntity(pos)` | ✓ |
 | `checkChunksExist(…)`, `getBlockLightValue(x, y, z)`, `getStrongestIndirectPower(x, y, z)` | `hasChunksAt`, `getMaxLocalRawBrightness`, `getBestNeighborSignal` | ✓ |
 | `block.canSustainPlant(world, x, y, z, direction, plantable)`, `isLeaves`, `canSustainLeaves`, `isAir`, `isReplaceable`, `onPlantGrow`, `isNormalCube(world, x, y, z)` | у состояния в точке: `canSustainPlant`, теги `minecraft:leaves` и `minecraft:logs`, `isAir`, `canBeReplaced`, трава и пашня → земля, `isRedstoneConductor` | ✓ `isNormalCube` до 1.16 и назывался так |
+| `block.material` у любого блока | `Block.material` прослойки (`Materials1710.kt`): у блока порта — его материал; у блоков ванилы и Botania — материал того же блока 1.7.10 по таблице; воздух, вода и лава — свои | ✓ блок 1.20.1, которого в 1.7.10 не было, с тегом `minecraft:dirt` — земля, прочие — камень; таблица дополняется, когда коду автора нужен материал ещё одного блока |
 | `block.canBlockStay(world, x, y, z)`, `block.canPlaceBlockAt(world, x, y, z)` у любого блока | растение порта — своё правило (`Bush1710`, `DoublePlant1710`), прочие — `canSurvive` (и заменяемое место) | ✓ |
 | `world.getBiomeGenForCoords(x, z).plantFlower(world, random, x, y, z)` | `world.plantFlower(random, x, y, z)` | ✓ раздел «Растения» |
 | `GameRegistry.registerFuelHandler(handler)` | `Fuel1710.handlers` | ✓ раздел «Блоки и предметы» |
@@ -472,7 +479,9 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `RenderGlobal.doSpawnParticle(имя, …)` из `worldAccesses` (частица, которой потом меняют цвет или скорость) | `mc.levelRenderer.addParticleInternal(данные, данные.type.overrideLimiter, …)` (открыт в `accesstransformer.cfg`) | ✓ те же правила ванилы: дальность и настройка «Частицы»; `LevelRenderer` у мира клиента один |
 | `EntityFX.setRBGColorF(r, g, b)`, `multiplyVelocity(m)` | `Particle.setColor(r, g, b)`, `setPower(m)` | ✓ |
 | частица `iconcrack_<id>_<meta>` | `ItemParticleOption(ParticleTypes.ITEM, ItemStack(предмет))` | ✓ рисунок — частица модели предмета (слой 0), как иконка прохода 0 в 1.7.10 |
-| `bindTileEntitySpecialRenderer` | `EntityRenderersEvent.RegisterRenderers` (`registerBlockEntityRenderer`) | |
+| `bindTileEntitySpecialRenderer` | `EntityRenderersEvent.RegisterRenderers` (`registerBlockEntityRenderer`, `alfheim.port.client.AlfheimEntityRenderers`) | ✓ с тем же условием, что у автора (`RenderTileTreeBerry` — без опции minimalGraphics); строка в `ClientProxy` помечена |
+| `TileEntitySpecialRenderer.renderTileEntityAt(tile, x, y, z, ticks)` | `BlockEntityRenderer<T>.render(tile, partialTicks, poseStack, buffers, light, overlay)` | ✓ смещение к блоку уже в матрице, свет блока — `light`; `setTwoside` (грани с двух сторон) и отсечение прозрачного — вид отрисовки `RenderType.entityCutoutNoCull(InventoryMenu.BLOCK_ATLAS)` |
+| OBJ-модель: `AdvancedModelLoader.loadModel(путь .obj)`, `IModelCustom.renderAll()` с текстурой `bindTexture` | модель загрузчика OBJ Forge (`"loader": "forge:obj"`) из генерации данных; клиент запекает её с ресурсами (`ModelEvent.RegisterAdditional`, `alfheim.port.client.AlfheimModels`), рендер рисует `modelRenderer.renderModel` | ✓ `.obj` автора не меняется (имя — snake_case); текстура — параметр модели `texture`, материал — `model/port/<имя>.mtl` (`map_Kd #texture`), `flip_v: true` — загрузчик OBJ Forge 1.7.10 переворачивал координату текстуры (`1 − v`). Модель, которую загрузчик не прочитал, клиент заменяет «нет модели»: проверка автора на ошибку загрузки — сравнение с `missingModel` |
 | `ASJShaderHelper` + шейдеры автора | core shaders через `RegisterShadersEvent` + свой `RenderType` | |
 | `setGlow` (asjlib) | полная яркость, `LightTexture.FULL_BRIGHT` | |
 | `mc.gameSettings.particleSetting` | `mc.options.particles().get().id` | ✓ номера те же: 0 — все, 1 — меньше, 2 — минимум |

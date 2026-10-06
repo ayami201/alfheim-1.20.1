@@ -1,9 +1,11 @@
 package alfheim.port.legacy;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -22,8 +24,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * же, по типу растения ({@code getPlantType}).
  * <p>
  * Методы 1.7.10, которые переопределяет автор: {@link #canBlockStay}, {@link #updateTick} (и запланированный, и
- * случайный тик), {@link #checkAndDropBlock}, {@link #randomDisplayTick}. Класс написан на Java, как {@code BlockBush}
- * 1.7.10: переопределения автора объявляют параметры кто nullable, кто нет.
+ * случайный тик), {@link #checkAndDropBlock}, {@link #randomDisplayTick}; установка и снятие, взрыв, сигнал и вечный
+ * огонь — как у {@code Block1710} ({@link LegacyBlockMethods}). Класс написан на Java, как {@code BlockBush} 1.7.10:
+ * переопределения автора объявляют параметры кто nullable, кто нет.
  */
 public class Bush1710 extends BushBlock implements LegacyBlock, SoundTypes1710 {
 
@@ -85,6 +88,42 @@ public class Bush1710 extends BushBlock implements LegacyBlock, SoundTypes1710 {
 	@Override
 	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		updateTick(level, pos.getX(), pos.getY(), pos.getZ(), random);
+	}
+
+	// Методы 1.7.10 класса автора (LegacyBlockMethods) из методов 1.20.1 — как у Block1710
+
+	@Override
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+		super.onPlace(state, level, pos, oldState, isMoving);
+		onBlockAdded(level, pos.getX(), pos.getY(), pos.getZ());
+	}
+
+	@Override
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+		Integer variant = getVariant();
+		breakBlock(level, pos.getX(), pos.getY(), pos.getZ(), this, variant != null ? variant : 0);
+		super.onRemove(state, level, pos, newState, isMoving);
+	}
+
+	@Override
+	public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
+		onBlockExploded(level, pos.getX(), pos.getY(), pos.getZ(), explosion);
+	}
+
+	@Override
+	public boolean isSignalSource(BlockState state) {
+		return canProvidePower();
+	}
+
+	@Override
+	public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return isProvidingWeakPower(level, pos.getX(), pos.getY(), pos.getZ(), direction.get3DDataValue());
+	}
+
+	@Override
+	public boolean isFireSource(BlockState state, LevelReader level, BlockPos pos, Direction direction) {
+		return level instanceof Level world && isFireSource(world, pos.getX(), pos.getY(), pos.getZ(), ForgeDirection.getOrientation(direction.get3DDataValue()))
+			|| super.isFireSource(state, level, pos, direction);
 	}
 
 	/** {@code randomDisplayTick} 1.7.10 — частицы и звуки рядом с игроком на клиенте; у куста их нет */

@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
+import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.Level
@@ -260,7 +261,8 @@ open class Block1710(material: Material): Block(material.properties()), LegacyBl
 	 */
 	override fun onTreeGrow(state: BlockState, level: LevelReader, placeFunction: BiConsumer<BlockPos, BlockState>, randomSource: RandomSource, pos: BlockPos, config: TreeConfiguration) = true
 
-	// Методы 1.7.10 класса автора ([LegacyBlockMethods]) из методов 1.20.1: тик, установка и снятие, взрыв, сигнал, огонь
+	// Методы 1.7.10 класса автора ([LegacyBlockMethods]) из методов 1.20.1: тик, установка и снятие, взрыв, сигнал, огонь,
+	// замена
 
 	@Deprecated("Deprecated in Java")
 	override fun tick(state: BlockState, level: ServerLevel, pos: BlockPos, random: RandomSource) = updateTick(level, pos.x, pos.y, pos.z, random)
@@ -287,6 +289,11 @@ open class Block1710(material: Material): Block(material.properties()), LegacyBl
 
 	override fun isFireSource(state: BlockState, level: LevelReader, pos: BlockPos, direction: Direction) =
 		level is Level && isFireSource(level, pos.x, pos.y, pos.z, ForgeDirection.getOrientation(direction.get3DDataValue())) || super<Block>.isFireSource(state, level, pos, direction)
+
+	/** Поставить блок на место этого ([isReplaceable] 1.7.10) нельзя тем же блоком, что в руке, — правило 1.20.1 */
+	@Deprecated("Deprecated in Java")
+	override fun canBeReplaced(state: BlockState, context: BlockPlaceContext) =
+		isReplaceable(context.level, context.clickedPos.x, context.clickedPos.y, context.clickedPos.z) && (context.itemInHand.isEmpty || !context.itemInHand.`is`(asItem()))
 
 	companion object: SoundTypes1710
 }

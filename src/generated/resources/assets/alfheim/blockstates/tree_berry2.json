@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "alfheim:block/tree_berry20"
+    },
+    "age=1": {
+      "model": "alfheim:block/tree_berry21"
+    },
+    "age=2": {
+      "model": "alfheim:block/tree_berry22"
+    }
+  }
+}
