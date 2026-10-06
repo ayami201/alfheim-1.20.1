@@ -164,7 +164,8 @@ object PortLegacyTest {
 	/**
 	 * Блок-сущность 1.7.10 (`alfheim.port.legacy.TileEntity`): создаётся в своей точке со своим типом, id типа — имя
 	 * автора в snake_case, старое имя — в `legacy_ids.json`; тип считает своим блок, в котором она создана; тик
-	 * блок-сущности даёт блок (`ITileEntityProvider`), данные она сохраняет со своим id
+	 * блок-сущности даёт блок (`ITileEntityProvider`), только если она тикает (`canUpdate`); данные она сохраняет со своим
+	 * id
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
@@ -179,7 +180,8 @@ object PortLegacyTest {
 		helper.assertTrue(LegacyIds.blockEntities["$MODID:TreeBerry"]?.get("*")?.id == ResourceLocation(MODID, "tree_berry"), "legacy block entity id")
 		val state = helper.getBlockState(pos)
 		helper.assertTrue(type.isValid(state) && !type.isValid(Blocks.STONE.defaultBlockState()), "the type knows its blocks")
-		helper.assertTrue(state.getTicker(helper.level, type) != null && !tile.canUpdate(), "the block ticks its tile entity, the berry tile does not update")
+		// ягода не тикает (canUpdate = false): 1.7.10 не ставил такую блок-сущность в список тикающих
+		helper.assertTrue(!tile.canUpdate() && state.getTicker(helper.level, type) == null, "a tile entity that does not update has no ticker")
 		helper.assertTrue(tile.saveWithFullMetadata().getString("id") == "$MODID:tree_berry", "saved id")
 		helper.succeed()
 	}
