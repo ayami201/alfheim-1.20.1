@@ -3043,9 +3043,9 @@ object AlfheimRecipes {
 		*/
 		addRecipe(RecipeThrowablePotion)
 		RecipeSorter.register("${ModInfo.MODID}:throwpotion", RecipeThrowablePotion::class.java, RecipeSorter.Category.SHAPELESS, "")
-		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addRecipe(RecipeElvenWeed)
 		RecipeSorter.register("${ModInfo.MODID}:elvenweed", RecipeElvenWeed::class.java, RecipeSorter.Category.SHAPELESS, "")
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addRecipe(RecipeAesirCloak)
 		RecipeSorter.register("${ModInfo.MODID}:aesirCloak", RecipeAesirCloak::class.java, RecipeSorter.Category.SHAPED, "")
 		addRecipe(RecipeLensSplit)
