@@ -18,12 +18,12 @@ import alfheim.common.block.colored.rainbow.*
 //import alfheim.common.block.corporea.*
 //import alfheim.common.block.fluid.BlockManaFluid
 //import alfheim.common.block.magtrees.BlockTunedSapling
-//import alfheim.common.block.magtrees.barrier.*
-//import alfheim.common.block.magtrees.calico.*
-//import alfheim.common.block.magtrees.circuit.*
-//import alfheim.common.block.magtrees.lightning.*
-//import alfheim.common.block.magtrees.nether.*
-//import alfheim.common.block.magtrees.sealing.*
+import alfheim.common.block.magtrees.barrier.*
+import alfheim.common.block.magtrees.calico.*
+import alfheim.common.block.magtrees.circuit.*
+import alfheim.common.block.magtrees.lightning.*
+import alfheim.common.block.magtrees.nether.*
+import alfheim.common.block.magtrees.sealing.*
 //import alfheim.common.block.mana.*
 //import alfheim.common.block.schema.*
 //import alfheim.common.block.tile.sub.flower.*
@@ -178,59 +178,59 @@ object AlfheimBlocks {
 //	val altWood0: Block // PORT: КТ-2
 //	val altWood1: Block // PORT: КТ-2
 	
-//	val barrierLeaves: Block // PORT: КТ-2
+	val barrierLeaves: Block
 //	val barrierBerry: Block // PORT: КТ-2
-//	val barrierPlanks: Block // PORT: КТ-2
+	val barrierPlanks: Block
 //	val barrierSapling: Block // PORT: КТ-2
-//	val barrierSlabs: Block // PORT: КТ-2
-//	val barrierSlabFull: Block // PORT: КТ-2
-//	val barrierStairs: Block // PORT: КТ-2
-//	val barrierWood: Block // PORT: КТ-2
+	val barrierSlabs: Block
+	val barrierSlabFull: Block
+	val barrierStairs: Block
+	val barrierWood: Array<Block>
 	
-//	val calicoLeaves: Block // PORT: КТ-2
+	val calicoLeaves: Block
 //	val calicoBerry: Block // PORT: КТ-2
-//	val calicoPlanks: Block // PORT: КТ-2
+	val calicoPlanks: Block
 //	val calicoSapling: Block // PORT: КТ-2
-//	val calicoSlabs: Block // PORT: КТ-2
-//	val calicoSlabFull: Block // PORT: КТ-2
-//	val calicoStairs: Block // PORT: КТ-2
-//	val calicoWood: Block // PORT: КТ-2
+	val calicoSlabs: Block
+	val calicoSlabFull: Block
+	val calicoStairs: Block
+	val calicoWood: Block
 	
-//	val circuitLeaves: Block // PORT: КТ-2
+	val circuitLeaves: Block
 //	val circuitBerry: Block // PORT: КТ-2
-//	val circuitPlanks: Block // PORT: КТ-2
+	val circuitPlanks: Block
 //	val circuitSapling: Block // PORT: КТ-2
-//	val circuitSlabs: Block // PORT: КТ-2
-//	val circuitSlabFull: Block // PORT: КТ-2
-//	val circuitStairs: Block // PORT: КТ-2
-//	val circuitWood: Block // PORT: КТ-2
+	val circuitSlabs: Block
+	val circuitSlabFull: Block
+	val circuitStairs: Block
+	val circuitWood: Block
 	
-//	val lightningLeaves: Block // PORT: КТ-2
+	val lightningLeaves: Block
 //	val lightningBerry: Block // PORT: КТ-2
-//	val lightningPlanks: Block // PORT: КТ-2
+	val lightningPlanks: Block
 //	val lightningSapling: Block // PORT: КТ-2
-//	val lightningSlabs: Block // PORT: КТ-2
-//	val lightningSlabFull: Block // PORT: КТ-2
-//	val lightningStairs: Block // PORT: КТ-2
-//	val lightningWood: Block // PORT: КТ-2
+	val lightningSlabs: Block
+	val lightningSlabFull: Block
+	val lightningStairs: Block
+	val lightningWood: Array<Block>
 	
-//	val netherLeaves: Block // PORT: КТ-2
+	val netherLeaves: Block
 //	val netherBerry: Block // PORT: КТ-2
-//	val netherPlanks: Block // PORT: КТ-2
+	val netherPlanks: Block
 //	val netherSapling: Block // PORT: КТ-2
-//	val netherSlabs: Block // PORT: КТ-2
-//	val netherSlabFull: Block // PORT: КТ-2
-//	val netherStairs: Block // PORT: КТ-2
-//	val netherWood: Block // PORT: КТ-2
+	val netherSlabs: Block
+	val netherSlabFull: Block
+	val netherStairs: Block
+	val netherWood: Array<Block>
 	
-//	val sealingLeaves: Block // PORT: КТ-2
+	val sealingLeaves: Block
 //	val sealingBerry: Block // PORT: КТ-2
-//	val sealingPlanks: Block // PORT: КТ-2
+	val sealingPlanks: Block
 //	val sealingSapling: Block // PORT: КТ-2
-//	val sealingSlabs: Block // PORT: КТ-2
-//	val sealingSlabFull: Block // PORT: КТ-2
-//	val sealingStairs: Block // PORT: КТ-2
-//	val sealingWood: Block // PORT: КТ-2
+	val sealingSlabs: Block
+	val sealingSlabFull: Block
+	val sealingStairs: Block
+	val sealingWood: Block
 	
 //	val tunedSapling: Block // PORT: КТ-2
 	
@@ -386,71 +386,80 @@ object AlfheimBlocks {
 //		altWood0 = BlockAltWood(0) // PORT: КТ-2
 //		altWood1 = BlockAltWood(1) // PORT: КТ-2
 		
-//		barrierLeaves = BlockBarrierLeaves() // PORT: КТ-2
+		barrierLeaves = BlockBarrierLeaves()
 //		barrierBerry = BlockTreeBerry(barrierLeaves, 0) // PORT: КТ-2
-//		barrierPlanks = BlockBarrierPlanks() // PORT: КТ-2
+		barrierPlanks = BlockBarrierPlanks()
 //		barrierSapling = BlockBarrierSapling() // PORT: КТ-2
-//		barrierSlabs = BlockBarrierWoodSlab(false) // PORT: КТ-2
-//		barrierSlabFull = BlockBarrierWoodSlab(true) // PORT: КТ-2
-//		barrierSlabs.register() // PORT: КТ-2
-//		barrierSlabFull.register() // PORT: КТ-2
-//		barrierStairs = BlockBarrierWoodStairs() // PORT: КТ-2
-//		barrierWood = BlockBarrierWood() // PORT: КТ-2
+		barrierSlabs = BlockBarrierWoodSlab(false)
+		barrierSlabFull = barrierSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
+//		barrierSlabFull = BlockBarrierWoodSlab(true)
+		barrierSlabs.register()
+//		barrierSlabFull.register()
+		barrierStairs = BlockBarrierWoodStairs()
+		barrierWood = Array(2) { BlockBarrierWood(it) } // PORT: варианты metadata — блоки массива (SPEC, Р-5): 0 — бревно, 1 — сердцевина
+//		barrierWood = BlockBarrierWood()
 		
-//		calicoLeaves = BlockCalicoLeaves() // PORT: КТ-2
+		calicoLeaves = BlockCalicoLeaves()
 //		calicoBerry = BlockTreeBerry(calicoLeaves, 1) // PORT: КТ-2
-//		calicoPlanks = BlockCalicoPlanks() // PORT: КТ-2
+		calicoPlanks = BlockCalicoPlanks()
 //		calicoSapling = BlockCalicoSapling() // PORT: КТ-2
-//		calicoSlabs = BlockCalicoWoodSlab(false) // PORT: КТ-2
-//		calicoSlabFull = BlockCalicoWoodSlab(true) // PORT: КТ-2
-//		calicoSlabs.register() // PORT: КТ-2
-//		calicoSlabFull.register() // PORT: КТ-2
-//		calicoStairs = BlockCalicoWoodStairs() // PORT: КТ-2
-//		calicoWood = BlockCalicoWood() // PORT: КТ-2
+		calicoSlabs = BlockCalicoWoodSlab(false)
+		calicoSlabFull = calicoSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
+//		calicoSlabFull = BlockCalicoWoodSlab(true)
+		calicoSlabs.register()
+//		calicoSlabFull.register()
+		calicoStairs = BlockCalicoWoodStairs()
+		calicoWood = BlockCalicoWood()
 		
-//		circuitLeaves = BlockCircuitLeaves() // PORT: КТ-2
+		circuitLeaves = BlockCircuitLeaves()
 //		circuitBerry = BlockTreeBerry(circuitLeaves, 2) // PORT: КТ-2
-//		circuitPlanks = BlockCircuitPlanks() // PORT: КТ-2
+		circuitPlanks = BlockCircuitPlanks()
 //		circuitSapling = BlockCircuitSapling() // PORT: КТ-2
-//		circuitSlabs = BlockCircuitWoodSlab(false) // PORT: КТ-2
-//		circuitSlabFull = BlockCircuitWoodSlab(true) // PORT: КТ-2
-//		circuitSlabs.register() // PORT: КТ-2
-//		circuitSlabFull.register() // PORT: КТ-2
-//		circuitStairs = BlockCircuitWoodStairs() // PORT: КТ-2
-//		circuitWood = BlockCircuitWood() // PORT: КТ-2
+		circuitSlabs = BlockCircuitWoodSlab(false)
+		circuitSlabFull = circuitSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
+//		circuitSlabFull = BlockCircuitWoodSlab(true)
+		circuitSlabs.register()
+//		circuitSlabFull.register()
+		circuitStairs = BlockCircuitWoodStairs()
+		circuitWood = BlockCircuitWood()
 		
-//		lightningLeaves = BlockLightningLeaves() // PORT: КТ-2
+		lightningLeaves = BlockLightningLeaves()
 //		lightningBerry = BlockTreeBerry(lightningLeaves, 3) // PORT: КТ-2
-//		lightningPlanks = BlockLightningPlanks() // PORT: КТ-2
+		lightningPlanks = BlockLightningPlanks()
 //		lightningSapling = BlockLightningSapling() // PORT: КТ-2
-//		lightningSlabs = BlockLightningWoodSlab(false) // PORT: КТ-2
-//		lightningSlabFull = BlockLightningWoodSlab(true) // PORT: КТ-2
-//		lightningSlabs.register() // PORT: КТ-2
-//		lightningSlabFull.register() // PORT: КТ-2
-//		lightningStairs = BlockLightningWoodStairs() // PORT: КТ-2
-//		lightningWood = BlockLightningWood() // PORT: КТ-2
+		lightningSlabs = BlockLightningWoodSlab(false)
+		lightningSlabFull = lightningSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
+//		lightningSlabFull = BlockLightningWoodSlab(true)
+		lightningSlabs.register()
+//		lightningSlabFull.register()
+		lightningStairs = BlockLightningWoodStairs()
+		lightningWood = Array(2) { BlockLightningWood(it) } // PORT: варианты metadata — блоки массива (SPEC, Р-5): 0 — бревно, 1 — сердцевина
+//		lightningWood = BlockLightningWood()
 		
-//		netherLeaves = BlockNetherLeaves() // PORT: КТ-2
+		netherLeaves = BlockNetherLeaves()
 //		netherBerry = BlockTreeBerry(netherLeaves, 4) // PORT: КТ-2
-//		netherPlanks = BlockNetherPlanks() // PORT: КТ-2
+		netherPlanks = BlockNetherPlanks()
 //		netherSapling = BlockNetherSapling() // PORT: КТ-2
-//		netherSlabs = BlockNetherWoodSlab(false) // PORT: КТ-2
-//		netherSlabFull = BlockNetherWoodSlab(true) // PORT: КТ-2
-//		netherSlabs.register() // PORT: КТ-2
-//		netherSlabFull.register() // PORT: КТ-2
-//		netherStairs = BlockNetherWoodStairs() // PORT: КТ-2
-//		netherWood = BlockNetherWood() // PORT: КТ-2
+		netherSlabs = BlockNetherWoodSlab(false)
+		netherSlabFull = netherSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
+//		netherSlabFull = BlockNetherWoodSlab(true)
+		netherSlabs.register()
+//		netherSlabFull.register()
+		netherStairs = BlockNetherWoodStairs()
+		netherWood = Array(2) { BlockNetherWood(it) } // PORT: варианты metadata — блоки массива (SPEC, Р-5): 0 — бревно, 1 — сердцевина
+//		netherWood = BlockNetherWood()
 		
-//		sealingLeaves = BlockSealingLeaves() // PORT: КТ-2
+		sealingLeaves = BlockSealingLeaves()
 //		sealingBerry = BlockTreeBerry(sealingLeaves, 5) // PORT: КТ-2
-//		sealingPlanks = BlockSealingPlanks() // PORT: КТ-2
+		sealingPlanks = BlockSealingPlanks()
 //		sealingSapling = BlockSealingSapling() // PORT: КТ-2
-//		sealingSlabs = BlockSealingWoodSlab(false) // PORT: КТ-2
-//		sealingSlabFull = BlockSealingWoodSlab(true) // PORT: КТ-2
-//		sealingSlabs.register() // PORT: КТ-2
-//		sealingSlabFull.register() // PORT: КТ-2
-//		sealingStairs = BlockSealingWoodStairs() // PORT: КТ-2
-//		sealingWood = BlockSealingWood() // PORT: КТ-2
+		sealingSlabs = BlockSealingWoodSlab(false)
+		sealingSlabFull = sealingSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
+//		sealingSlabFull = BlockSealingWoodSlab(true)
+		sealingSlabs.register()
+//		sealingSlabFull.register()
+		sealingStairs = BlockSealingWoodStairs()
+		sealingWood = BlockSealingWood()
 		
 //		tunedSapling = BlockTunedSapling() // PORT: КТ-2
 		
@@ -548,47 +557,47 @@ object AlfheimBlocks {
 		
 		registerOre("treeSapling", irisSapling)
 		
-//		registerOre("treeLeaves", ItemStack(lightningLeaves)) // PORT: КТ-2
-//		registerOre("plankWood", ItemStack(lightningPlanks)) // PORT: КТ-2
+		registerOre("treeLeaves", ItemStack(lightningLeaves))
+		registerOre("plankWood", ItemStack(lightningPlanks))
 //		registerOre("treeSapling", ItemStack(lightningSapling)) // PORT: КТ-2
 		
-//		registerOre("slabWood", ItemStack(lightningSlabs)) // PORT: КТ-2
-//		registerOre("stairWood", ItemStack(lightningStairs)) // PORT: КТ-2
+		registerOre("slabWood", ItemStack(lightningSlabs))
+		registerOre("stairWood", ItemStack(lightningStairs))
 		
-//		registerOre("treeLeaves", ItemStack(calicoLeaves)) // PORT: КТ-2
-//		registerOre("plankWood", ItemStack(calicoPlanks)) // PORT: КТ-2
+		registerOre("treeLeaves", ItemStack(calicoLeaves))
+		registerOre("plankWood", ItemStack(calicoPlanks))
 //		registerOre("treeSapling", ItemStack(calicoSapling)) // PORT: КТ-2
 		
-//		registerOre("slabWood", ItemStack(calicoSlabs)) // PORT: КТ-2
-//		registerOre("stairWood", ItemStack(calicoStairs)) // PORT: КТ-2
+		registerOre("slabWood", ItemStack(calicoSlabs))
+		registerOre("stairWood", ItemStack(calicoStairs))
 		
-//		registerOre("treeLeaves", ItemStack(circuitLeaves)) // PORT: КТ-2
-//		registerOre("plankWood", ItemStack(circuitPlanks)) // PORT: КТ-2
+		registerOre("treeLeaves", ItemStack(circuitLeaves))
+		registerOre("plankWood", ItemStack(circuitPlanks))
 //		registerOre("treeSapling", ItemStack(circuitSapling)) // PORT: КТ-2
 		
-//		registerOre("slabWood", ItemStack(circuitSlabs)) // PORT: КТ-2
-//		registerOre("stairWood", ItemStack(circuitStairs)) // PORT: КТ-2
+		registerOre("slabWood", ItemStack(circuitSlabs))
+		registerOre("stairWood", ItemStack(circuitStairs))
 		
-//		registerOre("treeLeaves", ItemStack(netherLeaves)) // PORT: КТ-2
-//		registerOre("plankWood", ItemStack(netherPlanks)) // PORT: КТ-2
+		registerOre("treeLeaves", ItemStack(netherLeaves))
+		registerOre("plankWood", ItemStack(netherPlanks))
 //		registerOre("treeSapling", ItemStack(netherSapling)) // PORT: КТ-2
 		
-//		registerOre("slabWood", ItemStack(netherSlabs)) // PORT: КТ-2
-//		registerOre("stairWood", ItemStack(netherStairs)) // PORT: КТ-2
+		registerOre("slabWood", ItemStack(netherSlabs))
+		registerOre("stairWood", ItemStack(netherStairs))
 		
-//		registerOre("treeLeaves", ItemStack(sealingLeaves)) // PORT: КТ-2
-//		registerOre("plankWood", ItemStack(sealingPlanks)) // PORT: КТ-2
+		registerOre("treeLeaves", ItemStack(sealingLeaves))
+		registerOre("plankWood", ItemStack(sealingPlanks))
 //		registerOre("treeSapling", ItemStack(sealingSapling)) // PORT: КТ-2
 		
-//		registerOre("slabWood", ItemStack(sealingSlabs)) // PORT: КТ-2
-//		registerOre("stairWood", ItemStack(sealingStairs)) // PORT: КТ-2
+		registerOre("slabWood", ItemStack(sealingSlabs))
+		registerOre("stairWood", ItemStack(sealingStairs))
 		
-//		registerOre("treeLeaves", ItemStack(barrierLeaves)) // PORT: КТ-2
-//		registerOre("plankWood", ItemStack(barrierPlanks)) // PORT: КТ-2
+		registerOre("treeLeaves", ItemStack(barrierLeaves))
+		registerOre("plankWood", ItemStack(barrierPlanks))
 //		registerOre("treeSapling", ItemStack(barrierSapling)) // PORT: КТ-2
 		
-//		registerOre("slabWood", ItemStack(barrierSlabs)) // PORT: КТ-2
-//		registerOre("stairWood", ItemStack(barrierStairs)) // PORT: КТ-2
+		registerOre("slabWood", ItemStack(barrierSlabs))
+		registerOre("stairWood", ItemStack(barrierStairs))
 		
 		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(x, 1, i) → ItemStack(x[i], 1)
 		for (i in 0..3) {
@@ -642,9 +651,11 @@ object AlfheimBlocks {
 		
 		var t: ItemStack
 		
-//		arrayOf(lightningWood, netherWood, sealingWood, calicoWood, circuitWood, barrierWood, altWood0).forEach { // PORT: КТ-2
-//			registerOre("logWood", ItemStack(it, 1, WILDCARD_VALUE))
-//		}
+		// PORT: блоки с вариантами — массивы, вместе — все варианты (SPEC, Р-5); КТ-2 (партия 8г) — altWood0
+		(lightningWood + netherWood + sealingWood + calicoWood + circuitWood + barrierWood).forEach {
+//		arrayOf(lightningWood, netherWood, sealingWood, calicoWood, circuitWood, barrierWood, altWood0).forEach {
+			registerOre("logWood", ItemStack(it, 1, WILDCARD_VALUE))
+		}
 		
 		// PORT: блоки с вариантами — массивы, вместе — все варианты (SPEC, Р-5)
 		(irisWood0 + irisWood1 + irisWood2 + irisWood3 + rainbowWood + auroraWood).forEach {
@@ -765,19 +776,19 @@ object AlfheimBlocks {
 		setBurnable(auroraStairs, 5, 20)
 		setBurnable(auroraWood, 5, 5)
 		
-//		setBurnable(calicoLeaves, 30, 60) // PORT: КТ-2
-//		setBurnable(calicoPlanks, 5, 20) // PORT: КТ-2
-//		setBurnable(calicoSlabs, 5, 20) // PORT: КТ-2
-//		setBurnable(calicoSlabFull, 5, 20) // PORT: КТ-2
-//		setBurnable(calicoStairs, 5, 20) // PORT: КТ-2
-//		setBurnable(calicoWood, 5, 5) // PORT: КТ-2
+		setBurnable(calicoLeaves, 30, 60)
+		setBurnable(calicoPlanks, 5, 20)
+		setBurnable(calicoSlabs, 5, 20)
+		setBurnable(calicoSlabFull, 5, 20)
+		setBurnable(calicoStairs, 5, 20)
+		setBurnable(calicoWood, 5, 5)
 		
-//		setBurnable(circuitLeaves, 30, 60) // PORT: КТ-2
-//		setBurnable(circuitPlanks, 5, 20) // PORT: КТ-2
-//		setBurnable(circuitSlabs, 5, 20) // PORT: КТ-2
-//		setBurnable(circuitSlabFull, 5, 20) // PORT: КТ-2
-//		setBurnable(circuitStairs, 5, 20) // PORT: КТ-2
-//		setBurnable(circuitWood, 5, 5) // PORT: КТ-2
+		setBurnable(circuitLeaves, 30, 60)
+		setBurnable(circuitPlanks, 5, 20)
+		setBurnable(circuitSlabs, 5, 20)
+		setBurnable(circuitSlabFull, 5, 20)
+		setBurnable(circuitStairs, 5, 20)
+		setBurnable(circuitWood, 5, 5)
 		
 		// PORT: блок с вариантами metadata — массив блоков (SPEC, Р-5): горит каждый вариант
 		irisGrass.forEach { setBurnable(it, 60, 100) }
@@ -794,12 +805,14 @@ object AlfheimBlocks {
 		irisWood2.forEach { setBurnable(it, 5, 5) }
 		irisWood3.forEach { setBurnable(it, 5, 5) }
 		
-//		setBurnable(lightningLeaves, 30, 60) // PORT: КТ-2
-//		setBurnable(lightningPlanks, 5, 20) // PORT: КТ-2
-//		setBurnable(lightningSlabs, 5, 20) // PORT: КТ-2
-//		setBurnable(lightningSlabFull, 5, 20) // PORT: КТ-2
-//		setBurnable(lightningStairs, 5, 20) // PORT: КТ-2
-//		setBurnable(lightningWood, 5, 5) // PORT: КТ-2
+		setBurnable(lightningLeaves, 30, 60)
+		setBurnable(lightningPlanks, 5, 20)
+		setBurnable(lightningSlabs, 5, 20)
+		setBurnable(lightningSlabFull, 5, 20)
+		setBurnable(lightningStairs, 5, 20)
+		// PORT: блок с вариантами metadata — массив блоков (SPEC, Р-5): горит каждый вариант
+		lightningWood.forEach { setBurnable(it, 5, 5) }
+//		setBurnable(lightningWood, 5, 5)
 		
 		// PORT: блок с вариантами metadata — массив блоков (SPEC, Р-5): горит каждый вариант
 		rainbowGrass.forEach { setBurnable(it, 60, 100) }
@@ -813,12 +826,12 @@ object AlfheimBlocks {
 //		setBurnable(rainbowTallGrass, 60, 100)
 		setBurnable(rainbowWood, 5, 5)
 		
-//		setBurnable(sealingLeaves, 30, 60) // PORT: КТ-2
-//		setBurnable(sealingPlanks, 5, 20) // PORT: КТ-2
-//		setBurnable(sealingSlabs, 5, 20) // PORT: КТ-2
-//		setBurnable(sealingSlabFull, 5, 20) // PORT: КТ-2
-//		setBurnable(sealingStairs, 5, 20) // PORT: КТ-2
-//		setBurnable(sealingWood, 5, 5) // PORT: КТ-2
+		setBurnable(sealingLeaves, 30, 60)
+		setBurnable(sealingPlanks, 5, 20)
+		setBurnable(sealingSlabs, 5, 20)
+		setBurnable(sealingSlabFull, 5, 20)
+		setBurnable(sealingStairs, 5, 20)
+		setBurnable(sealingWood, 5, 5)
 	}
 	
 	fun registerFlora() {

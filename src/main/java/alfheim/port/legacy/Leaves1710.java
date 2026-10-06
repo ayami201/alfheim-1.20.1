@@ -1,10 +1,13 @@
 package alfheim.port.legacy;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -15,9 +18,10 @@ import net.minecraft.world.level.block.state.BlockState;
  * дождь роняет капли, при «быстрой» графике рисуется сплошной — как листва 1.20.1. Бит опадания metadata (у автора —
  * {@code decayBit()}: листва, которую поставил игрок, не опадает) — свойство {@code persistent}.
  * <p>
- * Опадать ли, решает метод 1.7.10 {@link #updateTick} класса автора — на случайном тике листвы, которая может опасть.
- * Расстояние до бревна ({@code distance}) листва считает, как листва 1.20.1: по нему через неё находит бревно листва
- * ванилы. Лут — таблица (генерация данных): с ножницами или шёлковым касанием — сама листва, иначе — что даёт
+ * Опадать ли, решает метод 1.7.10 {@link #updateTick} класса автора — на случайном тике листвы, которая может опасть;
+ * у ванилы 1.7.10 он свой, здесь — пустой. Расстояние до бревна ({@code distance}) листва считает, как листва 1.20.1:
+ * по нему через неё находит бревно листва ванилы, поэтому запланированный тик ({@code tick}) остаётся тиком 1.20.1.
+ * Лут — таблица (генерация данных): с ножницами или шёлковым касанием — сама листва, иначе — что даёт
  * {@link #getItemDropped}.
  * <p>
  * Класс написан на Java, как {@code BlockLeaves} 1.7.10: переопределения автора объявляют параметры кто nullable, кто
@@ -42,10 +46,6 @@ public abstract class Leaves1710 extends LeavesBlock implements LegacyBlock, Sou
 		return false;
 	}
 
-	/** {@code updateTick} 1.7.10 — опадание; у ванилы 1.7.10 своё, класс автора переопределяет */
-	public void updateTick(Level world, int x, int y, int z, RandomSource random) {
-	}
-
 	@Override
 	public boolean isRandomlyTicking(BlockState state) {
 		return !state.getValue(PERSISTENT);
@@ -54,6 +54,36 @@ public abstract class Leaves1710 extends LeavesBlock implements LegacyBlock, Sou
 	@Override
 	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		updateTick(level, pos.getX(), pos.getY(), pos.getZ(), random);
+	}
+
+	// Методы 1.7.10 класса автора (LegacyBlockMethods) из методов 1.20.1 — как у Block1710, кроме тика
+
+	@Override
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+		super.onPlace(state, level, pos, oldState, isMoving);
+		onBlockAdded(level, pos.getX(), pos.getY(), pos.getZ());
+	}
+
+	@Override
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+		Integer variant = getVariant();
+		breakBlock(level, pos.getX(), pos.getY(), pos.getZ(), this, variant != null ? variant : 0);
+		super.onRemove(state, level, pos, newState, isMoving);
+	}
+
+	@Override
+	public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
+		onBlockExploded(level, pos.getX(), pos.getY(), pos.getZ(), explosion);
+	}
+
+	@Override
+	public boolean isSignalSource(BlockState state) {
+		return canProvidePower();
+	}
+
+	@Override
+	public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return isProvidingWeakPower(level, pos.getX(), pos.getY(), pos.getZ(), direction.get3DDataValue());
 	}
 
 	/** Что роняет листва без ножниц ({@code getItemDropped} 1.7.10): у ванилы — саженец дуба */

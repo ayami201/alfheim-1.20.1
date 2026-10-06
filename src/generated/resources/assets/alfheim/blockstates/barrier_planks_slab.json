@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/barrier_planks_slab"
+    },
+    "type=double": {
+      "model": "alfheim:block/barrier_planks"
+    },
+    "type=top": {
+      "model": "alfheim:block/barrier_planks_slab_top"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alfheim:block/calico_planks_slab"
+    },
+    "type=double": {
+      "model": "alfheim:block/calico_planks"
+    },
+    "type=top": {
+      "model": "alfheim:block/calico_planks_slab_top"
+    }
+  }
+}

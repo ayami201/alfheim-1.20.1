@@ -13,7 +13,8 @@ import net.minecraft.world.level.material.PushReaction
  * «Твёрдый» материал 1.7.10 — `forceSolidOn` 1.20.1 (`BlockState.isSolid` и есть «твёрдость материала» 1.7.10).
  * Блок из непрозрачного материала (не полупрозрачный и мешает движению) в 1.7.10 мог быть «нормальным кубом»: на нём
  * появлялись мобы, он проводил сигнал красного камня, в нём задыхались. Блок из прочих материалов не мог — для него
- * эти свойства 1.20.1 выключены.
+ * эти свойства 1.20.1 выключены. Не был нормальным кубом и источник сигнала (`canProvidePower` 1.7.10, `isSignalSource`
+ * 1.20.1): сигнал через себя он не проводил, в нём не задыхались.
  */
 class Material private constructor(val mapColor: MapColor, kind: Kind = Kind.NORMAL) {
 
@@ -59,6 +60,10 @@ class Material private constructor(val mapColor: MapColor, kind: Kind = Kind.NOR
 		if (isLiquid) props.liquid()
 		if (isSolid) props.forceSolidOn() else props.forceSolidOff()
 		if (!isOpaque) props.isValidSpawn { _, _, _, _ -> false }.isRedstoneConductor { _, _, _ -> false }.isSuffocating { _, _, _ -> false }.isViewBlocking { _, _, _ -> false }
+		// как по умолчанию в 1.20.1, кроме источника сигнала
+		else props.isRedstoneConductor { state, level, pos -> !state.isSignalSource && state.isCollisionShapeFullBlock(level, pos) }
+			.isSuffocating { state, level, pos -> !state.isSignalSource && state.blocksMotion() && state.isCollisionShapeFullBlock(level, pos) }
+			.isViewBlocking { state, level, pos -> !state.isSignalSource && state.blocksMotion() && state.isCollisionShapeFullBlock(level, pos) }
 		// нотный блок 1.7.10 выбирал инструмент по материалу блока под собой
 		when (this) {
 			rock  -> props.instrument(NoteBlockInstrument.BASEDRUM)

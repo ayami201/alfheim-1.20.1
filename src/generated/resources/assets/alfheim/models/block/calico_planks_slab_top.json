@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "alfheim:blocks/calico_planks",
+    "side": "alfheim:blocks/calico_planks",
+    "top": "alfheim:blocks/calico_planks"
+  }
+}

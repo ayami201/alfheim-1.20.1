@@ -6,6 +6,7 @@ import alfheim.common.item.AlfheimItems
 import alfheim.port.client.*
 import alfheim.port.data.AlfheimData
 import alfheim.port.hook.CreativeTabHooks
+import alfheim.port.legacy.Explosions1710
 import alfheim.port.legacy.Fuel1710
 import alfheim.port.legacy.botania.BotaniaBlocks1710
 import alfheim.port.legacy.botania.HornHarvest1710
@@ -49,6 +50,8 @@ object AlfheimRegisters {
 		LegacyRegistration.register(bus)
 		// деревянный блок 1.7.10 — топливо на 300 тиков
 		Fuel1710.register()
+		// отменённый взрыв 1.7.10 игроки не видят и не слышат
+		Explosions1710.register()
 		// врезки автора во вкладки творческого режима (HOOKS.md)
 		CreativeTabHooks.register(bus)
 		BotaniaBlocks1710.register(bus)

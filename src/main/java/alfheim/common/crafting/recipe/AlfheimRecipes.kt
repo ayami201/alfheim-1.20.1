@@ -63,22 +63,22 @@ import alfheim.common.block.AlfheimBlocks.auroraSlab
 import alfheim.common.block.AlfheimBlocks.auroraStairs
 import alfheim.common.block.AlfheimBlocks.auroraWood
 //import alfheim.common.block.AlfheimBlocks.barrel // PORT: КТ-3
-//import alfheim.common.block.AlfheimBlocks.barrierPlanks // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.barrierPlanks
 //import alfheim.common.block.AlfheimBlocks.barrierSapling // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.barrierSlabs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.barrierStairs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.barrierWood // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.barrierSlabs
+import alfheim.common.block.AlfheimBlocks.barrierStairs
+import alfheim.common.block.AlfheimBlocks.barrierWood
 //import alfheim.common.block.AlfheimBlocks.bottomlessChest // PORT: КТ-3
-//import alfheim.common.block.AlfheimBlocks.calicoPlanks // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.calicoPlanks
 //import alfheim.common.block.AlfheimBlocks.calicoSapling // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.calicoSlabs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.calicoStairs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.calicoWood // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.circuitPlanks // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.calicoSlabs
+import alfheim.common.block.AlfheimBlocks.calicoStairs
+import alfheim.common.block.AlfheimBlocks.calicoWood
+import alfheim.common.block.AlfheimBlocks.circuitPlanks
 //import alfheim.common.block.AlfheimBlocks.circuitSapling // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.circuitSlabs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.circuitStairs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.circuitWood // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.circuitSlabs
+import alfheim.common.block.AlfheimBlocks.circuitStairs
+import alfheim.common.block.AlfheimBlocks.circuitWood
 //import alfheim.common.block.AlfheimBlocks.corporeaAutocrafter // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.corporeaInjector // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.corporeaRatBase // PORT: КТ-3
@@ -102,11 +102,11 @@ import alfheim.common.block.AlfheimBlocks.irisWood3
 //import alfheim.common.block.AlfheimBlocks.itemFrame // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.kindling // PORT: КТ-2
 //import alfheim.common.block.AlfheimBlocks.kudzuVine // PORT: КТ-3
-//import alfheim.common.block.AlfheimBlocks.lightningPlanks // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.lightningPlanks
 //import alfheim.common.block.AlfheimBlocks.lightningSapling // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.lightningSlabs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.lightningStairs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.lightningWood // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.lightningSlabs
+import alfheim.common.block.AlfheimBlocks.lightningStairs
+import alfheim.common.block.AlfheimBlocks.lightningWood
 import alfheim.common.block.AlfheimBlocks.livingcobble
 //import alfheim.common.block.AlfheimBlocks.livingwoodFunnel // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.manaAccelerator // PORT: КТ-3
@@ -115,11 +115,11 @@ import alfheim.common.block.AlfheimBlocks.manaIce
 //import alfheim.common.block.AlfheimBlocks.manaInfuser // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.manaReflector // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.manaTuner // PORT: КТ-3
-//import alfheim.common.block.AlfheimBlocks.netherPlanks // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.netherPlanks
 //import alfheim.common.block.AlfheimBlocks.netherSapling // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.netherSlabs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.netherStairs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.netherWood // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.netherSlabs
+import alfheim.common.block.AlfheimBlocks.netherStairs
+import alfheim.common.block.AlfheimBlocks.netherWood
 //import alfheim.common.block.AlfheimBlocks.niflheimBlock // PORT: КТ-2
 import alfheim.common.block.AlfheimBlocks.rainbowDirt
 //import alfheim.common.block.AlfheimBlocks.rainbowFlowerFloating // PORT: КТ-3
@@ -135,11 +135,11 @@ import alfheim.common.block.AlfheimBlocks.rainbowWood
 //import alfheim.common.block.AlfheimBlocks.redstoneAttractor // PORT: КТ-2
 //import alfheim.common.block.AlfheimBlocks.redstoneRelay // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.rpc // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.sealingPlanks // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.sealingPlanks
 //import alfheim.common.block.AlfheimBlocks.sealingSapling // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.sealingSlabs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.sealingStairs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.sealingWood // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.sealingSlabs
+import alfheim.common.block.AlfheimBlocks.sealingStairs
+import alfheim.common.block.AlfheimBlocks.sealingWood
 import alfheim.common.block.AlfheimBlocks.shimmerQuartz
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzSlab
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
@@ -808,6 +808,7 @@ object AlfheimRecipes {
 						 'P', ItemStack(planks, 1, 5),
 						 'S', ItemStack(wooden_slab, 1, 5))
 		recipeBarrel = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addRecipe(ItemStack(barrierSlabs, 6),
 				  "PPP",
@@ -829,11 +830,13 @@ object AlfheimRecipes {
 						 'P', ItemStack(calicoPlanks))
 		recipeCalicoStairs = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(carver),
 		                 "  N", " T ", "T  ",
 		                 'N', MANASTEEL_NUGGET,
 						 'T', LIVINGWOOD_TWIG)
 		recipeCarver = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addRecipe(ItemStack(circuitSlabs, 6),
 				  "PPP",
@@ -845,6 +848,7 @@ object AlfheimRecipes {
 						 'P', ItemStack(circuitPlanks))
 		recipeCircuitStairs = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(pylon, 1, 2),
 						 "EEE", "EPE", "EEE",
 						 'E', LIFE_ESSENCE,
@@ -1447,6 +1451,7 @@ object AlfheimRecipes {
 						 'B', "powderBlaze",
 						 'S', MANA_STRING)
 		recipeKindling = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addRecipe(ItemStack(lightningSlabs, 6),
 				  "PPP",
@@ -1458,6 +1463,7 @@ object AlfheimRecipes {
 						 'P', ItemStack(lightningPlanks))
 		recipeThunderousStairs = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(livingrockPickaxe),
 						 "LLL", " S ", " S ",
 						 'L', ItemStack(livingcobble),
@@ -1544,6 +1550,7 @@ object AlfheimRecipes {
 						 'T', TERRA_STEEL,
 						 'Q', ItemStack(manaquartz, 1, 5))
 		recipeMultibauble = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
 		addRecipe(ItemStack(netherSlabs, 6),
 				  "PPP",
@@ -1555,11 +1562,14 @@ object AlfheimRecipes {
 						 'P', ItemStack(netherPlanks))
 		recipeInfernalStairs = BotaniaAPI.getLatestAddedRecipe()
 		
+		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(netherWood) — бревно, вариант 0
 		addRecipe(NetherwoodTwig.stack,
 				  "P", "P",
-				  'P', ItemStack(netherWood))
+				  'P', ItemStack(netherWood[0]))
+//				  'P', ItemStack(netherWood))
 		recipeInfernalTwig = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4, КТ-7 — рецепты вещей этих КТ, включаются вместе с ними
 		recipePaperBreak = ShapelessOreRecipe(ItemStack(paperBreak, 4), leather, ItemStack(wooden_sword, 1, WILDCARD_VALUE))
 		
 		recipePeacePipe = ShapedOreRecipe(ItemStack(peacePipe),
@@ -1897,7 +1907,6 @@ object AlfheimRecipes {
 						 'Q', QUARTZ[0])
 		recipeRunicChalk = BotaniaAPI.getLatestAddedRecipe()
 		
-		/* PORT: КТ-2, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addRecipe(ItemStack(sealingSlabs, 6),
 				  "PPP",
 				  'P', ItemStack(sealingPlanks))
@@ -1908,6 +1917,7 @@ object AlfheimRecipes {
 						 'P', ItemStack(sealingPlanks))
 		recipeSealingStairs = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addOreDictRecipe(ItemStack(serenade), true,
 		                 " GS", "GSL", "SL ",
 		                 'G', LIFE_ESSENCE,
@@ -2005,12 +2015,14 @@ object AlfheimRecipes {
 						 'P', tinyPotato,
 						 'S', MANA_STRING)
 		recipeThinkingHand = BotaniaAPI.getLatestAddedRecipe()
+		*/
 		
+		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(lightningWood) — бревно, вариант 0
 		addRecipe(ThunderwoodTwig.stack,
 				  "P", "P",
-				  'P', ItemStack(lightningWood))
+				  'P', ItemStack(lightningWood[0]))
+//				  'P', ItemStack(lightningWood))
 		recipeThunderousTwig = BotaniaAPI.getLatestAddedRecipe()
-		*/
 		
 		addRecipe(ItemStack(Blocks.TORCH, 6),
 				  "C", "S",
@@ -2407,7 +2419,6 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(ItemStack(auroraPlanks, 4), auroraWood)
 		recipeAuroraPlanks = BotaniaAPI.getLatestAddedRecipe()
 		
-		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(barrierPlanks, 4), barrierWood)
 		recipeBarrierPlanks = BotaniaAPI.getLatestAddedRecipe()
 		
@@ -2417,6 +2428,7 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(ItemStack(circuitPlanks, 4), circuitWood)
 		recipeCircuitPlanks = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(gaiaButton), wooden_button, LIFE_ESSENCE)
 		recipeGaiaButton = BotaniaAPI.getLatestAddedRecipe()
 		
@@ -2520,10 +2532,8 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(SaveIvy.stack, Blocks.VINE, DRAGONSTONE, MAUFTRIUM_NUGGET)
 		recipeSaveIvy = BotaniaAPI.getLatestAddedRecipe()
 		
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(lightningPlanks, 4), lightningWood)
 		recipeThunderousPlanks = BotaniaAPI.getLatestAddedRecipe()
-		*/
 		
 		addShapelessOreDictRecipe(ItemStack(livingcobble[0]), LIVING_ROCK)
 		recipeLivingcobble = BotaniaAPI.getLatestAddedRecipe()
@@ -2585,10 +2595,8 @@ object AlfheimRecipes {
 		addShapelessOreDictRecipe(ItemStack(Items.MUSHROOM_STEW), rainbowMushroom, rainbowMushroom, ItemStack(Items.BOWL))
 //		addShapelessOreDictRecipe(ItemStack(mushroom_stew), rainbowMushroom, rainbowMushroom, ItemStack(bowl))
 		
-		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(netherPlanks, 4), netherWood)
 		recipeInfernalPlanks = BotaniaAPI.getLatestAddedRecipe()
-		*/
 		
 		// PORT: ступку убирает прослойка (Recipes1710.kt)
 		addShapelessOreDictRecipe(RainbowDust.stack, RAINBOW_PETAL, PESTLE_AND_MORTAR)
@@ -2627,10 +2635,10 @@ object AlfheimRecipes {
 //		addOreDictRecipe(ItemStack(softStorage, 1, 2), "PPP", "PPP", "PPP", 'P', IFFESAL_DUST)
 //		addOreDictRecipe(ItemStack(softStorage, 1, 3), "PPP", "PPP", "PPP", 'P', LIFE_ESSENCE)
 		
-		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(sealingPlanks, 4), sealingWood)
 		recipeSealingPlanks = BotaniaAPI.getLatestAddedRecipe()
 		
+		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(shimmerrock), "livingrock", DYES[16])
 		ModCraftingRecipes.recipeShimmerrock?.let { CraftingManager.getInstance().recipeList.remove(it) }
 		ModCraftingRecipes.recipeShimmerrock = BotaniaAPI.getLatestAddedRecipe()
@@ -2707,16 +2715,19 @@ object AlfheimRecipes {
 		addSmelting(irisWood3, ItemStack(Items.CHARCOAL), 0.15f)
 		addSmelting(rainbowWood, ItemStack(Items.CHARCOAL), 0.15f)
 		addSmelting(auroraWood, ItemStack(Items.CHARCOAL), 0.15f)
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
-		addSmelting(lightningWood, ItemStack(coal, 1, 1), 0.15f)
-		addSmelting(sealingWood, ItemStack(coal, 1, 1), 0.15f)
+		addSmelting(lightningWood, ItemStack(Items.CHARCOAL), 0.15f)
+		addSmelting(sealingWood, ItemStack(Items.CHARCOAL), 0.15f)
 		addSmelting(netherWood, NetherwoodCoal.stack, 0.15f)
-		addSmelting(calicoWood, ItemStack(coal, 1, 1), 0.15f)
-		addSmelting(circuitWood, ItemStack(coal, 1, 1), 0.15f)
-		addSmelting(barrierWood, ItemStack(coal, 1, 1), 0.15f)
+		addSmelting(calicoWood, ItemStack(Items.CHARCOAL), 0.15f)
+		addSmelting(circuitWood, ItemStack(Items.CHARCOAL), 0.15f)
+		addSmelting(barrierWood, ItemStack(Items.CHARCOAL), 0.15f)
 		addSmelting(lightningPlanks, ThunderwoodSplinters.stack(2), 0.1f)
 		addSmelting(netherPlanks, NetherwoodSplinters.stack(2), 0.1f)
-		*/
+//		addSmelting(lightningWood, ItemStack(coal, 1, 1), 0.15f)
+//		addSmelting(sealingWood, ItemStack(coal, 1, 1), 0.15f)
+//		addSmelting(calicoWood, ItemStack(coal, 1, 1), 0.15f)
+//		addSmelting(circuitWood, ItemStack(coal, 1, 1), 0.15f)
+//		addSmelting(barrierWood, ItemStack(coal, 1, 1), 0.15f)
 		
 		// PORT: ModItems.manaResource 9 (драконий камень), 7 (элементиум), ModItems.quartz 5 (эльфийский кварц),
 		// краситель ванилы 4 (лазурит) → предметы 1.20.1 (MAPPING.md, «Botania»)

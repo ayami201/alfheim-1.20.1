@@ -98,12 +98,17 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `world.getBlockMetadata(x, y, z)` | свойство BlockState | без прослойки: смысл у каждого блока свой |
 | `Block.registerBlockIcons` / `getIcon` / `IIcon` | модели и состояния блоков через datagen | ✓ метод закомментирован в классе блока, рядом с ним — пометка, где его модель (раздел «Блоки и предметы») |
 | `Block.onBlockActivated` | `use` | |
-| `updateTick` | `tick` / `randomTick` | |
+| `updateTick` | `tick` / `randomTick` | ✓ метод автора остаётся (`LegacyBlockMethods`): базовые классы порта зовут его из обоих, листва — только из случайного (`tick` листвы 1.20.1 ведёт её расстояние до бревна) |
 | `onNeighborBlockChange` | `neighborChanged` | |
-| `onBlockAdded` | `onPlace` | ✓ 1.20.1 зовёт его и при смене состояния того же блока: код автора, который сверяет metadata, просто ничего не меняет |
-| `getLightValue(world, x, y, z)` — свечение по metadata | свечение состояний (`lightEmission`), записанное с создания блока по тому же правилу | ✓ `BlockColoredLamp`: свойство `power` |
+| `onBlockAdded` | `onPlace` | ✓ 1.20.1 зовёт его и при смене состояния того же блока: код автора, который сверяет metadata, просто ничего не меняет. Метод автора остаётся, его зовёт `onPlace` базовых классов порта (`LegacyBlockMethods`) |
+| `getLightValue(world, x, y, z)` — свечение по metadata | свечение состояний (`lightEmission`), записанное с создания блока по тому же правилу | ✓ `BlockColoredLamp`: свойство `power`; постоянное свечение (схемодрево — 8) — во всех состояниях, метод автора без параметров даёт число |
 | цвет света для Easy Colored Lights (`getLightValue` с цветом, `Loader.isModLoaded("easycoloredlights")`) | `assets/alfheim/light/emitters.json` для мода Colorful Lighting: цвет по состояниям блока (`"power=5": "#80FF00"`) | ✓ файл строит генерация данных (`alfheim.port.data.ColoredLights`) по коду цвета автора; ветка Easy Colored Lights остаётся закомментированной. Яркость — своя у блока |
-| `breakBlock` | `onRemove` | |
+| `breakBlock` | `onRemove` | ✓ метод автора остаётся, его зовёт `onRemove` базовых классов порта до `super`; `meta` — номер варианта. Как и `onPlace`, 1.20.1 зовёт его и при смене состояния того же блока (в 1.7.10 — при смене блока или metadata) |
+| `onBlockExploded(world, x, y, z, explosion)` | `onBlockExploded(state, level, pos, explosion)` | ✓ метод автора остаётся; без него — как в 1.7.10: блок убирается, затем `wasExploded` (`onBlockDestroyedByExplosion`) |
+| `canProvidePower`, `isProvidingWeakPower(world, x, y, z, side)` | `isSignalSource`, `getSignal(state, level, pos, direction)` | ✓ методы автора остаются; `side` — `direction.get3DDataValue()`. Источник сигнала 1.7.10 не был «нормальным кубом»: он не проводит сигнал, в нём не задыхаются, он не закрывает обзор — так же в порту (`Material`) |
+| `isFireSource(world, x, y, z, side)` | `isFireSource(state, level, pos, direction)` | ✓ метод автора остаётся; огонь вечен и на блоке из тега `infiniburn` измерения, как у ванилы 1.20.1 |
+| `tickRate(world)` | — | ✓ задержку запланированного тика 1.20.1 передаёт вызов `scheduleTick`; у блока, которому никто не ставит запланированный тик, метод закомментирован |
+| `isSideSolid(world, x, y, z, side) = true` у полного куба | `isFaceSturdy` по форме блока | ✓ у полного куба грань твёрдая и так; метод закомментирован |
 | `getDrops` | таблица лута (datagen) | |
 | `TileEntity` | `BlockEntity` + `BlockEntityType` | |
 | `updateEntity` | `BlockEntityTicker` | |
@@ -168,7 +173,7 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `ItemSubtypedBlockMod`, `ItemIridescentBlockMod`, `ItemSlabMod` — имя без номера варианта | ключ блока; старый ключ без номера → ключи всех блоков этого имени (`legacy_ids.json`, раздел `lang`) | ✓ текст у всех вариантов один, как в 1.7.10; цвет — в подсказке, как у автора |
 | `ItemSlab` 1.7.10 (одинарную плиту на одинарную ставил предмет) | обычный предмет-блок: плиты складывает сама плита 1.20.1 | ✓ |
 | `getIcon(world, x, y, z, side)` — иконка по координатам и стороне | модели вариантов; клиент выбирает грань по той же формуле (`alfheim.port.client.AlfheimModels`) | ✓ `BlockLivingCobble`, `BlockLivingMountain` и его плита |
-| текстура, которую автор грузил `InterpolatedIconHelper` (Botania `InterpolatedIcon`) | `"interpolate": true` в `.png.mcmeta` | ✓ `InterpolatedIcon` сглаживал кадры всегда; у части файлов автора ключ `"interpolated"` (1.7.10 его не читал) — исправляется на `"interpolate"` при переносе. У текстуры, которую автор грузил обычной иконкой, ключ `"interpolated"` остаётся: её кадры и в 1.7.10 не сглаживались (`netherwood_twig`) |
+| текстура, которую автор грузил `InterpolatedIconHelper` (Botania `InterpolatedIcon`) | `"interpolate": true` в `.png.mcmeta` | ✓ `InterpolatedIcon` сглаживал кадры всегда; у части файлов автора ключ `"interpolated"` (1.7.10 его не читал) или ключа нет — при переносе ставится `"interpolate": true`. У текстуры, которую автор грузил обычной иконкой, ключ `"interpolated"` остаётся: её кадры и в 1.7.10 не сглаживались (`netherwood_twig`) |
 
 ### Предметы
 
@@ -341,6 +346,9 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `block.canBlockStay(world, x, y, z)`, `block.canPlaceBlockAt(world, x, y, z)` у любого блока | растение порта — своё правило (`Bush1710`, `DoublePlant1710`), прочие — `canSurvive` (и заменяемое место) | ✓ |
 | `world.getBiomeGenForCoords(x, z).plantFlower(world, random, x, y, z)` | `world.plantFlower(random, x, y, z)` | ✓ раздел «Растения» |
 | `GameRegistry.registerFuelHandler(handler)` | `Fuel1710.handlers` | ✓ раздел «Блоки и предметы» |
+| `block.updateTick(world, x, y, z, random)` у блока в мире | `Block.updateTick` прослойки: метод 1.7.10 блока порта, у прочих — `tick` 1.20.1 на сервере | ✓ |
+| `explosion.explosionX` / `explosionY` / `explosionZ`, `explosionSize`; `world.newExplosion(entity, x, y, z, size, isFlaming, isSmoking)` | `getPosition()`, поле `radius` (открыто преобразователем доступа); `explode(entity, x, y, z, size, isFlaming, isSmoking ? BLOCK : NONE)` (`Explosions1710`) | ✓ взрыв, отменённый в `ExplosionEvent.Start`, игроки не видят и не слышат, как в 1.7.10: Forge 1.20.1 слал бы им пакет взрыва (миксин `ServerLevelMixin`) |
+| перебор куба блоков вокруг точки в поисках редкого блока (на каждый звук, взрыв, тик) | сначала `level.mayContain(x, y, z, range) { … }` — палитры секций чанков | ✓ `// PORT-OPT:`: нет такого блока в секциях — ответ сразу (`EventHandlerSealingOak.calculateMultiplier`) |
 
 ## Предметы, сущности, эффекты
 
@@ -443,6 +451,8 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `LivingPotionEvent` ASJCore: `Add.Post`, `Change.Post`, `Remove.Post` | `MobEffectEvent.Added` (`oldEffectInstance != null` — изменение), `MobEffectEvent.Remove`, `MobEffectEvent.Expired` | ✓ Forge сообщает об изменении до того, как эффект обновлён: пакет об изменении уходит в конце тика (`server.execute`). У `Remove` свой `effect` — `MobEffect`, эффект с длительностью — `effectInstance` (может быть `null`) |
 | `LivingUpdateEvent`, `LivingSetAttackTargetEvent`, `EntityJoinWorldEvent` | `LivingEvent.LivingTickEvent`, `LivingChangeTargetEvent` (цель снимается в самом событии: `newTarget = null`), `EntityJoinLevelEvent` | ✓ |
 | `BlockEvent.PlaceEvent`, `MultiPlaceEvent` | `BlockEvent.EntityPlaceEvent`, `EntityMultiPlaceEvent` | ✓ |
+| `ExplosionEvent.Start`, `Detonate` (`world`, `explosion`, `affectedBlocks`, `affectedEntities`) | как есть, `net.minecraftforge.event.level.ExplosionEvent`; `world` — `level` (`Events1710`) | ✓ отменённый `Start` — строка `explosionX` в разделе «Прослойка» |
+| `PlaySoundEvent17` (`event.result`), `ISound`, `ITickableSound`, `mc.theWorld` | `PlaySoundEvent` (`event.sound`, может быть `null`), `SoundInstance`, `TickableSoundInstance`, `mc.level` | ✓ методы `ISound`: `getPositionedSoundLocation` → `getLocation`, `canRepeat` → `isLooping`, `getRepeatDelay` → `getDelay`, `getXPosF` → `getX` (double), `getAttenuationType` → `getAttenuation`; обёртка звука отдаёт новые методы (`resolve`, `getSound`, `getSource`, `isRelative`, `canStartSilent`, `canPlaySound`, `getStream`) исходного. Обработчик — `@OnlyIn(Dist.CLIENT)` |
 | `RenderBlockOverlayEvent`, `DrawBlockHighlightEvent` | `RenderBlockScreenEffectEvent`, `RenderHighlightEvent.Block` | ✓ |
 | объект без методов `@SubscribeEvent` на шине | как есть | ✓ шина Forge 1.20.1 принимает его молча — общий обработчик подписывается, даже если его методы ещё ждут свою КТ |
 

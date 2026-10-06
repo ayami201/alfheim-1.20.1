@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 224 | 19 401 | 100 | 122 | 2 |  |
+| КТ-2 | 224 | 19 401 | 70 | 152 | 2 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **925** | **154** | **62** | **12** |
+| **всего** | **1153** | **124 643** | **895** | **184** | **62** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -799,73 +799,73 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockMagicLeaves.kt` | 24 | КТ-2 | ждёт |  |
+| `BlockMagicLeaves.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/BlockMagicLeaves.kt`; без ножниц листва пока ничего не роняет — саженцы партии 8в-2; шанс 1/400 (`quantityDropped`) лут листвы 1.7.10 не спрашивал (BUGS.md, B-026) |
 | `BlockTunedSapling.kt` | 67 | КТ-2 | ждёт |  |
 
 ### `legacy/src/main/java/alfheim/common/block/magtrees/barrier/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockBarrierLeaves.kt` | 20 | КТ-2 | ждёт |  |
-| `BlockBarrierPlanks.kt` | 37 | КТ-2 | ждёт |  |
+| `BlockBarrierLeaves.kt` | 20 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierLeaves.kt`; саженец (`getItemDropped`) — партия 8в-2 |
+| `BlockBarrierPlanks.kt` | 37 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierPlanks.kt`; случайный тик снят: он ничего не делал |
 | `BlockBarrierSapling.kt` | 21 | КТ-2 | ждёт |  |
-| `BlockBarrierWood.kt` | 59 | КТ-2 | ждёт |  |
-| `BlockBarrierWoodPartials.kt` | 25 | КТ-2 | ждёт |  |
+| `BlockBarrierWood.kt` | 59 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierWood.kt`; варианты 0–1 (бревно, сердцевина) — массив блоков `barrier_wood0`–`1`, сердцевина роняет бревно, поворот — свойство `axis`; TileTreeWind сердцевины — партия 8в-2 |
+| `BlockBarrierWoodPartials.kt` | 25 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierWoodPartials.kt`; плита `barrier_planks_slab` (двойная — её состояние `type=double`), ступеньки `barrier_planks_stairs` |
 
 ### `legacy/src/main/java/alfheim/common/block/magtrees/calico/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockCalicoLeaves.kt` | 24 | КТ-2 | ждёт |  |
-| `BlockCalicoPlanks.kt` | 39 | КТ-2 | ждёт |  |
+| `BlockCalicoLeaves.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/BlockCalicoLeaves.kt`; саженец — партия 8в-2 |
+| `BlockCalicoPlanks.kt` | 39 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/BlockCalicoPlanks.kt`; случайный тик снят: он ничего не делал |
 | `BlockCalicoSapling.kt` | 25 | КТ-2 | ждёт |  |
-| `BlockCalicoWood.kt` | 56 | КТ-2 | ждёт |  |
-| `BlockCalicoWoodPartials.kt` | 30 | КТ-2 | ждёт |  |
-| `EventHandlerCalico.kt` | 50 | КТ-2 | ждёт |  |
-| `IExplosionDampener.kt` | 11 | КТ-2 | ждёт |  |
+| `BlockCalicoWood.kt` | 56 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/BlockCalicoWood.kt`; поворот — свойство `axis` |
+| `BlockCalicoWoodPartials.kt` | 30 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/BlockCalicoWoodPartials.kt`; плита `calico_planks_slab` (двойная — её состояние `type=double`), ступеньки `calico_planks_stairs` |
+| `EventHandlerCalico.kt` | 50 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/EventHandlerCalico.kt`; поля взрыва и `newExplosion` 1.7.10 — `Explosions1710`; отменённый взрыв игроки не видят и не слышат (миксин `ServerLevelMixin`) |
+| `IExplosionDampener.kt` | 11 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/IExplosionDampener.kt` |
 
 ### `legacy/src/main/java/alfheim/common/block/magtrees/circuit/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockCircuitLeaves.kt` | 50 | КТ-2 | ждёт |  |
-| `BlockCircuitPlanks.kt` | 66 | КТ-2 | ждёт |  |
+| `BlockCircuitLeaves.kt` | 50 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/BlockCircuitLeaves.kt`; свечение 8 — в состояниях; случайный тик — у любой листвы, как у `BlockLeaves` 1.7.10; саженец — партия 8в-2 |
+| `BlockCircuitPlanks.kt` | 66 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/BlockCircuitPlanks.kt`; сигнал — `isSignalSource`/`getSignal` прослойки, источник сигнала не проводит его и не душит; свечение 8 — в состояниях |
 | `BlockCircuitSapling.kt` | 37 | КТ-2 | ждёт |  |
-| `BlockCircuitWood.kt` | 77 | КТ-2 | ждёт |  |
-| `BlockCircuitWoodPartials.kt` | 79 | КТ-2 | ждёт |  |
-| `ICircuitBlock.kt` | 20 | КТ-2 | ждёт |  |
+| `BlockCircuitWood.kt` | 77 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/BlockCircuitWood.kt`; поворот — свойство `axis`; свечение 8 — в состояниях |
+| `BlockCircuitWoodPartials.kt` | 79 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/BlockCircuitWoodPartials.kt`; плита `circuit_planks_slab` (двойная — её состояние `type=double`), ступеньки `circuit_planks_stairs` (без случайного тика, как `BlockStairs` 1.7.10); свечение 8 — в состояниях |
+| `ICircuitBlock.kt` | 20 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/ICircuitBlock.kt` |
 
 ### `legacy/src/main/java/alfheim/common/block/magtrees/lightning/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockLightningLeaves.kt` | 19 | КТ-2 | ждёт |  |
-| `BlockLightningPlanks.kt` | 58 | КТ-2 | ждёт |  |
+| `BlockLightningLeaves.kt` | 19 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningLeaves.kt`; саженец — партия 8в-2 |
+| `BlockLightningPlanks.kt` | 58 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningPlanks.kt` |
 | `BlockLightningSapling.kt` | 20 | КТ-2 | ждёт |  |
-| `BlockLightningWood.kt` | 68 | КТ-2 | ждёт |  |
-| `BlockLightningWoodPartials.kt` | 25 | КТ-2 | ждёт |  |
+| `BlockLightningWood.kt` | 68 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningWood.kt`; варианты 0–1 (бревно, сердцевина) — массив блоков `lightning_wood0`–`1`, сердцевина роняет бревно, поворот — свойство `axis`; TileLightningTreeTop сердцевины — партия 8в-2 |
+| `BlockLightningWoodPartials.kt` | 25 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningWoodPartials.kt`; плита `lightning_planks_slab` (двойная — её состояние `type=double`), ступеньки `lightning_planks_stairs` |
 
 ### `legacy/src/main/java/alfheim/common/block/magtrees/nether/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockNetherLeaves.kt` | 26 | КТ-2 | ждёт |  |
-| `BlockNetherPlanks.kt` | 68 | КТ-2 | ждёт |  |
+| `BlockNetherLeaves.kt` | 26 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherLeaves.kt`; саженец — партия 8в-2; не горит — его нет в таблице огня |
+| `BlockNetherPlanks.kt` | 68 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherPlanks.kt`; в печи — 300 тиков, 2000 не срабатывало и у автора (`Fuel1710`; BUGS.md, B-027) |
 | `BlockNetherSapling.kt` | 33 | КТ-2 | ждёт |  |
-| `BlockNetherWood.kt` | 73 | КТ-2 | ждёт |  |
-| `BlockNetherWoodPartials.kt` | 52 | КТ-2 | ждёт |  |
+| `BlockNetherWood.kt` | 73 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherWood.kt`; варианты 0–1 (бревно, сердцевина) — массив блоков `nether_wood0`–`1`, сердцевина роняет бревно, поворот — свойство `axis`; вечный огонь — `isFireSource` прослойки; TileTreeCook сердцевины — партия 8в-2 |
+| `BlockNetherWoodPartials.kt` | 52 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherWoodPartials.kt`; плита `nether_planks_slab` (двойная — её состояние `type=double`), ступеньки `nether_planks_stairs`; в печи — 300 тиков (B-027) |
 
 ### `legacy/src/main/java/alfheim/common/block/magtrees/sealing/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockSealingLeaves.kt` | 27 | КТ-2 | ждёт |  |
-| `BlockSealingPlanks.kt` | 34 | КТ-2 | ждёт |  |
+| `BlockSealingLeaves.kt` | 27 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/BlockSealingLeaves.kt`; саженец — партия 8в-2 |
+| `BlockSealingPlanks.kt` | 34 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/BlockSealingPlanks.kt` |
 | `BlockSealingSapling.kt` | 28 | КТ-2 | ждёт |  |
-| `BlockSealingWood.kt` | 58 | КТ-2 | ждёт |  |
-| `BlockSealingWoodPartials.kt` | 42 | КТ-2 | ждёт |  |
-| `EventHandlerSealingOak.kt` | 67 | КТ-2 | ждёт |  |
-| `ISoundSilencer.kt` | 37 | КТ-2 | ждёт |  |
+| `BlockSealingWood.kt` | 58 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/BlockSealingWood.kt`; поворот — свойство `axis` |
+| `BlockSealingWoodPartials.kt` | 42 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/BlockSealingWoodPartials.kt`; плита `sealing_planks_slab` (двойная — её состояние `type=double`), ступеньки `sealing_planks_stairs` |
+| `EventHandlerSealingOak.kt` | 67 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/EventHandlerSealingOak.kt`; звук — `SoundInstance`, событие — `PlaySoundEvent`; без глушителей в секциях чанков вокруг блоки не перебираются (PORT-OPT, `Level.mayContain`) |
+| `ISoundSilencer.kt` | 37 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/ISoundSilencer.kt` |
 
 ### `legacy/src/main/java/alfheim/common/block/mana/`
 

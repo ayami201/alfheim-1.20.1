@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "alfheim:blocks/circuit_wood_top",
+    "side": "alfheim:blocks/circuit_wood_side"
+  }
+}
