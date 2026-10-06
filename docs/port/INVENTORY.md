@@ -35,18 +35,18 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 224 | 19 401 | 70 | 152 | 2 |  |
+| КТ-2 | 225 | 19 495 | 60 | 163 | 2 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
-| КТ-6 | 106 | 12 410 | 106 |  |  |  |
+| КТ-6 | 105 | 12 316 | 105 |  |  |  |
 | КТ-7 | 139 | 10 888 | 139 |  |  |  |
 | КТ-8 | 95 | 13 066 | 95 |  |  |  |
 | КТ-9 | 19 | 2 559 | 19 |  |  |  |
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **895** | **184** | **62** | **12** |
+| **всего** | **1153** | **124 643** | **884** | **195** | **62** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -595,7 +595,7 @@ python3 tools/check_inventory.py
 | `RenderTileRaceSelector.kt` | 179 | КТ-7 | ждёт |  |
 | `RenderTileSpire.kt` | 42 | КТ-3 | ждёт |  |
 | `RenderTileTradePortal.kt` | 93 | КТ-3 | ждёт |  |
-| `RenderTileTreeBerry.kt` | 50 | КТ-2 | ждёт |  |
+| `RenderTileTreeBerry.kt` | 50 | КТ-2 | перенесено | → `src/main/java/alfheim/client/render/tile/RenderTileTreeBerry.kt`; `BlockEntityRenderer`, регистрация — `AlfheimEntityRenderers` без опции minimalGraphics, как у автора; OBJ-модели ягод видов 2–4 — модели загрузчика OBJ Forge `alfheim:block/tree_berry<вид><зрелость>_obj`, грани с двух сторон — вид отрисовки `entityCutoutNoCull` |
 | `RenderTileWorldTree.kt` | 63 | КТ-3 | ждёт |  |
 | `RenderTileYggFlower.kt` | 30 | КТ-3 | ждёт |  |
 
@@ -710,7 +710,7 @@ python3 tools/check_inventory.py
 | `BlockSubspacian.kt` | 79 | КТ-2 | ждёт |  |
 | `BlockTable.kt` | 18 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockTradePortal.kt` | 51 | КТ-3 | ждёт | с блок-сущностью |
-| `BlockTreeBerry.kt` | 122 | КТ-2 | ждёт | ягоды магических деревьев; блок-сущность простая, переносится с деревьями |
+| `BlockTreeBerry.kt` | 122 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockTreeBerry.kt`; зрелость 0–2 (metadata) — свойство `age`, рамки — формы состояний; держится только под своей листвой (`canSurvive`); лут — таблица генерации данных: зрелая — ягода своего дерева; рендер −1 — форма `INVISIBLE` (ягоду рисует `RenderTileTreeBerry`), с minimalGraphics и у видов без OBJ-модели — крест |
 | `BlockYggFlower.kt` | 36 | КТ-3 | ждёт | с блок-сущностью |
 
 ### `legacy/src/main/java/alfheim/common/block/alt/`
@@ -727,7 +727,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockContainerMod.kt` | 55 | КТ-2 | ждёт |  |
+| `BlockContainerMod.kt` | 55 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockContainerMod.kt`; поверх `BlockContainer` прослойки (`TileEntity1710.kt`); иконки — модели генерации данных |
 | `BlockLeavesMod.kt` | 209 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockLeavesMod.kt`; опадание — алгоритм автора на случайном тике, бит опадания — свойство `persistent` (`Leaves1710`), лут — таблица листвы |
 | `BlockMod.kt` | 49 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockMod.kt` |
 | `BlockModRotatedPillar.kt` | 92 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/base/BlockModRotatedPillar.kt`; поворот — свойство состояния `axis` |
@@ -799,26 +799,26 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockMagicLeaves.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/BlockMagicLeaves.kt`; без ножниц листва пока ничего не роняет — саженцы партии 8в-2; шанс 1/400 (`quantityDropped`) лут листвы 1.7.10 не спрашивал (BUGS.md, B-026) |
+| `BlockMagicLeaves.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/BlockMagicLeaves.kt`; без ножниц листва роняет свой саженец (`getItemDropped`, шанс 1/20 — как у любой листвы 1.7.10); шанс 1/400 (`quantityDropped`) лут листвы 1.7.10 не спрашивал (BUGS.md, B-026) |
 | `BlockTunedSapling.kt` | 67 | КТ-2 | ждёт |  |
 
 ### `legacy/src/main/java/alfheim/common/block/magtrees/barrier/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockBarrierLeaves.kt` | 20 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierLeaves.kt`; саженец (`getItemDropped`) — партия 8в-2 |
+| `BlockBarrierLeaves.kt` | 20 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierLeaves.kt` |
 | `BlockBarrierPlanks.kt` | 37 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierPlanks.kt`; случайный тик снят: он ничего не делал |
-| `BlockBarrierSapling.kt` | 21 | КТ-2 | ждёт |  |
-| `BlockBarrierWood.kt` | 59 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierWood.kt`; варианты 0–1 (бревно, сердцевина) — массив блоков `barrier_wood0`–`1`, сердцевина роняет бревно, поворот — свойство `axis`; TileTreeWind сердцевины — партия 8в-2 |
+| `BlockBarrierSapling.kt` | 21 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierSapling.kt`; дерево — `HeartWoodTreeGen` с сердцевиной `barrier_wood1` |
+| `BlockBarrierWood.kt` | 59 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierWood.kt`; варианты 0–1 (бревно, сердцевина) — массив блоков `barrier_wood0`–`1`, сердцевина роняет бревно, поворот — свойство `axis`; TileTreeWind сердцевины — партия 8в-3 |
 | `BlockBarrierWoodPartials.kt` | 25 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/barrier/BlockBarrierWoodPartials.kt`; плита `barrier_planks_slab` (двойная — её состояние `type=double`), ступеньки `barrier_planks_stairs` |
 
 ### `legacy/src/main/java/alfheim/common/block/magtrees/calico/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockCalicoLeaves.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/BlockCalicoLeaves.kt`; саженец — партия 8в-2 |
+| `BlockCalicoLeaves.kt` | 24 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/BlockCalicoLeaves.kt` |
 | `BlockCalicoPlanks.kt` | 39 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/BlockCalicoPlanks.kt`; случайный тик снят: он ничего не делал |
-| `BlockCalicoSapling.kt` | 25 | КТ-2 | ждёт |  |
+| `BlockCalicoSapling.kt` | 25 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/BlockCalicoSapling.kt` |
 | `BlockCalicoWood.kt` | 56 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/BlockCalicoWood.kt`; поворот — свойство `axis` |
 | `BlockCalicoWoodPartials.kt` | 30 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/BlockCalicoWoodPartials.kt`; плита `calico_planks_slab` (двойная — её состояние `type=double`), ступеньки `calico_planks_stairs` |
 | `EventHandlerCalico.kt` | 50 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/calico/EventHandlerCalico.kt`; поля взрыва и `newExplosion` 1.7.10 — `Explosions1710`; отменённый взрыв игроки не видят и не слышат (миксин `ServerLevelMixin`) |
@@ -828,9 +828,9 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockCircuitLeaves.kt` | 50 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/BlockCircuitLeaves.kt`; свечение 8 — в состояниях; случайный тик — у любой листвы, как у `BlockLeaves` 1.7.10; саженец — партия 8в-2 |
+| `BlockCircuitLeaves.kt` | 50 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/BlockCircuitLeaves.kt`; свечение 8 — в состояниях; случайный тик — у любой листвы, как у `BlockLeaves` 1.7.10 |
 | `BlockCircuitPlanks.kt` | 66 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/BlockCircuitPlanks.kt`; сигнал — `isSignalSource`/`getSignal` прослойки, источник сигнала не проводит его и не душит; свечение 8 — в состояниях |
-| `BlockCircuitSapling.kt` | 37 | КТ-2 | ждёт |  |
+| `BlockCircuitSapling.kt` | 37 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/BlockCircuitSapling.kt`; свечение 8 — в состояниях; `tickRate` закомментирован: запланированных тиков саженцу никто не ставит |
 | `BlockCircuitWood.kt` | 77 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/BlockCircuitWood.kt`; поворот — свойство `axis`; свечение 8 — в состояниях |
 | `BlockCircuitWoodPartials.kt` | 79 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/BlockCircuitWoodPartials.kt`; плита `circuit_planks_slab` (двойная — её состояние `type=double`), ступеньки `circuit_planks_stairs` (без случайного тика, как `BlockStairs` 1.7.10); свечение 8 — в состояниях |
 | `ICircuitBlock.kt` | 20 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/circuit/ICircuitBlock.kt` |
@@ -839,29 +839,29 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockLightningLeaves.kt` | 19 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningLeaves.kt`; саженец — партия 8в-2 |
+| `BlockLightningLeaves.kt` | 19 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningLeaves.kt` |
 | `BlockLightningPlanks.kt` | 58 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningPlanks.kt` |
-| `BlockLightningSapling.kt` | 20 | КТ-2 | ждёт |  |
-| `BlockLightningWood.kt` | 68 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningWood.kt`; варианты 0–1 (бревно, сердцевина) — массив блоков `lightning_wood0`–`1`, сердцевина роняет бревно, поворот — свойство `axis`; TileLightningTreeTop сердцевины — партия 8в-2 |
+| `BlockLightningSapling.kt` | 20 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningSapling.kt`; дерево — `HeartWoodTreeGen` с сердцевиной `lightning_wood1` |
+| `BlockLightningWood.kt` | 68 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningWood.kt`; варианты 0–1 (бревно, сердцевина) — массив блоков `lightning_wood0`–`1`, сердцевина роняет бревно, поворот — свойство `axis`; TileLightningTreeTop сердцевины — партия 8в-3 |
 | `BlockLightningWoodPartials.kt` | 25 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/lightning/BlockLightningWoodPartials.kt`; плита `lightning_planks_slab` (двойная — её состояние `type=double`), ступеньки `lightning_planks_stairs` |
 
 ### `legacy/src/main/java/alfheim/common/block/magtrees/nether/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockNetherLeaves.kt` | 26 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherLeaves.kt`; саженец — партия 8в-2; не горит — его нет в таблице огня |
+| `BlockNetherLeaves.kt` | 26 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherLeaves.kt`; не горит — его нет в таблице огня |
 | `BlockNetherPlanks.kt` | 68 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherPlanks.kt`; в печи — 300 тиков, 2000 не срабатывало и у автора (`Fuel1710`; BUGS.md, B-027) |
-| `BlockNetherSapling.kt` | 33 | КТ-2 | ждёт |  |
-| `BlockNetherWood.kt` | 73 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherWood.kt`; варианты 0–1 (бревно, сердцевина) — массив блоков `nether_wood0`–`1`, сердцевина роняет бревно, поворот — свойство `axis`; вечный огонь — `isFireSource` прослойки; TileTreeCook сердцевины — партия 8в-2 |
+| `BlockNetherSapling.kt` | 33 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherSapling.kt`; дерево — `HeartWoodTreeGen` с сердцевиной `nether_wood1`; не горит — его нет в таблице огня |
+| `BlockNetherWood.kt` | 73 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherWood.kt`; варианты 0–1 (бревно, сердцевина) — массив блоков `nether_wood0`–`1`, сердцевина роняет бревно, поворот — свойство `axis`; вечный огонь — `isFireSource` прослойки; TileTreeCook сердцевины — партия 8в-3 |
 | `BlockNetherWoodPartials.kt` | 52 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/nether/BlockNetherWoodPartials.kt`; плита `nether_planks_slab` (двойная — её состояние `type=double`), ступеньки `nether_planks_stairs`; в печи — 300 тиков (B-027) |
 
 ### `legacy/src/main/java/alfheim/common/block/magtrees/sealing/`
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockSealingLeaves.kt` | 27 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/BlockSealingLeaves.kt`; саженец — партия 8в-2 |
+| `BlockSealingLeaves.kt` | 27 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/BlockSealingLeaves.kt` |
 | `BlockSealingPlanks.kt` | 34 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/BlockSealingPlanks.kt` |
-| `BlockSealingSapling.kt` | 28 | КТ-2 | ждёт |  |
+| `BlockSealingSapling.kt` | 28 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/BlockSealingSapling.kt` |
 | `BlockSealingWood.kt` | 58 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/BlockSealingWood.kt`; поворот — свойство `axis` |
 | `BlockSealingWoodPartials.kt` | 42 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/BlockSealingWoodPartials.kt`; плита `sealing_planks_slab` (двойная — её состояние `type=double`), ступеньки `sealing_planks_stairs` |
 | `EventHandlerSealingOak.kt` | 67 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/magtrees/sealing/EventHandlerSealingOak.kt`; звук — `SoundInstance`, событие — `PlaySoundEvent`; без глушителей в секциях чанков вокруг блоки не перебираются (PORT-OPT, `Level.mayContain`) |
@@ -938,7 +938,7 @@ python3 tools/check_inventory.py
 | `TileStar.kt` | 37 | КТ-3 | ждёт |  |
 | `TileTable.kt` | 3 | КТ-3 | ждёт |  |
 | `TileTradePortal.kt` | 288 | КТ-3 | ждёт |  |
-| `TileTreeBerry.kt` | 11 | КТ-2 | ждёт | ягоды магических деревьев; блок-сущность простая, переносится с деревьями |
+| `TileTreeBerry.kt` | 11 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/tile/TileTreeBerry.kt`; конструктор `(pos, state)`; вид ягоды `type` — `berryType` (имя `type` у блок-сущности 1.20.1 занято); не тикает (`canUpdate`) |
 | `TileTreeCook.kt` | 32 | КТ-2 | ждёт | блок-сущность магического дерева, переносится с деревом |
 | `TileTreeCrafter.kt` | 418 | КТ-3 | ждёт |  |
 | `TileTreeWind.kt` | 61 | КТ-2 | ждёт | блок-сущность магического дерева, переносится с деревом |
@@ -2081,7 +2081,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `HeartWoodTreeGen.kt` | 94 | КТ-6 | ждёт |  |
+| `HeartWoodTreeGen.kt` | 94 | КТ-2 | перенесено | → `src/main/java/alfheim/common/world/gen/HeartWoodTreeGen.kt`; нужен саженцам магических деревьев (в описи было КТ-6); высота мира — границы мира 1.20.1 |
 | `SimpleTreeGen.kt` | 98 | КТ-2 | перенесено | → `src/main/java/alfheim/common/world/gen/SimpleTreeGen.kt`; перенесён в КТ-2: им растёт радужный саженец (`BlockColoredSapling.getGenerator`) |
 
 ### `legacy/src/main/java/alfheim/common/world/mobspawn/`
@@ -2100,7 +2100,7 @@ python3 tools/check_inventory.py
 | `alfheim/dialogs/common/` | 1 | — | WIP — стадия 2 | диалоги эльфов; вызов диалогов отключён автором (SPEC п. 6) |
 | `alfheim/lang/` | 3 | КТ-1 | перенесено | `.lang` остаются здесь, `src/main/resources/assets/alfheim/lang/*.json` собирает `tools/convert_lang.py` |
 | `alfheim/loot/` | 3 | КТ-6 | ждёт | награды лутбоксов летающих островов (`BlockLootbox`) |
-| `alfheim/model/` (только файлы папки) | 37 | по владельцу | ждёт | OBJ-модели; каждая — в КТ своего блока, предмета или существа (SPEC Р-13) |
+| `alfheim/model/` (только файлы папки) | 37 | по владельцу | ждёт | OBJ-модели; каждая — в КТ своего блока, предмета или существа (SPEC Р-13); перенесено 9 — ягоды магических деревьев (`TreeBerry20`–`42`, имена в snake_case), их читают модели загрузчика OBJ Forge генерации данных |
 | `alfheim/model/unused/` | 1 | — | WIP — стадия 2 | `SpireOld.obj`, в коде не используется |
 | `alfheim/schemas/` | 767 | КТ-6 | ждёт | постройки (вместе с `fi/`, `flowers/`, `niflheim/`, `yggdrasil/`), без изменений (SPEC Р-10) |
 | `alfheim/shaders/` | 11 | по владельцу | ждёт | шейдеры автора; каждый — в КТ эффекта, который его использует (SPEC Р-13) |
@@ -2112,7 +2112,7 @@ python3 tools/check_inventory.py
 | `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
-| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 85 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
+| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 152 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
 | `alfheim/textures/blocks/decor/` | 83 | КТ-3 | ждёт | перенесено 79 — декор `AlfheimFluffBlocks` и мерцающий кварц (`shimmerQuartz`); остались 4 файла (`blockInsertShimmerQuartz`, `blockSmoothShimmerQuartz` с .mcmeta) — варианты 5 и 6 кварца, их добавляет врезка `QuartzExtender` (КТ-3) |
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
@@ -2187,3 +2187,4 @@ python3 tools/check_inventory.py
 | `alexsocol/asjlib/extendables/ItemBlockMetaName.kt` | 17 | КТ-2 | всё | номер варианта — в id блока и в ключе перевода |
 | `alexsocol/asjlib/extendables/block/BlockModFence.kt` | 25 | КТ-2 | всё | поверх `Fence1710`; `canConnectFenceTo` → `connectsTo` |
 | `alexsocol/asjlib/extendables/block/BlockModFenceGate.kt` | 19 | КТ-2 | всё | поверх `FenceGate1710`; иконка блока-источника — модель генерации данных |
+| `alexsocol/asjlib/extendables/block/ASJTile.kt` | 33 | КТ-2 | всё | поверх `TileEntity` прослойки; пакет описания (`getDescriptionPacket`) — данные для клиента с чанком (`getUpdateTag`) и при обновлении блока (`getUpdatePacket`) |
