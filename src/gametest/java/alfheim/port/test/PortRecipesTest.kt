@@ -304,6 +304,27 @@ object PortRecipesTest {
 		helper.succeed()
 	}
 
+	/**
+	 * Эльфийская трава (`RecipeElvenWeed`): пыль иффесаля, пыльца фей, радужный гриб и бумага в любом месте сетки, каждого
+	 * по одному; лишний или повторный предмет ломает рецепт. Мана-гриба Thaumcraft нет (SPEC, п. 7)
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun elvenWeedRecipe(helper: GameTestHelper) {
+		val iffesal = IffesalDust.stack
+		val pixie = ItemStack(BotaniaItems.pixieDust)
+		val mushroom = ItemStack(AlfheimBlocks.rainbowMushroom)
+		val paper = ItemStack(Items.PAPER)
+		val weed = AlfheimItems.elvenResource[ElvenWeed.I]
+		helper.assertTrue(craft(helper, grid(iffesal, pixie, mushroom, paper)).`is`(weed), "elven weed")
+		helper.assertTrue(craft(helper, grid(null, paper, null, mushroom, null, pixie, null, iffesal)).`is`(weed), "elven weed from a scattered grid")
+		helper.assertTrue(craft(helper, grid(iffesal, pixie, mushroom)).isEmpty, "no elven weed without paper")
+		helper.assertTrue(craft(helper, grid(iffesal, pixie, mushroom, paper, paper)).isEmpty, "a second paper breaks the recipe")
+		helper.assertTrue(craft(helper, grid(iffesal, pixie, mushroom, paper, ItemStack(Items.DIRT))).isEmpty, "an extra item breaks the recipe")
+		helper.assertTrue(helper.level.recipeManager.byKey(ResourceLocation(MODID, "elvenweed")).orElse(null) is CustomRecipe, "alfheim:elvenweed is a special recipe")
+		helper.succeed()
+	}
+
 	/** Печь: руда, песок, песчаник — результат и опыт из `registerSmeltingRecipes` */
 	@JvmStatic
 	@GameTest(template = "empty")
