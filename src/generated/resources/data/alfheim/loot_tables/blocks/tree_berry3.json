@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "alfheim:tree_berry3",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "age": "2"
+          }
+        },
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "alfheim:tree_berry_lightning"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "alfheim:blocks/tree_berry3"
+}

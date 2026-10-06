@@ -1,0 +1,10 @@
+{
+  "flip_v": true,
+  "loader": "forge:obj",
+  "model": "alfheim:model/tree_berry42.obj",
+  "mtl_override": "alfheim:model/port/tree_berry.mtl",
+  "textures": {
+    "particle": "alfheim:blocks/tree_berry42",
+    "texture": "alfheim:blocks/tree_berry42"
+  }
+}

@@ -1,0 +1,3 @@
+# Материал OBJ-моделей ягод (порт): текстура — из модели блока (#texture), как bindTexture в RenderTileTreeBerry автора
+newmtl default
+map_Kd #texture
