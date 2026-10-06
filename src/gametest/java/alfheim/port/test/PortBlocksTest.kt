@@ -5,6 +5,7 @@ import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.AlfheimFluffBlocks
 import alfheim.common.block.colored.BlockColoredLamp
 import alfheim.common.block.colored.rainbow.BlockRainbowGrass
+import alfheim.common.block.magtrees.circuit.ICircuitBlock
 import alfheim.port.legacy.LegacyBlock
 import alfheim.port.registry.*
 import net.minecraft.core.BlockPos
@@ -148,7 +149,8 @@ object PortBlocksTest {
 	/**
 	 * Сеттеры 1.7.10 у всех блоков автора дошли до состояний: свечение и твёрдость те же, что у блока. Свечение лампы
 	 * ириса — по силе сигнала (`getLightValue` с координатами), его проверяет `PortPlantsTest.irisLampPower`; радужной
-	 * травы — по варианту, `PortRainbowTest.rainbowGrassVariants`
+	 * травы — по варианту, `PortRainbowTest.rainbowGrassVariants`; схемодрева — тоже `getLightValue` с координатами,
+	 * `PortMagicTreesTest.magicTreeProperties`
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
@@ -157,7 +159,7 @@ object PortBlocksTest {
 			val legacy = (block as LegacyBlock).legacy
 			for (state in block.stateDefinition.possibleStates) {
 				helper.assertTrue(state.getDestroySpeed(helper.level, BlockPos.ZERO) == legacy.blockHardness, "${BuiltInRegistries.BLOCK.getKey(block)} hardness")
-				if (block !is BlockColoredLamp && block !is BlockRainbowGrass) helper.assertTrue(state.lightEmission == legacy.lightValue, "${BuiltInRegistries.BLOCK.getKey(block)} light")
+				if (block !is BlockColoredLamp && block !is BlockRainbowGrass && block !is ICircuitBlock) helper.assertTrue(state.lightEmission == legacy.lightValue, "${BuiltInRegistries.BLOCK.getKey(block)} light")
 			}
 		}
 		helper.succeed()
