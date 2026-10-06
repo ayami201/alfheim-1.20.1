@@ -1,6 +1,7 @@
 package alfheim.common.block.magtrees.sealing
 
-import net.minecraft.world.World
+// PORT: импорты 1.20.1
+import net.minecraft.world.level.Level as World
 
 /**
  * @author WireSegal

@@ -1,15 +1,13 @@
 package alfheim.common.block.magtrees.calico
 
+// PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
 import alfheim.common.block.base.BlockMod
-import alfheim.common.lexicon.AlfheimLexiconData
-import net.minecraft.block.material.Material
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.util.MovingObjectPosition
-import net.minecraft.world.*
-import vazkii.botania.api.lexicon.ILexiconable
+import alfheim.port.legacy.*
+import net.minecraft.world.level.Explosion
+import net.minecraft.world.level.Level as World
 
-class BlockCalicoPlanks: BlockMod(Material.wood), IExplosionDampener, ILexiconable {
+// PORT: КТ-9 — лексикон (ILexiconable)
+class BlockCalicoPlanks: BlockMod(Material.wood), IExplosionDampener/*, ILexiconable*/ {
 	
 	private val name = "calicoPlanks"
 	
@@ -19,19 +17,23 @@ class BlockCalicoPlanks: BlockMod(Material.wood), IExplosionDampener, ILexiconab
 		stepSound = soundTypeWood
 		setBlockName(name)
 		
-		tickRandomly = true
+		// PORT-FIX: случайный тик досок ничего не делал (updateTick у них нет) — лишняя работа сервера каждый тик
+//		tickRandomly = true
 	}
 	
 	override fun isToolEffective(type: String?, metadata: Int) = (type != null && type == "axe")
 	
 	override fun getHarvestTool(metadata: Int) = "axe"
 	
+	/* PORT: выбор колёсиком — предмет блока (getCloneItemStack 1.20.1)
 	override fun getPickBlock(target: MovingObjectPosition?, world: World, x: Int, y: Int, z: Int, player: EntityPlayer): ItemStack {
 		val meta = world.getBlockMetadata(x, y, z)
 		return ItemStack(this, 1, meta)
 	}
+	*/
 	
-	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.calicoSapling
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.calicoSapling
 	
 	// ####
 	

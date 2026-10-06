@@ -1,22 +1,23 @@
 package alfheim.common.block.magtrees.calico
 
-import alexsocol.asjlib.toItem
-import alfheim.common.block.AlfheimBlocks
+// PORT: импорты 1.20.1
 import alfheim.common.block.magtrees.BlockMagicLeaves
-import alfheim.common.lexicon.AlfheimLexiconData
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.world.*
-import vazkii.botania.api.lexicon.ILexiconable
-import java.util.*
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.Explosion
+import net.minecraft.world.level.Level as World
 
-class BlockCalicoLeaves: BlockMagicLeaves("calicoLeaves"), IExplosionDampener, ILexiconable {
+// PORT: КТ-9 — лексикон (ILexiconable)
+class BlockCalicoLeaves: BlockMagicLeaves("calicoLeaves"), IExplosionDampener/*, ILexiconable*/ {
 	
 	override fun isInterpolated() = true
 	
-	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = AlfheimBlocks.calicoSapling.toItem()
+	// PORT: КТ-2 (партия 8в-2) — саженец; до него листва без ножниц ничего не роняет
+	override fun getItemDropped(meta: Int, random: Random, fortune: Int): Item? = null
+//	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = AlfheimBlocks.calicoSapling.toItem()
 	
-	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.calicoSapling
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.calicoSapling
 	
 	// ####
 	

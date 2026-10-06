@@ -1,9 +1,12 @@
 package alfheim.common.block.magtrees.calico
 
+// PORT: импорты 1.20.1; поля взрыва и World.newExplosion 1.7.10 — alfheim.port.legacy (Explosions1710). Отменённый
+// взрыв игроки не видят и не слышат, как в 1.7.10 (Explosions1710)
 import alexsocol.asjlib.*
 import alexsocol.asjlib.math.Vector3
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.event.world.ExplosionEvent
+import alfheim.port.legacy.*
+import net.minecraftforge.event.level.ExplosionEvent
+import net.minecraftforge.eventbus.api.SubscribeEvent
 
 object EventHandlerCalico {
 	
@@ -33,7 +36,9 @@ object EventHandlerCalico {
 		
 		if (explosiondampeners.isEmpty()) return
 		
-		val dampener = explosiondampeners[e.world.rand.nextInt(explosiondampeners.size)]
+		// PORT: генератор мира 1.20.1 — random
+		val dampener = explosiondampeners[e.world.random.nextInt(explosiondampeners.size)]
+//		val dampener = explosiondampeners[e.world.rand.nextInt(explosiondampeners.size)]
 		
 		e.world.newExplosion(null, dampener.x, dampener.y, dampener.z, e.explosion.explosionSize, false, false)
 		e.isCanceled = true

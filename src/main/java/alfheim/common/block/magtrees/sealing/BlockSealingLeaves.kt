@@ -1,13 +1,11 @@
 package alfheim.common.block.magtrees.sealing
 
-import alexsocol.asjlib.toItem
-import alfheim.common.block.AlfheimBlocks
+// PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
 import alfheim.common.block.magtrees.BlockMagicLeaves
-import alfheim.common.lexicon.AlfheimLexiconData
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.world.World
-import java.util.*
+import alfheim.port.legacy.*
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.Level as World
 
 class BlockSealingLeaves: BlockMagicLeaves("sealingLeaves"), ISoundSilencer {
 	
@@ -15,9 +13,12 @@ class BlockSealingLeaves: BlockMagicLeaves("sealingLeaves"), ISoundSilencer {
 		setStepSound(soundTypeCloth)
 	}
 	
-	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = AlfheimBlocks.sealingSapling.toItem()
+	// PORT: КТ-2 (партия 8в-2) — саженец; до него листва без ножниц ничего не роняет
+	override fun getItemDropped(meta: Int, random: Random, fortune: Int): Item? = null
+//	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = AlfheimBlocks.sealingSapling.toItem()
 	
-	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.silencer
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(world: World?, x: Int, y: Int, z: Int, player: EntityPlayer?, lexicon: ItemStack?) = AlfheimLexiconData.silencer
 	
 	// ####
 	

@@ -1,14 +1,12 @@
 package alfheim.common.block.magtrees.sealing
 
+// PORT: импорты 1.20.1 (блок 1.7.10 — alfheim.port.legacy, MAPPING.md)
 import alfheim.common.block.base.BlockMod
-import alfheim.common.lexicon.AlfheimLexiconData
-import net.minecraft.block.material.Material
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.world.World
-import vazkii.botania.api.lexicon.ILexiconable
+import alfheim.port.legacy.*
+import net.minecraft.world.level.Level as World
 
-class BlockSealingPlanks: BlockMod(Material.wood), ILexiconable, ISoundSilencer {
+// PORT: КТ-9 — лексикон (ILexiconable)
+class BlockSealingPlanks: BlockMod(Material.wood)/*, ILexiconable*/, ISoundSilencer {
 	
 	private val name = "sealingPlanks"
 	
@@ -28,7 +26,9 @@ class BlockSealingPlanks: BlockMod(Material.wood), ILexiconable, ISoundSilencer 
 	
 	override fun getHarvestTool(metadata: Int) = "axe"
 	
-	override fun damageDropped(par1: Int) = par1
+	// PORT: лут — сам блок (alfheim.port.data.AlfheimBlockLoot)
+//	override fun damageDropped(par1: Int) = par1
 	
-	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.silencer
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(p0: World?, p1: Int, p2: Int, p3: Int, p4: EntityPlayer?, p5: ItemStack?) = AlfheimLexiconData.silencer
 }

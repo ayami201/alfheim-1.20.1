@@ -1,6 +1,8 @@
 package alfheim.common.block.magtrees.calico
 
-import net.minecraft.world.*
+// PORT: импорты 1.20.1
+import net.minecraft.world.level.Explosion
+import net.minecraft.world.level.Level as World
 
 interface IExplosionDampener {
 	

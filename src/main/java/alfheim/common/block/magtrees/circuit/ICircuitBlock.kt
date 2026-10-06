@@ -1,6 +1,8 @@
 package alfheim.common.block.magtrees.circuit
 
-import net.minecraft.world.IBlockAccess
+// PORT: импорты 1.20.1 (мир по координатам 1.7.10 — alfheim.port.legacy, MAPPING.md)
+import alfheim.port.legacy.getBlock
+import net.minecraft.world.level.BlockGetter as IBlockAccess
 
 /**
  * @author WireSegal
