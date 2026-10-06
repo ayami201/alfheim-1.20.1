@@ -1,5 +1,8 @@
 package alfheim.port.legacy
 
+import net.minecraft.network.protocol.Packet
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.network.ServerGamePacketListenerImpl
 import net.minecraft.world.entity.player.Abilities
 import net.minecraft.world.entity.player.Player
 
@@ -30,3 +33,9 @@ var Abilities.allowFlying
 var Abilities.disableDamage
 	get() = invulnerable
 	set(value) { invulnerable = value }
+
+/** `playerNetServerHandler` 1.7.10 — соединение игрока с сервером */
+val ServerPlayer.playerNetServerHandler: ServerGamePacketListenerImpl get() = connection
+
+/** `sendPacket(packet)` 1.7.10 — пакет этому игроку */
+fun ServerGamePacketListenerImpl.sendPacket(packet: Packet<*>) = send(packet)
