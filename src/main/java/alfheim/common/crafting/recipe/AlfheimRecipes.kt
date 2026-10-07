@@ -2390,7 +2390,10 @@ object AlfheimRecipes {
 		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(x, n, i) → ItemStack(x[i], n); поля ванилы 1.20.1 —
 		// заглавными
 		addShapelessRecipe(ItemStack(yggDecor[0]), ItemStack(altPlanks[6], 1), Items.WHEAT_SEEDS)
-		addOreDictRecipe(ItemStack(yggDecor[1], 4), "WW", "WW", 'W', ItemStack(altPlanks[6], 1))
+		// PORT: 4 доски Иггдрасиля квадратом в 1.7.10 давали верстак: Forge заменил рецепт верстака ванилы рецептом с
+		// plankWood раньше рецептов модов, доски Иггдрасиля — plankWood, а верстак брал первый подходящий рецепт. Рецепт
+		// автора не срабатывал никогда (BUGS.md); в 1.20.1 два рецепта на одну раскладку срабатывали бы как попало
+//		addOreDictRecipe(ItemStack(yggDecor[1], 4), "WW", "WW", 'W', ItemStack(altPlanks[6], 1))
 		addOreDictRecipe(ItemStack(yggDecor[2], 4), " W ", "W W", " W ", 'W', ItemStack(altPlanks[6], 1))
 		
 		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
