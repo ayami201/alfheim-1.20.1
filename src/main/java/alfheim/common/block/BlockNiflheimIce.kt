@@ -135,7 +135,9 @@ class BlockNiflheimIce: BlockMod(material)/*, ILexiconable*/ {
 //		if (world.provider.dimensionId == AlfheimConfigHandler.dimensionIDNiflheim) return
 		if (!world.gameRules.getBoolean(GameRules.RULE_DOFIRETICK)) return
 //		if (!world.gameRules.getGameRuleBooleanValue("doFireTick")) return
-		if (world.getBlockState(BlockPos(x, y, z)).getValue(TYPE) == IceType.PERMANENT) return
+		// PORT: раскол (replaceNearestWater выше) оставляет на месте льда воздух: metadata воздуха в 1.7.10 — 0, свойства type у
+		// него нет
+		if (world.getBlockState(BlockPos(x, y, z)).getOptionalValue(TYPE).orElse(null) == IceType.PERMANENT) return
 //		if (world.getBlockMetadata(x, y, z) == 2) return
 		
 		val below = world.getBlock(x, y - 1, z)
