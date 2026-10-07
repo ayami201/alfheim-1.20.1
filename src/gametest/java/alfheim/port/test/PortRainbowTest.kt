@@ -285,8 +285,8 @@ object PortRainbowTest {
 	}
 
 	/**
-	 * Лут, горение и Ore Dictionary радужных растений: трава и авроровая трава — сами с ножницами, без них — только
-	 * семена; цветы — сами; закопанные лепестки — радужный лепесток; двойная трава с ножницами — две травы своего
+	 * Лут, горение и Ore Dictionary радужных растений: трава и авроровая трава — иногда семена, с ножницами — ещё и сами;
+	 * цветы — сами; закопанные лепестки — радужный лепесток; двойная трава с ножницами — две травы своего
 	 * варианта, двойной цветок — сам, без ножниц — ничего. Горят трава и двойная трава (60, 100); двойного цветка в
 	 * `registerBurnables` нет (BUGS.md, B-022)
 	 */
@@ -305,7 +305,11 @@ object PortRainbowTest {
 		helper.setBlock(soil, AlfheimBlocks.rainbowDirt)
 		for (meta in 0..1) {
 			helper.setBlock(pos, AlfheimBlocks.rainbowGrass[meta])
-			only(pos, shears, AlfheimBlocks.rainbowGrass[meta].asItem(), 1, "sheared rainbow grass $meta")
+			// с ножницами — сама трава и, как без них, иногда семена
+			repeat(50) {
+				val sheared = drops(pos, shears)
+				helper.assertTrue(sheared.count { it.item === AlfheimBlocks.rainbowGrass[meta].asItem() && it.count == 1 } == 1 && sheared.all { it.item === AlfheimBlocks.rainbowGrass[meta].asItem() || it.item === Items.WHEAT_SEEDS }, "sheared rainbow grass $meta drops $sheared")
+			}
 			repeat(50) { helper.assertTrue(drops(pos, ItemStack.EMPTY).all { it.item === Items.WHEAT_SEEDS }, "rainbow grass $meta without shears") }
 		}
 		for (meta in 2..3) {
