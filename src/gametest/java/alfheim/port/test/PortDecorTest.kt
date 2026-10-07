@@ -58,8 +58,8 @@ object PortDecorTest {
 		// 104 блока партий 1 и 2, 6 вариантов эльфийской руды партии 3, 130 цветных блоков партии 8а, 12 радужных и
 		// авроровых блоков партии 8б-1, 8 радужных растений партии 8б-2, 10 блоков партии 8б-3 (гриб, 3 варианта
 		// мерцающего кварца, его плита и лестница, 4 мягких блока), черепица Botania 1.7.10, 33 блока магических деревьев
-		// партии 8в-1 и 12 партии 8в-2 (6 саженцев, 6 ягод)
-		helper.assertTrue(LegacyRegistration.blocks.size == 316, "blocks of the author: ${LegacyRegistration.blocks.size}")
+		// партии 8в-1 и 12 партии 8в-2 (6 саженцев, 6 ягод), 37 блоков альтернативных деревьев партии 8г-1
+		helper.assertTrue(LegacyRegistration.blocks.size == 353, "blocks of the author: ${LegacyRegistration.blocks.size}")
 		helper.succeed()
 	}
 

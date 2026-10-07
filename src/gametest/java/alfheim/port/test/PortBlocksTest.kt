@@ -3,6 +3,7 @@ package alfheim.port.test
 import alfheim.api.ModInfo.MODID
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.AlfheimFluffBlocks
+import alfheim.common.block.alt.*
 import alfheim.common.block.colored.BlockColoredLamp
 import alfheim.common.block.colored.rainbow.BlockRainbowGrass
 import alfheim.common.block.magtrees.circuit.ICircuitBlock
@@ -43,10 +44,10 @@ object PortBlocksTest {
 			val loot = helper.level.server.lootData.getLootTable(block.lootTable)
 			if (loot === LootTable.EMPTY) problems += "${entry.id} has no loot table"
 		}
-		// двойная плита 1.7.10 — состояние своей плиты
+		// двойная плита 1.7.10 — состояние своей плиты; у вариантов metadata — по номеру варианта
 		for (alias in LegacyRegistration.aliases) {
-			val target = LegacyIds.block("$MODID:${alias.oldName}")
-			if (target?.id != LegacyRegistration.blocks[alias.block]?.id || target?.state != mapOf("type" to "double")) problems += "legacy_ids.json: $MODID:${alias.oldName} -> $target"
+			val target = LegacyIds.block("$MODID:${alias.oldName}", alias.oldMeta ?: 0)
+			if (target?.id != LegacyRegistration.blocks[alias.block]?.id || target?.state != mapOf("type" to "double")) problems += "legacy_ids.json: $MODID:${alias.oldName}:${alias.oldMeta} -> $target"
 		}
 		// блок автора, вместо которого блок другого мода
 		for (replacement in LegacyRegistration.replacements) {
@@ -150,15 +151,17 @@ object PortBlocksTest {
 	 * Сеттеры 1.7.10 у всех блоков автора дошли до состояний: свечение и твёрдость те же, что у блока. Свечение лампы
 	 * ириса — по силе сигнала (`getLightValue` с координатами), его проверяет `PortPlantsTest.irisLampPower`; радужной
 	 * травы — по варианту, `PortRainbowTest.rainbowGrassVariants`; схемодрева — тоже `getLightValue` с координатами,
-	 * `PortMagicTreesTest.magicTreeProperties`
+	 * `PortMagicTreesTest.magicTreeProperties`. Твёрдость альтернативных деревьев в мире — по `getBlockHardness` автора
+	 * (Иггдрасиль, перевёрнутые ступеньки), её проверяет `PortAltTreesTest.altTreeProperties`
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
 	fun settersReachStates(helper: GameTestHelper) {
 		for (block in LegacyRegistration.blocks.keys) {
 			val legacy = (block as LegacyBlock).legacy
+			val worldHardness = block is BlockAltWood || block is BlockAltLeaves || block is BlockAltPlanks || block is BlockAltWoodSlab || block is BlockAltWoodStairs
 			for (state in block.stateDefinition.possibleStates) {
-				helper.assertTrue(state.getDestroySpeed(helper.level, BlockPos.ZERO) == legacy.blockHardness, "${BuiltInRegistries.BLOCK.getKey(block)} hardness")
+				if (!worldHardness) helper.assertTrue(state.getDestroySpeed(helper.level, BlockPos.ZERO) == legacy.blockHardness, "${BuiltInRegistries.BLOCK.getKey(block)} hardness")
 				if (block !is BlockColoredLamp && block !is BlockRainbowGrass && block !is ICircuitBlock) helper.assertTrue(state.lightEmission == legacy.lightValue, "${BuiltInRegistries.BLOCK.getKey(block)} light")
 			}
 		}
