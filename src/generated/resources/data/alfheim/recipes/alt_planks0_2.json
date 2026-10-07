@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "alfheim:alt_wood00"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "alfheim:alt_planks0"
+  }
+}

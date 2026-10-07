@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "alfheim:blocks/alt_planks_vivid",
+    "side": "alfheim:blocks/alt_planks_vivid",
+    "top": "alfheim:blocks/alt_planks_vivid"
+  }
+}

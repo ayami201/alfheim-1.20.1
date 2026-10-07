@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "alfheim:blocks/alt_planks_dry",
+    "side": "alfheim:blocks/alt_planks_dry",
+    "top": "alfheim:blocks/alt_planks_dry"
+  }
+}

@@ -3,13 +3,8 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.15,
-  "ingredient": [
-    {
-      "item": "alfheim:barrier_wood0"
-    },
-    {
-      "item": "alfheim:barrier_wood1"
-    }
-  ],
+  "ingredient": {
+    "item": "alfheim:calico_wood"
+  },
   "result": "minecraft:charcoal"
 }

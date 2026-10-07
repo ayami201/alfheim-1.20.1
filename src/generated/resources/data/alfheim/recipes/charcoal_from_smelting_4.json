@@ -5,16 +5,16 @@
   "experience": 0.15,
   "ingredient": [
     {
-      "item": "alfheim:iris_wood30"
+      "item": "alfheim:iris_wood10"
     },
     {
-      "item": "alfheim:iris_wood31"
+      "item": "alfheim:iris_wood11"
     },
     {
-      "item": "alfheim:iris_wood32"
+      "item": "alfheim:iris_wood12"
     },
     {
-      "item": "alfheim:iris_wood33"
+      "item": "alfheim:iris_wood13"
     }
   ],
   "result": "minecraft:charcoal"

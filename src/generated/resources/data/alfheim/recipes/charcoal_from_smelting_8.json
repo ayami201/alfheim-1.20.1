@@ -4,7 +4,7 @@
   "cookingtime": 200,
   "experience": 0.15,
   "ingredient": {
-    "item": "alfheim:sealing_wood"
+    "item": "alfheim:aurora_wood"
   },
   "result": "minecraft:charcoal"
 }

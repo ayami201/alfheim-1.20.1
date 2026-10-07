@@ -9,6 +9,10 @@
     "alfheim:circuit_wood",
     "alfheim:barrier_wood0",
     "alfheim:barrier_wood1",
+    "alfheim:alt_wood00",
+    "alfheim:alt_wood01",
+    "alfheim:alt_wood02",
+    "alfheim:alt_wood03",
     "alfheim:iris_wood00",
     "alfheim:iris_wood01",
     "alfheim:iris_wood02",
@@ -26,6 +30,9 @@
     "alfheim:iris_wood32",
     "alfheim:iris_wood33",
     "alfheim:rainbow_wood",
-    "alfheim:aurora_wood"
+    "alfheim:aurora_wood",
+    "alfheim:alt_wood10",
+    "alfheim:alt_wood11",
+    "alfheim:alt_wood13"
   ]
 }

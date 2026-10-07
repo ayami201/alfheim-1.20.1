@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "alfheim:blocks/alt_oak_scorched_top",
+    "side": "alfheim:blocks/alt_oak_scorched_side"
+  }
+}

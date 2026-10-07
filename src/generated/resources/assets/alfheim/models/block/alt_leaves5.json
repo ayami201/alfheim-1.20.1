@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "alfheim:blocks/alt_leaves_mutated"
+  }
+}
