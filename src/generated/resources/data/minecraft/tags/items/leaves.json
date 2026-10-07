@@ -6,6 +6,12 @@
     "alfheim:nether_leaves",
     "alfheim:sealing_leaves",
     "alfheim:barrier_leaves",
+    "alfheim:alt_leaves0",
+    "alfheim:alt_leaves1",
+    "alfheim:alt_leaves2",
+    "alfheim:alt_leaves3",
+    "alfheim:alt_leaves4",
+    "alfheim:alt_leaves5",
     "alfheim:iris_leaves00",
     "alfheim:iris_leaves01",
     "alfheim:iris_leaves02",
@@ -23,6 +29,7 @@
     "alfheim:iris_leaves16",
     "alfheim:iris_leaves17",
     "alfheim:rainbow_leaves",
-    "alfheim:aurora_leaves"
+    "alfheim:aurora_leaves",
+    "alfheim:alt_leaves7"
   ]
 }

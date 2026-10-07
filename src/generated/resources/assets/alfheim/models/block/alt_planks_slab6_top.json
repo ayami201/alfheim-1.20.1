@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "alfheim:blocks/alt_planks_wisdom",
+    "side": "alfheim:blocks/alt_planks_wisdom",
+    "top": "alfheim:blocks/alt_planks_wisdom"
+  }
+}

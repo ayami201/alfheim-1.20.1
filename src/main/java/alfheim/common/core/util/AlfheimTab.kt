@@ -4,6 +4,12 @@ package alfheim.common.core.util
 import alexsocol.asjlib.meta
 import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks.alfStorage
+import alfheim.common.block.AlfheimBlocks.altLeaves
+import alfheim.common.block.AlfheimBlocks.altPlanks
+import alfheim.common.block.AlfheimBlocks.altSlabs
+import alfheim.common.block.AlfheimBlocks.altStairs
+import alfheim.common.block.AlfheimBlocks.altWood0
+import alfheim.common.block.AlfheimBlocks.altWood1
 import alfheim.common.block.AlfheimBlocks.auroraDirt
 import alfheim.common.block.AlfheimBlocks.auroraLeaves
 import alfheim.common.block.AlfheimBlocks.auroraPlanks
@@ -689,10 +695,8 @@ object AlfheimTab {
 		addBlock(sealingWood)
 		addBlock(barrierWood, 0)
 //		addBlock(barrierWood)
-		/* PORT: КТ-2
 		addBlock(altWood0)
 		addBlock(altWood1)
-		*/
 		
 		addBlock(lightningPlanks)
 		addBlock(netherPlanks)
@@ -700,9 +704,7 @@ object AlfheimTab {
 		addBlock(calicoPlanks)
 		addBlock(sealingPlanks)
 		addBlock(barrierPlanks)
-		/* PORT: КТ-2
 		addBlock(altPlanks)
-		*/
 		
 		addBlock(lightningStairs)
 		addBlock(netherStairs)
@@ -710,9 +712,7 @@ object AlfheimTab {
 		addBlock(calicoStairs)
 		addBlock(sealingStairs)
 		addBlock(barrierStairs)
-		/* PORT: КТ-2
 		altStairs.forEach { addBlock(it) }
-		*/
 		
 		addBlock(lightningSlabs)
 		addBlock(netherSlabs)
@@ -720,9 +720,7 @@ object AlfheimTab {
 		addBlock(calicoSlabs)
 		addBlock(sealingSlabs)
 		addBlock(barrierSlabs)
-		/* PORT: КТ-2
 		addBlock(altSlabs)
-		*/
 		
 		addBlock(lightningLeaves)
 		addBlock(netherLeaves)
@@ -730,9 +728,7 @@ object AlfheimTab {
 		addBlock(calicoLeaves)
 		addBlock(sealingLeaves)
 		addBlock(barrierLeaves)
-		/* PORT: КТ-2
 		addBlock(altLeaves)
-		*/
 		
 		addBlock(lightningSapling)
 		addBlock(netherSapling)

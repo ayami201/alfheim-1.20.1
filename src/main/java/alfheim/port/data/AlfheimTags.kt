@@ -61,8 +61,8 @@ object HarvestTags {
  * соединяется со стенами и панелями из `minecraft:walls`, к забору из `minecraft:fences` привязывается поводок, через
  * люк из `minecraft:trapdoors` ходят мобы. Забор порта не в `minecraft:wooden_fences`: к нему не тянутся заборы
  * ванилы, как в 1.7.10 (сам он тянется к любому забору — `BlockModFence.connectsTo`). Листва 1.7.10 (`BlockLeaves`) —
- * в `minecraft:leaves`: её `isLeaves` всегда отвечал «да», а в 1.20.1 листву узнают по этому тегу (листва ванилы, ножницы,
- * меч, деревья, `isLeaves` прослойки)
+ * в `minecraft:leaves`, если её `isLeaves` отвечает «да» (у листвы Иггдрасиля — нет): в 1.20.1 листву узнают по этому
+ * тегу (листва ванилы, ножницы, меч, деревья, `isLeaves` прослойки)
  */
 object ShapeTags {
 
@@ -70,7 +70,7 @@ object ShapeTags {
 		is Wall1710     -> BlockTags.WALLS
 		is Fence1710    -> BlockTags.FENCES
 		is TrapDoor1710 -> BlockTags.TRAPDOORS
-		is Leaves1710   -> BlockTags.LEAVES
+		is Leaves1710   -> BlockTags.LEAVES.takeIf { block.isLeaves(null, 0, 0, 0) }
 		else            -> null
 	}
 }
@@ -121,6 +121,7 @@ object OreDictTags {
 		LibOreDict.RAINBOW_QUARTZ to alfheim(LibOreDict.RAINBOW_QUARTZ),
 		LibOreDict.RAINBOW_QUARTZ_BLOCK to alfheim(LibOreDict.RAINBOW_QUARTZ_BLOCK),
 		LibOreDict.MUSHROOM to alfheim(LibOreDict.MUSHROOM),
+		LibOreDict.DREAM_WOOD_LOG to alfheim(LibOreDict.DREAM_WOOD_LOG),
 		LibOreDict.PETAL_ANY to alfheim(LibOreDict.PETAL_ANY),
 		// имена Forge 1.7.10 для дерева — теги ванилы 1.20.1: по ним брёвна держат листву, а доски идут в рецепты ванилы
 		"logWood" to ResourceLocation("minecraft", "logs"),

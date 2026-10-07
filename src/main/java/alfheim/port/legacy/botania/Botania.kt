@@ -1,6 +1,9 @@
 package alfheim.port.legacy.botania
 
 import alexsocol.asjlib.math.Vector3
+import net.minecraft.client.Minecraft
+import net.minecraft.client.ParticleStatus
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.Level
 import net.minecraftforge.fml.loading.FMLEnvironment
 import net.minecraftforge.server.ServerLifecycleHooks
@@ -50,11 +53,40 @@ object Botania {
 		
 		/** `wispFX(world, x, y, z, r, g, b, size, gravity)` — огонёк Botania 1.20.1; «гравитация» 1.7.10 — скорость вниз */
 		fun wispFX(world: Level, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float, size: Float, gravity: Float) =
-			world.addParticle(WispParticleData.wisp(size, r, g, b, 1f), x, y, z, 0.0, -gravity.toDouble(), 0.0)
+			wisp(world, WispParticleData.wisp(size, r, g, b, 1f), x, y, z, 0.0, -gravity.toDouble(), 0.0)
 		
 		/** `wispFX(world, x, y, z, r, g, b, size, motionX, motionY, motionZ)` — огонёк Botania 1.20.1 с заданной скоростью */
 		fun wispFX(world: Level, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float, size: Float, motionX: Float, motionY: Float, motionZ: Float) =
-			world.addParticle(WispParticleData.wisp(size, r, g, b, 1f), x, y, z, motionX.toDouble(), motionY.toDouble(), motionZ.toDouble())
+			wispFX(world, x, y, z, r, g, b, size, motionX, motionY, motionZ, 1f)
+		
+		/**
+		 * `wispFX(world, x, y, z, r, g, b, size, motionX, motionY, motionZ, maxAgeMul)` — огонёк с заданной скоростью;
+		 * [maxAgeMul] — во сколько раз дольше обычного он живёт
+		 */
+		fun wispFX(world: Level, x: Double, y: Double, z: Double, r: Float, g: Float, b: Float, size: Float, motionX: Float, motionY: Float, motionZ: Float, maxAgeMul: Float) =
+			wisp(world, WispParticleData.wisp(size, r, g, b, maxAgeMul), x, y, z, motionX.toDouble(), motionY.toDouble(), motionZ.toDouble())
+		
+		/** Флаг `setWispFXDistanceLimit` прокси 1.7.10: пока он снят, огоньки видны на любом расстоянии */
+		private var wispDistanceLimit = true
+		
+		/**
+		 * `setWispFXDistanceLimit(limit)`: в 1.7.10 огонёк дальше 50 блоков от игрока (25 при «быстрой» графике) сразу
+		 * гас; без ограничения — нет. Следующие огоньки, пока флаг снят, появляются на любом расстоянии ([wisp])
+		 */
+		fun setWispFXDistanceLimit(limit: Boolean) {
+			wispDistanceLimit = limit
+		}
+		
+		/**
+		 * Огонёк в мире. С ограничением расстояния — как любая частица 1.20.1: не дальше 32 блоков от камеры, по
+		 * настройке «Частицы». Без ограничения — на любом расстоянии; настройку «Частицы» тогда применяет порт, как это
+		 * делает 1.20.1: Botania 1.7.10 прореживала по ней свои частицы и без ограничения расстояния. Мир сервера частиц
+		 * не рисует
+		 */
+		private fun wisp(world: Level, data: WispParticleData, x: Double, y: Double, z: Double, motionX: Double, motionY: Double, motionZ: Double) {
+			if (wispDistanceLimit) world.addParticle(data, x, y, z, motionX, motionY, motionZ)
+			else if (world.isClientSide && ClientParticles.shown(world.random)) world.addParticle(data, true, x, y, z, motionX, motionY, motionZ)
+		}
 		
 		/**
 		 * `removeSextantMultiblock` — убрать подсветку секстанта: в 1.7.10 — структуру класса `MultiblockSextant`, в
@@ -68,4 +100,15 @@ object Botania {
 private object ClientTicks {
 	
 	fun ticks() = ClientTickHandler.ticksInGame.toLong()
+}
+
+/** Отдельный класс: на выделенном сервере не загружается, а с ним и классы клиента игры */
+private object ClientParticles {
+	
+	/** Появится ли частица при настройке «Частицы», как решает 1.20.1 (`LevelRenderer`): «меньше» — 2 из 3, «минимум» — нет */
+	fun shown(random: RandomSource) = when (Minecraft.getInstance().options.particles().get()) {
+		ParticleStatus.MINIMAL   -> false
+		ParticleStatus.DECREASED -> random.nextInt(3) != 0
+		else                     -> true
+	}
 }

@@ -3,8 +3,19 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.15,
-  "ingredient": {
-    "item": "alfheim:rainbow_wood"
-  },
+  "ingredient": [
+    {
+      "item": "alfheim:iris_wood20"
+    },
+    {
+      "item": "alfheim:iris_wood21"
+    },
+    {
+      "item": "alfheim:iris_wood22"
+    },
+    {
+      "item": "alfheim:iris_wood23"
+    }
+  ],
   "result": "minecraft:charcoal"
 }

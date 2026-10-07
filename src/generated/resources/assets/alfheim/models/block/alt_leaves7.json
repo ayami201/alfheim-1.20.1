@@ -1,0 +1,98 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#all",
+          "tintindex": 0
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#all",
+          "tintindex": 0
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#all",
+          "tintindex": 0
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#all",
+          "tintindex": 0
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#all",
+          "tintindex": 0
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#all",
+          "tintindex": 0
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#glow"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#glow"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#glow"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#glow"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#glow"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#glow"
+        }
+      },
+      "forge_data": {
+        "ambient_occlusion": false,
+        "block_light": 15
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "shade": false,
+      "to": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "all": "alfheim:blocks/alt_leaves_dreamwood",
+    "glow": "alfheim:blocks/alt_leaves_dreamwood_glow",
+    "particle": "alfheim:blocks/alt_leaves_dreamwood"
+  }
+}

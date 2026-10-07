@@ -18,6 +18,15 @@ import vazkii.botania.common.block.BotaniaBlocks
  * (SPEC, Р-5): `alfheim:custom_brick3`.
  */
 
+/**
+ * `ModBlocks.altGrass` Botania 1.7.10 — трава шести видов по metadata: 0 — сухая, 1 — золотая, 2 — яркая, 3 — опалённая,
+ * 4 — пропитанная, 5 — мутировавшая. В Botania 1.20.1 вид — отдельный блок; здесь они — массив по номеру 1.7.10
+ * (MAPPING.md, «Botania»)
+ */
+val altGrass: Array<Block> by lazy {
+	arrayOf(BotaniaBlocks.dryGrass, BotaniaBlocks.goldenGrass, BotaniaBlocks.vividGrass, BotaniaBlocks.scorchedGrass, BotaniaBlocks.infusedGrass, BotaniaBlocks.mutatedGrass)
+}
+
 /** `vazkii.botania.common.item.block.ItemBlockWithMetadataAndName`: ключ перевода — `tile.botania:`, имя и номер варианта */
 class ItemBlockWithMetadataAndName(block: Block): BlockItem(block, Item.Properties())
 

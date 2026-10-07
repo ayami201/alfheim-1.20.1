@@ -130,8 +130,8 @@ object PortMagicTreesTest {
 
 	/**
 	 * Лут, теги и топливо: сердцевина роняет обычное бревно (`damageDropped` — 0), двойная плита — две плиты, листва с
-	 * ножницами — себя, без ножниц — иногда свой саженец. Деревянный блок в печи горит 300 тиков: 2000 адских блоков у
-	 * автора не срабатывали (B-027)
+	 * ножницами — себя и иногда свой саженец, без ножниц — иногда саженец. Деревянный блок в печи горит 300 тиков: 2000
+	 * адских блоков у автора не срабатывали (B-027)
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
@@ -150,7 +150,9 @@ object PortMagicTreesTest {
 		helper.setBlock(pos, b.circuitSlabs.defaultBlockState().setValue(SlabBlock.TYPE, SlabType.DOUBLE))
 		only(pos, ItemStack.EMPTY, b.circuitSlabs.asItem(), 2, "double circuit slab")
 		helper.setBlock(pos, b.calicoLeaves)
-		only(pos, ItemStack(Items.SHEARS), b.calicoLeaves.asItem(), 1, "calico leaves with shears")
+		// с ножницами — листва и, как без них, иногда саженец (шанс 1/20): Forge 1.7.10 не отменял обычный сбор
+		val sheared = drops(pos, ItemStack(Items.SHEARS))
+		helper.assertTrue(sheared.count { it.item === b.calicoLeaves.asItem() && it.count == 1 } == 1 && sheared.all { it.item === b.calicoLeaves.asItem() || it.item === b.calicoSapling.asItem() }, "calico leaves with shears drop $sheared")
 		// без ножниц — только саженец, и то не всегда (шанс 1/20, magicLeavesDropSaplings)
 		val noShears = drops(pos, ItemStack.EMPTY)
 		helper.assertTrue(noShears.all { it.item === b.calicoSapling.asItem() }, "calico leaves without shears drop $noShears")

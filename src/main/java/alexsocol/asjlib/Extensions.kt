@@ -4,6 +4,7 @@ package alexsocol.asjlib
 
 // PORT: импорты 1.7.10 заменены на 1.20.1. Функции, которые порту ещё не понадобились, закомментированы блоками
 // «PORT: по мере надобности»: их переносит КТ, которой они нужны, и сверяет смысл с 1.20.1
+import alexsocol.asjlib.math.Vector3
 import alfheim.port.legacy.*
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
@@ -318,13 +319,20 @@ fun <T> T.eventFML(): T {
 	return this
 }
 
-/* PORT: по мере надобности — World, Entity, подсказки предметов
-fun World.isBlockDirectlyGettingPowered(x: Int, y: Int, z: Int) = getBlockPowerInput(x, y, z) > 0
-
-fun World.getBlock(e: Entity, x: Int = 0, y: Int = 0, z: Int = 0): Block {
+// PORT: World → Level
+fun Level.getBlock(e: Entity, x: Int = 0, y: Int = 0, z: Int = 0): Block {
 	val (i, j, k) = Vector3.fromEntity(e).mf()
 	return getBlock(i + x, j + y, k + z)
 }
+
+/* PORT: по мере надобности — World, Entity, подсказки предметов
+fun World.isBlockDirectlyGettingPowered(x: Int, y: Int, z: Int) = getBlockPowerInput(x, y, z) > 0
+
+// PORT: перенесена выше
+//fun World.getBlock(e: Entity, x: Int = 0, y: Int = 0, z: Int = 0): Block {
+//	val (i, j, k) = Vector3.fromEntity(e).mf()
+//	return getBlock(i + x, j + y, k + z)
+//}
 
 fun World.getBlockMeta(e: Entity, x: Int = 0, y: Int = 0, z: Int = 0): Int {
 	val (i, j, k) = Vector3.fromEntity(e).mf()

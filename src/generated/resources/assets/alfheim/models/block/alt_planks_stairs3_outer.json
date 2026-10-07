@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "alfheim:blocks/alt_planks_scorched",
+    "side": "alfheim:blocks/alt_planks_scorched",
+    "top": "alfheim:blocks/alt_planks_scorched"
+  }
+}

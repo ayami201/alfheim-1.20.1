@@ -4,6 +4,7 @@ package alfheim.common.block
 import alfheim.api.lib.LibOreDict
 import alfheim.port.legacy.*
 import alfheim.port.legacy.OreDictionary.WILDCARD_VALUE
+import alfheim.port.legacy.botania.altGrass
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import alexsocol.asjlib.ASJUtilities.setBurnable
@@ -11,7 +12,7 @@ import alexsocol.asjlib.ASJUtilities.setBurnable
 //import alexsocol.asjlib.extendables.block.BlockPattern
 import alfheim.api.*
 import alfheim.api.lib.LibOreDict.IRIS_WOOD
-//import alfheim.common.block.alt.*
+import alfheim.common.block.alt.*
 import alfheim.common.block.base.*
 import alfheim.common.block.colored.*
 import alfheim.common.block.colored.rainbow.*
@@ -170,13 +171,13 @@ object AlfheimBlocks {
 	
 	// DENDROLOGY
 	
-//	val altLeaves: Block // PORT: КТ-2
-//	val altPlanks: Block // PORT: КТ-2
-//	val altSlabs: Block // PORT: КТ-2
-//	val altSlabsFull: Block // PORT: КТ-2
-//	val altStairs: Array<Block> // PORT: КТ-2
-//	val altWood0: Block // PORT: КТ-2
-//	val altWood1: Block // PORT: КТ-2
+	val altLeaves: Array<Block>
+	val altPlanks: Array<Block>
+	val altSlabs: Array<Block>
+	val altSlabsFull: Array<Block>
+	val altStairs: Array<Block>
+	val altWood0: Array<Block>
+	val altWood1: Array<Block>
 	
 	val barrierLeaves: Block
 	val barrierBerry: Block
@@ -376,15 +377,22 @@ object AlfheimBlocks {
 		
 		// DENDOROLOGY
 		
-//		altLeaves = BlockAltLeaves() // PORT: КТ-2
-//		altPlanks = BlockAltPlanks() // PORT: КТ-2
-//		altSlabs = BlockAltWoodSlab(false) // PORT: КТ-2
-//		altSlabsFull = BlockAltWoodSlab(true) // PORT: КТ-2
-//		(altSlabs as BlockSlabMod).register() // PORT: КТ-2
-//		(altSlabsFull as BlockSlabMod).register() // PORT: КТ-2
-//		altStairs = Array(LibOreDict.ALT_TYPES.size - 1) { if (it == BlockAltLeaves.yggMeta) BlockYggStairs() else BlockAltWoodStairs(it) } // PORT: КТ-2
-//		altWood0 = BlockAltWood(0) // PORT: КТ-2
-//		altWood1 = BlockAltWood(1) // PORT: КТ-2
+		altLeaves = Array(LibOreDict.ALT_TYPES.size) { BlockAltLeaves(it) }
+//		altLeaves = BlockAltLeaves()
+		altPlanks = Array(LibOreDict.ALT_TYPES.size - 1) { BlockAltPlanks(it) }
+//		altPlanks = BlockAltPlanks()
+		altSlabs = Array(LibOreDict.ALT_TYPES.size - 1) { BlockAltWoodSlab(false, it) }
+		altSlabsFull = altSlabs // PORT: двойная плита 1.7.10 — состояние type=double той же плиты (SlabBlock 1.20.1); её старое имя регистрирует register() одинарной
+//		altSlabs = BlockAltWoodSlab(false)
+//		altSlabsFull = BlockAltWoodSlab(true)
+		altSlabs.forEach { (it as BlockSlabMod).register() }
+//		(altSlabs as BlockSlabMod).register()
+//		(altSlabsFull as BlockSlabMod).register()
+		altStairs = Array(LibOreDict.ALT_TYPES.size - 1) { if (it == BlockAltLeaves.yggMeta) BlockYggStairs() else BlockAltWoodStairs(it) }
+		altWood0 = Array(4) { BlockAltWood(0, it) }
+		altWood1 = Array(4) { BlockAltWood(1, it) }
+//		altWood0 = BlockAltWood(0)
+//		altWood1 = BlockAltWood(1)
 		
 		barrierLeaves = BlockBarrierLeaves()
 		barrierBerry = BlockTreeBerry(barrierLeaves, 0)
@@ -540,10 +548,13 @@ object AlfheimBlocks {
 		
 		registerOre("sand", ItemStack(elvenSand))
 		
-//		registerOre(LibOreDict.DREAM_WOOD_LOG, ItemStack(altWood1, 1, 3)) // PORT: КТ-2
-//		registerOre(LibOreDict.DREAM_WOOD_LOG, ItemStack(altWood1, 1, 7)) // PORT: КТ-2
-//		registerOre(LibOreDict.DREAM_WOOD_LOG, ItemStack(altWood1, 1, 11)) // PORT: КТ-2
-//		registerOre(LibOreDict.DREAM_WOOD_LOG, ItemStack(altWood1, 1, 15)) // PORT: КТ-2
+		// PORT: вариант metadata — блок массива (SPEC, Р-5); 7, 11, 15 — то же бревно мечтаний с поворотом (meta and 12),
+		// поворот — состояние блока
+		registerOre(LibOreDict.DREAM_WOOD_LOG, ItemStack(altWood1[3], 1))
+//		registerOre(LibOreDict.DREAM_WOOD_LOG, ItemStack(altWood1, 1, 3))
+//		registerOre(LibOreDict.DREAM_WOOD_LOG, ItemStack(altWood1, 1, 7))
+//		registerOre(LibOreDict.DREAM_WOOD_LOG, ItemStack(altWood1, 1, 11))
+//		registerOre(LibOreDict.DREAM_WOOD_LOG, ItemStack(altWood1, 1, 15))
 		
 		// ################
 		
@@ -621,17 +632,22 @@ object AlfheimBlocks {
 		registerOre(LibOreDict.LEAVES[16], ItemStack(rainbowLeaves))
 		registerOre(LibOreDict.LEAVES[17], ItemStack(auroraLeaves))
 		
-//		for (i in 0..5) { // PORT: КТ-2
-//			registerOre("stairWood", ItemStack(altStairs[i], 1))
-//			
+		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(x, 1, i) → ItemStack(x[i], 1)
+		for (i in 0..5) {
+			registerOre("stairWood", ItemStack(altStairs[i], 1))
+			
+			registerOre("treeLeaves", ItemStack(altLeaves[i], 1))
 //			registerOre("treeLeaves", ItemStack(altLeaves, 1, i))
-//		}
+		}
 		
-//		for (i in 0 until LibOreDict.ALT_TYPES.size - 1) { // PORT: КТ-2
+		for (i in 0 until LibOreDict.ALT_TYPES.size - 1) {
+			registerOre("slabWood", ItemStack(altSlabs[i], 1))
+			
+			registerOre("slabWood", ItemStack(altSlabsFull[i], 1))
 //			registerOre("slabWood", ItemStack(altSlabs, 1, i))
 //			
 //			registerOre("slabWood", ItemStack(altSlabsFull, 1, i))
-//		}
+		}
 		
 		// PORT: WILDCARD_VALUE у блока с вариантами — все блоки его массива (SPEC, Р-5)
 		irisDirt.forEach { registerOre(LibOreDict.IRIS_DIRT, ItemStack(it, 1, WILDCARD_VALUE)) }
@@ -651,8 +667,8 @@ object AlfheimBlocks {
 		
 		var t: ItemStack
 		
-		// PORT: блоки с вариантами — массивы, вместе — все варианты (SPEC, Р-5); КТ-2 (партия 8г) — altWood0
-		(lightningWood + netherWood + sealingWood + calicoWood + circuitWood + barrierWood).forEach {
+		// PORT: блоки с вариантами — массивы, вместе — все варианты (SPEC, Р-5)
+		(lightningWood + netherWood + sealingWood + calicoWood + circuitWood + barrierWood + altWood0).forEach {
 //		arrayOf(lightningWood, netherWood, sealingWood, calicoWood, circuitWood, barrierWood, altWood0).forEach {
 			registerOre("logWood", ItemStack(it, 1, WILDCARD_VALUE))
 		}
@@ -675,7 +691,8 @@ object AlfheimBlocks {
 			
 		irisPlanks.forEach { registerOre("plankWood", ItemStack(it, 1, WILDCARD_VALUE)) }
 //		registerOre("plankWood", ItemStack(irisPlanks, 1, WILDCARD_VALUE))
-//		registerOre("plankWood", ItemStack(altPlanks, 1, WILDCARD_VALUE)) // PORT: КТ-2
+		altPlanks.forEach { registerOre("plankWood", ItemStack(it, 1, WILDCARD_VALUE)) }
+//		registerOre("plankWood", ItemStack(altPlanks, 1, WILDCARD_VALUE))
 		registerOre("plankWood", ItemStack(rainbowPlanks, 1, WILDCARD_VALUE))
 		registerOre("plankWood", ItemStack(auroraPlanks, 1, WILDCARD_VALUE))
 		
@@ -691,82 +708,96 @@ object AlfheimBlocks {
 		registerOre("slabWood", rainbowSlab)
 		registerOre("slabWood", auroraSlab)
 		
-//		for (i in 0..15) { // PORT: КТ-2
-//			if (i !in arrayOf(2, 6, 10, 14)) { // Yggdrasil metas
+		// PORT: metadata бревна — вариант (meta and 3) и поворот (meta and 12), листвы — вариант и бит опадания (8); вариант —
+		// блок массива, поворот и бит — состояние блока (SPEC, Р-5). Вещи листвы с битом опадания в 1.7.10 не бывало: в
+		// treeLeaves — листва 0–7, кроме листвы Иггдрасиля
+		for (i in 0..15) {
+			if (i !in arrayOf(2, 6, 10, 14)) { // Yggdrasil metas
+				t = ItemStack(altWood1[i and 3], 1)
 //				t = ItemStack(altWood1, 1, i)
-//				registerOre("logWood", t)
-//			}
-//			
+				registerOre("logWood", t)
+			}
+			
+			if (i != BlockAltLeaves.yggMeta && i < altLeaves.size) {
 //			if (i != BlockAltLeaves.yggMeta) {
+				t = ItemStack(altLeaves[i], 1)
 //				t = ItemStack(altLeaves, 1, i)
-//				registerOre("treeLeaves", t)
-//			}
-//			
-////			registerOre(LibOreDict.IRIS_DIRT, ItemStack(irisDirt, 1, i))
-////			registerOre(LibOreDict.DIRT[i], ItemStack(irisDirt, 1, i))
-//			
-////			registerOre("logWood", ItemStack(lightningWood, 1, i))
-////			registerOre("logWood", ItemStack(netherWood, 1, i))
-////			registerOre("logWood", ItemStack(sealingWood, 1, i))
-////			registerOre("logWood", ItemStack(calicoWood, 1, i))
-////			registerOre("logWood", ItemStack(circuitWood, 1, i))
-//			
-////			t = ItemStack(irisWood0, 1, i)
-////			registerOre("logWood", t)
-////			registerOre(LibOreDict.IRIS_WOOD, t)
-////
-////			t = ItemStack(irisWood1, 1, i)
-////			registerOre("logWood", t)
-////			registerOre(LibOreDict.IRIS_WOOD, t)
-////
-////			t = ItemStack(irisWood2, 1, i)
-////			registerOre("logWood", t)
-////			registerOre(LibOreDict.IRIS_WOOD, t)
-////
-////			t = ItemStack(irisWood3, 1, i)
-////			registerOre("logWood", t)
-////			registerOre(LibOreDict.IRIS_WOOD, t)
-////
-////			t = ItemStack(rainbowWood, 1, i)
-////			registerOre("logWood", t)
-////			registerOre(LibOreDict.IRIS_WOOD, t)
-////
-////			t = ItemStack(auroraWood, 1, i)
-////			registerOre("logWood", t)
-////			registerOre(LibOreDict.IRIS_WOOD, t)
-////
-////			t = ItemStack(altWood0, 1, i)
-////			registerOre("logWood", t)
-//			
-////			t = ItemStack(irisLeaves0, 1, i)
-////			registerOre("treeLeaves", t)
-////			registerOre(LibOreDict.IRIS_LEAVES, t)
-////
-////			t = ItemStack(irisLeaves1, 1, i)
-////			registerOre("treeLeaves", t)
-////			registerOre(LibOreDict.IRIS_LEAVES, t)
-////
-////			t = ItemStack(rainbowLeaves, 1, i)
-////			registerOre("treeLeaves", t)
-////			registerOre(LibOreDict.IRIS_LEAVES, t)
-////
-////			t = ItemStack(auroraLeaves, 1, i)
-////			registerOre("treeLeaves", t)
-////			registerOre(LibOreDict.IRIS_LEAVES, t)
-//			
-////			t = ItemStack(irisSlabsFull[i], 1)
-////			registerOre("slabWood", t)
-//		}
+				registerOre("treeLeaves", t)
+			}
+			
+//			registerOre(LibOreDict.IRIS_DIRT, ItemStack(irisDirt, 1, i))
+//			registerOre(LibOreDict.DIRT[i], ItemStack(irisDirt, 1, i))
+			
+//			registerOre("logWood", ItemStack(lightningWood, 1, i))
+//			registerOre("logWood", ItemStack(netherWood, 1, i))
+//			registerOre("logWood", ItemStack(sealingWood, 1, i))
+//			registerOre("logWood", ItemStack(calicoWood, 1, i))
+//			registerOre("logWood", ItemStack(circuitWood, 1, i))
+			
+//			t = ItemStack(irisWood0, 1, i)
+//			registerOre("logWood", t)
+//			registerOre(LibOreDict.IRIS_WOOD, t)
+//
+//			t = ItemStack(irisWood1, 1, i)
+//			registerOre("logWood", t)
+//			registerOre(LibOreDict.IRIS_WOOD, t)
+//
+//			t = ItemStack(irisWood2, 1, i)
+//			registerOre("logWood", t)
+//			registerOre(LibOreDict.IRIS_WOOD, t)
+//
+//			t = ItemStack(irisWood3, 1, i)
+//			registerOre("logWood", t)
+//			registerOre(LibOreDict.IRIS_WOOD, t)
+//
+//			t = ItemStack(rainbowWood, 1, i)
+//			registerOre("logWood", t)
+//			registerOre(LibOreDict.IRIS_WOOD, t)
+//
+//			t = ItemStack(auroraWood, 1, i)
+//			registerOre("logWood", t)
+//			registerOre(LibOreDict.IRIS_WOOD, t)
+//
+//			t = ItemStack(altWood0, 1, i)
+//			registerOre("logWood", t)
+			
+//			t = ItemStack(irisLeaves0, 1, i)
+//			registerOre("treeLeaves", t)
+//			registerOre(LibOreDict.IRIS_LEAVES, t)
+//
+//			t = ItemStack(irisLeaves1, 1, i)
+//			registerOre("treeLeaves", t)
+//			registerOre(LibOreDict.IRIS_LEAVES, t)
+//
+//			t = ItemStack(rainbowLeaves, 1, i)
+//			registerOre("treeLeaves", t)
+//			registerOre(LibOreDict.IRIS_LEAVES, t)
+//
+//			t = ItemStack(auroraLeaves, 1, i)
+//			registerOre("treeLeaves", t)
+//			registerOre(LibOreDict.IRIS_LEAVES, t)
+			
+//			t = ItemStack(irisSlabsFull[i], 1)
+//			registerOre("slabWood", t)
+		}
 	}
 	
 	fun registerBurnables() {
-//		setBurnable(altLeaves, 30, 60) // PORT: КТ-2
-//		setBurnable(altPlanks, 5, 20) // PORT: КТ-2
-//		setBurnable(altSlabs, 5, 20) // PORT: КТ-2
-//		setBurnable(altSlabsFull, 5, 20) // PORT: КТ-2
-//		altStairs.forEach { setBurnable(it, 5, 20) } // PORT: КТ-2
-//		setBurnable(altWood0, 5, 5) // PORT: КТ-2
-//		setBurnable(altWood1, 5, 5) // PORT: КТ-2
+		// PORT: блок с вариантами metadata — массив блоков (SPEC, Р-5): горит каждый вариант; Иггдрасиль не горит —
+		// getFlammability его блоков
+		altLeaves.forEach { setBurnable(it, 30, 60) }
+		altPlanks.forEach { setBurnable(it, 5, 20) }
+		altSlabs.forEach { setBurnable(it, 5, 20) }
+		altSlabsFull.forEach { setBurnable(it, 5, 20) }
+		altStairs.forEach { setBurnable(it, 5, 20) }
+		altWood0.forEach { setBurnable(it, 5, 5) }
+		altWood1.forEach { setBurnable(it, 5, 5) }
+//		setBurnable(altLeaves, 30, 60)
+//		setBurnable(altPlanks, 5, 20)
+//		setBurnable(altSlabs, 5, 20)
+//		setBurnable(altSlabsFull, 5, 20)
+//		setBurnable(altWood0, 5, 5)
+//		setBurnable(altWood1, 5, 5)
 		
 //		setBurnable(amplifier, 5, 20) // PORT: КТ-2
 		
@@ -867,8 +898,11 @@ object AlfheimBlocks {
 		AlfheimAPI.addTreeVariant(arrayOf(auroraDirt), arrayOf(auroraWood), arrayOf(auroraLeaves))
 //		AlfheimAPI.addTreeVariant(rainbowDirt, rainbowWood, rainbowLeaves)
 //		AlfheimAPI.addTreeVariant(auroraDirt, auroraWood, auroraLeaves)
-//		AlfheimAPI.addTreeVariant(ModBlocks.altGrass, altWood0, altLeaves, 0, 3) // PORT: КТ-2
-//		AlfheimAPI.addTreeVariant(ModBlocks.altGrass, altWood1, altLeaves, 4, 5) // PORT: КТ-2
+		// PORT: трава Botania 1.7.10 с вариантами metadata — массив блоков Botania 1.20.1 по номеру (alfheim.port.legacy.botania)
+		AlfheimAPI.addTreeVariant(altGrass, altWood0, altLeaves, 0, 3)
+		AlfheimAPI.addTreeVariant(altGrass, altWood1, altLeaves, 4, 5)
+//		AlfheimAPI.addTreeVariant(ModBlocks.altGrass, altWood0, altLeaves, 0, 3)
+//		AlfheimAPI.addTreeVariant(ModBlocks.altGrass, altWood1, altLeaves, 4, 5)
 	}
 	
 //	fun addSubFlower(clazz: Class<out SubTileEntity>, name: String) { // PORT: КТ-3

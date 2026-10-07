@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 225 | 19 495 | 55 | 168 | 2 |  |
+| КТ-2 | 225 | 19 495 | 51 | 172 | 2 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **879** | **200** | **62** | **12** |
+| **всего** | **1153** | **124 643** | **875** | **204** | **62** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -717,10 +717,10 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockAltLeaves.kt` | 148 | КТ-2 | ждёт |  |
-| `BlockAltPlanks.kt` | 120 | КТ-2 | ждёт |  |
-| `BlockAltWood.kt` | 140 | КТ-2 | ждёт |  |
-| `BlockAltWoodPartials.kt` | 96 | КТ-2 | ждёт |  |
+| `BlockAltLeaves.kt` | 148 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockAltLeaves.kt`; 8 блоков-вариантов `alt_leaves0`–`7`; листва Иггдрасиля — не листва (нет в `minecraft:leaves`, `isLeaves` прослойки), не опадает и не ломается; листва мечтаний опадает в 8 шагах от бревна, роняет вишню мечтаний (таблица лута), ночью — огоньки (`Botania.proxy` без ограничения расстояния), светящийся слой (`RenderGlowingLayerBlock` ASJCore) — второй слой модели; саженец мечтаний в луте — партия 8г-2 |
+| `BlockAltPlanks.kt` | 120 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockAltPlanks.kt`; 7 блоков-вариантов `alt_planks0`–`6`; доски Иггдрасиля — твёрдость 100 у состояний блока, взрывоустойчивость 1000, не горят |
+| `BlockAltWood.kt` | 140 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockAltWood.kt`; 8 блоков-вариантов `alt_wood00`–`13` (набор и вариант); бревно Иггдрасиля (`alt_wood12`) не сломать (твёрдость −1 у состояний блока) и не взорвать (`getExplosionResistance` Forge), не горит, не в `minecraft:logs`; клык Нидхёгга — партия 9; иконки — модели, кадры опалённого бревна сглаживает .mcmeta |
+| `BlockAltWoodPartials.kt` | 96 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockAltWoodPartials.kt`; плиты `alt_planks_slab0`–`6` (двойная — состояние `type=double`, старое имя `altPlanksSlabFull` с metadata варианта), ступеньки `alt_planks_stairs0`–`6`; Иггдрасиль — твёрдость 100, взрывоустойчивость 1000, не горит; перевёрнутые ступеньки к югу — твёрдость 100, как у автора (BUGS.md) |
 | `BlockYggDecor.kt` | 31 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockYggDecor.kt` |
 
 ### `legacy/src/main/java/alfheim/common/block/base/`
@@ -2112,7 +2112,7 @@ python3 tools/check_inventory.py
 | `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
-| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 152 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
+| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 194 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
 | `alfheim/textures/blocks/decor/` | 83 | КТ-3 | ждёт | перенесено 79 — декор `AlfheimFluffBlocks` и мерцающий кварц (`shimmerQuartz`); остались 4 файла (`blockInsertShimmerQuartz`, `blockSmoothShimmerQuartz` с .mcmeta) — варианты 5 и 6 кварца, их добавляет врезка `QuartzExtender` (КТ-3) |
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
@@ -2176,7 +2176,7 @@ python3 tools/check_inventory.py
 | `alexsocol/asjlib/extendables/ASJConfigHandler.kt` | 98 | КТ-1 | всё | поверх `alfheim.port.config.Configuration` |
 | `alexsocol/asjlib/extendables/ASJPreConfigHandler.kt` | 83 | КТ-1 | всё | то же |
 | `alexsocol/asjlib/ASJUtilities.kt` | 914 | КТ-1 | лог, сторона (`isServer`/`isClient`), `chance`, `randInBounds`, поиск в коллекциях, `say`, `soundFromMaterial`, `dispatchTEToNearbyPlayers` (КТ-2) | |
-| `alexsocol/asjlib/Extensions.kt` | 358 | КТ-1 | функции Kotlin, `clamp`/`mfloor`/`mceil`, `eventForge`/`eventFML`, `ItemStack.cooldown`, `toItem`/`toBlock`/`ItemStack.block`, `TileEntity.boundingBox` (КТ-2) | `meta`, числовые `id`, `PotionEffectU`, базовые классы блоков (`extendables`) — в КТ-2 вместе с блоками: у них меняется смысл metadata |
+| `alexsocol/asjlib/Extensions.kt` | 358 | КТ-1 | функции Kotlin, `clamp`/`mfloor`/`mceil`, `eventForge`/`eventFML`, `ItemStack.cooldown`, `toItem`/`toBlock`/`ItemStack.block`, `TileEntity.boundingBox` (КТ-2), `getBlock(entity)` — блок в точке существа (КТ-2) | `meta`, числовые `id`, `PotionEffectU`, базовые классы блоков (`extendables`) — в КТ-2 вместе с блоками: у них меняется смысл metadata |
 | `alexsocol/asjlib/ExtensionsClient.kt` | 17 | КТ-1 | `mc` | |
 | `alexsocol/asjlib/ArrayExt.kt` | 88 | КТ-1 | всё | без правок |
 | `alexsocol/asjlib/ItemNBTHelper.kt` | 149 | КТ-1 | всё | |

@@ -17,6 +17,7 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.item.*
 import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.phys.Vec3
@@ -218,31 +219,44 @@ object PortPlantsTest {
 	}
 
 	/**
-	 * Лут: листва с ножницами — сама, без них — радужный саженец с шансом 1/20; трава ириса с ножницами — сама; двойная
-	 * трава с ножницами — две травы ириса своего цвета, без них — ничего
+	 * Лут: листва без ножниц — радужный саженец с шансом 1/20, с ножницами — сама и так же саженец (Forge 1.7.10 после
+	 * среза не отменял обычный сбор), с шёлковым касанием — только сама; трава ириса — семена с шансом 1/8, с ножницами —
+	 * ещё и сама; двойная трава с ножницами — две травы ириса своего цвета, без них — ничего
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
 	fun irisLoot(helper: GameTestHelper) {
 		val shears = ItemStack(Items.SHEARS)
+		val silkTouch = ItemStack(Items.DIAMOND_PICKAXE).also { it.enchant(Enchantments.SILK_TOUCH, 1) }
 		fun drops(pos: BlockPos, tool: ItemStack) = Block.getDrops(helper.getBlockState(pos), helper.level, helper.absolutePos(pos), null, null, tool)
+		/** Сколько саженцев за 400 сборов инструментом [tool]; кроме них — только [self] по одной на сбор, если он задан */
+		fun saplings(pos: BlockPos, tool: ItemStack, self: Item?): Int {
+			var saplings = 0
+			repeat(400) {
+				val stacks = drops(pos, tool)
+				if (self != null) helper.assertTrue(stacks.count { it.item === self && it.count == 1 } == 1, "$tool: leaves drop $stacks")
+				for (stack in stacks.filter { it.item !== self }) {
+					helper.assertTrue(stack.item === AlfheimBlocks.irisSapling.asItem() && stack.count == 1, "$tool: leaves drop $stack")
+					saplings++
+				}
+			}
+			return saplings
+		}
 
 		val leaves = BlockPos(1, 1, 1)
 		helper.setBlock(leaves, AlfheimBlocks.irisLeaves0[4])
-		helper.assertTrue(drops(leaves, shears).map { it.item } == listOf(AlfheimBlocks.irisLeaves0[4].asItem()), "sheared leaves: ${drops(leaves, shears)}")
-		var saplings = 0
-		repeat(400) {
-			for (stack in drops(leaves, ItemStack.EMPTY)) {
-				helper.assertTrue(stack.item === AlfheimBlocks.irisSapling.asItem() && stack.count == 1, "leaves drop $stack")
-				saplings++
-			}
-		}
-		helper.assertTrue(saplings in 5..40, "saplings from 400 leaves: $saplings")
+		val leavesItem = AlfheimBlocks.irisLeaves0[4].asItem()
+		saplings(leaves, ItemStack.EMPTY, null).let { helper.assertTrue(it in 5..40, "saplings from 400 leaves: $it") }
+		saplings(leaves, shears, leavesItem).let { helper.assertTrue(it in 5..40, "saplings from 400 sheared leaves: $it") }
+		saplings(leaves, silkTouch, leavesItem).let { helper.assertTrue(it == 0, "saplings from 400 leaves with silk touch: $it") }
 
 		val grass = BlockPos(0, 1, 0)
 		helper.setBlock(grass.below(), AlfheimBlocks.irisDirt[0])
 		helper.setBlock(grass, AlfheimBlocks.irisGrass[9])
-		helper.assertTrue(drops(grass, shears).map { it.item } == listOf(AlfheimBlocks.irisGrass[9].asItem()), "sheared grass")
+		repeat(50) {
+			val sheared = drops(grass, shears)
+			helper.assertTrue(sheared.count { it.item === AlfheimBlocks.irisGrass[9].asItem() } == 1 && sheared.all { it.item === AlfheimBlocks.irisGrass[9].asItem() || it.item === Items.WHEAT_SEEDS }, "sheared grass: $sheared")
+		}
 		repeat(50) { for (stack in drops(grass, ItemStack.EMPTY)) helper.assertTrue(stack.item === Items.WHEAT_SEEDS, "grass drops $stack") }
 
 		DoublePlantBlock.placeAt(helper.level, AlfheimBlocks.irisTallGrass0[5].defaultBlockState(), helper.absolutePos(grass), 3)

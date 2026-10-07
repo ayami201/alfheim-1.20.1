@@ -2,9 +2,10 @@ package alfheim.port.data
 
 import alexsocol.asjlib.extendables.block.*
 import alfheim.api.ModInfo.MODID
+import alfheim.api.lib.LibOreDict.ALT_TYPES
 import alfheim.client.render.tile.RenderTileTreeBerry
 import alfheim.common.block.*
-import alfheim.common.block.alt.BlockYggDecor
+import alfheim.common.block.alt.*
 import alfheim.common.block.base.*
 import alfheim.common.block.colored.*
 import alfheim.common.block.colored.rainbow.*
@@ -199,6 +200,8 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 		val (side, end) = when (block) {
 			// BlockShrinePillar.registerBlockIcons
 			is BlockShrinePillar -> legacyTexture("$MODID:decor/ShrinePillar") to legacyTexture("$MODID:decor/ShrinePillarTop")
+			// BlockAltWood.registerBlockIcons: altOak<вид>Side и altOak<вид>Top, вид — ALT_TYPES[набор * 4 + вариант]
+			is BlockAltWood      -> legacyTexture("$MODID:altOak${ALT_TYPES[block.set * 4 + block.meta]}Side") to legacyTexture("$MODID:altOak${ALT_TYPES[block.set * 4 + block.meta]}Top")
 			else                 -> legacyTexture(icon(block, "Side")) to legacyTexture(icon(block, "Top"))
 		}
 		pillar(block, side, end)
@@ -288,11 +291,32 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 	/**
 	 * `BlockLeavesMod.registerBlockIcons` и `getIcon`: иконка по имени блока, при «быстрой» графике — `_opaque` (её модель
 	 * подставляет клиент, alfheim.port.client.AlfheimModels). Модель — листва ванилы `block/leaves`: окрашенный куб,
-	 * сплошным или с отсечением его рисует 1.20.1 по настройке графики (LeavesBlock)
+	 * сплошным или с отсечением его рисует 1.20.1 по настройке графики (LeavesBlock). `BlockAltLeaves.registerBlockIcons`:
+	 * иконка — имя блока и вид (`altLeavesDry`), у листвы мечтаний — светящийся слой `altLeavesDreamwoodGlow`
+	 * (`getGlowIcon`, [glowLeaves])
 	 */
 	private fun leaves(block: BlockLeavesMod) {
-		models().withExistingParent(name(block) + "_opaque", mcLoc("block/leaves")).texture("all", legacyTexture(icon(block, "_opaque")))
-		block(block, models().withExistingParent(name(block), mcLoc("block/leaves")).texture("all", legacyTexture(icon(block))))
+		val type = if (block is BlockAltLeaves) ALT_TYPES[block.meta] else ""
+		if (block is BlockAltLeaves && block.meta == 7) return glowLeaves(block, type, legacyTexture(icon(block, "DreamwoodGlow")))
+		models().withExistingParent(name(block) + "_opaque", mcLoc("block/leaves")).texture("all", legacyTexture(icon(block, type + "_opaque")))
+		block(block, models().withExistingParent(name(block), mcLoc("block/leaves")).texture("all", legacyTexture(icon(block, type))))
+	}
+
+	/**
+	 * Листва со светящимся слоем (`RenderGlowingLayerBlock` ASJCore): поверх граней листвы — те же грани с иконкой [glow],
+	 * белые, со светом блока 15 (яркость 240) и без затенения граней. Прозрачные точки слоя 1.7.10 отсекал при любой
+	 * графике, поэтому модель — с отсечением прозрачного (`cutout_mipped`, как листва при «красивой» графике) и при
+	 * «быстрой» графике: непрозрачная текстура `_opaque` выглядит так же, как сплошная
+	 */
+	private fun glowLeaves(block: BlockLeavesMod, type: String, glow: ResourceLocation) {
+		fun model(name: String, leaves: ResourceLocation): BlockModelBuilder {
+			val model = models().withExistingParent(name, mcLoc("block/block")).texture("particle", leaves).texture("all", leaves).texture("glow", glow).renderType("cutout_mipped")
+			model.element().allFaces { side, face -> face.texture("#all").cullface(side).tintindex(0) }.end()
+			model.element().shade(false).ao(false).emissivity(15, 0).allFaces { side, face -> face.texture("#glow").cullface(side) }.end()
+			return model
+		}
+		model(name(block) + "_opaque", legacyTexture(icon(block, type + "_opaque")))
+		block(block, model(name(block), legacyTexture(icon(block, type))))
 	}
 
 	/** Растение 1.7.10 с рендером 1 — крест (окрашенный у блока, которого красит класс автора), с отсечением прозрачного */
@@ -485,6 +509,8 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			block is BlockModMeta                             -> "${block.modid}:${block.folder}${block.name}${block.variant ?: ""}"
 			// BlockShimmerQuartz.registerIcons: иконка варианта из iconNames, папка decor
 			block is BlockShimmerQuartz                       -> "$MODID:decor/" + block.iconNames[block.meta]!!.replace("decor/", "")
+			// BlockAltPlanks.registerBlockIcons: иконка — имя блока и вид (altPlanksDry)
+			block is BlockAltPlanks                           -> "$MODID:altPlanks${ALT_TYPES[block.meta]}"
 			(block as LegacyBlock).legacy.textureName != null -> block.legacy.textureName!!
 			block is BlockMod                                 -> MODID + ":" + block.legacy.unlocalizedName.removePrefix("tile.")
 			else                                              -> throw IllegalStateException("No 1.7.10 texture rule for ${block.javaClass.name}")

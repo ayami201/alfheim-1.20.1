@@ -60,6 +60,9 @@ val Level.isRemote: Boolean get() = isClientSide
 /** `totalWorldTime` 1.7.10 — тики мира с его создания */
 val Level.totalWorldTime: Long get() = gameTime
 
+/** `worldTime` 1.7.10 — время суток мира: с каждыми сутками растёт на 24000, его меняют команда `time` и сон */
+val Level.worldTime: Long get() = dayTime
+
 /** `playerEntities` 1.7.10 — игроки мира */
 val Level.playerEntities: List<Player> get() = players()
 

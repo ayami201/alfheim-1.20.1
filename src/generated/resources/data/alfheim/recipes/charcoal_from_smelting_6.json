@@ -3,8 +3,19 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.15,
-  "ingredient": {
-    "item": "alfheim:aurora_wood"
-  },
+  "ingredient": [
+    {
+      "item": "alfheim:iris_wood30"
+    },
+    {
+      "item": "alfheim:iris_wood31"
+    },
+    {
+      "item": "alfheim:iris_wood32"
+    },
+    {
+      "item": "alfheim:iris_wood33"
+    }
+  ],
   "result": "minecraft:charcoal"
 }

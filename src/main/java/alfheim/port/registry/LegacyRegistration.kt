@@ -50,9 +50,10 @@ object LegacyRegistration {
 
 	/**
 	 * Блок 1.7.10, у которого в 1.20.1 нет своего блока, — состояние другого блока: двойная плита — `type=double` плиты.
-	 * [state] — свойства состояния, как в `legacy_ids.json`: `type=double`
+	 * [state] — свойства состояния, как в `legacy_ids.json`: `type=double`; [oldMeta] — metadata варианта, `null` — блок
+	 * без вариантов
 	 */
-	class Alias(val oldName: String, val block: Block, val state: String)
+	class Alias(val oldName: String, val block: Block, val state: String, val oldMeta: Int? = null)
 
 	/**
 	 * Блок автора, вместо которого в порту — такой же блок другого мода (решение автора, TASKS.md, журнал решений): своего
@@ -146,11 +147,11 @@ object LegacyRegistration {
 		if (item != null) blockItems += block to item
 	}
 
-	/** Старое имя [name] — состояние [state] блока [block] ([Alias]) */
-	fun alias(name: String, block: Block, state: String) {
+	/** Старое имя [name] с metadata [meta] (`null` — без вариантов) — состояние [state] блока [block] ([Alias]) */
+	fun alias(name: String, block: Block, state: String, meta: Int? = null) {
 		check(block in blocks) { "Alias $name: block is not registered" }
-		check(aliases.none { it.oldName == name }) { "Alias $name is registered twice" }
-		aliases += Alias(name, block, state)
+		check(aliases.none { it.oldName == name && (it.oldMeta == meta || it.oldMeta == null || meta == null) }) { "Alias $name${meta ?: ""} is registered twice" }
+		aliases += Alias(name, block, state, meta)
 	}
 
 	/** Старое имя [name] — блок другого мода [block] ([Replacement]) */

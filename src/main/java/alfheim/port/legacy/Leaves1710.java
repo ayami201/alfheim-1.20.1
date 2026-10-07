@@ -14,15 +14,16 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * {@code net.minecraft.block.BlockLeaves} 1.7.10 (MAPPING.md, «Растения»): материал листвы; свет задерживает слабо, в
- * дождь роняет капли, при «быстрой» графике рисуется сплошной — как листва 1.20.1. Бит опадания metadata (у автора —
- * {@code decayBit()}: листва, которую поставил игрок, не опадает) — свойство {@code persistent}.
+ * {@code net.minecraft.block.BlockLeaves} 1.7.10 (MAPPING.md, «Растения»): материал листвы; свет задерживает, как задал
+ * {@code setLightOpacity}, в дождь роняет капли, при «быстрой» графике рисуется сплошной — как листва 1.20.1. Бит
+ * опадания metadata (у автора — {@code decayBit()}: листва, которую поставил игрок, не опадает) — свойство
+ * {@code persistent}.
  * <p>
  * Опадать ли, решает метод 1.7.10 {@link #updateTick} класса автора — на случайном тике листвы, которая может опасть;
  * у ванилы 1.7.10 он свой, здесь — пустой. Расстояние до бревна ({@code distance}) листва считает, как листва 1.20.1:
  * по нему через неё находит бревно листва ванилы, поэтому запланированный тик ({@code tick}) остаётся тиком 1.20.1.
- * Лут — таблица (генерация данных): с ножницами или шёлковым касанием — сама листва, иначе — что даёт
- * {@link #getItemDropped}.
+ * Лут — таблица (генерация данных): с ножницами или шёлковым касанием — сама листва; без шёлкового касания — что даёт
+ * {@link #getItemDropped} (и с ножницами: Forge 1.7.10 после среза не отменял обычный сбор).
  * <p>
  * Класс написан на Java, как {@code BlockLeaves} 1.7.10: переопределения автора объявляют параметры кто nullable, кто
  * нет.
@@ -46,6 +47,18 @@ public abstract class Leaves1710 extends LeavesBlock implements LegacyBlock, Sou
 		return false;
 	}
 
+	/** Свет листва задерживает, как задала {@code setLightOpacity} (у листвы ванилы 1.7.10 и 1.20.1 — 1), как {@code Block1710} */
+	@Override
+	public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
+		return Math.min(lightOpacity(), 15);
+	}
+
+	/** Свет неба 1.7.10 проходил блок с непрозрачностью 0 не ослабевая, как {@code Block1710} */
+	@Override
+	public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+		return lightOpacity() == 0;
+	}
+
 	@Override
 	public boolean isRandomlyTicking(BlockState state) {
 		return !state.getValue(PERSISTENT);
@@ -54,6 +67,29 @@ public abstract class Leaves1710 extends LeavesBlock implements LegacyBlock, Sou
 	@Override
 	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		updateTick(level, pos.getX(), pos.getY(), pos.getZ(), random);
+	}
+
+	/**
+	 * {@code randomDisplayTick} 1.7.10 — частицы рядом с игроком на клиенте; у листвы — капли в дождь, как у листвы
+	 * 1.20.1 ({@code animateTick})
+	 */
+	public void randomDisplayTick(Level world, int x, int y, int z, RandomSource random) {
+		BlockPos pos = new BlockPos(x, y, z);
+		super.animateTick(world.getBlockState(pos), world, pos, random);
+	}
+
+	@Override
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+		randomDisplayTick(level, pos.getX(), pos.getY(), pos.getZ(), random);
+	}
+
+	/**
+	 * {@code isLeaves} Forge 1.7.10 — листва ли блок; у листвы — да. В 1.20.1 листву узнают по тегу
+	 * {@code minecraft:leaves}: генерация данных кладёт в него листву порта, у которой этот метод отвечает «да» (мир —
+	 * {@code null}), а {@code isLeaves} прослойки (World.kt) спрашивает тег
+	 */
+	public boolean isLeaves(BlockGetter world, int x, int y, int z) {
+		return true;
 	}
 
 	// Методы 1.7.10 класса автора (LegacyBlockMethods) из методов 1.20.1 — как у Block1710, кроме тика
