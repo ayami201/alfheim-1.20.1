@@ -1,23 +1,23 @@
 package alfheim.common.block
 
+// PORT: импорты 1.20.1; BlockBush 1.7.10 — alfheim.port.legacy.Bush1710, IGrowable — alfheim.port.legacy.IGrowable
+// (MAPPING.md, «Растения»)
 import alexsocol.asjlib.toItem
 import alfheim.api.ModInfo
 import alfheim.common.core.util.AlfheimTab
 import alfheim.common.item.block.ItemBlockLeavesMod
-import alfheim.common.lexicon.AlfheimLexiconData
 import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim
-import cpw.mods.fml.common.IFuelHandler
-import cpw.mods.fml.common.registry.GameRegistry
-import net.minecraft.block.*
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
-import net.minecraft.world.World
-import net.minecraftforge.event.terraingen.TerrainGen
-import vazkii.botania.api.lexicon.ILexiconable
-import java.util.*
+import alfheim.port.legacy.*
+import net.minecraft.core.BlockPos
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.state.*
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.STAGE
 
-class BlockDreamSapling: BlockBush(), IGrowable, ILexiconable, IFuelHandler {
+// PORT: КТ-9 — лексикон (ILexiconable)
+class BlockDreamSapling: Bush1710(), IGrowable/*, ILexiconable*/, IFuelHandler {
 	
 	init {
 		setBlockBounds(0.1f, 0f, 0.1f, 0.9f, 0.8f, 0.9f)
@@ -28,8 +28,14 @@ class BlockDreamSapling: BlockBush(), IGrowable, ILexiconable, IFuelHandler {
 		setLightOpacity(0)
 		stepSound = soundTypeGrass
 		tickRandomly = true
+		// PORT: бит 8 metadata («готов расти») — свойство stage, как у саженца (Sapling1710)
+		registerDefaultState(stateDefinition.any().setValue(STAGE, 0))
 		
 		GameRegistry.registerFuelHandler(this)
+	}
+	
+	override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+		builder.add(STAGE)
 	}
 	
 	override fun setBlockName(name: String): Block {
@@ -48,10 +54,17 @@ class BlockDreamSapling: BlockBush(), IGrowable, ILexiconable, IFuelHandler {
 	}
 	
 	fun grow(world: World, x: Int, y: Int, z: Int, rand: Random) {
-		val l = world.getBlockMetadata(x, y, z)
+		// PORT: бит 8 metadata — свойство stage; саженец мог убрать super.updateTick (нет опоры), а стадии у воздуха
+		// 1.20.1 нет (в 1.7.10 metadata воздуха менялась впустую)
+		val pos = BlockPos(x, y, z)
+		val state = world.getBlockState(pos)
+		if (!state.`is`(this)) return
+//		val l = world.getBlockMetadata(x, y, z)
 		
-		if (l and 8 == 0) {
-			world.setBlockMetadataWithNotify(x, y, z, l or 8, 4)
+		if (state.getValue(STAGE) == 0) {
+//		if (l and 8 == 0) {
+			world.setBlock(pos, state.setValue(STAGE, 1), 4)
+//			world.setBlockMetadataWithNotify(x, y, z, l or 8, 4)
 		} else {
 			growTree(world, x, y, z, rand)
 		}
@@ -59,9 +72,12 @@ class BlockDreamSapling: BlockBush(), IGrowable, ILexiconable, IFuelHandler {
 	
 	fun growTree(world: World, x: Int, y: Int, z: Int, rand: Random) {
 		if (!TerrainGen.saplingGrowTree(world, rand, x, y, z)) return
-		val l = world.getBlockMetadata(x, y, z) and 7
-		world.setBlock(x, y, z, Blocks.air, 0, 4)
-		if (!BiomeAlfheim.dreamTree.generate(world, rand, x, y, z, null)) world.setBlock(x, y, z, this, l, 4)
+		// PORT: metadata без бита 8 — саженец со стадией 0 (вариантов у саженца нет)
+//		val l = world.getBlockMetadata(x, y, z) and 7
+		world.setBlock(x, y, z, Blocks.AIR.defaultBlockState(), 4)
+//		world.setBlock(x, y, z, Blocks.air, 0, 4)
+		if (!BiomeAlfheim.dreamTree.generate(world, rand, x, y, z, null)) world.setBlock(x, y, z, defaultBlockState(), 4)
+//		if (!BiomeAlfheim.dreamTree.generate(world, rand, x, y, z, null)) world.setBlock(x, y, z, this, l, 4)
 	}
 	
 	/** Can the block grow
@@ -79,9 +95,11 @@ class BlockDreamSapling: BlockBush(), IGrowable, ILexiconable, IFuelHandler {
 		grow(world, x, y, z, rand)
 	}
 	
-	override fun damageDropped(meta: Int) = 0
+	// PORT: лут — сам саженец (alfheim.port.data.AlfheimBlockLoot): бит стадии в предмет не попадает
+//	override fun damageDropped(meta: Int) = 0
 	
-	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, lexicon: ItemStack) = AlfheimLexiconData.worldgen
+	// PORT: КТ-9 — лексикон
+//	override fun getEntry(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, lexicon: ItemStack) = AlfheimLexiconData.worldgen
 	
 	override fun getBurnTime(fuel: ItemStack) = if (fuel.item === this.toItem()) 100 else 0
 }

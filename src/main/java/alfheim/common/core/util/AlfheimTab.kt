@@ -34,6 +34,7 @@ import alfheim.common.block.AlfheimBlocks.circuitSapling
 import alfheim.common.block.AlfheimBlocks.circuitSlabs
 import alfheim.common.block.AlfheimBlocks.circuitStairs
 import alfheim.common.block.AlfheimBlocks.circuitWood
+import alfheim.common.block.AlfheimBlocks.dreamSapling
 import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.elvenSand
 import alfheim.common.block.AlfheimBlocks.irisDirt
@@ -736,8 +737,8 @@ object AlfheimTab {
 		addBlock(calicoSapling)
 		addBlock(sealingSapling)
 		addBlock(barrierSapling)
-		/* PORT: КТ-2
 		addBlock(dreamSapling)
+		/* PORT: КТ-2
 		addBlock(tunedSapling)
 		
 		addBlock(grapesRed[0])

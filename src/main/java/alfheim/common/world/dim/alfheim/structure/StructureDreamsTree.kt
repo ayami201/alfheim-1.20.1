@@ -1,14 +1,18 @@
 package alfheim.common.world.dim.alfheim.structure
 
+// PORT: импорты 1.20.1 (блок и материал 1.7.10 — alfheim.port.legacy, MAPPING.md); генератор чанков WorldEngine
+// (WE_ChunkProvider) — КТ-6
 import alexsocol.asjlib.ASJUtilities
-import net.minecraft.block.Block
-import net.minecraft.block.material.Material
-import net.minecraft.init.Blocks
-import net.minecraft.world.World
-import ru.vamig.worldengine.WE_ChunkProvider
+import alfheim.port.legacy.*
+import net.minecraft.core.Direction
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.RotatedPillarBlock
 import ru.vamig.worldengine.standardcustomgen.StructureBaseClass
-import java.util.*
 
+// PORT: бревно и листва — блоки вариантов (SPEC, Р-5), metadata бревна в параметрах — его ось, как у автора (setBlock
+// ниже); дерево мечтаний и печальный дуб — BiomeAlfheim
 class StructureDreamsTree
 /**
  * @param upmeta Vertical wood meta
@@ -18,7 +22,8 @@ class StructureDreamsTree
  */
 (val log: Block, val leaves: Block, val upmeta: Int, val lrmeta: Int, val fbmeta: Int, val lvsmeta: Int): StructureBaseClass() {
 	
-	override fun generate(world: World, rand: Random, i: Int, y: Int, k: Int, `null`: WE_ChunkProvider?): Boolean {
+	// PORT: генератор чанков WorldEngine (КТ-6) — Any?: постройки из саженцев передают null
+	override fun generate(world: World, rand: Random, i: Int, y: Int, k: Int, `null`: Any?): Boolean {
 		var x = i
 		var z = k
 		x -= 7
@@ -531,6 +536,12 @@ class StructureDreamsTree
 		return false
 	}
 	
+	// PORT: setBlock(x, y, z, block, meta, flags) 1.7.10 — состояние вместо metadata выбирает вызывающий код (MAPPING.md):
+	// бревно — с осью по metadata (meta and 12: 0 — вверх, 4 — вдоль x, 8 — вдоль z), листва — состояние по умолчанию
+	// (природная: бита опадания в metadata автора нет); вариант — сам блок
+	private fun World.setBlock(x: Int, y: Int, z: Int, block: Block, meta: Int, flags: Int) =
+		setBlock(x, y, z, if (block === log) block.defaultBlockState().setValue(RotatedPillarBlock.AXIS, when (meta and 12) { 4 -> Direction.Axis.X; 8 -> Direction.Axis.Z; else -> Direction.Axis.Y }) else block.defaultBlockState(), flags)
+	
 	companion object {
 		
 		val forLog = arrayOf(Material.wood, Material.ground, Material.grass)
@@ -543,7 +554,9 @@ class StructureDreamsTree
 			var distanceToAir = 0
 			var checkBlock = world.getBlock(x, y, z)
 			
-			while (checkBlock !== Blocks.air) {
+			// PORT: воздух 1.20.1 — ещё и воздух пещер и пустоты (вне мира); в 1.7.10 их не было, вне мира был воздух
+			while (!checkBlock.defaultBlockState().isAir) {
+//			while (checkBlock !== Blocks.air) {
 				distanceToAir++
 				checkBlock = world.getBlock(x, y + distanceToAir, z)
 			}
@@ -559,7 +572,9 @@ class StructureDreamsTree
 			val blockBelow = world.getBlock(x, y - 1, z)
 			
 			for (i in validSpawnMaterial) {
-				if (blockAbove !== Blocks.air)
+				// PORT: воздух 1.20.1 — и воздух пещер и пустоты (выше)
+				if (!blockAbove.defaultBlockState().isAir)
+//				if (blockAbove !== Blocks.air)
 					return false
 				if (block.material === i)
 					return true

@@ -84,9 +84,7 @@ class BlockAltLeaves(val meta: Int): BlockLeavesMod()/*, IGlowingLayerBlock*/ {
 	}
 	*/
 	
-	// PORT: КТ-2 (партия 8г-2) — саженец древа мечтаний (dreamSapling): пока листва мечтаний без ножниц его не роняет
-	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = if (meta % 8 == yggMeta) null else if (meta % 8 == yggMeta + 1) null else AlfheimBlocks.irisSapling.toItem()
-//	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = if (meta % 8 == yggMeta) null else if (meta % 8 == yggMeta + 1) AlfheimBlocks.dreamSapling.toItem() else AlfheimBlocks.irisSapling.toItem()
+	override fun getItemDropped(meta: Int, random: Random, fortune: Int) = if (meta % 8 == yggMeta) null else if (meta % 8 == yggMeta + 1) AlfheimBlocks.dreamSapling.toItem() else AlfheimBlocks.irisSapling.toItem()
 	
 	/* PORT: лут — таблица листвы (alfheim.port.data.AlfheimBlockLoot): листва мечтаний роняет вишню мечтаний с шансом
 	   1 / (шанс плода BlockLeavesMod.getDrops / 2); с шёлковым касанием — сама листва без бита опадания

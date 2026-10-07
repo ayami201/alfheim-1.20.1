@@ -57,6 +57,9 @@ fun Level.spawnEntityInWorld(entity: Entity) = addFreshEntity(entity)
 
 val Level.isRemote: Boolean get() = isClientSide
 
+/** `rand` 1.7.10 — случайные числа мира */
+val Level.rand: RandomSource get() = random
+
 /** `totalWorldTime` 1.7.10 — тики мира с его создания */
 val Level.totalWorldTime: Long get() = gameTime
 
