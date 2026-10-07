@@ -126,6 +126,7 @@
       "8": "alfheim:niflheim_block7[axis=x]",
       "9": "alfheim:niflheim_block7[axis=z]"
     },
+    "alfheim:NiflheimIce": "alfheim:niflheim_ice",
     "alfheim:ShrineGlass": {
       "0": "alfheim:shrine_glass0",
       "1": "alfheim:shrine_glass1",
@@ -708,6 +709,7 @@
       "6": "alfheim:niflheim_block6",
       "7": "alfheim:niflheim_block7"
     },
+    "alfheim:NiflheimIce": "alfheim:niflheim_ice",
     "alfheim:ShrineGlass": {
       "0": "alfheim:shrine_glass0",
       "1": "alfheim:shrine_glass1",
@@ -1313,6 +1315,7 @@
     "tile.alfheim:DwarfTrapDoor.name": "block.alfheim.dwarf_trap_door",
     "tile.alfheim:ElvenSand.name": "block.alfheim.elven_sand",
     "tile.alfheim:ManaIce.name": "block.alfheim.mana_ice",
+    "tile.alfheim:NiflheimIce.name": "block.alfheim.niflheim_ice",
     "tile.alfheim:ShrinePillar.name": "block.alfheim.shrine_pillar",
     "tile.alfheim:ShrineRockWhiteStairs.name": "block.alfheim.shrine_rock_white_stairs",
     "tile.alfheim:SnowGrass.name": "block.alfheim.snow_grass",

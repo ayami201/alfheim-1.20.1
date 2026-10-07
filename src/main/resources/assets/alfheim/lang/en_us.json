@@ -196,7 +196,7 @@
 	"block.alfheim.niflheim_block6": "Polished Deepfrozen Stone",
 	"block.alfheim.niflheim_block10": "Runic Deepfrozen Stone",
 	"block.alfheim.niflheim_block0": "Deepfrozen Stone",
-	"tile.alfheim:NiflheimIce.name": "Niflheim Ice Of Eternity",
+	"block.alfheim.niflheim_ice": "Niflheim Ice Of Eternity",
 	"tile.NiflheimPortal.name": "Waters of Hvergelmir",
 	"fluid.NiflheimPortal": "Waters of Hvergelmir",
 	"tile.alfheim:orechidEndium.name": "Orechid Endium",

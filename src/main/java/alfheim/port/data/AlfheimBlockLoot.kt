@@ -4,6 +4,7 @@ import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.BlockElvenOre
 import alfheim.common.block.BlockHang
 import alfheim.common.block.BlockNiflheim
+import alfheim.common.block.BlockNiflheimIce
 import alfheim.common.block.BlockSadOakLeaves
 import alfheim.common.block.BlockSnowGrass
 import alfheim.common.block.BlockSnowLayer
@@ -75,6 +76,8 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 			block is BlockSnowGrass                -> add(block, createSingleItemTableWithSilkTouch(block, block.getItemDropped(0, null, 0)))
 			block is BlockSnowLayer                -> add(block, snowLayer(block))
 			block is BlockNiflheim                 -> add(block, niflheim(block))
+			// BlockNiflheimIce: quantityDropped — 0; с шёлковым касанием вещь шла через dropBlockAsItem, а тот ничего не ронял
+			block is BlockNiflheimIce              -> add(block, noDrop())
 			else                                   -> dropSelf(block)
 		}
 	}
