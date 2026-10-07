@@ -4,11 +4,14 @@ import alfheim.api.AlfheimAPI
 import alfheim.api.ModInfo.MODID
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.AlfheimFluffBlocks
+import alfheim.common.block.BlockDreamSapling
+import alfheim.common.block.BlockSadOakLeaves
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.block.base.BlockLeavesMod
 import alfheim.common.block.colored.BlockColoredSapling
 import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenFoodMetas
+import alfheim.common.world.dim.alfheim.biome.BiomeAlfheim
 import alfheim.port.legacy.*
 import alfheim.port.legacy.botania.altGrass
 import alfheim.port.registry.LegacyIds
@@ -30,6 +33,7 @@ import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.Half
 import net.minecraftforge.common.ForgeHooks
 import net.minecraftforge.gametest.GameTestHolder
@@ -38,8 +42,9 @@ import vazkii.botania.common.block.BotaniaBlocks
 
 /**
  * КТ-2, партия 8г-1: альтернативные деревья — брёвна, доски, плиты, ступеньки и листва деревьев травы Botania (сухое,
- * золотое, яркое, опалённое, пропитанное, мутировавшее), Иггдрасиля и древа мечтаний. Числа и правила — из классов
- * автора (`alfheim.common.block.alt`) и правил 1.7.10 (MAPPING.md)
+ * золотое, яркое, опалённое, пропитанное, мутировавшее), Иггдрасиля и древа мечтаний. Партия 8г-2: саженец древа
+ * мечтаний, его дерево (`StructureDreamsTree`), листва печального дуба и печальный дуб. Числа и правила — из классов
+ * автора (`alfheim.common.block.alt`, `BlockDreamSapling`, `BlockSadOakLeaves`) и правил 1.7.10 (MAPPING.md)
  */
 @GameTestHolder(MODID)
 @PrefixGameTestTemplate(false)
@@ -185,9 +190,10 @@ object PortAltTreesTest {
 	}
 
 	/**
-	 * Лут листвы: листва травы Botania без ножниц иногда роняет саженец ириса; листва мечтаний — вишню мечтаний с шансом
-	 * 1/100 (`func_150124_c`), с ножницами — себя и так же вишню, с шёлковым касанием — только себя; саженца древа мечтаний
-	 * пока нет (партия 8г-2). Листва Иггдрасиля без ножниц не роняет ничего
+	 * Лут листвы: листва травы Botania без ножниц иногда роняет саженец ириса; листва мечтаний — саженец древа мечтаний с
+	 * шансом 1/20 (`BlockLeavesMod.getDrops`, BUGS.md, B-032) и вишню мечтаний с шансом 1/100 (`func_150124_c`), с
+	 * ножницами — себя и так же саженец и вишню, с шёлковым касанием — только себя. Листва Иггдрасиля без ножниц не
+	 * роняет ничего
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
@@ -195,21 +201,24 @@ object PortAltTreesTest {
 		fun drops(pos: BlockPos, tool: ItemStack) = Block.getDrops(helper.getBlockState(pos), helper.level, helper.absolutePos(pos), null, null, tool)
 		val pos = BlockPos(1, 1, 1)
 		val cherry = AlfheimItems.elvenFood[ElvenFoodMetas.DreamCherry.I]
+		val dreamSapling = AlfheimBlocks.dreamSapling.asItem()
 		val dream = AlfheimBlocks.altLeaves[7]
 		helper.setBlock(pos, dream)
 		var cherries = 0
+		var dreamSaplings = 0
 		repeat(3000) {
 			for (stack in drops(pos, ItemStack.EMPTY)) {
-				helper.assertTrue(stack.item === cherry && stack.count == 1, "dreamwood leaves drop $stack")
-				cherries++
+				helper.assertTrue((stack.item === cherry || stack.item === dreamSapling) && stack.count == 1, "dreamwood leaves drop $stack")
+				if (stack.item === cherry) cherries++ else dreamSaplings++
 			}
 		}
 		helper.assertTrue(cherries in 10..60, "cherries from 3000 dreamwood leaves: $cherries")
+		helper.assertTrue(dreamSaplings in 100..210, "dreamwood saplings from 3000 dreamwood leaves: $dreamSaplings")
 		val silkTouch = ItemStack(Items.DIAMOND_PICKAXE).also { it.enchant(Enchantments.SILK_TOUCH, 1) }
 		repeat(300) { helper.assertTrue(drops(pos, silkTouch).map { it.item } == listOf(dream.asItem()), "dreamwood leaves with silk touch") }
 		repeat(300) {
 			val sheared = drops(pos, ItemStack(Items.SHEARS))
-			helper.assertTrue(sheared.count { it.item === dream.asItem() } == 1 && sheared.all { it.item === dream.asItem() || it.item === cherry }, "sheared dreamwood leaves drop $sheared")
+			helper.assertTrue(sheared.count { it.item === dream.asItem() } == 1 && sheared.all { it.item === dream.asItem() || it.item === cherry || it.item === dreamSapling }, "sheared dreamwood leaves drop $sheared")
 		}
 
 		helper.setBlock(pos, AlfheimBlocks.altLeaves[3])
@@ -253,6 +262,163 @@ object PortAltTreesTest {
 			}
 		}
 		helper.assertTrue(leaves > 10, "leaves: $leaves")
+		helper.succeed()
+	}
+
+	/**
+	 * Саженец древа мечтаний (`BlockDreamSapling`): куст 1.7.10 с рамкой саженца (0,1–0,9, высота 0,8), светится (9), свет
+	 * не задерживает, тики случайные, звук травы; стоит на земле и траве, без опоры роняет себя; горит в печи 100 тиков;
+	 * костную муку принимает всегда; лут — сам саженец и на стадии 1 (бит 8 metadata — свойство stage). Старое имя —
+	 * `alfheim:DreamSapling`
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun dreamSapling(helper: GameTestHelper) {
+		val sapling = AlfheimBlocks.dreamSapling as BlockDreamSapling
+		helper.assertTrue(BuiltInRegistries.BLOCK.getKey(sapling) == ResourceLocation(MODID, "dream_sapling"), "id ${BuiltInRegistries.BLOCK.getKey(sapling)}")
+		helper.assertTrue(LegacyIds.block("$MODID:DreamSapling")?.id == ResourceLocation(MODID, "dream_sapling"), "legacy id DreamSapling")
+		val state = sapling.defaultBlockState()
+		helper.assertTrue(state.lightEmission == 9, "light ${state.lightEmission}")
+		helper.assertTrue(state.getLightBlock(helper.level, BlockPos.ZERO) == 0 && state.propagatesSkylightDown(helper.level, BlockPos.ZERO), "lets the light through")
+		helper.assertTrue(state.isRandomlyTicking && state.soundType == SoundType.GRASS, "random ticks, grass sound")
+		val shape = state.getShape(helper.level, BlockPos.ZERO).bounds()
+		fun near(a: Double, b: Double) = Math.abs(a - b) < 1e-6
+		helper.assertTrue(near(shape.minX, 0.1) && near(shape.maxX, 0.9) && near(shape.minY, 0.0) && near(shape.maxY, 0.8) && near(shape.minZ, 0.1) && near(shape.maxZ, 0.9), "shape $shape")
+		helper.assertTrue(ForgeHooks.getBurnTime(ItemStack(sapling), RecipeType.SMELTING) == 100, "fuel ${ForgeHooks.getBurnTime(ItemStack(sapling), RecipeType.SMELTING)}")
+
+		val pos = BlockPos(1, 2, 1)
+		val abs = helper.absolutePos(pos)
+		for (soil in listOf(Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.PODZOL)) {
+			helper.setBlock(pos.below(), soil)
+			helper.setBlock(pos, sapling)
+			helper.assertTrue(sapling.canBlockStay(helper.level, abs.x, abs.y, abs.z), "stays on $soil")
+		}
+		helper.assertTrue(sapling.func_149851_a(helper.level, abs.x, abs.y, abs.z, false), "bone meal")
+		for (stage in 0..1) {
+			val drops = Block.getDrops(state.setValue(BlockStateProperties.STAGE, stage), helper.level, abs, null)
+			helper.assertTrue(drops.map { it.item } == listOf(sapling.asItem()) && drops[0].count == 1, "drops $drops at stage $stage")
+		}
+		helper.setBlock(pos.below(), Blocks.STONE)
+		helper.setBlock(pos, sapling)
+		sapling.updateTick(helper.level, abs.x, abs.y, abs.z, RandomSource.create(0))
+		helper.assertBlockNotPresent(sapling, pos)
+		helper.assertItemEntityPresent(sapling.asItem(), pos, 2.0)
+		helper.killAllEntities()
+		helper.succeed()
+	}
+
+	/**
+	 * Дерево мечтаний и печальный дуб (`StructureDreamsTree`, `BiomeAlfheim`): из 473 установок блоков автора на пустом
+	 * месте остаются 119 брёвен — 37 вертикальных, 36 вдоль x, 46 вдоль z (ось — metadata автора) — и 353 листвы,
+	 * природной (опадает); ствол — на месте саженца, корни — на 3 ниже. Саженец растёт за два шага (стадия, затем дерево);
+	 * на камне дерево не растёт — саженец возвращается со стадией 0. Саженец, которого уже нет, не растёт и не ломает
+	 * игру (в 1.20.1 у воздуха нет стадии). Деревья растут на пустом месте высоко над площадкой, в своей партии тестов,
+	 * и убираются в конце: крона 15 × 16 блоков накрыла бы соседние тесты
+	 */
+	@JvmStatic
+	@GameTest(template = "empty", batch = "dream_tree")
+	fun dreamTreeGrows(helper: GameTestHelper) {
+		val sapling = AlfheimBlocks.dreamSapling as BlockDreamSapling
+		val random = RandomSource.create(0)
+		val dreamWood = AlfheimBlocks.altWood1[3]
+		val dreamLeaves = AlfheimBlocks.altLeaves[7]
+		fun tree(origin: BlockPos, log: Block, leaves: Block) {
+			val counts = HashMap<Any, Int>()
+			for (p in BlockPos.betweenClosed(origin.offset(-7, -3, -7), origin.offset(7, 11, 8))) {
+				val state = helper.getBlockState(p)
+				when {
+					state.`is`(log)    -> counts.merge(state.getValue(RotatedPillarBlock.AXIS), 1, Int::plus)
+					state.`is`(leaves) -> {
+						helper.assertTrue(!state.getValue(LeavesBlock.PERSISTENT), "leaves of a tree decay")
+						counts.merge("leaves", 1, Int::plus)
+					}
+				}
+			}
+			val expected = mapOf(Direction.Axis.Y to 37, Direction.Axis.X to 36, Direction.Axis.Z to 46, "leaves" to 353)
+			helper.assertTrue(counts == expected, "${BuiltInRegistries.BLOCK.getKey(log)} tree: $counts, expected $expected")
+			helper.assertBlockProperty(origin, RotatedPillarBlock.AXIS, Direction.Axis.Y)
+			helper.assertBlockProperty(origin.offset(-3, 0, 0), RotatedPillarBlock.AXIS, Direction.Axis.X)
+			helper.assertBlockProperty(origin.offset(-2, 0, -1), RotatedPillarBlock.AXIS, Direction.Axis.Z)
+			helper.assertBlockProperty(origin.offset(3, -3, -6), RotatedPillarBlock.AXIS, Direction.Axis.Y)
+			helper.assertBlockPresent(leaves, origin.offset(6, 2, -3))
+		}
+		// мир сервера тестов — обычный: на этой высоте камень; место под дерево — пустое, как у автора на поверхности
+		fun clear(origin: BlockPos) {
+			for (p in BlockPos.betweenClosed(origin.offset(-7, -4, -7), origin.offset(7, 12, 8))) helper.setBlock(p, Blocks.AIR)
+		}
+
+		val dream = BlockPos(0, 40, 0)
+		clear(dream)
+		helper.setBlock(dream.below(), Blocks.GRASS_BLOCK)
+		helper.setBlock(dream, sapling)
+		val abs = helper.absolutePos(dream)
+		sapling.grow(helper.level, abs.x, abs.y, abs.z, random)
+		helper.assertBlockProperty(dream, BlockStateProperties.STAGE, 1)
+		sapling.grow(helper.level, abs.x, abs.y, abs.z, random)
+		tree(dream, dreamWood, dreamLeaves)
+		clear(dream)
+
+		// на камне дерево не растёт, саженец возвращается со стадией 0
+		helper.setBlock(dream.below(), Blocks.STONE)
+		helper.setBlock(dream, sapling.defaultBlockState().setValue(BlockStateProperties.STAGE, 1))
+		sapling.growTree(helper.level, abs.x, abs.y, abs.z, random)
+		helper.assertBlockProperty(dream, BlockStateProperties.STAGE, 0)
+		clear(dream)
+
+		// саженца уже нет (его убрала проверка опоры): ни роста, ни ошибки
+		sapling.grow(helper.level, abs.x, abs.y, abs.z, random)
+		(AlfheimBlocks.irisSapling as BlockColoredSapling).markOrGrowMarked(helper.level, abs.x, abs.y, abs.z, random)
+		helper.assertBlockPresent(Blocks.AIR, dream)
+
+		val sad = BlockPos(0, 60, 0)
+		clear(sad)
+		helper.setBlock(sad.below(), Blocks.DIRT)
+		val sadAbs = helper.absolutePos(sad)
+		helper.assertTrue(BiomeAlfheim.sadOak.generate(helper.level, random, sadAbs.x, sadAbs.y, sadAbs.z, null), "sad oak grows")
+		tree(sad, Blocks.OAK_LOG, AlfheimBlocks.sadOakLeaves)
+		clear(sad)
+		helper.succeed()
+	}
+
+	/**
+	 * Листва печального дуба (`BlockSadOakLeaves`, `alfheim:leaves`): листва 1.7.10 — опадает дальше 8 блоков от бревна
+	 * (у прочей листвы — 4), свет задерживает на 1, в `minecraft:leaves`; не горит — автор не внёс её в таблицу огня
+	 * (BUGS.md). Лут — как у дубовой листвы ванилы 1.7.10: без ножниц — саженец дуба (1/20) и яблоко (1/200), с
+	 * шёлковым касанием — только листва, с ножницами — листва и то же. «Выбор колёсиком» — сама листва, как в 1.7.10
+	 * (`getPickBlock` `BlockLeavesMod`, BUGS.md)
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun sadOakLeaves(helper: GameTestHelper) {
+		val leaves = AlfheimBlocks.sadOakLeaves as BlockSadOakLeaves
+		helper.assertTrue(BuiltInRegistries.BLOCK.getKey(leaves) == ResourceLocation(MODID, "leaves"), "id ${BuiltInRegistries.BLOCK.getKey(leaves)}")
+		helper.assertTrue(LegacyIds.block("$MODID:leaves")?.id == ResourceLocation(MODID, "leaves"), "legacy id leaves")
+		helper.assertTrue(leaves.getDecayRange(0) == 8 && leaves.decayBit() == 8 && leaves.canDecay(0), "decays further than 8 blocks from a log")
+		val state = leaves.defaultBlockState()
+		helper.assertTrue(state.`is`(BlockTags.LEAVES) && state.getLightBlock(helper.level, BlockPos.ZERO) == 1, "leaves tag, light")
+		helper.assertTrue(state.getFlammability(helper.level, BlockPos.ZERO, Direction.UP) == 0, "sad oak leaves do not burn")
+
+		val pos = BlockPos(1, 1, 1)
+		helper.setBlock(pos, leaves)
+		val abs = helper.absolutePos(pos)
+		fun drops(tool: ItemStack) = Block.getDrops(helper.getBlockState(pos), helper.level, abs, null, null, tool)
+		var saplings = 0
+		var apples = 0
+		repeat(4000) {
+			for (stack in drops(ItemStack.EMPTY)) {
+				helper.assertTrue((stack.item === Items.OAK_SAPLING || stack.item === Items.APPLE) && stack.count == 1, "sad oak leaves drop $stack")
+				if (stack.item === Items.APPLE) apples++ else saplings++
+			}
+		}
+		helper.assertTrue(saplings in 140..270 && apples in 5..45, "4000 sad oak leaves: $saplings oak saplings, $apples apples")
+		val silkTouch = ItemStack(Items.DIAMOND_PICKAXE).also { it.enchant(Enchantments.SILK_TOUCH, 1) }
+		repeat(200) { helper.assertTrue(drops(silkTouch).map { it.item } == listOf(leaves.asItem()), "sad oak leaves with silk touch") }
+		repeat(200) {
+			val sheared = drops(ItemStack(Items.SHEARS))
+			helper.assertTrue(sheared.count { it.item === leaves.asItem() } == 1 && sheared.all { it.item === leaves.asItem() || it.item === Items.OAK_SAPLING || it.item === Items.APPLE }, "sheared sad oak leaves drop $sheared")
+		}
+		val picked = leaves.getCloneItemStack(helper.level, abs, helper.getBlockState(pos))
+		helper.assertTrue(picked.item === leaves.asItem(), "pick block: $picked")
 		helper.succeed()
 	}
 

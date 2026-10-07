@@ -59,7 +59,7 @@ object PortDecorTest {
 		// авроровых блоков партии 8б-1, 8 радужных растений партии 8б-2, 10 блоков партии 8б-3 (гриб, 3 варианта
 		// мерцающего кварца, его плита и лестница, 4 мягких блока), черепица Botania 1.7.10, 33 блока магических деревьев
 		// партии 8в-1 и 12 партии 8в-2 (6 саженцев, 6 ягод), 37 блоков альтернативных деревьев партии 8г-1
-		helper.assertTrue(LegacyRegistration.blocks.size == 353, "blocks of the author: ${LegacyRegistration.blocks.size}")
+		helper.assertTrue(LegacyRegistration.blocks.size == 355, "blocks of the author: ${LegacyRegistration.blocks.size}")
 		helper.succeed()
 	}
 
@@ -219,15 +219,15 @@ object PortDecorTest {
 	 * разлома выдаётся по аномалиям (КТ-3). Эльфийские ресурсы — в порядке номеров, как выдавал `getSubItems`.
 	 * Черепица Botania 1.7.10 — во вкладке Botania перед первым азулежу, как в Botania 1.7.10. Закопанных радужных
 	 * лепестков во вкладке нет и у автора (`BlockRainbowGrass.getSubBlocks`), сердцевин барьерного, грозового и адского
-	 * деревьев — тоже: `getSubBlocks` их брёвен выдавал только metadata 0; ягод магических деревьев вкладка автора не
-	 * выдавала
+	 * деревьев — тоже: `getSubBlocks` их брёвен выдавал только metadata 0; ягод магических деревьев и листвы печального
+	 * дуба вкладка автора не выдавала
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
 	fun creativeTabs(helper: GameTestHelper) {
 		CreativeModeTabs.tryRebuildTabContents(helper.level.enabledFeatures(), true, helper.level.registryAccess())
 		val alfheim = AlfheimTab.tab.get().displayItems.map { it.item }
-		val hidden = listOf(AlfheimBlocks.manaIce.asItem(), AlfheimFluffBlocks.elfQuartzWall.asItem(), BotaniaBlocks1710.roofTile.asItem(), AlfheimBlocks.rainbowGrass[4].asItem()) +
+		val hidden = listOf(AlfheimBlocks.manaIce.asItem(), AlfheimFluffBlocks.elfQuartzWall.asItem(), BotaniaBlocks1710.roofTile.asItem(), AlfheimBlocks.rainbowGrass[4].asItem(), AlfheimBlocks.sadOakLeaves.asItem()) +
 			listOf(AlfheimBlocks.barrierWood, AlfheimBlocks.lightningWood, AlfheimBlocks.netherWood).map { it[1].asItem() } +
 			listOf(AlfheimBlocks.barrierBerry, AlfheimBlocks.calicoBerry, AlfheimBlocks.circuitBerry, AlfheimBlocks.lightningBerry, AlfheimBlocks.netherBerry, AlfheimBlocks.sealingBerry).map { it.asItem() } +
 			listOf(ElvenResourcesMetas.ElvenWeed, ElvenResourcesMetas.WisdomBottle, ElvenResourcesMetas.RiftDrive).map { AlfheimItems.elvenResource[it.I] }
