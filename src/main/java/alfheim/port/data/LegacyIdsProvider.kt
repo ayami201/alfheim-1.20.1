@@ -28,9 +28,14 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 			add("перевод ключей lang (tools/convert_lang.py), лексикон, тесты паритета. Формат — docs/port/MAPPING.md, раздел «legacy_ids.json».")
 		})
 		json.add("blocks", ids(LegacyRegistration.blocks.values).apply {
-			// блок 1.7.10, который в 1.20.1 — состояние другого блока (двойная плита)
-			for (alias in LegacyRegistration.aliases)
-				addProperty("$MODID:${alias.oldName}", "${LegacyRegistration.blocks[alias.block]!!.id}[${alias.state}]")
+			// блок 1.7.10, который в 1.20.1 — состояние другого блока (двойная плита); у вариантов metadata — объект
+			for ((oldName, group) in LegacyRegistration.aliases.groupBy { it.oldName }) {
+				fun target(alias: LegacyRegistration.Alias) = "${LegacyRegistration.blocks[alias.block]!!.id}[${alias.state}]"
+				if (group.size == 1 && group[0].oldMeta == null)
+					addProperty("$MODID:$oldName", target(group[0]))
+				else
+					add("$MODID:$oldName", JsonObject().apply { group.forEach { addProperty(it.oldMeta.toString(), target(it)) } })
+			}
 			// блок автора, вместо которого блок другого мода
 			for (replacement in LegacyRegistration.replacements)
 				addProperty("$MODID:${replacement.oldName}", BuiltInRegistries.BLOCK.getKey(replacement.block).toString())

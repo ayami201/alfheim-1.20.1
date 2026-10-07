@@ -167,6 +167,17 @@ var LegacyBlock.blockHardness: Float
 		for (state in (this as Block).stateDefinition.possibleStates) state.destroySpeed = value
 	}
 
+/**
+ * Твёрдость блока в мире — то, что 1.7.10 отвечал `getBlockHardness(world, x, y, z)`, когда класс автора переопределял
+ * его по metadata в точке. Вариант metadata в порту — свой блок (SPEC, Р-5), его твёрдость в мире 1.20.1 хранит в
+ * состояниях блока. Поле [blockHardness] остаётся прежним: его читают формулы автора
+ */
+var LegacyBlock.destroySpeed: Float
+	get() = (this as Block).defaultBlockState().destroySpeed
+	set(value) {
+		for (state in (this as Block).stateDefinition.possibleStates) state.destroySpeed = value
+	}
+
 var LegacyBlock.tickRandomly: Boolean
 	get() = legacy.needsRandomTick
 	set(value) {
