@@ -62,6 +62,8 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			is BlockRainbowDoubleGrass -> rainbowDoubleGrass(block)
 			is BlockRainbowDoubleFlower -> doublePlant(block, legacyTexture("$MODID:rainbowDoubleFlower"), legacyTexture("$MODID:rainbowDoubleFlowerTop"))
 			is BlockRainbowMushroom  -> plant(block, legacyTexture(icon(block)))
+			// BlockHang: рендер 1 — крест с иконкой стадии (BlockModMeta)
+			is BlockHang             -> plant(block, texture(block))
 			is BlockTreeBerry        -> treeBerry(block)
 			is BlockShimmerQuartz    -> shimmerQuartz(block)
 			is BlockModRotatedPillar -> pillar(block)

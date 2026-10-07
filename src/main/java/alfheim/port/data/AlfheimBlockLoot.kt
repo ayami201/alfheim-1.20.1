@@ -2,6 +2,7 @@ package alfheim.port.data
 
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.BlockElvenOre
+import alfheim.common.block.BlockHang
 import alfheim.common.block.BlockSadOakLeaves
 import alfheim.common.block.BlockTreeBerry
 import alfheim.common.block.alt.BlockAltLeaves
@@ -63,6 +64,9 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 			block is BlockLightningWood            -> add(block, createSingleItemTable(AlfheimBlocks.lightningWood[block.damageDropped(block.meta)]))
 			block is BlockNetherWood               -> add(block, createSingleItemTable(AlfheimBlocks.netherWood[block.damageDropped(block.meta)]))
 			block is BlockTreeBerry                -> add(block, treeBerry(block))
+			// BlockHang (сосулька, сталактит, сталагмит): getItemDropped — null; шёлковое касание 1.7.10 не брало блок,
+			// который не рисуется кубом (renderAsNormalBlock — false)
+			block is BlockHang                     -> add(block, noDrop())
 			else                                   -> dropSelf(block)
 		}
 	}
