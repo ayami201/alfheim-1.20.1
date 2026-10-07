@@ -52,8 +52,10 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			is BlockYggDecor         -> yggDecor(block)
 			is BlockDwarfLantern     -> dwarfLantern(block)
 			is BlockColoredLamp      -> irisLamp(block)
+			is BlockSadOakLeaves     -> sadOakLeaves(block)
 			is BlockLeavesMod        -> leaves(block)
 			is BlockColoredSapling   -> plant(block, legacyTexture(icon(block)))
+			is BlockDreamSapling     -> plant(block, texture(block))
 			is BlockColoredGrass     -> plant(block, legacyTexture(icon(block)))
 			is BlockColoredDoubleGrass -> irisDoubleGrass(block)
 			is BlockRainbowGrass       -> rainbowGrass(block)
@@ -317,6 +319,16 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 		}
 		model(name(block) + "_opaque", legacyTexture(icon(block, type + "_opaque")))
 		block(block, model(name(block), legacyTexture(icon(block, type))))
+	}
+
+	/**
+	 * `BlockSadOakLeaves.getIcon`: иконка дубовой листвы ванилы (`Blocks.leaves.getIcon(side, 0)`) — модель листвы ванилы
+	 * с текстурой дубовой листвы 1.20.1. Отдельной текстуры для «быстрой» графики у неё нет: сплошной её рисует 1.20.1,
+	 * поэтому модель `_opaque` — с той же текстурой
+	 */
+	private fun sadOakLeaves(block: BlockSadOakLeaves) {
+		models().withExistingParent(name(block) + "_opaque", mcLoc("block/leaves")).texture("all", mcLoc("block/oak_leaves"))
+		block(block, models().withExistingParent(name(block), mcLoc("block/leaves")).texture("all", mcLoc("block/oak_leaves")))
 	}
 
 	/** Растение 1.7.10 с рендером 1 — крест (окрашенный у блока, которого красит класс автора), с отсечением прозрачного */
