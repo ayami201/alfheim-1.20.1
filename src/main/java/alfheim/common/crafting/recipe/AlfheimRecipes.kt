@@ -48,11 +48,11 @@ import alfheim.api.lib.LibOreDict.WOOD
 import alfheim.common.block.AlfheimBlocks.alfStorage
 //import alfheim.common.block.AlfheimBlocks.alfheimPortal // PORT: КТ-6
 //import alfheim.common.block.AlfheimBlocks.alfheimPylon // PORT: КТ-3
-//import alfheim.common.block.AlfheimBlocks.altPlanks // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.altSlabs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.altStairs // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.altWood0 // PORT: КТ-2
-//import alfheim.common.block.AlfheimBlocks.altWood1 // PORT: КТ-2
+import alfheim.common.block.AlfheimBlocks.altPlanks
+import alfheim.common.block.AlfheimBlocks.altSlabs
+import alfheim.common.block.AlfheimBlocks.altStairs
+import alfheim.common.block.AlfheimBlocks.altWood0
+import alfheim.common.block.AlfheimBlocks.altWood1
 //import alfheim.common.block.AlfheimBlocks.amplifier // PORT: КТ-2
 //import alfheim.common.block.AlfheimBlocks.animatedTorch // PORT: КТ-3
 //import alfheim.common.block.AlfheimBlocks.anomalyHarvester // PORT: КТ-3
@@ -713,19 +713,22 @@ object AlfheimRecipes {
 						 'P', RAINBOW_PETAL,
 						 'C', "cobblestone")
 		ModCraftingRecipes.recipesApothecary?.add(BotaniaAPI.getLatestAddedRecipe())
+		*/
 		
+		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(x, n, i) → ItemStack(x[i], n)
 		for (i in 0 until ALT_TYPES.size - 1)
-			addRecipe(ItemStack(altSlabs, 6, i),
+			addRecipe(ItemStack(altSlabs[i], 6),
 					  "PPP",
-					  'P', ItemStack(altPlanks, 1, i))
+					  'P', ItemStack(altPlanks[i], 1))
 		recipesAltSlabs = BotaniaAPI.getLatestAddedRecipes(6)
 		
 		for (i in 0 until ALT_TYPES.size - 1)
 			addOreDictRecipe(ItemStack(altStairs[i], 4), true,
 							 "P  ", "PP ", "PPP",
-							 'P', ItemStack(altPlanks, 1, i))
+							 'P', ItemStack(altPlanks[i], 1))
 		recipesAltStairs = BotaniaAPI.getLatestAddedRecipes(6)
 		
+		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
 		addRecipe(ItemStack(amplifier),
 				  " N ", "NRN", " N ",
 				  'N', ItemStack(noteblock),
@@ -1362,12 +1365,10 @@ object AlfheimRecipes {
 		addRecipe(ItemStack(auroraPlanks), "P", "P", 'P', ItemStack(auroraSlab))
 		recipeAuroraPlanksFromSlabs = BotaniaAPI.getLatestAddedRecipe()
 		
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
+		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(x, n, i) → ItemStack(x[i], n)
 		for (i in 0..6)
-			addRecipe(ItemStack(altPlanks, 1, i), "P", "P", 'P', ItemStack(altSlabs, 1, i))
+			addRecipe(ItemStack(altPlanks[i], 1), "P", "P", 'P', ItemStack(altSlabs[i], 1))
 		recipesAltPlanksFromSlabs = BotaniaAPI.getLatestAddedRecipes(6)
-		
-		*/
 		
 		for (i in 0..15)
 			addRecipe(ItemStack(irisSlabs[i], 6),
@@ -2386,11 +2387,13 @@ object AlfheimRecipes {
 		*/
 		addOreDictRecipe(ItemStack(elfQuartzWall, 16), "QQQ", "QQQ", 'Q', ItemStack(elfQuartz))
 		
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
-		addShapelessRecipe(ItemStack(yggDecor), ItemStack(altPlanks, 1, 6), wheat_seeds)
-		addOreDictRecipe(ItemStack(yggDecor, 4, 1), "WW", "WW", 'W', ItemStack(altPlanks, 1, 6))
-		addOreDictRecipe(ItemStack(yggDecor, 4, 2), " W ", "W W", " W ", 'W', ItemStack(altPlanks, 1, 6))
+		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(x, n, i) → ItemStack(x[i], n); поля ванилы 1.20.1 —
+		// заглавными
+		addShapelessRecipe(ItemStack(yggDecor[0]), ItemStack(altPlanks[6], 1), Items.WHEAT_SEEDS)
+		addOreDictRecipe(ItemStack(yggDecor[1], 4), "WW", "WW", 'W', ItemStack(altPlanks[6], 1))
+		addOreDictRecipe(ItemStack(yggDecor[2], 4), " W ", "W W", " W ", 'W', ItemStack(altPlanks[6], 1))
 		
+		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addShapedRecipe(NiflheimBlockMetas.BRICKS.stack(4), "SS", "SS", 'S', NiflheimBlockMetas.STONE.stack)
 		addShapedRecipe(NiflheimBlockMetas.CHISELED.stack(4), "BB", "BB", 'B', NiflheimBlockMetas.BRICKS.stack)
 		addShapedRecipe(NiflheimBlockMetas.POLISHED.stack(8), "SSS", "S S", "SSS", 'S', NiflheimBlockMetas.STONE.stack)
@@ -2404,11 +2407,12 @@ object AlfheimRecipes {
 			addShapelessOreDictRecipe(ItemStack(alfStorage[id]), *Array(9) { ingot })
 		}
 		
-		/* PORT: КТ-2, КТ-3, КТ-4 — рецепты вещей этих КТ, включаются вместе с ними
-		val woods = Array(4) { ItemStack(altWood0, 1, it) } + Array(3) { ItemStack(altWood1, 1, it) }
-		woods.forEachIndexed { id, it -> addShapelessOreDictRecipe(ItemStack(altPlanks, 4, id), it) }
+		// PORT: вариант metadata — блок массива (SPEC, Р-5): ItemStack(x, n, i) → ItemStack(x[i], n)
+		val woods = Array(4) { ItemStack(altWood0[it], 1) } + Array(3) { ItemStack(altWood1[it], 1) }
+		woods.forEachIndexed { id, it -> addShapelessOreDictRecipe(ItemStack(altPlanks[id], 4), it) }
 		recipesAltPlanks = BotaniaAPI.getLatestAddedRecipes(6)
 		
+		/* PORT: КТ-4 — рецепты вещей этой КТ, включаются вместе с ними
 		addShapelessOreDictRecipe(ItemStack(auraRingElven), ELVORIUM_INGOT, auraRingPink)
 		recipeAuraRingElven = BotaniaAPI.getLatestAddedRecipe()
 		
@@ -2699,14 +2703,16 @@ object AlfheimRecipes {
 	}
 	
 	private fun registerSmeltingRecipes() {
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
-		for (i in 0..15) {
-			addSmelting(ItemStack(altWood0, 1, i), ItemStack(coal, 1, 1), 0.15f)
-			
-			if (i % 4 != 2)
-				addSmelting(ItemStack(altWood1, 1, i), ItemStack(coal, 1, 1), 0.15f)
-		}
-		*/
+		// PORT: Items.coal 1 → Items.CHARCOAL; metadata бревна — вариант (meta and 3) и поворот (meta and 12): вариант — блок
+		// массива, поворот — состояние блока (SPEC, Р-5). Бревно Иггдрасиля (altWood1, 2) не переплавляется
+		addSmelting(altWood0, ItemStack(Items.CHARCOAL), 0.15f)
+		addSmelting(altWood1.filterIndexed { i, _ -> i % 4 != 2 }.toTypedArray(), ItemStack(Items.CHARCOAL), 0.15f)
+//		for (i in 0..15) {
+//			addSmelting(ItemStack(altWood0, 1, i), ItemStack(coal, 1, 1), 0.15f)
+//			
+//			if (i % 4 != 2)
+//				addSmelting(ItemStack(altWood1, 1, i), ItemStack(coal, 1, 1), 0.15f)
+//		}
 		
 		// PORT: Items.coal 1 → Items.CHARCOAL (вариант ванилы 1.7.10 — отдельный предмет 1.20.1); брёвна — массивы вариантов
 		addSmelting(irisWood0, ItemStack(Items.CHARCOAL), 0.15f)

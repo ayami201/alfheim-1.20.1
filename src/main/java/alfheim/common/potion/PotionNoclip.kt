@@ -1,7 +1,9 @@
 package alfheim.common.potion
 
-// PORT: импорты 1.20.1 (MAPPING.md); блоки Иггдрасиля (деревья КТ-2) закомментированы вместе со своими строками
+// PORT: импорты 1.20.1 (MAPPING.md)
 import alexsocol.asjlib.*
+import alfheim.common.block.AlfheimBlocks
+import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.core.handler.AlfheimConfigHandler
 import alfheim.common.network.NetworkService
 import alfheim.common.network.packet.MessageEffect
@@ -16,8 +18,6 @@ import net.minecraftforge.client.event.RenderBlockScreenEffectEvent as RenderBlo
 import net.minecraftforge.client.event.RenderHighlightEvent.Block as DrawBlockHighlightEvent
 import net.minecraftforge.event.entity.living.LivingAttackEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
-//import alfheim.common.block.AlfheimBlocks
-//import alfheim.common.block.alt.BlockAltLeaves
 //import net.minecraft.util.DamageSource
 
 object PotionNoclip: PotionAlfheim(AlfheimConfigHandler.potionIDNoclip, "noclip", false, 0xAAAAAA) {
@@ -31,19 +31,20 @@ object PotionNoclip: PotionAlfheim(AlfheimConfigHandler.potionIDNoclip, "noclip"
 	
 	override fun isReady(time: Int, amp: Int) = AlfheimConfigHandler.enableMMO
 	
-	// PORT: КТ-2 — листва и древесина Иггдрасиля (AlfheimBlocks.altLeaves, altWood1) переносятся с деревьями
 	override fun performEffect(target: EntityLivingBase, time: Int) {
-		/*
 		if (AlfheimConfigHandler.enableMMO) // hacky shit to forbid noclip through Yggdrasil
 			target.noClip = if (target is EntityPlayer)
 				if (target.capabilities.isCreativeMode)
 					true
 				else
-					!(target.worldObj.getBlock(target) === AlfheimBlocks.altLeaves && target.worldObj.getBlockMeta(target) % 8 == BlockAltLeaves.yggMeta ||
-					 (target.worldObj.getBlock(target) === AlfheimBlocks.altWood1  && target.worldObj.getBlockMeta(target) % 4 == 2))
+					// PORT: вариант metadata — блок массива (SPEC, Р-5): листва Иггдрасиля — altLeaves[yggMeta], древесина —
+					// altWood1[2]
+					!(target.worldObj.getBlock(target) === AlfheimBlocks.altLeaves[BlockAltLeaves.yggMeta] ||
+					 (target.worldObj.getBlock(target) === AlfheimBlocks.altWood1[2]))
+//					!(target.worldObj.getBlock(target) === AlfheimBlocks.altLeaves && target.worldObj.getBlockMeta(target) % 8 == BlockAltLeaves.yggMeta ||
+//					 (target.worldObj.getBlock(target) === AlfheimBlocks.altWood1  && target.worldObj.getBlockMeta(target) % 4 == 2))
 			else
 				true
-		*/
 	}
 	
 	override fun applyAttributesModifiersToEntity(target: EntityLivingBase, attributes: BaseAttributeMap, amp: Int) {
