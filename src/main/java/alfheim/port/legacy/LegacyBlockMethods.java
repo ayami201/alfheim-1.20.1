@@ -2,6 +2,7 @@ package alfheim.port.legacy;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -70,6 +71,15 @@ public interface LegacyBlockMethods {
 	 * варианта блока (SPEC, Р-5); состояние, которое в 1.7.10 тоже было metadata (поворот, бит опадания), сюда не входит
 	 */
 	default void breakBlock(Level world, int x, int y, int z, Block block, int meta) {
+	}
+
+	/**
+	 * {@code onBlockActivated} 1.7.10 — игрок нажал на блок ({@code use} 1.20.1, на клиенте и на сервере): {@code side} —
+	 * номер стороны ({@code Direction.get3DDataValue}), {@code hitX..hitZ} — точка нажатия в блоке, 0–1. {@code true} —
+	 * нажатие сработало, предмет в руке не применяется. Зовёт его {@code Block1710}
+	 */
+	default boolean onBlockActivated(Level world, int x, int y, int z, Player player, int side, float hitX, float hitY, float hitZ) {
+		return false;
 	}
 
 	/**

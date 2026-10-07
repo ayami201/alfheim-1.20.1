@@ -38,6 +38,9 @@ class Material private constructor(val mapColor: MapColor, kind: Kind = Kind.NOR
 	/** `Material.isOpaque` 1.7.10 */
 	val isOpaque get() = !isTranslucent && blocksMovement
 
+	/** `blocksMovement()` 1.7.10 */
+	fun blocksMovement() = blocksMovement
+
 	init {
 		// конструкторы MaterialTransparent и MaterialLiquid 1.7.10
 		if (kind == Kind.TRANSPARENT || kind == Kind.LIQUID) setReplaceable()

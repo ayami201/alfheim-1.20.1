@@ -12,6 +12,7 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.EmptyBlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
@@ -20,6 +21,7 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.ChunkStatus
+import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration
 import net.minecraftforge.common.IPlantable
 
@@ -59,6 +61,21 @@ val Level.isRemote: Boolean get() = isClientSide
 
 /** `rand` 1.7.10 — случайные числа мира */
 val Level.rand: RandomSource get() = random
+
+/** `getSeed()` 1.7.10 — зерно мира; клиент 1.7.10 его не знал (0), в 1.20.1 его знает только сервер */
+val Level.seed: Long get() = (this as? ServerLevel)?.seed ?: 0L
+
+/**
+ * `getPrecipitationHeight(x, z)` 1.7.10 — высота над верхним блоком столбца, который мешает движению или с жидкостью:
+ * туда падают дождь и снег (карта высот `MOTION_BLOCKING` 1.20.1)
+ */
+fun Level.getPrecipitationHeight(x: Int, z: Int) = getHeight(Heightmap.Types.MOTION_BLOCKING, x, z)
+
+/** `getBlockLightOpacity(x, y, z)` 1.7.10 — сколько света задерживает блок в точке; в 1.20.1 — не больше 15 */
+fun Level.getBlockLightOpacity(x: Int, y: Int, z: Int): Int {
+	val pos = BlockPos(x, y, z)
+	return getBlockState(pos).getLightBlock(this, pos)
+}
 
 /** `totalWorldTime` 1.7.10 — тики мира с его создания */
 val Level.totalWorldTime: Long get() = gameTime
@@ -145,6 +162,13 @@ fun Block.onPlantGrow(world: LevelAccessor, x: Int, y: Int, z: Int, sourceX: Int
 	val state = world.getBlockState(pos)
 	if (state.`is`(Blocks.GRASS_BLOCK) || state.`is`(Blocks.FARMLAND)) world.setBlock(pos, Blocks.DIRT.defaultBlockState(), 2)
 }
+
+/**
+ * `isOpaqueCube` 1.7.10 у любого блока — непрозрачный полный куб: у блока порта — его метод, у прочих — полный
+ * непрозрачный рисунок состояния по умолчанию (`isSolidRender`: стекло, листва, плиты — нет)
+ */
+val Block.isOpaqueCube: Boolean
+	get() = if (this is LegacyBlock) isOpaqueCube() else defaultBlockState().isSolidRender(EmptyBlockGetter.INSTANCE, BlockPos.ZERO)
 
 /**
  * `isNormalCube(world, x, y, z)` Forge 1.7.10: блок в точке — непрозрачный полный куб, который не даёт сигнал

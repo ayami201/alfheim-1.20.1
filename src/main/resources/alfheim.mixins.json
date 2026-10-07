@@ -5,6 +5,7 @@
   "refmap": "alfheim.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BushBlockInvoker",
     "LivingEntityMixin",
     "ServerLevelMixin"
   ],
