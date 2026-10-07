@@ -115,7 +115,11 @@ class BlockSnowLayer: BlockMod(Material.snow), IHornHarvestable {
 //	override fun quantityDropped(rand: Random?) = 1
 	
 	override fun updateTick(world: World, x: Int, y: Int, z: Int, rand: Random?) {
-		// PORT: КТ-6 — измерение Альфхейм (AlfheimConfigHandler.dimensionIDAlfheim): вне зимы слой снега тает только там
+		// PORT: КТ-6 — измерение Альфхейм (AlfheimConfigHandler.dimensionIDAlfheim): вне зимы слой снега тает только там.
+		// Шанс таяния — 1/20 за случайный тик (`== 0`), как у снежной травы и слоя снега ванилы; у автора — 19/20 (`!= 0`):
+		// исправлено решением владельца (BUGS.md, B-045), вернуть как у автора — `!= 0`. Ниже — строка для КТ-6 и строка автора
+//		if (!AlfheimCore.winter && world.provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim && !world.isRemote && world.rand.nextInt(20) == 0)
+//			world.setBlockToAir(x, y, z)
 //		if (!AlfheimCore.winter && world.provider.dimensionId == AlfheimConfigHandler.dimensionIDAlfheim && !world.isRemote && world.rand.nextInt(20) != 0)
 //			world.setBlockToAir(x, y, z)
 	}
