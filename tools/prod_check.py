@@ -22,7 +22,9 @@ GameTest-ы идут в среде разработки: там у методо�
 10. блок-сущность мода тикает и сохраняет данные: сердцевина барьерного дерева после первого тика пишет в NBT
     `firstTick: 0b` (`updateEntity`, `writeToNBT` прослойки);
 11. громоотвод: молнию у сердцевины грозового дерева в начале следующего тика сменяет ложная молния мода
-    (`alfheim:fake_lightning`; событие тика мира, погодные эффекты прослойки).
+    (`alfheim:fake_lightning`; событие тика мира, погодные эффекты прослойки);
+12. сосулька: лёд над ней убран — она падает существом мода `alfheim:falling_hang` со своим блоком (сосед блока
+    1.7.10 — `neighborChanged` прослойки, данные существа — `SynchedEntityData`).
 
 Команды идут по RCON (удалённая консоль сервера): скрипт сам включает его в `server.properties`
 (порт 25575, пароль `alfcheck`). Существа появляются в точке появления мира с меткой `alfcheck` и
@@ -237,6 +239,15 @@ def main():
         bolt = r("execute if entity @e[type=minecraft:lightning_bolt]")
         r("setblock ~8 ~1 ~-2 minecraft:air")
         check("Молнию у грозового дерева сменяет ложная (alfheim:fake_lightning)", "Test passed" in fake and "Test failed" in bolt, f"{fake}; {bolt}")
+
+        # 12. Сосулька высоко подо льдом: лёд убран — на её месте воздух, она падает существом мода со своим блоком (падает
+        # долго — успеваем спросить)
+        r("setblock ~10 ~21 ~-2 minecraft:ice")
+        r("setblock ~10 ~20 ~-2 alfheim:icicle2")
+        r("setblock ~10 ~21 ~-2 minecraft:air")
+        gone = r("execute if block ~10 ~20 ~-2 minecraft:air")
+        falling = r("data get entity @e[type=alfheim:falling_hang,limit=1] block")
+        check("Сосулька без льда падает существом мода (alfheim:falling_hang)", "Test passed" in gone and "alfheim:icicle2" in falling, f"{gone}; {falling}")
 
         r("kill @e[tag=alfcheck]")
         r("stop")
