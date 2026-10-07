@@ -247,6 +247,17 @@ open class Block1710(material: Material): Block(material.properties()), LegacyBl
 
 	final override val legacy = BlockProps(material)
 
+	/** Рамка блока (`setBlockBounds`), по умолчанию — весь куб; по ней 1.20.1 строит и столкновения, и рамку выделения */
+	private var shape: VoxelShape = Shapes.block()
+
+	/** `setBlockBounds` 1.7.10: рамка в долях блока */
+	fun setBlockBounds(minX: Float, minY: Float, minZ: Float, maxX: Float, maxY: Float, maxZ: Float) {
+		shape = Shapes.box(minX.toDouble(), minY.toDouble(), minZ.toDouble(), maxX.toDouble(), maxY.toDouble(), maxZ.toDouble())
+	}
+
+	@Deprecated("Deprecated in Java")
+	override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext) = shape
+
 	override fun getExplosionResistance() = legacy.blockResistance / 5f
 
 	override fun getFriction() = legacy.slipperiness
@@ -288,6 +299,12 @@ open class Block1710(material: Material): Block(material.properties()), LegacyBl
 	override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
 		breakBlock(level, pos.x, pos.y, pos.z, this, variant ?: 0)
 		super.onRemove(state, level, pos, newState, isMoving)
+	}
+
+	@Deprecated("Deprecated in Java")
+	override fun neighborChanged(state: BlockState, level: Level, pos: BlockPos, block: Block, fromPos: BlockPos, isMoving: Boolean) {
+		super.neighborChanged(state, level, pos, block, fromPos, isMoving)
+		onNeighborBlockChange(level, pos.x, pos.y, pos.z, block)
 	}
 
 	override fun onBlockExploded(state: BlockState, level: Level, pos: BlockPos, explosion: Explosion) = onBlockExploded(level, pos.x, pos.y, pos.z, explosion)

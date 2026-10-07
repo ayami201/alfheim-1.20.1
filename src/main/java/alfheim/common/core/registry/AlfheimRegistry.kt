@@ -190,7 +190,9 @@ object AlfheimRegistry {
 		registerEntity(EntityEarthquake::class.java, "Earthquake", nextEntityID)
 		registerEntity(EntityEarthquakeFracture::class.java, "EarthquakeFracture", nextEntityID)
 		registerEntity(EntityElvenChakram::class.java, "ElvenChakram", nextEntityID)
+		*/
 		registerEntity(EntityFallingHang::class.java, "FallingHang", nextEntityID)
+		/*
 		registerEntity(EntityFenrirDome::class.java, "FenrirDome", nextEntityID)
 		registerEntity(EntityFenrirSlash::class.java, "FenrirSlash", nextEntityID)
 		registerEntity(EntityFireAura::class.java, "FireAura", nextEntityID)

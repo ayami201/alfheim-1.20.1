@@ -193,6 +193,13 @@ fun Block.canPlaceBlockAt(world: Level, x: Int, y: Int, z: Int): Boolean {
 fun BlockGetter.getBlockVariant(x: Int, y: Int, z: Int) = (getBlock(x, y, z) as? LegacyBlock)?.variant ?: 0
 
 /**
+ * Блок варианта [meta] — для `world.setBlock(x, y, z, block, meta, flags)` и `setBlockMetadataWithNotify` 1.7.10 у
+ * блока, варианты metadata которого в порту — отдельные блоки (SPEC, Р-5): блок с тем же именем 1.7.10 и номером
+ * варианта [meta]. Блок без вариантов, блок не автора и metadata, у которой нет варианта, — сам блок
+ */
+fun Block.variant1710(meta: Int): Block = LegacyRegistration.variant(this, meta) ?: this
+
+/**
  * `block == other` 1.7.10, когда у блока есть варианты metadata: в 1.7.10 это один блок, в порту — разные блоки с одним
  * именем 1.7.10 (SPEC, Р-5)
  */

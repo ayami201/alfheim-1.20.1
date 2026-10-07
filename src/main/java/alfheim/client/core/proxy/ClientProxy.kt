@@ -163,6 +163,7 @@ object ClientProxy : CommonProxy() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityDedMoroz::class.java, RenderEntityDedMoroz)
 		RenderingRegistry.registerEntityRenderingHandler(EntityElementalSlime::class.java, RenderEntityElementalSlime)
 		RenderingRegistry.registerEntityRenderingHandler(EntityElf::class.java, RenderEntityElf)
+		// PORT: перенесён — alfheim.port.client.AlfheimEntityRenderers
 		RenderingRegistry.registerEntityRenderingHandler(EntityFallingHang::class.java, RenderEntityFallingHang)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFenrir::class.java, RenderEntityFenrir)
 		RenderingRegistry.registerEntityRenderingHandler(EntityFenrirDome::class.java, RenderEntityFenrirDome)

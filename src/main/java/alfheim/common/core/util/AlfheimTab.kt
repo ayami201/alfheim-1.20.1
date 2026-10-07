@@ -37,6 +37,7 @@ import alfheim.common.block.AlfheimBlocks.circuitWood
 import alfheim.common.block.AlfheimBlocks.dreamSapling
 import alfheim.common.block.AlfheimBlocks.elvenOre
 import alfheim.common.block.AlfheimBlocks.elvenSand
+import alfheim.common.block.AlfheimBlocks.icicle
 import alfheim.common.block.AlfheimBlocks.irisDirt
 import alfheim.common.block.AlfheimBlocks.irisGrass
 import alfheim.common.block.AlfheimBlocks.irisLamp
@@ -85,6 +86,8 @@ import alfheim.common.block.AlfheimBlocks.shimmerQuartz
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzSlab
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
 import alfheim.common.block.AlfheimBlocks.softStorage
+import alfheim.common.block.AlfheimBlocks.stalactite
+import alfheim.common.block.AlfheimBlocks.stalagmite
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFence
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodBarkFenceGate
 import alfheim.common.block.AlfheimFluffBlocks.dreamwoodFence
@@ -798,9 +801,11 @@ object AlfheimTab {
 		
 		/* PORT: КТ-2
 		addBlock(niflheimBlock)
+		*/
 		addBlock(stalactite)
 		addBlock(stalagmite)
 		addBlock(icicle)
+		/* PORT: КТ-2
 		addBlock(nidhoggTooth)
 		*/
 		

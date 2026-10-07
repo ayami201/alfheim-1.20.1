@@ -73,6 +73,13 @@ public interface LegacyBlockMethods {
 	}
 
 	/**
+	 * {@code onNeighborBlockChange} 1.7.10: сосед блока сменился ({@code neighborChanged} 1.20.1, на сервере);
+	 * {@code block} — прежний блок соседа, как в 1.7.10. Зовёт его {@code Block1710}
+	 */
+	default void onNeighborBlockChange(Level world, int x, int y, int z, Block block) {
+	}
+
+	/**
 	 * {@code onBlockExploded} Forge 1.7.10: взрыв убирает блок, после того как выпал лут взрыва. Переопределение без
 	 * вызова этого метода оставляет блок на месте
 	 */

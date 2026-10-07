@@ -7,6 +7,8 @@ import alexsocol.asjlib.component3
 import alfheim.api.ModInfo.MODID
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.tile.TileTreeBerry
+import alfheim.common.entity.EntityFallingHang
+import alfheim.common.entity.FakeLightning
 import alfheim.port.legacy.*
 import alfheim.port.registry.AlfheimSounds
 import alfheim.port.registry.LegacyIds
@@ -23,6 +25,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -37,7 +40,7 @@ import java.util.UUID
 
 /**
  * КТ-1: прослойка `alfheim.port.legacy` (SPEC, Р-4) на мире сервера: блоки по координатам, звуки и частицы по
- * именам 1.7.10; КТ-2: материалы и замена блока 1.7.10, блок-сущности 1.7.10.
+ * именам 1.7.10; КТ-2: материалы и замена блока 1.7.10, блок-сущности 1.7.10, варианты metadata, существа 1.7.10.
  */
 @GameTestHolder(MODID)
 @PrefixGameTestTemplate(false)
@@ -181,6 +184,59 @@ object PortLegacyTest {
 		helper.assertTrue(Blocks.STONE.getBlockHardness(helper.level, abs.x, abs.y, abs.z) == 1.5f, "hardness of stone at a point")
 		helper.setBlock(pos, AlfheimBlocks.altWood1[2])
 		helper.assertTrue(AlfheimBlocks.altWood1[2].getBlockHardness(helper.level, abs.x, abs.y, abs.z) == -1f, "Yggdrasil wood at a point is unbreakable")
+		helper.succeed()
+	}
+
+	/**
+	 * Материалы 1.7.10 блоков ванилы, у которых он не камень (`super(Material.…)` их классов 1.7.10), и их родни из 1.20.1:
+	 * лёд и плотный лёд (подтаявший — как лёд, синий — как плотный), песок и гравий, глина и камни с чешуйницей, стёкла,
+	 * панели и светокамень, шерсть, кровати и ковры, железо (блоки хранения, решётка, котлы), поршни, «схемы» (факелы,
+	 * рельсы, рычаги, кнопки, провод, головы, горшки), дерево (сундуки, таблички), порталы, торт, яйцо дракона, лампа,
+	 * наковальни, губка, динамит. Прочие блоки ванилы — камень, как в 1.7.10
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun materialsOfVanillaBlocks(helper: GameTestHelper) {
+		val materials = mapOf(
+			Material.ice to listOf(Blocks.ICE, Blocks.FROSTED_ICE), Material.packedIce to listOf(Blocks.PACKED_ICE, Blocks.BLUE_ICE),
+			Material.sand to listOf(Blocks.SAND, Blocks.RED_SAND, Blocks.SUSPICIOUS_SAND, Blocks.GRAVEL, Blocks.SOUL_SAND),
+			Material.clay to listOf(Blocks.CLAY, Blocks.INFESTED_STONE, Blocks.INFESTED_DEEPSLATE),
+			Material.glass to listOf(Blocks.GLASS, Blocks.RED_STAINED_GLASS, Blocks.TINTED_GLASS, Blocks.GLASS_PANE, Blocks.LIME_STAINED_GLASS_PANE, Blocks.GLOWSTONE, Blocks.BEACON),
+			Material.cloth to listOf(Blocks.WHITE_WOOL, Blocks.BLACK_WOOL, Blocks.RED_BED), Material.carpet to listOf(Blocks.WHITE_CARPET),
+			Material.iron to listOf(Blocks.IRON_BLOCK, Blocks.GOLD_BLOCK, Blocks.DIAMOND_BLOCK, Blocks.LAPIS_BLOCK, Blocks.REDSTONE_BLOCK, Blocks.IRON_BARS, Blocks.IRON_DOOR, Blocks.CAULDRON, Blocks.WATER_CAULDRON, Blocks.HOPPER, Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE),
+			Material.piston to listOf(Blocks.PISTON, Blocks.STICKY_PISTON, Blocks.PISTON_HEAD),
+			Material.circuits to listOf(Blocks.TORCH, Blocks.WALL_TORCH, Blocks.REDSTONE_TORCH, Blocks.RAIL, Blocks.POWERED_RAIL, Blocks.LEVER, Blocks.STONE_BUTTON, Blocks.OAK_BUTTON, Blocks.REDSTONE_WIRE, Blocks.REPEATER, Blocks.LADDER, Blocks.SKELETON_SKULL, Blocks.FLOWER_POT, Blocks.POTTED_POPPY),
+			Material.wood to listOf(Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.OAK_SIGN, Blocks.OAK_WALL_SIGN, Blocks.JUKEBOX),
+			Material.portal to listOf(Blocks.NETHER_PORTAL, Blocks.END_PORTAL), Material.cake to listOf(Blocks.CAKE),
+			Material.dragonEgg to listOf(Blocks.DRAGON_EGG), Material.redstoneLight to listOf(Blocks.REDSTONE_LAMP),
+			Material.anvil to listOf(Blocks.ANVIL, Blocks.DAMAGED_ANVIL), Material.sponge to listOf(Blocks.SPONGE, Blocks.WET_SPONGE),
+			Material.tnt to listOf(Blocks.TNT),
+			Material.rock to listOf(Blocks.STONE, Blocks.COBBLESTONE, Blocks.OBSIDIAN, Blocks.NETHERRACK, Blocks.NETHER_BRICK_FENCE, Blocks.STONE_PRESSURE_PLATE, Blocks.FURNACE, Blocks.ENDER_CHEST, Blocks.TERRACOTTA, Blocks.DEEPSLATE),
+		)
+		for ((material, blocks) in materials) for (block in blocks) helper.assertTrue(block.material === material, "$block: ${block.material}")
+		helper.succeed()
+	}
+
+	/**
+	 * Блок варианта metadata (`variant1710`): вариант с тем же именем 1.7.10; у блока без вариантов, у блока не автора и
+	 * для metadata без варианта — сам блок. Существо 1.7.10 (`Entity1710`): размер — из `setSize` (по умолчанию 0,6 × 1,8),
+	 * запас воздуха (`air`), источник урона 1.7.10 без виновника
+	 */
+	@JvmStatic
+	@GameTest(template = "empty")
+	fun variantsAndEntities1710(helper: GameTestHelper) {
+		helper.assertTrue(AlfheimBlocks.elvenOre[0].variant1710(2) === AlfheimBlocks.elvenOre[2] && AlfheimBlocks.icicle[3].variant1710(0) === AlfheimBlocks.icicle[0], "variants")
+		helper.assertTrue(AlfheimBlocks.icicle[1].variant1710(7) === AlfheimBlocks.icicle[1], "a missing variant is the block itself")
+		helper.assertTrue(AlfheimBlocks.dreamSapling.variant1710(3) === AlfheimBlocks.dreamSapling && Blocks.STONE.variant1710(1) === Blocks.STONE, "blocks without variants")
+
+		val hang = EntityFallingHang(helper.level)
+		helper.assertTrue(hang.bbWidth == 1f && hang.bbHeight == 1f, "setSize")
+		val lightning = FakeLightning(helper.level)
+		helper.assertTrue(lightning.bbWidth == 0.6f && lightning.bbHeight == 1.8f, "default size")
+		hang.air = 5
+		helper.assertTrue(hang.airSupply == 5 && hang.meta == 5, "air")
+		val source = helper.level.damageSource(DamageTypes.FALLING_BLOCK)
+		helper.assertTrue(source.entity == null && source.directEntity == null && source.damageType == "fallingBlock" && source.`is`(DamageTypes.FALLING_BLOCK), "a falling block damage source without a culprit")
 		helper.succeed()
 	}
 

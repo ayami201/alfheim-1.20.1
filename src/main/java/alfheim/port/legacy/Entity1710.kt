@@ -1,7 +1,12 @@
 package alfheim.port.legacy
 
 import alfheim.port.registry.LegacyRegistration
+import net.minecraft.core.registries.Registries
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.resources.ResourceKey
+import net.minecraft.util.RandomSource
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
@@ -21,6 +26,72 @@ import kotlin.math.*
 
 /** Тип 1.20.1 существа автора [T] */
 inline fun <reified T: Entity> legacyType(): EntityType<T> = LegacyRegistration.entityType(T::class.java)
+
+/**
+ * `net.minecraft.entity.Entity` 1.7.10 — существо с методами 1.7.10 поверх `Entity` 1.20.1:
+ * - [onUpdate] — тик существа (`tick` 1.20.1), [onEntityUpdate] — его общая часть (`baseTick`: огонь, вода, лава,
+ *   портал, падение за край мира); `super.onUpdate()` и `super.onEntityUpdate()` в коде автора — они же в 1.20.1;
+ * - [entityInit] — данные, которые сервер шлёт клиенту (`DataWatcher` 1.7.10), [readEntityFromNBT] и
+ *   [writeEntityToNBT] — сохранение;
+ * - [moveEntity] — движение со столкновениями (`move` 1.20.1), после него — [isCollided];
+ * - [setSize] — размер: в 1.7.10 его задавало существо, в 1.20.1 — тип; по умолчанию 0,6 × 1,8, как в 1.7.10.
+ */
+abstract class Entity1710(type: EntityType<*>, world: Level): Entity(type, world) {
+
+	/** `rand` 1.7.10 — случайные числа существа */
+	val rand: RandomSource get() = random
+
+	/** `isCollided` 1.7.10: существо столкнулось с блоком при последнем [moveEntity]; код автора поднимает его и сам */
+	var isCollided = false
+
+	private var size = EntityDimensions.scalable(0.6f, 1.8f)
+
+	init {
+		refreshDimensions()
+	}
+
+	/** `setSize(width, height)` 1.7.10 */
+	fun setSize(width: Float, height: Float) {
+		size = EntityDimensions.scalable(width, height)
+		refreshDimensions()
+	}
+
+	override fun getDimensions(pose: Pose): EntityDimensions = size
+
+	/** `onUpdate()` 1.7.10 — тик существа */
+	open fun onUpdate() = super.tick()
+
+	final override fun tick() = onUpdate()
+
+	/** `onEntityUpdate()` 1.7.10 — общий тик существа (`baseTick` 1.20.1), его зовёт [onUpdate] */
+	open fun onEntityUpdate() = super.baseTick()
+
+	final override fun baseTick() = onEntityUpdate()
+
+	/**
+	 * `moveEntity(dx, dy, dz)` 1.7.10 — сдвиг со столкновениями (`move` 1.20.1): упор в блок гасит скорость по его оси,
+	 * падение копит `fallDistance`, существо задевает блоки на пути
+	 */
+	fun moveEntity(x: Double, y: Double, z: Double) {
+		move(MoverType.SELF, Vec3(x, y, z))
+		isCollided = horizontalCollision || verticalCollision
+	}
+
+	/** `entityInit()` 1.7.10 — данные, которые сервер шлёт клиенту (`DataWatcher` 1.7.10, MAPPING.md) */
+	open fun entityInit() = Unit
+
+	final override fun defineSynchedData() = entityInit()
+
+	/** `readEntityFromNBT(tag)` 1.7.10 */
+	open fun readEntityFromNBT(tag: CompoundTag) = Unit
+
+	/** `writeEntityToNBT(tag)` 1.7.10 */
+	open fun writeEntityToNBT(tag: CompoundTag) = Unit
+
+	final override fun readAdditionalSaveData(tag: CompoundTag) = readEntityFromNBT(tag)
+
+	final override fun addAdditionalSaveData(tag: CompoundTag) = writeEntityToNBT(tag)
+}
 
 /** `worldObj` 1.7.10 */
 val Entity.worldObj: Level get() = level()
@@ -90,6 +161,25 @@ fun Entity.setLocationAndAngles(x: Double, y: Double, z: Double, yaw: Float, pit
 
 /** `setPosition(x, y, z)` 1.7.10 */
 fun Entity.setPosition(x: Double, y: Double, z: Double) = setPos(x, y, z)
+
+/** `lastTickPosX`, `lastTickPosY`, `lastTickPosZ` 1.7.10 — где существо было в начале тика (`xOld` … 1.20.1) */
+val Entity.lastTickPosX: Double get() = xOld
+val Entity.lastTickPosY: Double get() = yOld
+val Entity.lastTickPosZ: Double get() = zOld
+
+/** `air` 1.7.10 — запас воздуха (`airSupply` 1.20.1); сервер шлёт его клиенту, как в 1.7.10 */
+var Entity.air: Int
+	get() = airSupply
+	set(value) {
+		airSupply = value
+	}
+
+/**
+ * Источник урона 1.7.10 без виновника (`DamageSource.fallingBlock`, `DamageSource.inWall`…) — тип урона 1.20.1 с тем же
+ * именем из реестра мира. Без виновника урон не отбрасывает, как в 1.7.10; `damageSources().fallingBlock(существо)`
+ * 1.20.1 указал бы существо — и отбрасывал бы от него
+ */
+fun Level.damageSource(type: ResourceKey<DamageType>) = DamageSource(registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(type))
 
 /** `entityItem` 1.7.10 — стак предмета, который лежит на земле */
 val ItemEntity.entityItem: ItemStack get() = item
