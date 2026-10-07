@@ -127,7 +127,8 @@ Metadata поворота и половины (лестницы, плиты, с�
 | `block.material.isLiquid` | `state.liquid()` | ✓ |
 | `Blocks.water` и `flowing_water`, `lava` и `flowing_lava` | `Blocks.WATER`, `Blocks.LAVA` | ✓ стоячая и текучая жидкость — один блок, уровень — свойство состояния: сравнения автора «стоячая — текучая» сводятся к одному блоку |
 | `IFluidBlock.canDrain(world, x, y, z)`, `drain(world, x, y, z, true)` | `canDrain(level, pos)`, `drain(level, pos, FluidAction.EXECUTE)` | ✓ |
-| `block.getBlockHardness(world, x, y, z)`, `block.canPlaceBlockAt(world, x, y, z)` | `state.getDestroySpeed(level, pos)`, `state.canSurvive(level, pos)` | ✓ |
+| `block.getBlockHardness(world, x, y, z)`, `block.canPlaceBlockAt(world, x, y, z)` | `getBlockHardness` прослойки — `state.getDestroySpeed(level, pos)` блока в точке; `state.canSurvive(level, pos)` | ✓ |
+| `block === Blocks.air` (сравнение с воздухом) | `block.defaultBlockState().isAir` | ✓ воздух 1.20.1 — ещё и воздух пещер и пустоты: вне мира 1.20.1 отдаёт воздух пустоты, 1.7.10 — обычный воздух (поиск воздуха вверх иначе не кончился бы) |
 | `getBlockHardness(world, x, y, z)`, переопределённый автором (твёрдость по metadata) | твёрдость состояний блока, записанная с создания блока по тому же правилу: `destroySpeed` прослойки (`LegacyBlock.kt`) | ✓ метод автора закомментирован; поле `blockHardness` остаётся как было. У лестницы metadata — поворот и половина: твёрдость получают состояния с тем же номером 1.7.10 (`BlockAltWoodStairs`) |
 | `getExplosionResistance(entity, world, x, y, z, explosionX, explosionY, explosionZ)` | `getExplosionResistance(state, level, pos, explosion)` (Forge) | ✓ число то же: оба метода отдают устойчивость, уже поделённую на 5 (по умолчанию в 1.7.10 — `blockResistance / 5`), и взрыв 1.20.1 вычитает её по формуле 1.7.10; metadata — номер варианта блока (SPEC, Р-5) |
 | `getFlammability(world, x, y, z, face)`, `getFireSpreadSpeed(world, x, y, z, face)` | `getFlammability(state, level, pos, direction)`, `getFireSpreadSpeed(state, level, pos, direction)` (Forge) | ✓ metadata — номер варианта блока |
@@ -234,7 +235,7 @@ Metadata поворота и половины (лестницы, плиты, с�
 
 | Было | Стало | Примечание |
 |---|---|---|
-| `BlockBush` | `Bush1710` (`BushBlock`) | ✓ стоит, пока блок снизу держит растение (`canBlockStay`: `canSustainPlant` блока снизу); без опоры — лут и воздух (флаг 2); столкновений нет; рамка 0,3–0,7 по сторонам и 0,6 в высоту; тики случайные |
+| `BlockBush` | `Bush1710` (`BushBlock`) | ✓ стоит, пока блок снизу держит растение (`canBlockStay`: `canSustainPlant` блока снизу); без опоры — лут и воздух (флаг 2); столкновений нет; рамка 0,3–0,7 по сторонам и 0,6 в высоту; тики случайные; `BlockBush()` без материала — материал растений |
 | `canPlaceBlockAt` и `canBlockStay` растения | одно правило 1.20.1 — `canSurvive` (`Bush1710`: `canBlockStay` автора) | ✓ 1.7.10 при установке ещё требовал заменяемое место и `canSustainPlant` блока снизу — у растений автора это то же самое |
 | `updateTick` растения | и случайный (`randomTick`), и запланированный (`tick`) тик | ✓ |
 | `IGrowable`: `func_149851_a`, `func_149852_a`, `func_149853_b` | `IGrowable` прослойки (`BonemealableBlock`): `isValidBonemealTarget`, `isBonemealSuccess`, `performBonemeal` | ✓ имена методов автора те же; костная мука тратится, если удобрить можно, как в 1.7.10 |
@@ -258,6 +259,8 @@ Metadata поворота и половины (лестницы, плиты, с�
 | высота мира 0–255 (генераторы, `canBlockStay` растений) | `minBuildHeight`, `maxBuildHeight` мира | ✓ мир 1.20.1 — от −64 до 320 |
 | `BiomeGenBase.plantFlower` (`world.getBiomeGenForCoords(x, z).plantFlower(…)`) | `Level.plantFlower(random, x, y, z)` прослойки | ✓ цветы биома 1.20.1 — его цветочные узоры генерации; ставится цветок первого, как от костной муки на траве 1.20.1 |
 | цвет блока (`getRenderColor`, `colorMultiplier`) | цвет блока на клиенте (`alfheim.port.client.AlfheimBlockColors`); модели — окрашенные копии шаблонов ванилы (`alfheim.port.data.TintedTemplates`), листва — `block/leaves`, крест — `block/tinted_cross` | ✓ metadata в `colorMultiplier` — номер варианта блока; у двойного растения у обеих половин он один. Предмет-блок 1.7.10 красил объёмную модель `getRenderColor` блока по metadata предмета (`ItemBlock` прослойки) |
+| `ColorizerFoliage.getFoliageColor(t, h)`, `getFoliageColorBasic()`; среднее цвета листвы биомов вокруг (`getBiomeGenForCoords(…).getBiomeFoliageColor(…)`, 3 × 3, как у листвы ванилы 1.7.10) | `FoliageColor.get(t, h)`, `getDefaultColor()`; `BiomeColors.getAverageFoliageColor(level, pos)` | ✓ смешивание цвета биомов 1.20.1 — по настройке «Смешивание биомов» (при 3 × 3 — то же самое), как у листвы ванилы 1.20.1 рядом (`BlockSadOakLeaves`) |
+| `getItem(world, x, y, z)`, `getPickBlock(…)` — вещь «выбора колёсиком» | `getCloneItemStack(level, pos, state)` | ✓ у листвы автора `getPickBlock` `BlockLeavesMod` (сама листва) перекрывал `getItem` наследника: тот не вызывался |
 | `IIridescentSaplingVariant`, `addTreeVariant(soil, wood, leaves, …)` | те же имена; почва, бревно и листва — массивы блоков-вариантов, блок без вариантов — `arrayOf(блок)` | ✓ номер варианта почвы — её индекс в массиве; `getWood` и `getLeaves` отдают сам блок варианта, `getMeta` — 0 |
 
 ## Ore Dictionary
@@ -337,7 +340,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 |---|---|---|
 | `getBlock(x, y, z)`, `getTileEntity(x, y, z)`, `isAirBlock(x, y, z)` | `getBlockState(pos).block`, `getBlockEntity(pos)`, `getBlockState(pos).isAir` | у `BlockGetter` (IBlockAccess 1.7.10) |
 | `setBlock(x, y, z, block)` | `setBlock(pos, block.defaultBlockState(), 3)` | metadata 0 — состояние по умолчанию |
-| `setBlock(x, y, z, block, meta, flags)` | `setBlock(x, y, z, state, flags)` прослойки | состояние вместо metadata выбирает вызывающий код; младшие флаги 1, 2, 4 те же |
+| `setBlock(x, y, z, block, meta, flags)` | `setBlock(x, y, z, state, flags)` прослойки | состояние вместо metadata выбирает вызывающий код; младшие флаги 1, 2, 4 те же. Постройка, где metadata — ось бревна (`StructureDreamsTree`, сотни вызовов), — функция `setBlock(x, y, z, block, meta, flags)` в её классе: строки автора не меняются |
 | `setBlockToAir(x, y, z)` | `setBlock(pos, AIR, 3)` | |
 | `notifyBlocksOfNeighborChange(x, y, z, block)`, `scheduleBlockUpdate(x, y, z, block, delay)` | `updateNeighborsAt`, `scheduleTick` | |
 | `spawnEntityInWorld(entity)`, `isRemote` | `addFreshEntity(entity)`, `isClientSide` | |
@@ -367,12 +370,13 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 | `Constants.NBT.TAG_…`, `nbt.getTagList(key, type)`, `tagCount()`, `getStringTagAt(i)`, `appendTag(tag)`, `NBTTagString(s)` | `Tag.TAG_…` (те же числа), `getList`, `size`, `getString`, `add`, `StringTag.valueOf` (`NBT1710.kt`) | ✓ |
 | `entityItem` (предмет на земле), `world.totalWorldTime`, `world.playerEntities` | `item`, `gameTime`, `players()` | ✓ |
 | `world.worldTime` | `worldTime` прослойки (`World.kt`) — `dayTime` | ✓ время суток мира: за сутки растёт на 24000, его меняют команда `time` и сон |
+| `world.rand` | `rand` прослойки — `random` мира | ✓ |
 | `player.playerNetServerHandler.sendPacket(packet)` | `connection.send(packet)` (`Player1710.kt`) | ✓ |
 | `tile.getDescriptionPacket()` (вызов) | `descriptionPacket` прослойки — `getUpdatePacket()` | ✓ |
 | `FurnaceRecipes.smelting().getSmeltingResult(stack)` | `getSmeltingResult(stack, world)` прослойки | ✓ рецепты 1.20.1 — у мира (у сервера и у клиента, которому сервер их прислал): мир — второй параметр, вызов меняется на месте |
 | `checkChunksExist(…)`, `getBlockLightValue(x, y, z)`, `getStrongestIndirectPower(x, y, z)` | `hasChunksAt`, `getMaxLocalRawBrightness`, `getBestNeighborSignal` | ✓ |
 | `block.canSustainPlant(world, x, y, z, direction, plantable)`, `isLeaves`, `canSustainLeaves`, `isAir`, `isReplaceable`, `onPlantGrow`, `isNormalCube(world, x, y, z)` | у состояния в точке: `canSustainPlant`, теги `minecraft:leaves` и `minecraft:logs`, `isAir`, `canBeReplaced`, трава и пашня → земля, `isRedstoneConductor` | ✓ `isNormalCube` до 1.16 и назывался так |
-| `block.material` у любого блока | `Block.material` прослойки (`Materials1710.kt`): у блока порта — его материал; у блоков ванилы и Botania — материал того же блока 1.7.10 по таблице; воздух, вода и лава — свои | ✓ блок 1.20.1, которого в 1.7.10 не было, с тегом `minecraft:dirt` — земля, прочие — камень; таблица дополняется, когда коду автора нужен материал ещё одного блока |
+| `block.material` у любого блока | `Block.material` прослойки (`Materials1710.kt`): у блока порта — его материал; у блоков ванилы и Botania — материал того же блока 1.7.10 по таблице; воздух, вода и лава — свои | ✓ блок 1.20.1, которого в 1.7.10 не было, — по тегу, как такие же блоки 1.7.10: `minecraft:dirt` — земля, `leaves` — листва, `logs`, `planks` и деревянные лестницы, плиты, заборы, калитки, двери, люки, нажимные плиты — дерево, `saplings` и `flowers` — растения, `fire` — огонь; прочие — камень; таблица дополняется, когда коду автора нужен материал ещё одного блока |
 | `block.canBlockStay(world, x, y, z)`, `block.canPlaceBlockAt(world, x, y, z)` у любого блока | растение порта — своё правило (`Bush1710`, `DoublePlant1710`), прочие — `canSurvive` (и заменяемое место) | ✓ |
 | `world.getBiomeGenForCoords(x, z).plantFlower(world, random, x, y, z)` | `world.plantFlower(random, x, y, z)` | ✓ раздел «Растения» |
 | `GameRegistry.registerFuelHandler(handler)` | `Fuel1710.handlers` | ✓ раздел «Блоки и предметы» |
@@ -527,6 +531,7 @@ Ore Dictionary искали и вещи, и блоки. Имя без строк
 |---|---|---|
 | `WorldProvider` + номер измерения | `dimension_type` + `dimension` в датапаке мода | высоты 0–255 (SPEC, Р-10) |
 | `IChunkProvider` / `WE_ChunkProvider` | свой `ChunkGenerator` с кодеком | WorldEngine внутри |
+| `StructureBaseClass.generate(world, rand, x, y, z, chunkProvider)` (постройка WorldEngine) | `generate(Level, RandomSource, x, y, z, Object)` | ✓ генератор чанков — `Object` до КТ-6: постройки из саженцев (дерево мечтаний, печальный дуб) передают `null` |
 | `BiomeGenBase` | биом в датапаке + свой `BiomeSource` | |
 | `EntityRegistry.addSpawn` в чужие биомы | Forge biome modifier | веса — авторские |
 | телепорт между мирами | `entity.changeDimension(level, ITeleporter)` | |

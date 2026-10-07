@@ -35,18 +35,18 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 225 | 19 495 | 51 | 172 | 2 |  |
+| КТ-2 | 227 | 20 144 | 49 | 176 | 2 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 43 | 4 930 | 43 |  |  |  |
-| КТ-6 | 105 | 12 316 | 105 |  |  |  |
+| КТ-6 | 103 | 11 667 | 103 |  |  |  |
 | КТ-7 | 139 | 10 888 | 139 |  |  |  |
 | КТ-8 | 95 | 13 066 | 95 |  |  |  |
 | КТ-9 | 19 | 2 559 | 19 |  |  |  |
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **875** | **204** | **62** | **12** |
+| **всего** | **1153** | **124 643** | **871** | **208** | **62** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -652,7 +652,7 @@ python3 tools/check_inventory.py
 | `BlockDomainDoor.kt` | 69 | КТ-6 | ждёт | вход в Домены |
 | `BlockDoubleBlock.kt` | 191 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockDoubleCamo.kt` | 220 | КТ-3 | ждёт | основа маскирующихся блоков с блок-сущностью |
-| `BlockDreamSapling.kt` | 87 | КТ-2 | ждёт |  |
+| `BlockDreamSapling.kt` | 87 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockDreamSapling.kt`; `dream_sapling`; куст 1.7.10 (`Bush1710`), бит 8 metadata — свойство `stage`; растит дерево мечтаний (`BiomeAlfheim.dreamTree`); светится (9), топливо 100; лексикон — КТ-9 |
 | `BlockDwarfLantern.kt` | 44 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockDwarfLantern.kt` |
 | `BlockElvenOre.kt` | 58 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockElvenOre.kt`; лексикон ждёт КТ-9 |
 | `BlockElvenSand.kt` | 18 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockElvenSand.kt` |
@@ -695,7 +695,7 @@ python3 tools/check_inventory.py
 | `BlockRedStringObserver.kt` | 39 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockRedStringWatcher.kt` | 53 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockRift.kt` | 22 | КТ-4 | ждёт | вместе с инструментами разлома (`ItemRiftPick`, `ItemRiftSword`) |
-| `BlockSadOakLeaves.kt` | 71 | КТ-2 | ждёт |  |
+| `BlockSadOakLeaves.kt` | 71 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockSadOakLeaves.kt`; `alfheim:leaves`; модель дубовой листвы 1.20.1, цвет листвы биомов — смешивание 1.20.1 (`BiomeColors`); лут — саженец дуба и яблоки; не во вкладке, как у автора; `getItem` автора не вызывался (BUGS.md) |
 | `BlockSecretGlass.kt` | 56 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockShrineGlass.kt` | 36 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockShrineGlass.kt` |
 | `BlockShrinePillar.kt` | 33 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockShrinePillar.kt` |
@@ -717,7 +717,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BlockAltLeaves.kt` | 148 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockAltLeaves.kt`; 8 блоков-вариантов `alt_leaves0`–`7`; листва Иггдрасиля — не листва (нет в `minecraft:leaves`, `isLeaves` прослойки), не опадает и не ломается; листва мечтаний опадает в 8 шагах от бревна, роняет вишню мечтаний (таблица лута), ночью — огоньки (`Botania.proxy` без ограничения расстояния), светящийся слой (`RenderGlowingLayerBlock` ASJCore) — второй слой модели; саженец мечтаний в луте — партия 8г-2 |
+| `BlockAltLeaves.kt` | 148 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockAltLeaves.kt`; 8 блоков-вариантов `alt_leaves0`–`7`; листва Иггдрасиля — не листва (нет в `minecraft:leaves`, `isLeaves` прослойки), не опадает и не ломается; листва мечтаний опадает в 8 шагах от бревна, роняет саженец древа мечтаний и вишню мечтаний (таблица лута), ночью — огоньки (`Botania.proxy` без ограничения расстояния), светящийся слой (`RenderGlowingLayerBlock` ASJCore) — второй слой модели |
 | `BlockAltPlanks.kt` | 120 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockAltPlanks.kt`; 7 блоков-вариантов `alt_planks0`–`6`; доски Иггдрасиля — твёрдость 100 у состояний блока, взрывоустойчивость 1000, не горят |
 | `BlockAltWood.kt` | 140 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockAltWood.kt`; 8 блоков-вариантов `alt_wood00`–`13` (набор и вариант); бревно Иггдрасиля (`alt_wood12`) не сломать (твёрдость −1 у состояний блока) и не взорвать (`getExplosionResistance` Forge), не горит, не в `minecraft:logs`; клык Нидхёгга — партия 9; иконки — модели, кадры опалённого бревна сглаживает .mcmeta |
 | `BlockAltWoodPartials.kt` | 96 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/alt/BlockAltWoodPartials.kt`; плиты `alt_planks_slab0`–`6` (двойная — состояние `type=double`, старое имя `altPlanksSlabFull` с metadata варианта), ступеньки `alt_planks_stairs0`–`6`; Иггдрасиль — твёрдость 100, взрывоустойчивость 1000, не горит; перевёрнутые ступеньки к югу — твёрдость 100, как у автора (BUGS.md) |
@@ -1963,7 +1963,7 @@ python3 tools/check_inventory.py
 
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
-| `BiomeAlfheim.kt` | 75 | КТ-6 | ждёт |  |
+| `BiomeAlfheim.kt` | 75 | КТ-2 | перенесено | → `src/main/java/alfheim/common/world/dim/alfheim/biome/BiomeAlfheim.kt`; в описи было КТ-6: работают только деревья биомов (`dreamTree`, `sadOak`) — их растят саженцы; биом (`WE_Biome` WorldEngine), его погода и существа — КТ-6, закомментированы |
 | `BiomeBeach.kt` | 19 | КТ-6 | ждёт |  |
 | `BiomeField.kt` | 36 | КТ-6 | ждёт |  |
 | `BiomeIslandForest.kt` | 40 | КТ-6 | ждёт |  |
@@ -1998,7 +1998,7 @@ python3 tools/check_inventory.py
 | Файл | Строк | КТ | Статус | Примечание |
 |---|---:|---|---|---|
 | `StructureArena.kt` | 87 | КТ-6 | ждёт |  |
-| `StructureDreamsTree.kt` | 574 | КТ-6 | ждёт |  |
+| `StructureDreamsTree.kt` | 574 | КТ-2 | перенесено | → `src/main/java/alfheim/common/world/dim/alfheim/structure/StructureDreamsTree.kt`; нужен саженцу древа мечтаний (в описи было КТ-6); ось бревна по metadata — функция `setBlock` в классе; генератор чанков — КТ-6 |
 | `StructurePortalToNiflheim.kt` | 18 | КТ-6 | ждёт |  |
 | `StructureShrine.kt` | 49 | КТ-6 | ждёт |  |
 | `StructureSpawnpoint.kt` | 91 | КТ-6 | ждёт |  |
@@ -2112,7 +2112,7 @@ python3 tools/check_inventory.py
 | `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
-| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 194 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
+| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 195 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
 | `alfheim/textures/blocks/decor/` | 83 | КТ-3 | ждёт | перенесено 79 — декор `AlfheimFluffBlocks` и мерцающий кварц (`shimmerQuartz`); остались 4 файла (`blockInsertShimmerQuartz`, `blockSmoothShimmerQuartz` с .mcmeta) — варианты 5 и 6 кварца, их добавляет врезка `QuartzExtender` (КТ-3) |
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
@@ -2175,7 +2175,7 @@ python3 tools/check_inventory.py
 |---|---:|---|---|---|
 | `alexsocol/asjlib/extendables/ASJConfigHandler.kt` | 98 | КТ-1 | всё | поверх `alfheim.port.config.Configuration` |
 | `alexsocol/asjlib/extendables/ASJPreConfigHandler.kt` | 83 | КТ-1 | всё | то же |
-| `alexsocol/asjlib/ASJUtilities.kt` | 914 | КТ-1 | лог, сторона (`isServer`/`isClient`), `chance`, `randInBounds`, поиск в коллекциях, `say`, `soundFromMaterial`, `dispatchTEToNearbyPlayers` (КТ-2) | |
+| `alexsocol/asjlib/ASJUtilities.kt` | 914 | КТ-1 | лог, сторона (`isServer`/`isClient`), `chance`, `randInBounds`, поиск в коллекциях, `say`, `soundFromMaterial`, `dispatchTEToNearbyPlayers` (КТ-2), `isBlockReplaceable` (КТ-2) | |
 | `alexsocol/asjlib/Extensions.kt` | 358 | КТ-1 | функции Kotlin, `clamp`/`mfloor`/`mceil`, `eventForge`/`eventFML`, `ItemStack.cooldown`, `toItem`/`toBlock`/`ItemStack.block`, `TileEntity.boundingBox` (КТ-2), `getBlock(entity)` — блок в точке существа (КТ-2) | `meta`, числовые `id`, `PotionEffectU`, базовые классы блоков (`extendables`) — в КТ-2 вместе с блоками: у них меняется смысл metadata |
 | `alexsocol/asjlib/ExtensionsClient.kt` | 17 | КТ-1 | `mc` | |
 | `alexsocol/asjlib/ArrayExt.kt` | 88 | КТ-1 | всё | без правок |
@@ -2188,3 +2188,4 @@ python3 tools/check_inventory.py
 | `alexsocol/asjlib/extendables/block/BlockModFence.kt` | 25 | КТ-2 | всё | поверх `Fence1710`; `canConnectFenceTo` → `connectsTo` |
 | `alexsocol/asjlib/extendables/block/BlockModFenceGate.kt` | 19 | КТ-2 | всё | поверх `FenceGate1710`; иконка блока-источника — модель генерации данных |
 | `alexsocol/asjlib/extendables/block/ASJTile.kt` | 33 | КТ-2 | всё | поверх `TileEntity` прослойки; пакет описания (`getDescriptionPacket`) — данные для клиента с чанком (`getUpdateTag`) и при обновлении блока (`getUpdatePacket`) |
+| `ru/vamig/worldengine/standardcustomgen/StructureBaseClass.java` | 11 | КТ-2 | всё | постройка библиотеки WorldEngine (дерево мечтаний); генератор чанков `WE_ChunkProvider` — КТ-6, до неё параметр — `Object` |
