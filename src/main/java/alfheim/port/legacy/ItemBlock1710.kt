@@ -21,3 +21,10 @@ open class ItemBlock(block: Block): BlockItem(block, Properties()) {
 
 /** `net.minecraft.item.ItemBlockWithMetadata` 1.7.10: предмет блока с вариантами metadata; иконку задаёт модель */
 open class ItemBlockWithMetadata(block: Block, @Suppress("UNUSED_PARAMETER") iconBlock: Block): ItemBlock(block)
+
+/**
+ * `net.minecraft.item.ItemMultiTexture` 1.7.10: предмет блока с вариантами metadata, имя вещи — имя блока, точка и
+ * [names] по metadata (вне массива — первое: `tile.NiflheimBlock.Stone`). Старый ключ перевода по нему читает генерация
+ * `legacy_ids.json`; иконку задаёт модель
+ */
+open class ItemMultiTexture(block: Block, @Suppress("UNUSED_PARAMETER") iconBlock: Block, val names: Array<String>): ItemBlock(block)
