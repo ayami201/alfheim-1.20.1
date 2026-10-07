@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "alfheim:blocks/niflheim_block_runic_top",
+    "side": "alfheim:blocks/niflheim_block_runic_side"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "alfheim:block/niflheim_block10_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "alfheim:block/niflheim_block10"
+    },
+    "axis=z": {
+      "model": "alfheim:block/niflheim_block10_horizontal",
+      "x": 90
+    }
+  }
+}

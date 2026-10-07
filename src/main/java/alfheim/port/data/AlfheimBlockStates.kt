@@ -67,6 +67,7 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			is BlockTreeBerry        -> treeBerry(block)
 			is BlockSnowGrass        -> snowGrass(block)
 			is BlockSnowLayer        -> snowLayer(block)
+			is BlockNiflheim         -> niflheim(block)
 			is BlockShimmerQuartz    -> shimmerQuartz(block)
 			is BlockModRotatedPillar -> pillar(block)
 			is Stairs1710            -> stairs(block)
@@ -381,6 +382,18 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 		for (layers in 1..8)
 			states.partialState().with(BlockSnowLayer.LAYERS, layers).modelForState().modelFile(models().getExistingFile(mcLoc(if (layers == 8) "block/snow_block" else "block/snow_height${layers * 2}"))).addModel()
 		itemModels().withExistingParent(name(block), mcLoc("block/snow_height2"))
+	}
+
+	/**
+	 * `BlockNiflheim.getIcon`: варианты 0–6 — иконка `NiflheimBlock<вид>` со всех сторон; колонна и руническая колонна —
+	 * бока `…Side`, торцы по оси `…Top` (RenderBlockNiflheimSet поворачивал их, как бревно); предмет — стоячая колонна
+	 */
+	private fun niflheim(block: BlockNiflheim) {
+		val name = BlockNiflheim.NiflheimBlockMetas.entries[block.meta].modname
+		if (block.meta == BlockNiflheim.PILLAR || block.meta == BlockNiflheim.RUNIC)
+			pillar(block, legacyTexture(icon(block, name + "Side")), legacyTexture(icon(block, name + "Top")))
+		else
+			block(block, cubeAll(block, legacyTexture(icon(block, name))))
 	}
 
 	/**

@@ -3,6 +3,7 @@ package alfheim.port.data
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.BlockElvenOre
 import alfheim.common.block.BlockHang
+import alfheim.common.block.BlockNiflheim
 import alfheim.common.block.BlockSadOakLeaves
 import alfheim.common.block.BlockSnowGrass
 import alfheim.common.block.BlockSnowLayer
@@ -17,6 +18,7 @@ import alfheim.common.item.AlfheimItems
 import alfheim.common.item.material.ElvenFoodMetas
 import alfheim.common.item.material.ElvenResourcesMetas
 import alfheim.port.legacy.*
+import alfheim.port.loot.FortuneCount
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.advancements.critereon.*
 import net.minecraft.core.BlockPos
@@ -72,6 +74,7 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 			// BlockSnowGrass: getItemDropped — земля; с шёлковым касанием — сама трава (обычный куб: canSilkHarvest)
 			block is BlockSnowGrass                -> add(block, createSingleItemTableWithSilkTouch(block, block.getItemDropped(0, null, 0)))
 			block is BlockSnowLayer                -> add(block, snowLayer(block))
+			block is BlockNiflheim                 -> add(block, niflheim(block))
 			else                                   -> dropSelf(block)
 		}
 	}
@@ -195,6 +198,18 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 		for (layers in 1..8)
 			snowballs.apply(SetItemCountFunction.setCount(ConstantValue.exactly(block.quantityDropped(layers - 1, 0, null).toFloat())).`when`(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockSnowLayer.LAYERS, layers))))
 		return LootTable.lootTable().withPool(LootPool.lootPool().add(applyExplosionDecay(block, snowballs)))
+	}
+
+	/**
+	 * `BlockNiflheim.getDrops`: руда (вариант 2) — нифлёр (`damageDropped`), штук — удача + 1 (функция
+	 * `alfheim:fortune_count`: у функций ванилы прибавка от удачи случайная); с шёлковым касанием — руда
+	 * (`createStackedBlock`); при взрыве — вся стопка с шансом 1 / сила взрыва. Прочие варианты роняют себя (повёрнутая
+	 * колонна — колонну: её состояние)
+	 */
+	private fun niflheim(block: BlockNiflheim): LootTable.Builder {
+		if (block.meta != BlockNiflheim.NiflheimBlockMetas.ORE.I) return createSingleItemTable(block)
+		val nifleur = LootItem.lootTableItem(AlfheimItems.elvenResource[block.damageDropped(block.meta)]).apply(FortuneCount.fortuneCount(1))
+		return createSilkTouchDispatchTable(block, applyExplosionCondition(block, nifleur))
 	}
 
 	override fun getKnownBlocks(): Iterable<Block> = LegacyRegistration.blocks.keys
