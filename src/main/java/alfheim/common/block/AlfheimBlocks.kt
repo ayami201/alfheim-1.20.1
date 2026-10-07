@@ -119,7 +119,7 @@ object AlfheimBlocks {
 //	val niflheimBlock: Block
 //	val niflheimPortal: Block // PORT: КТ-6
 //	val onyx: Block // PORT: КТ-2
-//	val poisonIce: Block // PORT: КТ-2
+	val poisonIce: Block
 //	val powerStone: Block // PORT: КТ-3
 //	val raceSelector: Block // PORT: КТ-7
 	val rainbowDirt: Block
@@ -316,7 +316,7 @@ object AlfheimBlocks {
 //		niflheimBlock = BlockNiflheim()
 //		niflheimPortal = BlockNiflheimPortal() // PORT: КТ-6
 //		onyx = BlockOnyx().WIP() // PORT: КТ-2
-//		poisonIce = BlockNiflheimIce() // PORT: КТ-2
+		poisonIce = BlockNiflheimIce()
 //		powerStone = BlockPowerStone() // PORT: КТ-3
 //		raceSelector = BlockRaceSelector() // PORT: КТ-7
 		rainbowDirt = BlockRainbowDirt()
@@ -474,7 +474,7 @@ object AlfheimBlocks {
 		
 //		tunedSapling = BlockTunedSapling() // PORT: КТ-2
 		
-//		AlfheimAPI.coldBlocks.addAll(arrayOf(poisonIce)) // PORT: КТ-2
+//		AlfheimAPI.coldBlocks.addAll(arrayOf(poisonIce)) // PORT: КТ-6
 //		AlfheimAPI.warmBlocks.addAll(arrayOf(redFlame, ModBlocks.blazeBlock, netherLeaves, netherBerry, netherSapling, netherPlanks, netherSlabs, netherSlabFull, netherStairs, netherWood)) // PORT: КТ-2
 		
 		registerBurnables()
