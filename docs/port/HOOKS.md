@@ -55,7 +55,7 @@ python3 tools/check_hooks.py
 | КТ | Всего | ждёт | перенесено | не нужна | выпало | WIP — стадия 2 |
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-1 | 3 | 3 |  |  |  |  |
-| КТ-2 | 20 | 16 | 3 | 1 |  |  |
+| КТ-2 | 20 | 15 | 4 | 1 |  |  |
 | КТ-3 | 190 | 190 |  |  |  |  |
 | КТ-4 | 105 | 105 |  |  |  |  |
 | КТ-5 | 13 | 13 |  |  |  |  |
@@ -65,7 +65,7 @@ python3 tools/check_hooks.py
 | КТ-9 | 5 | 5 |  |  |  |  |
 | КТ-10 | 5 | 5 |  |  |  |  |
 | — | 50 |  |  |  | 43 | 7 |
-| **всего** | **465** | **411** | **3** | **1** | **43** | **7** |
+| **всего** | **465** | **410** | **4** | **1** | **43** | **7** |
 
 Сводку пересчитывает `tools/check_hooks.py --summary`.
 
@@ -525,7 +525,7 @@ python3 tools/check_hooks.py
 |---|---|---|---|---|---|---|---|---|
 | S-01 | `legacy/src/main/java/alfheim/common/core/asm/superwrapper/SuperWrapperHandler.kt:14` | `ItemManasteelArmor#addInformation` | обёртка вызова `super` | оба | КТ-4 |  | ждёт |  |
 | S-02 | `legacy/src/main/java/alfheim/common/core/asm/superwrapper/SuperWrapperHandler.kt:20` | `EntityLiving#canDespawn` | обёртка вызова `super` без вызова своего метода | оба | КТ-5 |  | ждёт | исчезновение и редкий дроп мобов |
-| S-03 | `legacy/src/main/java/alfheim/common/core/asm/superwrapper/SuperWrapperHandler.kt:26` | `BlockBush#canPlaceBlockOn` | обёртка вызова `super` без вызова своего метода | оба | КТ-2 |  | ждёт |  |
+| S-03 | `legacy/src/main/java/alfheim/common/core/asm/superwrapper/SuperWrapperHandler.kt:26` | `BlockBush#canPlaceBlockOn` | обёртка вызова `super` без вызова своего метода | оба | КТ-2 | миксин-вызыватель `alfheim.port.mixin.BushBlockInvoker` → защищённый `BushBlock#mayPlaceOn` | перенесено | почва снежной травы: куст, который растёт на траве, растёт и на ней (`BlockSnowGrass.canSustainPlant`); проверяет `PortSnowTest.snowGrassSoil` и `tools/prod_check.py` (13) |
 | S-04 | `legacy/src/main/java/alfheim/common/core/asm/superwrapper/SuperWrapperHandler.kt:32` | `EntityLivingBase#dropRareDrop` | обёртка вызова `super` без вызова своего метода | оба | КТ-5 |  | ждёт | исчезновение и редкий дроп мобов |
 
 ## Трансформер

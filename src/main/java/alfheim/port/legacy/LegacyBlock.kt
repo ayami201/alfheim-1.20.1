@@ -4,6 +4,9 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Explosion
@@ -12,6 +15,7 @@ import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.*
 import java.util.function.BiConsumer
 import kotlin.math.min
@@ -305,6 +309,15 @@ open class Block1710(material: Material): Block(material.properties()), LegacyBl
 	override fun neighborChanged(state: BlockState, level: Level, pos: BlockPos, block: Block, fromPos: BlockPos, isMoving: Boolean) {
 		super.neighborChanged(state, level, pos, block, fromPos, isMoving)
 		onNeighborBlockChange(level, pos.x, pos.y, pos.z, block)
+	}
+
+	/** Нажатие 1.7.10 было одно на щелчок — основной рукой: второй руки в 1.7.10 не было */
+	@Deprecated("Deprecated in Java")
+	override fun use(state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult): InteractionResult {
+		if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS
+		val at = hit.location
+		val activated = onBlockActivated(level, pos.x, pos.y, pos.z, player, hit.direction.get3DDataValue(), (at.x - pos.x).toFloat(), (at.y - pos.y).toFloat(), (at.z - pos.z).toFloat())
+		return if (activated) InteractionResult.sidedSuccess(level.isClientSide) else InteractionResult.PASS
 	}
 
 	override fun onBlockExploded(state: BlockState, level: Level, pos: BlockPos, explosion: Explosion) = onBlockExploded(level, pos.x, pos.y, pos.z, explosion)

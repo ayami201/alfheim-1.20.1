@@ -4,6 +4,8 @@ import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.BlockElvenOre
 import alfheim.common.block.BlockHang
 import alfheim.common.block.BlockSadOakLeaves
+import alfheim.common.block.BlockSnowGrass
+import alfheim.common.block.BlockSnowLayer
 import alfheim.common.block.BlockTreeBerry
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.block.colored.BlockColoredDoubleGrass
@@ -67,6 +69,9 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 			// BlockHang (сосулька, сталактит, сталагмит): getItemDropped — null; шёлковое касание 1.7.10 не брало блок,
 			// который не рисуется кубом (renderAsNormalBlock — false)
 			block is BlockHang                     -> add(block, noDrop())
+			// BlockSnowGrass: getItemDropped — земля; с шёлковым касанием — сама трава (обычный куб: canSilkHarvest)
+			block is BlockSnowGrass                -> add(block, createSingleItemTableWithSilkTouch(block, block.getItemDropped(0, null, 0)))
+			block is BlockSnowLayer                -> add(block, snowLayer(block))
 			else                                   -> dropSelf(block)
 		}
 	}
@@ -177,6 +182,19 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 	private fun treeBerry(block: BlockTreeBerry): LootTable.Builder {
 		val ripe = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockTreeBerry.AGE, 2))
 		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().`when`(ripe).add(LootItem.lootTableItem(block.getItemDropped(2, null, 0)!!))))
+	}
+
+	/**
+	 * `BlockSnowLayer`: снежки (`getItemDropped`) по числу слоёв (`quantityDropped(meta, …)` — metadata + 1); без лопаты —
+	 * ничего: материал снега 1.7.10 требует инструмента (`requiresCorrectToolForDrops`). Шёлковое касание блок не берёт —
+	 * он не рисуется кубом (`canSilkHarvest`). При взрыве — каждый снежок с шансом 1 / сила взрыва: `getDrops` Forge
+	 * 1.7.10 выдавал их по одному
+	 */
+	private fun snowLayer(block: BlockSnowLayer): LootTable.Builder {
+		val snowballs = LootItem.lootTableItem(block.getItemDropped(0, null, 0))
+		for (layers in 1..8)
+			snowballs.apply(SetItemCountFunction.setCount(ConstantValue.exactly(block.quantityDropped(layers - 1, 0, null).toFloat())).`when`(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockSnowLayer.LAYERS, layers))))
+		return LootTable.lootTable().withPool(LootPool.lootPool().add(applyExplosionDecay(block, snowballs)))
 	}
 
 	override fun getKnownBlocks(): Iterable<Block> = LegacyRegistration.blocks.keys

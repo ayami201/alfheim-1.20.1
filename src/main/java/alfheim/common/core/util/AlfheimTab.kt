@@ -2,6 +2,7 @@ package alfheim.common.core.util
 
 // PORT: импорты 1.20.1 — первыми; импорты автора закомментированы до КТ, в которых появятся их блоки и предметы
 import alexsocol.asjlib.meta
+import alfheim.AlfheimCore
 import alfheim.api.ModInfo
 import alfheim.common.block.AlfheimBlocks.alfStorage
 import alfheim.common.block.AlfheimBlocks.altLeaves
@@ -85,6 +86,8 @@ import alfheim.common.block.AlfheimBlocks.sealingWood
 import alfheim.common.block.AlfheimBlocks.shimmerQuartz
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzSlab
 import alfheim.common.block.AlfheimBlocks.shimmerQuartzStairs
+import alfheim.common.block.AlfheimBlocks.snowGrass
+import alfheim.common.block.AlfheimBlocks.snowLayer
 import alfheim.common.block.AlfheimBlocks.softStorage
 import alfheim.common.block.AlfheimBlocks.stalactite
 import alfheim.common.block.AlfheimBlocks.stalagmite
@@ -512,12 +515,10 @@ object AlfheimTab {
 		addBlock(barrel)
 		*/
 		
-		/* PORT: КТ-2
 		if (AlfheimCore.winter) {
 			addBlock(snowGrass)
 			addBlock(snowLayer)
 		}
-		*/
 		
 		addItem(elvenResource)
 		addItem(AlfheimItems.eventResource)

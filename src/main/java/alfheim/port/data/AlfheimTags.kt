@@ -133,6 +133,8 @@ object OreDictTags {
 		LibOreDict.IRIS_WOOD to alfheim(LibOreDict.IRIS_WOOD),
 		LibOreDict.IRIS_LEAVES to alfheim(LibOreDict.IRIS_LEAVES),
 		LibOreDict.IRIS_DIRT to alfheim(LibOreDict.IRIS_DIRT),
+		"grassSnow" to alfheim("grassSnow"),
+		"snowLayer" to alfheim("snowLayer"),
 	) + (LibOreDict.WOOD + LibOreDict.LEAVES + LibOreDict.DIRT).associateWith { alfheim(it) }
 
 	/** Общий тег Forge: `forge:ingots/elvorium` — так материалы называют и Botania 1.20.1, и другие моды */
@@ -168,6 +170,9 @@ class AlfheimBlockTags(output: PackOutput, lookup: CompletableFuture<HolderLooku
 			HarvestTags.tier(block)?.let { add(it, block) }
 			if (block.isBeaconBase(null, 0, 0, 0, 0, 0, 0)) add(BlockTags.BEACON_BASE_BLOCKS, block)
 			ShapeTags.tag(block)?.let { add(it, block) }
+			// снег 1.7.10: трава, подзол и мицелий под блоком из материала снега заснежены (их getIcon смотрел на материал
+			// блока сверху); в 1.20.1 — по тегу minecraft:snow
+			if (block.blockMaterial === Material.snow || block.blockMaterial === Material.craftedSnow) add(BlockTags.SNOW, block)
 		}
 
 		// блок — вещь-блок 1.7.10 (ItemBlock). Предмет, который ставит блок под своим именем (ItemNameBlockItem: семена,

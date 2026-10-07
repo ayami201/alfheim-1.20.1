@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 229 | 20 248 | 45 | 182 | 2 |  |
+| КТ-2 | 229 | 20 248 | 43 | 184 | 2 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 41 | 4 826 | 41 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **865** | **214** | **62** | **12** |
+| **всего** | **1153** | **124 643** | **863** | **216** | **62** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -701,8 +701,8 @@ python3 tools/check_inventory.py
 | `BlockShrinePillar.kt` | 33 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockShrinePillar.kt` |
 | `BlockSnakeBody.kt` | 204 | КТ-2 | ждёт |  |
 | `BlockSnakeObject.kt` | 32 | КТ-2 | ждёт |  |
-| `BlockSnowGrass.kt` | 117 | КТ-2 | ждёт |  |
-| `BlockSnowLayer.kt` | 122 | КТ-2 | ждёт |  |
+| `BlockSnowGrass.kt` | 117 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockSnowGrass.kt`; metadata 1 (вечная) — свойство `permanent`; почва кустов — миксин `BushBlockInvoker` (S-03); Рагнарёк (`meltDelay`) — КТ-8 |
+| `BlockSnowLayer.kt` | 122 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockSnowLayer.kt`; metadata — свойство `layers` ванилы (1–8), рамки по metadata — формы состояний; таяние в Альфхейме — КТ-6 |
 | `BlockSpire.kt` | 23 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockStalactite.kt` | 16 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockStalactite.kt`; `stalactite = Array(8) { … }`, держится под камнем |
 | `BlockStalagmite.kt` | 16 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockStalagmite.kt`; `stalagmite = Array(8) { … }`, стоит на камне, не растёт и не падает |
@@ -2189,3 +2189,4 @@ python3 tools/check_inventory.py
 | `alexsocol/asjlib/extendables/block/BlockModFenceGate.kt` | 19 | КТ-2 | всё | поверх `FenceGate1710`; иконка блока-источника — модель генерации данных |
 | `alexsocol/asjlib/extendables/block/ASJTile.kt` | 33 | КТ-2 | всё | поверх `TileEntity` прослойки; пакет описания (`getDescriptionPacket`) — данные для клиента с чанком (`getUpdateTag`) и при обновлении блока (`getUpdatePacket`) |
 | `ru/vamig/worldengine/standardcustomgen/StructureBaseClass.java` | 11 | КТ-2 | всё | постройка библиотеки WorldEngine (дерево мечтаний); генератор чанков `WE_ChunkProvider` — КТ-6, до неё параметр — `Object` |
+| `ru/vamig/worldengine/WE_PerlinNoise.java` | 60 | КТ-2 | всё | шум Перлина библиотеки WorldEngine: до какой высоты растёт снег на снежной траве; без правок (чистая Java) |

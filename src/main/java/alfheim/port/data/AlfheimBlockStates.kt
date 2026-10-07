@@ -65,6 +65,8 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			// BlockHang: рендер 1 — крест с иконкой стадии (BlockModMeta)
 			is BlockHang             -> plant(block, texture(block))
 			is BlockTreeBerry        -> treeBerry(block)
+			is BlockSnowGrass        -> snowGrass(block)
+			is BlockSnowLayer        -> snowLayer(block)
 			is BlockShimmerQuartz    -> shimmerQuartz(block)
 			is BlockModRotatedPillar -> pillar(block)
 			is Stairs1710            -> stairs(block)
@@ -360,6 +362,25 @@ class AlfheimBlockStates(output: PackOutput, files: ExistingFileHelper): BlockSt
 			models().getBuilder("tree_berry${block.type}${age}_obj").customLoader { builder, helper -> ObjModelBuilder.begin(builder, helper) }
 				.modelLocation(modLoc("model/tree_berry${block.type}$age.obj")).flipV(true).overrideMaterialLibrary(modLoc("model/port/tree_berry.mtl")).end()
 				.texture("texture", textures[age]).texture("particle", textures[age])
+	}
+
+	/**
+	 * `BlockSnowGrass.getIcon`: низ — земля, верх — снег, бока — заснеженный бок травы ванилы (`field_149993_M`).
+	 * Частицы 1.7.10 брали иконку низа (`getIcon(0, meta)`) — земля
+	 */
+	private fun snowGrass(block: BlockSnowGrass) =
+		block(block, models().cubeBottomTop(name(block), mcLoc("block/grass_block_snow"), mcLoc("block/dirt"), mcLoc("block/snow")).texture("particle", mcLoc("block/dirt")))
+
+	/**
+	 * `BlockSnowLayer` — слой снега ванилы 1.7.10 с иконкой `snow`: высота по числу слоёв (`setSizeForMeta`) — модели
+	 * слоя снега ванилы 1.20.1, у восьми слоёв — блок снега; верх рисуется всегда, остальные грани — если их не скрывает
+	 * сосед (`shouldSideBeRendered`). Предмет — один слой (`setBlockBoundsForItemRender`)
+	 */
+	private fun snowLayer(block: BlockSnowLayer) {
+		val states = getVariantBuilder(block)
+		for (layers in 1..8)
+			states.partialState().with(BlockSnowLayer.LAYERS, layers).modelForState().modelFile(models().getExistingFile(mcLoc(if (layers == 8) "block/snow_block" else "block/snow_height${layers * 2}"))).addModel()
+		itemModels().withExistingParent(name(block), mcLoc("block/snow_height2"))
 	}
 
 	/**

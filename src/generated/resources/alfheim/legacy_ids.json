@@ -153,6 +153,8 @@
     "alfheim:ShrineRock0Slab": "alfheim:shrine_rock0_slab",
     "alfheim:ShrineRock0SlabFull": "alfheim:shrine_rock0_slab[type=double]",
     "alfheim:ShrineRockWhiteStairs": "alfheim:shrine_rock_white_stairs",
+    "alfheim:SnowGrass": "alfheim:snow_grass",
+    "alfheim:SnowLayer": "alfheim:snow_layer",
     "alfheim:Stalactite": {
       "0": "alfheim:stalactite0",
       "1": "alfheim:stalactite1",
@@ -720,6 +722,8 @@
     },
     "alfheim:ShrineRock0Slab": "alfheim:shrine_rock0_slab",
     "alfheim:ShrineRockWhiteStairs": "alfheim:shrine_rock_white_stairs",
+    "alfheim:SnowGrass": "alfheim:snow_grass",
+    "alfheim:SnowLayer": "alfheim:snow_layer",
     "alfheim:SoulHorn": "alfheim:soul_horn",
     "alfheim:Stalactite": {
       "0": "alfheim:stalactite0",
@@ -1273,6 +1277,8 @@
     "tile.alfheim:ManaIce.name": "block.alfheim.mana_ice",
     "tile.alfheim:ShrinePillar.name": "block.alfheim.shrine_pillar",
     "tile.alfheim:ShrineRockWhiteStairs.name": "block.alfheim.shrine_rock_white_stairs",
+    "tile.alfheim:SnowGrass.name": "block.alfheim.snow_grass",
+    "tile.alfheim:SnowLayer.name": "block.alfheim.snow_layer",
     "tile.alfheim:TreeBerry0.name": "block.alfheim.tree_berry0",
     "tile.alfheim:TreeBerry1.name": "block.alfheim.tree_berry1",
     "tile.alfheim:TreeBerry2.name": "block.alfheim.tree_berry2",
