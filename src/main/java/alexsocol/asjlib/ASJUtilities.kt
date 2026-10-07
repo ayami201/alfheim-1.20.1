@@ -5,6 +5,7 @@ package alexsocol.asjlib
 import alexsocol.asjlib.math.Vector3
 import alfheim.port.legacy.Block1710
 import alfheim.port.legacy.CraftingManager
+import alfheim.port.legacy.GameRegistry
 import alfheim.port.legacy.Material
 import alfheim.port.legacy.Material.Companion.air
 import alfheim.port.legacy.Material.Companion.anvil
@@ -51,6 +52,7 @@ import alfheim.port.legacy.playerNetServerHandler
 import alfheim.port.legacy.posX
 import alfheim.port.legacy.posZ
 import alfheim.port.legacy.sendPacket
+import alfheim.port.legacy.unlocalizedName
 import alfheim.port.registry.LegacyRegistration
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
@@ -87,7 +89,24 @@ import java.util.*
 @Suppress("unused", "MemberVisibilityCanBePrivate", "UNCHECKED_CAST")
 object ASJUtilities {
 	
-	/* PORT: по мере надобности — реестры, телепорт, предметы и инвентари, рецепты, взгляд и прицел, сущности
+	/**
+	 * Returns the name of the block
+	 * @param block Block to get name from
+	 */
+	// PORT: имя блока 1.7.10 — Block.unlocalizedName прослойки (`tile.` + имя из setBlockName) (КТ-2, BlockPattern)
+	@JvmStatic
+	fun getBlockName(block: Block) = block.unlocalizedName.substring(5)
+	
+	/**
+	 * Registers block by name
+	 * @param block Block to register
+	 */
+	// PORT: регистрация — GameRegistry прослойки, предмет — BlockItem, как ItemBlock 1.7.10 (КТ-2, BlockPattern)
+	@JvmStatic
+	fun register(block: Block) = GameRegistry.registerBlock(block, getBlockName(block))
+	
+	/* PORT: по мере надобности — реестры, телепорт, предметы и инвентари, рецепты, взгляд и прицел, сущности; выше —
+	   перенесённые getBlockName и register(block), здесь — их код 1.7.10
 	/**
 	 * Returns the name of the block
 	 * @param block Block to get name from

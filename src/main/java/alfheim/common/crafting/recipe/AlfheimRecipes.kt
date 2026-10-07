@@ -200,7 +200,7 @@ import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteSlab
 import alfheim.common.block.AlfheimFluffBlocks.shrineRockWhiteStairs
 //import alfheim.common.block.AlfheimFluffBlocks.table // PORT: КТ-3
 import alfheim.common.block.AlfheimFluffBlocks.yggDecor
-//import alfheim.common.block.BlockNiflheim.* // PORT: КТ-2
+import alfheim.common.block.BlockNiflheim.*
 //import alfheim.common.block.tile.* // PORT: КТ-3
 //import alfheim.common.core.asm.hook.* // PORT: КТ-3
 //import alfheim.common.core.asm.hook.AlfheimHookHandler.ageLocked // PORT: КТ-3
@@ -2396,13 +2396,11 @@ object AlfheimRecipes {
 //		addOreDictRecipe(ItemStack(yggDecor[1], 4), "WW", "WW", 'W', ItemStack(altPlanks[6], 1))
 		addOreDictRecipe(ItemStack(yggDecor[2], 4), " W ", "W W", " W ", 'W', ItemStack(altPlanks[6], 1))
 		
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addShapedRecipe(NiflheimBlockMetas.BRICKS.stack(4), "SS", "SS", 'S', NiflheimBlockMetas.STONE.stack)
 		addShapedRecipe(NiflheimBlockMetas.CHISELED.stack(4), "BB", "BB", 'B', NiflheimBlockMetas.BRICKS.stack)
 		addShapedRecipe(NiflheimBlockMetas.POLISHED.stack(8), "SSS", "S S", "SSS", 'S', NiflheimBlockMetas.STONE.stack)
 		addShapedRecipe(NiflheimBlockMetas.PILLAR.stack(2), "S", "S", 'S', NiflheimBlockMetas.STONE.stack)
 		addShapedRecipe(NiflheimBlockMetas.RUNIC.stack(2), "C", "C", 'C', NiflheimBlockMetas.CHISELED.stack)
-		*/
 	}
 	
 	private fun registerShapelessRecipes() {
@@ -2673,9 +2671,9 @@ object AlfheimRecipes {
 //		addShapelessRecipe(ItemStack(Blocks.BROWN_MUSHROOM), ItemStack(brownMushroom))
 //		addShapelessRecipe(ItemStack(Blocks.RED_MUSHROOM), ItemStack(redMushroom))
 		
-		/* PORT: КТ-2, КТ-3 — рецепты вещей этих КТ, включаются вместе с ними
 		addShapelessRecipe(NiflheimBlockMetas.COBBLESTONE.stack, NiflheimBlockMetas.STONE.stack)
 		
+		/* PORT: КТ-3 — рецепты вещей этой КТ, включаются вместе с ними
 		// change to shapeless, same parts
 		addShapelessOreDictRecipe(ItemStack(spreader, 1, 3), LIFE_ESSENCE, ItemStack(spreader, 1, 2), DRAGONSTONE)
 		ModCraftingRecipes.recipeUltraSpreader?.let { CraftingManager.getInstance().recipeList.remove(it) }
@@ -2749,9 +2747,7 @@ object AlfheimRecipes {
 		
 		addSmelting(elvenSand, ItemStack(elfGlass), 1f)
 		addSmelting(elvenSandstone, ItemStack(elvenSandstone[4]), 1f)
-		/* PORT: КТ-2 — рецепты вещей этой КТ, включаются вместе с ними
 		addSmelting(NiflheimBlockMetas.BRICKS.stack, NiflheimBlockMetas.CRACKED.stack, 0f)
-		*/
 	}
 	
 	/* PORT: КТ-3 — инфузор маны, древесная кузня (RecipeTreeCrafting)
