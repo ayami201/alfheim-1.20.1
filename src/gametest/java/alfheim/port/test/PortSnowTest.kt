@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.GameType
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.material.PushReaction
 import net.minecraft.world.phys.AABB
@@ -191,7 +192,7 @@ object PortSnowTest {
 	}
 
 	/**
-	 * Нажатие на слой снега: с ним же в руке — слоем больше (до 8), предмет не тратится (ошибка автора, BUGS.md); пустой
+	 * Нажатие на слой снега: с ним же в руке — слоем больше (до 8), предмет не тратится и в выживании (ошибка автора, BUGS.md); пустой
 	 * рукой — слоем меньше (не меньше 1) и снежок в инвентарь. Прослойка `dropPlayerItemWithRandomChoice`: вещь летит
 	 * вперёд по взгляду, флаг 1.7.10 не читал
 	 */
@@ -201,6 +202,9 @@ object PortSnowTest {
 		val c = floor(helper, 140)
 		val level = helper.level
 		val player = FakePlayerFactory.get(level, GameProfile(UUID.randomUUID(), "snow_layer_test")).apply { inventory.clearContent() }
+		// в творческом режиме предметы не тратятся вообще: трату слоя снега в руке проверяет игрок в выживании
+		player.setGameMode(GameType.SURVIVAL)
+		helper.assertTrue(!player.isCreative && !player.abilities.instabuild, "the player is in survival")
 		fun use(): Boolean = level.getBlockState(c).use(level, player, InteractionHand.MAIN_HAND, BlockHitResult(Vec3.atCenterOf(c), Direction.UP, c, false)).consumesAction()
 
 		player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(layer, 1))

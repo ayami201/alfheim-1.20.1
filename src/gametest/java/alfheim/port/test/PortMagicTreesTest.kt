@@ -457,7 +457,8 @@ object PortMagicTreesTest {
 	/**
 	 * Ветер барьерного дерева (`TileTreeWind`): игроки в 10 блоках в первый тик сердцевины — её друзья. Живых существ
 	 * и чужих игроков (не в творческом режиме) в 10 блоках сердцевина толкает от себя каждый тик — на 1 блок за тик;
-	 * игроку шлёт его новую скорость. Друзья сохраняются в NBT
+	 * игроку шлёт его новую скорость. Друзья сохраняются в NBT. Первый тик сердцевины тест ждёт, а не отсчитывает: блок-сущность
+	 * тикает, только когда её чанк готов, а сервер тестов в первые секунды ещё строит чанки вокруг точки появления
 	 */
 	@JvmStatic
 	@GameTest(template = "empty", batch = "heart_wood")
@@ -473,8 +474,10 @@ object PortMagicTreesTest {
 		helper.setBlock(wood, AlfheimBlocks.barrierWood[1])
 		val tile = helper.getBlockEntity(wood) as? TileTreeWind ?: throw GameTestAssertException("no barrier heart wood tile")
 		val pig = helper.spawnWithNoFreeWill(EntityType.PIG, BlockPos(1, 2, 3))
-		helper.startSequence().thenExecuteAfter(2) {
-			helper.assertTrue(!tile.firstTick && tile.friends == setOf(player.gameProfile.name), "friends: ${tile.friends}")
+		helper.startSequence().thenWaitUntil {
+			helper.assertTrue(!tile.firstTick, "the heart wood has not ticked yet")
+		}.thenExecute {
+			helper.assertTrue(tile.friends == setOf(player.gameProfile.name), "friends: ${tile.friends}")
 			helper.assertTrue(pig.deltaMovement.z > 0.5, "the pig is blown away: ${pig.deltaMovement}")
 			helper.assertTrue(kotlin.math.abs(player.deltaMovement.x) < 0.1, "a friend is not blown away: ${player.deltaMovement}")
 			val nbt = tile.saveWithoutMetadata()
