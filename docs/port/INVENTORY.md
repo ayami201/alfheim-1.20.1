@@ -35,7 +35,7 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 229 | 20 248 | 43 | 184 | 2 |  |
+| КТ-2 | 229 | 20 248 | 41 | 185 | 3 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
 | КТ-5 | 41 | 4 826 | 41 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **863** | **216** | **62** | **12** |
+| **всего** | **1153** | **124 643** | **861** | **217** | **63** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -471,7 +471,7 @@ python3 tools/check_inventory.py
 | `RenderBlockManaReflector.kt` | 27 | КТ-3 | ждёт |  |
 | `RenderBlockManaTuner.kt` | 25 | КТ-3 | ждёт |  |
 | `RenderBlockNidhoggTooth.kt` | 123 | КТ-2 | ждёт |  |
-| `RenderBlockNiflheimSet.kt` | 82 | КТ-2 | ждёт |  |
+| `RenderBlockNiflheimSet.kt` | 82 | КТ-2 | выпало (заменён моделью: колонны камня Нифльхейма — модели бревна `cube_column` и `cube_column_horizontal` по свойству `axis` из генерации данных, SPEC Р-13) |  |
 | `RenderBlockOnyx.kt` | 12 | КТ-2 | ждёт |  |
 | `RenderBlockPowerStone.kt` | 30 | КТ-3 | ждёт |  |
 | `RenderBlockShrinePanel.kt` | 362 | КТ-2 | выпало (заменён моделью: рендер стеклянной панели ванилы 1.7.10 с иконкой по metadata — модель панели 1.20.1 из генерации данных, SPEC Р-13) | `BlockPaneMeta` |
@@ -679,7 +679,7 @@ python3 tools/check_inventory.py
 | `BlockManaIce.kt` | 20 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockManaIce.kt` |
 | `BlockModTrapDoor.kt` | 39 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockModTrapDoor.kt` |
 | `BlockNidhoggTooth.kt` | 53 | КТ-2 | ждёт |  |
-| `BlockNiflheim.kt` | 112 | КТ-2 | ждёт |  |
+| `BlockNiflheim.kt` | 112 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockNiflheim.kt`; вариант metadata — блок (0–6, колонна 7, руническая колонна 10), массив `niflheimBlock` — по metadata 1.7.10: повёрнутые колонны (8, 9, 11, 12) — состояние `axis` тех же блоков; лут руды «удача + 1» — функция `alfheim:fortune_count` |
 | `BlockNiflheimIce.kt` | 128 | КТ-2 | ждёт |  |
 | `BlockNiflheimPortal.kt` | 160 | КТ-6 | ждёт | портал в Нифльхейм |
 | `BlockOnyx.kt` | 11 | КТ-2 | ждёт | WIP автора (`.WIP()`): переносится как есть, с меткой [WIP] (SPEC п. 6) |
@@ -2112,7 +2112,7 @@ python3 tools/check_inventory.py
 | `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
-| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 215 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
+| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 227 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
 | `alfheim/textures/blocks/decor/` | 83 | КТ-3 | ждёт | перенесено 79 — декор `AlfheimFluffBlocks` и мерцающий кварц (`shimmerQuartz`); остались 4 файла (`blockInsertShimmerQuartz`, `blockSmoothShimmerQuartz` с .mcmeta) — варианты 5 и 6 кварца, их добавляет врезка `QuartzExtender` (КТ-3) |
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
@@ -2188,5 +2188,6 @@ python3 tools/check_inventory.py
 | `alexsocol/asjlib/extendables/block/BlockModFence.kt` | 25 | КТ-2 | всё | поверх `Fence1710`; `canConnectFenceTo` → `connectsTo` |
 | `alexsocol/asjlib/extendables/block/BlockModFenceGate.kt` | 19 | КТ-2 | всё | поверх `FenceGate1710`; иконка блока-источника — модель генерации данных |
 | `alexsocol/asjlib/extendables/block/ASJTile.kt` | 33 | КТ-2 | всё | поверх `TileEntity` прослойки; пакет описания (`getDescriptionPacket`) — данные для клиента с чанком (`getUpdateTag`) и при обновлении блока (`getUpdatePacket`) |
+| `alexsocol/asjlib/extendables/block/BlockPattern.kt` | 52 | КТ-2 | всё | поверх `BlockFalling1710`, как `BlockPatternLexicon`; падает (`isFalling`) — `tick` `FallingBlock` 1.20.1, иначе тик ничего не делает (твердь Хельхейма) |
 | `ru/vamig/worldengine/standardcustomgen/StructureBaseClass.java` | 11 | КТ-2 | всё | постройка библиотеки WorldEngine (дерево мечтаний); генератор чанков `WE_ChunkProvider` — КТ-6, до неё параметр — `Object` |
 | `ru/vamig/worldengine/WE_PerlinNoise.java` | 60 | КТ-2 | всё | шум Перлина библиотеки WorldEngine: до какой высоты растёт снег на снежной траве; без правок (чистая Java) |

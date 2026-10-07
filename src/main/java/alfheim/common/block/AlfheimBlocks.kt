@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import alexsocol.asjlib.ASJUtilities.setBurnable
 //import alexsocol.asjlib.capitalized
-//import alexsocol.asjlib.extendables.block.BlockPattern
+import alexsocol.asjlib.extendables.block.BlockPattern
 import alfheim.api.*
 import alfheim.api.lib.LibOreDict.IRIS_WOOD
 import alfheim.common.block.alt.*
@@ -30,7 +30,7 @@ import alfheim.common.block.magtrees.sealing.*
 //import alfheim.common.block.tile.sub.flower.*
 //import alfheim.common.core.handler.AlfheimConfigHandler
 //import alfheim.common.core.handler.WorkInProgressItemsHandler.WIP
-//import alfheim.common.core.util.AlfheimTab
+import alfheim.common.core.util.AlfheimTab
 //import net.minecraft.block.Block
 //import net.minecraft.block.material.Material
 //import net.minecraft.init.Blocks
@@ -101,7 +101,7 @@ object AlfheimBlocks {
 	val irisWood2: Array<Block>
 	val irisWood3: Array<Block>
 //	val itemFrame: Block // PORT: КТ-3
-//	val helheimBlock: Block // PORT: КТ-2
+	val helheimBlock: Block
 //	val kindling: Block // PORT: КТ-2
 //	val kudzuVine: Block // PORT: КТ-3
 	val livingcobble: Array<Block>
@@ -114,7 +114,9 @@ object AlfheimBlocks {
 //	val manaReflector: Block // PORT: КТ-3
 //	val manaTuner: Block // PORT: КТ-3
 //	val nidhoggTooth: Block // PORT: КТ-2
-//	val niflheimBlock: Block // PORT: КТ-2
+	// PORT: вариант metadata — блок массива (SPEC, Р-5), индекс — metadata 1.7.10 (BlockNiflheim.create)
+	val niflheimBlock: Array<Block>
+//	val niflheimBlock: Block
 //	val niflheimPortal: Block // PORT: КТ-6
 //	val onyx: Block // PORT: КТ-2
 //	val poisonIce: Block // PORT: КТ-2
@@ -297,7 +299,7 @@ object AlfheimBlocks {
 		irisWood2 = Array(4) { BlockColoredWood(2, it) }
 		irisWood3 = Array(4) { BlockColoredWood(3, it) }
 //		itemFrame = BlockItemFrame().WIP() // PORT: КТ-3
-//		helheimBlock = BlockPattern(ModInfo.MODID, Material.rock, "HelheimBlock", AlfheimTab, hardness = -1f, harvLvl = Int.MAX_VALUE, resistance = Float.MAX_VALUE) // PORT: КТ-2
+		helheimBlock = BlockPattern(ModInfo.MODID, Material.rock, "HelheimBlock", AlfheimTab, hardness = -1f, harvLvl = Int.MAX_VALUE, resistance = Float.MAX_VALUE)
 //		kindling = BlockKindling() // PORT: КТ-2
 //		kudzuVine = BlockKudzuVine() // PORT: КТ-3
 		livingcobble = Array(4) { BlockLivingCobble(it) }
@@ -310,7 +312,8 @@ object AlfheimBlocks {
 //		manaReflector = BlockManaReflector() // PORT: КТ-3
 //		manaTuner = BlockManaTuner() // PORT: КТ-3
 //		nidhoggTooth = BlockNidhoggTooth() // PORT: КТ-2
-//		niflheimBlock = BlockNiflheim() // PORT: КТ-2
+		niflheimBlock = BlockNiflheim.create()
+//		niflheimBlock = BlockNiflheim()
 //		niflheimPortal = BlockNiflheimPortal() // PORT: КТ-6
 //		onyx = BlockOnyx().WIP() // PORT: КТ-2
 //		poisonIce = BlockNiflheimIce() // PORT: КТ-2
@@ -519,7 +522,8 @@ object AlfheimBlocks {
 //		registerOre("endstone", ItemStack(Blocks.end_stone)) // PORT: КТ-3
 		registerOre("grassSnow", ItemStack(snowGrass))
 		registerOre("snowLayer", ItemStack(snowLayer))
-//		registerOre("niflStone", ItemStack(niflheimBlock)) // PORT: КТ-2
+		registerOre("niflStone", ItemStack(niflheimBlock[0]))
+//		registerOre("niflStone", ItemStack(niflheimBlock))
 		
 //		BotaniaAPI.registerSemiDisposableBlock(BLibOreDict.LIVING_ROCK) // PORT: КТ-3
 //		BotaniaAPI.registerSemiDisposableBlock("endstone") // PORT: КТ-3
@@ -535,7 +539,7 @@ object AlfheimBlocks {
 		registerOre(LibOreDict.LAPIS_ORE, ItemStack(elvenOre[5]))
 		registerOre(LibOreDict.LAPIS_ORE + "Alfheim", ItemStack(elvenOre[5]))
 		
-//		registerOre(LibOreDict.NIFLEUR_ORE, BlockNiflheim.NiflheimBlockMetas.ORE.stack) // PORT: КТ-2
+		registerOre(LibOreDict.NIFLEUR_ORE, BlockNiflheim.NiflheimBlockMetas.ORE.stack)
 		
 //		val quartzs = arrayOf(ModFluffBlocks.darkQuartz, ModFluffBlocks.manaQuartz, ModFluffBlocks.blazeQuartz, ModFluffBlocks.lavenderQuartz, ModFluffBlocks.redQuartz, ModFluffBlocks.elfQuartz, ModFluffBlocks.sunnyQuartz) // PORT: КТ-2
 		

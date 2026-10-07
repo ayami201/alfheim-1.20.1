@@ -33,8 +33,9 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 				fun target(alias: LegacyRegistration.Alias) = "${LegacyRegistration.blocks[alias.block]!!.id}[${alias.state}]"
 				if (group.size == 1 && group[0].oldMeta == null)
 					addProperty("$MODID:$oldName", target(group[0]))
+				// у имени вариантов блока (повёрнутые колонны камня Нифльхейма — metadata 8, 9, 11, 12) — в тот же объект
 				else
-					add("$MODID:$oldName", JsonObject().apply { group.forEach { addProperty(it.oldMeta.toString(), target(it)) } })
+					(get("$MODID:$oldName") as? JsonObject ?: JsonObject().also { add("$MODID:$oldName", it) }).apply { group.forEach { addProperty(it.oldMeta.toString(), target(it)) } }
 			}
 			// блок автора, вместо которого блок другого мода
 			for (replacement in LegacyRegistration.replacements)
@@ -84,7 +85,7 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 		 * Ключ перевода предмета-блока в 1.7.10: `tile.` + имя блока; `ItemBlockMetaName` дописывал номер варианта,
 		 * `ItemBlockLeavesMod` — приставку `alfheim:`, `ItemBlockMod` и `ItemBlockModSlab` Botania — `botania:`,
 		 * `ItemBlockWithMetadataAndName` Botania — `botania:` и номер варианта, `ItemBlockSpecialQuartz` Botania — имя
-		 * варианта из `getNames` блока. `ItemSubtypedBlockMod`, `ItemIridescentBlockMod`, `ItemSlabMod` и
+		 * варианта из `getNames` блока, `ItemMultiTexture` — точку и имя варианта из своего списка. `ItemSubtypedBlockMod`, `ItemIridescentBlockMod`, `ItemSlabMod` и
 		 * `ItemShimmerSlabMod` — приставку `alfheim:` и убирали номер в конце
 		 * имени (у всех цветов одно имя), `ItemUniqueSubtypedBlockMod` — дописывал номер варианта по модулю числа видов,
 		 * `ItemMetaSlabMod` — номер варианта без бита 8, `ItemRainbowGrassMod` — приставку `alfheim:` и номер варианта (у
@@ -101,6 +102,7 @@ class LegacyIdsProvider(private val output: PackOutput): DataProvider {
 			if (item is ItemBlockMod || item is ItemBlockModSlab) key = key.replace("tile.", "tile.botania:")
 			if (item is ItemBlockWithMetadataAndName) key = key.replace("tile.", "tile.botania:") + variant
 			if (item is ItemBlockSpecialQuartz) key = (block as BlockSpecialQuartz).getNames()[variant]
+			if (item is ItemMultiTexture) key += "." + item.names[if (variant in item.names.indices) variant else 0]
 			if (item is ItemSubtypedBlockMod || item is ItemIridescentBlockMod || item is ItemSlabMod || item is ItemShimmerSlabMod) key = key.replace("tile.", "tile.$MODID:").replace(Regex("\\d+$"), "")
 			if (item is ItemUniqueSubtypedBlockMod) key = key.replace("tile.", "tile.$MODID:") + variant % item.subtypes.toInt()
 			if (item is ItemMetaSlabMod) key = key.replace("tile.", "tile.$MODID:") + (variant and 0x8.inv())

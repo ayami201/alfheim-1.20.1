@@ -11,6 +11,7 @@ import alfheim.port.legacy.Fuel1710
 import alfheim.port.legacy.Weather1710
 import alfheim.port.legacy.botania.BotaniaBlocks1710
 import alfheim.port.legacy.botania.HornHarvest1710
+import alfheim.port.loot.FortuneCount
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.fml.DistExecutor
 import net.minecraft.core.registries.Registries
@@ -32,6 +33,7 @@ object AlfheimRegisters {
 	val SOUND_EVENTS: DeferredRegister<net.minecraft.sounds.SoundEvent> = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID)
 	val CREATIVE_MODE_TABS: DeferredRegister<net.minecraft.world.item.CreativeModeTab> = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID)
 	val RECIPE_SERIALIZERS: DeferredRegister<net.minecraft.world.item.crafting.RecipeSerializer<*>> = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MODID)
+	val LOOT_FUNCTION_TYPES: DeferredRegister<net.minecraft.world.level.storage.loot.functions.LootItemFunctionType> = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, MODID)
 	
 	/** Все реестры — на шину мода; вызывается из конструктора мода, до события регистрации */
 	fun register(bus: IEventBus) {
@@ -62,12 +64,14 @@ object AlfheimRegisters {
 		HornHarvest1710.register(bus)
 		// особые рецепты автора — свой сериализатор у каждого, ингредиент «предмет с metadata»; обычные рецепты — данные
 		LegacySpecialRecipes.register(bus)
+		// функции лута порта — формулы лута автора, которых нет у ванилы 1.20.1
+		FortuneCount
 		// модели, лут, теги, рецепты и legacy_ids.json — генерация данных (./gradlew runData)
 		AlfheimData.register(bus)
 		// модели блоков и предметов, которые 1.7.10 выбирал в коде, цвета блоков и предметов и рендер существ — только на клиенте
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT) { Runnable { AlfheimModels.register(bus); AlfheimBlockColors.register(bus); AlfheimItemColors.register(bus); AlfheimEntityRenderers.register(bus) } }
 		
-		for (register in listOf(BLOCKS, ITEMS, BLOCK_ENTITY_TYPES, ENTITY_TYPES, MOB_EFFECTS, SOUND_EVENTS, CREATIVE_MODE_TABS, RECIPE_SERIALIZERS))
+		for (register in listOf(BLOCKS, ITEMS, BLOCK_ENTITY_TYPES, ENTITY_TYPES, MOB_EFFECTS, SOUND_EVENTS, CREATIVE_MODE_TABS, RECIPE_SERIALIZERS, LOOT_FUNCTION_TYPES))
 			register.register(bus)
 	}
 	

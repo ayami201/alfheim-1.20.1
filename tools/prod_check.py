@@ -26,7 +26,8 @@ GameTest-ы идут в среде разработки: там у методо�
 12. сосулька: лёд над ней убран — она падает существом мода `alfheim:falling_hang` со своим блоком (сосед блока
     1.7.10 — `neighborChanged` прослойки, данные существа — `SynchedEntityData`);
 13. снежная трава держит мак (почва `canSustainPlant` — миксин `BushBlockInvoker`, обёртка автора S-03), слой снега
-    принимает число слоёв.
+    принимает число слоёв;
+14. руда Нифльхейма киркой с удачей III роняет 4 нифлёра — функция лута мода `alfheim:fortune_count`.
 
 Команды идут по RCON (удалённая консоль сервера): скрипт сам включает его в `server.properties`
 (порт 25575, пароль `alfcheck`). Существа появляются в точке появления мира с меткой `alfcheck` и
@@ -261,6 +262,13 @@ def main():
         r("setblock ~14 ~1 ~-2 alfheim:snow_layer[layers=5]")
         snow = r("execute if block ~14 ~1 ~-2 alfheim:snow_layer[layers=5]")
         check("Мак держится на снежной траве (миксин BushBlockInvoker), слой снега — с числом слоёв", "Test passed" in poppy and "Test passed" in snow, f"{poppy}; {snow}")
+
+        # 14. Руда Нифльхейма киркой с удачей III: функция лута мода alfheim:fortune_count (удача + 1) — 4 нифлёра
+        r("setblock ~16 ~1 ~-2 alfheim:niflheim_block2")
+        drop = r('loot spawn ~16 ~3 ~-2 mine ~16 ~1 ~-2 minecraft:diamond_pickaxe{Enchantments:[{id:"minecraft:fortune",lvl:3s}]}')
+        r("setblock ~16 ~1 ~-2 minecraft:air")
+        r("execute positioned ~16 ~3 ~-2 run kill @e[type=minecraft:item,distance=..3]")
+        check("Руда Нифльхейма с удачей III роняет 4 нифлёра (функция лута alfheim:fortune_count)", "Dropped 4 " in drop, drop)
 
         r("kill @e[tag=alfcheck]")
         r("stop")

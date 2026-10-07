@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "alfheim:niflheim_block0"
+    }
+  ],
+  "result": {
+    "item": "alfheim:niflheim_block1"
+  }
+}

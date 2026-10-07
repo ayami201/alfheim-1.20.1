@@ -44,10 +44,12 @@ object PortBlocksTest {
 			val loot = helper.level.server.lootData.getLootTable(block.lootTable)
 			if (loot === LootTable.EMPTY) problems += "${entry.id} has no loot table"
 		}
-		// двойная плита 1.7.10 — состояние своей плиты; у вариантов metadata — по номеру варианта
+		// блок 1.7.10, который в 1.20.1 — состояние другого блока: двойная плита — своей плиты (у вариантов metadata — по
+		// номеру варианта), повёрнутая колонна камня Нифльхейма — колонны с осью
 		for (alias in LegacyRegistration.aliases) {
 			val target = LegacyIds.block("$MODID:${alias.oldName}", alias.oldMeta ?: 0)
-			if (target?.id != LegacyRegistration.blocks[alias.block]?.id || target?.state != mapOf("type" to "double")) problems += "legacy_ids.json: $MODID:${alias.oldName}:${alias.oldMeta} -> $target"
+			val state = alias.state.split(',').associate { it.substringBefore('=') to it.substringAfter('=') }
+			if (target?.id != LegacyRegistration.blocks[alias.block]?.id || target?.state != state) problems += "legacy_ids.json: $MODID:${alias.oldName}:${alias.oldMeta} -> $target"
 		}
 		// блок автора, вместо которого блок другого мода
 		for (replacement in LegacyRegistration.replacements) {

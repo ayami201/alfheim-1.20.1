@@ -67,6 +67,7 @@ import alfheim.common.block.AlfheimBlocks.netherSapling
 import alfheim.common.block.AlfheimBlocks.netherSlabs
 import alfheim.common.block.AlfheimBlocks.netherStairs
 import alfheim.common.block.AlfheimBlocks.netherWood
+import alfheim.common.block.AlfheimBlocks.niflheimBlock
 import alfheim.common.block.AlfheimBlocks.rainbowDirt
 import alfheim.common.block.AlfheimBlocks.rainbowGrass
 import alfheim.common.block.AlfheimBlocks.rainbowLeaves
@@ -800,9 +801,7 @@ object AlfheimTab {
 		addBlock(shrineGlass)
 		addBlock(shrinePanel)
 		
-		/* PORT: КТ-2
 		addBlock(niflheimBlock)
-		*/
 		addBlock(stalactite)
 		addBlock(stalagmite)
 		addBlock(icicle)
@@ -947,9 +946,10 @@ object AlfheimTab {
 //		block.getSubBlocks(block.toItem(), this, list)
 	}
 	
-	// PORT: блок с вариантами metadata — массив блоков (SPEC, Р-5); getSubBlocks выдавал все варианты по порядку
+	// PORT: блок с вариантами metadata — массив блоков (SPEC, Р-5); getSubBlocks выдавал все варианты по порядку. Повёрнутая
+	// колонна в массиве по metadata — та же колонна (камень Нифльхейма): её getSubBlocks пропускал
 	fun addBlock(blocks: Array<Block>) {
-		blocks.forEach { addBlock(it) }
+		blocks.distinct().forEach { addBlock(it) }
 	}
 	
 	// PORT: вариант metadata блока — блок массива (SPEC, Р-5)

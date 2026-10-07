@@ -135,6 +135,8 @@ object OreDictTags {
 		LibOreDict.IRIS_DIRT to alfheim(LibOreDict.IRIS_DIRT),
 		"grassSnow" to alfheim("grassSnow"),
 		"snowLayer" to alfheim("snowLayer"),
+		"niflStone" to alfheim("niflStone"),
+		LibOreDict.NIFLEUR_ORE to forge("ores/nifleur"),
 	) + (LibOreDict.WOOD + LibOreDict.LEAVES + LibOreDict.DIRT).associateWith { alfheim(it) }
 
 	/** Общий тег Forge: `forge:ingots/elvorium` — так материалы называют и Botania 1.20.1, и другие моды */
