@@ -1,10 +1,5 @@
 package alfheim.port.legacy
 
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.protocol.Packet
-import net.minecraft.network.protocol.game.ClientGamePacketListener
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
-import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
@@ -22,41 +17,16 @@ import java.util.*
  */
 
 /**
- * `EntityWeatherEffect` 1.7.10 — погодный эффект: существо 1.20.1 с методами 1.7.10. Тип такого существа регистрация
+ * `EntityWeatherEffect` 1.7.10 — погодный эффект: существо 1.7.10 ([Entity1710]). Тип такого существа регистрация
  * порта строит, как тип молнии 1.20.1 (`LegacyRegistration`): мир его не сохраняет (погодные эффекты 1.7.10 не
  * сохранялись), клиент видит его за 16 чанков. Рисуется, даже если его точка за краем экрана (`noCulling`): 1.7.10
  * рисовал погодные эффекты без этой проверки, а молния уходит от своей точки высоко вверх
  */
-abstract class EntityWeatherEffect(type: EntityType<*>, world: Level): Entity(type, world) {
+abstract class EntityWeatherEffect(type: EntityType<*>, world: Level): Entity1710(type, world) {
 
 	init {
 		noCulling = true
 	}
-
-	/** `rand` 1.7.10 — случайные числа существа */
-	val rand: RandomSource get() = random
-
-	/** `onUpdate()` 1.7.10 — тик существа; `super.onUpdate()` в коде автора — тик существа 1.20.1 */
-	open fun onUpdate() = super.tick()
-
-	final override fun tick() = onUpdate()
-
-	/** `entityInit()` 1.7.10 — данные, которые сервер шлёт клиенту (`DataWatcher` 1.7.10) */
-	open fun entityInit() = Unit
-
-	final override fun defineSynchedData() = entityInit()
-
-	/** `readEntityFromNBT(tag)` 1.7.10 */
-	open fun readEntityFromNBT(tag: CompoundTag) = Unit
-
-	/** `writeEntityToNBT(tag)` 1.7.10 */
-	open fun writeEntityToNBT(tag: CompoundTag) = Unit
-
-	final override fun readAdditionalSaveData(tag: CompoundTag) = readEntityFromNBT(tag)
-
-	final override fun addAdditionalSaveData(tag: CompoundTag) = writeEntityToNBT(tag)
-
-	override fun getAddEntityPacket(): Packet<ClientGamePacketListener> = ClientboundAddEntityPacket(this)
 }
 
 /**

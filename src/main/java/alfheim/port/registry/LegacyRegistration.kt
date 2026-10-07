@@ -147,6 +147,19 @@ object LegacyRegistration {
 		if (item != null) blockItems += block to item
 	}
 
+	/** Варианты блоков автора: имя 1.7.10 → номер варианта → блок; строится, когда все блоки зарегистрированы */
+	private val variants: Map<String, Map<Int, Block>> by lazy {
+		check(event?.registryKey != Registries.BLOCK) { "Block variants are read during the block registration" }
+		blocks.entries.filter { it.value.oldMeta != null }.groupBy({ it.value.oldName }, { it.value.oldMeta!! to it.key }).mapValues { it.value.toMap() }
+	}
+
+	/** Блок варианта [meta] с тем же именем 1.7.10, что у [block]; `null` — у блока нет вариантов или нет такого варианта */
+	fun variant(block: Block, meta: Int): Block? {
+		val entry = blocks[block] ?: return null
+		if (entry.oldMeta == null) return null
+		return variants[entry.oldName]?.get(meta)
+	}
+
 	/** Старое имя [name] с metadata [meta] (`null` — без вариантов) — состояние [state] блока [block] ([Alias]) */
 	fun alias(name: String, block: Block, state: String, meta: Int? = null) {
 		check(block in blocks) { "Alias $name: block is not registered" }
