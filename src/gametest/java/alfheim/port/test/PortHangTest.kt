@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.SoundType
+import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.AABB
 import net.minecraftforge.gametest.GameTestHolder
 import net.minecraftforge.gametest.PrefixGameTestTemplate
@@ -101,7 +102,8 @@ object PortHangTest {
 
 	/**
 	 * Свойства `BlockModMeta` автора: твёрдость 0,3, взрывоустойчивость 5 (3 в 1.20.1: 5 × 3 / 5), звук материала — у
-	 * сосулек стекло, у сталактитов и сталагмитов камень; кирка, уровень 1. Свет проходит, столкновений нет; рамка — 0,25–0,75
+	 * сосулек стекло, у сталактитов и сталагмитов камень; кирка, уровень 1. Свет проходит, столкновений нет, но мобы их
+	 * обходят: путь 1.7.10 — по материалу (лёд, камень мешают движению); рамка — 0,25–0,75
 	 * по сторонам, у сосулек и сталактитов 0,1–1 в высоту, у сталагмитов 0–0,9. Случайные тики — только у тех, что падают
 	 * (сосульки, сталактиты). Лута нет (`getItemDropped` — null), и с шёлковым касанием тоже; колёсиком — своя стадия
 	 */
@@ -118,6 +120,7 @@ object PortHangTest {
 			helper.assertTrue(state.requiresCorrectToolForDrops() == (id != "icicle"), "$block: a tool for drops")
 			helper.assertTrue(state.getLightBlock(helper.level, abs) == 0 && state.propagatesSkylightDown(helper.level, abs), "$block: light passes")
 			helper.assertTrue(state.getCollisionShape(helper.level, abs).isEmpty, "$block: no collision")
+			helper.assertTrue(!state.isPathfindable(helper.level, abs, PathComputationType.LAND), "$block: mobs go around")
 			val bounds = state.getShape(helper.level, abs).bounds()
 			val expected = if (id == "stalagmite") AABB(0.25, 0.0, 0.25, 0.75, 0.9, 0.75) else AABB(0.25, 0.1, 0.25, 0.75, 1.0, 0.75)
 			helper.assertTrue(abs(bounds.minX - expected.minX) < 1e-6 && abs(bounds.minY - expected.minY) < 1e-6 && abs(bounds.maxY - expected.maxY) < 1e-6 && abs(bounds.maxZ - expected.maxZ) < 1e-6, "$block: bounds $bounds")

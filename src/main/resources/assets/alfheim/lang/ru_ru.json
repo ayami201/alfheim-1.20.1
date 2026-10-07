@@ -196,7 +196,7 @@
 	"block.alfheim.niflheim_block6": "Полированный промёрзший камень",
 	"block.alfheim.niflheim_block10": "Рунический промёрзший камень",
 	"block.alfheim.niflheim_block0": "Промёрзший камень",
-	"tile.alfheim:NiflheimIce.name": "Вечный лёд Нифльхейма",
+	"block.alfheim.niflheim_ice": "Вечный лёд Нифльхейма",
 	"tile.NiflheimPortal.name": "Воды Хвергельмира",
 	"fluid.NiflheimPortal": "Воды Хвергельмира",
 	"tile.alfheim:orechidEndium.name": "Рудноцвет Края",

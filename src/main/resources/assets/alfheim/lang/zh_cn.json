@@ -218,7 +218,7 @@
 	"block.alfheim.niflheim_block6": "平滑封冻石",
 	"block.alfheim.niflheim_block10": "符文封冻石",
 	"block.alfheim.niflheim_block0": "封冻石",
-	"tile.alfheim:NiflheimIce.name": "永恒极寒之冰",
+	"block.alfheim.niflheim_ice": "永恒极寒之冰",
 	"tile.NiflheimPortal.name": "不竭之泉水",
 	"fluid.NiflheimPortal": "不竭之泉水",
 	"tile.alfheim:orechidEndium.name": "末影凝矿兰",

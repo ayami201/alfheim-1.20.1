@@ -2,6 +2,7 @@ package alfheim.port.legacy;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
@@ -11,8 +12,8 @@ import net.minecraft.world.level.block.Blocks;
 
 /**
  * Методы блока 1.7.10, которые переопределяет автор и которые 1.20.1 зовёт через порт (MAPPING.md, «Блоки и
- * предметы»): цвет блока, инструмент добычи, тики, установка и снятие блока, взрыв, сигнал красного камня, вечный огонь,
- * замена блока.
+ * предметы»): цвет блока, инструмент добычи, тики, установка и снятие блока, существо в блоке и на блоке, путь мобов,
+ * взрыв, сигнал красного камня, вечный огонь, замена блока.
  * Их наследует {@link LegacyBlock}. Методы 1.20.1, из которых они вызываются, переопределяют базовые классы порта:
  * {@code Block1710}, {@code Slab1710}, {@code Stairs1710}, {@code Leaves1710}, {@code Bush1710}.
  * <p>
@@ -87,6 +88,30 @@ public interface LegacyBlockMethods {
 	 * {@code block} — прежний блок соседа, как в 1.7.10. Зовёт его {@code Block1710}
 	 */
 	default void onNeighborBlockChange(Level world, int x, int y, int z, Block block) {
+	}
+
+	/**
+	 * {@code onEntityCollidedWithBlock} 1.7.10: рамка существа зашла в клетку блока ({@code entityInside} 1.20.1 — так же
+	 * по клеткам, каждый тик движения существа, на клиенте и на сервере). Зовёт его {@code Block1710}
+	 */
+	default void onEntityCollidedWithBlock(Level world, int x, int y, int z, Entity entity) {
+	}
+
+	/**
+	 * {@code onEntityWalking} 1.7.10: существо идёт по блоку — блок на 0,2 ниже его ног ({@code stepOn} 1.20.1, та же
+	 * клетка). 1.7.10 звал его на каждом шаге, со звуком шага; 1.20.1 зовёт каждый тик, пока существо стоит на земле, —
+	 * так этот вызов перенесла и сама игра (руда красного камня, магмовый блок). Зовёт его {@code Block1710}
+	 */
+	default void onEntityWalking(Level world, int x, int y, int z, Entity entity) {
+	}
+
+	/**
+	 * {@code getBlocksMovement} 1.7.10 — мобы прокладывают путь сквозь блок ({@code isPathfindable} 1.20.1): по умолчанию,
+	 * если материал не мешает движению. 1.20.1 решал бы по форме столкновений, и блок со столкновениями меньше куба был бы
+	 * для мобов пустым местом. Зовёт его {@code Block1710}
+	 */
+	default boolean getBlocksMovement(BlockGetter world, int x, int y, int z) {
+		return !((LegacyBlock) this).getLegacy().getMaterial().blocksMovement();
 	}
 
 	/**

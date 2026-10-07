@@ -27,7 +27,9 @@ GameTest-ы идут в среде разработки: там у методо�
     1.7.10 — `neighborChanged` прослойки, данные существа — `SynchedEntityData`);
 13. снежная трава держит мак (почва `canSustainPlant` — миксин `BushBlockInvoker`, обёртка автора S-03), слой снега
     принимает число слоёв;
-14. руда Нифльхейма киркой с удачей III роняет 4 нифлёра — функция лута мода `alfheim:fortune_count`.
+14. руда Нифльхейма киркой с удачей III роняет 4 нифлёра — функция лута мода `alfheim:fortune_count`;
+15. лёд Нифльхейма: хаск на нём получает замедление III и «Вечность» (существо в блоке — `entityInside` прослойки,
+    паутина — `makeStuckInBlock`).
 
 Команды идут по RCON (удалённая консоль сервера): скрипт сам включает его в `server.properties`
 (порт 25575, пароль `alfcheck`). Существа появляются в точке появления мира с меткой `alfcheck` и
@@ -269,6 +271,17 @@ def main():
         r("setblock ~16 ~1 ~-2 minecraft:air")
         r("execute positioned ~16 ~3 ~-2 run kill @e[type=minecraft:item,distance=..3]")
         check("Руда Нифльхейма с удачей III роняет 4 нифлёра (функция лута alfheim:fortune_count)", "Dropped 4 " in drop, drop)
+
+        # 15. Хаск на льду Нифльхейма: замедление III и «Вечность» (атака) — у обоих уровень 2. Хаск — с ИИ: моб без ИИ
+        # не двигается и блоков не касается
+        r("fill ~17 ~1 ~-3 ~19 ~4 ~-1 minecraft:air")
+        r("setblock ~18 ~1 ~-2 alfheim:niflheim_ice")
+        r('summon minecraft:husk ~18 ~2 ~-2 {PersistenceRequired:1b,Tags:["alfcheck","alfcheck_ice"]}')
+        time.sleep(1)
+        frozen = r("data get entity @e[tag=alfcheck_ice,limit=1] ActiveEffects")
+        r("setblock ~18 ~1 ~-2 minecraft:air")
+        check("Лёд Нифльхейма держит существо: замедление III и «Вечность» (entityInside прослойки)",
+              "minecraft:slowness" in frozen and "alfheim:eternity" in frozen and frozen.count("Amplifier: 2b") == 2, frozen)
 
         r("kill @e[tag=alfcheck]")
         r("stop")
