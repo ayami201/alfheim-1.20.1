@@ -35,10 +35,10 @@ python3 tools/check_inventory.py
 |---|---:|---:|---:|---:|---:|---:|
 | КТ-0 | 2 | 141 |  | 2 |  |  |
 | КТ-1 | 30 | 5 631 |  | 30 |  |  |
-| КТ-2 | 227 | 20 144 | 49 | 176 | 2 |  |
+| КТ-2 | 229 | 20 248 | 45 | 182 | 2 |  |
 | КТ-3 | 215 | 21 193 | 215 |  |  |  |
 | КТ-4 | 176 | 24 357 | 176 |  |  |  |
-| КТ-5 | 43 | 4 930 | 43 |  |  |  |
+| КТ-5 | 41 | 4 826 | 41 |  |  |  |
 | КТ-6 | 103 | 11 667 | 103 |  |  |  |
 | КТ-7 | 139 | 10 888 | 139 |  |  |  |
 | КТ-8 | 95 | 13 066 | 95 |  |  |  |
@@ -46,7 +46,7 @@ python3 tools/check_inventory.py
 | КТ-10 | 24 | 1 775 | 24 |  |  |  |
 | по HOOKS.md | 8 | 3 773 | 8 |  |  |  |
 | — | 72 | 4 519 |  |  | 60 | 12 |
-| **всего** | **1153** | **124 643** | **871** | **208** | **62** | **12** |
+| **всего** | **1153** | **124 643** | **865** | **214** | **62** | **12** |
 
 «Строк» — строки исходников автора вместе с пустыми и комментариями.
 
@@ -494,7 +494,7 @@ python3 tools/check_inventory.py
 | `RenderEntityElementalSlime.kt` | 17 | КТ-5 | ждёт |  |
 | `RenderEntityElf.kt` | 11 | КТ-5 | ждёт |  |
 | `RenderEntityElvenChakram.kt` | 49 | КТ-4 | ждёт |  |
-| `RenderEntityFallingHang.kt` | 35 | КТ-5 | ждёт |  |
+| `RenderEntityFallingHang.kt` | 35 | КТ-2 | перенесено | → `src/main/java/alfheim/client/render/entity/RenderEntityFallingHang.kt`; было КТ-5; крест — модель блока своей стадии (`renderSingleBlock`, `RenderType.cutout`) |
 | `RenderEntityFenrir.kt` | 71 | КТ-8 | ждёт |  |
 | `RenderEntityFenrirDome.kt` | 46 | КТ-8 | ждёт |  |
 | `RenderEntityFenrirSlash.kt` | 43 | КТ-8 | ждёт |  |
@@ -664,10 +664,10 @@ python3 tools/check_inventory.py
 | `BlockGrapeRed.kt` | 82 | КТ-2 | ждёт |  |
 | `BlockGrapeRedPlanted.kt` | 134 | КТ-2 | ждёт |  |
 | `BlockGrapeWhite.kt` | 102 | КТ-2 | ждёт |  |
-| `BlockHang.kt` | 61 | КТ-2 | ждёт |  |
+| `BlockHang.kt` | 61 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockHang.kt`; стадия роста (metadata `BlockModMeta`) — свой блок, рост — замена блоком следующей стадии (`variant1710`); удержание и установка — `canSurvive`, без столкновений |
 | `BlockHeadFlugel.kt` | 47 | КТ-8 | ждёт | трофей босса |
 | `BlockHeadMiku.kt` | 48 | КТ-8 | ждёт | трофей босса |
-| `BlockIcicle.kt` | 19 | КТ-2 | ждёт |  |
+| `BlockIcicle.kt` | 19 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockIcicle.kt`; `icicle = Array(4) { BlockIcicle(it) }`, держится подо льдом и плотным льдом (материал 1.7.10) |
 | `BlockIcyGeyser.kt` | 24 | КТ-6 | ждёт | гейзер Нифльхейма |
 | `BlockItemDisplay.kt` | 136 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockItemFrame.kt` | 277 | КТ-3 | ждёт | WIP автора (`.WIP()`): переносится как есть, с меткой [WIP] (SPEC п. 6) |
@@ -704,8 +704,8 @@ python3 tools/check_inventory.py
 | `BlockSnowGrass.kt` | 117 | КТ-2 | ждёт |  |
 | `BlockSnowLayer.kt` | 122 | КТ-2 | ждёт |  |
 | `BlockSpire.kt` | 23 | КТ-3 | ждёт | с блок-сущностью |
-| `BlockStalactite.kt` | 16 | КТ-2 | ждёт |  |
-| `BlockStalagmite.kt` | 16 | КТ-2 | ждёт |  |
+| `BlockStalactite.kt` | 16 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockStalactite.kt`; `stalactite = Array(8) { … }`, держится под камнем |
+| `BlockStalagmite.kt` | 16 | КТ-2 | перенесено | → `src/main/java/alfheim/common/block/BlockStalagmite.kt`; `stalagmite = Array(8) { … }`, стоит на камне, не растёт и не падает |
 | `BlockStar.kt` | 96 | КТ-3 | ждёт | с блок-сущностью |
 | `BlockSubspacian.kt` | 79 | КТ-2 | ждёт |  |
 | `BlockTable.kt` | 18 | КТ-3 | ждёт | с блок-сущностью |
@@ -1201,7 +1201,7 @@ python3 tools/check_inventory.py
 | `EntityElementalSlime.kt` | 103 | КТ-5 | ждёт |  |
 | `EntityElf.kt` | 525 | КТ-5 | ждёт |  |
 | `EntityElvenChakram.kt` | 245 | КТ-4 | ждёт |  |
-| `EntityFallingHang.kt` | 69 | КТ-5 | ждёт |  |
+| `EntityFallingHang.kt` | 69 | КТ-2 | перенесено | → `src/main/java/alfheim/common/entity/EntityFallingHang.kt`; было КТ-5: падают сосульки и сталактиты (КТ-2); существо 1.7.10 — `Entity1710`, урон «падающий блок» без виновника |
 | `EntityFenrirDome.kt` | 103 | КТ-8 | ждёт | зарегистрирована, но используется только незарегистрированным `EntityFenrirNew`; переносится как зарегистрированная (SPEC п. 6) |
 | `EntityFenrirSlash.kt` | 51 | КТ-8 | ждёт | зарегистрирована, но используется только незарегистрированным `EntityFenrirNew`; переносится как зарегистрированная (SPEC п. 6) |
 | `EntityFireAura.kt` | 47 | КТ-4 | ждёт |  |
@@ -2112,7 +2112,7 @@ python3 tools/check_inventory.py
 | `alfheim/sounds/thrym/` | 15 | КТ-1 | перенесено | Трим |
 | `alfheim/textures/` (только файлы папки) | 2 | КТ-2 | ждёт | `rainbow.png` с анимацией |
 | `alfheim/textures/banner/` | 2 | КТ-8 | ждёт | баннеры сезонных событий |
-| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 195 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
+| `alfheim/textures/blocks/` (только файлы папки) | 386 | КТ-2 | ждёт | текстуры блоков других КТ переносятся вместе с блоком; перенесено 215 — вместе со своими блоками, имена в snake_case (`tools/move_legacy.py`); `alfStorage6.png` автор не использовал (вариантов у `BlockAlfStorage` 6: 0–5) |
 | `alfheim/textures/blocks/decor/` | 83 | КТ-3 | ждёт | перенесено 79 — декор `AlfheimFluffBlocks` и мерцающий кварц (`shimmerQuartz`); остались 4 файла (`blockInsertShimmerQuartz`, `blockSmoothShimmerQuartz` с .mcmeta) — варианты 5 и 6 кварца, их добавляет врезка `QuartzExtender` (КТ-3) |
 | `alfheim/textures/blocks/snake/` | 40 | КТ-2 | ждёт |  |
 | `alfheim/textures/blocks/unused/` | 27 | — | WIP — стадия 2 | папка автора `unused`, в игре не используется |
