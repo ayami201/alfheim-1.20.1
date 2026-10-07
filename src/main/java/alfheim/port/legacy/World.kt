@@ -123,6 +123,16 @@ fun Block.isReplaceable(world: BlockGetter, x: Int, y: Int, z: Int) =
 	if (this is LegacyBlockMethods) (this as LegacyBlockMethods).isReplaceable(world, x, y, z) else world.getBlockState(BlockPos(x, y, z)).canBeReplaced()
 
 /**
+ * `getBlockHardness(world, x, y, z)` 1.7.10 — твёрдость блока в точке (−1 — не сломать): твёрдость его состояния.
+ * Твёрдость, которую автор считал по координатам, блок порта записывает в состояния ([destroySpeed])
+ */
+@Suppress("UNUSED_PARAMETER")
+fun Block.getBlockHardness(world: BlockGetter, x: Int, y: Int, z: Int): Float {
+	val pos = BlockPos(x, y, z)
+	return world.getBlockState(pos).getDestroySpeed(world, pos)
+}
+
+/**
  * `onPlantGrow` Forge 1.7.10: под выросшим деревом трава и пашня становятся землёй (флаг 2), прочие блоки — как
  * были; вместо блока — его состояние в точке
  */
