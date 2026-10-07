@@ -6,8 +6,8 @@ import net.minecraft.world.level.Level;
 /**
  * {@code net.minecraft.block.BlockTallGrass} 1.7.10 (MAPPING.md, «Растения»): материал лиан — трава заменяемая (в неё
  * ставят блок) и горит; рамка 0,1–0,9 по сторонам и 0,8 в высоту. Костная мука: удобрить можно, срабатывает всегда;
- * что вырастает, решает класс автора. Лут — таблица (генерация данных): с ножницами — сама трава ({@code onSheared}),
- * без них — семена с шансом 1/8 ({@code ForgeHooks.getGrassSeed}).
+ * что вырастает, решает класс автора. Лут — таблица (генерация данных): семена с шансом 1/8
+ * ({@code ForgeHooks.getGrassSeed}), с ножницами — ещё и сама трава ({@code onSheared}).
  */
 public class TallGrass1710 extends Bush1710 implements IGrowable {
 

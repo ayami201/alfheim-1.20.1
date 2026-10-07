@@ -79,26 +79,30 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 	}
 
 	/**
-	 * Листва 1.7.10 (`BlockLeavesMod.getDrops`, `IShearable`): с ножницами или шёлковым касанием — сама листва, иначе —
-	 * `getItemDropped` с шансом 1/20, с удачей I, II, III — 1/16, 1/12, 1/10 (`20 - (2 shl удача)`, не меньше 10). Взрыв
-	 * лут не уменьшает (`dropBlockAsItemWithChance` с шансом 1); палок и яблок, как у листвы ванилы 1.20.1, нет
+	 * Листва 1.7.10 (`BlockLeavesMod.getDrops`, `IShearable`): с шёлковым касанием — сама листва (`createStackedBlock`),
+	 * без него — `getItemDropped` с шансом 1/20, с удачей I, II, III — 1/16, 1/12, 1/10 (`20 - (2 shl удача)`, не меньше
+	 * 10). Ножницы ещё и срезают листву (`onSheared`): Forge 1.7.10 после среза не отменял обычный сбор
+	 * (`ItemShears.onBlockStartBreak` → `false`), и с ножницами выпадает и листва, и то, что без них. Взрыв лут не
+	 * уменьшает (`dropBlockAsItemWithChance` с шансом 1); палок и яблок, как у листвы ванилы 1.20.1, нет
 	 */
 	private fun leaves(block: Leaves1710): LootTable.Builder {
-		val shearsOrSilkTouch = SHEARS.or(HAS_SILK_TOUCH)
+		val table = LootTable.lootTable()
+			.withPool(LootPool.lootPool().`when`(SHEARS).add(LootItem.lootTableItem(block)))
+			.withPool(LootPool.lootPool().`when`(HAS_SILK_TOUCH).add(LootItem.lootTableItem(block)))
 		val drop = block.getItemDropped(block.variant ?: 0, RandomSource.create(), 0)
-		if (drop == null || drop == Items.AIR)
-			return LootTable.lootTable().withPool(LootPool.lootPool().`when`(shearsOrSilkTouch).add(LootItem.lootTableItem(block)))
+		if (drop == null || drop == Items.AIR) return table
 		val sapling = LootItem.lootTableItem(drop).`when`(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 1f / 20, 1f / 16, 1f / 12, 1f / 10))
-		return createSelfDropDispatchTable(block, shearsOrSilkTouch, sapling)
+		return table.withPool(LootPool.lootPool().`when`(HAS_NO_SILK_TOUCH).add(sapling))
 	}
 
 	/**
-	 * Трава 1.7.10 (`BlockTallGrass`, Forge): с ножницами — сама трава (`onSheared`); иначе с шансом 1/8 — семена
-	 * (`ForgeHooks.getGrassSeed`: пшеничные), удача не влияет; при взрыве — с шансом 1 / сила взрыва. Шёлковое касание
-	 * трава 1.7.10 не брала (`canSilkHarvest`: не обычный куб)
+	 * Трава 1.7.10 (`BlockTallGrass`, Forge): с шансом 1/8 — семена (`ForgeHooks.getGrassSeed`: пшеничные), удача не
+	 * влияет; при взрыве — с шансом 1 / сила взрыва. Ножницы ещё и срезают саму траву (`onSheared`), не отменяя обычного
+	 * сбора, как у листвы ([leaves]). Шёлковое касание трава 1.7.10 не брала (`canSilkHarvest`: не обычный куб)
 	 */
-	private fun tallGrass(block: TallGrass1710) =
-		createSelfDropDispatchTable(block, SHEARS, applyExplosionDecay(block, LootItem.lootTableItem(Items.WHEAT_SEEDS).`when`(LootItemRandomChanceCondition.randomChance(1f / 8))))
+	private fun tallGrass(block: TallGrass1710) = LootTable.lootTable()
+		.withPool(LootPool.lootPool().`when`(SHEARS).add(LootItem.lootTableItem(block)))
+		.withPool(LootPool.lootPool().add(applyExplosionDecay(block, LootItem.lootTableItem(Items.WHEAT_SEEDS).`when`(LootItemRandomChanceCondition.randomChance(1f / 8)))))
 
 	/**
 	 * `BlockColoredDoubleGrass.onSheared`: с ножницами — две травы ириса цвета растения; верхняя половина — если под ней
