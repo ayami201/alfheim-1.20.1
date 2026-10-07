@@ -12,6 +12,7 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.entity.projectile.ThrowableProjectile
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import kotlin.math.*
@@ -107,6 +108,13 @@ fun Entity.attackEntityFrom(source: DamageSource, amount: Float) = hurt(source, 
 
 /** `setFire(seconds)` 1.7.10 */
 fun Entity.setFire(seconds: Int) = setSecondsOnFire(seconds)
+
+/**
+ * `setInWeb()` 1.7.10: существо увязло, как в паутине, — следующее его движение в 4 раза короче по горизонтали и в 20 раз
+ * по вертикали, скорость гаснет, высота падения сбрасывается. В 1.20.1 так делает паутина (`makeStuckInBlock` с её
+ * состоянием и числами). Паука, иссушителя и летящего игрока это не держит — и в 1.7.10 их `setInWeb` ничего не делал
+ */
+fun Entity.setInWeb() = makeStuckInBlock(Blocks.COBWEB.defaultBlockState(), Vec3(0.25, 0.05000000074505806, 0.25))
 
 /**
  * `posX`, `posY`, `posZ` 1.7.10; запись — `setPos`. `posY` — низ существа, как у большинства существ 1.7.10; у своего

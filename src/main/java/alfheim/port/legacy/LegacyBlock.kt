@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
@@ -15,6 +16,7 @@ import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration
+import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.*
 import java.util.function.BiConsumer
@@ -287,8 +289,8 @@ open class Block1710(material: Material): Block(material.properties()), LegacyBl
 	 */
 	override fun onTreeGrow(state: BlockState, level: LevelReader, placeFunction: BiConsumer<BlockPos, BlockState>, randomSource: RandomSource, pos: BlockPos, config: TreeConfiguration) = true
 
-	// Методы 1.7.10 класса автора ([LegacyBlockMethods]) из методов 1.20.1: тик, установка и снятие, взрыв, сигнал, огонь,
-	// замена
+	// Методы 1.7.10 класса автора ([LegacyBlockMethods]) из методов 1.20.1: тик, установка и снятие, существо в блоке и на
+	// блоке, путь мобов, взрыв, сигнал, огонь, замена
 
 	@Deprecated("Deprecated in Java")
 	override fun tick(state: BlockState, level: ServerLevel, pos: BlockPos, random: RandomSource) = updateTick(level, pos.x, pos.y, pos.z, random)
@@ -319,6 +321,16 @@ open class Block1710(material: Material): Block(material.properties()), LegacyBl
 		val activated = onBlockActivated(level, pos.x, pos.y, pos.z, player, hit.direction.get3DDataValue(), (at.x - pos.x).toFloat(), (at.y - pos.y).toFloat(), (at.z - pos.z).toFloat())
 		return if (activated) InteractionResult.sidedSuccess(level.isClientSide) else InteractionResult.PASS
 	}
+
+	@Deprecated("Deprecated in Java")
+	override fun entityInside(state: BlockState, level: Level, pos: BlockPos, entity: Entity) = onEntityCollidedWithBlock(level, pos.x, pos.y, pos.z, entity)
+
+	override fun stepOn(level: Level, pos: BlockPos, state: BlockState, entity: Entity) = onEntityWalking(level, pos.x, pos.y, pos.z, entity)
+
+	/** Водные мобы 1.7.10 пути не искали: для них — правило 1.20.1 (путь — по воде) */
+	@Deprecated("Deprecated in Java")
+	override fun isPathfindable(state: BlockState, level: BlockGetter, pos: BlockPos, type: PathComputationType) =
+		if (type == PathComputationType.WATER) super.isPathfindable(state, level, pos, type) else getBlocksMovement(level, pos.x, pos.y, pos.z)
 
 	override fun onBlockExploded(state: BlockState, level: Level, pos: BlockPos, explosion: Explosion) = onBlockExploded(level, pos.x, pos.y, pos.z, explosion)
 

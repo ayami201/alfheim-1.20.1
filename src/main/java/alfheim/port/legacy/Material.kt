@@ -1,6 +1,10 @@
 package alfheim.port.legacy
 
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.material.PushReaction
@@ -14,45 +18,54 @@ import net.minecraft.world.level.material.PushReaction
  * Блок из непрозрачного материала (не полупрозрачный и мешает движению) в 1.7.10 мог быть «нормальным кубом»: на нём
  * появлялись мобы, он проводил сигнал красного камня, в нём задыхались. Блок из прочих материалов не мог — для него
  * эти свойства 1.20.1 выключены. Не был нормальным кубом и источник сигнала (`canProvidePower` 1.7.10, `isSignalSource`
- * 1.20.1): сигнал через себя он не проводил, в нём не задыхались.
+ * 1.20.1): сигнал через себя он не проводил, в нём не задыхались. Нормальным кубом 1.7.10 считал блок, который рисуется
+ * кубом (`renderAsNormalBlock`); в 1.20.1 это блок, форма опоры которого (`getBlockSupportShape`) — полный куб. По
+ * умолчанию форма опоры — форма столкновений; блок, у которого столкновения меньше куба, а в 1.7.10 он был нормальным
+ * кубом, отвечает полной формой опоры сам, как песок душ 1.20.1.
+ *
+ * Материал со своими значениями свойств (`MaterialPublic` ASJCore) — наследник, он переопределяет свойства ниже.
  */
-class Material private constructor(val mapColor: MapColor, kind: Kind = Kind.NORMAL) {
+open class Material private constructor(val mapColor: MapColor, kind: Kind) {
+
+	/** Обычный материал (`Material(color)` 1.7.10) — для наследника со своими значениями */
+	protected constructor(mapColor: MapColor): this(mapColor, Kind.NORMAL)
 
 	private enum class Kind { NORMAL, TRANSPARENT, LOGIC, LIQUID, PORTAL, WEB }
 
-	var requiresTool = false
-		private set
-	var canBurn = false
-		private set
-	var isReplaceable = false
-		private set
-	var isTranslucent = false
-		private set
-	var pushReaction = PushReaction.NORMAL
-		private set
+	private var tool = false
+	private var burning = false
+	private var replaceable = false
+	private var translucent = false
+	private var mobility = PushReaction.NORMAL
 
-	val isLiquid = kind == Kind.LIQUID
-	val isSolid = kind == Kind.NORMAL || kind == Kind.WEB
-	val blocksMovement = kind == Kind.NORMAL
+	open val requiresTool get() = tool
+	open val canBurn get() = burning
+	open val isReplaceable get() = replaceable
+	val isTranslucent get() = translucent
+	val pushReaction get() = mobility
+
+	open val isLiquid = kind == Kind.LIQUID
+	open val isSolid = kind == Kind.NORMAL || kind == Kind.WEB
+	private val blocksMovement = kind == Kind.NORMAL
 	
 	/** `Material.isOpaque` 1.7.10 */
-	val isOpaque get() = !isTranslucent && blocksMovement
+	open val isOpaque get() = !isTranslucent && blocksMovement()
 
 	/** `blocksMovement()` 1.7.10 */
-	fun blocksMovement() = blocksMovement
+	open fun blocksMovement() = blocksMovement
 
 	init {
 		// конструкторы MaterialTransparent и MaterialLiquid 1.7.10
 		if (kind == Kind.TRANSPARENT || kind == Kind.LIQUID) setReplaceable()
-		if (kind == Kind.LIQUID) setNoPushMobility()
+		if (kind == Kind.LIQUID) mobility = PushReaction.DESTROY
 	}
 
-	private fun setRequiresTool() = apply { requiresTool = true }
-	private fun setBurning() = apply { canBurn = true }
-	private fun setReplaceable() = apply { isReplaceable = true }
-	private fun setTranslucent() = apply { isTranslucent = true }
-	private fun setNoPushMobility() = apply { pushReaction = PushReaction.DESTROY }
-	private fun setImmovableMobility() = apply { pushReaction = PushReaction.BLOCK }
+	private fun setRequiresTool() = apply { tool = true }
+	private fun setBurning() = apply { burning = true }
+	private fun setReplaceable() = apply { replaceable = true }
+	private fun setTranslucent() = apply { translucent = true }
+	protected open fun setNoPushMobility(): Material = apply { mobility = PushReaction.DESTROY }
+	protected open fun setImmovableMobility(): Material = apply { mobility = PushReaction.BLOCK }
 
 	/** Свойства 1.20.1, которые в 1.7.10 давал материал */
 	fun properties(): BlockBehaviour.Properties {
@@ -63,10 +76,10 @@ class Material private constructor(val mapColor: MapColor, kind: Kind = Kind.NOR
 		if (isLiquid) props.liquid()
 		if (isSolid) props.forceSolidOn() else props.forceSolidOff()
 		if (!isOpaque) props.isValidSpawn { _, _, _, _ -> false }.isRedstoneConductor { _, _, _ -> false }.isSuffocating { _, _, _ -> false }.isViewBlocking { _, _, _ -> false }
-		// как по умолчанию в 1.20.1, кроме источника сигнала
-		else props.isRedstoneConductor { state, level, pos -> !state.isSignalSource && state.isCollisionShapeFullBlock(level, pos) }
-			.isSuffocating { state, level, pos -> !state.isSignalSource && state.blocksMotion() && state.isCollisionShapeFullBlock(level, pos) }
-			.isViewBlocking { state, level, pos -> !state.isSignalSource && state.blocksMotion() && state.isCollisionShapeFullBlock(level, pos) }
+		// как по умолчанию в 1.20.1, кроме источника сигнала; полный куб — по форме опоры
+		else props.isRedstoneConductor { state, level, pos -> !state.isSignalSource && state.isSupportFullBlock(level, pos) }
+			.isSuffocating { state, level, pos -> !state.isSignalSource && state.blocksMotion() && state.isSupportFullBlock(level, pos) }
+			.isViewBlocking { state, level, pos -> !state.isSignalSource && state.blocksMotion() && state.isSupportFullBlock(level, pos) }
 		// нотный блок 1.7.10 выбирал инструмент по материалу блока под собой
 		when (this) {
 			rock  -> props.instrument(NoteBlockInstrument.BASEDRUM)
@@ -76,6 +89,9 @@ class Material private constructor(val mapColor: MapColor, kind: Kind = Kind.NOR
 		}
 		return props
 	}
+
+	/** Форма опоры состояния — полный куб (нормальный куб 1.7.10, см. выше) */
+	private fun BlockState.isSupportFullBlock(level: BlockGetter, pos: BlockPos) = Block.isShapeFullBlock(getBlockSupportShape(level, pos))
 
 	companion object {
 
