@@ -506,6 +506,11 @@ object PortMagicTreesTest {
 		helper.setBlock(wood, AlfheimBlocks.netherWood[1])
 		helper.setBlock(BlockPos(1, 0, 3), Blocks.STONE)
 		helper.setBlock(BlockPos(3, 0, 1), Blocks.STONE)
+		// мир сервера тестов (run/world) между запусками не пересоздаётся: предметы, которые ветер барьерного дерева из той же
+		// партии унёс за площадку теста, остаются в нём — и попали бы в счёт
+		val area = AABB(helper.absolutePos(wood)).inflate(9.0)
+		fun clear() = helper.level.getEntitiesOfClass(ItemEntity::class.java, area).forEach { it.discard() }
+		clear()
 		fun drop(item: Item, count: Int, at: BlockPos): ItemEntity {
 			val pos = helper.absoluteVec(Vec3.atBottomCenterOf(at))
 			return ItemEntity(helper.level, pos.x, pos.y, pos.z, ItemStack(item, count)).apply {
@@ -515,7 +520,7 @@ object PortMagicTreesTest {
 		}
 		val beef = drop(Items.BEEF, 3, BlockPos(1, 1, 3))
 		val iron = drop(Items.RAW_IRON, 1, BlockPos(3, 1, 1))
-		fun count(item: Item) = helper.level.getEntitiesOfClass(ItemEntity::class.java, AABB(helper.absolutePos(wood)).inflate(9.0)).filter { it.item.`is`(item) }.sumOf { it.item.count }
+		fun count(item: Item) = helper.level.getEntitiesOfClass(ItemEntity::class.java, area).filter { it.item.`is`(item) }.sumOf { it.item.count }
 		helper.succeedWhen {
 			val cooked = count(Items.COOKED_BEEF)
 			helper.assertTrue(cooked >= 1, "cooked beef")
@@ -523,6 +528,7 @@ object PortMagicTreesTest {
 			helper.assertTrue(iron.item.count == 1 && count(Items.IRON_INGOT) == 0, "raw iron is not food")
 			helper.setBlock(wood, Blocks.AIR)
 			helper.killAllEntities()
+			clear()
 		}
 	}
 
