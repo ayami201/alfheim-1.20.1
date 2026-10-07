@@ -153,8 +153,8 @@ object AlfheimBlocks {
 	val shimmerQuartzStairs: Block
 //	val snakeBody: Block // PORT: КТ-2
 //	val snakeObject: Block // PORT: КТ-2
-//	val snowGrass: Block // PORT: КТ-2
-//	val snowLayer: Block // PORT: КТ-2
+	val snowGrass: Block
+	val snowLayer: Block
 	val softStorage: Array<Block>
 //	val spire: Block // PORT: КТ-3
 //	val starBlock: Block // PORT: КТ-3
@@ -359,8 +359,8 @@ object AlfheimBlocks {
 //		shimmerQuartzStairs = BlockShimmerQuartzStairs(shimmerQuartz)
 //		snakeBody = BlockSnakeBody() // PORT: КТ-2
 //		snakeObject = BlockSnakeObject() // PORT: КТ-2
-//		snowGrass = BlockSnowGrass() // PORT: КТ-2
-//		snowLayer = BlockSnowLayer() // PORT: КТ-2
+		snowGrass = BlockSnowGrass()
+		snowLayer = BlockSnowLayer()
 		softStorage = Array(4) { BlockSoftStorage(it) }
 //		spire = BlockSpire() // PORT: КТ-3
 //		starBlock = BlockStar() // PORT: КТ-3
@@ -517,8 +517,8 @@ object AlfheimBlocks {
 	
 	fun regOreDict() {
 //		registerOre("endstone", ItemStack(Blocks.end_stone)) // PORT: КТ-3
-//		registerOre("grassSnow", ItemStack(snowGrass)) // PORT: КТ-2
-//		registerOre("snowLayer", ItemStack(snowLayer)) // PORT: КТ-2
+		registerOre("grassSnow", ItemStack(snowGrass))
+		registerOre("snowLayer", ItemStack(snowLayer))
 //		registerOre("niflStone", ItemStack(niflheimBlock)) // PORT: КТ-2
 		
 //		BotaniaAPI.registerSemiDisposableBlock(BLibOreDict.LIVING_ROCK) // PORT: КТ-3
