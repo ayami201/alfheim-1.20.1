@@ -2,6 +2,7 @@ package alfheim.port.data
 
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.BlockElvenOre
+import alfheim.common.block.BlockSadOakLeaves
 import alfheim.common.block.BlockTreeBerry
 import alfheim.common.block.alt.BlockAltLeaves
 import alfheim.common.block.colored.BlockColoredDoubleGrass
@@ -49,6 +50,7 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 			block is Pane1710 && !block.canDrop    -> dropWhenSilkTouch(block)
 			block is BlockElvenOre                 -> add(block, elvenOre(block))
 			block is BlockAltLeaves                -> add(block, altLeaves(block))
+			block is BlockSadOakLeaves             -> add(block, sadOakLeaves(block))
 			block is Leaves1710                    -> add(block, leaves(block))
 			block is BlockRainbowGrass             -> add(block, rainbowGrass(block))
 			block is TallGrass1710                 -> add(block, tallGrass(block))
@@ -109,6 +111,16 @@ class AlfheimBlockLoot: BlockLootSubProvider(emptySet(), FeatureFlags.REGISTRY.a
 		if (block.meta % 8 != BlockAltLeaves.yggMeta + 1) return table
 		val cherry = LootItem.lootTableItem(AlfheimItems.elvenFood[ElvenFoodMetas.DreamCherry.I]).`when`(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 1f / 100, 1f / 90, 1f / 80, 1f / 60))
 		return table.withPool(LootPool.lootPool().`when`(HAS_NO_SILK_TOUCH).add(cherry))
+	}
+	
+	/**
+	 * `BlockSadOakLeaves`: листва ([leaves]) — саженец дуба (`getItemDropped` листвы 1.7.10) — и яблоко (`func_150124_c`)
+	 * с шансом 1 / шанс плода `BlockLeavesMod.getDrops`: 1/200, с удачей I, II, III — 1/180, 1/160, 1/120, как у дубовой
+	 * листвы ванилы 1.7.10. С шёлковым касанием плодов нет, с ножницами — есть
+	 */
+	private fun sadOakLeaves(block: BlockSadOakLeaves): LootTable.Builder {
+		val apple = LootItem.lootTableItem(Items.APPLE).`when`(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 1f / 200, 1f / 180, 1f / 160, 1f / 120))
+		return leaves(block).withPool(LootPool.lootPool().`when`(HAS_NO_SILK_TOUCH).add(apple))
 	}
 	
 	/**

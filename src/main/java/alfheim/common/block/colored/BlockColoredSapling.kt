@@ -91,9 +91,11 @@ open class BlockColoredSapling(name: String = "irisSapling"): Sapling1710()/*, I
 	
 	fun markOrGrowMarked(world: World?, x: Int, y: Int, z: Int, random: Random) {
 		if (world != null) {
-			// PORT: бит 8 metadata («готов расти») — свойство STAGE (Sapling1710)
+			// PORT: бит 8 metadata («готов расти») — свойство STAGE (Sapling1710); саженец мог убрать checkAndDropBlock
+			// (updateTick), а стадии у воздуха 1.20.1 нет (в 1.7.10 metadata воздуха менялась впустую)
 			val pos = BlockPos(x, y, z)
 			val state = world.getBlockState(pos)
+			if (!state.`is`(this)) return
 //			val l = world.getBlockMetadata(x, y, z)
 			
 			if (state.getValue(STAGE) == 0) {

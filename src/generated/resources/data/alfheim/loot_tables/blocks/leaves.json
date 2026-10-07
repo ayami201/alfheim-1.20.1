@@ -12,7 +12,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "alfheim:alt_leaves7"
+          "name": "alfheim:leaves"
         }
       ],
       "rolls": 1.0
@@ -37,7 +37,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "alfheim:alt_leaves7"
+          "name": "alfheim:leaves"
         }
       ],
       "rolls": 1.0
@@ -77,7 +77,7 @@
               "enchantment": "minecraft:fortune"
             }
           ],
-          "name": "alfheim:dream_sapling"
+          "name": "minecraft:oak_sapling"
         }
       ],
       "rolls": 1.0
@@ -108,20 +108,20 @@
           "conditions": [
             {
               "chances": [
-                0.01,
-                0.011111111,
-                0.0125,
-                0.016666668
+                0.005,
+                0.0055555557,
+                0.00625,
+                0.008333334
               ],
               "condition": "minecraft:table_bonus",
               "enchantment": "minecraft:fortune"
             }
           ],
-          "name": "alfheim:dream_cherry"
+          "name": "minecraft:apple"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "alfheim:blocks/alt_leaves7"
+  "random_sequence": "alfheim:blocks/leaves"
 }

@@ -1,27 +1,31 @@
 package alfheim.common.world.dim.alfheim.biome
 
-import alexsocol.asjlib.*
-import alfheim.AlfheimCore
+// PORT: импорты 1.20.1; биом Альфхейма (WE_Biome библиотеки WorldEngine), его погода и существа — КТ-6
+//import alexsocol.asjlib.*
+//import alfheim.AlfheimCore
 import alfheim.common.block.AlfheimBlocks
-import alfheim.common.core.handler.AlfheimConfigHandler
-import alfheim.common.core.handler.ragnarok.RagnarokHandler
-import alfheim.common.world.dim.alfheim.customgens.NiflheimLocationGenerator
+//import alfheim.common.core.handler.AlfheimConfigHandler
+//import alfheim.common.core.handler.ragnarok.RagnarokHandler
+//import alfheim.common.world.dim.alfheim.customgens.NiflheimLocationGenerator
 import alfheim.common.world.dim.alfheim.structure.StructureDreamsTree
-import net.minecraft.entity.EnumCreatureType
-import net.minecraft.init.Blocks
-import net.minecraft.world.biome.BiomeGenBase
-import net.minecraftforge.common.*
-import net.minecraftforge.common.BiomeDictionary.Type
-import ru.vamig.worldengine.WE_Biome
+//import net.minecraft.entity.EnumCreatureType
+import net.minecraft.world.level.block.Blocks
+//import net.minecraft.world.biome.BiomeGenBase
+//import net.minecraftforge.common.*
+//import net.minecraftforge.common.BiomeDictionary.Type
+//import ru.vamig.worldengine.WE_Biome
 
-abstract class BiomeAlfheim(
+// PORT: КТ-6 — биом Альфхейма (WE_Biome библиотеки WorldEngine) и генерация мира; до неё у класса только деревья
+// биомов (компаньон): их растят саженцы
+abstract class BiomeAlfheim/*(
 	minMapValue: Double, maxMapValue: Double,
 	persistence: Double, numOctaves: Int,
 	sx: Double, sy: Double,
 	height: Int, interpolateQuality: Int,
 	name: String, vararg types: Type
-): WE_Biome(minMapValue, maxMapValue, persistence, numOctaves, sx, sy, height + offset, interpolateQuality) {
+): WE_Biome(minMapValue, maxMapValue, persistence, numOctaves, sx, sy, height + offset, interpolateQuality)*/ {
 	
+	/* PORT: КТ-6
 	init {
 		setBiomeName(name)
 		
@@ -57,6 +61,7 @@ abstract class BiomeAlfheim(
 	}
 	
 	override fun getSkyColorByTemp(temp: Float) = if (AlfheimCore.winter || temp < 0.5f) 0x576cd9 else 0x266eff
+	*/
 	
 	companion object {
 		
@@ -64,12 +69,18 @@ abstract class BiomeAlfheim(
 		
 		val alfheimBiomes = ArrayList<BiomeAlfheim>()
 		
-		val dreamTree = StructureDreamsTree(AlfheimBlocks.altWood1, AlfheimBlocks.altLeaves, 3, 7, 11, 7)
-		val sadOak = StructureDreamsTree(Blocks.log, AlfheimBlocks.sadOakLeaves, 0, 4, 8, 0)
+		// PORT: вариант metadata — блок массива (SPEC, Р-5): древесина древа мечтаний — altWood1[3], его листва —
+		// altLeaves[7]; бревно 1.7.10 с metadata 0 — дубовое бревно
+		val dreamTree = StructureDreamsTree(AlfheimBlocks.altWood1[3], AlfheimBlocks.altLeaves[7], 3, 7, 11, 7)
+		val sadOak = StructureDreamsTree(Blocks.OAK_LOG, AlfheimBlocks.sadOakLeaves, 0, 4, 8, 0)
+//		val dreamTree = StructureDreamsTree(AlfheimBlocks.altWood1, AlfheimBlocks.altLeaves, 3, 7, 11, 7)
+//		val sadOak = StructureDreamsTree(Blocks.log, AlfheimBlocks.sadOakLeaves, 0, 4, 8, 0)
 		
+		/* PORT: КТ-6 — существа биомов
 		fun BiomeGenBase.addEntry(clazz: Class<*>, rate: IntArray, type: EnumCreatureType = EnumCreatureType.creature) {
 			val (w, i, x) = rate
 			this.getSpawnableList(type).add(SpawnListEntry(clazz, w, i, x))
 		}
+		*/
 	}
 }

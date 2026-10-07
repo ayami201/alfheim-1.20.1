@@ -17,12 +17,14 @@ import alfheim.port.legacy.Material.Companion.cloth
 import alfheim.port.legacy.Material.Companion.coral
 import alfheim.port.legacy.Material.Companion.craftedSnow
 import alfheim.port.legacy.Material.Companion.dragonEgg
+import alfheim.port.legacy.Material.Companion.fire
 import alfheim.port.legacy.Material.Companion.glass
 import alfheim.port.legacy.Material.Companion.gourd
 import alfheim.port.legacy.Material.Companion.grass
 import alfheim.port.legacy.Material.Companion.ground
 import alfheim.port.legacy.Material.Companion.ice
 import alfheim.port.legacy.Material.Companion.iron
+import alfheim.port.legacy.Material.Companion.lava
 import alfheim.port.legacy.Material.Companion.leaves
 import alfheim.port.legacy.Material.Companion.packedIce
 import alfheim.port.legacy.Material.Companion.plants
@@ -34,6 +36,7 @@ import alfheim.port.legacy.Material.Companion.snow
 import alfheim.port.legacy.Material.Companion.sponge
 import alfheim.port.legacy.Material.Companion.tnt
 import alfheim.port.legacy.Material.Companion.vine
+import alfheim.port.legacy.Material.Companion.water
 import alfheim.port.legacy.Material.Companion.web
 import alfheim.port.legacy.Material.Companion.wood
 import alfheim.port.legacy.StatCollector
@@ -42,6 +45,7 @@ import alfheim.port.legacy.ShapedOreRecipe
 import alfheim.port.legacy.ShapelessOreRecipe
 import alfheim.port.legacy.descriptionPacket
 import alfheim.port.legacy.getTileEntity
+import alfheim.port.legacy.material
 import alfheim.port.legacy.playerEntities
 import alfheim.port.legacy.playerNetServerHandler
 import alfheim.port.legacy.posX
@@ -987,14 +991,17 @@ object ASJUtilities {
 			j--
 		}
 	}
+	*/
 	
+	// PORT: материал 1.7.10 любого блока — Block.material прослойки (Materials1710.kt): воздух пещер и пустоты 1.20.1 —
+	// тоже воздух
 	private val replaceableMaterials = arrayOf(air, cactus, coral, fire, gourd, leaves, lava, plants, vine, water, web)
 	
 	@JvmStatic
 	fun isBlockReplaceable(block: Block): Boolean {
-		return block === Blocks.air || block === Blocks.snow_layer || block.material in replaceableMaterials
+		return block === Blocks.AIR || block === Blocks.SNOW || block.material in replaceableMaterials
+//		return block === Blocks.air || block === Blocks.snow_layer || block.material in replaceableMaterials
 	}
-	*/
 	
 	@JvmStatic
 	fun soundFromMaterial(mat: Material) = when (mat) {

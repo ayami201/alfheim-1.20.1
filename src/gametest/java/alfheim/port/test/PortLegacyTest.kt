@@ -1,5 +1,6 @@
 package alfheim.port.test
 
+import alexsocol.asjlib.ASJUtilities
 import alexsocol.asjlib.component1
 import alexsocol.asjlib.component2
 import alexsocol.asjlib.component3
@@ -135,7 +136,9 @@ object PortLegacyTest {
 
 	/**
 	 * Материал 1.7.10 любого блока (`block.material`, `Materials1710`): земля и трава ванилы и Botania — как в 1.7.10, блок
-	 * 1.20.1 с тегом `minecraft:dirt` — земля, блок порта — свой; воздух, вода, лава; прочие — камень. Заменить блок
+	 * 1.20.1 с тегом `minecraft:dirt` — земля, блок порта — свой; воздух, вода, лава; листва, дерево, растения, лианы,
+	 * снег, паутина, огонь, кактус, тыквы — как в 1.7.10, новые блоки 1.20.1 — по тегам; прочие — камень. Что деревья
+	 * автора заменяют (`ASJUtilities.isBlockReplaceable`): воздух (и пещер), слой снега и заменяемые материалы. Заменить блок
 	 * (`isReplaceable` 1.7.10) можно, если так решил его класс (ягода — нет, хотя материал лиан заменяем), у прочих —
 	 * если заменяем материал; это же спрашивает установка блока 1.20.1 (`canBeReplaced`)
 	 */
@@ -146,6 +149,22 @@ object PortLegacyTest {
 		for (block in listOf(Blocks.GRASS_BLOCK, Blocks.MYCELIUM, Blocks.HAY_BLOCK, BotaniaBlocks.enchantedSoil, BotaniaBlocks.vividGrass)) helper.assertTrue(block.material === Material.grass, "$block: grass")
 		helper.assertTrue(Blocks.AIR.material === Material.air && Blocks.CAVE_AIR.material === Material.air && Blocks.WATER.material === Material.water && Blocks.LAVA.material === Material.lava, "air and liquids")
 		helper.assertTrue(Blocks.STONE.material === Material.rock && AlfheimBlocks.irisDirt[3].material === Material.ground && AlfheimBlocks.circuitBerry.material === Material.vine, "stone, port blocks")
+		// материалы, которые спрашивают деревья автора (StructureDreamsTree, ASJUtilities.isBlockReplaceable); блоки 1.20.1,
+		// которых в 1.7.10 не было, — по тегам
+		val materials = mapOf(
+			Material.leaves to listOf(Blocks.OAK_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.CHERRY_LEAVES, Blocks.FLOWERING_AZALEA_LEAVES),
+			Material.wood to listOf(Blocks.OAK_LOG, Blocks.MANGROVE_LOG, Blocks.OAK_PLANKS, Blocks.OAK_FENCE, Blocks.OAK_STAIRS, Blocks.OAK_SLAB, Blocks.OAK_DOOR, Blocks.CRAFTING_TABLE, Blocks.RED_MUSHROOM_BLOCK),
+			Material.plants to listOf(Blocks.OAK_SAPLING, Blocks.CHERRY_SAPLING, Blocks.POPPY, Blocks.SUNFLOWER, Blocks.TALL_GRASS, Blocks.WHEAT, Blocks.BROWN_MUSHROOM, Blocks.SUGAR_CANE),
+			Material.vine to listOf(Blocks.GRASS, Blocks.FERN, Blocks.DEAD_BUSH, Blocks.VINE),
+			Material.snow to listOf(Blocks.SNOW), Material.craftedSnow to listOf(Blocks.SNOW_BLOCK), Material.web to listOf(Blocks.COBWEB),
+			Material.fire to listOf(Blocks.FIRE, Blocks.SOUL_FIRE), Material.cactus to listOf(Blocks.CACTUS),
+			Material.gourd to listOf(Blocks.PUMPKIN, Blocks.CARVED_PUMPKIN, Blocks.MELON),
+		)
+		for ((material, blocks) in materials) for (block in blocks) helper.assertTrue(block.material === material, "$block: ${block.material}")
+		for (block in listOf(Blocks.AIR, Blocks.CAVE_AIR, Blocks.SNOW, Blocks.GRASS, Blocks.OAK_LEAVES, Blocks.POPPY, Blocks.WATER, Blocks.FIRE, Blocks.COBWEB, Blocks.MELON))
+			helper.assertTrue(ASJUtilities.isBlockReplaceable(block), "$block is replaceable by trees of the author")
+		for (block in listOf(Blocks.STONE, Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.OAK_LOG, Blocks.SNOW_BLOCK))
+			helper.assertTrue(!ASJUtilities.isBlockReplaceable(block), "$block is not replaceable by trees of the author")
 
 		val pos = BlockPos(1, 1, 1)
 		val abs = helper.absolutePos(pos)
@@ -158,6 +177,10 @@ object PortLegacyTest {
 		helper.assertTrue(!replaceable() && !placeable(), "a tree berry is not replaceable")
 		helper.setBlock(pos, Blocks.STONE)
 		helper.assertTrue(!replaceable() && !placeable(), "stone is not replaceable")
+		// твёрдость блока в точке (getBlockHardness 1.7.10): у древесины Иггдрасиля её записал в состояния класс автора
+		helper.assertTrue(Blocks.STONE.getBlockHardness(helper.level, abs.x, abs.y, abs.z) == 1.5f, "hardness of stone at a point")
+		helper.setBlock(pos, AlfheimBlocks.altWood1[2])
+		helper.assertTrue(AlfheimBlocks.altWood1[2].getBlockHardness(helper.level, abs.x, abs.y, abs.z) == -1f, "Yggdrasil wood at a point is unbreakable")
 		helper.succeed()
 	}
 

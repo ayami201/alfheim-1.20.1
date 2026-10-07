@@ -71,7 +71,7 @@ object AlfheimBlocks {
 //	val corporeaSparkBase: Block // PORT: КТ-3
 //	val dirtDissolvable: Block // PORT: КТ-2
 //	val domainDoor: Block // PORT: КТ-6
-//	val dreamSapling: Block // PORT: КТ-2
+	val dreamSapling: Block
 	val elvenOre: Array<Block>
 	val elvenSand: Block
 //	val enderActuator: Block // PORT: КТ-3
@@ -141,7 +141,7 @@ object AlfheimBlocks {
 //	val redStringWatcher: Block // PORT: КТ-3
 //	val rift: Block // PORT: КТ-4
 //	val rpc: Block // PORT: КТ-2
-//	val sadOakLeaves: Block // PORT: КТ-2
+	val sadOakLeaves: Block
 //	val schemaAnnihilator: Block // PORT: КТ-6
 //	val schemaController: Block // PORT: КТ-6
 //	val schemaFiller: Block // PORT: КТ-6
@@ -264,7 +264,7 @@ object AlfheimBlocks {
 //		corporeaSparkBase = BlockCorporeaSparkBase() // PORT: КТ-3
 //		dirtDissolvable = BlockDirtDissolvable() // PORT: КТ-2
 //		domainDoor = BlockDomainDoor() // PORT: КТ-6
-//		dreamSapling = BlockDreamSapling() // PORT: КТ-2
+		dreamSapling = BlockDreamSapling()
 		elvenOre = Array(6) { BlockElvenOre(it) }
 		elvenSand = BlockElvenSand()
 //		enderActuator = BlockEnderActuator() // PORT: КТ-3
@@ -340,7 +340,7 @@ object AlfheimBlocks {
 //		redStringWatcher = BlockRedStringWatcher() // PORT: КТ-3
 //		rift = BlockRift() // PORT: КТ-4
 //		rpc = BlockRealmPowerCollector() // PORT: КТ-2
-//		sadOakLeaves = BlockSadOakLeaves() // PORT: КТ-2
+		sadOakLeaves = BlockSadOakLeaves()
 //		schemaAnnihilator = BlockSchemaAnnihilator() // PORT: КТ-6
 //		schemaController = BlockSchemaContoller() // PORT: КТ-6
 //		schemaFiller = BlockSchemaFiller() // PORT: КТ-6

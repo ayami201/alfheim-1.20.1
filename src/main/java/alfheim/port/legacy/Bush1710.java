@@ -40,6 +40,11 @@ public class Bush1710 extends BushBlock implements LegacyBlock, SoundTypes1710 {
 		setTickRandomly(true);
 	}
 
+	/** {@code BlockBush()} 1.7.10 — материал растений */
+	public Bush1710() {
+		this(Material.plants);
+	}
+
 	@Override
 	public BlockProps getLegacy() {
 		return legacy;

@@ -45,6 +45,7 @@
     "alfheim:DarkLivingRockStairs0": "alfheim:dark_living_rock_stairs0",
     "alfheim:DarkLivingRockStairs1": "alfheim:dark_living_rock_stairs1",
     "alfheim:DarkLivingRockStairs3": "alfheim:dark_living_rock_stairs3",
+    "alfheim:DreamSapling": "alfheim:dream_sapling",
     "alfheim:DreamwoodBarkFence": "alfheim:dreamwood_bark_fence",
     "alfheim:DreamwoodBarkFenceGate": "alfheim:dreamwood_bark_fence_gate",
     "alfheim:DreamwoodFence": "alfheim:dreamwood_fence",
@@ -420,6 +421,7 @@
       "2": "alfheim:iris_wood32",
       "3": "alfheim:iris_wood33"
     },
+    "alfheim:leaves": "alfheim:leaves",
     "alfheim:lightningLeaves": "alfheim:lightning_leaves",
     "alfheim:lightningPlanks": "alfheim:lightning_planks",
     "alfheim:lightningPlanksSlab": "alfheim:lightning_planks_slab",
@@ -521,6 +523,7 @@
     "alfheim:DarkLivingRockStairs1": "alfheim:dark_living_rock_stairs1",
     "alfheim:DarkLivingRockStairs3": "alfheim:dark_living_rock_stairs3",
     "alfheim:DeathSeed": "alfheim:death_seed",
+    "alfheim:DreamSapling": "alfheim:dream_sapling",
     "alfheim:DreamwoodBarkFence": "alfheim:dreamwood_bark_fence",
     "alfheim:DreamwoodBarkFenceGate": "alfheim:dreamwood_bark_fence_gate",
     "alfheim:DreamwoodFence": "alfheim:dreamwood_fence",
@@ -932,6 +935,7 @@
       "2": "alfheim:iris_wood32",
       "3": "alfheim:iris_wood33"
     },
+    "alfheim:leaves": "alfheim:leaves",
     "alfheim:lightningLeaves": "alfheim:lightning_leaves",
     "alfheim:lightningPlanks": "alfheim:lightning_planks",
     "alfheim:lightningPlanksSlab": "alfheim:lightning_planks_slab",
@@ -1188,6 +1192,7 @@
     "tile.alfStorage3.name": "block.alfheim.alf_storage3",
     "tile.alfStorage4.name": "block.alfheim.alf_storage4",
     "tile.alfStorage5.name": "block.alfheim.alf_storage5",
+    "tile.alfheim:DreamSapling.name": "block.alfheim.dream_sapling",
     "tile.alfheim:DwarfLantern.name": "block.alfheim.dwarf_lantern",
     "tile.alfheim:DwarfTrapDoor.name": "block.alfheim.dwarf_trap_door",
     "tile.alfheim:ElvenSand.name": "block.alfheim.elven_sand",
@@ -1406,6 +1411,7 @@
       "block.alfheim.iris_wood32",
       "block.alfheim.iris_wood33"
     ],
+    "tile.alfheim:leaves0.name": "block.alfheim.leaves",
     "tile.alfheim:lightningLeaves.name": "block.alfheim.lightning_leaves",
     "tile.alfheim:lightningPlanks.name": "block.alfheim.lightning_planks",
     "tile.alfheim:lightningPlanksSlab.name": "block.alfheim.lightning_planks_slab",
