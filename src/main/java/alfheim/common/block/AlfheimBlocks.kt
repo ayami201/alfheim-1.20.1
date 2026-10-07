@@ -81,7 +81,7 @@ object AlfheimBlocks {
 //	val grapesRed: Array<Block> // PORT: КТ-2
 //	val grapesRedPlanted: Block // PORT: КТ-2
 //	val grapesWhite: Block // PORT: КТ-2
-//	val icicle: Block // PORT: КТ-2
+	val icicle: Array<Block>
 //	val icyGeyser: Block // PORT: КТ-6
 //	val itemDisplay: Block // PORT: КТ-3
 	val irisDirt: Array<Block>
@@ -159,8 +159,8 @@ object AlfheimBlocks {
 //	val spire: Block // PORT: КТ-3
 //	val starBlock: Block // PORT: КТ-3
 //	val starBlock2: Block // PORT: КТ-3
-//	val stalactite: Block // PORT: КТ-2
-//	val stalagmite: Block // PORT: КТ-2
+	val stalactite: Array<Block>
+	val stalagmite: Array<Block>
 //	val subspacian: Block // PORT: КТ-2
 //	val tradePortal: Block // PORT: КТ-3
 //	val treeCrafterBlock: Block // PORT: КТ-3
@@ -274,7 +274,7 @@ object AlfheimBlocks {
 //		grapesRed = Array(3) { BlockGrapeRed(it) } // PORT: КТ-2
 //		grapesRedPlanted = BlockGrapeRedPlanted() // PORT: КТ-2
 //		grapesWhite = BlockGrapeWhite() // PORT: КТ-2
-//		icicle = BlockIcicle() // PORT: КТ-2
+		icicle = Array(4) { BlockIcicle(it) }
 //		icyGeyser = BlockIcyGeyser() // PORT: КТ-6
 //		itemDisplay = BlockItemDisplay() // PORT: КТ-3
 		irisDirt = Array(16) { BlockColoredDirt(it) }
@@ -365,8 +365,8 @@ object AlfheimBlocks {
 //		spire = BlockSpire() // PORT: КТ-3
 //		starBlock = BlockStar() // PORT: КТ-3
 //		starBlock2 = BlockCracklingStar() // PORT: КТ-3
-//		stalactite = BlockStalactite() // PORT: КТ-2
-//		stalagmite = BlockStalagmite() // PORT: КТ-2
+		stalactite = Array(8) { BlockStalactite(it) }
+		stalagmite = Array(8) { BlockStalagmite(it) }
 //		subspacian = BlockSubspacian() // PORT: КТ-2
 //		tradePortal = BlockTradePortal() // PORT: КТ-3
 //		treeCrafterBlock = BlockTreeCrafter("treeCrafter", irisPlanks) // PORT: КТ-3

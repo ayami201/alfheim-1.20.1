@@ -24,6 +24,7 @@ object AlfheimEntityRenderers {
 	}
 
 	private fun registerRenderers(e: EntityRenderersEvent.RegisterRenderers) {
+		e.registerEntityRenderer(LegacyRegistration.entityType(EntityFallingHang::class.java), ::RenderEntityFallingHang)
 		e.registerEntityRenderer(LegacyRegistration.entityType(EntityThrownPotion::class.java), ::RenderEntityThrownPotion)
 		e.registerEntityRenderer(LegacyRegistration.entityType(EntityThrowableItem::class.java), ::RenderEntityThrownItem)
 		e.registerEntityRenderer(LegacyRegistration.entityType(FakeLightning::class.java), ::RenderFakeLightning)
