@@ -24,7 +24,9 @@ GameTest-ы идут в среде разработки: там у методо�
 11. громоотвод: молнию у сердцевины грозового дерева в начале следующего тика сменяет ложная молния мода
     (`alfheim:fake_lightning`; событие тика мира, погодные эффекты прослойки);
 12. сосулька: лёд над ней убран — она падает существом мода `alfheim:falling_hang` со своим блоком (сосед блока
-    1.7.10 — `neighborChanged` прослойки, данные существа — `SynchedEntityData`).
+    1.7.10 — `neighborChanged` прослойки, данные существа — `SynchedEntityData`);
+13. снежная трава держит мак (почва `canSustainPlant` — миксин `BushBlockInvoker`, обёртка автора S-03), слой снега
+    принимает число слоёв.
 
 Команды идут по RCON (удалённая консоль сервера): скрипт сам включает его в `server.properties`
 (порт 25575, пароль `alfcheck`). Существа появляются в точке появления мира с меткой `alfcheck` и
@@ -248,6 +250,17 @@ def main():
         gone = r("execute if block ~10 ~20 ~-2 minecraft:air")
         falling = r("data get entity @e[type=alfheim:falling_hang,limit=1] block")
         check("Сосулька без льда падает существом мода (alfheim:falling_hang)", "Test passed" in gone and "alfheim:icicle2" in falling, f"{gone}; {falling}")
+
+        # 13. Мак на снежной траве: сосед сменился — мак спрашивает почву (canSustainPlant снежной травы зовёт mayPlaceOn
+        # мака через миксин-вызыватель) и остаётся; слой снега — с числом слоёв
+        r("setblock ~12 ~1 ~-2 alfheim:snow_grass")
+        r("setblock ~12 ~2 ~-2 minecraft:poppy")
+        r("setblock ~13 ~2 ~-2 minecraft:stone")
+        r("setblock ~13 ~2 ~-2 minecraft:air")
+        poppy = r("execute if block ~12 ~2 ~-2 minecraft:poppy")
+        r("setblock ~14 ~1 ~-2 alfheim:snow_layer[layers=5]")
+        snow = r("execute if block ~14 ~1 ~-2 alfheim:snow_layer[layers=5]")
+        check("Мак держится на снежной траве (миксин BushBlockInvoker), слой снега — с числом слоёв", "Test passed" in poppy and "Test passed" in snow, f"{poppy}; {snow}")
 
         r("kill @e[tag=alfcheck]")
         r("stop")

@@ -1,6 +1,7 @@
 package alfheim.port.test
 
 import alexsocol.asjlib.meta
+import alfheim.AlfheimCore
 import alfheim.api.ModInfo.MODID
 import alfheim.common.block.AlfheimBlocks
 import alfheim.common.block.AlfheimFluffBlocks
@@ -59,8 +60,9 @@ object PortDecorTest {
 		// авроровых блоков партии 8б-1, 8 радужных растений партии 8б-2, 10 блоков партии 8б-3 (гриб, 3 варианта
 		// мерцающего кварца, его плита и лестница, 4 мягких блока), черепица Botania 1.7.10, 33 блока магических деревьев
 		// партии 8в-1 и 12 партии 8в-2 (6 саженцев, 6 ягод), 37 блоков альтернативных деревьев партии 8г-1, саженец древа
-		// мечтаний и листва печального дуба партии 8г-2, 20 стадий висячих блоков партии 9а-1
-		helper.assertTrue(LegacyRegistration.blocks.size == 375, "blocks of the author: ${LegacyRegistration.blocks.size}")
+		// мечтаний и листва печального дуба партии 8г-2, 20 стадий висячих блоков партии 9а-1, снежная трава и слой снега
+		// партии 9а-2
+		helper.assertTrue(LegacyRegistration.blocks.size == 377, "blocks of the author: ${LegacyRegistration.blocks.size}")
 		helper.succeed()
 	}
 
@@ -221,7 +223,7 @@ object PortDecorTest {
 	 * Черепица Botania 1.7.10 — во вкладке Botania перед первым азулежу, как в Botania 1.7.10. Закопанных радужных
 	 * лепестков во вкладке нет и у автора (`BlockRainbowGrass.getSubBlocks`), сердцевин барьерного, грозового и адского
 	 * деревьев — тоже: `getSubBlocks` их брёвен выдавал только metadata 0; ягод магических деревьев и листвы печального
-	 * дуба вкладка автора не выдавала
+	 * дуба вкладка автора не выдавала; снежная трава и слой снега — во вкладке только зимой (`AlfheimCore.winter`)
 	 */
 	@JvmStatic
 	@GameTest(template = "empty")
@@ -231,7 +233,8 @@ object PortDecorTest {
 		val hidden = listOf(AlfheimBlocks.manaIce.asItem(), AlfheimFluffBlocks.elfQuartzWall.asItem(), BotaniaBlocks1710.roofTile.asItem(), AlfheimBlocks.rainbowGrass[4].asItem(), AlfheimBlocks.sadOakLeaves.asItem()) +
 			listOf(AlfheimBlocks.barrierWood, AlfheimBlocks.lightningWood, AlfheimBlocks.netherWood).map { it[1].asItem() } +
 			listOf(AlfheimBlocks.barrierBerry, AlfheimBlocks.calicoBerry, AlfheimBlocks.circuitBerry, AlfheimBlocks.lightningBerry, AlfheimBlocks.netherBerry, AlfheimBlocks.sealingBerry).map { it.asItem() } +
-			listOf(ElvenResourcesMetas.ElvenWeed, ElvenResourcesMetas.WisdomBottle, ElvenResourcesMetas.RiftDrive).map { AlfheimItems.elvenResource[it.I] }
+			listOf(ElvenResourcesMetas.ElvenWeed, ElvenResourcesMetas.WisdomBottle, ElvenResourcesMetas.RiftDrive).map { AlfheimItems.elvenResource[it.I] } +
+			(if (AlfheimCore.winter) emptyList() else listOf(AlfheimBlocks.snowGrass.asItem(), AlfheimBlocks.snowLayer.asItem()))
 		// рог души — дважды: обычный и заряженный (metadata 1); брызгающее зелье — по разу на варево Botania, кроме
 		// запасного, как у автора
 		val brews = BotaniaAPI.instance().brewRegistry!!.count { it !== BotaniaBrews.fallbackBrew }
